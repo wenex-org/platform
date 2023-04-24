@@ -17,6 +17,7 @@ services:
       - "6379:6379"
     environment:
       - REDIS_PASSWORD=
+      - ALLOW_EMPTY_PASSWORD=yes
     networks:
       - platform
 
@@ -26,8 +27,8 @@ services:
       - "9000:9000"
       - "9001:9001"
     environment:
-      - MINIO_ROOT_USER=
-      - MINIO_ROOT_PASSWORD=
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
     networks:
       - platform
 
