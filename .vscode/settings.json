@@ -17,6 +17,9 @@
     },
     "cSpell.words": [
         "nestjs",
-        "OTLP"
+        "OTLP",
+        "proto",
+        "protos",
+        "webpush"
     ]
 }

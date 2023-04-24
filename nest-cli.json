@@ -3,8 +3,11 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "apps/gateway/src",
   "compilerOptions": {
-    "deleteOutDir": true,
     "webpack": true,
+    "deleteOutDir": true,
+    "assets": [
+      "protos/*.proto"
+    ],
     "tsConfigPath": "apps/gateway/tsconfig.app.json"
   },
   "monorepo": true,
@@ -17,6 +20,348 @@
       "sourceRoot": "apps/gateway/src",
       "compilerOptions": {
         "tsConfigPath": "apps/gateway/tsconfig.app.json"
+      }
+    },
+    "service:auth/authentication": {
+      "type": "application",
+      "root": "apps/services/auth/authentication",
+      "entryFile": "main",
+      "sourceRoot": "apps/services/auth/authentication/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/services/auth/authentication/tsconfig.app.json"
+      }
+    },
+    "service:auth/authorization": {
+      "type": "application",
+      "root": "apps/services/auth/authorization",
+      "entryFile": "main",
+      "sourceRoot": "apps/services/auth/authorization/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/services/auth/authorization/tsconfig.app.json"
+      }
+    },
+    "common": {
+      "type": "library",
+      "root": "libs/common",
+      "entryFile": "index",
+      "sourceRoot": "libs/common/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/common/tsconfig.lib.json"
+      }
+    },
+    "command": {
+      "type": "library",
+      "root": "libs/command",
+      "entryFile": "index",
+      "sourceRoot": "libs/command/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/command/tsconfig.lib.json"
+      }
+    },
+    "blacklisted": {
+      "type": "library",
+      "root": "libs/blacklisted",
+      "entryFile": "index",
+      "sourceRoot": "libs/blacklisted/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/blacklisted/tsconfig.lib.json"
+      }
+    },
+    "health": {
+      "type": "library",
+      "root": "libs/health",
+      "entryFile": "index",
+      "sourceRoot": "libs/health/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/health/tsconfig.lib.json"
+      }
+    },
+    "redis": {
+      "type": "library",
+      "root": "libs/redis",
+      "entryFile": "index",
+      "sourceRoot": "libs/redis/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/redis/tsconfig.lib.json"
+      }
+    },
+    "users": {
+      "type": "application",
+      "root": "apps/users",
+      "entryFile": "main",
+      "sourceRoot": "apps/users/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/users/tsconfig.app.json"
+      }
+    },
+    "profiles": {
+      "type": "application",
+      "root": "apps/profiles",
+      "entryFile": "main",
+      "sourceRoot": "apps/profiles/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/profiles/tsconfig.app.json"
+      }
+    },
+    "sessions": {
+      "type": "application",
+      "root": "apps/sessions",
+      "entryFile": "main",
+      "sourceRoot": "apps/sessions/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/sessions/tsconfig.app.json"
+      }
+    },
+    "grants": {
+      "type": "application",
+      "root": "apps/grants",
+      "entryFile": "main",
+      "sourceRoot": "apps/grants/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/grants/tsconfig.app.json"
+      }
+    },
+    "apps": {
+      "type": "application",
+      "root": "apps/apps",
+      "entryFile": "main",
+      "sourceRoot": "apps/apps/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/apps/tsconfig.app.json"
+      }
+    },
+    "clients": {
+      "type": "application",
+      "root": "apps/clients",
+      "entryFile": "main",
+      "sourceRoot": "apps/clients/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/clients/tsconfig.app.json"
+      }
+    },
+    "workflows": {
+      "type": "application",
+      "root": "apps/workflows",
+      "entryFile": "main",
+      "sourceRoot": "apps/workflows/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/workflows/tsconfig.app.json"
+      }
+    },
+    "assets": {
+      "type": "application",
+      "root": "apps/assets",
+      "entryFile": "main",
+      "sourceRoot": "apps/assets/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/assets/tsconfig.app.json"
+      }
+    },
+    "wallets": {
+      "type": "application",
+      "root": "apps/wallets",
+      "entryFile": "main",
+      "sourceRoot": "apps/wallets/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/wallets/tsconfig.app.json"
+      }
+    },
+    "invoices": {
+      "type": "application",
+      "root": "apps/invoices",
+      "entryFile": "main",
+      "sourceRoot": "apps/invoices/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/invoices/tsconfig.app.json"
+      }
+    },
+    "transactions": {
+      "type": "application",
+      "root": "apps/transactions",
+      "entryFile": "main",
+      "sourceRoot": "apps/transactions/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/transactions/tsconfig.app.json"
+      }
+    },
+    "configs": {
+      "type": "application",
+      "root": "apps/configs",
+      "entryFile": "main",
+      "sourceRoot": "apps/configs/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/configs/tsconfig.app.json"
+      }
+    },
+    "stats": {
+      "type": "application",
+      "root": "apps/stats",
+      "entryFile": "main",
+      "sourceRoot": "apps/stats/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/stats/tsconfig.app.json"
+      }
+    },
+    "artifacts": {
+      "type": "application",
+      "root": "apps/artifacts",
+      "entryFile": "main",
+      "sourceRoot": "apps/artifacts/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/artifacts/tsconfig.app.json"
+      }
+    },
+    "alerts": {
+      "type": "application",
+      "root": "apps/alerts",
+      "entryFile": "main",
+      "sourceRoot": "apps/alerts/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/alerts/tsconfig.app.json"
+      }
+    },
+    "metrics": {
+      "type": "application",
+      "root": "apps/metrics",
+      "entryFile": "main",
+      "sourceRoot": "apps/metrics/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/metrics/tsconfig.app.json"
+      }
+    },
+    "devices": {
+      "type": "application",
+      "root": "apps/devices",
+      "entryFile": "main",
+      "sourceRoot": "apps/devices/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/devices/tsconfig.app.json"
+      }
+    },
+    "sensors": {
+      "type": "application",
+      "root": "apps/sensors",
+      "entryFile": "main",
+      "sourceRoot": "apps/sensors/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/sensors/tsconfig.app.json"
+      }
+    },
+    "shops": {
+      "type": "application",
+      "root": "apps/shops",
+      "entryFile": "main",
+      "sourceRoot": "apps/shops/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/shops/tsconfig.app.json"
+      }
+    },
+    "products": {
+      "type": "application",
+      "root": "apps/products",
+      "entryFile": "main",
+      "sourceRoot": "apps/products/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/products/tsconfig.app.json"
+      }
+    },
+    "locations": {
+      "type": "application",
+      "root": "apps/locations",
+      "entryFile": "main",
+      "sourceRoot": "apps/locations/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/locations/tsconfig.app.json"
+      }
+    },
+    "signaling": {
+      "type": "application",
+      "root": "apps/signaling",
+      "entryFile": "main",
+      "sourceRoot": "apps/signaling/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/signaling/tsconfig.app.json"
+      }
+    },
+    "webpush": {
+      "type": "application",
+      "root": "apps/webpush",
+      "entryFile": "main",
+      "sourceRoot": "apps/webpush/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/webpush/tsconfig.app.json"
+      }
+    },
+    "messages": {
+      "type": "application",
+      "root": "apps/messages",
+      "entryFile": "main",
+      "sourceRoot": "apps/messages/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/messages/tsconfig.app.json"
+      }
+    },
+    "rooms": {
+      "type": "application",
+      "root": "apps/rooms",
+      "entryFile": "main",
+      "sourceRoot": "apps/rooms/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/rooms/tsconfig.app.json"
+      }
+    },
+    "otp": {
+      "type": "application",
+      "root": "apps/otp",
+      "entryFile": "main",
+      "sourceRoot": "apps/otp/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/otp/tsconfig.app.json"
+      }
+    },
+    "jobs": {
+      "type": "application",
+      "root": "apps/jobs",
+      "entryFile": "main",
+      "sourceRoot": "apps/jobs/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/jobs/tsconfig.app.json"
+      }
+    },
+    "coworkers": {
+      "type": "application",
+      "root": "apps/coworkers",
+      "entryFile": "main",
+      "sourceRoot": "apps/coworkers/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/coworkers/tsconfig.app.json"
+      }
+    },
+    "employees": {
+      "type": "application",
+      "root": "apps/employees",
+      "entryFile": "main",
+      "sourceRoot": "apps/employees/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/employees/tsconfig.app.json"
+      }
+    },
+    "stores": {
+      "type": "application",
+      "root": "apps/stores",
+      "entryFile": "main",
+      "sourceRoot": "apps/stores/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/stores/tsconfig.app.json"
+      }
+    },
+    "comments": {
+      "type": "application",
+      "root": "apps/comments",
+      "entryFile": "main",
+      "sourceRoot": "apps/comments/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/comments/tsconfig.app.json"
       }
     }
   }
