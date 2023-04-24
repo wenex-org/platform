@@ -1,8 +1,5 @@
 version: '3.8'
 
-networks:
-  platform:
-
 services:
   jaeger:
     image: jaegertracing/all-in-one:1.44
@@ -29,3 +26,6 @@ services:
       - jaeger
     networks:
       - platform
+
+networks:
+  platform:

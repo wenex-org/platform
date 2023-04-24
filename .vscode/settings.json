@@ -16,6 +16,7 @@
         "**/node_modules": true
     },
     "cSpell.words": [
+        "nestjs",
         "OTLP"
     ]
 }
