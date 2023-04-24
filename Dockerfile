@@ -19,4 +19,4 @@ ENV OTLP_SERVICE_NAME=${APP_NAME}
 
 EXPOSE 3000 5000
 
-CMD npm run start:dev ${PROJECT}
+CMD npm run start ${PROJECT}

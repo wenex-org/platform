@@ -1,0 +1,27 @@
+version: '3.8'
+
+x-common: &common
+  build:
+    context: .
+  env_file:
+    - .env
+  environment:
+    DEBUG: '*'
+    NODE_ENV: prod
+  networks:
+    - platform
+
+services:
+  gateway:
+    build:
+      args:
+        APP_NAME: gateway
+    ports:
+      - '3000:3000' # Rest
+      - '5000:5000' # gRPC
+    environment:
+      SENTRY_DSN:
+    <<: *common
+
+networks:
+  platform:
