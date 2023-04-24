@@ -1,0 +1,21 @@
+{
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "git.mergeEditor": true,
+    "docwriter.style": "Auto-detect",
+    "editor.tabCompletion": "on",
+    "diffEditor.codeLens": true,
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/node_modules": true
+    },
+    "cSpell.words": [
+        "OTLP"
+    ]
+}
