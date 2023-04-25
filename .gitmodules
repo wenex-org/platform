@@ -1,15 +1,18 @@
 [submodule "apps/gateway"]
 	path = apps/gateway
 	url = git@github.com:wenex-org/platform-gateway.git
+[submodule "apps/premium"]
+	path = apps/premium
+	url = git@github.com:wenex-org/platform-premium.git
+[submodule "apps/primary"]
+	path = apps/primary
+	url = git@github.com:wenex-org/platform-primary.git
+[submodule "compose"]
+	path = compose
+	url = git@github.com:wenex-org/platform-compose.git
 [submodule "protos"]
 	path = protos
 	url = git@github.com:wenex-org/platform-protos.git
 [submodule "libs"]
 	path = libs
 	url = git@github.com:wenex-org/platform-libs.git
-[submodule "compose"]
-	path = compose
-	url = git@github.com:wenex-org/platform-compose.git
-[submodule "apps/premium"]
-	path = apps/premium
-	url = git@github.com:wenex-org/platform-premium.git
