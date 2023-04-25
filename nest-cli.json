@@ -22,22 +22,328 @@
         "tsConfigPath": "apps/gateway/tsconfig.app.json"
       }
     },
+    "service:otp": {
+      "type": "application",
+      "root": "apps/primary/otp",
+      "entryFile": "main",
+      "sourceRoot": "apps/primary/otp/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/primary/otp/tsconfig.app.json"
+      }
+    },
+    "service:stats": {
+      "type": "application",
+      "root": "apps/stats",
+      "entryFile": "main",
+      "sourceRoot": "apps/stats/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/stats/tsconfig.app.json"
+      }
+    },
+    "service:grants": {
+      "type": "application",
+      "root": "apps/primary/grants",
+      "entryFile": "main",
+      "sourceRoot": "apps/primary/grants/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/primary/grants/tsconfig.app.json"
+      }
+    },
+    "service:assets": {
+      "type": "application",
+      "root": "apps/primary/assets",
+      "entryFile": "main",
+      "sourceRoot": "apps/primary/assets/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/primary/assets/tsconfig.app.json"
+      }
+    },
+    "service:configs": {
+      "type": "application",
+      "root": "apps/primary/configs",
+      "entryFile": "main",
+      "sourceRoot": "apps/primary/configs/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/primary/configs/tsconfig.app.json"
+      }
+    },
+    "service:artifacts": {
+      "type": "application",
+      "root": "apps/primary/artifacts",
+      "entryFile": "main",
+      "sourceRoot": "apps/primary/artifacts/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/primary/artifacts/tsconfig.app.json"
+      }
+    },
     "service:auth/authentication": {
       "type": "application",
-      "root": "apps/services/auth/authentication",
+      "root": "apps/primary/auth/authentication",
       "entryFile": "main",
-      "sourceRoot": "apps/services/auth/authentication/src",
+      "sourceRoot": "apps/primary/auth/authentication/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/services/auth/authentication/tsconfig.app.json"
+        "tsConfigPath": "apps/primary/auth/authentication/tsconfig.app.json"
       }
     },
     "service:auth/authorization": {
       "type": "application",
-      "root": "apps/services/auth/authorization",
+      "root": "apps/primary/auth/authorization",
       "entryFile": "main",
-      "sourceRoot": "apps/services/auth/authorization/src",
+      "sourceRoot": "apps/primary/auth/authorization/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/services/auth/authorization/tsconfig.app.json"
+        "tsConfigPath": "apps/primary/auth/authorization/tsconfig.app.json"
+      }
+    },
+    "service:domain/apps": {
+      "type": "application",
+      "root": "apps/primary/domain/apps",
+      "entryFile": "main",
+      "sourceRoot": "apps/primary/domain/apps/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/primary/domain/apps/tsconfig.app.json"
+      }
+    },
+    "service:domain/clients": {
+      "type": "application",
+      "root": "apps/primary/domain/clients",
+      "entryFile": "main",
+      "sourceRoot": "apps/primary/domain/clients/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/primary/domain/clients/tsconfig.app.json"
+      }
+    },
+    "service:identity/users": {
+      "type": "application",
+      "root": "apps/primary/identity/users",
+      "entryFile": "main",
+      "sourceRoot": "apps/primary/identity/users/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/primary/identity/users/tsconfig.app.json"
+      }
+    },
+    "service:identity/profiles": {
+      "type": "application",
+      "root": "apps/primary/identity/profiles",
+      "entryFile": "main",
+      "sourceRoot": "apps/primary/identity/profiles/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/primary/identity/profiles/tsconfig.app.json"
+      }
+    },
+    "service:identity/sessions": {
+      "type": "application",
+      "root": "apps/primary/identity/sessions",
+      "entryFile": "main",
+      "sourceRoot": "apps/primary/identity/sessions/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/primary/identity/sessions/tsconfig.app.json"
+      }
+    },
+    "service:alerts": {
+      "type": "application",
+      "root": "apps/premium/alerts",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/alerts/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/alerts/tsconfig.app.json"
+      }
+    },
+    "service:thing/devices": {
+      "type": "application",
+      "root": "apps/premium/thing/devices",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/thing/devices/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/thing/devices/tsconfig.app.json"
+      }
+    },
+    "service:thing/sensors": {
+      "type": "application",
+      "root": "apps/premium/thing/sensors",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/thing/sensors/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/thing/sensors/tsconfig.app.json"
+      }
+    },
+    "service:thing/metrics": {
+      "type": "application",
+      "root": "apps/premium/thing/metrics",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/thing/metrics/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/thing/metrics/tsconfig.app.json"
+      }
+    },
+    "service:financial/wallets": {
+      "type": "application",
+      "root": "apps/premium/financial/wallets",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/financial/wallets/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/financial/wallets/tsconfig.app.json"
+      }
+    },
+    "service:financial/invoices": {
+      "type": "application",
+      "root": "apps/premium/financial/invoices",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/financial/invoices/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/financial/invoices/tsconfig.app.json"
+      }
+    },
+    "service:financial/transactions": {
+      "type": "application",
+      "root": "apps/premium/financial/transactions",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/financial/transactions/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/financial/transactions/tsconfig.app.json"
+      }
+    },
+    "service:business/stores": {
+      "type": "application",
+      "root": "apps/premium/business/stores",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/business/stores/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/business/stores/tsconfig.app.json"
+      }
+    },
+    "service:business/cooperations": {
+      "type": "application",
+      "root": "apps/premium/business/cooperations",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/business/cooperations/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/business/cooperations/tsconfig.app.json"
+      }
+    },
+    "service:business/coworkers": {
+      "type": "application",
+      "root": "apps/premium/business/coworkers",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/business/coworkers/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/business/coworkers/tsconfig.app.json"
+      }
+    },
+    "service:business/employees": {
+      "type": "application",
+      "root": "apps/premium/business/employees",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/business/employees/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/business/employees/tsconfig.app.json"
+      }
+    },
+    "service:business/shops": {
+      "type": "application",
+      "root": "apps/premium/business/shops",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/business/shops/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/business/shops/tsconfig.app.json"
+      }
+    },
+    "service:business/products": {
+      "type": "application",
+      "root": "apps/premium/business/products",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/business/products/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/business/products/tsconfig.app.json"
+      }
+    },
+    "service:chat/messages": {
+      "type": "application",
+      "root": "apps/premium/chat/messages",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/chat/messages/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/chat/messages/tsconfig.app.json"
+      }
+    },
+    "service:chat/rooms": {
+      "type": "application",
+      "root": "apps/premium/chat/rooms",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/chat/rooms/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/chat/rooms/tsconfig.app.json"
+      }
+    },
+    "service:chat/signaling": {
+      "type": "application",
+      "root": "apps/premium/chat/signaling",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/chat/signaling/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/chat/signaling/tsconfig.app.json"
+      }
+    },
+    "service:touch/sms": {
+      "type": "application",
+      "root": "apps/premium/touch/sms",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/touch/sms/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/touch/sms/tsconfig.app.json"
+      }
+    },
+    "service:touch/email": {
+      "type": "application",
+      "root": "apps/premium/touch/email",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/touch/email/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/touch/email/tsconfig.app.json"
+      }
+    },
+    "service:touch/webpush": {
+      "type": "application",
+      "root": "apps/premium/touch/webpush",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/touch/webpush/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/touch/webpush/tsconfig.app.json"
+      }
+    },
+    "service:jobs": {
+      "type": "application",
+      "root": "apps/premium/jobs",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/jobs/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/jobs/tsconfig.app.json"
+      }
+    },
+    "service:workflows": {
+      "type": "application",
+      "root": "apps/premium/workflows",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/workflows/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/workflows/tsconfig.app.json"
+      }
+    },
+    "service:locations": {
+      "type": "application",
+      "root": "apps/premium/locations",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/locations/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/locations/tsconfig.app.json"
+      }
+    },
+    "service:comments": {
+      "type": "application",
+      "root": "apps/premium/comments",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/comments/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/comments/tsconfig.app.json"
       }
     },
     "common": {
@@ -83,285 +389,6 @@
       "sourceRoot": "libs/redis/src",
       "compilerOptions": {
         "tsConfigPath": "libs/redis/tsconfig.lib.json"
-      }
-    },
-    "users": {
-      "type": "application",
-      "root": "apps/users",
-      "entryFile": "main",
-      "sourceRoot": "apps/users/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/users/tsconfig.app.json"
-      }
-    },
-    "profiles": {
-      "type": "application",
-      "root": "apps/profiles",
-      "entryFile": "main",
-      "sourceRoot": "apps/profiles/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/profiles/tsconfig.app.json"
-      }
-    },
-    "sessions": {
-      "type": "application",
-      "root": "apps/sessions",
-      "entryFile": "main",
-      "sourceRoot": "apps/sessions/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/sessions/tsconfig.app.json"
-      }
-    },
-    "grants": {
-      "type": "application",
-      "root": "apps/grants",
-      "entryFile": "main",
-      "sourceRoot": "apps/grants/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/grants/tsconfig.app.json"
-      }
-    },
-    "apps": {
-      "type": "application",
-      "root": "apps/apps",
-      "entryFile": "main",
-      "sourceRoot": "apps/apps/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/apps/tsconfig.app.json"
-      }
-    },
-    "clients": {
-      "type": "application",
-      "root": "apps/clients",
-      "entryFile": "main",
-      "sourceRoot": "apps/clients/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/clients/tsconfig.app.json"
-      }
-    },
-    "workflows": {
-      "type": "application",
-      "root": "apps/workflows",
-      "entryFile": "main",
-      "sourceRoot": "apps/workflows/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/workflows/tsconfig.app.json"
-      }
-    },
-    "assets": {
-      "type": "application",
-      "root": "apps/assets",
-      "entryFile": "main",
-      "sourceRoot": "apps/assets/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/assets/tsconfig.app.json"
-      }
-    },
-    "wallets": {
-      "type": "application",
-      "root": "apps/wallets",
-      "entryFile": "main",
-      "sourceRoot": "apps/wallets/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/wallets/tsconfig.app.json"
-      }
-    },
-    "invoices": {
-      "type": "application",
-      "root": "apps/invoices",
-      "entryFile": "main",
-      "sourceRoot": "apps/invoices/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/invoices/tsconfig.app.json"
-      }
-    },
-    "transactions": {
-      "type": "application",
-      "root": "apps/transactions",
-      "entryFile": "main",
-      "sourceRoot": "apps/transactions/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/transactions/tsconfig.app.json"
-      }
-    },
-    "configs": {
-      "type": "application",
-      "root": "apps/configs",
-      "entryFile": "main",
-      "sourceRoot": "apps/configs/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/configs/tsconfig.app.json"
-      }
-    },
-    "stats": {
-      "type": "application",
-      "root": "apps/stats",
-      "entryFile": "main",
-      "sourceRoot": "apps/stats/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/stats/tsconfig.app.json"
-      }
-    },
-    "artifacts": {
-      "type": "application",
-      "root": "apps/artifacts",
-      "entryFile": "main",
-      "sourceRoot": "apps/artifacts/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/artifacts/tsconfig.app.json"
-      }
-    },
-    "alerts": {
-      "type": "application",
-      "root": "apps/alerts",
-      "entryFile": "main",
-      "sourceRoot": "apps/alerts/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/alerts/tsconfig.app.json"
-      }
-    },
-    "metrics": {
-      "type": "application",
-      "root": "apps/metrics",
-      "entryFile": "main",
-      "sourceRoot": "apps/metrics/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/metrics/tsconfig.app.json"
-      }
-    },
-    "devices": {
-      "type": "application",
-      "root": "apps/devices",
-      "entryFile": "main",
-      "sourceRoot": "apps/devices/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/devices/tsconfig.app.json"
-      }
-    },
-    "sensors": {
-      "type": "application",
-      "root": "apps/sensors",
-      "entryFile": "main",
-      "sourceRoot": "apps/sensors/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/sensors/tsconfig.app.json"
-      }
-    },
-    "shops": {
-      "type": "application",
-      "root": "apps/shops",
-      "entryFile": "main",
-      "sourceRoot": "apps/shops/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/shops/tsconfig.app.json"
-      }
-    },
-    "products": {
-      "type": "application",
-      "root": "apps/products",
-      "entryFile": "main",
-      "sourceRoot": "apps/products/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/products/tsconfig.app.json"
-      }
-    },
-    "locations": {
-      "type": "application",
-      "root": "apps/locations",
-      "entryFile": "main",
-      "sourceRoot": "apps/locations/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/locations/tsconfig.app.json"
-      }
-    },
-    "signaling": {
-      "type": "application",
-      "root": "apps/signaling",
-      "entryFile": "main",
-      "sourceRoot": "apps/signaling/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/signaling/tsconfig.app.json"
-      }
-    },
-    "webpush": {
-      "type": "application",
-      "root": "apps/webpush",
-      "entryFile": "main",
-      "sourceRoot": "apps/webpush/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/webpush/tsconfig.app.json"
-      }
-    },
-    "messages": {
-      "type": "application",
-      "root": "apps/messages",
-      "entryFile": "main",
-      "sourceRoot": "apps/messages/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/messages/tsconfig.app.json"
-      }
-    },
-    "rooms": {
-      "type": "application",
-      "root": "apps/rooms",
-      "entryFile": "main",
-      "sourceRoot": "apps/rooms/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/rooms/tsconfig.app.json"
-      }
-    },
-    "otp": {
-      "type": "application",
-      "root": "apps/otp",
-      "entryFile": "main",
-      "sourceRoot": "apps/otp/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/otp/tsconfig.app.json"
-      }
-    },
-    "jobs": {
-      "type": "application",
-      "root": "apps/jobs",
-      "entryFile": "main",
-      "sourceRoot": "apps/jobs/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/jobs/tsconfig.app.json"
-      }
-    },
-    "coworkers": {
-      "type": "application",
-      "root": "apps/coworkers",
-      "entryFile": "main",
-      "sourceRoot": "apps/coworkers/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/coworkers/tsconfig.app.json"
-      }
-    },
-    "employees": {
-      "type": "application",
-      "root": "apps/employees",
-      "entryFile": "main",
-      "sourceRoot": "apps/employees/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/employees/tsconfig.app.json"
-      }
-    },
-    "stores": {
-      "type": "application",
-      "root": "apps/stores",
-      "entryFile": "main",
-      "sourceRoot": "apps/stores/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/stores/tsconfig.app.json"
-      }
-    },
-    "comments": {
-      "type": "application",
-      "root": "apps/comments",
-      "entryFile": "main",
-      "sourceRoot": "apps/comments/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/comments/tsconfig.app.json"
       }
     }
   }

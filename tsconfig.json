@@ -47,12 +47,6 @@
       ],
       "@app/redis/*": [
         "libs/redis/src/*"
-      ],
-      "@app/otp": [
-        "libs/otp/src"
-      ],
-      "@app/otp/*": [
-        "libs/otp/src/*"
       ]
     }
   }
