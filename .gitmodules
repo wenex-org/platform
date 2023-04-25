@@ -7,3 +7,6 @@
 [submodule "libs"]
 	path = libs
 	url = git@github.com:wenex-org/platform-libs.git
+[submodule "compose"]
+	path = compose
+	url = git@github.com:wenex-org/platform-compose.git
