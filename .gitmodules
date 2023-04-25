@@ -10,3 +10,6 @@
 [submodule "compose"]
 	path = compose
 	url = git@github.com:wenex-org/platform-compose.git
+[submodule "apps/premium"]
+	path = apps/premium
+	url = git@github.com:wenex-org/platform-premium.git
