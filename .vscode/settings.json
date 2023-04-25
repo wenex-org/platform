@@ -16,10 +16,14 @@
         "**/node_modules": true
     },
     "cSpell.words": [
+        "metinseylan",
         "nestjs",
+        "opentelemetry",
         "OTLP",
         "proto",
         "protos",
-        "webpush"
+        "Vahid",
+        "webpush",
+        "Zipkin"
     ]
 }

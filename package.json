@@ -1,7 +1,7 @@
 {
   "name": "platform",
   "version": "0.0.1",
-  "description": "",
+  "description": "Platform with a microservice design",
   "author": "Vahid V. <vhid.vz@gmail.com>",
   "license": "MIT",
   "scripts": {
