@@ -1,3 +1,6 @@
 [submodule "apps/gateway"]
 	path = apps/gateway
 	url = git@github.com:wenex-org/platform-gateway.git
+[submodule "protos"]
+	path = protos
+	url = git@github.com:wenex-org/platform-protos.git
