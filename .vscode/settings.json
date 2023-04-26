@@ -16,7 +16,10 @@
         "**/node_modules": true
     },
     "cSpell.words": [
+        "consts",
         "metinseylan",
+        "minio",
+        "minioadmin",
         "nestjs",
         "opentelemetry",
         "OTLP",
@@ -24,6 +27,7 @@
         "protos",
         "Vahid",
         "webpush",
+        "wenex",
         "Zipkin"
     ]
 }
