@@ -16,7 +16,9 @@
         "**/node_modules": true
     },
     "cSpell.words": [
+        "abacl",
         "consts",
+        "kafkajs",
         "metinseylan",
         "minio",
         "minioadmin",
