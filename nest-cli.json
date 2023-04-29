@@ -175,6 +175,15 @@
         "tsConfigPath": "apps/premium/thing/metrics/tsconfig.app.json"
       }
     },
+    "service:financial/accounts": {
+      "type": "application",
+      "root": "apps/premium/financial/accounts",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/financial/accounts/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/financial/accounts/tsconfig.app.json"
+      }
+    },
     "service:financial/wallets": {
       "type": "application",
       "root": "apps/premium/financial/wallets",
@@ -254,6 +263,24 @@
       "sourceRoot": "apps/premium/business/suppliers/src",
       "compilerOptions": {
         "tsConfigPath": "apps/premium/business/suppliers/tsconfig.app.json"
+      }
+    },
+    "service:chat/contacts": {
+      "type": "application",
+      "root": "apps/premium/chat/contacts",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/chat/contacts/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/chat/contacts/tsconfig.app.json"
+      }
+    },
+    "service:chat/members": {
+      "type": "application",
+      "root": "apps/premium/chat/members",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/chat/members/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/chat/members/tsconfig.app.json"
       }
     },
     "service:chat/messages": {
