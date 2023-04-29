@@ -202,31 +202,13 @@
         "tsConfigPath": "apps/premium/financial/transactions/tsconfig.app.json"
       }
     },
-    "service:business/stores": {
+    "service:business/customers": {
       "type": "application",
-      "root": "apps/premium/business/stores",
+      "root": "apps/premium/business/customers",
       "entryFile": "main",
-      "sourceRoot": "apps/premium/business/stores/src",
+      "sourceRoot": "apps/premium/business/customers/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/premium/business/stores/tsconfig.app.json"
-      }
-    },
-    "service:business/cooperations": {
-      "type": "application",
-      "root": "apps/premium/business/cooperations",
-      "entryFile": "main",
-      "sourceRoot": "apps/premium/business/cooperations/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/premium/business/cooperations/tsconfig.app.json"
-      }
-    },
-    "service:business/coworkers": {
-      "type": "application",
-      "root": "apps/premium/business/coworkers",
-      "entryFile": "main",
-      "sourceRoot": "apps/premium/business/coworkers/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/premium/business/coworkers/tsconfig.app.json"
+        "tsConfigPath": "apps/premium/business/customers/tsconfig.app.json"
       }
     },
     "service:business/employees": {
@@ -238,13 +220,22 @@
         "tsConfigPath": "apps/premium/business/employees/tsconfig.app.json"
       }
     },
-    "service:business/shops": {
+    "service:business/investors": {
       "type": "application",
-      "root": "apps/premium/business/shops",
+      "root": "apps/premium/business/investors",
       "entryFile": "main",
-      "sourceRoot": "apps/premium/business/shops/src",
+      "sourceRoot": "apps/premium/business/investors/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/premium/business/shops/tsconfig.app.json"
+        "tsConfigPath": "apps/premium/business/investors/tsconfig.app.json"
+      }
+    },
+    "service:business/partners": {
+      "type": "application",
+      "root": "apps/premium/business/partners",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/business/partners/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/business/partners/tsconfig.app.json"
       }
     },
     "service:business/products": {
@@ -254,6 +245,15 @@
       "sourceRoot": "apps/premium/business/products/src",
       "compilerOptions": {
         "tsConfigPath": "apps/premium/business/products/tsconfig.app.json"
+      }
+    },
+    "service:business/suppliers": {
+      "type": "application",
+      "root": "apps/premium/business/suppliers",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/business/suppliers/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/business/suppliers/tsconfig.app.json"
       }
     },
     "service:chat/messages": {
