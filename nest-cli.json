@@ -4,10 +4,9 @@
   "sourceRoot": "apps/gateway/src",
   "compilerOptions": {
     "webpack": true,
+    "watchAssets": true,
     "deleteOutDir": true,
-    "assets": [
-      "protos/*.proto"
-    ],
+    "assets": ["**/*.proto"],
     "tsConfigPath": "apps/gateway/tsconfig.app.json"
   },
   "monorepo": true,
