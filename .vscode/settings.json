@@ -23,6 +23,7 @@
         "minio",
         "minioadmin",
         "nestjs",
+        "ntegral",
         "opentelemetry",
         "OTLP",
         "proto",
@@ -31,6 +32,7 @@
         "Vahid",
         "webpush",
         "wenex",
+        "willsoto",
         "Zipkin"
     ]
 }
