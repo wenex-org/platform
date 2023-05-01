@@ -16,7 +16,19 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./apps/platform/test/jest-e2e.json"
+    "test:e2e": "jest --config ./apps/platform/test/jest-e2e.json",
+    "command": "dotenv -e .env -- node -r tsconfig-paths/register -r ts-node/register libs/command/src/main.ts",
+    "command:debug": "dotenv -e .env -- node --inspect-brk -r tsconfig-paths/register -r ts-node/register libs/command/src/main.ts",
+    "db:clean": "npm run command -- db clean",
+    "db:seed": "npm run command -- db seed",
+    "db:debug": "npm run command:debug -- db",
+    "mongo:drop": "npm run command -- mongo drop",
+    "mongo:seed": "npm run command -- mongo seed",
+    "mongo:debug": "npm run command:debug -- mongo",
+    "storage:init": "npm run command -- storage init",
+    "storage:debug": "npm run command:debug -- storage",
+    "minio:init": "npm run command -- minio init",
+    "minio:debug": "npm run command:debug -- minio"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.321.1",
@@ -30,6 +42,7 @@
     "@nestjs/platform-express": "^9.4.0",
     "@nestjs/swagger": "^6.3.0",
     "@nestjs/terminus": "^9.2.2",
+    "@nestjs/websockets": "^9.4.0",
     "@ntegral/nestjs-sentry": "^4.0.0",
     "@opentelemetry/api": "^1.4.1",
     "@opentelemetry/auto-instrumentations-node": "^0.36.6",
@@ -60,6 +73,8 @@
     "mongoose": "^7.1.0",
     "multer-s3": "^3.0.1",
     "naming-conventions-modeler": "^1.4.0",
+    "nest-commander": "^3.7.0",
+    "nestjs-minio-client": "^2.0.0",
     "prom-client": "^14.2.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1"
