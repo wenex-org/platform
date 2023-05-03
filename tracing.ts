@@ -6,6 +6,7 @@ import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentation
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 import { NestInstrumentation } from '@opentelemetry/instrumentation-nestjs-core';
 import { ExpressInstrumentation } from '@opentelemetry/instrumentation-express';
+import { GraphQLInstrumentation } from '@opentelemetry/instrumentation-graphql';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
@@ -15,7 +16,7 @@ import { ZipkinExporter } from '@opentelemetry/exporter-zipkin';
 import { Resource } from '@opentelemetry/resources';
 import { NodeSDK } from '@opentelemetry/sdk-node';
 
-export function initTracing() {
+export function initTracing(modules: ('http' | 'grpc' | 'graphql')[]) {
   try {
     diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.WARN);
 
@@ -35,11 +36,19 @@ export function initTracing() {
     provider.addSpanProcessor(new BatchSpanProcessor(exporter));
     provider.register();
 
+    const instrumentations = [];
+
+    if (modules.includes('http'))
+      instrumentations.push(new HttpInstrumentation());
+    if (modules.includes('grpc'))
+      instrumentations.push(new GrpcInstrumentation());
+    if (modules.includes('graphql'))
+      instrumentations.push(new GraphQLInstrumentation());
+
     registerInstrumentations({
       tracerProvider: provider,
       instrumentations: [
-        new HttpInstrumentation(),
-        new GrpcInstrumentation(),
+        ...instrumentations,
         new ExpressInstrumentation(),
         new NestInstrumentation(),
       ],
