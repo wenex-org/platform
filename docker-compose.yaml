@@ -17,8 +17,8 @@ services:
       args:
         APP_NAME: gateway
     ports:
-      - '3000:3000' # Rest
-      - '5000:5000' # gRPC
+      - '3001:3001' # Rest
+      - '5001:5001' # gRPC
     environment:
       SENTRY_DSN:
     <<: *common
