@@ -6,7 +6,6 @@ import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentation
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 import { NestInstrumentation } from '@opentelemetry/instrumentation-nestjs-core';
 import { ExpressInstrumentation } from '@opentelemetry/instrumentation-express';
-import { GraphQLInstrumentation } from '@opentelemetry/instrumentation-graphql';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
@@ -41,7 +40,6 @@ export function initTracing() {
       instrumentations: [
         new HttpInstrumentation(),
         new GrpcInstrumentation(),
-        new GraphQLInstrumentation(),
         new ExpressInstrumentation(),
         new NestInstrumentation(),
       ],
