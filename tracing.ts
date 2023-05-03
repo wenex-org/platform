@@ -16,7 +16,7 @@ import { ZipkinExporter } from '@opentelemetry/exporter-zipkin';
 import { Resource } from '@opentelemetry/resources';
 import { NodeSDK } from '@opentelemetry/sdk-node';
 
-export async function initTracing() {
+export function initTracing() {
   try {
     diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.WARN);
 
