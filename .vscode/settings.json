@@ -19,6 +19,7 @@
         "abacl",
         "consts",
         "kafkajs",
+        "metatype",
         "metinseylan",
         "minio",
         "minioadmin",
