@@ -7,6 +7,7 @@ import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentation
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 import { NestInstrumentation } from '@opentelemetry/instrumentation-nestjs-core';
 import { ExpressInstrumentation } from '@opentelemetry/instrumentation-express';
+import { KafkaJsInstrumentation } from 'opentelemetry-instrumentation-kafkajs';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
 import { GrpcInstrumentation } from '@opentelemetry/instrumentation-grpc';
@@ -16,7 +17,7 @@ import { Resource } from '@opentelemetry/resources';
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { NODE_ENV } from '@app/common/configs';
 
-export const initTracing = async (modules: ('http' | 'grpc')[]) => {
+export const initTracing = async (modules: ('http' | 'grpc' | 'kafka')[]) => {
   const exporter = new OTLPTraceExporter({
     url: `http://${process.env.OTLP_HOST}:${process.env.OTLP_PORT}/v1/traces`,
   });
@@ -45,6 +46,8 @@ export const initTracing = async (modules: ('http' | 'grpc')[]) => {
     instrumentations.push(new HttpInstrumentation());
   if (modules.includes('grpc'))
     instrumentations.push(new GrpcInstrumentation());
+  if (modules.includes('kafka'))
+    instrumentations.push(new KafkaJsInstrumentation());
 
   provider.register();
   const sdk = new NodeSDK({
