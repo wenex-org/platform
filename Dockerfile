@@ -1,22 +1,21 @@
 # App Image
-FROM node:18-alpine AS BASE
+FROM node:18-alpine AS build
 
 WORKDIR /app
 
-COPY package-lock.json ./
+COPY package*.json ./
 
 RUN npm ci
 
 # Service Image
-FROM BASE
+FROM build
 
 COPY . .
 
+ARG COMMAND
 ARG APP_NAME
 
 ENV SERVICE_NAME=${APP_NAME}
 ENV OTLP_SERVICE_NAME=${APP_NAME}
 
-EXPOSE 3000 5000
-
-CMD npm run start ${SERVICE_NAME}
+CMD npm run start ${COMMAND}

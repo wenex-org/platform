@@ -5,9 +5,6 @@ x-common: &common
     context: .
   env_file:
     - .env
-  environment:
-    DEBUG: '*'
-    NODE_ENV: prod
   networks:
     - platform
 
@@ -21,6 +18,20 @@ services:
       - '5001:5001' # gRPC
     environment:
       SENTRY_DSN:
+    <<: *common
+
+  service-grants:
+    container_name: service-grants
+    build:
+      args:
+        COMMAND: "service:grants"
+        APP_NAME: service-grants
+    ports:
+      - '3054:3054' # Rest
+      - '5054:5054' # gRPC
+    environment:
+      NODE_ENV: prod
+      SENTRY_DSN: https://bce7769e92dd477e8bb1b9d7f2288711@o1209414.ingest.sentry.io/4505130814078976
     <<: *common
 
 networks:
