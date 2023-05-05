@@ -33,7 +33,9 @@ export const initTracing = async (modules: ('http' | 'grpc' | 'kafka')[]) => {
     : SimpleSpanProcessor;
 
   if (NODE_ENV().IS_PRODUCTION)
-    provider.addSpanProcessor(new SpanProcessor(new ZipkinExporter()));
+    provider.addSpanProcessor(
+      new SpanProcessor(new ZipkinExporter({ url: process.env.ZIPKIN_URL })),
+    );
   // export spans to opentelemetry collector
   else provider.addSpanProcessor(new SpanProcessor(exporter));
 
