@@ -31,7 +31,99 @@ services:
       - '5054:5054' # gRPC
     environment:
       NODE_ENV: prod
-      SENTRY_DSN: https://bce7769e92dd477e8bb1b9d7f2288711@o1209414.ingest.sentry.io/4505130814078976
+      SENTRY_DSN:
+    <<: *common
+
+  service-configs:
+    container_name: service-configs
+    build:
+      args:
+        COMMAND: "service:configs"
+        APP_NAME: service-configs
+    ports:
+      - '3056:3056' # Rest
+      - '5056:5056' # gRPC
+    environment:
+      NODE_ENV: prod
+      SENTRY_DSN:
+    <<: *common
+    
+  #######################
+  # DOMAIN SERVICES
+  #######################
+
+  service-domain-apps:
+    container_name: service-domain-apps
+    build:
+      args:
+        COMMAND: "service:domain/apps"
+        APP_NAME: service-domain-apps
+    ports:
+      - '3052:3052' # Rest
+      - '5052:5052' # gRPC
+    environment:
+      NODE_ENV: prod
+      SENTRY_DSN:
+    <<: *common
+
+  service-domain-clients:
+    container_name: service-domain-clients
+    build:
+      args:
+        COMMAND: "service:domain/clients"
+        APP_NAME: service-domain-clients
+    ports:
+      - '3055:3055' # Rest
+      - '5055:5055' # gRPC
+    environment:
+      NODE_ENV: prod
+      SENTRY_DSN:
+    <<: *common
+
+  #######################
+  # IDENTITY SERVICES
+  #######################
+
+  service-identity-users:
+    container_name: service-identity-users
+    build:
+      args:
+        COMMAND: "service:identity/users"
+        APP_NAME: service-identity-users
+    ports:
+      - '3053:3053' # Rest
+      - '5053:5053' # gRPC
+    environment:
+      NODE_ENV: prod
+      SENTRY_DSN:
+    <<: *common
+
+  service-identity-sessions:
+    container_name: service-identity-sessions
+    build:
+      args:
+        COMMAND: "service:identity/sessions"
+        APP_NAME: service-identity-sessions
+    ports:
+      - '3057:3057' # Rest
+      - '5057:5057' # gRPC
+    environment:
+      NODE_ENV: prod
+      SENTRY_DSN:
+    <<: *common
+
+  service-identity-profiles:
+    container_name: service-identity-profiles
+    build:
+      args:
+        COMMAND: "service:identity/profiles"
+        APP_NAME: service-identity-profiles
+    ports:
+      - '3058:3058' # Rest
+      - '5058:5058' # gRPC
+    environment:
+      NODE_ENV: prod
+      SENTRY_DSN:
     <<: *common
 
 networks:
