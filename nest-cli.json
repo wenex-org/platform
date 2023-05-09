@@ -417,6 +417,15 @@
         "tsConfigPath": "apps/premium/intellij/classifications/tsconfig.app.json"
       }
     },
+    "service:intellij/recommendations": {
+      "type": "application",
+      "root": "apps/premium/intellij/recommendations",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/intellij/recommendations/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/intellij/recommendations/tsconfig.app.json"
+      }
+    },
     "common": {
       "type": "library",
       "root": "libs/common",
