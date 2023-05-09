@@ -21,24 +21,6 @@
         "tsConfigPath": "apps/gateway/tsconfig.app.json"
       }
     },
-    "service:otp": {
-      "type": "application",
-      "root": "apps/primary/auth/otp",
-      "entryFile": "main",
-      "sourceRoot": "apps/primary/auth/otp/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/primary/auth/otp/tsconfig.app.json"
-      }
-    },
-    "service:stats": {
-      "type": "application",
-      "root": "apps/primary/stats",
-      "entryFile": "main",
-      "sourceRoot": "apps/primary/stats/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/primary/stats/tsconfig.app.json"
-      }
-    },
     "service:grants": {
       "type": "application",
       "root": "apps/primary/grants",
@@ -46,15 +28,6 @@
       "sourceRoot": "apps/primary/grants/src",
       "compilerOptions": {
         "tsConfigPath": "apps/primary/grants/tsconfig.app.json"
-      }
-    },
-    "service:assets": {
-      "type": "application",
-      "root": "apps/premium/assets",
-      "entryFile": "main",
-      "sourceRoot": "apps/premium/assets/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/premium/assets/tsconfig.app.json"
       }
     },
     "service:configs": {
@@ -66,13 +39,85 @@
         "tsConfigPath": "apps/primary/configs/tsconfig.app.json"
       }
     },
-    "service:artifacts": {
+    "service:general/stats": {
       "type": "application",
-      "root": "apps/premium/artifacts",
+      "root": "apps/premium/general/stats",
       "entryFile": "main",
-      "sourceRoot": "apps/premium/artifacts/src",
+      "sourceRoot": "apps/premium/general/stats/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/premium/artifacts/tsconfig.app.json"
+        "tsConfigPath": "apps/premium/general/stats/tsconfig.app.json"
+      }
+    },
+    "service:general/assets": {
+      "type": "application",
+      "root": "apps/premium/general/assets",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/general/assets/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/general/assets/tsconfig.app.json"
+      }
+    },
+    "service:general/alerts": {
+      "type": "application",
+      "root": "apps/premium/general/alerts",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/general/alerts/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/general/alerts/tsconfig.app.json"
+      }
+    },
+    "service:general/artifacts": {
+      "type": "application",
+      "root": "apps/premium/general/artifacts",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/general/artifacts/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/general/artifacts/tsconfig.app.json"
+      }
+    },
+    "service:general/jobs": {
+      "type": "application",
+      "root": "apps/premium/general/jobs",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/general/jobs/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/general/jobs/tsconfig.app.json"
+      }
+    },
+    "service:general/workflows": {
+      "type": "application",
+      "root": "apps/premium/general/workflows",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/general/workflows/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/general/workflows/tsconfig.app.json"
+      }
+    },
+    "service:general/locations": {
+      "type": "application",
+      "root": "apps/premium/general/locations",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/general/locations/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/general/locations/tsconfig.app.json"
+      }
+    },
+    "service:general/comments": {
+      "type": "application",
+      "root": "apps/premium/general/comments",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/general/comments/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/general/comments/tsconfig.app.json"
+      }
+    },
+    "service:auth/otp": {
+      "type": "application",
+      "root": "apps/primary/auth/otp",
+      "entryFile": "main",
+      "sourceRoot": "apps/primary/auth/otp/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/primary/auth/otp/tsconfig.app.json"
       }
     },
     "service:auth/authentication": {
@@ -136,15 +181,6 @@
       "sourceRoot": "apps/primary/identity/sessions/src",
       "compilerOptions": {
         "tsConfigPath": "apps/primary/identity/sessions/tsconfig.app.json"
-      }
-    },
-    "service:alerts": {
-      "type": "application",
-      "root": "apps/premium/alerts",
-      "entryFile": "main",
-      "sourceRoot": "apps/premium/alerts/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/premium/alerts/tsconfig.app.json"
       }
     },
     "service:thing/devices": {
@@ -282,49 +318,49 @@
         "tsConfigPath": "apps/premium/work/suppliers/tsconfig.app.json"
       }
     },
-    "service:chat/contacts": {
+    "service:conjoin/contacts": {
       "type": "application",
-      "root": "apps/premium/chat/contacts",
+      "root": "apps/premium/conjoin/contacts",
       "entryFile": "main",
-      "sourceRoot": "apps/premium/chat/contacts/src",
+      "sourceRoot": "apps/premium/conjoin/contacts/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/premium/chat/contacts/tsconfig.app.json"
+        "tsConfigPath": "apps/premium/conjoin/contacts/tsconfig.app.json"
       }
     },
-    "service:chat/members": {
+    "service:conjoin/members": {
       "type": "application",
-      "root": "apps/premium/chat/members",
+      "root": "apps/premium/conjoin/members",
       "entryFile": "main",
-      "sourceRoot": "apps/premium/chat/members/src",
+      "sourceRoot": "apps/premium/conjoin/members/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/premium/chat/members/tsconfig.app.json"
+        "tsConfigPath": "apps/premium/conjoin/members/tsconfig.app.json"
       }
     },
-    "service:chat/messages": {
+    "service:conjoin/messages": {
       "type": "application",
-      "root": "apps/premium/chat/messages",
+      "root": "apps/premium/conjoin/messages",
       "entryFile": "main",
-      "sourceRoot": "apps/premium/chat/messages/src",
+      "sourceRoot": "apps/premium/conjoin/messages/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/premium/chat/messages/tsconfig.app.json"
+        "tsConfigPath": "apps/premium/conjoin/messages/tsconfig.app.json"
       }
     },
-    "service:chat/rooms": {
+    "service:conjoin/rooms": {
       "type": "application",
-      "root": "apps/premium/chat/rooms",
+      "root": "apps/premium/conjoin/rooms",
       "entryFile": "main",
-      "sourceRoot": "apps/premium/chat/rooms/src",
+      "sourceRoot": "apps/premium/conjoin/rooms/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/premium/chat/rooms/tsconfig.app.json"
+        "tsConfigPath": "apps/premium/conjoin/rooms/tsconfig.app.json"
       }
     },
-    "service:chat/signaling": {
+    "service:conjoin/signaling": {
       "type": "application",
-      "root": "apps/premium/chat/signaling",
+      "root": "apps/premium/conjoin/signaling",
       "entryFile": "main",
-      "sourceRoot": "apps/premium/chat/signaling/src",
+      "sourceRoot": "apps/premium/conjoin/signaling/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/premium/chat/signaling/tsconfig.app.json"
+        "tsConfigPath": "apps/premium/conjoin/signaling/tsconfig.app.json"
       }
     },
     "service:touch/sms": {
@@ -352,42 +388,6 @@
       "sourceRoot": "apps/premium/touch/webpush/src",
       "compilerOptions": {
         "tsConfigPath": "apps/premium/touch/webpush/tsconfig.app.json"
-      }
-    },
-    "service:jobs": {
-      "type": "application",
-      "root": "apps/premium/jobs",
-      "entryFile": "main",
-      "sourceRoot": "apps/premium/jobs/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/premium/jobs/tsconfig.app.json"
-      }
-    },
-    "service:workflows": {
-      "type": "application",
-      "root": "apps/premium/workflows",
-      "entryFile": "main",
-      "sourceRoot": "apps/premium/workflows/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/premium/workflows/tsconfig.app.json"
-      }
-    },
-    "service:locations": {
-      "type": "application",
-      "root": "apps/premium/locations",
-      "entryFile": "main",
-      "sourceRoot": "apps/premium/locations/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/premium/locations/tsconfig.app.json"
-      }
-    },
-    "service:comments": {
-      "type": "application",
-      "root": "apps/premium/comments",
-      "entryFile": "main",
-      "sourceRoot": "apps/premium/comments/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/premium/comments/tsconfig.app.json"
       }
     },
     "common": {
