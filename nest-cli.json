@@ -201,6 +201,15 @@
         "tsConfigPath": "apps/premium/financial/invoices/tsconfig.app.json"
       }
     },
+    "service:financial/transfers": {
+      "type": "application",
+      "root": "apps/premium/financial/transfers",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/financial/transfers/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/financial/transfers/tsconfig.app.json"
+      }
+    },
     "service:financial/transactions": {
       "type": "application",
       "root": "apps/premium/financial/transactions",
