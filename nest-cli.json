@@ -210,58 +210,67 @@
         "tsConfigPath": "apps/premium/financial/transactions/tsconfig.app.json"
       }
     },
-    "service:business/customers": {
+    "service:work/businesses": {
       "type": "application",
-      "root": "apps/premium/business/customers",
+      "root": "apps/premium/work/businesses",
       "entryFile": "main",
-      "sourceRoot": "apps/premium/business/customers/src",
+      "sourceRoot": "apps/premium/work/businesses/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/premium/business/customers/tsconfig.app.json"
+        "tsConfigPath": "apps/premium/work/businesses/tsconfig.app.json"
       }
     },
-    "service:business/employees": {
+    "service:work/customers": {
       "type": "application",
-      "root": "apps/premium/business/employees",
+      "root": "apps/premium/work/customers",
       "entryFile": "main",
-      "sourceRoot": "apps/premium/business/employees/src",
+      "sourceRoot": "apps/premium/work/customers/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/premium/business/employees/tsconfig.app.json"
+        "tsConfigPath": "apps/premium/work/customers/tsconfig.app.json"
       }
     },
-    "service:business/investors": {
+    "service:work/employees": {
       "type": "application",
-      "root": "apps/premium/business/investors",
+      "root": "apps/premium/work/employees",
       "entryFile": "main",
-      "sourceRoot": "apps/premium/business/investors/src",
+      "sourceRoot": "apps/premium/work/employees/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/premium/business/investors/tsconfig.app.json"
+        "tsConfigPath": "apps/premium/work/employees/tsconfig.app.json"
       }
     },
-    "service:business/partners": {
+    "service:work/investors": {
       "type": "application",
-      "root": "apps/premium/business/partners",
+      "root": "apps/premium/work/investors",
       "entryFile": "main",
-      "sourceRoot": "apps/premium/business/partners/src",
+      "sourceRoot": "apps/premium/work/investors/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/premium/business/partners/tsconfig.app.json"
+        "tsConfigPath": "apps/premium/work/investors/tsconfig.app.json"
       }
     },
-    "service:business/products": {
+    "service:work/partners": {
       "type": "application",
-      "root": "apps/premium/business/products",
+      "root": "apps/premium/work/partners",
       "entryFile": "main",
-      "sourceRoot": "apps/premium/business/products/src",
+      "sourceRoot": "apps/premium/work/partners/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/premium/business/products/tsconfig.app.json"
+        "tsConfigPath": "apps/premium/work/partners/tsconfig.app.json"
       }
     },
-    "service:business/suppliers": {
+    "service:work/products": {
       "type": "application",
-      "root": "apps/premium/business/suppliers",
+      "root": "apps/premium/work/products",
       "entryFile": "main",
-      "sourceRoot": "apps/premium/business/suppliers/src",
+      "sourceRoot": "apps/premium/work/products/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/premium/business/suppliers/tsconfig.app.json"
+        "tsConfigPath": "apps/premium/work/products/tsconfig.app.json"
+      }
+    },
+    "service:work/suppliers": {
+      "type": "application",
+      "root": "apps/premium/work/suppliers",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/work/suppliers/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/work/suppliers/tsconfig.app.json"
       }
     },
     "service:chat/contacts": {
