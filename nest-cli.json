@@ -21,15 +21,6 @@
         "tsConfigPath": "apps/gateway/tsconfig.app.json"
       }
     },
-    "service:grants": {
-      "type": "application",
-      "root": "apps/primary/grants",
-      "entryFile": "main",
-      "sourceRoot": "apps/primary/grants/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/primary/grants/tsconfig.app.json"
-      }
-    },
     "service:configs": {
       "type": "application",
       "root": "apps/primary/configs",
@@ -39,31 +30,40 @@
         "tsConfigPath": "apps/primary/configs/tsconfig.app.json"
       }
     },
-    "service:general/stats": {
+    "service:special/stats": {
       "type": "application",
-      "root": "apps/premium/general/stats",
+      "root": "apps/premium/special/stats",
       "entryFile": "main",
-      "sourceRoot": "apps/premium/general/stats/src",
+      "sourceRoot": "apps/premium/special/stats/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/premium/general/stats/tsconfig.app.json"
+        "tsConfigPath": "apps/premium/special/stats/tsconfig.app.json"
       }
     },
-    "service:general/assets": {
+    "service:special/jobs": {
       "type": "application",
-      "root": "apps/premium/general/assets",
+      "root": "apps/premium/special/jobs",
       "entryFile": "main",
-      "sourceRoot": "apps/premium/general/assets/src",
+      "sourceRoot": "apps/premium/special/jobs/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/premium/general/assets/tsconfig.app.json"
+        "tsConfigPath": "apps/premium/special/jobs/tsconfig.app.json"
       }
     },
-    "service:general/alerts": {
+    "service:special/alerts": {
       "type": "application",
-      "root": "apps/premium/general/alerts",
+      "root": "apps/premium/special/alerts",
       "entryFile": "main",
-      "sourceRoot": "apps/premium/general/alerts/src",
+      "sourceRoot": "apps/premium/special/alerts/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/premium/general/alerts/tsconfig.app.json"
+        "tsConfigPath": "apps/premium/special/alerts/tsconfig.app.json"
+      }
+    },
+    "service:special/assets": {
+      "type": "application",
+      "root": "apps/premium/special/assets",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/special/assets/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/special/assets/tsconfig.app.json"
       }
     },
     "service:general/artifacts": {
@@ -73,15 +73,6 @@
       "sourceRoot": "apps/premium/general/artifacts/src",
       "compilerOptions": {
         "tsConfigPath": "apps/premium/general/artifacts/tsconfig.app.json"
-      }
-    },
-    "service:general/jobs": {
-      "type": "application",
-      "root": "apps/premium/general/jobs",
-      "entryFile": "main",
-      "sourceRoot": "apps/premium/general/jobs/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/premium/general/jobs/tsconfig.app.json"
       }
     },
     "service:general/workflows": {
@@ -118,6 +109,15 @@
       "sourceRoot": "apps/primary/auth/otp/src",
       "compilerOptions": {
         "tsConfigPath": "apps/primary/auth/otp/tsconfig.app.json"
+      }
+    },
+    "service:auth/grants": {
+      "type": "application",
+      "root": "apps/primary/auth/grants",
+      "entryFile": "main",
+      "sourceRoot": "apps/primary/auth/grants/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/primary/auth/grants/tsconfig.app.json"
       }
     },
     "service:auth/authentication": {
