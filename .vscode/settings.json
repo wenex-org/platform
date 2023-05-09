@@ -1,41 +1,43 @@
 {
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
-    },
-    "git.mergeEditor": true,
-    "docwriter.style": "Auto-detect",
-    "editor.tabCompletion": "on",
-    "diffEditor.codeLens": true,
-    "files.exclude": {
-        "**/.git": true,
-        "**/.svn": true,
-        "**/.hg": true,
-        "**/CVS": true,
-        "**/.DS_Store": true,
-        "**/Thumbs.db": true,
-        "**/node_modules": true
-    },
-    "cSpell.words": [
-        "abacl",
-        "consts",
-        "kafkajs",
-        "kavenegar",
-        "metatype",
-        "metinseylan",
-        "minio",
-        "minioadmin",
-        "nestjs",
-        "ntegral",
-        "opentelemetry",
-        "OTLP",
-        "proto",
-        "protos",
-        "Subdocument",
-        "Vahid",
-        "webpush",
-        "websockets",
-        "wenex",
-        "willsoto",
-        "Zipkin"
-    ]
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "git.mergeEditor": true,
+  "docwriter.style": "Auto-detect",
+  "editor.tabCompletion": "on",
+  "diffEditor.codeLens": true,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/node_modules": true
+  },
+  "cSpell.words": [
+    "abacl",
+    "clusterings",
+    "consts",
+    "intellij",
+    "kafkajs",
+    "kavenegar",
+    "metatype",
+    "metinseylan",
+    "minio",
+    "minioadmin",
+    "nestjs",
+    "ntegral",
+    "opentelemetry",
+    "OTLP",
+    "proto",
+    "protos",
+    "Subdocument",
+    "Vahid",
+    "webpush",
+    "websockets",
+    "wenex",
+    "willsoto",
+    "Zipkin"
+  ]
 }

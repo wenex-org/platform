@@ -390,6 +390,33 @@
         "tsConfigPath": "apps/premium/touch/webpush/tsconfig.app.json"
       }
     },
+    "service:intellij/regressions": {
+      "type": "application",
+      "root": "apps/premium/intellij/regressions",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/intellij/regressions/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/intellij/regressions/tsconfig.app.json"
+      }
+    },
+    "service:intellij/clusterings": {
+      "type": "application",
+      "root": "apps/premium/intellij/clusterings",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/intellij/clusterings/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/intellij/clusterings/tsconfig.app.json"
+      }
+    },
+    "service:intellij/classifications": {
+      "type": "application",
+      "root": "apps/premium/intellij/classifications",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/intellij/classifications/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/intellij/classifications/tsconfig.app.json"
+      }
+    },
     "common": {
       "type": "library",
       "root": "libs/common",
