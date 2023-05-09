@@ -23,20 +23,20 @@
     },
     "service:otp": {
       "type": "application",
-      "root": "apps/primary/otp",
+      "root": "apps/primary/auth/otp",
       "entryFile": "main",
-      "sourceRoot": "apps/primary/otp/src",
+      "sourceRoot": "apps/primary/auth/otp/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/primary/otp/tsconfig.app.json"
+        "tsConfigPath": "apps/primary/auth/otp/tsconfig.app.json"
       }
     },
     "service:stats": {
       "type": "application",
-      "root": "apps/stats",
+      "root": "apps/primary/stats",
       "entryFile": "main",
-      "sourceRoot": "apps/stats/src",
+      "sourceRoot": "apps/primary/stats/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/stats/tsconfig.app.json"
+        "tsConfigPath": "apps/primary/stats/tsconfig.app.json"
       }
     },
     "service:grants": {
@@ -50,11 +50,11 @@
     },
     "service:assets": {
       "type": "application",
-      "root": "apps/primary/assets",
+      "root": "apps/premium/assets",
       "entryFile": "main",
-      "sourceRoot": "apps/primary/assets/src",
+      "sourceRoot": "apps/premium/assets/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/primary/assets/tsconfig.app.json"
+        "tsConfigPath": "apps/premium/assets/tsconfig.app.json"
       }
     },
     "service:configs": {
@@ -68,11 +68,11 @@
     },
     "service:artifacts": {
       "type": "application",
-      "root": "apps/primary/artifacts",
+      "root": "apps/premium/artifacts",
       "entryFile": "main",
-      "sourceRoot": "apps/primary/artifacts/src",
+      "sourceRoot": "apps/premium/artifacts/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/primary/artifacts/tsconfig.app.json"
+        "tsConfigPath": "apps/premium/artifacts/tsconfig.app.json"
       }
     },
     "service:auth/authentication": {
