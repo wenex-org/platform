@@ -20,11 +20,64 @@ services:
       SENTRY_DSN:
     <<: *common
 
+  #######################
+  # CONFIGS SERVICE
+  #######################
+
+  service-configs:
+    container_name: service-configs
+    build:
+      args:
+        COMMAND: 'service:configs'
+        APP_NAME: service-configs
+    ports:
+      - '3056:3056' # Rest
+      - '5056:5056' # gRPC
+    environment:
+      NODE_ENV: prod
+      SENTRY_DSN:
+    <<: *common
+
+  #######################
+  # AUTH SERVICES
+  #######################
+
+  service-authentication:
+    profiles: ['auth']
+    container_name: service-authentication
+    build:
+      args:
+        COMMAND: 'service:authentication'
+        APP_NAME: service-authentication
+    ports:
+      - '3050:3050' # Rest
+      - '5050:5050' # gRPC
+    environment:
+      NODE_ENV: prod
+      SENTRY_DSN:
+    <<: *common
+
+  service-authorization:
+    profiles: ['auth']
+    container_name: service-authorization
+    build:
+      args:
+        COMMAND: 'service:authorization'
+        APP_NAME: service-authorization
+    ports:
+      - '3051:3051' # Rest
+      - '5051:5051' # gRPC
+    environment:
+      NODE_ENV: prod
+      SENTRY_DSN:
+    <<: *common
+
   service-grants:
+    profiles: ['auth']
     container_name: service-grants
     build:
       args:
-        COMMAND: "service:grants"
+        COMMAND: 'service:grants'
         APP_NAME: service-grants
     ports:
       - '3054:3054' # Rest
@@ -34,29 +87,16 @@ services:
       SENTRY_DSN:
     <<: *common
 
-  service-configs:
-    container_name: service-configs
-    build:
-      args:
-        COMMAND: "service:configs"
-        APP_NAME: service-configs
-    ports:
-      - '3056:3056' # Rest
-      - '5056:5056' # gRPC
-    environment:
-      NODE_ENV: prod
-      SENTRY_DSN:
-    <<: *common
-    
   #######################
   # DOMAIN SERVICES
   #######################
 
   service-domain-apps:
+    profiles: ['domain']
     container_name: service-domain-apps
     build:
       args:
-        COMMAND: "service:domain/apps"
+        COMMAND: 'service:domain/apps'
         APP_NAME: service-domain-apps
     ports:
       - '3052:3052' # Rest
@@ -67,10 +107,11 @@ services:
     <<: *common
 
   service-domain-clients:
+    profiles: ['domain']
     container_name: service-domain-clients
     build:
       args:
-        COMMAND: "service:domain/clients"
+        COMMAND: 'service:domain/clients'
         APP_NAME: service-domain-clients
     ports:
       - '3055:3055' # Rest
@@ -85,10 +126,11 @@ services:
   #######################
 
   service-identity-users:
+    profiles: ['identity']
     container_name: service-identity-users
     build:
       args:
-        COMMAND: "service:identity/users"
+        COMMAND: 'service:identity/users'
         APP_NAME: service-identity-users
     ports:
       - '3053:3053' # Rest
@@ -99,10 +141,11 @@ services:
     <<: *common
 
   service-identity-sessions:
+    profiles: ['identity']
     container_name: service-identity-sessions
     build:
       args:
-        COMMAND: "service:identity/sessions"
+        COMMAND: 'service:identity/sessions'
         APP_NAME: service-identity-sessions
     ports:
       - '3057:3057' # Rest
@@ -113,10 +156,11 @@ services:
     <<: *common
 
   service-identity-profiles:
+    profiles: ['identity']
     container_name: service-identity-profiles
     build:
       args:
-        COMMAND: "service:identity/profiles"
+        COMMAND: 'service:identity/profiles'
         APP_NAME: service-identity-profiles
     ports:
       - '3058:3058' # Rest
