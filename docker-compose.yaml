@@ -15,7 +15,6 @@ services:
         APP_NAME: gateway
     ports:
       - '3001:3001' # Rest
-      - '5001:5001' # gRPC
     environment:
       SENTRY_DSN:
     <<: *common

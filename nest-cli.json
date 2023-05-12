@@ -7,6 +7,7 @@
     "watchAssets": true,
     "deleteOutDir": true,
     "assets": ["**/*.proto"],
+    "plugins": ["@nestjs/swagger"],
     "tsConfigPath": "apps/gateway/tsconfig.app.json"
   },
   "monorepo": true,
