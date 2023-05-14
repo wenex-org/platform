@@ -7,7 +7,15 @@
     "watchAssets": true,
     "deleteOutDir": true,
     "assets": ["**/*.proto"],
-    "plugins": ["@nestjs/swagger"],
+    "plugins": [
+      {
+        "name": "@nestjs/swagger",
+        "options": {
+          "introspectComments": true,
+          "dtoFileNameSuffix": [".dto.ts", ".serializer.ts"]
+        }
+      }
+    ],
     "tsConfigPath": "apps/gateway/tsconfig.app.json"
   },
   "monorepo": true,
