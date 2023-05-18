@@ -14,13 +14,6 @@
           "introspectComments": true,
           "dtoFileNameSuffix": [".dto.ts", ".serializer.ts"]
         }
-      },
-      {
-        "name": "@nestjs/graphql",
-        "options": {
-          "introspectComments": true,
-          "typeFileNameSuffix": [".dto.ts", ".serializer.ts"]
-        }
       }
     ],
     "tsConfigPath": "apps/gateway/tsconfig.app.json"
