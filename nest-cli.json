@@ -433,13 +433,13 @@
         "tsConfigPath": "apps/premium/intellij/classifications/tsconfig.app.json"
       }
     },
-    "service:intellij/recommendations": {
+    "service:intellij/recommenders": {
       "type": "application",
-      "root": "apps/premium/intellij/recommendations",
+      "root": "apps/premium/intellij/recommenders",
       "entryFile": "main",
-      "sourceRoot": "apps/premium/intellij/recommendations/src",
+      "sourceRoot": "apps/premium/intellij/recommenders/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/premium/intellij/recommendations/tsconfig.app.json"
+        "tsConfigPath": "apps/premium/intellij/recommenders/tsconfig.app.json"
       }
     },
     "common": {
