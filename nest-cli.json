@@ -46,6 +46,15 @@
         "tsConfigPath": "apps/primary/configs/tsconfig.app.json"
       }
     },
+    "service:archives": {
+      "type": "application",
+      "root": "apps/premium/archives",
+      "entryFile": "main",
+      "sourceRoot": "apps/premium/archives/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/premium/archives/tsconfig.app.json"
+      }
+    },
     "service:special/stats": {
       "type": "application",
       "root": "apps/premium/special/stats",
@@ -251,15 +260,6 @@
       "sourceRoot": "apps/premium/financial/invoices/src",
       "compilerOptions": {
         "tsConfigPath": "apps/premium/financial/invoices/tsconfig.app.json"
-      }
-    },
-    "service:financial/transfers": {
-      "type": "application",
-      "root": "apps/premium/financial/transfers",
-      "entryFile": "main",
-      "sourceRoot": "apps/premium/financial/transfers/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/premium/financial/transfers/tsconfig.app.json"
       }
     },
     "service:financial/transactions": {
