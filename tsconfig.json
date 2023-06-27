@@ -18,36 +18,16 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@app/common": [
-        "libs/common/src"
-      ],
-      "@app/common/*": [
-        "libs/common/src/*"
-      ],
-      "@app/command": [
-        "libs/command/src"
-      ],
-      "@app/command/*": [
-        "libs/command/src/*"
-      ],
-      "@app/blacklisted": [
-        "libs/blacklisted/src"
-      ],
-      "@app/blacklisted/*": [
-        "libs/blacklisted/src/*"
-      ],
-      "@app/health": [
-        "libs/health/src"
-      ],
-      "@app/health/*": [
-        "libs/health/src/*"
-      ],
-      "@app/redis": [
-        "libs/redis/src"
-      ],
-      "@app/redis/*": [
-        "libs/redis/src/*"
-      ]
+      "@app/common": ["libs/common/src"],
+      "@app/common/*": ["libs/common/src/*"],
+      "@app/command": ["libs/command/src"],
+      "@app/command/*": ["libs/command/src/*"],
+      "@app/blacklisted": ["libs/blacklisted/src"],
+      "@app/blacklisted/*": ["libs/blacklisted/src/*"],
+      "@app/health": ["libs/health/src"],
+      "@app/health/*": ["libs/health/src/*"],
+      "@app/redis": ["libs/redis/src"],
+      "@app/redis/*": ["libs/redis/src/*"]
     }
   }
 }

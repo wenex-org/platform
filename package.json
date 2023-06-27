@@ -8,6 +8,7 @@
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
+    "start:repl": "nest start --entryFile repl",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:debug2": "nest start --debug 9228 --watch",
