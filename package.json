@@ -29,6 +29,8 @@
     "mongo:debug": "npm run command:debug -- mongo",
     "storage:init": "npm run command -- storage init",
     "storage:debug": "npm run command:debug -- storage",
+    "cassandra:migrate": "npm run command -- cassandra migrate",
+    "cassandra:debug": "npm run command:debug -- cassandra",
     "minio:init": "npm run command -- minio init",
     "minio:debug": "npm run command:debug -- minio",
     "doc": "npx compodoc -p tsconfig.json -n \"Wenex Documentation\" -d ./docs -s"
