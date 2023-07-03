@@ -21,6 +21,7 @@
     "compodoc",
     "consts",
     "datacenter",
+    "fieldname",
     "intellij",
     "kafkajs",
     "kavenegar",
