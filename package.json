@@ -88,6 +88,7 @@
     "lodash": "^4.17.21",
     "log": "^6.3.1",
     "log-node": "^8.0.3",
+    "mongodb": "^5.6.0",
     "mongoose": "^7.3.1",
     "multer-s3": "^3.0.1",
     "naming-conventions-modeler": "^1.4.0",

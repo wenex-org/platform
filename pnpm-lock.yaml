@@ -157,6 +157,9 @@ dependencies:
   log-node:
     specifier: ^8.0.3
     version: 8.0.3(log@6.3.1)
+  mongodb:
+    specifier: ^5.6.0
+    version: 5.6.0
   mongoose:
     specifier: ^7.3.1
     version: 7.3.1
