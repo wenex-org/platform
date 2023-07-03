@@ -4,8 +4,9 @@ FROM node:18-alpine AS build
 WORKDIR /app
 
 COPY package*.json ./
+COPY pnpm-lock.yaml ./
 
-RUN npm ci
+RUN pnpm install --frozen-lockfile
 
 # Service Image
 FROM build
