@@ -21,6 +21,7 @@
     "compodoc",
     "consts",
     "datacenter",
+    "dsphere",
     "fieldname",
     "intellij",
     "kafkajs",
