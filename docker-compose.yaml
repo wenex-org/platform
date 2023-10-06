@@ -1,0 +1,72 @@
+version: 3.8
+
+x-common: &common
+  build:
+    context: .
+  env_file:
+    - .env
+  networks:
+    - localnet
+
+services:
+  gateway:
+    build:
+      args:
+        APP_NAME: gateway
+    ports:
+      - 3010:3010 # Rest
+    environment:
+      SENTRY_DSN:
+    <<: *common
+
+  #######################
+  # AUTH SERVICE
+  #######################
+  auth:
+    container_name: auth
+    build:
+      args:
+        SERVICE_NAME: auth
+    ports:
+      - 3020:3020 # Rest
+      - 5020:5020 # gRPC
+    environment:
+      NODE_ENV: prod
+      SENTRY_DSN:
+    <<: *common
+
+  #######################
+  # DOMAIN SERVICES
+  #######################
+  domain:
+    container_name: domain
+    build:
+      args:
+        SERVICE_NAME: domain
+    ports:
+      - 3030:3030 # Rest
+      - 5030:5030 # gRPC
+    environment:
+      NODE_ENV: prod
+      SENTRY_DSN:
+    <<: *common
+
+  #######################
+  # IDENTITY SERVICES
+  #######################
+  identity:
+    container_name: identity
+    build:
+      args:
+        SERVICE_NAME: identity
+    ports:
+      - 3040:3040 # Rest
+      - 5040:5040 # gRPC
+    environment:
+      NODE_ENV: prod
+      SENTRY_DSN:
+    <<: *common
+
+networks:
+  localnet:
+    driver: bridge
