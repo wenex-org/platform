@@ -1,0 +1,344 @@
+syntax = "proto3";
+package domain;
+
+// Package Services
+
+service AppsService {
+  rpc Count(QueryFilter) returns (Total);
+
+  rpc Create(AppData) returns (AppData);
+  rpc CreateBulk(Apps) returns (Apps);
+
+  rpc Find(Filter) returns (Apps);
+  rpc Cursor(Filter) returns (stream App);
+
+  rpc FindOne(OneFilter) returns (AppData);
+  rpc FindById(UniqueFilter) returns (AppData);
+
+  rpc DeleteOne(OneFilter) returns (AppData);
+  rpc DeleteById(UniqueFilter) returns (AppData);
+
+  rpc RestoreOne(OneFilter) returns (AppData);
+  rpc RestoreById(UniqueFilter) returns (AppData);
+
+  rpc DestroyOne(OneFilter) returns (AppData);
+  rpc DestroyById(UniqueFilter) returns (AppData);
+
+  rpc UpdateOne(UpdateAppOne) returns (AppData);
+  rpc UpdateBulk(UpdateAppBulk) returns (Total);
+  rpc UpdateById(UpdateAppUnique) returns (AppData);
+}
+
+service ClientsService {
+  rpc Count(QueryFilter) returns (Total);
+
+  rpc Create(ClientData) returns (ClientData);
+  rpc CreateBulk(Clients) returns (Clients);
+
+  rpc Find(Filter) returns (Clients);
+  rpc Cursor(Filter) returns (stream Client);
+
+  rpc FindOne(OneFilter) returns (ClientData);
+  rpc FindById(UniqueFilter) returns (ClientData);
+
+  rpc DeleteOne(OneFilter) returns (ClientData);
+  rpc DeleteById(UniqueFilter) returns (ClientData);
+
+  rpc RestoreOne(OneFilter) returns (ClientData);
+  rpc RestoreById(UniqueFilter) returns (ClientData);
+
+  rpc DestroyOne(OneFilter) returns (ClientData);
+  rpc DestroyById(UniqueFilter) returns (ClientData);
+
+  rpc UpdateOne(UpdateClientOne) returns (ClientData);
+  rpc UpdateBulk(UpdateClientBulk) returns (Total);
+  rpc UpdateById(UpdateClientUnique) returns (ClientData);
+}
+
+// Common Messages
+
+message Total { int64 total = 1; }
+message UniqueQuery { string id = 1; }
+
+message Filter {
+  string query = 1;
+  optional string projection = 2;
+  optional string pagination = 3;
+}
+message OneFilter {
+  string query = 1;
+  optional string projection = 2;
+}
+message UniqueFilter {
+  UniqueQuery query = 1;
+  optional string projection = 2;
+}
+message QueryFilter { string query = 1; }
+
+// Apps Messages
+
+message UpdateAppOne {
+  App data = 1;
+  OneFilter filter = 2;
+}
+message UpdateAppBulk {
+  App data = 1;
+  QueryFilter filter = 2;
+}
+message UpdateAppUnique {
+  App data = 1;
+  UniqueFilter filter = 2;
+}
+
+message App {
+  // Base Interface
+  string owner = 1;
+
+  optional string id = 2;
+  optional string ref = 3;
+
+  repeated string shares = 4;
+  repeated string groups = 5;
+  repeated string clients = 6;
+
+  optional string created_at = 7;
+  optional string created_by = 8;
+  optional string created_in = 9;
+
+  optional string updated_at = 10;
+  optional string updated_by = 11;
+  optional string updated_in = 12;
+  optional string deleted_at = 13;
+  optional string deleted_by = 14;
+  optional string deleted_in = 15;
+  optional string restored_at = 16;
+  optional string restored_by = 17;
+  optional string restored_in = 18;
+
+  optional string description = 19;
+  optional string version = 20;
+  optional string props = 21;
+  repeated string tags = 22;
+
+  optional string rand = 23;
+  optional string timestamp = 24;
+
+  // App Interface
+  string cid = 50;
+  string type = 51;
+
+  string name = 52;
+  string status = 53;
+
+  repeated string scopes = 54;
+  repeated string grant_types = 55;
+
+  int32 access_token_ttl = 56;
+  int32 refresh_token_ttl = 57;
+
+  optional string url = 58;
+  optional string logo = 59;
+  optional string site = 60;
+  optional string slogan = 61;
+  optional string redirect_uri = 62;
+  repeated ChangeLog change_logs = 63;
+
+  message ChangeLog {
+    // Sub Interface
+    optional string owner = 1;
+
+    optional string id = 2;
+    optional string ref = 3;
+
+    repeated string shares = 4;
+    repeated string groups = 5;
+    repeated string clients = 6;
+
+    optional string created_at = 7;
+    optional string created_by = 8;
+    optional string created_in = 9;
+
+    optional string updated_at = 10;
+    optional string updated_by = 11;
+    optional string updated_in = 12;
+    optional string deleted_at = 13;
+    optional string deleted_by = 14;
+    optional string deleted_in = 15;
+    optional string restored_at = 16;
+    optional string restored_by = 17;
+    optional string restored_in = 18;
+
+    optional string description = 19;
+    optional string version = 20;
+    optional string props = 21;
+    repeated string tags = 22;
+
+    optional string rand = 23;
+    optional string timestamp = 24;
+
+    // ChangeLog Interface
+    optional string code = 50;
+    repeated string changes = 51;
+    optional string deprecation_date = 52;
+  }
+}
+message Apps { repeated App items = 1; }
+message AppData { optional App data = 1; }
+
+// Client Messages
+
+message UpdateClientOne {
+  Client data = 1;
+  OneFilter filter = 2;
+}
+message UpdateClientBulk {
+  Client data = 1;
+  QueryFilter filter = 2;
+}
+message UpdateClientUnique {
+  Client data = 1;
+  UniqueFilter filter = 2;
+}
+
+message Client {
+  // Base Interface
+  string owner = 1;
+
+  optional string id = 2;
+  optional string ref = 3;
+
+  repeated string shares = 4;
+  repeated string groups = 5;
+  repeated string clients = 6;
+
+  optional string created_at = 7;
+  optional string created_by = 8;
+  optional string created_in = 9;
+
+  optional string updated_at = 10;
+  optional string updated_by = 11;
+  optional string updated_in = 12;
+  optional string deleted_at = 13;
+  optional string deleted_by = 14;
+  optional string deleted_in = 15;
+  optional string restored_at = 16;
+  optional string restored_by = 17;
+  optional string restored_in = 18;
+
+  optional string description = 19;
+  optional string version = 20;
+  optional string props = 21;
+  repeated string tags = 22;
+
+  optional string rand = 23;
+  optional string timestamp = 24;
+
+  // Client Interface
+  string name = 50;
+  string plan = 51;
+
+  optional string url = 52;
+  optional string logo = 53;
+  optional string site = 54;
+  optional string slogan = 55;
+
+  string state = 56;
+  string status = 57;
+
+  string client_id = 58;
+  string client_secret = 59;
+  string expiration_date = 60;
+
+  int32 access_token_ttl = 61;
+  int32 refresh_token_ttl = 62;
+
+  repeated string scopes = 63;
+  repeated string whitelist = 64;
+
+  repeated string coworkers = 65;
+  repeated string grant_types = 66;
+  optional string redirect_uri = 67;
+
+  repeated Domain domains = 68;
+  repeated OtpService otp_services = 69;
+
+  message Domain {
+    // Sub Interface
+    optional string owner = 1;
+
+    optional string id = 2;
+    optional string ref = 3;
+
+    repeated string shares = 4;
+    repeated string groups = 5;
+    repeated string clients = 6;
+
+    optional string created_at = 7;
+    optional string created_by = 8;
+    optional string created_in = 9;
+
+    optional string updated_at = 10;
+    optional string updated_by = 11;
+    optional string updated_in = 12;
+    optional string deleted_at = 13;
+    optional string deleted_by = 14;
+    optional string deleted_in = 15;
+    optional string restored_at = 16;
+    optional string restored_by = 17;
+    optional string restored_in = 18;
+
+    optional string description = 19;
+    optional string version = 20;
+    optional string props = 21;
+    repeated string tags = 22;
+
+    optional string rand = 23;
+    optional string timestamp = 24;
+
+    // Domain Interface
+    string status = 50;
+    string address = 51;
+    repeated string policies = 53;
+  }
+
+  message OtpService {
+    // Sub Interface
+    optional string owner = 1;
+
+    optional string id = 2;
+    optional string ref = 3;
+
+    repeated string shares = 4;
+    repeated string groups = 5;
+    repeated string clients = 6;
+
+    optional string created_at = 7;
+    optional string created_by = 8;
+    optional string created_in = 9;
+
+    optional string updated_at = 10;
+    optional string updated_by = 11;
+    optional string updated_in = 12;
+    optional string deleted_at = 13;
+    optional string deleted_by = 14;
+    optional string deleted_in = 15;
+    optional string restored_at = 16;
+    optional string restored_by = 17;
+    optional string restored_in = 18;
+
+    optional string description = 19;
+    optional string version = 20;
+    optional string props = 21;
+    repeated string tags = 22;
+
+    optional string rand = 23;
+    optional string timestamp = 24;
+
+    // OtpService Interface
+    string type = 50;
+    string config = 51;
+    string provider = 52;
+  }
+}
+message Clients { repeated Client items = 1; }
+message ClientData { optional Client data = 1; }

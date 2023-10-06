@@ -1,0 +1,344 @@
+syntax = "proto3";
+package identity;
+
+// Package Services
+
+service UsersService {
+  rpc Count(QueryFilter) returns (Total);
+
+  rpc Create(UserData) returns (UserData);
+  rpc CreateBulk(Users) returns (Users);
+
+  rpc Find(Filter) returns (Users);
+  rpc Cursor(Filter) returns (stream User);
+
+  rpc FindOne(OneFilter) returns (UserData);
+  rpc FindById(UniqueFilter) returns (UserData);
+
+  rpc DeleteOne(OneFilter) returns (UserData);
+  rpc DeleteById(UniqueFilter) returns (UserData);
+
+  rpc RestoreOne(OneFilter) returns (UserData);
+  rpc RestoreById(UniqueFilter) returns (UserData);
+
+  rpc DestroyOne(OneFilter) returns (UserData);
+  rpc DestroyById(UniqueFilter) returns (UserData);
+
+  rpc UpdateOne(UpdateUserOne) returns (UserData);
+  rpc UpdateBulk(UpdateUserBulk) returns (Total);
+  rpc UpdateById(UpdateUserUnique) returns (UserData);
+}
+
+service SessionsService {
+  rpc Count(QueryFilter) returns (Total);
+
+  rpc Create(SessionData) returns (SessionData);
+  rpc CreateBulk(Sessions) returns (Sessions);
+
+  rpc Find(Filter) returns (Sessions);
+  rpc Cursor(Filter) returns (stream Session);
+
+  rpc FindOne(OneFilter) returns (SessionData);
+  rpc FindById(UniqueFilter) returns (SessionData);
+
+  rpc DeleteOne(OneFilter) returns (SessionData);
+  rpc DeleteById(UniqueFilter) returns (SessionData);
+
+  rpc RestoreOne(OneFilter) returns (SessionData);
+  rpc RestoreById(UniqueFilter) returns (SessionData);
+
+  rpc DestroyOne(OneFilter) returns (SessionData);
+  rpc DestroyById(UniqueFilter) returns (SessionData);
+
+  rpc UpdateOne(UpdateSessionOne) returns (SessionData);
+  rpc UpdateBulk(UpdateSessionBulk) returns (Total);
+  rpc UpdateById(UpdateSessionUnique) returns (SessionData);
+}
+
+service ProfilesService {
+  rpc Count(QueryFilter) returns (Total);
+
+  rpc Create(ProfileData) returns (ProfileData);
+  rpc CreateBulk(Profiles) returns (Profiles);
+
+  rpc Find(Filter) returns (Profiles);
+  rpc Cursor(Filter) returns (stream Profile);
+
+  rpc FindOne(OneFilter) returns (ProfileData);
+  rpc FindById(UniqueFilter) returns (ProfileData);
+
+  rpc DeleteOne(OneFilter) returns (ProfileData);
+  rpc DeleteById(UniqueFilter) returns (ProfileData);
+
+  rpc RestoreOne(OneFilter) returns (ProfileData);
+  rpc RestoreById(UniqueFilter) returns (ProfileData);
+
+  rpc DestroyOne(OneFilter) returns (ProfileData);
+  rpc DestroyById(UniqueFilter) returns (ProfileData);
+
+  rpc UpdateOne(UpdateProfileOne) returns (ProfileData);
+  rpc UpdateBulk(UpdateProfileBulk) returns (Total);
+  rpc UpdateById(UpdateProfileUnique) returns (ProfileData);
+}
+
+// Common Messages
+
+message Total { int64 total = 1; }
+message UniqueQuery { string id = 1; }
+
+message Filter {
+  string query = 1;
+  optional string projection = 2;
+  optional string pagination = 3;
+}
+message OneFilter {
+  string query = 1;
+  optional string projection = 2;
+}
+message UniqueFilter {
+  UniqueQuery query = 1;
+  optional string projection = 2;
+}
+message QueryFilter { string query = 1; }
+
+// Users Messages
+
+message UpdateUserOne {
+  User data = 1;
+  OneFilter filter = 2;
+}
+message UpdateUserBulk {
+  User data = 1;
+  QueryFilter filter = 2;
+}
+message UpdateUserUnique {
+  User data = 1;
+  UniqueFilter filter = 2;
+}
+
+message User {
+  // Base Interface
+  string owner = 1;
+
+  optional string id = 2;
+  optional string ref = 3;
+
+  repeated string shares = 4;
+  repeated string groups = 5;
+  repeated string clients = 6;
+
+  optional string created_at = 7;
+  optional string created_by = 8;
+  optional string created_in = 9;
+
+  optional string updated_at = 10;
+  optional string updated_by = 11;
+  optional string updated_in = 12;
+  optional string deleted_at = 13;
+  optional string deleted_by = 14;
+  optional string deleted_in = 15;
+  optional string restored_at = 16;
+  optional string restored_by = 17;
+  optional string restored_in = 18;
+
+  optional string description = 19;
+  optional string version = 20;
+  optional string props = 21;
+  repeated string tags = 22;
+
+  optional string rand = 23;
+  optional string timestamp = 24;
+
+  // User Interface
+  string status = 50;
+
+  repeated string mfa = 51;
+  repeated string oauth = 52;
+
+  optional string email = 53;
+  optional string phone = 54;
+
+  optional string username = 55;
+  optional string password = 56;
+
+  repeated string subjects = 57;
+
+  optional string last_login_date = 58;
+  optional string last_login_session = 59;
+}
+message Users { repeated User items = 1; }
+message UserData { optional User data = 1; }
+
+// Sessions Messages
+
+message UpdateSessionOne {
+  Session data = 1;
+  OneFilter filter = 2;
+}
+message UpdateSessionBulk {
+  Session data = 1;
+  QueryFilter filter = 2;
+}
+message UpdateSessionUnique {
+  Session data = 1;
+  UniqueFilter filter = 2;
+}
+
+message Session {
+  // Base Interface
+  string owner = 1;
+
+  optional string id = 2;
+  optional string ref = 3;
+
+  repeated string shares = 4;
+  repeated string groups = 5;
+  repeated string clients = 6;
+
+  optional string created_at = 7;
+  optional string created_by = 8;
+  optional string created_in = 9;
+
+  optional string updated_at = 10;
+  optional string updated_by = 11;
+  optional string updated_in = 12;
+  optional string deleted_at = 13;
+  optional string deleted_by = 14;
+  optional string deleted_in = 15;
+  optional string restored_at = 16;
+  optional string restored_by = 17;
+  optional string restored_in = 18;
+
+  optional string description = 19;
+  optional string version = 20;
+  optional string props = 21;
+  repeated string tags = 22;
+
+  optional string rand = 23;
+  optional string timestamp = 24;
+
+  // Session Interface
+  string ip = 50;
+  string agent = 51;
+  string expiration_date = 52;
+
+  optional string last_refresh_date = 53;
+}
+message Sessions { repeated Session items = 1; }
+message SessionData { optional Session data = 1; }
+
+// Profiles Messages
+
+message UpdateProfileOne {
+  Profile data = 1;
+  OneFilter filter = 2;
+}
+message UpdateProfileBulk {
+  Profile data = 1;
+  QueryFilter filter = 2;
+}
+message UpdateProfileUnique {
+  Profile data = 1;
+  UniqueFilter filter = 2;
+}
+
+message Profile {
+  // Base Interface
+  string owner = 1;
+
+  optional string id = 2;
+  optional string ref = 3;
+
+  repeated string shares = 4;
+  repeated string groups = 5;
+  repeated string clients = 6;
+
+  optional string created_at = 7;
+  optional string created_by = 8;
+  optional string created_in = 9;
+
+  optional string updated_at = 10;
+  optional string updated_by = 11;
+  optional string updated_in = 12;
+  optional string deleted_at = 13;
+  optional string deleted_by = 14;
+  optional string deleted_in = 15;
+  optional string restored_at = 16;
+  optional string restored_by = 17;
+  optional string restored_in = 18;
+
+  optional string description = 19;
+  optional string version = 20;
+  optional string props = 21;
+  repeated string tags = 22;
+
+  optional string rand = 23;
+  optional string timestamp = 24;
+
+  // Profile Interface
+  string state = 50;
+  string gender = 51;
+  string person_type = 52;
+
+  optional string cover = 53;
+  optional string avatar = 54;
+
+  optional string nickname = 55;
+  optional string last_name = 56;
+  optional string first_name = 57;
+  optional string middle_name = 58;
+
+  optional string nationality = 59;
+  optional string national_code = 60;
+
+  optional string verified_at = 61;
+  optional string verified_by = 62;
+  optional string verified_in = 63;
+
+  optional string birth_date = 64;
+  repeated Place places = 65;
+
+  message Place {
+    // Sub Interface
+    optional string owner = 1;
+
+    optional string id = 2;
+    optional string ref = 3;
+
+    repeated string shares = 4;
+    repeated string groups = 5;
+    repeated string clients = 6;
+
+    optional string created_at = 7;
+    optional string created_by = 8;
+    optional string created_in = 9;
+
+    optional string updated_at = 10;
+    optional string updated_by = 11;
+    optional string updated_in = 12;
+    optional string deleted_at = 13;
+    optional string deleted_by = 14;
+    optional string deleted_in = 15;
+    optional string restored_at = 16;
+    optional string restored_by = 17;
+    optional string restored_in = 18;
+
+    optional string description = 19;
+    optional string version = 20;
+    optional string props = 21;
+    repeated string tags = 22;
+
+    optional string rand = 23;
+    optional string timestamp = 24;
+
+    // Place Interface
+    string type = 50;
+    string country = 51;
+
+    optional string name = 52;
+    optional string address = 53;
+    optional string location = 54;
+  }
+}
+message Profiles { repeated Profile items = 1; }
+message ProfileData { optional Profile data = 1; }

@@ -1,0 +1,266 @@
+syntax = "proto3";
+package auth;
+
+// Package Services
+
+service AuthenticationService {
+  rpc Token(AuthenticationRequest) returns (AuthenticationResponse);
+
+  rpc Logout(TokenValue) returns (Result);
+  rpc Verify(TokenValue) returns (JwtToken);
+}
+
+service AuthorizationService {
+  rpc Can(AuthorizationRequest) returns (AuthorizationResponse);
+  rpc Policy(AuthorizationRequest) returns (AuthorizationResponse);
+}
+
+service GrantsService {
+  rpc Count(QueryFilter) returns (Total);
+
+  rpc Create(GrantData) returns (GrantData);
+  rpc CreateBulk(Grants) returns (Grants);
+
+  rpc Find(Filter) returns (Grants);
+  rpc Cursor(Filter) returns (stream Grant);
+
+  rpc FindOne(OneFilter) returns (GrantData);
+  rpc FindById(UniqueFilter) returns (GrantData);
+
+  rpc DeleteOne(OneFilter) returns (GrantData);
+  rpc DeleteById(UniqueFilter) returns (GrantData);
+
+  rpc RestoreOne(OneFilter) returns (GrantData);
+  rpc RestoreById(UniqueFilter) returns (GrantData);
+
+  rpc DestroyOne(OneFilter) returns (GrantData);
+  rpc DestroyById(UniqueFilter) returns (GrantData);
+
+  rpc UpdateOne(UpdateGrantOne) returns (GrantData);
+  rpc UpdateBulk(UpdateGrantBulk) returns (Total);
+  rpc UpdateById(UpdateGrantUnique) returns (GrantData);
+}
+
+// Common Messages
+
+message Total { int64 total = 1; }
+message UniqueQuery { string id = 1; }
+
+message Filter {
+  string query = 1;
+  optional string projection = 2;
+  optional string pagination = 3;
+}
+message OneFilter {
+  string query = 1;
+  optional string projection = 2;
+}
+message UniqueFilter {
+  UniqueQuery query = 1;
+  optional string projection = 2;
+}
+message QueryFilter { string query = 1; }
+
+// Authentication Messages
+
+message Result { string result = 1; }
+message TokenValue { string token = 1; }
+
+message JwtToken {
+  bool strict = 1;
+
+  string cid = 2;
+  string type = 3;
+  string i18n = 4;
+  string scope = 5;
+  string domain = 6;
+  string policy = 7;
+  string session = 8;
+  string client_id = 9;
+
+  optional string aid = 10;
+  optional string uid = 11;
+  optional string client = 12;
+}
+
+message AuthenticationRequest {
+  string grant_type = 1;
+
+  string client_id = 2;
+  optional string client_secret = 3;
+
+  optional string domain = 4;
+  optional string app_id = 5;
+
+  repeated string scopes = 6;
+  repeated string policies = 7;
+
+  optional string email = 8;
+  optional string phone = 9;
+  optional string username = 10;
+  optional string password = 11;
+
+  optional string code = 12;
+  optional string state = 13;
+
+  optional string redirect_uri = 14;
+  optional string response_type = 15;
+
+  optional string i18n = 16;
+
+  optional string refresh_token = 17;
+  optional string confirmation_code = 18;
+}
+
+message AuthenticationResponse {
+  optional string token_type = 1;
+
+  optional int64 expires_in = 2;
+
+  optional string scope = 3;
+  optional string policy = 4;
+  optional string domain = 5;
+
+  optional string i18n = 6;
+  optional string session = 7;
+  optional string access_token = 8;
+  optional string refresh_token = 9;
+
+  optional string code = 10;
+  optional string state = 11;
+}
+
+// Authorization Messages
+
+message AuthorizationRequest {
+  string token = 1;
+  optional string strict = 2;
+
+  string action = 3;
+  string object = 4;
+
+  optional string ip = 5;
+  optional string time = 6;
+}
+
+message AuthorizationResponse {
+  optional bool granted = 1;
+  repeated Policy policies = 2;
+
+  message Policy {
+    string subject = 50;
+    string action = 51;
+    string object = 52;
+
+    repeated string field = 53;
+    repeated string filter = 54;
+    repeated string location = 55;
+
+    repeated Time time = 56;
+
+    message Time {
+      int64 duration = 50;
+      string cron_exp = 51;
+    }
+  }
+}
+
+// Grants Messages
+
+message UpdateGrantOne {
+  Grant data = 1;
+  OneFilter filter = 2;
+}
+message UpdateGrantBulk {
+  Grant data = 1;
+  QueryFilter filter = 2;
+}
+message UpdateGrantUnique {
+  Grant data = 1;
+  UniqueFilter filter = 2;
+}
+
+message Grant {
+  // Base Interface
+  string owner = 1;
+
+  optional string id = 2;
+  optional string ref = 3;
+
+  repeated string shares = 4;
+  repeated string groups = 5;
+  repeated string clients = 6;
+
+  optional string created_at = 7;
+  optional string created_by = 8;
+  optional string created_in = 9;
+
+  optional string updated_at = 10;
+  optional string updated_by = 11;
+  optional string updated_in = 12;
+  optional string deleted_at = 13;
+  optional string deleted_by = 14;
+  optional string deleted_in = 15;
+  optional string restored_at = 16;
+  optional string restored_by = 17;
+  optional string restored_in = 18;
+
+  optional string description = 19;
+  optional string version = 20;
+  optional string props = 21;
+  repeated string tags = 22;
+
+  optional string rand = 23;
+  optional string timestamp = 24;
+
+  // Grant Interface
+  string subject = 50;
+  string action = 51;
+  string object = 52;
+
+  repeated string field = 53;
+  repeated string filter = 54;
+  repeated string location = 55;
+
+  repeated Time time = 56;
+
+  message Time {
+    // Sub Interface
+    optional string owner = 1;
+
+    optional string id = 2;
+    optional string ref = 3;
+
+    repeated string shares = 4;
+    repeated string groups = 5;
+    repeated string clients = 6;
+
+    optional string created_at = 7;
+    optional string created_by = 8;
+    optional string created_in = 9;
+
+    optional string updated_at = 10;
+    optional string updated_by = 11;
+    optional string updated_in = 12;
+    optional string deleted_at = 13;
+    optional string deleted_by = 14;
+    optional string deleted_in = 15;
+    optional string restored_at = 16;
+    optional string restored_by = 17;
+    optional string restored_in = 18;
+
+    optional string description = 19;
+    optional string version = 20;
+    optional string props = 21;
+    repeated string tags = 22;
+
+    optional string rand = 23;
+    optional string timestamp = 24;
+
+    // Time Interface
+    int64 duration = 50;
+    string cron_exp = 51;
+  }
+}
+message Grants { repeated Grant items = 1; }
+message GrantData { optional Grant data = 1; }

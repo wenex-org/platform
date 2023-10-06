@@ -6,6 +6,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "nest build",
+    "prepare": "sh ./script/setup.sh",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
