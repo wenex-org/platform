@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  mongo:
+    container_name: mongo
+    image: bitnami/mongodb:6.0
+    ports:
+      - '27017:27017'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=
+      - MONGO_INITDB_ROOT_PASSWORD=
+    networks:
+      - platform
+
+  redis:
+    container_name: redis
+    image: bitnami/redis:7.0
+    ports:
+      - '6379:6379'
+    environment:
+      - REDIS_PASSWORD=
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - platform
+
+  minio:
+    container_name: minio
+    image: bitnami/minio:2023.4.20
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    networks:
+      - platform
+
+  cassandra:
+    container_name: cassandra
+    image: 'bitnami/cassandra:4.1'
+    ports:
+      - '9042:9042'
+    environment:
+      - CASSANDRA_PASSWORD=cassandra
+      - CASSANDRA_USERNAME=cassandra
+      - CASSANDRA_PASSWORD_SEEDER=
+    networks:
+      - platform
+
+  postgres:
+    image: postgres:15.2
+    container_name: postgres
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    networks:
+      - platform
+
+  mysql:
+    image: bitnami/mysql:8.0
+    container_name: mysql
+    ports:
+      - '3306:3306'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=admin
+      - MYSQL_DATABASE=wenex
+    networks:
+      - platform
+
+networks:
+  platform:
+    driver: bridge
