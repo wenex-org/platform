@@ -106,10 +106,11 @@ message AuthenticationRequest {
   optional string redirect_uri = 14;
   optional string response_type = 15;
 
-  optional string i18n = 16;
+  optional bool strict = 16;
+  optional string i18n = 17;
 
-  optional string refresh_token = 17;
-  optional string confirmation_code = 18;
+  optional string refresh_token = 18;
+  optional string confirmation_code = 19;
 }
 
 message AuthenticationResponse {
