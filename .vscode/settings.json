@@ -6,6 +6,7 @@
     "opentelemetry",
     "OTLP",
     "proto",
+    "setex",
     "Vahid",
     "Wenex",
     "Zipkin"
