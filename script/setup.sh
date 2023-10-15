@@ -4,7 +4,7 @@
 # Assets Preparation #
 ######################
 
-# Protos
+# Proto
 sh ./script/proto.sh
-if [ $? == 0 ]; then echo "Protos prepared successfully."
+if [ $? == 0 ]; then echo "Proto prepared successfully."
 else echo "Preparing proto assets was failed...!"; fi
