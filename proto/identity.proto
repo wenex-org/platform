@@ -152,16 +152,17 @@ message User {
   // User Interface
   string status = 50;
 
-  repeated string mfa = 51;
+  optional string mfa = 51;
   repeated string oauth = 52;
+  optional string secret = 53;
 
-  optional string email = 53;
-  optional string phone = 54;
+  optional string email = 54;
+  optional string phone = 55;
 
-  optional string username = 55;
-  optional string password = 56;
+  optional string username = 56;
+  optional string password = 57;
 
-  repeated string subjects = 57;
+  repeated string subjects = 58;
 }
 message Users { repeated User items = 1; }
 message UserData { optional User data = 1; }
@@ -218,8 +219,6 @@ message Session {
   string ip = 50;
   string agent = 51;
   string expiration_date = 52;
-
-  optional string last_refresh_date = 53;
 }
 message Sessions { repeated Session items = 1; }
 message SessionData { optional Session data = 1; }
@@ -297,7 +296,7 @@ message Profile {
 
   message Place {
     // Sub Interface
-    optional string owner = 1;
+    optional string uid = 1;
 
     optional string id = 2;
     optional string ref = 3;
@@ -329,12 +328,12 @@ message Profile {
     optional string timestamp = 24;
 
     // Place Interface
-    string type = 50;
-    string country = 51;
+    optional string name = 50;
 
-    optional string name = 52;
-    optional string address = 53;
-    optional string location = 54;
+    string type = 51;
+    string country = 52;
+    optional string city = 53;
+    optional string address = 54;
   }
 }
 message Profiles { repeated Profile items = 1; }

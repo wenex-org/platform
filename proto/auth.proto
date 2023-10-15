@@ -227,7 +227,7 @@ message Grant {
 
   message Time {
     // Sub Interface
-    optional string owner = 1;
+    optional string uid = 1;
 
     optional string id = 2;
     optional string ref = 3;
