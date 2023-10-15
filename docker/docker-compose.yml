@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  redis:
+    extends:
+      file: docker-compose.utils.yml
+      service: redis
+
+  kafka:
+    extends:
+      file: docker-compose.brk.yml
+      service: kafka
+
+  mongodb-primary:
+    extends:
+      file: mongo-rs/docker-compose.yml
+      service: mongodb-primary
+
+  mongodb-secondary:
+    extends:
+      file: mongo-rs/docker-compose.yml
+      service: mongodb-secondary
+
+  mongodb-arbiter:
+    extends:
+      file: mongo-rs/docker-compose.yml
+      service: mongodb-arbiter
+
+networks:
+  localnet:
+    driver: bridge

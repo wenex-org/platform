@@ -1,4 +1,4 @@
-version: 3.8
+version: '3.8'
 
 x-common: &common
   build:
@@ -9,6 +9,9 @@ x-common: &common
     - localnet
 
 services:
+  #######################
+  # GATEWAY
+  #######################
   gateway:
     build:
       args:
@@ -36,6 +39,22 @@ services:
     <<: *common
 
   #######################
+  # CONFIGS SERVICE
+  #######################
+  configs:
+    container_name: configs
+    build:
+      args:
+        SERVICE_NAME: configs
+    ports:
+      - 3030:3030 # Rest
+      - 5030:5030 # gRPC
+    environment:
+      NODE_ENV: prod
+      SENTRY_DSN:
+    <<: *common
+
+  #######################
   # DOMAIN SERVICES
   #######################
   domain:
@@ -44,8 +63,8 @@ services:
       args:
         SERVICE_NAME: domain
     ports:
-      - 3030:3030 # Rest
-      - 5030:5030 # gRPC
+      - 3040:3040 # Rest
+      - 5040:5040 # gRPC
     environment:
       NODE_ENV: prod
       SENTRY_DSN:
@@ -60,8 +79,8 @@ services:
       args:
         SERVICE_NAME: identity
     ports:
-      - 3040:3040 # Rest
-      - 5040:5040 # gRPC
+      - 3050:3050 # Rest
+      - 5050:5050 # gRPC
     environment:
       NODE_ENV: prod
       SENTRY_DSN:
