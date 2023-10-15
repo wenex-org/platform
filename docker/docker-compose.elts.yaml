@@ -1,29 +1,29 @@
-version: '3.8'
+version: 3.8
 
 services:
   elasticsearch:
-    image: elasticsearch:8.7.0
+    image: elasticsearch:8.10.2
     container_name: elasticsearch
     ports:
-      - 9200:9200  
+      - 9200:9200
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
     networks:
-      - platform
+      - localnet
 
   kibana:
+    image: bitnami/kibana:8.10.3
     container_name: kibana
-    image: bitnami/kibana:8.7.0
     ports:
       - 5601:5601
     environment:
-    - KIBANA_ELASTICSEARCH_URL=elasticsearch
+      - KIBANA_ELASTICSEARCH_URL=elasticsearch
     depends_on:
       - elasticsearch
     networks:
-      - platform
+      - localnet
 
 networks:
-  platform:
+  localnet:
     driver: bridge

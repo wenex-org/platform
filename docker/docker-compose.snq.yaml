@@ -1,24 +1,24 @@
-version: '3.8'
+version: 3.8
 
 services:
   sonarqube:
     image: sonarqube:lts
     container_name: sonarqube
     ports:
-      - '80:9000'
+      - 80:9000
     environment:
       - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
     networks:
-      - platform
+      - localnet
 
   structurizr:
     image: structurizr/lite:lates
     container_name: structurizr
     ports:
-      - '8080:8080'
+      - 8080:8080
     networks:
-      - platform
+      - localnet
 
 networks:
-  platform:
+  localnet:
     driver: bridge

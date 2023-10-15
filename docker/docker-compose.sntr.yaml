@@ -1,58 +1,5 @@
-version: '3.8'
-
 ############################################################
 #
-#   Note: This version is not supported by our project
 #   Please use https://github.com/getsentry/self-hosted
 #
 ############################################################
-
-# docker-compose -f compose/docker-compose.utils.yaml up redis -d
-# docker-compose -f compose/docker-compose.utils.yaml up postgres -d
-
-# docker exec -it sentry sentry upgrade
-
-services:
-  sentry:
-    image: sentry:9.1
-    container_name: sentry
-    ports:
-     - 9000:9000
-    environment:
-      SENTRY_SECRET_KEY: '2sOzJnzpWHYtaHNZSRy2Dw3wHW6Rv5dF'
-      SENTRY_POSTGRES_HOST: postgres
-      SENTRY_DB_USER: admin
-      SENTRY_DB_PASSWORD: admin
-      SENTRY_REDIS_HOST: redis
-    networks:
-      - platform
-
-  sentry-cron:
-    image: sentry:9.1
-    container_name: sentry-cron
-    command: "sentry run cron"
-    environment:
-      SENTRY_SECRET_KEY: '2sOzJnzpWHYtaHNZSRy2Dw3wHW6Rv5dF'
-      SENTRY_POSTGRES_HOST: postgres
-      SENTRY_DB_USER: admin
-      SENTRY_DB_PASSWORD: admin
-      SENTRY_REDIS_HOST: redis
-    networks:
-      - platform
-
-  sentry-worker:
-    image: sentry:9.1
-    container_name: sentry-worker
-    command: "sentry run worker"
-    environment:
-      SENTRY_SECRET_KEY: '2sOzJnzpWHYtaHNZSRy2Dw3wHW6Rv5dF'
-      SENTRY_POSTGRES_HOST: postgres
-      SENTRY_DB_USER: admin
-      SENTRY_DB_PASSWORD: admin
-      SENTRY_REDIS_HOST: redis
-    networks:
-      - platform
-
-networks:
-  platform:
-    driver: bridge

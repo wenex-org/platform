@@ -1,13 +1,13 @@
-version: '3.8'
+version: 3.8
 
 services:
   grafana:
     container_name: grafana
-    image: grafana/grafana:9.4.7
+    image: grafana/grafana:10.1.5
     ports:
       - 3000:3000
     networks:
-      - platform
+      - localnet
 
   zipkin:
     container_name: zipkin
@@ -17,8 +17,8 @@ services:
     environment:
       - STORAGE_TYPE=mem
     networks:
-      - platform
+      - localnet
 
 networks:
-  platform:
+  localnet:
     driver: bridge
