@@ -1,15 +1,31 @@
 version: '3.8'
 
 services:
+  #######################
+  # UTILS
+  #######################
   redis:
     extends:
       file: docker-compose.utils.yml
       service: redis
 
+  #######################
+  # BROKER
+  #######################
+
+  zookeeper:
+    extends:
+      file: docker-compose.brk.yml
+      service: zookeeper
+
   kafka:
     extends:
       file: docker-compose.brk.yml
       service: kafka
+
+  #######################
+  # MONGO-RS
+  #######################
 
   mongodb-primary:
     extends:
