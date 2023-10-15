@@ -162,9 +162,6 @@ message User {
   optional string password = 56;
 
   repeated string subjects = 57;
-
-  optional string last_login_date = 58;
-  optional string last_login_session = 59;
 }
 message Users { repeated User items = 1; }
 message UserData { optional User data = 1; }
