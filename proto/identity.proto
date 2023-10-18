@@ -152,17 +152,19 @@ message User {
   // User Interface
   string status = 50;
 
-  optional string mfa = 51;
-  repeated string oauth = 52;
-  optional string secret = 53;
+  optional string tz = 51;
+  optional string mfa = 52;
+  optional string i18n = 53;
+  repeated string oauth = 54;
+  optional string secret = 55;
 
-  optional string email = 54;
-  optional string phone = 55;
+  optional string email = 56;
+  optional string phone = 57;
 
-  optional string username = 56;
-  optional string password = 57;
+  optional string username = 58;
+  optional string password = 59;
 
-  repeated string subjects = 58;
+  repeated string subjects = 60;
 }
 message Users { repeated User items = 1; }
 message UserData { optional User data = 1; }
