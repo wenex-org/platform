@@ -56,6 +56,8 @@
     "@opentelemetry/semantic-conventions": "^1.17.1",
     "@willsoto/nestjs-prometheus": "^6.0.0",
     "bcryptjs": "^2.4.3",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
     "crypto-js": "^4.1.1",
     "dotenv": "^16.3.1",
     "ioredis": "^5.3.2",
