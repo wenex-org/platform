@@ -54,6 +54,7 @@
     "@opentelemetry/sdk-node": "^0.44.0",
     "@opentelemetry/sdk-trace-node": "^1.17.1",
     "@opentelemetry/semantic-conventions": "^1.17.1",
+    "@typegoose/typegoose": "^11.6.0",
     "@willsoto/nestjs-prometheus": "^6.0.0",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
@@ -64,6 +65,7 @@
     "log": "^6.3.1",
     "log-node": "^8.0.3",
     "opentelemetry-instrumentation-kafkajs": "^0.39.1",
+    "phone": "^3.1.41",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1"
   },
