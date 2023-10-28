@@ -9,9 +9,6 @@ x-common: &common
     - localnet
 
 services:
-  #######################
-  # GATEWAY
-  #######################
   gateway:
     build:
       args:
