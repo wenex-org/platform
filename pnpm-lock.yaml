@@ -95,6 +95,9 @@ dependencies:
   dotenv:
     specifier: ^16.3.1
     version: 16.3.1
+  graphql-type-json:
+    specifier: ^0.3.2
+    version: 0.3.2(graphql@16.8.1)
   ioredis:
     specifier: ^5.3.2
     version: 5.3.2
@@ -4988,6 +4991,14 @@ packages:
     dependencies:
       graphql: 16.8.1
       tslib: 2.6.2
+    dev: false
+
+  /graphql-type-json@0.3.2(graphql@16.8.1):
+    resolution: {integrity: sha512-J+vjof74oMlCWXSvt0DOf2APEdZOCdubEvGDUAlqH//VBYcOYsGgRW7Xzorr44LvkjiuvecWc8fChxuZZbChtg==}
+    peerDependencies:
+      graphql: '>=0.8.0'
+    dependencies:
+      graphql: 16.8.1
     dev: false
 
   /graphql-ws@5.11.3(graphql@16.8.1):
