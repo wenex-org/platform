@@ -122,6 +122,9 @@ dependencies:
   mongoose:
     specifier: ^7.6.3
     version: 7.6.3
+  naming-conventions-modeler:
+    specifier: ^1.4.1
+    version: 1.4.1
   opentelemetry-instrumentation-kafkajs:
     specifier: ^0.40.0
     version: 0.40.0(@opentelemetry/api@1.6.0)
@@ -157,6 +160,9 @@ devDependencies:
   '@types/jest':
     specifier: ^29.5.6
     version: 29.5.6
+  '@types/log':
+    specifier: ^6.3.2
+    version: 6.3.2
   '@types/node':
     specifier: ^20.8.9
     version: 20.8.9
@@ -2962,6 +2968,10 @@ packages:
     dependencies:
       '@types/koa': 2.13.9
     dev: false
+
+  /@types/log@6.3.2:
+    resolution: {integrity: sha512-AMLojLBToiSj6ypSSq9mZ8oMeXdalG84U6rqCG5NKsywxuY/7zEaYCwp0PByNkD4VeuR0YtdT17IrmzCPUlCdA==}
+    dev: true
 
   /@types/memcached@2.2.8:
     resolution: {integrity: sha512-ITIJmGByEheHtqCgwxlrW+x/NRUXE33f2qhA2imsUcIgaO1Z1qhNmDU1N1IDVg45yeKTt0AV81UREvdM4GUYxQ==}
@@ -6371,6 +6381,10 @@ packages:
   /mute-stream@0.0.8:
     resolution: {integrity: sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==}
     dev: true
+
+  /naming-conventions-modeler@1.4.1:
+    resolution: {integrity: sha512-RTn3qXxaXSPRhVDmXlpnzsDxBzOE9GxT/l5vTnNLKVrVIDmfGuCgFOK+XJ8FhIsirTewUt2DzMnN8wFUvrYFKg==}
+    dev: false
 
   /natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
