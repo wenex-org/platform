@@ -58,20 +58,26 @@ service ClientsService {
 // Common Messages
 
 message Total { int64 total = 1; }
-message UniqueQuery { string id = 1; }
+message UniqueQuery {
+  optional string id = 1;
+  optional string ref = 2;
+}
 
 message Filter {
   string query = 1;
-  optional string projection = 2;
-  optional string pagination = 3;
+  optional string populate = 2;
+  optional string projection = 3;
+  optional string pagination = 4;
 }
 message OneFilter {
   string query = 1;
-  optional string projection = 2;
+  optional string populate = 2;
+  optional string projection = 3;
 }
 message UniqueFilter {
   UniqueQuery query = 1;
-  optional string projection = 2;
+  optional string populate = 2;
+  optional string projection = 3;
 }
 message QueryFilter { string query = 1; }
 
