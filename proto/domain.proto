@@ -84,15 +84,15 @@ message QueryFilter { string query = 1; }
 // Apps Messages
 
 message UpdateAppOne {
-  App data = 1;
+  App update = 1;
   OneFilter filter = 2;
 }
 message UpdateAppBulk {
-  App data = 1;
+  App update = 1;
   QueryFilter filter = 2;
 }
 message UpdateAppUnique {
-  App data = 1;
+  App update = 1;
   UniqueFilter filter = 2;
 }
 
@@ -194,15 +194,15 @@ message AppData { optional App data = 1; }
 // Client Messages
 
 message UpdateClientOne {
-  Client data = 1;
+  Client update = 1;
   OneFilter filter = 2;
 }
 message UpdateClientBulk {
-  Client data = 1;
+  Client update = 1;
   QueryFilter filter = 2;
 }
 message UpdateClientUnique {
-  Client data = 1;
+  Client update = 1;
   UniqueFilter filter = 2;
 }
 

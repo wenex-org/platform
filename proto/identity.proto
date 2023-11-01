@@ -110,15 +110,15 @@ message QueryFilter { string query = 1; }
 // Users Messages
 
 message UpdateUserOne {
-  User data = 1;
+  User update = 1;
   OneFilter filter = 2;
 }
 message UpdateUserBulk {
-  User data = 1;
+  User update = 1;
   QueryFilter filter = 2;
 }
 message UpdateUserUnique {
-  User data = 1;
+  User update = 1;
   UniqueFilter filter = 2;
 }
 
@@ -178,15 +178,15 @@ message UserData { optional User data = 1; }
 // Sessions Messages
 
 message UpdateSessionOne {
-  Session data = 1;
+  Session update = 1;
   OneFilter filter = 2;
 }
 message UpdateSessionBulk {
-  Session data = 1;
+  Session update = 1;
   QueryFilter filter = 2;
 }
 message UpdateSessionUnique {
-  Session data = 1;
+  Session update = 1;
   UniqueFilter filter = 2;
 }
 
@@ -234,15 +234,15 @@ message SessionData { optional Session data = 1; }
 // Profiles Messages
 
 message UpdateProfileOne {
-  Profile data = 1;
+  Profile update = 1;
   OneFilter filter = 2;
 }
 message UpdateProfileBulk {
-  Profile data = 1;
+  Profile update = 1;
   QueryFilter filter = 2;
 }
 message UpdateProfileUnique {
-  Profile data = 1;
+  Profile update = 1;
   UniqueFilter filter = 2;
 }
 

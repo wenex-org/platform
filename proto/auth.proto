@@ -175,15 +175,15 @@ message AuthorizationResponse {
 // Grants Messages
 
 message UpdateGrantOne {
-  Grant data = 1;
+  Grant update = 1;
   OneFilter filter = 2;
 }
 message UpdateGrantBulk {
-  Grant data = 1;
+  Grant update = 1;
   QueryFilter filter = 2;
 }
 message UpdateGrantUnique {
-  Grant data = 1;
+  Grant update = 1;
   UniqueFilter filter = 2;
 }
 

@@ -58,15 +58,15 @@ message QueryFilter { string query = 1; }
 // Config Messages
 
 message UpdateConfigOne {
-  Config data = 1;
+  Config update = 1;
   OneFilter filter = 2;
 }
 message UpdateConfigBulk {
-  Config data = 1;
+  Config update = 1;
   QueryFilter filter = 2;
 }
 message UpdateConfigUnique {
-  Config data = 1;
+  Config update = 1;
   UniqueFilter filter = 2;
 }
 

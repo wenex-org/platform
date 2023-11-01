@@ -1,4 +1,5 @@
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+import { ComplexityPlugin, DateScalar } from '@app/common/plugins';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { JWT_SECRET, REDIS_CONFIG } from '@app/common/configs';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
@@ -11,7 +12,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { join } from 'path';
 
 import * as modules from './modules';
-import { ComplexityPlugin, DateScalar } from './common';
 
 @Module({
   imports: [

@@ -155,6 +155,9 @@ dependencies:
   rxjs:
     specifier: ^7.8.1
     version: 7.8.1
+  semver-increment:
+    specifier: ^1.0.1
+    version: 1.0.1
 
 devDependencies:
   '@nestjs/cli':
@@ -7375,6 +7378,17 @@ packages:
       ajv: 6.12.6
       ajv-keywords: 3.5.2(ajv@6.12.6)
     dev: true
+
+  /semver-increment@1.0.1:
+    resolution: {integrity: sha512-+Ycn4FaIMo0fbPyHXgRXnctIFXEk8qdirye/tC9sczXMK60yF8PgzNQAQ9JlqTArlEQtDn3ZLYhYMiLFpyL04Q==}
+    engines: {node: '>=5.0.0'}
+    dependencies:
+      semver-utils: 1.1.1
+    dev: false
+
+  /semver-utils@1.1.1:
+    resolution: {integrity: sha512-coCNrapDtEmdOhLyIvaV1xzXJ9lm1YzE0DwmEQqH55XL2APBMR/IZxz3JYEk0LDSmcfrSuNSofYIExDpEzBHVw==}
+    dev: false
 
   /semver@6.3.1:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}

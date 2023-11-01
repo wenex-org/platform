@@ -82,7 +82,8 @@
     "opentelemetry-instrumentation-kafkajs": "^0.40.0",
     "phone": "^3.1.41",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "semver-increment": "^1.0.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.2.1",
