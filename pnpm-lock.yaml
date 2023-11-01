@@ -31,7 +31,7 @@ dependencies:
     version: 10.1.1(@nestjs/common@10.2.7)
   '@nestjs/microservices':
     specifier: ^10.2.7
-    version: 10.2.7(@grpc/grpc-js@1.9.9)(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)(ioredis@5.3.2)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+    version: 10.2.7(@grpc/grpc-js@1.9.9)(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)(ioredis@5.3.2)(kafkajs@2.2.4)(reflect-metadata@0.1.13)(rxjs@7.8.1)
   '@nestjs/mongoose':
     specifier: ^10.0.1
     version: 10.0.1(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)(mongoose@7.6.3)(reflect-metadata@0.1.13)(rxjs@7.8.1)
@@ -125,6 +125,9 @@ dependencies:
   ioredis:
     specifier: ^5.3.2
     version: 5.3.2
+  kafkajs:
+    specifier: ^2.2.4
+    version: 2.2.4
   log:
     specifier: ^6.3.1
     version: 6.3.1
@@ -1466,7 +1469,7 @@ packages:
         optional: true
     dependencies:
       '@nestjs/common': 10.2.7(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
-      '@nestjs/microservices': 10.2.7(@grpc/grpc-js@1.9.9)(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)(ioredis@5.3.2)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/microservices': 10.2.7(@grpc/grpc-js@1.9.9)(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)(ioredis@5.3.2)(kafkajs@2.2.4)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@nestjs/platform-express': 10.2.7(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)
       '@nuxtjs/opencollective': 0.3.2
       fast-safe-stringify: 2.1.1
@@ -1623,7 +1626,7 @@ packages:
       reflect-metadata: 0.1.13
     dev: false
 
-  /@nestjs/microservices@10.2.7(@grpc/grpc-js@1.9.9)(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)(ioredis@5.3.2)(reflect-metadata@0.1.13)(rxjs@7.8.1):
+  /@nestjs/microservices@10.2.7(@grpc/grpc-js@1.9.9)(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)(ioredis@5.3.2)(kafkajs@2.2.4)(reflect-metadata@0.1.13)(rxjs@7.8.1):
     resolution: {integrity: sha512-ggpng1yRuugPufn+OKeHV6Dcw3TWI7lmOvXkyYRwatVHQMvb3MlPpbzsA5PfUlg5DsjPGEWRbkIWN7OFb8OTyw==}
     peerDependencies:
       '@grpc/grpc-js': '*'
@@ -1664,6 +1667,7 @@ packages:
       '@nestjs/core': 10.2.7(@nestjs/common@10.2.7)(@nestjs/microservices@10.2.7)(@nestjs/platform-express@10.2.7)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       ioredis: 5.3.2
       iterare: 1.2.1
+      kafkajs: 2.2.4
       reflect-metadata: 0.1.13
       rxjs: 7.8.1
       tslib: 2.6.2
@@ -1796,7 +1800,7 @@ packages:
       '@grpc/proto-loader': 0.7.10
       '@nestjs/common': 10.2.7(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@nestjs/core': 10.2.7(@nestjs/common@10.2.7)(@nestjs/microservices@10.2.7)(@nestjs/platform-express@10.2.7)(reflect-metadata@0.1.13)(rxjs@7.8.1)
-      '@nestjs/microservices': 10.2.7(@grpc/grpc-js@1.9.9)(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)(ioredis@5.3.2)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/microservices': 10.2.7(@grpc/grpc-js@1.9.9)(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)(ioredis@5.3.2)(kafkajs@2.2.4)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@nestjs/mongoose': 10.0.1(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)(mongoose@7.6.3)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       boxen: 5.1.2
       check-disk-space: 3.4.0
@@ -1820,7 +1824,7 @@ packages:
     dependencies:
       '@nestjs/common': 10.2.7(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@nestjs/core': 10.2.7(@nestjs/common@10.2.7)(@nestjs/microservices@10.2.7)(@nestjs/platform-express@10.2.7)(reflect-metadata@0.1.13)(rxjs@7.8.1)
-      '@nestjs/microservices': 10.2.7(@grpc/grpc-js@1.9.9)(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)(ioredis@5.3.2)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/microservices': 10.2.7(@grpc/grpc-js@1.9.9)(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)(ioredis@5.3.2)(kafkajs@2.2.4)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@nestjs/platform-express': 10.2.7(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)
       tslib: 2.6.2
     dev: true
@@ -6268,6 +6272,10 @@ packages:
       jwa: 1.4.1
       safe-buffer: 5.2.1
     dev: false
+
+  /kafkajs@2.2.4:
+    resolution: {integrity: sha512-j/YeapB1vfPT2iOIUn/vxdyKEuhuY2PxMBvf5JWux6iSaukAccrMtXEY/Lb7OvavDhOWME589bpLrEdnVHjfjA==}
+    engines: {node: '>=14.0.0'}
 
   /kareem@2.5.1:
     resolution: {integrity: sha512-7jFxRVm+jD+rkq3kY0iZDJfsO2/t4BBPeEb2qKn2lR/9KhuksYk5hxzfRYWMPV8P/x2d0kHD306YyWLzjjH+uA==}
