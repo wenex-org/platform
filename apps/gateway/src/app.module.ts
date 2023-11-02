@@ -15,12 +15,10 @@ import * as modules from './modules';
 
 @Module({
   imports: [
-    ...(Object.values(modules) as unknown as DynamicModule[]),
-
-    JwtModule.register({ secret: JWT_SECRET(), global: true }),
-
+    HealthModule.forRoot(['disk', 'memory', 'redis', 'kafka']),
     PrometheusModule.register(),
     RedisModule.forRoot(REDIS_CONFIG()),
+    JwtModule.register({ secret: JWT_SECRET(), global: true }),
     // GraphQLModule.forRoot<ApolloDriverConfig>({
     //   playground: false,
     //   driver: ApolloDriver,
@@ -29,7 +27,8 @@ import * as modules from './modules';
     //   autoSchemaFile: join(process.cwd(), 'schema.gql'),
     //   plugins: [ApolloServerPluginLandingPageLocalDefault()],
     // }),
-    HealthModule.forRoot(['disk', 'memory', 'mongo', 'redis', 'kafka']),
+
+    ...(Object.values(modules) as unknown as DynamicModule[]),
   ],
   // providers: [DateScalar, ComplexityPlugin],
 })
