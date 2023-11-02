@@ -21,16 +21,16 @@ import * as modules from './modules';
 
     PrometheusModule.register(),
     RedisModule.forRoot(REDIS_CONFIG()),
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      playground: false,
-      driver: ApolloDriver,
-      resolvers: { JSON: GraphQLJSON },
-      subscriptions: { 'graphql-ws': true },
-      autoSchemaFile: join(process.cwd(), 'schema.gql'),
-      plugins: [ApolloServerPluginLandingPageLocalDefault()],
-    }),
+    // GraphQLModule.forRoot<ApolloDriverConfig>({
+    //   playground: false,
+    //   driver: ApolloDriver,
+    //   resolvers: { JSON: GraphQLJSON },
+    //   subscriptions: { 'graphql-ws': true },
+    //   autoSchemaFile: join(process.cwd(), 'schema.gql'),
+    //   plugins: [ApolloServerPluginLandingPageLocalDefault()],
+    // }),
     HealthModule.forRoot(['disk', 'memory', 'mongo', 'redis', 'kafka']),
   ],
-  providers: [DateScalar, ComplexityPlugin],
+  // providers: [DateScalar, ComplexityPlugin],
 })
 export class AppModule {}

@@ -12,17 +12,17 @@ service ConfigsService {
   rpc Find(Filter) returns (Configs);
   rpc Cursor(Filter) returns (stream Config);
 
-  rpc FindOne(OneFilter) returns (ConfigData);
-  rpc FindById(UniqueFilter) returns (ConfigData);
+  rpc FindOne(FilterOne) returns (ConfigData);
+  rpc FindById(FilterID) returns (ConfigData);
 
-  rpc DeleteOne(OneFilter) returns (ConfigData);
-  rpc DeleteById(UniqueFilter) returns (ConfigData);
+  rpc DeleteOne(FilterOne) returns (ConfigData);
+  rpc DeleteById(FilterID) returns (ConfigData);
 
-  rpc RestoreOne(OneFilter) returns (ConfigData);
-  rpc RestoreById(UniqueFilter) returns (ConfigData);
+  rpc RestoreOne(FilterOne) returns (ConfigData);
+  rpc RestoreById(FilterID) returns (ConfigData);
 
-  rpc DestroyOne(OneFilter) returns (ConfigData);
-  rpc DestroyById(UniqueFilter) returns (ConfigData);
+  rpc DestroyOne(FilterOne) returns (ConfigData);
+  rpc DestroyById(FilterID) returns (ConfigData);
 
   rpc UpdateOne(UpdateConfigOne) returns (ConfigData);
   rpc UpdateBulk(UpdateConfigBulk) returns (Total);
@@ -32,7 +32,7 @@ service ConfigsService {
 // Common Messages
 
 message Total { int64 total = 1; }
-message UniqueQuery {
+message QueryID {
   optional string id = 1;
   optional string ref = 2;
 }
@@ -43,13 +43,13 @@ message Filter {
   optional string projection = 3;
   optional string pagination = 4;
 }
-message OneFilter {
+message FilterOne {
   string query = 1;
   optional string populate = 2;
   optional string projection = 3;
 }
-message UniqueFilter {
-  UniqueQuery query = 1;
+message FilterID {
+  QueryID query = 1;
   optional string populate = 2;
   optional string projection = 3;
 }
@@ -59,7 +59,7 @@ message QueryFilter { string query = 1; }
 
 message UpdateConfigOne {
   Config update = 1;
-  OneFilter filter = 2;
+  FilterOne filter = 2;
 }
 message UpdateConfigBulk {
   Config update = 1;
@@ -67,7 +67,7 @@ message UpdateConfigBulk {
 }
 message UpdateConfigUnique {
   Config update = 1;
-  UniqueFilter filter = 2;
+  FilterID filter = 2;
 }
 
 message Config {

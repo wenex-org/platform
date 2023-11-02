@@ -24,17 +24,17 @@ service GrantsService {
   rpc Find(Filter) returns (Grants);
   rpc Cursor(Filter) returns (stream Grant);
 
-  rpc FindOne(OneFilter) returns (GrantData);
-  rpc FindById(UniqueFilter) returns (GrantData);
+  rpc FindOne(FilterOne) returns (GrantData);
+  rpc FindById(FilterID) returns (GrantData);
 
-  rpc DeleteOne(OneFilter) returns (GrantData);
-  rpc DeleteById(UniqueFilter) returns (GrantData);
+  rpc DeleteOne(FilterOne) returns (GrantData);
+  rpc DeleteById(FilterID) returns (GrantData);
 
-  rpc RestoreOne(OneFilter) returns (GrantData);
-  rpc RestoreById(UniqueFilter) returns (GrantData);
+  rpc RestoreOne(FilterOne) returns (GrantData);
+  rpc RestoreById(FilterID) returns (GrantData);
 
-  rpc DestroyOne(OneFilter) returns (GrantData);
-  rpc DestroyById(UniqueFilter) returns (GrantData);
+  rpc DestroyOne(FilterOne) returns (GrantData);
+  rpc DestroyById(FilterID) returns (GrantData);
 
   rpc UpdateOne(UpdateGrantOne) returns (GrantData);
   rpc UpdateBulk(UpdateGrantBulk) returns (Total);
@@ -44,7 +44,7 @@ service GrantsService {
 // Common Messages
 
 message Total { int64 total = 1; }
-message UniqueQuery {
+message QueryID {
   optional string id = 1;
   optional string ref = 2;
 }
@@ -55,13 +55,13 @@ message Filter {
   optional string projection = 3;
   optional string pagination = 4;
 }
-message OneFilter {
+message FilterOne {
   string query = 1;
   optional string populate = 2;
   optional string projection = 3;
 }
-message UniqueFilter {
-  UniqueQuery query = 1;
+message FilterID {
+  QueryID query = 1;
   optional string populate = 2;
   optional string projection = 3;
 }
@@ -176,7 +176,7 @@ message AuthorizationResponse {
 
 message UpdateGrantOne {
   Grant update = 1;
-  OneFilter filter = 2;
+  FilterOne filter = 2;
 }
 message UpdateGrantBulk {
   Grant update = 1;
@@ -184,7 +184,7 @@ message UpdateGrantBulk {
 }
 message UpdateGrantUnique {
   Grant update = 1;
-  UniqueFilter filter = 2;
+  FilterID filter = 2;
 }
 
 message Grant {

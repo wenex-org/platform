@@ -12,17 +12,17 @@ service UsersService {
   rpc Find(Filter) returns (Users);
   rpc Cursor(Filter) returns (stream User);
 
-  rpc FindOne(OneFilter) returns (UserData);
-  rpc FindById(UniqueFilter) returns (UserData);
+  rpc FindOne(FilterOne) returns (UserData);
+  rpc FindById(FilterID) returns (UserData);
 
-  rpc DeleteOne(OneFilter) returns (UserData);
-  rpc DeleteById(UniqueFilter) returns (UserData);
+  rpc DeleteOne(FilterOne) returns (UserData);
+  rpc DeleteById(FilterID) returns (UserData);
 
-  rpc RestoreOne(OneFilter) returns (UserData);
-  rpc RestoreById(UniqueFilter) returns (UserData);
+  rpc RestoreOne(FilterOne) returns (UserData);
+  rpc RestoreById(FilterID) returns (UserData);
 
-  rpc DestroyOne(OneFilter) returns (UserData);
-  rpc DestroyById(UniqueFilter) returns (UserData);
+  rpc DestroyOne(FilterOne) returns (UserData);
+  rpc DestroyById(FilterID) returns (UserData);
 
   rpc UpdateOne(UpdateUserOne) returns (UserData);
   rpc UpdateBulk(UpdateUserBulk) returns (Total);
@@ -38,17 +38,17 @@ service SessionsService {
   rpc Find(Filter) returns (Sessions);
   rpc Cursor(Filter) returns (stream Session);
 
-  rpc FindOne(OneFilter) returns (SessionData);
-  rpc FindById(UniqueFilter) returns (SessionData);
+  rpc FindOne(FilterOne) returns (SessionData);
+  rpc FindById(FilterID) returns (SessionData);
 
-  rpc DeleteOne(OneFilter) returns (SessionData);
-  rpc DeleteById(UniqueFilter) returns (SessionData);
+  rpc DeleteOne(FilterOne) returns (SessionData);
+  rpc DeleteById(FilterID) returns (SessionData);
 
-  rpc RestoreOne(OneFilter) returns (SessionData);
-  rpc RestoreById(UniqueFilter) returns (SessionData);
+  rpc RestoreOne(FilterOne) returns (SessionData);
+  rpc RestoreById(FilterID) returns (SessionData);
 
-  rpc DestroyOne(OneFilter) returns (SessionData);
-  rpc DestroyById(UniqueFilter) returns (SessionData);
+  rpc DestroyOne(FilterOne) returns (SessionData);
+  rpc DestroyById(FilterID) returns (SessionData);
 
   rpc UpdateOne(UpdateSessionOne) returns (SessionData);
   rpc UpdateBulk(UpdateSessionBulk) returns (Total);
@@ -64,17 +64,17 @@ service ProfilesService {
   rpc Find(Filter) returns (Profiles);
   rpc Cursor(Filter) returns (stream Profile);
 
-  rpc FindOne(OneFilter) returns (ProfileData);
-  rpc FindById(UniqueFilter) returns (ProfileData);
+  rpc FindOne(FilterOne) returns (ProfileData);
+  rpc FindById(FilterID) returns (ProfileData);
 
-  rpc DeleteOne(OneFilter) returns (ProfileData);
-  rpc DeleteById(UniqueFilter) returns (ProfileData);
+  rpc DeleteOne(FilterOne) returns (ProfileData);
+  rpc DeleteById(FilterID) returns (ProfileData);
 
-  rpc RestoreOne(OneFilter) returns (ProfileData);
-  rpc RestoreById(UniqueFilter) returns (ProfileData);
+  rpc RestoreOne(FilterOne) returns (ProfileData);
+  rpc RestoreById(FilterID) returns (ProfileData);
 
-  rpc DestroyOne(OneFilter) returns (ProfileData);
-  rpc DestroyById(UniqueFilter) returns (ProfileData);
+  rpc DestroyOne(FilterOne) returns (ProfileData);
+  rpc DestroyById(FilterID) returns (ProfileData);
 
   rpc UpdateOne(UpdateProfileOne) returns (ProfileData);
   rpc UpdateBulk(UpdateProfileBulk) returns (Total);
@@ -84,7 +84,7 @@ service ProfilesService {
 // Common Messages
 
 message Total { int64 total = 1; }
-message UniqueQuery {
+message QueryID {
   optional string id = 1;
   optional string ref = 2;
 }
@@ -95,13 +95,13 @@ message Filter {
   optional string projection = 3;
   optional string pagination = 4;
 }
-message OneFilter {
+message FilterOne {
   string query = 1;
   optional string populate = 2;
   optional string projection = 3;
 }
-message UniqueFilter {
-  UniqueQuery query = 1;
+message FilterID {
+  QueryID query = 1;
   optional string populate = 2;
   optional string projection = 3;
 }
@@ -111,7 +111,7 @@ message QueryFilter { string query = 1; }
 
 message UpdateUserOne {
   User update = 1;
-  OneFilter filter = 2;
+  FilterOne filter = 2;
 }
 message UpdateUserBulk {
   User update = 1;
@@ -119,7 +119,7 @@ message UpdateUserBulk {
 }
 message UpdateUserUnique {
   User update = 1;
-  UniqueFilter filter = 2;
+  FilterID filter = 2;
 }
 
 message User {
@@ -179,7 +179,7 @@ message UserData { optional User data = 1; }
 
 message UpdateSessionOne {
   Session update = 1;
-  OneFilter filter = 2;
+  FilterOne filter = 2;
 }
 message UpdateSessionBulk {
   Session update = 1;
@@ -187,7 +187,7 @@ message UpdateSessionBulk {
 }
 message UpdateSessionUnique {
   Session update = 1;
-  UniqueFilter filter = 2;
+  FilterID filter = 2;
 }
 
 message Session {
@@ -235,7 +235,7 @@ message SessionData { optional Session data = 1; }
 
 message UpdateProfileOne {
   Profile update = 1;
-  OneFilter filter = 2;
+  FilterOne filter = 2;
 }
 message UpdateProfileBulk {
   Profile update = 1;
@@ -243,7 +243,7 @@ message UpdateProfileBulk {
 }
 message UpdateProfileUnique {
   Profile update = 1;
-  UniqueFilter filter = 2;
+  FilterID filter = 2;
 }
 
 message Profile {

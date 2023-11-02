@@ -12,17 +12,17 @@ service AppsService {
   rpc Find(Filter) returns (Apps);
   rpc Cursor(Filter) returns (stream App);
 
-  rpc FindOne(OneFilter) returns (AppData);
-  rpc FindById(UniqueFilter) returns (AppData);
+  rpc FindOne(FilterOne) returns (AppData);
+  rpc FindById(FilterID) returns (AppData);
 
-  rpc DeleteOne(OneFilter) returns (AppData);
-  rpc DeleteById(UniqueFilter) returns (AppData);
+  rpc DeleteOne(FilterOne) returns (AppData);
+  rpc DeleteById(FilterID) returns (AppData);
 
-  rpc RestoreOne(OneFilter) returns (AppData);
-  rpc RestoreById(UniqueFilter) returns (AppData);
+  rpc RestoreOne(FilterOne) returns (AppData);
+  rpc RestoreById(FilterID) returns (AppData);
 
-  rpc DestroyOne(OneFilter) returns (AppData);
-  rpc DestroyById(UniqueFilter) returns (AppData);
+  rpc DestroyOne(FilterOne) returns (AppData);
+  rpc DestroyById(FilterID) returns (AppData);
 
   rpc UpdateOne(UpdateAppOne) returns (AppData);
   rpc UpdateBulk(UpdateAppBulk) returns (Total);
@@ -38,17 +38,17 @@ service ClientsService {
   rpc Find(Filter) returns (Clients);
   rpc Cursor(Filter) returns (stream Client);
 
-  rpc FindOne(OneFilter) returns (ClientData);
-  rpc FindById(UniqueFilter) returns (ClientData);
+  rpc FindOne(FilterOne) returns (ClientData);
+  rpc FindById(FilterID) returns (ClientData);
 
-  rpc DeleteOne(OneFilter) returns (ClientData);
-  rpc DeleteById(UniqueFilter) returns (ClientData);
+  rpc DeleteOne(FilterOne) returns (ClientData);
+  rpc DeleteById(FilterID) returns (ClientData);
 
-  rpc RestoreOne(OneFilter) returns (ClientData);
-  rpc RestoreById(UniqueFilter) returns (ClientData);
+  rpc RestoreOne(FilterOne) returns (ClientData);
+  rpc RestoreById(FilterID) returns (ClientData);
 
-  rpc DestroyOne(OneFilter) returns (ClientData);
-  rpc DestroyById(UniqueFilter) returns (ClientData);
+  rpc DestroyOne(FilterOne) returns (ClientData);
+  rpc DestroyById(FilterID) returns (ClientData);
 
   rpc UpdateOne(UpdateClientOne) returns (ClientData);
   rpc UpdateBulk(UpdateClientBulk) returns (Total);
@@ -58,7 +58,7 @@ service ClientsService {
 // Common Messages
 
 message Total { int64 total = 1; }
-message UniqueQuery {
+message QueryID {
   optional string id = 1;
   optional string ref = 2;
 }
@@ -69,13 +69,13 @@ message Filter {
   optional string projection = 3;
   optional string pagination = 4;
 }
-message OneFilter {
+message FilterOne {
   string query = 1;
   optional string populate = 2;
   optional string projection = 3;
 }
-message UniqueFilter {
-  UniqueQuery query = 1;
+message FilterID {
+  QueryID query = 1;
   optional string populate = 2;
   optional string projection = 3;
 }
@@ -85,7 +85,7 @@ message QueryFilter { string query = 1; }
 
 message UpdateAppOne {
   App update = 1;
-  OneFilter filter = 2;
+  FilterOne filter = 2;
 }
 message UpdateAppBulk {
   App update = 1;
@@ -93,7 +93,7 @@ message UpdateAppBulk {
 }
 message UpdateAppUnique {
   App update = 1;
-  UniqueFilter filter = 2;
+  FilterID filter = 2;
 }
 
 message App {
@@ -195,7 +195,7 @@ message AppData { optional App data = 1; }
 
 message UpdateClientOne {
   Client update = 1;
-  OneFilter filter = 2;
+  FilterOne filter = 2;
 }
 message UpdateClientBulk {
   Client update = 1;
@@ -203,7 +203,7 @@ message UpdateClientBulk {
 }
 message UpdateClientUnique {
   Client update = 1;
-  UniqueFilter filter = 2;
+  FilterID filter = 2;
 }
 
 message Client {
