@@ -95,6 +95,7 @@ export class UsersController extends GrpcController<User> {
   }
 
   @Get(':id')
+  @ApiQuery({ type: String, name: 'ref', required: false })
   FindOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -107,6 +108,7 @@ export class UsersController extends GrpcController<User> {
   }
 
   @Delete(':id')
+  @ApiQuery({ type: String, name: 'ref', required: false })
   DeleteOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -119,6 +121,7 @@ export class UsersController extends GrpcController<User> {
   }
 
   @Put(':id/restore')
+  @ApiQuery({ type: String, name: 'ref', required: false })
   RestoreOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -131,6 +134,7 @@ export class UsersController extends GrpcController<User> {
   }
 
   @Delete(':id/destroy')
+  @ApiQuery({ type: String, name: 'ref', required: false })
   DestroyOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -143,6 +147,7 @@ export class UsersController extends GrpcController<User> {
   }
 
   @Patch(':id')
+  @ApiQuery({ type: String, name: 'ref', required: false })
   UpdateOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
