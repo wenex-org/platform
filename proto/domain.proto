@@ -259,10 +259,10 @@ message Client {
   int32 refresh_token_ttl = 62;
 
   repeated string scopes = 63;
-  repeated string whitelist = 64;
+  repeated string grant_types = 64;
 
-  repeated string coworkers = 65;
-  repeated string grant_types = 66;
+  repeated string whitelist = 65;
+  repeated string coworkers = 66;
   optional string redirect_uri = 67;
 
   repeated Domain domains = 68;
@@ -302,9 +302,10 @@ message Client {
     optional string timestamp = 24;
 
     // Domain Interface
-    string status = 50;
-    string address = 51;
-    repeated string policies = 53;
+    string name = 50;
+    string status = 51;
+
+    repeated string subjects = 52;
   }
 
   message OtpService {
