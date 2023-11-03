@@ -11,22 +11,9 @@ import {
   QueryFilterDto,
   UpdateUserDto,
 } from '@app/common/dto';
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Put,
-  Query,
-  UseFilters,
-  UseInterceptors,
-  UsePipes,
-} from '@nestjs/common';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
-import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { UseFilters, UseInterceptors, UsePipes } from '@nestjs/common';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Filter, Meta, Session } from '@app/common/decorators';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
@@ -37,137 +24,117 @@ import { GrpcController } from '@app/common/classes';
 import { ClientSession } from 'mongoose';
 import { Observable } from 'rxjs';
 
-@ApiBearerAuth()
-@ApiTags('users')
-@Controller('users')
+@Resolver(() => UserSerializer)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseInterceptors(new SentryInterceptor())
-export class UsersController extends GrpcController<User> {
+export class UsersResolver extends GrpcController<User> {
   constructor(readonly provider: IdentityProvider) {
     super(provider.users, () => UserSerializer);
   }
 
-  @Get('count')
-  @ApiQuery({ type: QueryFilterDto, required: false })
-  Count(
+  @Query(() => TotalSerializer)
+  countUser(
     @Meta() meta: Metadata,
-    @Filter() filter: QueryFilterDto,
+    @Filter() @Args('filter') filter: QueryFilterDto,
     @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
     return super.count(meta, filter, session);
   }
 
-  @Post()
-  Create(
+  @Mutation(() => UserDataSerializer)
+  createUser(
     @Meta() meta: Metadata,
-    @Body() data: CreateUserDto,
+    @Args('data') data: CreateUserDto,
     @Session() session?: ClientSession,
   ): Observable<UserDataSerializer> {
     return super.create(meta, data as User, session);
   }
 
-  @Post('bulk')
-  CreateBulk(
+  @Mutation(() => UserItemsSerializer)
+  createBulkUser(
     @Meta() meta: Metadata,
-    @Body() items: CreateUserDto[],
+    @Args('items', { type: () => [CreateUserDto] }) items: CreateUserDto[],
     @Session() session?: ClientSession,
   ): Observable<UserItemsSerializer> {
     return super.createBulk(meta, items as User[], session);
   }
 
-  @Get()
-  @ApiQuery({ type: FilterDto, required: false })
-  Find(
+  @Query(() => UserItemsSerializer)
+  findUser(
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<User>,
+    @Filter() @Args('filter') filter: FilterDto<User>,
     @Session() session?: ClientSession,
   ): Observable<UserItemsSerializer> {
     return super.find(meta, filter, session);
   }
 
-  @Get('cursor')
-  @ApiQuery({ type: FilterDto, required: false })
-  Cursor(
-    @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<User>,
-    @Session() session?: ClientSession,
-  ): Observable<UserSerializer> {
-    return super.cursor(meta, filter, session);
-  }
-
-  @Get(':id')
-  @ApiQuery({ type: String, name: 'ref', required: false })
-  FindOne(
-    @Param('id', ParseIdPipe) id: string,
+  @Query(() => UserDataSerializer)
+  findOneUser(
+    @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<User>,
     @Session() session?: ClientSession,
-    @Query('ref', ParseRefPipe) ref?: string,
+    @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<UserDataSerializer> {
     refineFilterQuery(filter, { id, ref });
     return super.findOne(meta, filter, session);
   }
 
-  @Delete(':id')
-  @ApiQuery({ type: String, name: 'ref', required: false })
-  DeleteOne(
-    @Param('id', ParseIdPipe) id: string,
+  @Mutation(() => UserDataSerializer)
+  deleteOneUser(
+    @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<User>,
     @Session() session?: ClientSession,
-    @Query('ref', ParseRefPipe) ref?: string,
+    @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<UserDataSerializer> {
     refineFilterQuery(filter, { id, ref });
     return super.deleteOne(meta, filter, session);
   }
 
-  @Put(':id/restore')
-  @ApiQuery({ type: String, name: 'ref', required: false })
-  RestoreOne(
-    @Param('id', ParseIdPipe) id: string,
+  @Mutation(() => UserDataSerializer)
+  restoreOneUser(
+    @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<User>,
     @Session() session?: ClientSession,
-    @Query('ref', ParseRefPipe) ref?: string,
+    @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<UserDataSerializer> {
     refineFilterQuery(filter, { id, ref });
     return super.restoreOne(meta, filter, session);
   }
 
-  @Delete(':id/destroy')
-  @ApiQuery({ type: String, name: 'ref', required: false })
-  DestroyOne(
-    @Param('id', ParseIdPipe) id: string,
+  @Mutation(() => UserDataSerializer)
+  destroyOneUser(
+    @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<User>,
     @Session() session?: ClientSession,
-    @Query('ref', ParseRefPipe) ref?: string,
+    @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<UserDataSerializer> {
     refineFilterQuery(filter, { id, ref });
     return super.destroyOne(meta, filter, session);
   }
 
-  @Patch(':id')
-  @ApiQuery({ type: String, name: 'ref', required: false })
-  UpdateOne(
-    @Param('id', ParseIdPipe) id: string,
+  @Mutation(() => UserDataSerializer)
+  updateOneUser(
+    @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<User>,
-    @Body() update: UpdateUserDto,
+    @Args('data') update: UpdateUserDto,
     @Session() session?: ClientSession,
-    @Query('ref', ParseRefPipe) ref?: string,
+    @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<UserDataSerializer> {
     refineFilterQuery(filter, { id, ref });
     return super.updateOne(meta, filter, update, session);
   }
 
-  @Patch('bulk')
-  @ApiQuery({ type: QueryFilterDto, required: false })
-  UpdateBulk(
+  @Mutation(() => TotalSerializer)
+  updateBulkUser(
     @Meta() meta: Metadata,
-    @Filter() filter: QueryFilterDto<User>,
-    @Body() update: UpdateUserDto,
+    @Filter() @Args('filter') filter: QueryFilterDto<User>,
+    @Args('data') update: UpdateUserDto,
     @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
     return super.updateBulk(meta, filter, update, session);

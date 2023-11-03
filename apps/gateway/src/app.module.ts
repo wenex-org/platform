@@ -19,17 +19,17 @@ import * as modules from './modules';
     PrometheusModule.register(),
     RedisModule.forRoot(REDIS_CONFIG()),
     JwtModule.register({ secret: JWT_SECRET(), global: true }),
-    // GraphQLModule.forRoot<ApolloDriverConfig>({
-    //   playground: false,
-    //   driver: ApolloDriver,
-    //   resolvers: { JSON: GraphQLJSON },
-    //   subscriptions: { 'graphql-ws': true },
-    //   autoSchemaFile: join(process.cwd(), 'schema.gql'),
-    //   plugins: [ApolloServerPluginLandingPageLocalDefault()],
-    // }),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      playground: false,
+      driver: ApolloDriver,
+      resolvers: { JSON: GraphQLJSON },
+      subscriptions: { 'graphql-ws': true },
+      autoSchemaFile: join(process.cwd(), 'schema.gql'),
+      plugins: [ApolloServerPluginLandingPageLocalDefault()],
+    }),
 
     ...(Object.values(modules) as unknown as DynamicModule[]),
   ],
-  // providers: [DateScalar, ComplexityPlugin],
+  providers: [DateScalar, ComplexityPlugin],
 })
 export class AppModule {}

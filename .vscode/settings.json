@@ -4,6 +4,7 @@
     "compodoc",
     "consts",
     "kafkajs",
+    "metatype",
     "nestjs",
     "ntegral",
     "opentelemetry",

@@ -1,0 +1,143 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type TotalSerializer {
+  total: Float!
+}
+
+type UserSerializer {
+  props: JSON
+  id: String!
+  ref: String
+  shares: [String!]
+  groups: [String!]
+  clients: [String!]!
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  tags: [String!]
+  rand: String!
+  timestamp: String!
+  owner: String!
+  status: Status!
+  tz: String!
+  mfa: UserMFA
+  i18n: String!
+  oauth: [UserOAuth!]
+  email: String
+  phone: String
+  username: String
+  subjects: [String!]!
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+enum Status {
+  Active
+  Inactive
+}
+
+enum UserMFA {
+  SMS
+  Time
+  Email
+}
+
+enum UserOAuth {
+  Google
+  Github
+}
+
+type UserDataSerializer {
+  data: UserSerializer
+}
+
+type UserItemsSerializer {
+  items: [UserSerializer!]
+}
+
+"""Date custom scalar type"""
+scalar Date
+
+type Query {
+  countUser(filter: QueryFilterDto!): TotalSerializer!
+  findUser(filter: FilterDto!): UserItemsSerializer!
+  findOneUser(id: String!, ref: String): UserDataSerializer!
+}
+
+input QueryFilterDto {
+  query: JSON!
+}
+
+input FilterDto {
+  query: JSON!
+  populate: [PopulateDto!]
+  projection: JSON
+  pagination: PaginationDto
+}
+
+input PopulateDto {
+  match: JSON
+  select: JSON
+  options: PaginationDto
+  path: String!
+}
+
+input PaginationDto {
+  sort: JSON
+  limit: Float
+  skip: Float
+}
+
+type Mutation {
+  createUser(data: CreateUserDto!): UserDataSerializer!
+  createBulkUser(items: [CreateUserDto!]!): UserItemsSerializer!
+  deleteOneUser(id: String!, ref: String): UserDataSerializer!
+  restoreOneUser(id: String!, ref: String): UserDataSerializer!
+  destroyOneUser(id: String!, ref: String): UserDataSerializer!
+  updateOneUser(id: String!, data: UpdateUserDto!, ref: String): UserDataSerializer!
+  updateBulkUser(filter: QueryFilterDto!, data: UpdateUserDto!): TotalSerializer!
+}
+
+input CreateUserDto {
+  status: Status!
+  tz: String
+  mfa: UserMFA
+  i18n: String
+  oauth: [UserOAuth!]
+  secret: String
+  email: String
+  phone: String
+  username: String
+  password: String
+  subjects: [String!]!
+}
+
+input UpdateUserDto {
+  status: Status
+  tz: String
+  mfa: UserMFA
+  i18n: String
+  oauth: [UserOAuth!]
+  secret: String
+  email: String
+  phone: String
+  username: String
+  password: String
+  subjects: [String!]
+}
