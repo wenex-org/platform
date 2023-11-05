@@ -13,12 +13,12 @@ import {
 } from '@app/common/dto';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { UseFilters, UseInterceptors, UsePipes } from '@nestjs/common';
+import { Metadata, UserDom, UserSer } from '@app/common/interfaces';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Filter, Meta, Session } from '@app/common/decorators';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { IdentityProvider } from '@app/common/providers';
-import { Metadata, User } from '@app/common/interfaces';
 import { refineFilterQuery } from '@app/common/utils';
 import { GrpcController } from '@app/common/classes';
 import { ClientSession } from 'mongoose';
@@ -28,7 +28,7 @@ import { Observable } from 'rxjs';
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseInterceptors(new SentryInterceptor())
-export class UsersResolver extends GrpcController<User> {
+export class UsersResolver extends GrpcController<UserDom, UserSer> {
   constructor(readonly provider: IdentityProvider) {
     super(provider.users, () => UserSerializer);
   }
@@ -48,7 +48,7 @@ export class UsersResolver extends GrpcController<User> {
     @Args('data') data: CreateUserDto,
     @Session() session?: ClientSession,
   ): Observable<UserDataSerializer> {
-    return super.create(meta, data as User, session);
+    return super.create(meta, data, session);
   }
 
   @Mutation(() => UserItemsSerializer)
@@ -57,13 +57,13 @@ export class UsersResolver extends GrpcController<User> {
     @Args('items', { type: () => [CreateUserDto] }) items: CreateUserDto[],
     @Session() session?: ClientSession,
   ): Observable<UserItemsSerializer> {
-    return super.createBulk(meta, items as User[], session);
+    return super.createBulk(meta, items, session);
   }
 
   @Query(() => UserItemsSerializer)
   findUser(
     @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: FilterDto<User>,
+    @Filter() @Args('filter') filter: FilterDto<UserDom>,
     @Session() session?: ClientSession,
   ): Observable<UserItemsSerializer> {
     return super.find(meta, filter, session);
@@ -73,7 +73,7 @@ export class UsersResolver extends GrpcController<User> {
   findOneUser(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<User>,
+    @Filter() filter: FilterOneDto<UserDom>,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<UserDataSerializer> {
@@ -85,7 +85,7 @@ export class UsersResolver extends GrpcController<User> {
   deleteOneUser(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<User>,
+    @Filter() filter: FilterDto<UserDom>,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<UserDataSerializer> {
@@ -97,7 +97,7 @@ export class UsersResolver extends GrpcController<User> {
   restoreOneUser(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<User>,
+    @Filter() filter: FilterDto<UserDom>,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<UserDataSerializer> {
@@ -109,7 +109,7 @@ export class UsersResolver extends GrpcController<User> {
   destroyOneUser(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<User>,
+    @Filter() filter: FilterDto<UserDom>,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<UserDataSerializer> {
@@ -121,7 +121,7 @@ export class UsersResolver extends GrpcController<User> {
   updateOneUser(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<User>,
+    @Filter() filter: FilterOneDto<UserDom>,
     @Args('data') update: UpdateUserDto,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
@@ -133,7 +133,7 @@ export class UsersResolver extends GrpcController<User> {
   @Mutation(() => TotalSerializer)
   updateBulkUser(
     @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: QueryFilterDto<User>,
+    @Filter() @Args('filter') filter: QueryFilterDto<UserDom>,
     @Args('data') update: UpdateUserDto,
     @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
