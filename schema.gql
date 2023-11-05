@@ -6,6 +6,51 @@ type TotalSerializer {
   total: Float!
 }
 
+type ConfigSerializer {
+  props: JSON
+  id: String!
+  ref: String
+  shares: [String!]
+  groups: [String!]
+  clients: [String!]!
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  tags: [String!]
+  rand: String!
+  timestamp: String!
+  owner: String!
+  value: JSON
+  key: String!
+  type: ValueType!
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+enum ValueType {
+  Null
+  Array
+  Object
+  String
+  Number
+  Boolean
+  Undefined
+}
+
 type AppChangeLogSerializer {
   props: JSON
   id: String!
@@ -35,11 +80,6 @@ type AppChangeLogSerializer {
   changes: [String!]!
   deprecation_date: Date
 }
-
-"""
-The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
-"""
-scalar JSON
 
 type AppSerializer {
   props: JSON
