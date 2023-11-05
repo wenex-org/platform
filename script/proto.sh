@@ -8,6 +8,7 @@ IDENTITY=./proto/identity.proto
 
 # Domain Proto
 PROTOS[DOMAIN,1]=./apps/services/domain/src/app.proto
+PROTOS[DOMAIN,2]=./apps/gateway/src/modules/domain/domain.proto
 
 # Identity Proto
 PROTOS[IDENTITY,1]=./apps/services/identity/src/app.proto

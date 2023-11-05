@@ -115,6 +115,14 @@ enum GrantType {
   AuthorizationCode
 }
 
+type AppDataSerializer {
+  data: AppSerializer
+}
+
+type AppItemsSerializer {
+  items: [AppSerializer]!
+}
+
 type ClientDomainSerializer {
   props: JSON
   id: String!
@@ -245,6 +253,14 @@ enum State {
   Rejected
   Verified
   Unknown
+}
+
+type ClientDataSerializer {
+  data: ClientSerializer
+}
+
+type ClientItemsSerializer {
+  items: [ClientSerializer!]
 }
 
 type UserSerializer {
@@ -406,6 +422,12 @@ type SessionItemsSerializer {
 scalar Date
 
 type Query {
+  countApp(filter: QueryFilterDto!): TotalSerializer!
+  findApp(filter: FilterDto!): AppItemsSerializer!
+  findOneApp(id: String!, ref: String): AppDataSerializer!
+  countClient(filter: QueryFilterDto!): TotalSerializer!
+  findClient(filter: FilterDto!): ClientItemsSerializer!
+  findOneClient(id: String!, ref: String): ClientDataSerializer!
   countUser(filter: QueryFilterDto!): TotalSerializer!
   findUser(filter: FilterDto!): UserItemsSerializer!
   findOneUser(id: String!, ref: String): UserDataSerializer!
@@ -442,6 +464,20 @@ input PaginationDto {
 }
 
 type Mutation {
+  createApp(data: CreateAppDto!): AppDataSerializer!
+  createBulkApp(items: [CreateAppDto!]!): AppItemsSerializer!
+  deleteOneApp(id: String!, ref: String): AppDataSerializer!
+  restoreOneApp(id: String!, ref: String): AppDataSerializer!
+  destroyOneApp(id: String!, ref: String): AppDataSerializer!
+  updateOneApp(id: String!, data: UpdateAppDto!, ref: String): AppDataSerializer!
+  updateBulkApp(filter: QueryFilterDto!, data: UpdateAppDto!): TotalSerializer!
+  createClient(data: CreateClientDto!): ClientDataSerializer!
+  createBulkClient(items: [CreateClientDto!]!): ClientItemsSerializer!
+  deleteOneClient(id: String!, ref: String): ClientDataSerializer!
+  restoreOneClient(id: String!, ref: String): ClientDataSerializer!
+  destroyOneClient(id: String!, ref: String): ClientDataSerializer!
+  updateOneClient(id: String!, data: UpdateClientDto!, ref: String): ClientDataSerializer!
+  updateBulkClient(filter: QueryFilterDto!, data: UpdateClientDto!): TotalSerializer!
   createUser(data: CreateUserDto!): UserDataSerializer!
   createBulkUser(items: [CreateUserDto!]!): UserItemsSerializer!
   deleteOneUser(id: String!, ref: String): UserDataSerializer!
@@ -463,6 +499,122 @@ type Mutation {
   destroyOneSession(id: String!, ref: String): SessionDataSerializer!
   updateOneSession(id: String!, data: UpdateSessionDto!, ref: String): SessionDataSerializer!
   updateBulkSession(filter: QueryFilterDto!, data: UpdateSessionDto!): TotalSerializer!
+}
+
+input CreateAppDto {
+  change_logs: [CreateAppChangeLogDto]
+  cid: String!
+  type: AppType
+  name: String!
+  status: Status
+  scopes: [Scope!]!
+  grant_types: [GrantType!]!
+  access_token_ttl: Float
+  refresh_token_ttl: Float
+  url: String
+  logo: String
+  site: String
+  slogan: String
+  redirect_uri: String
+}
+
+input CreateAppChangeLogDto {
+  code: String
+  changes: [String!]!
+  deprecation_date: Date
+}
+
+input UpdateAppDto {
+  change_logs: [UpdateAppChangeLogDto]
+  cid: String
+  type: AppType
+  name: String
+  status: Status
+  scopes: [Scope!]
+  grant_types: [GrantType!]
+  access_token_ttl: Float
+  refresh_token_ttl: Float
+  url: String
+  logo: String
+  site: String
+  slogan: String
+  redirect_uri: String
+}
+
+input UpdateAppChangeLogDto {
+  code: String
+  changes: [String!]!
+  deprecation_date: Date
+}
+
+input CreateClientDto {
+  domains: [CreateClientDomainDto!]!
+  otp_services: [CreateClientOtpServiceDto]
+  name: String!
+  status: Status!
+  scopes: [Scope!]!
+  grant_types: [GrantType!]!
+  access_token_ttl: Float
+  refresh_token_ttl: Float
+  url: String
+  logo: String
+  site: String
+  slogan: String
+  redirect_uri: String
+  plan: ClientPlan!
+  state: State
+  client_id: String
+  client_secret: String!
+  expiration_date: Date!
+  whitelist: [String!]
+  coworkers: [String!]
+}
+
+input CreateClientDomainDto {
+  name: String!
+  status: Status!
+  subjects: [String!]!
+}
+
+input CreateClientOtpServiceDto {
+  config: JSON!
+  type: ClientOtpType!
+  provider: ClientOtpProvider!
+}
+
+input UpdateClientDto {
+  domains: [UpdateClientDomainDto!]
+  otp_services: [UpdateClientOtpServiceDto]
+  name: String
+  status: Status
+  scopes: [Scope!]
+  grant_types: [GrantType!]
+  access_token_ttl: Float
+  refresh_token_ttl: Float
+  url: String
+  logo: String
+  site: String
+  slogan: String
+  redirect_uri: String
+  plan: ClientPlan
+  state: State
+  client_id: String
+  client_secret: String
+  expiration_date: Date
+  whitelist: [String!]
+  coworkers: [String!]
+}
+
+input UpdateClientDomainDto {
+  name: String!
+  status: Status!
+  subjects: [String!]!
+}
+
+input UpdateClientOtpServiceDto {
+  config: JSON!
+  type: ClientOtpType!
+  provider: ClientOtpProvider!
 }
 
 input CreateUserDto {
