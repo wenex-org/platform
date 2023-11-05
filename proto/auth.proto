@@ -86,7 +86,8 @@ message JwtToken {
 
   optional string aid = 10;
   optional string uid = 11;
-  optional string client = 12;
+
+  optional string coworker = 12;
 }
 
 message AuthenticationRequest {
@@ -95,28 +96,32 @@ message AuthenticationRequest {
   string client_id = 2;
   optional string client_secret = 3;
 
-  optional string domain = 4;
-  optional string app_id = 5;
+  optional bool strict = 4;
 
-  repeated string scopes = 6;
-  repeated string policies = 7;
+  optional string domain = 5;
+  optional string app_id = 6;
 
-  optional string email = 8;
-  optional string phone = 9;
-  optional string username = 10;
-  optional string password = 11;
+  repeated string scopes = 7;
+  repeated string policies = 8;
 
-  optional string code = 12;
-  optional string state = 13;
+  optional string email = 9;
+  optional string phone = 10;
+  optional string username = 11;
+  optional string password = 12;
 
-  optional string redirect_uri = 14;
-  optional string response_type = 15;
+  optional string code = 13;
+  optional string state = 14;
 
-  optional bool strict = 16;
-  optional string i18n = 17;
+  optional string redirect_uri = 15;
+  optional string response_type = 16;
 
-  optional string refresh_token = 18;
-  optional string confirmation_code = 19;
+  optional string tz = 17;
+  optional string mfa = 18;
+  optional string i18n = 19;
+  optional string oauth = 20;
+
+  optional string refresh_token = 21;
+  optional string confirmation_code = 22;
 }
 
 message AuthenticationResponse {
@@ -128,13 +133,16 @@ message AuthenticationResponse {
   optional string policy = 4;
   optional string domain = 5;
 
-  optional string i18n = 6;
-  optional string session = 7;
-  optional string access_token = 8;
-  optional string refresh_token = 9;
+  optional string tz = 6;
+  optional string i18n = 7;
+  optional string session = 8;
+  optional string access_token = 9;
+  optional string refresh_token = 10;
 
-  optional string code = 10;
-  optional string state = 11;
+  optional string code = 11;
+  optional string state = 12;
+
+  optional string coworker = 13;
 }
 
 // Authorization Messages
