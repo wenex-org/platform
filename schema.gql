@@ -51,6 +51,14 @@ enum ValueType {
   Undefined
 }
 
+type ConfigDataSerializer {
+  data: ConfigSerializer
+}
+
+type ConfigItemsSerializer {
+  items: [ConfigSerializer]!
+}
+
 type AppChangeLogSerializer {
   props: JSON
   id: String!
@@ -462,6 +470,9 @@ type SessionItemsSerializer {
 scalar Date
 
 type Query {
+  countConfig(filter: QueryFilterDto!): TotalSerializer!
+  findConfig(filter: FilterDto!): ConfigItemsSerializer!
+  findOneConfig(id: String!, ref: String): ConfigDataSerializer!
   countApp(filter: QueryFilterDto!): TotalSerializer!
   findApp(filter: FilterDto!): AppItemsSerializer!
   findOneApp(id: String!, ref: String): AppDataSerializer!
@@ -504,6 +515,13 @@ input PaginationDto {
 }
 
 type Mutation {
+  createConfig(data: CreateConfigDto!): ConfigDataSerializer!
+  createBulkConfig(items: [CreateConfigDto!]!): ConfigItemsSerializer!
+  deleteOneConfig(id: String!, ref: String): ConfigDataSerializer!
+  restoreOneConfig(id: String!, ref: String): ConfigDataSerializer!
+  destroyOneConfig(id: String!, ref: String): ConfigDataSerializer!
+  updateOneConfig(id: String!, data: UpdateConfigDto!, ref: String): ConfigDataSerializer!
+  updateBulkConfig(filter: QueryFilterDto!, data: UpdateConfigDto!): TotalSerializer!
   createApp(data: CreateAppDto!): AppDataSerializer!
   createBulkApp(items: [CreateAppDto!]!): AppItemsSerializer!
   deleteOneApp(id: String!, ref: String): AppDataSerializer!
@@ -539,6 +557,18 @@ type Mutation {
   destroyOneSession(id: String!, ref: String): SessionDataSerializer!
   updateOneSession(id: String!, data: UpdateSessionDto!, ref: String): SessionDataSerializer!
   updateBulkSession(filter: QueryFilterDto!, data: UpdateSessionDto!): TotalSerializer!
+}
+
+input CreateConfigDto {
+  value: JSON
+  key: String!
+  type: ValueType!
+}
+
+input UpdateConfigDto {
+  value: JSON
+  key: String
+  type: ValueType
 }
 
 input CreateAppDto {
