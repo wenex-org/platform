@@ -6,6 +6,139 @@ type TotalSerializer {
   total: Float!
 }
 
+type GrantTimeSerializer {
+  props: JSON
+  id: String!
+  ref: String
+  shares: [String!]
+  groups: [String!]
+  clients: [String!]!
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  tags: [String!]
+  rand: String!
+  timestamp: String!
+  owner: String
+  cron_exp: String!
+  duration: Float!
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+type GrantSerializer {
+  props: JSON
+  id: String!
+  ref: String
+  shares: [String!]
+  groups: [String!]
+  clients: [String!]!
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  tags: [String!]
+  rand: String!
+  timestamp: String!
+  owner: String!
+  time: [GrantTimeSerializer]
+  subject: String!
+  action: Action!
+  object: Resource!
+  field: [String!]
+  filter: [String!]
+  location: [String!]
+}
+
+enum Action {
+  Any
+  Create
+  Read
+  Update
+  Delete
+  Restore
+  Destroy
+  Emit
+  Send
+  Init
+  Verify
+  Upload
+  Download
+  CreateOwn
+  ReadOwn
+  UpdateOwn
+  DeleteOwn
+  RestoreOwn
+  DestroyOwn
+  CreateShare
+  ReadShare
+  UpdateShare
+  DeleteShare
+  RestoreShare
+  DestroyShare
+  CreateGroup
+  ReadGroup
+  UpdateGroup
+  DeleteGroup
+  RestoreGroup
+  DestroyGroup
+  CreateClient
+  ReadClient
+  UpdateClient
+  DeleteClient
+  RestoreClient
+  DestroyClient
+}
+
+enum Resource {
+  All
+  Auth
+  AuthGrants
+  AuthAuthorization
+  AuthAuthentication
+  Config
+  ConfigConfigs
+  Domain
+  DomainApps
+  DomainClients
+  Identity
+  IdentityUsers
+  IdentityProfiles
+  IdentitySessions
+}
+
+type GrantDataSerializer {
+  data: GrantSerializer
+}
+
+type GrantItemsSerializer {
+  items: [GrantSerializer]!
+}
+
 type ConfigSerializer {
   props: JSON
   id: String!
@@ -35,11 +168,6 @@ type ConfigSerializer {
   key: String!
   type: ValueType!
 }
-
-"""
-The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
-"""
-scalar JSON
 
 enum ValueType {
   Null
@@ -470,15 +598,18 @@ type SessionItemsSerializer {
 scalar Date
 
 type Query {
-  countConfig(filter: QueryFilterDto!): TotalSerializer!
-  findConfig(filter: FilterDto!): ConfigItemsSerializer!
-  findOneConfig(id: String!, ref: String): ConfigDataSerializer!
+  countGrant(filter: QueryFilterDto!): TotalSerializer!
+  findGrant(filter: FilterDto!): GrantItemsSerializer!
+  findOneGrant(id: String!, ref: String): GrantDataSerializer!
   countApp(filter: QueryFilterDto!): TotalSerializer!
   findApp(filter: FilterDto!): AppItemsSerializer!
   findOneApp(id: String!, ref: String): AppDataSerializer!
   countClient(filter: QueryFilterDto!): TotalSerializer!
   findClient(filter: FilterDto!): ClientItemsSerializer!
   findOneClient(id: String!, ref: String): ClientDataSerializer!
+  countConfig(filter: QueryFilterDto!): TotalSerializer!
+  findConfig(filter: FilterDto!): ConfigItemsSerializer!
+  findOneConfig(id: String!, ref: String): ConfigDataSerializer!
   countUser(filter: QueryFilterDto!): TotalSerializer!
   findUser(filter: FilterDto!): UserItemsSerializer!
   findOneUser(id: String!, ref: String): UserDataSerializer!
@@ -515,13 +646,13 @@ input PaginationDto {
 }
 
 type Mutation {
-  createConfig(data: CreateConfigDto!): ConfigDataSerializer!
-  createBulkConfig(items: [CreateConfigDto!]!): ConfigItemsSerializer!
-  deleteOneConfig(id: String!, ref: String): ConfigDataSerializer!
-  restoreOneConfig(id: String!, ref: String): ConfigDataSerializer!
-  destroyOneConfig(id: String!, ref: String): ConfigDataSerializer!
-  updateOneConfig(id: String!, data: UpdateConfigDto!, ref: String): ConfigDataSerializer!
-  updateBulkConfig(filter: QueryFilterDto!, data: UpdateConfigDto!): TotalSerializer!
+  createGrant(data: CreateGrantDto!): GrantDataSerializer!
+  createBulkGrant(items: [CreateGrantDto!]!): GrantItemsSerializer!
+  deleteOneGrant(id: String!, ref: String): GrantDataSerializer!
+  restoreOneGrant(id: String!, ref: String): GrantDataSerializer!
+  destroyOneGrant(id: String!, ref: String): GrantDataSerializer!
+  updateOneGrant(id: String!, data: UpdateGrantDto!, ref: String): GrantDataSerializer!
+  updateBulkGrant(filter: QueryFilterDto!, data: UpdateGrantDto!): TotalSerializer!
   createApp(data: CreateAppDto!): AppDataSerializer!
   createBulkApp(items: [CreateAppDto!]!): AppItemsSerializer!
   deleteOneApp(id: String!, ref: String): AppDataSerializer!
@@ -536,6 +667,13 @@ type Mutation {
   destroyOneClient(id: String!, ref: String): ClientDataSerializer!
   updateOneClient(id: String!, data: UpdateClientDto!, ref: String): ClientDataSerializer!
   updateBulkClient(filter: QueryFilterDto!, data: UpdateClientDto!): TotalSerializer!
+  createConfig(data: CreateConfigDto!): ConfigDataSerializer!
+  createBulkConfig(items: [CreateConfigDto!]!): ConfigItemsSerializer!
+  deleteOneConfig(id: String!, ref: String): ConfigDataSerializer!
+  restoreOneConfig(id: String!, ref: String): ConfigDataSerializer!
+  destroyOneConfig(id: String!, ref: String): ConfigDataSerializer!
+  updateOneConfig(id: String!, data: UpdateConfigDto!, ref: String): ConfigDataSerializer!
+  updateBulkConfig(filter: QueryFilterDto!, data: UpdateConfigDto!): TotalSerializer!
   createUser(data: CreateUserDto!): UserDataSerializer!
   createBulkUser(items: [CreateUserDto!]!): UserItemsSerializer!
   deleteOneUser(id: String!, ref: String): UserDataSerializer!
@@ -559,16 +697,34 @@ type Mutation {
   updateBulkSession(filter: QueryFilterDto!, data: UpdateSessionDto!): TotalSerializer!
 }
 
-input CreateConfigDto {
-  value: JSON
-  key: String!
-  type: ValueType!
+input CreateGrantDto {
+  action: String!
+  object: String!
+  time: [CreateGrantTimeDto!]
+  subject: String!
+  field: [String!]
+  filter: [String!]
+  location: [String!]
 }
 
-input UpdateConfigDto {
-  value: JSON
-  key: String
-  type: ValueType
+input CreateGrantTimeDto {
+  cron_exp: String!
+  duration: Float!
+}
+
+input UpdateGrantDto {
+  action: String
+  object: String
+  time: [UpdateGrantTimeDto!]
+  subject: String
+  field: [String!]
+  filter: [String!]
+  location: [String!]
+}
+
+input UpdateGrantTimeDto {
+  cron_exp: String!
+  duration: Float!
 }
 
 input CreateAppDto {
@@ -685,6 +841,18 @@ input UpdateClientOtpServiceDto {
   config: JSON!
   type: ClientOtpType!
   provider: ClientOtpProvider!
+}
+
+input CreateConfigDto {
+  value: JSON
+  key: String!
+  type: ValueType!
+}
+
+input UpdateConfigDto {
+  value: JSON
+  key: String
+  type: ValueType
 }
 
 input CreateUserDto {
