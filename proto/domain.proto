@@ -146,7 +146,7 @@ message App {
   optional string logo = 59;
   optional string site = 60;
   optional string slogan = 61;
-  optional string redirect_uri = 62;
+  repeated string redirect_uris = 62;
   repeated ChangeLog change_logs = 63;
 
   message ChangeLog {
@@ -263,7 +263,7 @@ message Client {
 
   repeated string whitelist = 65;
   repeated string coworkers = 66;
-  repeated string redirect_uri = 67;
+  repeated string redirect_uris = 67;
 
   repeated Domain domains = 68;
   repeated OtpService otp_services = 69;

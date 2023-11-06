@@ -136,8 +136,8 @@ message AuthenticationResponse {
   optional int64 expires_in = 2;
 
   optional string scope = 3;
-  optional string policy = 4;
-  optional string domain = 5;
+  optional string domain = 4;
+  optional string subject = 5;
 
   optional string tz = 6;
   optional string i18n = 7;
@@ -149,6 +149,7 @@ message AuthenticationResponse {
   optional string state = 12;
 
   optional string coworker = 13;
+  optional string redirect_uri = 14;
 }
 
 // Authorization Messages
