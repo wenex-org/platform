@@ -75,19 +75,20 @@ message TokenValue { string token = 1; }
 message JwtToken {
   bool strict = 1;
 
-  string cid = 2;
-  string type = 3;
-  string i18n = 4;
-  string scope = 5;
-  string domain = 6;
-  string policy = 7;
-  string session = 8;
-  string client_id = 9;
+  string tz = 2;
+  string cid = 3;
+  string type = 4;
+  string i18n = 5;
+  string scope = 6;
+  string domain = 7;
+  string policy = 8;
+  string session = 9;
 
-  optional string aid = 10;
-  optional string uid = 11;
+  string client_id = 10;
+  optional string aid = 11;
+  optional string uid = 12;
 
-  optional string coworker = 12;
+  optional string coworker = 13;
 }
 
 message AuthenticationRequest {
