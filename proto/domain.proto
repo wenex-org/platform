@@ -263,7 +263,7 @@ message Client {
 
   repeated string whitelist = 65;
   repeated string coworkers = 66;
-  optional string redirect_uri = 67;
+  repeated string redirect_uri = 67;
 
   repeated Domain domains = 68;
   repeated OtpService otp_services = 69;
