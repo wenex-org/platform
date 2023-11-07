@@ -6,6 +6,15 @@ type TotalSerializer {
   total: Float!
 }
 
+type ResultSerializer {
+  result: Result!
+}
+
+enum Result {
+  OK
+  NOK
+}
+
 type GrantTimeSerializer {
   props: JSON
   id: String!
@@ -137,6 +146,44 @@ type GrantDataSerializer {
 
 type GrantItemsSerializer {
   items: [GrantSerializer]!
+}
+
+type JwtTokenSerializer {
+  strict: Boolean!
+  type: JwtTokenType!
+  cid: String!
+  scope: String!
+  domain: String!
+  session: String!
+  tz: String!
+  i18n: String!
+  subject: String!
+  client_id: String!
+  aid: String
+  uid: String
+  coworker: String
+}
+
+enum JwtTokenType {
+  Access
+  Refresh
+}
+
+type AuthenticationResponseSerializer {
+  token_type: String
+  expires_in: Float
+  scope: String
+  domain: String
+  subject: String
+  tz: String
+  i18n: String
+  session: String
+  access_token: String
+  refresh_token: String
+  code: String
+  state: String
+  coworker: String
+  redirect_uri: String
 }
 
 type ConfigSerializer {
@@ -653,6 +700,9 @@ type Mutation {
   destroyOneGrant(id: String!, ref: String): GrantDataSerializer!
   updateOneGrant(id: String!, data: UpdateGrantDto!, ref: String): GrantDataSerializer!
   updateBulkGrant(filter: QueryFilterDto!, data: UpdateGrantDto!): TotalSerializer!
+  token(data: AuthenticationRequestDto!): AuthenticationResponseSerializer!
+  logout(data: TokenDto!): ResultSerializer!
+  verify(data: TokenDto!): JwtTokenSerializer!
   createApp(data: CreateAppDto!): AppDataSerializer!
   createBulkApp(items: [CreateAppDto!]!): AppItemsSerializer!
   deleteOneApp(id: String!, ref: String): AppDataSerializer!
@@ -725,6 +775,41 @@ input UpdateGrantDto {
 input UpdateGrantTimeDto {
   cron_exp: String!
   duration: Float!
+}
+
+input AuthenticationRequestDto {
+  scopes: [String!]
+  grant_type: GrantType!
+  client_id: String!
+  client_secret: String
+  strict: Boolean
+  domain: String
+  app_id: String
+  subjects: [String!]
+  email: String
+  phone: String
+  username: String
+  password: String
+  code: String
+  state: String
+  redirect_uri: String
+  response_type: ResponseType
+  tz: String
+  mfa: UserMFA
+  i18n: String
+  oauth: UserOAuth
+  refresh_token: String
+  confirmation_code: String
+  coworkers: [String!]
+}
+
+enum ResponseType {
+  Code
+  Token
+}
+
+input TokenDto {
+  token: String
 }
 
 input CreateAppDto {
