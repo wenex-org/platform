@@ -12,10 +12,7 @@ type GrantTimeSerializer {
   ref: String
   shares: [String!]
   groups: [String!]
-  clients: [String!]!
   created_at: Date!
-  created_by: String!
-  created_in: String!
   updated_at: Date
   updated_by: String
   updated_in: String
@@ -31,6 +28,9 @@ type GrantTimeSerializer {
   rand: String!
   timestamp: String!
   owner: String
+  clients: [String!]
+  created_by: String
+  created_in: String
   cron_exp: String!
   duration: Float!
 }
@@ -46,10 +46,7 @@ type GrantSerializer {
   ref: String
   shares: [String!]
   groups: [String!]
-  clients: [String!]!
   created_at: Date!
-  created_by: String!
-  created_in: String!
   updated_at: Date
   updated_by: String
   updated_in: String
@@ -65,6 +62,9 @@ type GrantSerializer {
   rand: String!
   timestamp: String!
   owner: String!
+  clients: [String!]!
+  created_by: String!
+  created_in: String!
   time: [GrantTimeSerializer]
   subject: String!
   action: Action!
@@ -145,10 +145,7 @@ type ConfigSerializer {
   ref: String
   shares: [String!]
   groups: [String!]
-  clients: [String!]!
   created_at: Date!
-  created_by: String!
-  created_in: String!
   updated_at: Date
   updated_by: String
   updated_in: String
@@ -164,6 +161,9 @@ type ConfigSerializer {
   rand: String!
   timestamp: String!
   owner: String!
+  clients: [String!]!
+  created_by: String!
+  created_in: String!
   value: JSON
   key: String!
   type: ValueType!
@@ -193,10 +193,7 @@ type AppChangeLogSerializer {
   ref: String
   shares: [String!]
   groups: [String!]
-  clients: [String!]!
   created_at: Date!
-  created_by: String!
-  created_in: String!
   updated_at: Date
   updated_by: String
   updated_in: String
@@ -212,6 +209,9 @@ type AppChangeLogSerializer {
   rand: String!
   timestamp: String!
   owner: String
+  clients: [String!]
+  created_by: String
+  created_in: String
   code: String
   changes: [String!]!
   deprecation_date: Date
@@ -223,10 +223,7 @@ type AppSerializer {
   ref: String
   shares: [String!]
   groups: [String!]
-  clients: [String!]!
   created_at: Date!
-  created_by: String!
-  created_in: String!
   updated_at: Date
   updated_by: String
   updated_in: String
@@ -242,6 +239,9 @@ type AppSerializer {
   rand: String!
   timestamp: String!
   owner: String!
+  clients: [String!]!
+  created_by: String!
+  created_in: String!
   change_logs: [AppChangeLogSerializer]!
   cid: String!
   type: AppType!
@@ -255,7 +255,7 @@ type AppSerializer {
   logo: String
   site: String
   slogan: String
-  redirect_uri: String
+  redirect_uris: [String!]
 }
 
 enum AppType {
@@ -305,10 +305,7 @@ type ClientDomainSerializer {
   ref: String
   shares: [String!]
   groups: [String!]
-  clients: [String!]!
   created_at: Date!
-  created_by: String!
-  created_in: String!
   updated_at: Date
   updated_by: String
   updated_in: String
@@ -324,6 +321,9 @@ type ClientDomainSerializer {
   rand: String!
   timestamp: String!
   owner: String
+  clients: [String!]
+  created_by: String
+  created_in: String
   name: String!
   status: Status!
   subjects: [String!]!
@@ -335,10 +335,7 @@ type ClientOtpServiceSerializer {
   ref: String
   shares: [String!]
   groups: [String!]
-  clients: [String!]!
   created_at: Date!
-  created_by: String!
-  created_in: String!
   updated_at: Date
   updated_by: String
   updated_in: String
@@ -354,6 +351,9 @@ type ClientOtpServiceSerializer {
   rand: String!
   timestamp: String!
   owner: String
+  clients: [String!]
+  created_by: String
+  created_in: String
   config: JSON!
   type: ClientOtpType!
   provider: ClientOtpProvider!
@@ -376,10 +376,7 @@ type ClientSerializer {
   ref: String
   shares: [String!]
   groups: [String!]
-  clients: [String!]!
   created_at: Date!
-  created_by: String!
-  created_in: String!
   updated_at: Date
   updated_by: String
   updated_in: String
@@ -395,6 +392,9 @@ type ClientSerializer {
   rand: String!
   timestamp: String!
   owner: String!
+  clients: [String!]!
+  created_by: String!
+  created_in: String!
   domains: [ClientDomainSerializer]!
   otp_services: [ClientOtpServiceSerializer]!
   name: String!
@@ -414,7 +414,7 @@ type ClientSerializer {
   whitelist: [String!]
   coworkers: [String!]
   grant_types: [GrantType!]!
-  redirect_uri: String
+  redirect_uris: [String!]
 }
 
 enum ClientPlan {
@@ -445,10 +445,7 @@ type UserSerializer {
   ref: String
   shares: [String!]
   groups: [String!]
-  clients: [String!]!
   created_at: Date!
-  created_by: String!
-  created_in: String!
   updated_at: Date
   updated_by: String
   updated_in: String
@@ -464,6 +461,9 @@ type UserSerializer {
   rand: String!
   timestamp: String!
   owner: String!
+  clients: [String!]!
+  created_by: String!
+  created_in: String!
   status: Status!
   tz: String!
   mfa: UserMFA
@@ -500,10 +500,7 @@ type ProfileSerializer {
   ref: String
   shares: [String!]
   groups: [String!]
-  clients: [String!]!
   created_at: Date!
-  created_by: String!
-  created_in: String!
   updated_at: Date
   updated_by: String
   updated_in: String
@@ -519,6 +516,9 @@ type ProfileSerializer {
   rand: String!
   timestamp: String!
   owner: String!
+  clients: [String!]!
+  created_by: String!
+  created_in: String!
   state: State!
   gender: Gender!
   person_type: ProfilePersonType!
@@ -562,10 +562,7 @@ type SessionSerializer {
   ref: String
   shares: [String!]
   groups: [String!]
-  clients: [String!]!
   created_at: Date!
-  created_by: String!
-  created_in: String!
   updated_at: Date
   updated_by: String
   updated_in: String
@@ -581,6 +578,9 @@ type SessionSerializer {
   rand: String!
   timestamp: String!
   owner: String!
+  clients: [String!]!
+  created_by: String!
+  created_in: String!
   ip: String!
   agent: String!
   expiration_date: Date!
@@ -741,7 +741,7 @@ input CreateAppDto {
   logo: String
   site: String
   slogan: String
-  redirect_uri: String
+  redirect_uris: [String!]
 }
 
 input CreateAppChangeLogDto {
@@ -764,7 +764,7 @@ input UpdateAppDto {
   logo: String
   site: String
   slogan: String
-  redirect_uri: String
+  redirect_uris: [String!]
 }
 
 input UpdateAppChangeLogDto {
@@ -786,7 +786,7 @@ input CreateClientDto {
   logo: String
   site: String
   slogan: String
-  redirect_uri: String
+  redirect_uris: [String!]
   plan: ClientPlan!
   state: State
   client_id: String
@@ -821,7 +821,7 @@ input UpdateClientDto {
   logo: String
   site: String
   slogan: String
-  redirect_uri: String
+  redirect_uris: [String!]
   plan: ClientPlan
   state: State
   client_id: String

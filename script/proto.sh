@@ -20,9 +20,13 @@ PROTOS[CONFIG,2]=./apps/gateway/src/modules/config/config.proto
 PROTOS[DOMAIN,1]=./apps/services/domain/src/app.proto
 PROTOS[DOMAIN,2]=./apps/gateway/src/modules/domain/domain.proto
 
+PROTOS[DOMAIN,3]=./apps/services/auth/src/protobuf/domain.proto
+
 # Identity Proto
 PROTOS[IDENTITY,1]=./apps/services/identity/src/app.proto
 PROTOS[IDENTITY,2]=./apps/gateway/src/modules/identity/identity.proto
+
+PROTOS[IDENTITY,3]=./apps/services/auth/src/protobuf/identity.proto
 
 # Main Program
 for KEY in "${!PROTOS[@]}"; do
