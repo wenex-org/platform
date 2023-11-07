@@ -148,6 +148,29 @@ type GrantItemsSerializer {
   items: [GrantSerializer]!
 }
 
+type PolicyTimeSerializer {
+  duration: Float!
+  cron_exp: String!
+}
+
+type PolicySerializer {
+  time: [PolicyTimeSerializer]
+  subject: String!
+  action: String!
+  object: String!
+  field: [String!]
+  filter: [String!]
+  location: [String!]
+}
+
+type AuthorizationPolicyResponseSerializer {
+  policies: [PolicySerializer]!
+}
+
+type AuthorizationCanResponseSerializer {
+  granted: Boolean!
+}
+
 type JwtTokenSerializer {
   strict: Boolean!
   type: JwtTokenType!
@@ -332,6 +355,7 @@ enum Scope {
 
 enum GrantType {
   OTP
+  OAuth
   Password
   RefreshToken
   ClientCredential
@@ -693,6 +717,11 @@ input PaginationDto {
 }
 
 type Mutation {
+  token(data: AuthenticationRequestDto!): AuthenticationResponseSerializer!
+  logout(data: TokenDto!): ResultSerializer!
+  verify(data: TokenDto!): JwtTokenSerializer!
+  can(data: AuthorizationCanRequestDto!): AuthorizationCanResponseSerializer!
+  policy(data: AuthorizationPolicyRequestDto!): AuthorizationPolicyResponseSerializer!
   createGrant(data: CreateGrantDto!): GrantDataSerializer!
   createBulkGrant(items: [CreateGrantDto!]!): GrantItemsSerializer!
   deleteOneGrant(id: String!, ref: String): GrantDataSerializer!
@@ -700,9 +729,6 @@ type Mutation {
   destroyOneGrant(id: String!, ref: String): GrantDataSerializer!
   updateOneGrant(id: String!, data: UpdateGrantDto!, ref: String): GrantDataSerializer!
   updateBulkGrant(filter: QueryFilterDto!, data: UpdateGrantDto!): TotalSerializer!
-  token(data: AuthenticationRequestDto!): AuthenticationResponseSerializer!
-  logout(data: TokenDto!): ResultSerializer!
-  verify(data: TokenDto!): JwtTokenSerializer!
   createApp(data: CreateAppDto!): AppDataSerializer!
   createBulkApp(items: [CreateAppDto!]!): AppItemsSerializer!
   deleteOneApp(id: String!, ref: String): AppDataSerializer!
@@ -747,36 +773,6 @@ type Mutation {
   updateBulkSession(filter: QueryFilterDto!, data: UpdateSessionDto!): TotalSerializer!
 }
 
-input CreateGrantDto {
-  action: String!
-  object: String!
-  time: [CreateGrantTimeDto!]
-  subject: String!
-  field: [String!]
-  filter: [String!]
-  location: [String!]
-}
-
-input CreateGrantTimeDto {
-  cron_exp: String!
-  duration: Float!
-}
-
-input UpdateGrantDto {
-  action: String
-  object: String
-  time: [UpdateGrantTimeDto!]
-  subject: String
-  field: [String!]
-  filter: [String!]
-  location: [String!]
-}
-
-input UpdateGrantTimeDto {
-  cron_exp: String!
-  duration: Float!
-}
-
 input AuthenticationRequestDto {
   scopes: [String!]
   grant_type: GrantType!
@@ -810,6 +806,55 @@ enum ResponseType {
 
 input TokenDto {
   token: String
+}
+
+input AuthorizationCanRequestDto {
+  token: String
+  strict: String
+  subject: String
+  action: String!
+  object: String!
+  tz: String
+  ip: String
+  time: Date
+}
+
+input AuthorizationPolicyRequestDto {
+  token: String
+  strict: String
+  subject: String
+  action: String
+  object: String
+}
+
+input CreateGrantDto {
+  action: String!
+  object: String!
+  time: [CreateGrantTimeDto!]
+  subject: String!
+  field: [String!]
+  filter: [String!]
+  location: [String!]
+}
+
+input CreateGrantTimeDto {
+  cron_exp: String!
+  duration: Float!
+}
+
+input UpdateGrantDto {
+  action: String
+  object: String
+  time: [UpdateGrantTimeDto!]
+  subject: String
+  field: [String!]
+  filter: [String!]
+  location: [String!]
+}
+
+input UpdateGrantTimeDto {
+  cron_exp: String!
+  duration: Float!
 }
 
 input CreateAppDto {

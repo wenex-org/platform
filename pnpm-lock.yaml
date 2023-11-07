@@ -95,6 +95,9 @@ dependencies:
   abacl:
     specifier: ^8.0.4
     version: 8.0.4
+  abacl-redis:
+    specifier: ^2.0.0
+    version: 2.0.0
   bcryptjs:
     specifier: ^2.4.3
     version: 2.4.3
@@ -4648,6 +4651,15 @@ packages:
     requiresBuild: true
     dev: false
     optional: true
+
+  /abacl-redis@2.0.0:
+    resolution: {integrity: sha512-iqUXSLZfyi7mRmYX1nY2zcKhUZeEoQPmSQxLJdDyyM+lAsAF/1Jx7194f9Iva9sgXCWOX38bQyTOkImCkhEzBQ==}
+    dependencies:
+      abacl: 8.0.4
+      ioredis: 5.3.2
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
 
   /abacl@8.0.4:
     resolution: {integrity: sha512-oFInPHG0A/56lFewiWO0wWg8TYb5TWpSGxzXY6zR5xwa5Idc95xhcwVxYdXflmNVwTu04uxs7ixHjZFVjTdBcg==}

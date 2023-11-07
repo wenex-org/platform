@@ -11,8 +11,8 @@ service AuthenticationService {
 }
 
 service AuthorizationService {
-  rpc Can(AuthorizationRequest) returns (AuthorizationResponse);
-  rpc Policy(AuthorizationRequest) returns (AuthorizationResponse);
+  rpc Can(AuthorizationCanRequest) returns (AuthorizationCanResponse);
+  rpc Policy(AuthorizationPolicyRequest) returns (AuthorizationPolicyResponse);
 }
 
 service GrantsService {
@@ -154,20 +154,31 @@ message AuthenticationResponse {
 
 // Authorization Messages
 
-message AuthorizationRequest {
-  string token = 1;
+message AuthorizationCanRequest {
+  optional string token = 1;
   optional string strict = 2;
+  optional string subject = 3;
 
-  string action = 3;
-  string object = 4;
+  string action = 4;
+  string object = 5;
 
-  optional string ip = 5;
-  optional string time = 6;
+  optional string tz = 6;
+
+  optional string ip = 7;
+  optional string time = 8;
 }
+message AuthorizationCanResponse { bool granted = 1; }
 
-message AuthorizationResponse {
-  optional bool granted = 1;
-  repeated Policy policies = 2;
+message AuthorizationPolicyRequest {
+  optional string token = 1;
+  optional string strict = 2;
+  optional string subject = 3;
+
+  optional string action = 4;
+  optional string object = 5;
+}
+message AuthorizationPolicyResponse {
+  repeated Policy policies = 1;
 
   message Policy {
     string subject = 50;

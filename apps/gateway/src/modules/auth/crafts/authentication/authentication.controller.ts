@@ -23,8 +23,8 @@ import { Metadata } from '@app/common/interfaces';
 import { Meta } from '@app/common/decorators';
 import { Observable } from 'rxjs';
 
-@ApiTags('authentication')
-@Controller('authentication')
+@ApiTags('auth')
+@Controller('auth')
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseInterceptors(new SentryInterceptor())
