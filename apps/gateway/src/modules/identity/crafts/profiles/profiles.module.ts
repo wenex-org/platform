@@ -6,7 +6,11 @@ import { ProfilesResolver } from './profiles.resolver';
 import { ProfilesController } from './profiles.controller';
 
 @Module({
-  imports: [ClientsModule.register(identityClientsModuleOptions)],
+  imports: [
+    ClientsModule.register(
+      identityClientsModuleOptions('modules/identity/identity.proto'),
+    ),
+  ],
   controllers: [ProfilesController],
   providers: [ProfilesResolver, IdentityProvider],
 })

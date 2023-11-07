@@ -6,7 +6,11 @@ import { UsersResolver } from './users.resolver';
 import { UsersController } from './users.controller';
 
 @Module({
-  imports: [ClientsModule.register(identityClientsModuleOptions)],
+  imports: [
+    ClientsModule.register(
+      identityClientsModuleOptions('modules/identity/identity.proto'),
+    ),
+  ],
   controllers: [UsersController],
   providers: [UsersResolver, IdentityProvider],
 })

@@ -6,7 +6,11 @@ import { SessionsResolver } from './sessions.resolver';
 import { SessionsController } from './sessions.controller';
 
 @Module({
-  imports: [ClientsModule.register(identityClientsModuleOptions)],
+  imports: [
+    ClientsModule.register(
+      identityClientsModuleOptions('modules/identity/identity.proto'),
+    ),
+  ],
   controllers: [SessionsController],
   providers: [SessionsResolver, IdentityProvider],
 })

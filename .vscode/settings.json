@@ -15,6 +15,7 @@
     "opentelemetry",
     "OTLP",
     "proto",
+    "protobuf",
     "QLJSON",
     "setex",
     "TOTP",

@@ -6,7 +6,9 @@ import { ConfigsResolver } from './configs.resolver';
 import { ConfigsController } from './configs.controller';
 
 @Module({
-  imports: [ClientsModule.register(configClientsModuleOptions)],
+  imports: [
+    ClientsModule.register(configClientsModuleOptions('modules/config/config.proto')),
+  ],
   controllers: [ConfigsController],
   providers: [ConfigsResolver, ConfigProvider],
 })

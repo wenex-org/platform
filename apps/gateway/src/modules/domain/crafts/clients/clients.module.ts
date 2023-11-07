@@ -6,7 +6,9 @@ import { ClientsResolver } from './clients.resolver';
 import { ClientsController } from './clients.controller';
 
 @Module({
-  imports: [ClientModule.register(domainClientsModuleOptions)],
+  imports: [
+    ClientModule.register(domainClientsModuleOptions('modules/domain/domain.proto')),
+  ],
   controllers: [ClientsController],
   providers: [ClientsResolver, DomainProvider],
 })

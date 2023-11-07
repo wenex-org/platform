@@ -6,7 +6,7 @@ import { GrantsResolver } from './grants.resolver';
 import { GrantsController } from './grants.controller';
 
 @Module({
-  imports: [ClientsModule.register(authClientsModuleOptions)],
+  imports: [ClientsModule.register(authClientsModuleOptions('modules/auth/auth.proto'))],
   controllers: [GrantsController],
   providers: [GrantsResolver, AuthProvider],
 })
