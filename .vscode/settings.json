@@ -17,6 +17,8 @@
     "OTLP",
     "proto",
     "protobuf",
+    "psetex",
+    "pttl",
     "QLJSON",
     "setex",
     "TOTP",
