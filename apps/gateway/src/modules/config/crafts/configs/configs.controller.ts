@@ -28,6 +28,7 @@ import {
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { Metadata, ConfigDom, ConfigSer } from '@app/common/interfaces';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { RateLimitInterceptor } from '@app/common/interceptors';
 import { Filter, Meta, Session } from '@app/common/decorators';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
@@ -42,7 +43,7 @@ import { Observable } from 'rxjs';
 @Controller('configs')
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
-@UseInterceptors(new SentryInterceptor())
+@UseInterceptors(RateLimitInterceptor, new SentryInterceptor())
 export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   constructor(readonly provider: ConfigProvider) {
     super(provider.configs, () => ConfigSerializer);
