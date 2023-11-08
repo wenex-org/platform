@@ -22,13 +22,16 @@ import {
   Put,
   Query,
   UseFilters,
+  UseGuards,
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { Metadata, ProfileDom, ProfileSer } from '@app/common/interfaces';
+import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Filter, Meta, Session } from '@app/common/decorators';
+import { GatewayInterceptors } from '@app/common/interceptors';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { IdentityProvider } from '@app/common/providers';
@@ -42,7 +45,8 @@ import { Observable } from 'rxjs';
 @Controller('profiles')
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
-@UseInterceptors(new SentryInterceptor())
+@UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
+@UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class ProfilesController extends GrpcController<ProfileDom, ProfileSer> {
   constructor(readonly provider: IdentityProvider) {
     super(provider.profiles, () => ProfileSerializer);

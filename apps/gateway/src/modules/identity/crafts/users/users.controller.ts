@@ -22,16 +22,19 @@ import {
   Put,
   Query,
   UseFilters,
+  UseGuards,
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
+import { Metadata, UserDom, UserSer } from '@app/common/interfaces';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Filter, Meta, Session } from '@app/common/decorators';
+import { GatewayInterceptors } from '@app/common/interceptors';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { IdentityProvider } from '@app/common/providers';
-import { Metadata, UserDom, UserSer } from '@app/common/interfaces';
 import { refineFilterQuery } from '@app/common/utils';
 import { GrpcController } from '@app/common/classes';
 import { ClientSession } from 'mongoose';
@@ -42,7 +45,8 @@ import { Observable } from 'rxjs';
 @Controller('users')
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
-@UseInterceptors(new SentryInterceptor())
+@UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
+@UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class UsersController extends GrpcController<UserDom, UserSer> {
   constructor(readonly provider: IdentityProvider) {
     super(provider.users, () => UserSerializer);
