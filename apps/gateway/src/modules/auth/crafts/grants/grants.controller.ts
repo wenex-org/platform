@@ -22,10 +22,12 @@ import {
   Put,
   Query,
   UseFilters,
+  UseGuards,
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Metadata, GrantDom, GrantSer } from '@app/common/interfaces';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Filter, Meta, Session } from '@app/common/decorators';
@@ -43,6 +45,7 @@ import { Observable } from 'rxjs';
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseInterceptors(new SentryInterceptor())
+@UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   constructor(readonly provider: AuthProvider) {
     super(provider.grants, () => GrantSerializer);
