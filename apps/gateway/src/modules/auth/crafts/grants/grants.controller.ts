@@ -30,8 +30,10 @@ import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Metadata, GrantDom, GrantSer } from '@app/common/interfaces';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Filter, Meta, Session } from '@app/common/decorators';
 import { GatewayInterceptors } from '@app/common/interceptors';
+import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { refineFilterQuery } from '@app/common/utils';
@@ -53,6 +55,9 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   }
 
   @Get('count')
+  @Cache('grants', 'fill')
+  @SetScope(Scope.ReadAuthGrants)
+  @SetPolicy(Action.Read, Resource.AuthGrants)
   @ApiQuery({ type: QueryFilterDto, required: false })
   count(
     @Meta() meta: Metadata,
@@ -63,6 +68,9 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   }
 
   @Post()
+  @Cache('grants', 'flush')
+  @SetScope(Scope.WriteAuthGrants)
+  @SetPolicy(Action.Create, Resource.AuthGrants)
   create(
     @Meta() meta: Metadata,
     @Body() data: CreateGrantDto,
@@ -72,6 +80,9 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   }
 
   @Post('bulk')
+  @Cache('grants', 'flush')
+  @SetScope(Scope.WriteAuthGrants)
+  @SetPolicy(Action.Create, Resource.AuthGrants)
   createBulk(
     @Meta() meta: Metadata,
     @Body() items: CreateGrantDto[],
@@ -81,6 +92,9 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   }
 
   @Get()
+  @Cache('grants', 'fill')
+  @SetScope(Scope.ReadAuthGrants)
+  @SetPolicy(Action.Read, Resource.AuthGrants)
   @ApiQuery({ type: FilterDto, required: false })
   Find(
     @Meta() meta: Metadata,
@@ -91,6 +105,8 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   }
 
   @Get('cursor')
+  @SetScope(Scope.ReadAuthGrants)
+  @SetPolicy(Action.Read, Resource.AuthGrants)
   @ApiQuery({ type: FilterDto, required: false })
   Cursor(
     @Meta() meta: Metadata,
@@ -101,6 +117,9 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   }
 
   @Get(':id')
+  @Cache('grants', 'fill')
+  @SetScope(Scope.ReadAuthGrants)
+  @SetPolicy(Action.Read, Resource.AuthGrants)
   @ApiQuery({ type: String, name: 'ref', required: false })
   FindOne(
     @Param('id', ParseIdPipe) id: string,
@@ -114,6 +133,9 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   }
 
   @Delete(':id')
+  @Cache('grants', 'flush')
+  @SetScope(Scope.WriteAuthGrants)
+  @SetPolicy(Action.Delete, Resource.AuthGrants)
   @ApiQuery({ type: String, name: 'ref', required: false })
   DeleteOne(
     @Param('id', ParseIdPipe) id: string,
@@ -127,6 +149,9 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   }
 
   @Put(':id/restore')
+  @Cache('grants', 'flush')
+  @SetScope(Scope.WriteAuthGrants)
+  @SetPolicy(Action.Restore, Resource.AuthGrants)
   @ApiQuery({ type: String, name: 'ref', required: false })
   RestoreOne(
     @Param('id', ParseIdPipe) id: string,
@@ -140,6 +165,9 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   }
 
   @Delete(':id/destroy')
+  @Cache('grants', 'flush')
+  @SetScope(Scope.ManageAuthGrants)
+  @SetPolicy(Action.Destroy, Resource.AuthGrants)
   @ApiQuery({ type: String, name: 'ref', required: false })
   DestroyOne(
     @Param('id', ParseIdPipe) id: string,
@@ -153,6 +181,9 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   }
 
   @Patch(':id')
+  @Cache('grants', 'flush')
+  @SetScope(Scope.WriteAuthGrants)
+  @SetPolicy(Action.Update, Resource.AuthGrants)
   @ApiQuery({ type: String, name: 'ref', required: false })
   UpdateOne(
     @Param('id', ParseIdPipe) id: string,
@@ -167,6 +198,9 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   }
 
   @Patch('bulk')
+  @Cache('grants', 'flush')
+  @SetScope(Scope.ManageAuthGrants)
+  @SetPolicy(Action.Update, Resource.AuthGrants)
   @ApiQuery({ type: QueryFilterDto, required: false })
   UpdateBulk(
     @Meta() meta: Metadata,

@@ -30,8 +30,10 @@ import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Metadata, UserDom, UserSer } from '@app/common/interfaces';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Filter, Meta, Session } from '@app/common/decorators';
 import { GatewayInterceptors } from '@app/common/interceptors';
+import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { IdentityProvider } from '@app/common/providers';
@@ -53,6 +55,9 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   }
 
   @Get('count')
+  @Cache('users', 'fill')
+  @SetScope(Scope.ReadIdentityUsers)
+  @SetPolicy(Action.Read, Resource.IdentityUsers)
   @ApiQuery({ type: QueryFilterDto, required: false })
   Count(
     @Meta() meta: Metadata,
@@ -63,6 +68,9 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   }
 
   @Post()
+  @Cache('users', 'flush')
+  @SetScope(Scope.WriteIdentityUsers)
+  @SetPolicy(Action.Create, Resource.IdentityUsers)
   Create(
     @Meta() meta: Metadata,
     @Body() data: CreateUserDto,
@@ -72,6 +80,9 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   }
 
   @Post('bulk')
+  @Cache('users', 'flush')
+  @SetScope(Scope.WriteIdentityUsers)
+  @SetPolicy(Action.Create, Resource.IdentityUsers)
   CreateBulk(
     @Meta() meta: Metadata,
     @Body() items: CreateUserDto[],
@@ -81,6 +92,9 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   }
 
   @Get()
+  @Cache('users', 'fill')
+  @SetScope(Scope.ReadIdentityUsers)
+  @SetPolicy(Action.Read, Resource.IdentityUsers)
   @ApiQuery({ type: FilterDto, required: false })
   Find(
     @Meta() meta: Metadata,
@@ -91,6 +105,8 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   }
 
   @Get('cursor')
+  @SetScope(Scope.ReadIdentityUsers)
+  @SetPolicy(Action.Read, Resource.IdentityUsers)
   @ApiQuery({ type: FilterDto, required: false })
   Cursor(
     @Meta() meta: Metadata,
@@ -101,6 +117,9 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   }
 
   @Get(':id')
+  @Cache('users', 'fill')
+  @SetScope(Scope.ReadIdentityUsers)
+  @SetPolicy(Action.Read, Resource.IdentityUsers)
   @ApiQuery({ type: String, name: 'ref', required: false })
   FindOne(
     @Param('id', ParseIdPipe) id: string,
@@ -114,6 +133,9 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   }
 
   @Delete(':id')
+  @Cache('users', 'flush')
+  @SetScope(Scope.WriteIdentityUsers)
+  @SetPolicy(Action.Delete, Resource.IdentityUsers)
   @ApiQuery({ type: String, name: 'ref', required: false })
   DeleteOne(
     @Param('id', ParseIdPipe) id: string,
@@ -127,6 +149,9 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   }
 
   @Put(':id/restore')
+  @Cache('users', 'flush')
+  @SetScope(Scope.WriteIdentityUsers)
+  @SetPolicy(Action.Restore, Resource.IdentityUsers)
   @ApiQuery({ type: String, name: 'ref', required: false })
   RestoreOne(
     @Param('id', ParseIdPipe) id: string,
@@ -140,6 +165,9 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   }
 
   @Delete(':id/destroy')
+  @Cache('users', 'flush')
+  @SetScope(Scope.ManageIdentityUsers)
+  @SetPolicy(Action.Destroy, Resource.IdentityUsers)
   @ApiQuery({ type: String, name: 'ref', required: false })
   DestroyOne(
     @Param('id', ParseIdPipe) id: string,
@@ -153,6 +181,9 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   }
 
   @Patch(':id')
+  @Cache('users', 'flush')
+  @SetScope(Scope.WriteIdentityUsers)
+  @SetPolicy(Action.Update, Resource.IdentityUsers)
   @ApiQuery({ type: String, name: 'ref', required: false })
   UpdateOne(
     @Param('id', ParseIdPipe) id: string,
@@ -167,6 +198,9 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   }
 
   @Patch('bulk')
+  @Cache('users', 'flush')
+  @SetScope(Scope.WriteIdentityUsers)
+  @SetPolicy(Action.Update, Resource.IdentityUsers)
   @ApiQuery({ type: QueryFilterDto, required: false })
   UpdateBulk(
     @Meta() meta: Metadata,

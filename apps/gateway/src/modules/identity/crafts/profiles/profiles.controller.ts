@@ -30,8 +30,10 @@ import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { Metadata, ProfileDom, ProfileSer } from '@app/common/interfaces';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Filter, Meta, Session } from '@app/common/decorators';
 import { GatewayInterceptors } from '@app/common/interceptors';
+import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { IdentityProvider } from '@app/common/providers';
@@ -53,6 +55,9 @@ export class ProfilesController extends GrpcController<ProfileDom, ProfileSer> {
   }
 
   @Get('count')
+  @Cache('profiles', 'fill')
+  @SetScope(Scope.ReadIdentityProfiles)
+  @SetPolicy(Action.Read, Resource.IdentityProfiles)
   @ApiQuery({ type: QueryFilterDto, required: false })
   Count(
     @Meta() meta: Metadata,
@@ -63,6 +68,9 @@ export class ProfilesController extends GrpcController<ProfileDom, ProfileSer> {
   }
 
   @Post()
+  @Cache('profiles', 'flush')
+  @SetScope(Scope.WriteIdentityProfiles)
+  @SetPolicy(Action.Create, Resource.IdentityProfiles)
   Create(
     @Meta() meta: Metadata,
     @Body() data: CreateProfileDto,
@@ -72,6 +80,9 @@ export class ProfilesController extends GrpcController<ProfileDom, ProfileSer> {
   }
 
   @Post('bulk')
+  @Cache('profiles', 'flush')
+  @SetScope(Scope.WriteIdentityProfiles)
+  @SetPolicy(Action.Create, Resource.IdentityProfiles)
   CreateBulk(
     @Meta() meta: Metadata,
     @Body() items: CreateProfileDto[],
@@ -81,6 +92,9 @@ export class ProfilesController extends GrpcController<ProfileDom, ProfileSer> {
   }
 
   @Get()
+  @Cache('profiles', 'fill')
+  @SetScope(Scope.ReadIdentityProfiles)
+  @SetPolicy(Action.Read, Resource.IdentityProfiles)
   @ApiQuery({ type: FilterDto, required: false })
   Find(
     @Meta() meta: Metadata,
@@ -91,6 +105,8 @@ export class ProfilesController extends GrpcController<ProfileDom, ProfileSer> {
   }
 
   @Get('cursor')
+  @SetScope(Scope.ReadIdentityProfiles)
+  @SetPolicy(Action.Read, Resource.IdentityProfiles)
   @ApiQuery({ type: FilterDto, required: false })
   Cursor(
     @Meta() meta: Metadata,
@@ -101,6 +117,9 @@ export class ProfilesController extends GrpcController<ProfileDom, ProfileSer> {
   }
 
   @Get(':id')
+  @Cache('profiles', 'fill')
+  @SetScope(Scope.ReadIdentityProfiles)
+  @SetPolicy(Action.Read, Resource.IdentityProfiles)
   @ApiQuery({ type: String, name: 'ref', required: false })
   FindOne(
     @Param('id', ParseIdPipe) id: string,
@@ -114,6 +133,9 @@ export class ProfilesController extends GrpcController<ProfileDom, ProfileSer> {
   }
 
   @Delete(':id')
+  @Cache('profiles', 'flush')
+  @SetScope(Scope.WriteIdentityProfiles)
+  @SetPolicy(Action.Delete, Resource.IdentityProfiles)
   @ApiQuery({ type: String, name: 'ref', required: false })
   DeleteOne(
     @Param('id', ParseIdPipe) id: string,
@@ -127,6 +149,9 @@ export class ProfilesController extends GrpcController<ProfileDom, ProfileSer> {
   }
 
   @Put(':id/restore')
+  @Cache('profiles', 'flush')
+  @SetScope(Scope.WriteIdentityProfiles)
+  @SetPolicy(Action.Restore, Resource.IdentityProfiles)
   @ApiQuery({ type: String, name: 'ref', required: false })
   RestoreOne(
     @Param('id', ParseIdPipe) id: string,
@@ -140,6 +165,9 @@ export class ProfilesController extends GrpcController<ProfileDom, ProfileSer> {
   }
 
   @Delete(':id/destroy')
+  @Cache('profiles', 'flush')
+  @SetScope(Scope.ManageIdentityProfiles)
+  @SetPolicy(Action.Destroy, Resource.IdentityProfiles)
   @ApiQuery({ type: String, name: 'ref', required: false })
   DestroyOne(
     @Param('id', ParseIdPipe) id: string,
@@ -153,6 +181,9 @@ export class ProfilesController extends GrpcController<ProfileDom, ProfileSer> {
   }
 
   @Patch(':id')
+  @Cache('profiles', 'flush')
+  @SetScope(Scope.WriteIdentityProfiles)
+  @SetPolicy(Action.Update, Resource.IdentityProfiles)
   @ApiQuery({ type: String, name: 'ref', required: false })
   UpdateOne(
     @Param('id', ParseIdPipe) id: string,
@@ -167,6 +198,9 @@ export class ProfilesController extends GrpcController<ProfileDom, ProfileSer> {
   }
 
   @Patch('bulk')
+  @Cache('profiles', 'flush')
+  @SetScope(Scope.WriteIdentityProfiles)
+  @SetPolicy(Action.Update, Resource.IdentityProfiles)
   @ApiQuery({ type: QueryFilterDto, required: false })
   UpdateBulk(
     @Meta() meta: Metadata,

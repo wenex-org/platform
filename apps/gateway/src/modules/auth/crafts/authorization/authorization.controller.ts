@@ -22,7 +22,9 @@ import { AuthProvider } from '@app/common/providers';
 import { ValidationPipe } from '@app/common/pipes';
 import { mapToInstance } from '@app/common/utils';
 import { Metadata } from '@app/common/interfaces';
+import { SetScope } from '@app/common/metadatas';
 import { Meta } from '@app/common/decorators';
+import { Scope } from '@app/common/enums';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
@@ -37,6 +39,7 @@ export class AuthorizationController extends GrpcAuthorizationController {
   }
 
   @Post('can')
+  @SetScope(Scope.ManageAuth)
   can(
     @Meta() meta: Metadata,
     @Body() data: AuthorizationCanRequestDto,
@@ -45,6 +48,7 @@ export class AuthorizationController extends GrpcAuthorizationController {
   }
 
   @Post('policy')
+  @SetScope(Scope.ManageAuth)
   policy(
     @Meta() meta: Metadata,
     @Body() data: AuthorizationPolicyRequestDto,

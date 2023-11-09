@@ -30,8 +30,10 @@ import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Metadata, ConfigDom, ConfigSer } from '@app/common/interfaces';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Filter, Meta, Session } from '@app/common/decorators';
 import { GatewayInterceptors } from '@app/common/interceptors';
+import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { ConfigProvider } from '@app/common/providers';
@@ -53,6 +55,9 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   }
 
   @Get('count')
+  @Cache('configs', 'fill')
+  @SetScope(Scope.ReadConfigConfigs)
+  @SetPolicy(Action.Read, Resource.ConfigConfigs)
   @ApiQuery({ type: QueryFilterDto, required: false })
   count(
     @Meta() meta: Metadata,
@@ -63,6 +68,9 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   }
 
   @Post()
+  @Cache('configs', 'flush')
+  @SetScope(Scope.WriteConfigConfigs)
+  @SetPolicy(Action.Create, Resource.ConfigConfigs)
   create(
     @Meta() meta: Metadata,
     @Body() data: CreateConfigDto,
@@ -72,6 +80,9 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   }
 
   @Post('bulk')
+  @Cache('configs', 'flush')
+  @SetScope(Scope.WriteConfigConfigs)
+  @SetPolicy(Action.Create, Resource.ConfigConfigs)
   createBulk(
     @Meta() meta: Metadata,
     @Body() items: CreateConfigDto[],
@@ -81,6 +92,9 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   }
 
   @Get()
+  @Cache('configs', 'fill')
+  @SetScope(Scope.ReadConfigConfigs)
+  @SetPolicy(Action.Read, Resource.ConfigConfigs)
   @ApiQuery({ type: FilterDto, required: false })
   Find(
     @Meta() meta: Metadata,
@@ -91,6 +105,8 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   }
 
   @Get('cursor')
+  @SetScope(Scope.ReadConfigConfigs)
+  @SetPolicy(Action.Read, Resource.ConfigConfigs)
   @ApiQuery({ type: FilterDto, required: false })
   Cursor(
     @Meta() meta: Metadata,
@@ -101,6 +117,9 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   }
 
   @Get(':id')
+  @Cache('configs', 'fill')
+  @SetScope(Scope.ReadConfigConfigs)
+  @SetPolicy(Action.Read, Resource.ConfigConfigs)
   @ApiQuery({ type: String, name: 'ref', required: false })
   FindOne(
     @Param('id', ParseIdPipe) id: string,
@@ -114,6 +133,9 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   }
 
   @Delete(':id')
+  @Cache('configs', 'flush')
+  @SetScope(Scope.WriteConfigConfigs)
+  @SetPolicy(Action.Delete, Resource.ConfigConfigs)
   @ApiQuery({ type: String, name: 'ref', required: false })
   DeleteOne(
     @Param('id', ParseIdPipe) id: string,
@@ -127,6 +149,9 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   }
 
   @Put(':id/restore')
+  @Cache('configs', 'flush')
+  @SetScope(Scope.WriteConfigConfigs)
+  @SetPolicy(Action.Restore, Resource.ConfigConfigs)
   @ApiQuery({ type: String, name: 'ref', required: false })
   RestoreOne(
     @Param('id', ParseIdPipe) id: string,
@@ -140,6 +165,9 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   }
 
   @Delete(':id/destroy')
+  @Cache('configs', 'flush')
+  @SetScope(Scope.ManageConfigConfigs)
+  @SetPolicy(Action.Destroy, Resource.ConfigConfigs)
   @ApiQuery({ type: String, name: 'ref', required: false })
   DestroyOne(
     @Param('id', ParseIdPipe) id: string,
@@ -153,6 +181,9 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   }
 
   @Patch(':id')
+  @Cache('configs', 'flush')
+  @SetScope(Scope.WriteConfigConfigs)
+  @SetPolicy(Action.Update, Resource.ConfigConfigs)
   @ApiQuery({ type: String, name: 'ref', required: false })
   UpdateOne(
     @Param('id', ParseIdPipe) id: string,
@@ -167,6 +198,9 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   }
 
   @Patch('bulk')
+  @Cache('configs', 'flush')
+  @SetScope(Scope.WriteConfigConfigs)
+  @SetPolicy(Action.Update, Resource.ConfigConfigs)
   @ApiQuery({ type: QueryFilterDto, required: false })
   UpdateBulk(
     @Meta() meta: Metadata,

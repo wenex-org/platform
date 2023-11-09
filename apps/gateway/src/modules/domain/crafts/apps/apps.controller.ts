@@ -29,9 +29,11 @@ import {
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Metadata, AppDom, AppSer } from '@app/common/interfaces';
 import { Filter, Meta, Session } from '@app/common/decorators';
 import { GatewayInterceptors } from '@app/common/interceptors';
+import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { DomainProvider } from '@app/common/providers';
@@ -53,6 +55,9 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   }
 
   @Get('count')
+  @Cache('apps', 'fill')
+  @SetScope(Scope.ReadDomainApps)
+  @SetPolicy(Action.Read, Resource.DomainApps)
   @ApiQuery({ type: QueryFilterDto, required: false })
   Count(
     @Meta() meta: Metadata,
@@ -63,6 +68,9 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   }
 
   @Post()
+  @Cache('apps', 'flush')
+  @SetScope(Scope.WriteDomainApps)
+  @SetPolicy(Action.Create, Resource.DomainApps)
   Create(
     @Meta() meta: Metadata,
     @Body() data: CreateAppDto,
@@ -72,6 +80,9 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   }
 
   @Post('bulk')
+  @Cache('apps', 'flush')
+  @SetScope(Scope.WriteDomainApps)
+  @SetPolicy(Action.Create, Resource.DomainApps)
   CreateBulk(
     @Meta() meta: Metadata,
     @Body() items: CreateAppDto[],
@@ -81,6 +92,9 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   }
 
   @Get()
+  @Cache('apps', 'fill')
+  @SetScope(Scope.ReadDomainApps)
+  @SetPolicy(Action.Read, Resource.DomainApps)
   @ApiQuery({ type: FilterDto, required: false })
   Find(
     @Meta() meta: Metadata,
@@ -91,6 +105,8 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   }
 
   @Get('cursor')
+  @SetScope(Scope.ReadDomainApps)
+  @SetPolicy(Action.Read, Resource.DomainApps)
   @ApiQuery({ type: FilterDto, required: false })
   Cursor(
     @Meta() meta: Metadata,
@@ -101,6 +117,9 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   }
 
   @Get(':id')
+  @Cache('apps', 'fill')
+  @SetScope(Scope.ReadDomainApps)
+  @SetPolicy(Action.Read, Resource.DomainApps)
   @ApiQuery({ type: String, name: 'ref', required: false })
   FindOne(
     @Param('id', ParseIdPipe) id: string,
@@ -114,6 +133,9 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   }
 
   @Delete(':id')
+  @Cache('apps', 'flush')
+  @SetScope(Scope.WriteDomainApps)
+  @SetPolicy(Action.Delete, Resource.DomainApps)
   @ApiQuery({ type: String, name: 'ref', required: false })
   DeleteOne(
     @Param('id', ParseIdPipe) id: string,
@@ -127,6 +149,9 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   }
 
   @Put(':id/restore')
+  @Cache('apps', 'flush')
+  @SetScope(Scope.WriteDomainApps)
+  @SetPolicy(Action.Restore, Resource.DomainApps)
   @ApiQuery({ type: String, name: 'ref', required: false })
   RestoreOne(
     @Param('id', ParseIdPipe) id: string,
@@ -140,6 +165,9 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   }
 
   @Delete(':id/destroy')
+  @Cache('apps', 'flush')
+  @SetScope(Scope.ManageDomainApps)
+  @SetPolicy(Action.Destroy, Resource.DomainApps)
   @ApiQuery({ type: String, name: 'ref', required: false })
   DestroyOne(
     @Param('id', ParseIdPipe) id: string,
@@ -153,6 +181,9 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   }
 
   @Patch(':id')
+  @Cache('apps', 'flush')
+  @SetScope(Scope.WriteDomainApps)
+  @SetPolicy(Action.Update, Resource.DomainApps)
   @ApiQuery({ type: String, name: 'ref', required: false })
   UpdateOne(
     @Param('id', ParseIdPipe) id: string,
@@ -167,6 +198,9 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   }
 
   @Patch('bulk')
+  @Cache('apps', 'flush')
+  @SetScope(Scope.WriteDomainApps)
+  @SetPolicy(Action.Update, Resource.DomainApps)
   @ApiQuery({ type: QueryFilterDto, required: false })
   UpdateBulk(
     @Meta() meta: Metadata,

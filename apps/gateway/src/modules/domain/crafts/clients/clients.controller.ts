@@ -30,8 +30,10 @@ import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Metadata, ClientDom, ClientSer } from '@app/common/interfaces';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Filter, Meta, Session } from '@app/common/decorators';
 import { GatewayInterceptors } from '@app/common/interceptors';
+import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { DomainProvider } from '@app/common/providers';
@@ -53,6 +55,9 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   }
 
   @Get('count')
+  @Cache('clients', 'fill')
+  @SetScope(Scope.ReadDomainClients)
+  @SetPolicy(Action.Read, Resource.DomainClients)
   @ApiQuery({ type: QueryFilterDto, required: false })
   Count(
     @Meta() meta: Metadata,
@@ -63,6 +68,9 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   }
 
   @Post()
+  @Cache('clients', 'flush')
+  @SetScope(Scope.WriteDomainClients)
+  @SetPolicy(Action.Create, Resource.DomainClients)
   Create(
     @Meta() meta: Metadata,
     @Body() data: CreateClientDto,
@@ -72,6 +80,9 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   }
 
   @Post('bulk')
+  @Cache('clients', 'flush')
+  @SetScope(Scope.WriteDomainClients)
+  @SetPolicy(Action.Create, Resource.DomainClients)
   CreateBulk(
     @Meta() meta: Metadata,
     @Body() items: CreateClientDto[],
@@ -81,6 +92,9 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   }
 
   @Get()
+  @Cache('clients', 'fill')
+  @SetScope(Scope.ReadDomainClients)
+  @SetPolicy(Action.Read, Resource.DomainClients)
   @ApiQuery({ type: FilterDto, required: false })
   Find(
     @Meta() meta: Metadata,
@@ -91,6 +105,8 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   }
 
   @Get('cursor')
+  @SetScope(Scope.ReadDomainClients)
+  @SetPolicy(Action.Read, Resource.DomainClients)
   @ApiQuery({ type: FilterDto, required: false })
   Cursor(
     @Meta() meta: Metadata,
@@ -101,6 +117,9 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   }
 
   @Get(':id')
+  @Cache('clients', 'fill')
+  @SetScope(Scope.ReadDomainClients)
+  @SetPolicy(Action.Read, Resource.DomainClients)
   @ApiQuery({ type: String, name: 'ref', required: false })
   FindOne(
     @Param('id', ParseIdPipe) id: string,
@@ -114,6 +133,9 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   }
 
   @Delete(':id')
+  @Cache('clients', 'flush')
+  @SetScope(Scope.WriteDomainClients)
+  @SetPolicy(Action.Delete, Resource.DomainClients)
   @ApiQuery({ type: String, name: 'ref', required: false })
   DeleteOne(
     @Param('id', ParseIdPipe) id: string,
@@ -127,6 +149,9 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   }
 
   @Put(':id/restore')
+  @Cache('clients', 'flush')
+  @SetScope(Scope.WriteDomainClients)
+  @SetPolicy(Action.Restore, Resource.DomainClients)
   @ApiQuery({ type: String, name: 'ref', required: false })
   RestoreOne(
     @Param('id', ParseIdPipe) id: string,
@@ -140,6 +165,9 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   }
 
   @Delete(':id/destroy')
+  @Cache('clients', 'flush')
+  @SetScope(Scope.ManageDomainClients)
+  @SetPolicy(Action.Destroy, Resource.DomainClients)
   @ApiQuery({ type: String, name: 'ref', required: false })
   DestroyOne(
     @Param('id', ParseIdPipe) id: string,
@@ -153,6 +181,9 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   }
 
   @Patch(':id')
+  @Cache('clients', 'flush')
+  @SetScope(Scope.WriteDomainClients)
+  @SetPolicy(Action.Update, Resource.DomainClients)
   @ApiQuery({ type: String, name: 'ref', required: false })
   UpdateOne(
     @Param('id', ParseIdPipe) id: string,
@@ -167,6 +198,9 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   }
 
   @Patch('bulk')
+  @Cache('clients', 'flush')
+  @SetScope(Scope.WriteDomainClients)
+  @SetPolicy(Action.Update, Resource.DomainClients)
   @ApiQuery({ type: QueryFilterDto, required: false })
   UpdateBulk(
     @Meta() meta: Metadata,
