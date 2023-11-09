@@ -127,8 +127,6 @@ enum Resource {
   All
   Auth
   AuthGrants
-  AuthAuthorization
-  AuthAuthentication
   Config
   ConfigConfigs
   Domain
@@ -351,6 +349,31 @@ enum Scope {
   Verify
   Upload
   Download
+  ManageAuth
+  ReadAuthGrants
+  WriteAuthGrants
+  ManageAuthGrants
+  ManageConfig
+  ReadConfigConfigs
+  WriteConfigConfigs
+  ManageConfigConfigs
+  ManageDomain
+  ReadDomainApps
+  WriteDomainApps
+  ManageDomainApps
+  ReadDomainClients
+  WriteDomainClients
+  ManageDomainClients
+  ManageIdentity
+  ReadIdentityUsers
+  WriteIdentityUsers
+  ManageIdentityUsers
+  ReadIdentityProfiles
+  WriteIdentityProfiles
+  ManageIdentityProfiles
+  ReadIdentitySessions
+  WriteIdentitySessions
+  ManageIdentitySessions
 }
 
 enum GrantType {
