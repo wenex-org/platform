@@ -1,15 +1,10 @@
-import { ConfigProvider, configClientsModuleOptions } from '@app/common/providers';
-import { ClientsModule } from '@nestjs/microservices';
 import { Module } from '@nestjs/common';
 
 import { ConfigsResolver } from './configs.resolver';
 import { ConfigsController } from './configs.controller';
 
 @Module({
-  imports: [
-    ClientsModule.register(configClientsModuleOptions('modules/config/config.proto')),
-  ],
   controllers: [ConfigsController],
-  providers: [ConfigsResolver, ConfigProvider],
+  providers: [ConfigsResolver],
 })
 export class ConfigsModule {}

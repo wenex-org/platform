@@ -3,7 +3,7 @@
 # ------------------------------------------------------
 
 type TotalSerializer {
-  total: Float!
+  total: Int!
 }
 
 type ResultSerializer {
@@ -466,6 +466,7 @@ type ClientSerializer {
   clients: [String!]!
   created_by: String!
   created_in: String!
+  api_key: String!
   domains: [ClientDomainSerializer]!
   otp_services: [ClientOtpServiceSerializer]!
   name: String!
