@@ -26,13 +26,17 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import {
+  FilterInterceptor,
+  GatewayInterceptors,
+  WriteInterceptors,
+} from '@app/common/interceptors';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Metadata, GrantDom, GrantSer } from '@app/common/interfaces';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Filter, Meta, Session } from '@app/common/decorators';
-import { GatewayInterceptors } from '@app/common/interceptors';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
@@ -70,6 +74,7 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   @Post()
   @Cache('grants', 'flush')
   @SetScope(Scope.WriteAuthGrants)
+  @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.AuthGrants)
   create(
     @Meta() meta: Metadata,
@@ -82,6 +87,7 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   @Post('bulk')
   @Cache('grants', 'flush')
   @SetScope(Scope.WriteAuthGrants)
+  @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.AuthGrants)
   createBulk(
     @Meta() meta: Metadata,
@@ -94,6 +100,7 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   @Get()
   @Cache('grants', 'fill')
   @SetScope(Scope.ReadAuthGrants)
+  @UseInterceptors(FilterInterceptor)
   @SetPolicy(Action.Read, Resource.AuthGrants)
   @ApiQuery({ type: FilterDto, required: false })
   Find(
@@ -106,6 +113,7 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
 
   @Get('cursor')
   @SetScope(Scope.ReadAuthGrants)
+  @UseInterceptors(FilterInterceptor)
   @SetPolicy(Action.Read, Resource.AuthGrants)
   @ApiQuery({ type: FilterDto, required: false })
   Cursor(
@@ -119,6 +127,7 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   @Get(':id')
   @Cache('grants', 'fill')
   @SetScope(Scope.ReadAuthGrants)
+  @UseInterceptors(FilterInterceptor)
   @SetPolicy(Action.Read, Resource.AuthGrants)
   @ApiQuery({ type: String, name: 'ref', required: false })
   FindOne(
@@ -135,6 +144,7 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   @Delete(':id')
   @Cache('grants', 'flush')
   @SetScope(Scope.WriteAuthGrants)
+  @UseInterceptors(FilterInterceptor)
   @SetPolicy(Action.Delete, Resource.AuthGrants)
   @ApiQuery({ type: String, name: 'ref', required: false })
   DeleteOne(
@@ -151,6 +161,7 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   @Put(':id/restore')
   @Cache('grants', 'flush')
   @SetScope(Scope.WriteAuthGrants)
+  @UseInterceptors(FilterInterceptor)
   @SetPolicy(Action.Restore, Resource.AuthGrants)
   @ApiQuery({ type: String, name: 'ref', required: false })
   RestoreOne(
@@ -167,6 +178,7 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   @Delete(':id/destroy')
   @Cache('grants', 'flush')
   @SetScope(Scope.ManageAuthGrants)
+  @UseInterceptors(FilterInterceptor)
   @SetPolicy(Action.Destroy, Resource.AuthGrants)
   @ApiQuery({ type: String, name: 'ref', required: false })
   DestroyOne(
@@ -183,6 +195,7 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   @Patch(':id')
   @Cache('grants', 'flush')
   @SetScope(Scope.WriteAuthGrants)
+  @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Update, Resource.AuthGrants)
   @ApiQuery({ type: String, name: 'ref', required: false })
   UpdateOne(
@@ -200,6 +213,7 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   @Patch('bulk')
   @Cache('grants', 'flush')
   @SetScope(Scope.ManageAuthGrants)
+  @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Update, Resource.AuthGrants)
   @ApiQuery({ type: QueryFilterDto, required: false })
   UpdateBulk(
