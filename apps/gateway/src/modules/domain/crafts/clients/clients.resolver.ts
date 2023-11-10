@@ -11,11 +11,20 @@ import {
   QueryFilterDto,
   UpdateClientDto,
 } from '@app/common/dto';
+import {
+  AuthorityInterceptor,
+  FilterInterceptor,
+  GatewayInterceptors,
+  WriteInterceptors,
+} from '@app/common/interceptors';
+import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
-import { UseFilters, UseInterceptors, UsePipes } from '@nestjs/common';
+import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Metadata, ClientDom, ClientSer } from '@app/common/interfaces';
+import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Filter, Meta, Session } from '@app/common/decorators';
+import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { DomainProvider } from '@app/common/providers';
@@ -27,13 +36,18 @@ import { Observable } from 'rxjs';
 @Resolver(() => ClientSerializer)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
-@UseInterceptors(new SentryInterceptor())
+@UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
+@UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class ClientsResolver extends GrpcController<ClientDom, ClientSer> {
   constructor(readonly provider: DomainProvider) {
     super(provider.clients, () => ClientSerializer);
   }
 
   @Query(() => TotalSerializer)
+  @Cache('clients', 'fill')
+  @SetScope(Scope.ReadDomainClients)
+  @UseInterceptors(AuthorityInterceptor)
+  @SetPolicy(Action.Read, Resource.DomainClients)
   countClient(
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: QueryFilterDto,
@@ -43,6 +57,10 @@ export class ClientsResolver extends GrpcController<ClientDom, ClientSer> {
   }
 
   @Mutation(() => ClientDataSerializer)
+  @Cache('clients', 'flush')
+  @SetScope(Scope.WriteDomainClients)
+  @UseInterceptors(...WriteInterceptors)
+  @SetPolicy(Action.Create, Resource.DomainClients)
   createClient(
     @Meta() meta: Metadata,
     @Args('data') data: CreateClientDto,
@@ -52,6 +70,10 @@ export class ClientsResolver extends GrpcController<ClientDom, ClientSer> {
   }
 
   @Mutation(() => ClientItemsSerializer)
+  @Cache('clients', 'flush')
+  @SetScope(Scope.WriteDomainClients)
+  @UseInterceptors(...WriteInterceptors)
+  @SetPolicy(Action.Create, Resource.DomainClients)
   createBulkClient(
     @Meta() meta: Metadata,
     @Args('items', { type: () => [CreateClientDto] }) items: CreateClientDto[],
@@ -61,6 +83,10 @@ export class ClientsResolver extends GrpcController<ClientDom, ClientSer> {
   }
 
   @Query(() => ClientItemsSerializer)
+  @Cache('clients', 'fill')
+  @SetScope(Scope.ReadDomainClients)
+  @SetPolicy(Action.Read, Resource.DomainClients)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findClient(
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: FilterDto<ClientDom>,
@@ -70,6 +96,10 @@ export class ClientsResolver extends GrpcController<ClientDom, ClientSer> {
   }
 
   @Query(() => ClientDataSerializer)
+  @Cache('clients', 'fill')
+  @SetScope(Scope.ReadDomainClients)
+  @SetPolicy(Action.Read, Resource.DomainClients)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findOneClient(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -82,6 +112,10 @@ export class ClientsResolver extends GrpcController<ClientDom, ClientSer> {
   }
 
   @Mutation(() => ClientDataSerializer)
+  @Cache('clients', 'flush')
+  @SetScope(Scope.WriteDomainClients)
+  @SetPolicy(Action.Delete, Resource.DomainClients)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   deleteOneClient(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -94,6 +128,10 @@ export class ClientsResolver extends GrpcController<ClientDom, ClientSer> {
   }
 
   @Mutation(() => ClientDataSerializer)
+  @Cache('clients', 'flush')
+  @SetScope(Scope.WriteDomainClients)
+  @SetPolicy(Action.Restore, Resource.DomainClients)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   restoreOneClient(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -106,6 +144,10 @@ export class ClientsResolver extends GrpcController<ClientDom, ClientSer> {
   }
 
   @Mutation(() => ClientDataSerializer)
+  @Cache('clients', 'flush')
+  @SetScope(Scope.ManageDomainClients)
+  @SetPolicy(Action.Destroy, Resource.DomainClients)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   destroyOneClient(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -118,6 +160,10 @@ export class ClientsResolver extends GrpcController<ClientDom, ClientSer> {
   }
 
   @Mutation(() => ClientDataSerializer)
+  @Cache('clients', 'flush')
+  @SetScope(Scope.WriteDomainClients)
+  @SetPolicy(Action.Update, Resource.DomainClients)
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateOneClient(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -131,6 +177,10 @@ export class ClientsResolver extends GrpcController<ClientDom, ClientSer> {
   }
 
   @Mutation(() => TotalSerializer)
+  @Cache('clients', 'flush')
+  @SetScope(Scope.WriteDomainClients)
+  @SetPolicy(Action.Update, Resource.DomainClients)
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateBulkClient(
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: QueryFilterDto<ClientDom>,

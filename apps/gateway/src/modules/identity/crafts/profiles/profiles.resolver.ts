@@ -11,11 +11,20 @@ import {
   QueryFilterDto,
   UpdateProfileDto,
 } from '@app/common/dto';
+import {
+  AuthorityInterceptor,
+  FilterInterceptor,
+  GatewayInterceptors,
+  WriteInterceptors,
+} from '@app/common/interceptors';
+import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { Metadata, ProfileDom, ProfileSer } from '@app/common/interfaces';
-import { UseFilters, UseInterceptors, UsePipes } from '@nestjs/common';
+import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
+import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Filter, Meta, Session } from '@app/common/decorators';
+import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { IdentityProvider } from '@app/common/providers';
@@ -27,13 +36,18 @@ import { Observable } from 'rxjs';
 @Resolver(() => ProfileSerializer)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
-@UseInterceptors(new SentryInterceptor())
+@UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
+@UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class ProfilesResolver extends GrpcController<ProfileDom, ProfileSer> {
   constructor(readonly provider: IdentityProvider) {
     super(provider.profiles, () => ProfileSerializer);
   }
 
   @Query(() => TotalSerializer)
+  @Cache('profiles', 'fill')
+  @SetScope(Scope.ReadIdentityProfiles)
+  @UseInterceptors(AuthorityInterceptor)
+  @SetPolicy(Action.Read, Resource.IdentityProfiles)
   countProfile(
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: QueryFilterDto,
@@ -43,6 +57,10 @@ export class ProfilesResolver extends GrpcController<ProfileDom, ProfileSer> {
   }
 
   @Mutation(() => ProfileDataSerializer)
+  @Cache('profiles', 'flush')
+  @SetScope(Scope.WriteIdentityProfiles)
+  @UseInterceptors(...WriteInterceptors)
+  @SetPolicy(Action.Create, Resource.IdentityProfiles)
   createProfile(
     @Meta() meta: Metadata,
     @Args('data') data: CreateProfileDto,
@@ -52,6 +70,10 @@ export class ProfilesResolver extends GrpcController<ProfileDom, ProfileSer> {
   }
 
   @Mutation(() => ProfileItemsSerializer)
+  @Cache('profiles', 'flush')
+  @SetScope(Scope.WriteIdentityProfiles)
+  @UseInterceptors(...WriteInterceptors)
+  @SetPolicy(Action.Create, Resource.IdentityProfiles)
   createBulkProfile(
     @Meta() meta: Metadata,
     @Args('items', { type: () => [CreateProfileDto] }) items: CreateProfileDto[],
@@ -61,6 +83,10 @@ export class ProfilesResolver extends GrpcController<ProfileDom, ProfileSer> {
   }
 
   @Query(() => ProfileItemsSerializer)
+  @Cache('profiles', 'fill')
+  @SetScope(Scope.ReadIdentityProfiles)
+  @SetPolicy(Action.Read, Resource.IdentityProfiles)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findProfile(
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: FilterDto<ProfileDom>,
@@ -70,6 +96,10 @@ export class ProfilesResolver extends GrpcController<ProfileDom, ProfileSer> {
   }
 
   @Query(() => ProfileDataSerializer)
+  @Cache('profiles', 'fill')
+  @SetScope(Scope.ReadIdentityProfiles)
+  @SetPolicy(Action.Read, Resource.IdentityProfiles)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findOneProfile(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -82,6 +112,10 @@ export class ProfilesResolver extends GrpcController<ProfileDom, ProfileSer> {
   }
 
   @Mutation(() => ProfileDataSerializer)
+  @Cache('profiles', 'flush')
+  @SetScope(Scope.WriteIdentityProfiles)
+  @SetPolicy(Action.Delete, Resource.IdentityProfiles)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   deleteOneProfile(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -94,6 +128,10 @@ export class ProfilesResolver extends GrpcController<ProfileDom, ProfileSer> {
   }
 
   @Mutation(() => ProfileDataSerializer)
+  @Cache('profiles', 'flush')
+  @SetScope(Scope.WriteIdentityProfiles)
+  @SetPolicy(Action.Restore, Resource.IdentityProfiles)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   restoreOneProfile(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -106,6 +144,10 @@ export class ProfilesResolver extends GrpcController<ProfileDom, ProfileSer> {
   }
 
   @Mutation(() => ProfileDataSerializer)
+  @Cache('profiles', 'flush')
+  @SetScope(Scope.ManageIdentityProfiles)
+  @SetPolicy(Action.Destroy, Resource.IdentityProfiles)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   destroyOneProfile(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -118,6 +160,10 @@ export class ProfilesResolver extends GrpcController<ProfileDom, ProfileSer> {
   }
 
   @Mutation(() => ProfileDataSerializer)
+  @Cache('profiles', 'flush')
+  @SetScope(Scope.WriteIdentityProfiles)
+  @SetPolicy(Action.Update, Resource.IdentityProfiles)
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateOneProfile(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -131,6 +177,10 @@ export class ProfilesResolver extends GrpcController<ProfileDom, ProfileSer> {
   }
 
   @Mutation(() => TotalSerializer)
+  @Cache('profiles', 'flush')
+  @SetScope(Scope.WriteIdentityProfiles)
+  @SetPolicy(Action.Update, Resource.IdentityProfiles)
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateBulkProfile(
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: QueryFilterDto<ProfileDom>,

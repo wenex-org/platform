@@ -11,11 +11,20 @@ import {
   QueryFilterDto,
   UpdateAppDto,
 } from '@app/common/dto';
+import {
+  AuthorityInterceptor,
+  FilterInterceptor,
+  GatewayInterceptors,
+  WriteInterceptors,
+} from '@app/common/interceptors';
+import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
-import { Metadata, AppDom, AppSer } from '@app/common/interfaces';
-import { UseFilters, UseInterceptors, UsePipes } from '@nestjs/common';
+import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
+import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Metadata, AppDom, AppSer } from '@app/common/interfaces';
 import { Filter, Meta, Session } from '@app/common/decorators';
+import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { DomainProvider } from '@app/common/providers';
@@ -27,13 +36,18 @@ import { Observable } from 'rxjs';
 @Resolver(() => AppSerializer)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
-@UseInterceptors(new SentryInterceptor())
+@UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
+@UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class AppsResolver extends GrpcController<AppDom, AppSer> {
   constructor(readonly provider: DomainProvider) {
     super(provider.apps, () => AppSerializer);
   }
 
   @Query(() => TotalSerializer)
+  @Cache('apps', 'fill')
+  @SetScope(Scope.ReadDomainApps)
+  @UseInterceptors(AuthorityInterceptor)
+  @SetPolicy(Action.Read, Resource.DomainApps)
   countApp(
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: QueryFilterDto,
@@ -43,6 +57,10 @@ export class AppsResolver extends GrpcController<AppDom, AppSer> {
   }
 
   @Mutation(() => AppDataSerializer)
+  @Cache('apps', 'flush')
+  @SetScope(Scope.WriteDomainApps)
+  @UseInterceptors(...WriteInterceptors)
+  @SetPolicy(Action.Create, Resource.DomainApps)
   createApp(
     @Meta() meta: Metadata,
     @Args('data') data: CreateAppDto,
@@ -52,6 +70,10 @@ export class AppsResolver extends GrpcController<AppDom, AppSer> {
   }
 
   @Mutation(() => AppItemsSerializer)
+  @Cache('apps', 'flush')
+  @SetScope(Scope.WriteDomainApps)
+  @UseInterceptors(...WriteInterceptors)
+  @SetPolicy(Action.Create, Resource.DomainApps)
   createBulkApp(
     @Meta() meta: Metadata,
     @Args('items', { type: () => [CreateAppDto] }) items: CreateAppDto[],
@@ -61,6 +83,10 @@ export class AppsResolver extends GrpcController<AppDom, AppSer> {
   }
 
   @Query(() => AppItemsSerializer)
+  @Cache('apps', 'fill')
+  @SetScope(Scope.ReadDomainApps)
+  @SetPolicy(Action.Read, Resource.DomainApps)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findApp(
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: FilterDto<AppDom>,
@@ -70,6 +96,10 @@ export class AppsResolver extends GrpcController<AppDom, AppSer> {
   }
 
   @Query(() => AppDataSerializer)
+  @Cache('apps', 'fill')
+  @SetScope(Scope.ReadDomainApps)
+  @SetPolicy(Action.Read, Resource.DomainApps)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findOneApp(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -82,6 +112,10 @@ export class AppsResolver extends GrpcController<AppDom, AppSer> {
   }
 
   @Mutation(() => AppDataSerializer)
+  @Cache('apps', 'flush')
+  @SetScope(Scope.WriteDomainApps)
+  @SetPolicy(Action.Delete, Resource.DomainApps)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   deleteOneApp(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -94,6 +128,10 @@ export class AppsResolver extends GrpcController<AppDom, AppSer> {
   }
 
   @Mutation(() => AppDataSerializer)
+  @Cache('apps', 'flush')
+  @SetScope(Scope.WriteDomainApps)
+  @SetPolicy(Action.Restore, Resource.DomainApps)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   restoreOneApp(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -106,6 +144,10 @@ export class AppsResolver extends GrpcController<AppDom, AppSer> {
   }
 
   @Mutation(() => AppDataSerializer)
+  @Cache('apps', 'flush')
+  @SetScope(Scope.ManageDomainApps)
+  @SetPolicy(Action.Destroy, Resource.DomainApps)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   destroyOneApp(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -118,6 +160,10 @@ export class AppsResolver extends GrpcController<AppDom, AppSer> {
   }
 
   @Mutation(() => AppDataSerializer)
+  @Cache('apps', 'flush')
+  @SetScope(Scope.WriteDomainApps)
+  @SetPolicy(Action.Update, Resource.DomainApps)
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateOneApp(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -131,6 +177,10 @@ export class AppsResolver extends GrpcController<AppDom, AppSer> {
   }
 
   @Mutation(() => TotalSerializer)
+  @Cache('apps', 'flush')
+  @SetScope(Scope.WriteDomainApps)
+  @SetPolicy(Action.Update, Resource.DomainApps)
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateBulkApp(
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: QueryFilterDto<AppDom>,

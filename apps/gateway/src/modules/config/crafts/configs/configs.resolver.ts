@@ -11,11 +11,20 @@ import {
   QueryFilterDto,
   UpdateConfigDto,
 } from '@app/common/dto';
+import {
+  AuthorityInterceptor,
+  FilterInterceptor,
+  GatewayInterceptors,
+  WriteInterceptors,
+} from '@app/common/interceptors';
+import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Metadata, ConfigDom, ConfigSer } from '@app/common/interfaces';
-import { UseFilters, UseInterceptors, UsePipes } from '@nestjs/common';
+import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Filter, Meta, Session } from '@app/common/decorators';
+import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { ConfigProvider } from '@app/common/providers';
@@ -27,13 +36,18 @@ import { Observable } from 'rxjs';
 @Resolver(() => ConfigSerializer)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
-@UseInterceptors(new SentryInterceptor())
+@UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
+@UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class ConfigsResolver extends GrpcController<ConfigDom, ConfigSer> {
   constructor(readonly provider: ConfigProvider) {
     super(provider.configs, () => ConfigSerializer);
   }
 
   @Query(() => TotalSerializer)
+  @Cache('configs', 'fill')
+  @SetScope(Scope.ReadConfigConfigs)
+  @UseInterceptors(AuthorityInterceptor)
+  @SetPolicy(Action.Read, Resource.ConfigConfigs)
   countConfig(
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: QueryFilterDto,
@@ -43,6 +57,10 @@ export class ConfigsResolver extends GrpcController<ConfigDom, ConfigSer> {
   }
 
   @Mutation(() => ConfigDataSerializer)
+  @Cache('configs', 'flush')
+  @SetScope(Scope.WriteConfigConfigs)
+  @UseInterceptors(...WriteInterceptors)
+  @SetPolicy(Action.Create, Resource.ConfigConfigs)
   createConfig(
     @Meta() meta: Metadata,
     @Args('data') data: CreateConfigDto,
@@ -52,6 +70,10 @@ export class ConfigsResolver extends GrpcController<ConfigDom, ConfigSer> {
   }
 
   @Mutation(() => ConfigItemsSerializer)
+  @Cache('configs', 'flush')
+  @SetScope(Scope.WriteConfigConfigs)
+  @UseInterceptors(...WriteInterceptors)
+  @SetPolicy(Action.Create, Resource.ConfigConfigs)
   createBulkConfig(
     @Meta() meta: Metadata,
     @Args('items', { type: () => [CreateConfigDto] }) items: CreateConfigDto[],
@@ -61,6 +83,10 @@ export class ConfigsResolver extends GrpcController<ConfigDom, ConfigSer> {
   }
 
   @Query(() => ConfigItemsSerializer)
+  @Cache('configs', 'fill')
+  @SetScope(Scope.ReadConfigConfigs)
+  @SetPolicy(Action.Read, Resource.ConfigConfigs)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findConfig(
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: FilterDto<ConfigDom>,
@@ -70,6 +96,10 @@ export class ConfigsResolver extends GrpcController<ConfigDom, ConfigSer> {
   }
 
   @Query(() => ConfigDataSerializer)
+  @Cache('configs', 'fill')
+  @SetScope(Scope.ReadConfigConfigs)
+  @SetPolicy(Action.Read, Resource.ConfigConfigs)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findOneConfig(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -82,6 +112,10 @@ export class ConfigsResolver extends GrpcController<ConfigDom, ConfigSer> {
   }
 
   @Mutation(() => ConfigDataSerializer)
+  @Cache('configs', 'flush')
+  @SetScope(Scope.WriteConfigConfigs)
+  @SetPolicy(Action.Delete, Resource.ConfigConfigs)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   deleteOneConfig(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -94,6 +128,10 @@ export class ConfigsResolver extends GrpcController<ConfigDom, ConfigSer> {
   }
 
   @Mutation(() => ConfigDataSerializer)
+  @Cache('configs', 'flush')
+  @SetScope(Scope.WriteConfigConfigs)
+  @SetPolicy(Action.Restore, Resource.ConfigConfigs)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   restoreOneConfig(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -106,6 +144,10 @@ export class ConfigsResolver extends GrpcController<ConfigDom, ConfigSer> {
   }
 
   @Mutation(() => ConfigDataSerializer)
+  @Cache('configs', 'flush')
+  @SetScope(Scope.ManageConfigConfigs)
+  @SetPolicy(Action.Destroy, Resource.ConfigConfigs)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   destroyOneConfig(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -118,6 +160,10 @@ export class ConfigsResolver extends GrpcController<ConfigDom, ConfigSer> {
   }
 
   @Mutation(() => ConfigDataSerializer)
+  @Cache('configs', 'flush')
+  @SetScope(Scope.WriteConfigConfigs)
+  @SetPolicy(Action.Update, Resource.ConfigConfigs)
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateOneConfig(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -131,6 +177,10 @@ export class ConfigsResolver extends GrpcController<ConfigDom, ConfigSer> {
   }
 
   @Mutation(() => TotalSerializer)
+  @Cache('configs', 'flush')
+  @SetScope(Scope.WriteConfigConfigs)
+  @SetPolicy(Action.Update, Resource.ConfigConfigs)
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateBulkConfig(
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: QueryFilterDto<ConfigDom>,

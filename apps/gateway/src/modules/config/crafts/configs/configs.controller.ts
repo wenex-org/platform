@@ -26,13 +26,18 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import {
+  AuthorityInterceptor,
+  FilterInterceptor,
+  GatewayInterceptors,
+  WriteInterceptors,
+} from '@app/common/interceptors';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Metadata, ConfigDom, ConfigSer } from '@app/common/interfaces';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Filter, Meta, Session } from '@app/common/decorators';
-import { GatewayInterceptors } from '@app/common/interceptors';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
@@ -57,6 +62,7 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   @Get('count')
   @Cache('configs', 'fill')
   @SetScope(Scope.ReadConfigConfigs)
+  @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ConfigConfigs)
   @ApiQuery({ type: QueryFilterDto, required: false })
   count(
@@ -70,6 +76,7 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   @Post()
   @Cache('configs', 'flush')
   @SetScope(Scope.WriteConfigConfigs)
+  @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ConfigConfigs)
   create(
     @Meta() meta: Metadata,
@@ -82,6 +89,7 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   @Post('bulk')
   @Cache('configs', 'flush')
   @SetScope(Scope.WriteConfigConfigs)
+  @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ConfigConfigs)
   createBulk(
     @Meta() meta: Metadata,
@@ -96,6 +104,7 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   @SetScope(Scope.ReadConfigConfigs)
   @SetPolicy(Action.Read, Resource.ConfigConfigs)
   @ApiQuery({ type: FilterDto, required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   Find(
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<ConfigDom>,
@@ -108,6 +117,7 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   @SetScope(Scope.ReadConfigConfigs)
   @SetPolicy(Action.Read, Resource.ConfigConfigs)
   @ApiQuery({ type: FilterDto, required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   Cursor(
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<ConfigDom>,
@@ -121,6 +131,7 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   @SetScope(Scope.ReadConfigConfigs)
   @SetPolicy(Action.Read, Resource.ConfigConfigs)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   FindOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -137,6 +148,7 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   @SetScope(Scope.WriteConfigConfigs)
   @SetPolicy(Action.Delete, Resource.ConfigConfigs)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   DeleteOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -153,6 +165,7 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   @SetScope(Scope.WriteConfigConfigs)
   @SetPolicy(Action.Restore, Resource.ConfigConfigs)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   RestoreOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -169,6 +182,7 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   @SetScope(Scope.ManageConfigConfigs)
   @SetPolicy(Action.Destroy, Resource.ConfigConfigs)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   DestroyOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -185,6 +199,7 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   @SetScope(Scope.WriteConfigConfigs)
   @SetPolicy(Action.Update, Resource.ConfigConfigs)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   UpdateOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -202,6 +217,7 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   @SetScope(Scope.WriteConfigConfigs)
   @SetPolicy(Action.Update, Resource.ConfigConfigs)
   @ApiQuery({ type: QueryFilterDto, required: false })
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   UpdateBulk(
     @Meta() meta: Metadata,
     @Filter() filter: QueryFilterDto<ConfigDom>,

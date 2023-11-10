@@ -26,13 +26,18 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import {
+  AuthorityInterceptor,
+  FilterInterceptor,
+  GatewayInterceptors,
+  WriteInterceptors,
+} from '@app/common/interceptors';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Metadata, AppDom, AppSer } from '@app/common/interfaces';
 import { Filter, Meta, Session } from '@app/common/decorators';
-import { GatewayInterceptors } from '@app/common/interceptors';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
@@ -57,6 +62,7 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   @Get('count')
   @Cache('apps', 'fill')
   @SetScope(Scope.ReadDomainApps)
+  @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.DomainApps)
   @ApiQuery({ type: QueryFilterDto, required: false })
   Count(
@@ -70,6 +76,7 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   @Post()
   @Cache('apps', 'flush')
   @SetScope(Scope.WriteDomainApps)
+  @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainApps)
   Create(
     @Meta() meta: Metadata,
@@ -82,6 +89,7 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   @Post('bulk')
   @Cache('apps', 'flush')
   @SetScope(Scope.WriteDomainApps)
+  @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainApps)
   CreateBulk(
     @Meta() meta: Metadata,
@@ -96,6 +104,7 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   @SetScope(Scope.ReadDomainApps)
   @SetPolicy(Action.Read, Resource.DomainApps)
   @ApiQuery({ type: FilterDto, required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   Find(
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<AppDom>,
@@ -108,6 +117,7 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   @SetScope(Scope.ReadDomainApps)
   @SetPolicy(Action.Read, Resource.DomainApps)
   @ApiQuery({ type: FilterDto, required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   Cursor(
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<AppDom>,
@@ -121,6 +131,7 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   @SetScope(Scope.ReadDomainApps)
   @SetPolicy(Action.Read, Resource.DomainApps)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   FindOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -137,6 +148,7 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   @SetScope(Scope.WriteDomainApps)
   @SetPolicy(Action.Delete, Resource.DomainApps)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   DeleteOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -153,6 +165,7 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   @SetScope(Scope.WriteDomainApps)
   @SetPolicy(Action.Restore, Resource.DomainApps)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   RestoreOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -169,6 +182,7 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   @SetScope(Scope.ManageDomainApps)
   @SetPolicy(Action.Destroy, Resource.DomainApps)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   DestroyOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -185,6 +199,7 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   @SetScope(Scope.WriteDomainApps)
   @SetPolicy(Action.Update, Resource.DomainApps)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   UpdateOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -202,6 +217,7 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   @SetScope(Scope.WriteDomainApps)
   @SetPolicy(Action.Update, Resource.DomainApps)
   @ApiQuery({ type: QueryFilterDto, required: false })
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   UpdateBulk(
     @Meta() meta: Metadata,
     @Filter() filter: QueryFilterDto<AppDom>,

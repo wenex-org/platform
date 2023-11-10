@@ -11,11 +11,20 @@ import {
   QueryFilterDto,
   UpdateGrantDto,
 } from '@app/common/dto';
+import {
+  AuthorityInterceptor,
+  FilterInterceptor,
+  GatewayInterceptors,
+  WriteInterceptors,
+} from '@app/common/interceptors';
+import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Metadata, GrantDom, GrantSer } from '@app/common/interfaces';
-import { UseFilters, UseInterceptors, UsePipes } from '@nestjs/common';
+import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Filter, Meta, Session } from '@app/common/decorators';
+import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { refineFilterQuery } from '@app/common/utils';
@@ -27,13 +36,18 @@ import { Observable } from 'rxjs';
 @Resolver(() => GrantSerializer)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
-@UseInterceptors(new SentryInterceptor())
+@UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
+@UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class GrantsResolver extends GrpcController<GrantDom, GrantSer> {
   constructor(readonly provider: AuthProvider) {
     super(provider.grants, () => GrantSerializer);
   }
 
   @Query(() => TotalSerializer)
+  @Cache('grants', 'fill')
+  @SetScope(Scope.ReadAuthGrants)
+  @UseInterceptors(AuthorityInterceptor)
+  @SetPolicy(Action.Read, Resource.AuthGrants)
   countGrant(
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: QueryFilterDto,
@@ -43,6 +57,10 @@ export class GrantsResolver extends GrpcController<GrantDom, GrantSer> {
   }
 
   @Mutation(() => GrantDataSerializer)
+  @Cache('grants', 'flush')
+  @SetScope(Scope.WriteAuthGrants)
+  @UseInterceptors(...WriteInterceptors)
+  @SetPolicy(Action.Create, Resource.AuthGrants)
   createGrant(
     @Meta() meta: Metadata,
     @Args('data') data: CreateGrantDto,
@@ -52,6 +70,10 @@ export class GrantsResolver extends GrpcController<GrantDom, GrantSer> {
   }
 
   @Mutation(() => GrantItemsSerializer)
+  @Cache('grants', 'flush')
+  @SetScope(Scope.WriteAuthGrants)
+  @UseInterceptors(...WriteInterceptors)
+  @SetPolicy(Action.Create, Resource.AuthGrants)
   createBulkGrant(
     @Meta() meta: Metadata,
     @Args('items', { type: () => [CreateGrantDto] }) items: CreateGrantDto[],
@@ -61,6 +83,10 @@ export class GrantsResolver extends GrpcController<GrantDom, GrantSer> {
   }
 
   @Query(() => GrantItemsSerializer)
+  @Cache('grants', 'fill')
+  @SetScope(Scope.ReadAuthGrants)
+  @SetPolicy(Action.Read, Resource.AuthGrants)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findGrant(
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: FilterDto<GrantDom>,
@@ -70,6 +96,10 @@ export class GrantsResolver extends GrpcController<GrantDom, GrantSer> {
   }
 
   @Query(() => GrantDataSerializer)
+  @Cache('grants', 'fill')
+  @SetScope(Scope.ReadAuthGrants)
+  @SetPolicy(Action.Read, Resource.AuthGrants)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findOneGrant(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -82,6 +112,10 @@ export class GrantsResolver extends GrpcController<GrantDom, GrantSer> {
   }
 
   @Mutation(() => GrantDataSerializer)
+  @Cache('grants', 'flush')
+  @SetScope(Scope.WriteAuthGrants)
+  @SetPolicy(Action.Delete, Resource.AuthGrants)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   deleteOneGrant(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -94,6 +128,10 @@ export class GrantsResolver extends GrpcController<GrantDom, GrantSer> {
   }
 
   @Mutation(() => GrantDataSerializer)
+  @Cache('grants', 'flush')
+  @SetScope(Scope.WriteAuthGrants)
+  @SetPolicy(Action.Restore, Resource.AuthGrants)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   restoreOneGrant(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -106,6 +144,10 @@ export class GrantsResolver extends GrpcController<GrantDom, GrantSer> {
   }
 
   @Mutation(() => GrantDataSerializer)
+  @Cache('grants', 'flush')
+  @SetScope(Scope.ManageAuthGrants)
+  @SetPolicy(Action.Destroy, Resource.AuthGrants)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   destroyOneGrant(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -118,6 +160,10 @@ export class GrantsResolver extends GrpcController<GrantDom, GrantSer> {
   }
 
   @Mutation(() => GrantDataSerializer)
+  @Cache('grants', 'flush')
+  @SetScope(Scope.WriteAuthGrants)
+  @SetPolicy(Action.Update, Resource.AuthGrants)
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateOneGrant(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -131,6 +177,10 @@ export class GrantsResolver extends GrpcController<GrantDom, GrantSer> {
   }
 
   @Mutation(() => TotalSerializer)
+  @Cache('grants', 'flush')
+  @SetScope(Scope.ManageAuthGrants)
+  @SetPolicy(Action.Update, Resource.AuthGrants)
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateBulkGrant(
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: QueryFilterDto<GrantDom>,

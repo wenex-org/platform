@@ -26,13 +26,18 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import {
+  AuthorityInterceptor,
+  FilterInterceptor,
+  GatewayInterceptors,
+  WriteInterceptors,
+} from '@app/common/interceptors';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Metadata, UserDom, UserSer } from '@app/common/interfaces';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Filter, Meta, Session } from '@app/common/decorators';
-import { GatewayInterceptors } from '@app/common/interceptors';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
@@ -57,6 +62,7 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   @Get('count')
   @Cache('users', 'fill')
   @SetScope(Scope.ReadIdentityUsers)
+  @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.IdentityUsers)
   @ApiQuery({ type: QueryFilterDto, required: false })
   Count(
@@ -70,6 +76,7 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   @Post()
   @Cache('users', 'flush')
   @SetScope(Scope.WriteIdentityUsers)
+  @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentityUsers)
   Create(
     @Meta() meta: Metadata,
@@ -82,6 +89,7 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   @Post('bulk')
   @Cache('users', 'flush')
   @SetScope(Scope.WriteIdentityUsers)
+  @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentityUsers)
   CreateBulk(
     @Meta() meta: Metadata,
@@ -94,8 +102,9 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   @Get()
   @Cache('users', 'fill')
   @SetScope(Scope.ReadIdentityUsers)
-  @SetPolicy(Action.Read, Resource.IdentityUsers)
   @ApiQuery({ type: FilterDto, required: false })
+  @SetPolicy(Action.Read, Resource.IdentityUsers)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   Find(
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<UserDom>,
@@ -106,8 +115,9 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
 
   @Get('cursor')
   @SetScope(Scope.ReadIdentityUsers)
-  @SetPolicy(Action.Read, Resource.IdentityUsers)
   @ApiQuery({ type: FilterDto, required: false })
+  @SetPolicy(Action.Read, Resource.IdentityUsers)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   Cursor(
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<UserDom>,
@@ -121,6 +131,7 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   @SetScope(Scope.ReadIdentityUsers)
   @SetPolicy(Action.Read, Resource.IdentityUsers)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   FindOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -137,6 +148,7 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   @SetScope(Scope.WriteIdentityUsers)
   @SetPolicy(Action.Delete, Resource.IdentityUsers)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   DeleteOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -153,6 +165,7 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   @SetScope(Scope.WriteIdentityUsers)
   @SetPolicy(Action.Restore, Resource.IdentityUsers)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   RestoreOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -169,6 +182,7 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   @SetScope(Scope.ManageIdentityUsers)
   @SetPolicy(Action.Destroy, Resource.IdentityUsers)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   DestroyOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -185,6 +199,7 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   @SetScope(Scope.WriteIdentityUsers)
   @SetPolicy(Action.Update, Resource.IdentityUsers)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   UpdateOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -202,6 +217,7 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   @SetScope(Scope.WriteIdentityUsers)
   @SetPolicy(Action.Update, Resource.IdentityUsers)
   @ApiQuery({ type: QueryFilterDto, required: false })
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   UpdateBulk(
     @Meta() meta: Metadata,
     @Filter() filter: QueryFilterDto<UserDom>,

@@ -26,13 +26,18 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import {
+  AuthorityInterceptor,
+  FilterInterceptor,
+  GatewayInterceptors,
+  WriteInterceptors,
+} from '@app/common/interceptors';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { Metadata, SessionDom, SessionSer } from '@app/common/interfaces';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Filter, Meta, Session } from '@app/common/decorators';
-import { GatewayInterceptors } from '@app/common/interceptors';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
@@ -57,6 +62,7 @@ export class SessionsController extends GrpcController<SessionDom, SessionSer> {
   @Get('count')
   @Cache('sessions', 'fill')
   @SetScope(Scope.ReadIdentitySessions)
+  @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.IdentitySessions)
   @ApiQuery({ type: QueryFilterDto, required: false })
   count(
@@ -70,6 +76,7 @@ export class SessionsController extends GrpcController<SessionDom, SessionSer> {
   @Post()
   @Cache('sessions', 'flush')
   @SetScope(Scope.WriteIdentitySessions)
+  @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentitySessions)
   create(
     @Meta() meta: Metadata,
@@ -82,6 +89,7 @@ export class SessionsController extends GrpcController<SessionDom, SessionSer> {
   @Post('bulk')
   @Cache('sessions', 'flush')
   @SetScope(Scope.WriteIdentitySessions)
+  @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentitySessions)
   createBulk(
     @Meta() meta: Metadata,
@@ -94,8 +102,9 @@ export class SessionsController extends GrpcController<SessionDom, SessionSer> {
   @Get()
   @Cache('sessions', 'fill')
   @SetScope(Scope.ReadIdentitySessions)
-  @SetPolicy(Action.Read, Resource.IdentitySessions)
   @ApiQuery({ type: FilterDto, required: false })
+  @SetPolicy(Action.Read, Resource.IdentitySessions)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   Find(
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<SessionDom>,
@@ -106,8 +115,9 @@ export class SessionsController extends GrpcController<SessionDom, SessionSer> {
 
   @Get('cursor')
   @SetScope(Scope.ReadIdentitySessions)
-  @SetPolicy(Action.Read, Resource.IdentitySessions)
   @ApiQuery({ type: FilterDto, required: false })
+  @SetPolicy(Action.Read, Resource.IdentitySessions)
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   Cursor(
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<SessionDom>,
@@ -121,6 +131,7 @@ export class SessionsController extends GrpcController<SessionDom, SessionSer> {
   @SetScope(Scope.ReadIdentitySessions)
   @SetPolicy(Action.Read, Resource.IdentitySessions)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   FindOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -137,6 +148,7 @@ export class SessionsController extends GrpcController<SessionDom, SessionSer> {
   @SetScope(Scope.WriteIdentitySessions)
   @SetPolicy(Action.Delete, Resource.IdentitySessions)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   DeleteOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -153,6 +165,7 @@ export class SessionsController extends GrpcController<SessionDom, SessionSer> {
   @SetScope(Scope.WriteIdentitySessions)
   @SetPolicy(Action.Restore, Resource.IdentitySessions)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   RestoreOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -169,6 +182,7 @@ export class SessionsController extends GrpcController<SessionDom, SessionSer> {
   @SetScope(Scope.ManageIdentitySessions)
   @SetPolicy(Action.Destroy, Resource.IdentitySessions)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   DestroyOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -185,6 +199,7 @@ export class SessionsController extends GrpcController<SessionDom, SessionSer> {
   @SetScope(Scope.WriteIdentitySessions)
   @SetPolicy(Action.Update, Resource.IdentitySessions)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   UpdateOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -202,6 +217,7 @@ export class SessionsController extends GrpcController<SessionDom, SessionSer> {
   @SetScope(Scope.WriteIdentitySessions)
   @SetPolicy(Action.Update, Resource.IdentitySessions)
   @ApiQuery({ type: QueryFilterDto, required: false })
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   UpdateBulk(
     @Meta() meta: Metadata,
     @Filter() filter: QueryFilterDto<SessionDom>,

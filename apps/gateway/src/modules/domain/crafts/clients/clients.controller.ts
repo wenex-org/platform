@@ -26,13 +26,18 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import {
+  AuthorityInterceptor,
+  FilterInterceptor,
+  GatewayInterceptors,
+  WriteInterceptors,
+} from '@app/common/interceptors';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Metadata, ClientDom, ClientSer } from '@app/common/interfaces';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Filter, Meta, Session } from '@app/common/decorators';
-import { GatewayInterceptors } from '@app/common/interceptors';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
@@ -57,6 +62,7 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   @Get('count')
   @Cache('clients', 'fill')
   @SetScope(Scope.ReadDomainClients)
+  @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.DomainClients)
   @ApiQuery({ type: QueryFilterDto, required: false })
   Count(
@@ -70,6 +76,7 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   @Post()
   @Cache('clients', 'flush')
   @SetScope(Scope.WriteDomainClients)
+  @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainClients)
   Create(
     @Meta() meta: Metadata,
@@ -82,6 +89,7 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   @Post('bulk')
   @Cache('clients', 'flush')
   @SetScope(Scope.WriteDomainClients)
+  @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainClients)
   CreateBulk(
     @Meta() meta: Metadata,
@@ -96,6 +104,7 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   @SetScope(Scope.ReadDomainClients)
   @SetPolicy(Action.Read, Resource.DomainClients)
   @ApiQuery({ type: FilterDto, required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   Find(
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<ClientDom>,
@@ -108,6 +117,7 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   @SetScope(Scope.ReadDomainClients)
   @SetPolicy(Action.Read, Resource.DomainClients)
   @ApiQuery({ type: FilterDto, required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   Cursor(
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<ClientDom>,
@@ -121,6 +131,7 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   @SetScope(Scope.ReadDomainClients)
   @SetPolicy(Action.Read, Resource.DomainClients)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   FindOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -137,6 +148,7 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   @SetScope(Scope.WriteDomainClients)
   @SetPolicy(Action.Delete, Resource.DomainClients)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   DeleteOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -153,6 +165,7 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   @SetScope(Scope.WriteDomainClients)
   @SetPolicy(Action.Restore, Resource.DomainClients)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   RestoreOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -169,6 +182,7 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   @SetScope(Scope.ManageDomainClients)
   @SetPolicy(Action.Destroy, Resource.DomainClients)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   DestroyOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -185,6 +199,7 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   @SetScope(Scope.WriteDomainClients)
   @SetPolicy(Action.Update, Resource.DomainClients)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   UpdateOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -202,6 +217,7 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   @SetScope(Scope.WriteDomainClients)
   @SetPolicy(Action.Update, Resource.DomainClients)
   @ApiQuery({ type: QueryFilterDto, required: false })
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   UpdateBulk(
     @Meta() meta: Metadata,
     @Filter() filter: QueryFilterDto<ClientDom>,

@@ -27,6 +27,7 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import {
+  AuthorityInterceptor,
   FilterInterceptor,
   GatewayInterceptors,
   WriteInterceptors,
@@ -61,6 +62,7 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   @Get('count')
   @Cache('grants', 'fill')
   @SetScope(Scope.ReadAuthGrants)
+  @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.AuthGrants)
   @ApiQuery({ type: QueryFilterDto, required: false })
   count(
@@ -100,9 +102,9 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   @Get()
   @Cache('grants', 'fill')
   @SetScope(Scope.ReadAuthGrants)
-  @UseInterceptors(FilterInterceptor)
   @SetPolicy(Action.Read, Resource.AuthGrants)
   @ApiQuery({ type: FilterDto, required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   Find(
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<GrantDom>,
@@ -113,9 +115,9 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
 
   @Get('cursor')
   @SetScope(Scope.ReadAuthGrants)
-  @UseInterceptors(FilterInterceptor)
   @SetPolicy(Action.Read, Resource.AuthGrants)
   @ApiQuery({ type: FilterDto, required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   Cursor(
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<GrantDom>,
@@ -127,9 +129,9 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   @Get(':id')
   @Cache('grants', 'fill')
   @SetScope(Scope.ReadAuthGrants)
-  @UseInterceptors(FilterInterceptor)
   @SetPolicy(Action.Read, Resource.AuthGrants)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   FindOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -144,9 +146,9 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   @Delete(':id')
   @Cache('grants', 'flush')
   @SetScope(Scope.WriteAuthGrants)
-  @UseInterceptors(FilterInterceptor)
   @SetPolicy(Action.Delete, Resource.AuthGrants)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   DeleteOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -161,9 +163,9 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   @Put(':id/restore')
   @Cache('grants', 'flush')
   @SetScope(Scope.WriteAuthGrants)
-  @UseInterceptors(FilterInterceptor)
   @SetPolicy(Action.Restore, Resource.AuthGrants)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   RestoreOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -178,9 +180,9 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   @Delete(':id/destroy')
   @Cache('grants', 'flush')
   @SetScope(Scope.ManageAuthGrants)
-  @UseInterceptors(FilterInterceptor)
   @SetPolicy(Action.Destroy, Resource.AuthGrants)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   DestroyOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -195,9 +197,9 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   @Patch(':id')
   @Cache('grants', 'flush')
   @SetScope(Scope.WriteAuthGrants)
-  @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Update, Resource.AuthGrants)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   UpdateOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
@@ -213,9 +215,9 @@ export class GrantsController extends GrpcController<GrantDom, GrantSer> {
   @Patch('bulk')
   @Cache('grants', 'flush')
   @SetScope(Scope.ManageAuthGrants)
-  @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Update, Resource.AuthGrants)
   @ApiQuery({ type: QueryFilterDto, required: false })
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   UpdateBulk(
     @Meta() meta: Metadata,
     @Filter() filter: QueryFilterDto<GrantDom>,
