@@ -3,4 +3,4 @@
 	url = git@github.com:wenex-org/platform-libs.git
 [submodule "apps/services"]
 	path = apps/services
-	url = git@github.com:wenex-org/platform-private.git
+	url = git@github.com:wenex-org/platform-services.git
