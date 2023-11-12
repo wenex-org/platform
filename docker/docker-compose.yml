@@ -6,7 +6,7 @@ services:
   #######################
   redis:
     extends:
-      file: docker-compose.utils.yml
+      file: docker-compose.util.yml
       service: redis
 
   #######################
