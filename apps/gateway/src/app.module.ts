@@ -1,9 +1,10 @@
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+import { JWT_SECRET, REDIS_CONFIG, SENTRY_CONFIG } from '@app/common/configs';
 import { ComplexityPlugin, DateScalar } from '@app/common/plugins';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { JWT_SECRET, REDIS_CONFIG } from '@app/common/configs';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { DynamicModule, Module } from '@nestjs/common';
+import { SentryModule } from '@ntegral/nestjs-sentry';
 import { GraphQLModule } from '@nestjs/graphql';
 import GraphQLJSON from 'graphql-type-json';
 import { HealthModule } from '@app/health';
@@ -18,6 +19,7 @@ import * as modules from './modules';
     HealthModule.forRoot(['disk', 'memory', 'redis', 'kafka']),
     PrometheusModule.register(),
     RedisModule.forRoot(REDIS_CONFIG()),
+    SentryModule.forRoot(SENTRY_CONFIG()),
     JwtModule.register({ secret: JWT_SECRET(), global: true }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       playground: false,
