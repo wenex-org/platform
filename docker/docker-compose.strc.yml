@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   structurizr:
-    image: structurizr/lite:lates
+    image: structurizr/lite:latest
     container_name: structurizr
     ports:
       - 8080:8080
