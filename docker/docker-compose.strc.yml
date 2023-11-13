@@ -6,8 +6,10 @@ services:
     container_name: structurizr
     ports:
       - 8080:8080
+    volumes:
+      - ../:/usr/local/structurizr
     networks:
-      - localnet
+      - platform
 
 networks:
   localnet:
