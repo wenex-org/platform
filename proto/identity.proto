@@ -280,9 +280,9 @@ message Profile {
   optional string timestamp = 24;
 
   // Profile Interface
-  string state = 50;
-  string gender = 51;
-  string person_type = 52;
+  string type = 50;
+  string state = 51;
+  string gender = 52;
 
   optional string cover = 53;
   optional string avatar = 54;
