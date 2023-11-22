@@ -1,6 +1,6 @@
 # Mongo-RS
 
-Mongo replication set with three nodes, run and start with docker compose:
+Mongo replication set with three nodes, run and start with docker-compose:
 
 ```sh
 docker-compose up -d
@@ -8,7 +8,7 @@ docker-compose up -d
 
 > NOTE: It will take time to initiate for first time
 
-Add this lines to `/etc/hosts`:
+Add these lines to `/etc/hosts`:
 
 ```sh
 127.0.0.1 mongodb-primary
