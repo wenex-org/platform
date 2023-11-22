@@ -14,7 +14,6 @@ import {
   AuthorizationCanRequestDto,
   AuthorizationPolicyRequestDto,
 } from '@app/common/dto';
-import { GrpcAuthorizationController } from '@app/common/classes';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -25,7 +24,7 @@ import { Metadata } from '@app/common/interfaces';
 import { SetScope } from '@app/common/metadatas';
 import { Meta } from '@app/common/decorators';
 import { Scope } from '@app/common/enums';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 
 @ApiBearerAuth()
 @ApiTags('auth')
@@ -33,10 +32,8 @@ import { Observable } from 'rxjs';
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseInterceptors(new SentryInterceptor())
-export class AuthorizationController extends GrpcAuthorizationController {
-  constructor(readonly provider: AuthProvider) {
-    super(provider.authorization);
-  }
+export class AuthorizationController {
+  constructor(readonly provider: AuthProvider) {}
 
   @Post('can')
   @SetScope(Scope.ManageAuth)
@@ -44,7 +41,9 @@ export class AuthorizationController extends GrpcAuthorizationController {
     @Meta() meta: Metadata,
     @Body() data: AuthorizationCanRequestDto,
   ): Observable<AuthorizationCanResponseSerializer> {
-    return super.can(meta, data).pipe(mapToInstance(AuthorizationCanResponseSerializer));
+    return from(this.provider.authorization.can(data, meta)).pipe(
+      mapToInstance(AuthorizationCanResponseSerializer),
+    );
   }
 
   @Post('policy')
@@ -53,8 +52,8 @@ export class AuthorizationController extends GrpcAuthorizationController {
     @Meta() meta: Metadata,
     @Body() data: AuthorizationPolicyRequestDto,
   ): Observable<AuthorizationPolicyResponseSerializer> {
-    return super
-      .policy(meta, data)
-      .pipe(mapToInstance(AuthorizationPolicyResponseSerializer));
+    return from(this.provider.authorization.policy(data, meta)).pipe(
+      mapToInstance(AuthorizationPolicyResponseSerializer),
+    );
   }
 }

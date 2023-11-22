@@ -32,9 +32,15 @@ import {
   GatewayInterceptors,
   WriteInterceptors,
 } from '@app/common/interceptors';
+import {
+  Controller as ControllerInterface,
+  Metadata,
+  Config,
+  ConfigDto,
+} from '@app/common/interfaces';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
-import { Metadata, ConfigDom, ConfigSer } from '@app/common/interfaces';
+import { Controller as ControllerClass } from '@app/common/classes';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Filter, Meta, Session } from '@app/common/decorators';
@@ -43,7 +49,6 @@ import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { ConfigProvider } from '@app/common/providers';
 import { refineFilterQuery } from '@app/common/utils';
-import { GrpcController } from '@app/common/classes';
 import { ClientSession } from 'mongoose';
 import { Observable } from 'rxjs';
 
@@ -54,7 +59,10 @@ import { Observable } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
+export class ConfigsController
+  extends ControllerClass<Config, ConfigDto>
+  implements ControllerInterface<Config, ConfigDto>
+{
   constructor(readonly provider: ConfigProvider) {
     super(provider.configs, () => ConfigSerializer);
   }
@@ -68,9 +76,9 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   count(
     @Meta() meta: Metadata,
     @Filter() filter: QueryFilterDto,
-    @Session() config?: ClientSession,
+    @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
-    return super.count(meta, filter, config);
+    return super.count(meta, filter, session);
   }
 
   @Post()
@@ -81,9 +89,9 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   create(
     @Meta() meta: Metadata,
     @Body() data: CreateConfigDto,
-    @Session() config?: ClientSession,
+    @Session() session?: ClientSession,
   ): Observable<ConfigDataSerializer> {
-    return super.create(meta, data, config);
+    return super.create(meta, data, session);
   }
 
   @Post('bulk')
@@ -94,9 +102,9 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   createBulk(
     @Meta() meta: Metadata,
     @Body() items: CreateConfigDto[],
-    @Session() config?: ClientSession,
+    @Session() session?: ClientSession,
   ): Observable<ConfigItemsSerializer> {
-    return super.createBulk(meta, items, config);
+    return super.createBulk(meta, items, session);
   }
 
   @Get()
@@ -107,10 +115,10 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   Find(
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<ConfigDom>,
-    @Session() config?: ClientSession,
+    @Filter() filter: FilterDto<Config>,
+    @Session() session?: ClientSession,
   ): Observable<ConfigItemsSerializer> {
-    return super.find(meta, filter, config);
+    return super.find(meta, filter, session);
   }
 
   @Get('cursor')
@@ -120,10 +128,10 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   Cursor(
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<ConfigDom>,
-    @Session() config?: ClientSession,
+    @Filter() filter: FilterDto<Config>,
+    @Session() session?: ClientSession,
   ): Observable<ConfigSerializer> {
-    return super.cursor(meta, filter, config);
+    return super.cursor(meta, filter, session);
   }
 
   @Get(':id')
@@ -135,12 +143,12 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   FindOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<ConfigDom>,
-    @Session() config?: ClientSession,
+    @Filter() filter: FilterOneDto<Config>,
+    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<ConfigDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.findOne(meta, filter, config);
+    return super.findOne(meta, filter, session);
   }
 
   @Delete(':id')
@@ -152,12 +160,12 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   DeleteOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<ConfigDom>,
-    @Session() config?: ClientSession,
+    @Filter() filter: FilterDto<Config>,
+    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<ConfigDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.deleteOne(meta, filter, config);
+    return super.deleteOne(meta, filter, session);
   }
 
   @Put(':id/restore')
@@ -169,12 +177,12 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   RestoreOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<ConfigDom>,
-    @Session() config?: ClientSession,
+    @Filter() filter: FilterDto<Config>,
+    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<ConfigDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.restoreOne(meta, filter, config);
+    return super.restoreOne(meta, filter, session);
   }
 
   @Delete(':id/destroy')
@@ -186,12 +194,12 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   DestroyOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<ConfigDom>,
-    @Session() config?: ClientSession,
+    @Filter() filter: FilterDto<Config>,
+    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<ConfigDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.destroyOne(meta, filter, config);
+    return super.destroyOne(meta, filter, session);
   }
 
   @Patch(':id')
@@ -203,27 +211,27 @@ export class ConfigsController extends GrpcController<ConfigDom, ConfigSer> {
   UpdateOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<ConfigDom>,
+    @Filter() filter: FilterOneDto<Config>,
     @Body() update: UpdateConfigDto,
-    @Session() config?: ClientSession,
+    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<ConfigDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.updateOne(meta, filter, update, config);
+    return super.updateOne(meta, filter, update, session);
   }
 
   @Patch('bulk')
   @Cache('configs', 'flush')
-  @SetScope(Scope.WriteConfigConfigs)
+  @SetScope(Scope.ManageConfigConfigs)
   @SetPolicy(Action.Update, Resource.ConfigConfigs)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   UpdateBulk(
     @Meta() meta: Metadata,
-    @Filter() filter: QueryFilterDto<ConfigDom>,
+    @Filter() filter: QueryFilterDto<Config>,
     @Body() update: UpdateConfigDto,
-    @Session() config?: ClientSession,
+    @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
-    return super.updateBulk(meta, filter, update, config);
+    return super.updateBulk(meta, filter, update, session);
   }
 }

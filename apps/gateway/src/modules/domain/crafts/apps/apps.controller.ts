@@ -32,18 +32,23 @@ import {
   GatewayInterceptors,
   WriteInterceptors,
 } from '@app/common/interceptors';
+import {
+  Controller as ControllerInterface,
+  Metadata,
+  App,
+  AppDto,
+} from '@app/common/interfaces';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
+import { Controller as ControllerClass } from '@app/common/classes';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
-import { Metadata, AppDom, AppSer } from '@app/common/interfaces';
 import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { DomainProvider } from '@app/common/providers';
 import { refineFilterQuery } from '@app/common/utils';
-import { GrpcController } from '@app/common/classes';
 import { ClientSession } from 'mongoose';
 import { Observable } from 'rxjs';
 
@@ -54,7 +59,10 @@ import { Observable } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class AppsController extends GrpcController<AppDom, AppSer> {
+export class AppsController
+  extends ControllerClass<App, AppDto>
+  implements ControllerInterface<App, AppDto>
+{
   constructor(readonly provider: DomainProvider) {
     super(provider.apps, () => AppSerializer);
   }
@@ -65,7 +73,7 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.DomainApps)
   @ApiQuery({ type: QueryFilterDto, required: false })
-  Count(
+  count(
     @Meta() meta: Metadata,
     @Filter() filter: QueryFilterDto,
     @Session() session?: ClientSession,
@@ -78,7 +86,7 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   @SetScope(Scope.WriteDomainApps)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainApps)
-  Create(
+  create(
     @Meta() meta: Metadata,
     @Body() data: CreateAppDto,
     @Session() session?: ClientSession,
@@ -91,7 +99,7 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   @SetScope(Scope.WriteDomainApps)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainApps)
-  CreateBulk(
+  createBulk(
     @Meta() meta: Metadata,
     @Body() items: CreateAppDto[],
     @Session() session?: ClientSession,
@@ -107,7 +115,7 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   Find(
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<AppDom>,
+    @Filter() filter: FilterDto<App>,
     @Session() session?: ClientSession,
   ): Observable<AppItemsSerializer> {
     return super.find(meta, filter, session);
@@ -120,7 +128,7 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   Cursor(
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<AppDom>,
+    @Filter() filter: FilterDto<App>,
     @Session() session?: ClientSession,
   ): Observable<AppSerializer> {
     return super.cursor(meta, filter, session);
@@ -135,7 +143,7 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   FindOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<AppDom>,
+    @Filter() filter: FilterOneDto<App>,
     @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<AppDataSerializer> {
@@ -152,7 +160,7 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   DeleteOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<AppDom>,
+    @Filter() filter: FilterDto<App>,
     @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<AppDataSerializer> {
@@ -169,7 +177,7 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   RestoreOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<AppDom>,
+    @Filter() filter: FilterDto<App>,
     @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<AppDataSerializer> {
@@ -186,7 +194,7 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   DestroyOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<AppDom>,
+    @Filter() filter: FilterDto<App>,
     @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<AppDataSerializer> {
@@ -203,7 +211,7 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
   UpdateOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<AppDom>,
+    @Filter() filter: FilterOneDto<App>,
     @Body() update: UpdateAppDto,
     @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
@@ -214,13 +222,13 @@ export class AppsController extends GrpcController<AppDom, AppSer> {
 
   @Patch('bulk')
   @Cache('apps', 'flush')
-  @SetScope(Scope.WriteDomainApps)
+  @SetScope(Scope.ManageDomainApps)
   @SetPolicy(Action.Update, Resource.DomainApps)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   UpdateBulk(
     @Meta() meta: Metadata,
-    @Filter() filter: QueryFilterDto<AppDom>,
+    @Filter() filter: QueryFilterDto<App>,
     @Body() update: UpdateAppDto,
     @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {

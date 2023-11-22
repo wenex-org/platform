@@ -17,10 +17,16 @@ import {
   GatewayInterceptors,
   WriteInterceptors,
 } from '@app/common/interceptors';
+import {
+  Controller as ControllerInterface,
+  Metadata,
+  Profile,
+  ProfileDto,
+} from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
-import { Metadata, ProfileDom, ProfileSer } from '@app/common/interfaces';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
+import { Controller as ControllerClass } from '@app/common/classes';
 import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Filter, Meta, Session } from '@app/common/decorators';
@@ -29,7 +35,6 @@ import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { IdentityProvider } from '@app/common/providers';
 import { refineFilterQuery } from '@app/common/utils';
-import { GrpcController } from '@app/common/classes';
 import { ClientSession } from 'mongoose';
 import { Observable } from 'rxjs';
 
@@ -38,7 +43,10 @@ import { Observable } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class ProfilesResolver extends GrpcController<ProfileDom, ProfileSer> {
+export class ProfilesResolver
+  extends ControllerClass<Profile, ProfileDto>
+  implements ControllerInterface<Profile, ProfileDto>
+{
   constructor(readonly provider: IdentityProvider) {
     super(provider.profiles, () => ProfileSerializer);
   }
@@ -89,7 +97,7 @@ export class ProfilesResolver extends GrpcController<ProfileDom, ProfileSer> {
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findProfile(
     @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: FilterDto<ProfileDom>,
+    @Filter() @Args('filter') filter: FilterDto<Profile>,
     @Session() session?: ClientSession,
   ): Observable<ProfileItemsSerializer> {
     return super.find(meta, filter, session);
@@ -103,7 +111,7 @@ export class ProfilesResolver extends GrpcController<ProfileDom, ProfileSer> {
   findOneProfile(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<ProfileDom>,
+    @Filter() filter: FilterOneDto<Profile>,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<ProfileDataSerializer> {
@@ -119,7 +127,7 @@ export class ProfilesResolver extends GrpcController<ProfileDom, ProfileSer> {
   deleteOneProfile(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<ProfileDom>,
+    @Filter() filter: FilterDto<Profile>,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<ProfileDataSerializer> {
@@ -135,7 +143,7 @@ export class ProfilesResolver extends GrpcController<ProfileDom, ProfileSer> {
   restoreOneProfile(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<ProfileDom>,
+    @Filter() filter: FilterDto<Profile>,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<ProfileDataSerializer> {
@@ -151,7 +159,7 @@ export class ProfilesResolver extends GrpcController<ProfileDom, ProfileSer> {
   destroyOneProfile(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<ProfileDom>,
+    @Filter() filter: FilterDto<Profile>,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<ProfileDataSerializer> {
@@ -167,7 +175,7 @@ export class ProfilesResolver extends GrpcController<ProfileDom, ProfileSer> {
   updateOneProfile(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<ProfileDom>,
+    @Filter() filter: FilterOneDto<Profile>,
     @Args('data') update: UpdateProfileDto,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
@@ -178,12 +186,12 @@ export class ProfilesResolver extends GrpcController<ProfileDom, ProfileSer> {
 
   @Mutation(() => TotalSerializer)
   @Cache('profiles', 'flush')
-  @SetScope(Scope.WriteIdentityProfiles)
+  @SetScope(Scope.ManageIdentityProfiles)
   @SetPolicy(Action.Update, Resource.IdentityProfiles)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateBulkProfile(
     @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: QueryFilterDto<ProfileDom>,
+    @Filter() @Args('filter') filter: QueryFilterDto<Profile>,
     @Args('data') update: UpdateProfileDto,
     @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {

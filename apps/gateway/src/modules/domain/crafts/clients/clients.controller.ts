@@ -32,9 +32,15 @@ import {
   GatewayInterceptors,
   WriteInterceptors,
 } from '@app/common/interceptors';
+import {
+  Controller as ControllerInterface,
+  Metadata,
+  Client,
+  ClientDto,
+} from '@app/common/interfaces';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
-import { Metadata, ClientDom, ClientSer } from '@app/common/interfaces';
+import { Controller as ControllerClass } from '@app/common/classes';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Filter, Meta, Session } from '@app/common/decorators';
@@ -43,7 +49,6 @@ import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { DomainProvider } from '@app/common/providers';
 import { refineFilterQuery } from '@app/common/utils';
-import { GrpcController } from '@app/common/classes';
 import { ClientSession } from 'mongoose';
 import { Observable } from 'rxjs';
 
@@ -54,7 +59,10 @@ import { Observable } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class ClientsController extends GrpcController<ClientDom, ClientSer> {
+export class ClientsController
+  extends ControllerClass<Client, ClientDto>
+  implements ControllerInterface<Client, ClientDto>
+{
   constructor(readonly provider: DomainProvider) {
     super(provider.clients, () => ClientSerializer);
   }
@@ -65,7 +73,7 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.DomainClients)
   @ApiQuery({ type: QueryFilterDto, required: false })
-  Count(
+  count(
     @Meta() meta: Metadata,
     @Filter() filter: QueryFilterDto,
     @Session() session?: ClientSession,
@@ -78,7 +86,7 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainClients)
-  Create(
+  create(
     @Meta() meta: Metadata,
     @Body() data: CreateClientDto,
     @Session() session?: ClientSession,
@@ -91,7 +99,7 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainClients)
-  CreateBulk(
+  createBulk(
     @Meta() meta: Metadata,
     @Body() items: CreateClientDto[],
     @Session() session?: ClientSession,
@@ -107,7 +115,7 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   Find(
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<ClientDom>,
+    @Filter() filter: FilterDto<Client>,
     @Session() session?: ClientSession,
   ): Observable<ClientItemsSerializer> {
     return super.find(meta, filter, session);
@@ -120,7 +128,7 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   Cursor(
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<ClientDom>,
+    @Filter() filter: FilterDto<Client>,
     @Session() session?: ClientSession,
   ): Observable<ClientSerializer> {
     return super.cursor(meta, filter, session);
@@ -135,7 +143,7 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   FindOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<ClientDom>,
+    @Filter() filter: FilterOneDto<Client>,
     @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<ClientDataSerializer> {
@@ -152,7 +160,7 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   DeleteOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<ClientDom>,
+    @Filter() filter: FilterDto<Client>,
     @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<ClientDataSerializer> {
@@ -169,7 +177,7 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   RestoreOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<ClientDom>,
+    @Filter() filter: FilterDto<Client>,
     @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<ClientDataSerializer> {
@@ -186,7 +194,7 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   DestroyOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<ClientDom>,
+    @Filter() filter: FilterDto<Client>,
     @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<ClientDataSerializer> {
@@ -203,7 +211,7 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
   UpdateOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<ClientDom>,
+    @Filter() filter: FilterOneDto<Client>,
     @Body() update: UpdateClientDto,
     @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
@@ -214,13 +222,13 @@ export class ClientsController extends GrpcController<ClientDom, ClientSer> {
 
   @Patch('bulk')
   @Cache('clients', 'flush')
-  @SetScope(Scope.WriteDomainClients)
+  @SetScope(Scope.ManageDomainClients)
   @SetPolicy(Action.Update, Resource.DomainClients)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   UpdateBulk(
     @Meta() meta: Metadata,
-    @Filter() filter: QueryFilterDto<ClientDom>,
+    @Filter() filter: QueryFilterDto<Client>,
     @Body() update: UpdateClientDto,
     @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {

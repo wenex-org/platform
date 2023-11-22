@@ -32,9 +32,15 @@ import {
   GatewayInterceptors,
   WriteInterceptors,
 } from '@app/common/interceptors';
+import {
+  Controller as ControllerInterface,
+  Metadata,
+  User,
+  UserDto,
+} from '@app/common/interfaces';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
-import { Metadata, UserDom, UserSer } from '@app/common/interfaces';
+import { Controller as ControllerClass } from '@app/common/classes';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Filter, Meta, Session } from '@app/common/decorators';
@@ -43,7 +49,6 @@ import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { IdentityProvider } from '@app/common/providers';
 import { refineFilterQuery } from '@app/common/utils';
-import { GrpcController } from '@app/common/classes';
 import { ClientSession } from 'mongoose';
 import { Observable } from 'rxjs';
 
@@ -54,7 +59,10 @@ import { Observable } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class UsersController extends GrpcController<UserDom, UserSer> {
+export class UsersController
+  extends ControllerClass<User, UserDto>
+  implements ControllerInterface<User, UserDto>
+{
   constructor(readonly provider: IdentityProvider) {
     super(provider.users, () => UserSerializer);
   }
@@ -65,7 +73,7 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.IdentityUsers)
   @ApiQuery({ type: QueryFilterDto, required: false })
-  Count(
+  count(
     @Meta() meta: Metadata,
     @Filter() filter: QueryFilterDto,
     @Session() session?: ClientSession,
@@ -78,7 +86,7 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentityUsers)
-  Create(
+  create(
     @Meta() meta: Metadata,
     @Body() data: CreateUserDto,
     @Session() session?: ClientSession,
@@ -91,7 +99,7 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentityUsers)
-  CreateBulk(
+  createBulk(
     @Meta() meta: Metadata,
     @Body() items: CreateUserDto[],
     @Session() session?: ClientSession,
@@ -102,12 +110,12 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   @Get()
   @Cache('users', 'fill')
   @SetScope(Scope.ReadIdentityUsers)
-  @ApiQuery({ type: FilterDto, required: false })
   @SetPolicy(Action.Read, Resource.IdentityUsers)
+  @ApiQuery({ type: FilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   Find(
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<UserDom>,
+    @Filter() filter: FilterDto<User>,
     @Session() session?: ClientSession,
   ): Observable<UserItemsSerializer> {
     return super.find(meta, filter, session);
@@ -115,12 +123,12 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
 
   @Get('cursor')
   @SetScope(Scope.ReadIdentityUsers)
-  @ApiQuery({ type: FilterDto, required: false })
   @SetPolicy(Action.Read, Resource.IdentityUsers)
+  @ApiQuery({ type: FilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   Cursor(
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<UserDom>,
+    @Filter() filter: FilterDto<User>,
     @Session() session?: ClientSession,
   ): Observable<UserSerializer> {
     return super.cursor(meta, filter, session);
@@ -135,7 +143,7 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   FindOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<UserDom>,
+    @Filter() filter: FilterOneDto<User>,
     @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<UserDataSerializer> {
@@ -152,7 +160,7 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   DeleteOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<UserDom>,
+    @Filter() filter: FilterDto<User>,
     @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<UserDataSerializer> {
@@ -169,7 +177,7 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   RestoreOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<UserDom>,
+    @Filter() filter: FilterDto<User>,
     @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<UserDataSerializer> {
@@ -186,7 +194,7 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   DestroyOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<UserDom>,
+    @Filter() filter: FilterDto<User>,
     @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<UserDataSerializer> {
@@ -203,7 +211,7 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
   UpdateOne(
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<UserDom>,
+    @Filter() filter: FilterOneDto<User>,
     @Body() update: UpdateUserDto,
     @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
@@ -214,13 +222,13 @@ export class UsersController extends GrpcController<UserDom, UserSer> {
 
   @Patch('bulk')
   @Cache('users', 'flush')
-  @SetScope(Scope.WriteIdentityUsers)
+  @SetScope(Scope.ManageIdentityUsers)
   @SetPolicy(Action.Update, Resource.IdentityUsers)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   UpdateBulk(
     @Meta() meta: Metadata,
-    @Filter() filter: QueryFilterDto<UserDom>,
+    @Filter() filter: QueryFilterDto<User>,
     @Body() update: UpdateUserDto,
     @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {

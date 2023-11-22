@@ -17,10 +17,16 @@ import {
   GatewayInterceptors,
   WriteInterceptors,
 } from '@app/common/interceptors';
+import {
+  Controller as ControllerInterface,
+  Session as ISession,
+  Metadata,
+  SessionDto,
+} from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
-import { Metadata, SessionDom, SessionSer } from '@app/common/interfaces';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
+import { Controller as ControllerClass } from '@app/common/classes';
 import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Filter, Meta, Session } from '@app/common/decorators';
@@ -29,7 +35,6 @@ import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { IdentityProvider } from '@app/common/providers';
 import { refineFilterQuery } from '@app/common/utils';
-import { GrpcController } from '@app/common/classes';
 import { ClientSession } from 'mongoose';
 import { Observable } from 'rxjs';
 
@@ -38,7 +43,10 @@ import { Observable } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class SessionsResolver extends GrpcController<SessionDom, SessionSer> {
+export class SessionsResolver
+  extends ControllerClass<ISession, SessionDto>
+  implements ControllerInterface<ISession, SessionDto>
+{
   constructor(readonly provider: IdentityProvider) {
     super(provider.sessions, () => SessionSerializer);
   }
@@ -89,7 +97,7 @@ export class SessionsResolver extends GrpcController<SessionDom, SessionSer> {
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findSession(
     @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: FilterDto<SessionDom>,
+    @Filter() @Args('filter') filter: FilterDto<ISession>,
     @Session() session?: ClientSession,
   ): Observable<SessionItemsSerializer> {
     return super.find(meta, filter, session);
@@ -103,7 +111,7 @@ export class SessionsResolver extends GrpcController<SessionDom, SessionSer> {
   findOneSession(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<SessionDom>,
+    @Filter() filter: FilterOneDto<ISession>,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<SessionDataSerializer> {
@@ -119,7 +127,7 @@ export class SessionsResolver extends GrpcController<SessionDom, SessionSer> {
   deleteOneSession(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<SessionDom>,
+    @Filter() filter: FilterDto<ISession>,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<SessionDataSerializer> {
@@ -135,7 +143,7 @@ export class SessionsResolver extends GrpcController<SessionDom, SessionSer> {
   restoreOneSession(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<SessionDom>,
+    @Filter() filter: FilterDto<ISession>,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<SessionDataSerializer> {
@@ -151,7 +159,7 @@ export class SessionsResolver extends GrpcController<SessionDom, SessionSer> {
   destroyOneSession(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<SessionDom>,
+    @Filter() filter: FilterDto<ISession>,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<SessionDataSerializer> {
@@ -167,7 +175,7 @@ export class SessionsResolver extends GrpcController<SessionDom, SessionSer> {
   updateOneSession(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<SessionDom>,
+    @Filter() filter: FilterOneDto<ISession>,
     @Args('data') update: UpdateSessionDto,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
@@ -178,12 +186,12 @@ export class SessionsResolver extends GrpcController<SessionDom, SessionSer> {
 
   @Mutation(() => TotalSerializer)
   @Cache('sessions', 'flush')
-  @SetScope(Scope.WriteIdentitySessions)
+  @SetScope(Scope.ManageIdentitySessions)
   @SetPolicy(Action.Update, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateBulkSession(
     @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: QueryFilterDto<SessionDom>,
+    @Filter() @Args('filter') filter: QueryFilterDto<ISession>,
     @Args('data') update: UpdateSessionDto,
     @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {

@@ -13,7 +13,6 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { AuthenticationRequestDto, TokenDto } from '@app/common/dto';
-import { GrpcAuthenticationController } from '@app/common/classes';
 import { AuthGuard, ScopeGuard } from '@app/common/guards';
 import { IsPublic, SetScope } from '@app/common/metadatas';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
@@ -25,7 +24,7 @@ import { mapToInstance } from '@app/common/utils';
 import { Metadata } from '@app/common/interfaces';
 import { Meta } from '@app/common/decorators';
 import { Scope } from '@app/common/enums';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -33,10 +32,8 @@ import { Observable } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard)
 @UseInterceptors(new SentryInterceptor())
-export class AuthenticationController extends GrpcAuthenticationController {
-  constructor(readonly provider: AuthProvider) {
-    super(provider.authentication);
-  }
+export class AuthenticationController {
+  constructor(readonly provider: AuthProvider) {}
 
   @IsPublic()
   @Post('token')
@@ -44,20 +41,26 @@ export class AuthenticationController extends GrpcAuthenticationController {
     @Meta() meta: Metadata,
     @Body() data: AuthenticationRequestDto,
   ): Observable<AuthenticationResponseSerializer> {
-    return super.token(meta, data).pipe(mapToInstance(AuthenticationResponseSerializer));
-  }
-
-  @Post('logout')
-  @ApiBearerAuth()
-  @SetScope(Scope.ManageAuth)
-  logout(@Meta() meta: Metadata, @Body() data: TokenDto): Observable<ResultSerializer> {
-    return super.logout(meta, data).pipe(mapToInstance(ResultSerializer));
+    return from(this.provider.authentication.token(data, meta)).pipe(
+      mapToInstance(AuthenticationResponseSerializer),
+    );
   }
 
   @Post('verify')
   @ApiBearerAuth()
   @SetScope(Scope.ManageAuth)
   verify(@Meta() meta: Metadata, @Body() data: TokenDto): Observable<JwtTokenSerializer> {
-    return super.verify(meta, data).pipe(mapToInstance(JwtTokenSerializer));
+    return from(this.provider.authentication.verify(data, meta)).pipe(
+      mapToInstance(JwtTokenSerializer),
+    );
+  }
+
+  @Post('logout')
+  @ApiBearerAuth()
+  @SetScope(Scope.ManageAuth)
+  logout(@Meta() meta: Metadata, @Body() data: TokenDto): Observable<ResultSerializer> {
+    return from(this.provider.authentication.logout(data, meta)).pipe(
+      mapToInstance(ResultSerializer),
+    );
   }
 }

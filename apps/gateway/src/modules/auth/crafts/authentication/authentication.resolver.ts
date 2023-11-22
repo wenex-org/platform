@@ -5,7 +5,6 @@ import {
 } from '@app/common/serializers';
 import { UseFilters, UseInterceptors, UsePipes } from '@nestjs/common';
 import { AuthenticationRequestDto, TokenDto } from '@app/common/dto';
-import { GrpcAuthenticationController } from '@app/common/classes';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
@@ -14,31 +13,23 @@ import { ValidationPipe } from '@app/common/pipes';
 import { mapToInstance } from '@app/common/utils';
 import { Metadata } from '@app/common/interfaces';
 import { Meta } from '@app/common/decorators';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 
 @Resolver(() => AuthenticationResponseSerializer)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseInterceptors(new SentryInterceptor())
-export class AuthenticationResolver extends GrpcAuthenticationController {
-  constructor(readonly provider: AuthProvider) {
-    super(provider.authentication);
-  }
+export class AuthenticationResolver {
+  constructor(readonly provider: AuthProvider) {}
 
   @Mutation(() => AuthenticationResponseSerializer)
   token(
     @Meta() meta: Metadata,
     @Args('data') data: AuthenticationRequestDto,
   ): Observable<AuthenticationResponseSerializer> {
-    return super.token(meta, data).pipe(mapToInstance(AuthenticationResponseSerializer));
-  }
-
-  @Mutation(() => ResultSerializer)
-  logout(
-    @Meta() meta: Metadata,
-    @Args('data') data: TokenDto,
-  ): Observable<ResultSerializer> {
-    return super.logout(meta, data).pipe(mapToInstance(ResultSerializer));
+    return from(this.provider.authentication.token(data, meta)).pipe(
+      mapToInstance(AuthenticationResponseSerializer),
+    );
   }
 
   @Mutation(() => JwtTokenSerializer)
@@ -46,6 +37,18 @@ export class AuthenticationResolver extends GrpcAuthenticationController {
     @Meta() meta: Metadata,
     @Args('data') data: TokenDto,
   ): Observable<JwtTokenSerializer> {
-    return super.verify(meta, data).pipe(mapToInstance(JwtTokenSerializer));
+    return from(this.provider.authentication.verify(data, meta)).pipe(
+      mapToInstance(JwtTokenSerializer),
+    );
+  }
+
+  @Mutation(() => ResultSerializer)
+  logout(
+    @Meta() meta: Metadata,
+    @Args('data') data: TokenDto,
+  ): Observable<ResultSerializer> {
+    return from(this.provider.authentication.logout(data, meta)).pipe(
+      mapToInstance(ResultSerializer),
+    );
   }
 }

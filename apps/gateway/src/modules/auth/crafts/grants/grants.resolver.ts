@@ -17,10 +17,16 @@ import {
   GatewayInterceptors,
   WriteInterceptors,
 } from '@app/common/interceptors';
+import {
+  Controller as ControllerInterface,
+  Metadata,
+  Grant,
+  GrantDto,
+} from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
-import { Metadata, GrantDom, GrantSer } from '@app/common/interfaces';
+import { Controller as ControllerClass } from '@app/common/classes';
 import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Filter, Meta, Session } from '@app/common/decorators';
@@ -28,7 +34,6 @@ import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { refineFilterQuery } from '@app/common/utils';
-import { GrpcController } from '@app/common/classes';
 import { AuthProvider } from '@app/common/providers';
 import { ClientSession } from 'mongoose';
 import { Observable } from 'rxjs';
@@ -38,7 +43,10 @@ import { Observable } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class GrantsResolver extends GrpcController<GrantDom, GrantSer> {
+export class GrantsResolver
+  extends ControllerClass<Grant, GrantDto>
+  implements ControllerInterface<Grant, GrantDto>
+{
   constructor(readonly provider: AuthProvider) {
     super(provider.grants, () => GrantSerializer);
   }
@@ -51,9 +59,9 @@ export class GrantsResolver extends GrpcController<GrantDom, GrantSer> {
   countGrant(
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: QueryFilterDto,
-    @Session() grant?: ClientSession,
+    @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
-    return super.count(meta, filter, grant);
+    return super.count(meta, filter, session);
   }
 
   @Mutation(() => GrantDataSerializer)
@@ -64,9 +72,9 @@ export class GrantsResolver extends GrpcController<GrantDom, GrantSer> {
   createGrant(
     @Meta() meta: Metadata,
     @Args('data') data: CreateGrantDto,
-    @Session() grant?: ClientSession,
+    @Session() session?: ClientSession,
   ): Observable<GrantDataSerializer> {
-    return super.create(meta, data, grant);
+    return super.create(meta, data, session);
   }
 
   @Mutation(() => GrantItemsSerializer)
@@ -77,9 +85,9 @@ export class GrantsResolver extends GrpcController<GrantDom, GrantSer> {
   createBulkGrant(
     @Meta() meta: Metadata,
     @Args('items', { type: () => [CreateGrantDto] }) items: CreateGrantDto[],
-    @Session() grant?: ClientSession,
+    @Session() session?: ClientSession,
   ): Observable<GrantItemsSerializer> {
-    return super.createBulk(meta, items, grant);
+    return super.createBulk(meta, items, session);
   }
 
   @Query(() => GrantItemsSerializer)
@@ -89,10 +97,10 @@ export class GrantsResolver extends GrpcController<GrantDom, GrantSer> {
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findGrant(
     @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: FilterDto<GrantDom>,
-    @Session() grant?: ClientSession,
+    @Filter() @Args('filter') filter: FilterDto<Grant>,
+    @Session() session?: ClientSession,
   ): Observable<GrantItemsSerializer> {
-    return super.find(meta, filter, grant);
+    return super.find(meta, filter, session);
   }
 
   @Query(() => GrantDataSerializer)
@@ -103,12 +111,12 @@ export class GrantsResolver extends GrpcController<GrantDom, GrantSer> {
   findOneGrant(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<GrantDom>,
-    @Session() grant?: ClientSession,
+    @Filter() filter: FilterOneDto<Grant>,
+    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<GrantDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.findOne(meta, filter, grant);
+    return super.findOne(meta, filter, session);
   }
 
   @Mutation(() => GrantDataSerializer)
@@ -119,12 +127,12 @@ export class GrantsResolver extends GrpcController<GrantDom, GrantSer> {
   deleteOneGrant(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<GrantDom>,
-    @Session() grant?: ClientSession,
+    @Filter() filter: FilterDto<Grant>,
+    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<GrantDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.deleteOne(meta, filter, grant);
+    return super.deleteOne(meta, filter, session);
   }
 
   @Mutation(() => GrantDataSerializer)
@@ -135,12 +143,12 @@ export class GrantsResolver extends GrpcController<GrantDom, GrantSer> {
   restoreOneGrant(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<GrantDom>,
-    @Session() grant?: ClientSession,
+    @Filter() filter: FilterDto<Grant>,
+    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<GrantDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.restoreOne(meta, filter, grant);
+    return super.restoreOne(meta, filter, session);
   }
 
   @Mutation(() => GrantDataSerializer)
@@ -151,12 +159,12 @@ export class GrantsResolver extends GrpcController<GrantDom, GrantSer> {
   destroyOneGrant(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<GrantDom>,
-    @Session() grant?: ClientSession,
+    @Filter() filter: FilterDto<Grant>,
+    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<GrantDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.destroyOne(meta, filter, grant);
+    return super.destroyOne(meta, filter, session);
   }
 
   @Mutation(() => GrantDataSerializer)
@@ -167,13 +175,13 @@ export class GrantsResolver extends GrpcController<GrantDom, GrantSer> {
   updateOneGrant(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<GrantDom>,
+    @Filter() filter: FilterOneDto<Grant>,
     @Args('data') update: UpdateGrantDto,
-    @Session() grant?: ClientSession,
+    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<GrantDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.updateOne(meta, filter, update, grant);
+    return super.updateOne(meta, filter, update, session);
   }
 
   @Mutation(() => TotalSerializer)
@@ -183,10 +191,10 @@ export class GrantsResolver extends GrpcController<GrantDom, GrantSer> {
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateBulkGrant(
     @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: QueryFilterDto<GrantDom>,
+    @Filter() @Args('filter') filter: QueryFilterDto<Grant>,
     @Args('data') update: UpdateGrantDto,
-    @Session() grant?: ClientSession,
+    @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
-    return super.updateBulk(meta, filter, update, grant);
+    return super.updateBulk(meta, filter, update, session);
   }
 }

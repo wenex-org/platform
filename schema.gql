@@ -7,21 +7,20 @@ type TotalSerializer {
 }
 
 type ResultSerializer {
-  result: Result!
-}
-
-enum Result {
-  OK
-  NOK
+  result: String!
 }
 
 type GrantTimeSerializer {
   props: JSON
   id: String!
   ref: String
+  owner: String!
   shares: [String!]
   groups: [String!]
+  clients: [String!]!
   created_at: Date!
+  created_by: String!
+  created_in: String!
   updated_at: Date
   updated_by: String
   updated_in: String
@@ -36,10 +35,6 @@ type GrantTimeSerializer {
   tags: [String!]
   rand: String!
   timestamp: String!
-  owner: String
-  clients: [String!]
-  created_by: String
-  created_in: String
   cron_exp: String!
   duration: Float!
 }
@@ -53,9 +48,13 @@ type GrantSerializer {
   props: JSON
   id: String!
   ref: String
+  owner: String!
   shares: [String!]
   groups: [String!]
+  clients: [String!]!
   created_at: Date!
+  created_by: String!
+  created_in: String!
   updated_at: Date
   updated_by: String
   updated_in: String
@@ -70,10 +69,6 @@ type GrantSerializer {
   tags: [String!]
   rand: String!
   timestamp: String!
-  owner: String!
-  clients: [String!]!
-  created_by: String!
-  created_in: String!
   time: [GrantTimeSerializer]
   subject: String!
   action: Action!
@@ -211,9 +206,13 @@ type ConfigSerializer {
   props: JSON
   id: String!
   ref: String
+  owner: String!
   shares: [String!]
   groups: [String!]
+  clients: [String!]!
   created_at: Date!
+  created_by: String!
+  created_in: String!
   updated_at: Date
   updated_by: String
   updated_in: String
@@ -228,10 +227,6 @@ type ConfigSerializer {
   tags: [String!]
   rand: String!
   timestamp: String!
-  owner: String!
-  clients: [String!]!
-  created_by: String!
-  created_in: String!
   value: JSON
   key: String!
   type: ValueType!
@@ -259,9 +254,13 @@ type AppChangeLogSerializer {
   props: JSON
   id: String!
   ref: String
+  owner: String!
   shares: [String!]
   groups: [String!]
+  clients: [String!]!
   created_at: Date!
+  created_by: String!
+  created_in: String!
   updated_at: Date
   updated_by: String
   updated_in: String
@@ -276,10 +275,6 @@ type AppChangeLogSerializer {
   tags: [String!]
   rand: String!
   timestamp: String!
-  owner: String
-  clients: [String!]
-  created_by: String
-  created_in: String
   code: String
   changes: [String!]!
   deprecation_date: Date
@@ -289,9 +284,13 @@ type AppSerializer {
   props: JSON
   id: String!
   ref: String
+  owner: String!
   shares: [String!]
   groups: [String!]
+  clients: [String!]!
   created_at: Date!
+  created_by: String!
+  created_in: String!
   updated_at: Date
   updated_by: String
   updated_in: String
@@ -306,10 +305,6 @@ type AppSerializer {
   tags: [String!]
   rand: String!
   timestamp: String!
-  owner: String!
-  clients: [String!]!
-  created_by: String!
-  created_in: String!
   change_logs: [AppChangeLogSerializer]!
   cid: String!
   type: AppType!
@@ -397,9 +392,13 @@ type ClientDomainSerializer {
   props: JSON
   id: String!
   ref: String
+  owner: String!
   shares: [String!]
   groups: [String!]
+  clients: [String!]!
   created_at: Date!
+  created_by: String!
+  created_in: String!
   updated_at: Date
   updated_by: String
   updated_in: String
@@ -414,10 +413,6 @@ type ClientDomainSerializer {
   tags: [String!]
   rand: String!
   timestamp: String!
-  owner: String
-  clients: [String!]
-  created_by: String
-  created_in: String
   name: String!
   status: Status!
   subjects: [String!]!
@@ -427,9 +422,13 @@ type ClientOtpServiceSerializer {
   props: JSON
   id: String!
   ref: String
+  owner: String!
   shares: [String!]
   groups: [String!]
+  clients: [String!]!
   created_at: Date!
+  created_by: String!
+  created_in: String!
   updated_at: Date
   updated_by: String
   updated_in: String
@@ -444,10 +443,6 @@ type ClientOtpServiceSerializer {
   tags: [String!]
   rand: String!
   timestamp: String!
-  owner: String
-  clients: [String!]
-  created_by: String
-  created_in: String
   config: JSON!
   type: ClientOtpType!
   provider: ClientOtpProvider!
@@ -468,9 +463,13 @@ type ClientSerializer {
   props: JSON
   id: String!
   ref: String
+  owner: String!
   shares: [String!]
   groups: [String!]
+  clients: [String!]!
   created_at: Date!
+  created_by: String!
+  created_in: String!
   updated_at: Date
   updated_by: String
   updated_in: String
@@ -485,10 +484,6 @@ type ClientSerializer {
   tags: [String!]
   rand: String!
   timestamp: String!
-  owner: String!
-  clients: [String!]!
-  created_by: String!
-  created_in: String!
   api_key: String!
   domains: [ClientDomainSerializer]!
   otp_services: [ClientOtpServiceSerializer]!
@@ -538,9 +533,13 @@ type UserSerializer {
   props: JSON
   id: String!
   ref: String
+  owner: String!
   shares: [String!]
   groups: [String!]
+  clients: [String!]!
   created_at: Date!
+  created_by: String!
+  created_in: String!
   updated_at: Date
   updated_by: String
   updated_in: String
@@ -555,10 +554,6 @@ type UserSerializer {
   tags: [String!]
   rand: String!
   timestamp: String!
-  owner: String!
-  clients: [String!]!
-  created_by: String!
-  created_in: String!
   status: Status!
   tz: String!
   mfa: UserMFA
@@ -593,9 +588,13 @@ type ProfileSerializer {
   props: JSON
   id: String!
   ref: String
+  owner: String!
   shares: [String!]
   groups: [String!]
+  clients: [String!]!
   created_at: Date!
+  created_by: String!
+  created_in: String!
   updated_at: Date
   updated_by: String
   updated_in: String
@@ -610,13 +609,9 @@ type ProfileSerializer {
   tags: [String!]
   rand: String!
   timestamp: String!
-  owner: String!
-  clients: [String!]!
-  created_by: String!
-  created_in: String!
+  type: ProfileType!
   state: State!
   gender: Gender!
-  person_type: ProfilePersonType!
   cover: String
   avatar: String
   nickname: String
@@ -631,16 +626,16 @@ type ProfileSerializer {
   birth_date: Date
 }
 
+enum ProfileType {
+  Real
+  Legal
+  Govern
+}
+
 enum Gender {
   Male
   Female
   Unknown
-}
-
-enum ProfilePersonType {
-  Real
-  Legal
-  Govern
 }
 
 type ProfileDataSerializer {
@@ -655,9 +650,13 @@ type SessionSerializer {
   props: JSON
   id: String!
   ref: String
+  owner: String!
   shares: [String!]
   groups: [String!]
+  clients: [String!]!
   created_at: Date!
+  created_by: String!
+  created_in: String!
   updated_at: Date
   updated_by: String
   updated_in: String
@@ -672,10 +671,6 @@ type SessionSerializer {
   tags: [String!]
   rand: String!
   timestamp: String!
-  owner: String!
-  clients: [String!]!
-  created_by: String!
-  created_in: String!
   ip: String!
   agent: String!
   expiration_date: Date!
@@ -696,15 +691,15 @@ type Query {
   countGrant(filter: QueryFilterDto!): TotalSerializer!
   findGrant(filter: FilterDto!): GrantItemsSerializer!
   findOneGrant(id: String!, ref: String): GrantDataSerializer!
+  countConfig(filter: QueryFilterDto!): TotalSerializer!
+  findConfig(filter: FilterDto!): ConfigItemsSerializer!
+  findOneConfig(id: String!, ref: String): ConfigDataSerializer!
   countApp(filter: QueryFilterDto!): TotalSerializer!
   findApp(filter: FilterDto!): AppItemsSerializer!
   findOneApp(id: String!, ref: String): AppDataSerializer!
   countClient(filter: QueryFilterDto!): TotalSerializer!
   findClient(filter: FilterDto!): ClientItemsSerializer!
   findOneClient(id: String!, ref: String): ClientDataSerializer!
-  countConfig(filter: QueryFilterDto!): TotalSerializer!
-  findConfig(filter: FilterDto!): ConfigItemsSerializer!
-  findOneConfig(id: String!, ref: String): ConfigDataSerializer!
   countUser(filter: QueryFilterDto!): TotalSerializer!
   findUser(filter: FilterDto!): UserItemsSerializer!
   findOneUser(id: String!, ref: String): UserDataSerializer!
@@ -742,8 +737,8 @@ input PaginationDto {
 
 type Mutation {
   token(data: AuthenticationRequestDto!): AuthenticationResponseSerializer!
-  logout(data: TokenDto!): ResultSerializer!
   verify(data: TokenDto!): JwtTokenSerializer!
+  logout(data: TokenDto!): ResultSerializer!
   can(data: AuthorizationCanRequestDto!): AuthorizationCanResponseSerializer!
   policy(data: AuthorizationPolicyRequestDto!): AuthorizationPolicyResponseSerializer!
   createGrant(data: CreateGrantDto!): GrantDataSerializer!
@@ -753,6 +748,13 @@ type Mutation {
   destroyOneGrant(id: String!, ref: String): GrantDataSerializer!
   updateOneGrant(id: String!, data: UpdateGrantDto!, ref: String): GrantDataSerializer!
   updateBulkGrant(filter: QueryFilterDto!, data: UpdateGrantDto!): TotalSerializer!
+  createConfig(data: CreateConfigDto!): ConfigDataSerializer!
+  createBulkConfig(items: [CreateConfigDto!]!): ConfigItemsSerializer!
+  deleteOneConfig(id: String!, ref: String): ConfigDataSerializer!
+  restoreOneConfig(id: String!, ref: String): ConfigDataSerializer!
+  destroyOneConfig(id: String!, ref: String): ConfigDataSerializer!
+  updateOneConfig(id: String!, data: UpdateConfigDto!, ref: String): ConfigDataSerializer!
+  updateBulkConfig(filter: QueryFilterDto!, data: UpdateConfigDto!): TotalSerializer!
   createApp(data: CreateAppDto!): AppDataSerializer!
   createBulkApp(items: [CreateAppDto!]!): AppItemsSerializer!
   deleteOneApp(id: String!, ref: String): AppDataSerializer!
@@ -767,13 +769,6 @@ type Mutation {
   destroyOneClient(id: String!, ref: String): ClientDataSerializer!
   updateOneClient(id: String!, data: UpdateClientDto!, ref: String): ClientDataSerializer!
   updateBulkClient(filter: QueryFilterDto!, data: UpdateClientDto!): TotalSerializer!
-  createConfig(data: CreateConfigDto!): ConfigDataSerializer!
-  createBulkConfig(items: [CreateConfigDto!]!): ConfigItemsSerializer!
-  deleteOneConfig(id: String!, ref: String): ConfigDataSerializer!
-  restoreOneConfig(id: String!, ref: String): ConfigDataSerializer!
-  destroyOneConfig(id: String!, ref: String): ConfigDataSerializer!
-  updateOneConfig(id: String!, data: UpdateConfigDto!, ref: String): ConfigDataSerializer!
-  updateBulkConfig(filter: QueryFilterDto!, data: UpdateConfigDto!): TotalSerializer!
   createUser(data: CreateUserDto!): UserDataSerializer!
   createBulkUser(items: [CreateUserDto!]!): UserItemsSerializer!
   deleteOneUser(id: String!, ref: String): UserDataSerializer!
@@ -879,6 +874,18 @@ input UpdateGrantDto {
 input UpdateGrantTimeDto {
   cron_exp: String!
   duration: Float!
+}
+
+input CreateConfigDto {
+  value: JSON
+  key: String!
+  type: ValueType!
+}
+
+input UpdateConfigDto {
+  value: JSON
+  key: String
+  type: ValueType
 }
 
 input CreateAppDto {
@@ -997,18 +1004,6 @@ input UpdateClientOtpServiceDto {
   provider: ClientOtpProvider!
 }
 
-input CreateConfigDto {
-  value: JSON
-  key: String!
-  type: ValueType!
-}
-
-input UpdateConfigDto {
-  value: JSON
-  key: String
-  type: ValueType
-}
-
 input CreateUserDto {
   status: Status!
   tz: String
@@ -1038,9 +1033,9 @@ input UpdateUserDto {
 }
 
 input CreateProfileDto {
+  type: ProfileType
   state: State
   gender: Gender
-  person_type: ProfilePersonType
   cover: String
   avatar: String
   nickname: String
@@ -1056,9 +1051,9 @@ input CreateProfileDto {
 }
 
 input UpdateProfileDto {
+  type: ProfileType
   state: State
   gender: Gender
-  person_type: ProfilePersonType
   cover: String
   avatar: String
   nickname: String
