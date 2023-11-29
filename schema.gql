@@ -124,6 +124,7 @@ enum Resource {
   AuthGrants
   Config
   ConfigConfigs
+  ConfigSettings
   Domain
   DomainApps
   DomainClients
@@ -250,6 +251,44 @@ type ConfigItemsSerializer {
   items: [ConfigSerializer]!
 }
 
+type SettingSerializer {
+  props: JSON
+  id: String!
+  ref: String
+  owner: String!
+  shares: [String!]
+  groups: [String!]
+  clients: [String!]!
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  tags: [String!]
+  rand: String!
+  timestamp: String!
+  value: JSON
+  key: String!
+  type: ValueType!
+}
+
+type SettingDataSerializer {
+  data: SettingSerializer
+}
+
+type SettingItemsSerializer {
+  items: [SettingSerializer]!
+}
+
 type AppChangeLogSerializer {
   props: JSON
   id: String!
@@ -344,14 +383,23 @@ enum Scope {
   Verify
   Upload
   Download
+  ReadAuth
+  WriteAuth
   ManageAuth
   ReadAuthGrants
   WriteAuthGrants
   ManageAuthGrants
+  ReadConfig
+  WriteConfig
   ManageConfig
   ReadConfigConfigs
   WriteConfigConfigs
   ManageConfigConfigs
+  ReadConfigSettings
+  WriteConfigSettings
+  ManageConfigSettings
+  ReadDomain
+  WriteDomain
   ManageDomain
   ReadDomainApps
   WriteDomainApps
@@ -359,6 +407,8 @@ enum Scope {
   ReadDomainClients
   WriteDomainClients
   ManageDomainClients
+  ReadIdentity
+  WriteIdentity
   ManageIdentity
   ReadIdentityUsers
   WriteIdentityUsers
@@ -694,6 +744,9 @@ type Query {
   countConfig(filter: QueryFilterDto!): TotalSerializer!
   findConfig(filter: FilterDto!): ConfigItemsSerializer!
   findOneConfig(id: String!, ref: String): ConfigDataSerializer!
+  countSetting(filter: QueryFilterDto!): TotalSerializer!
+  findSetting(filter: FilterDto!): SettingItemsSerializer!
+  findOneSetting(id: String!, ref: String): SettingDataSerializer!
   countApp(filter: QueryFilterDto!): TotalSerializer!
   findApp(filter: FilterDto!): AppItemsSerializer!
   findOneApp(id: String!, ref: String): AppDataSerializer!
@@ -755,6 +808,13 @@ type Mutation {
   destroyOneConfig(id: String!, ref: String): ConfigDataSerializer!
   updateOneConfig(id: String!, data: UpdateConfigDto!, ref: String): ConfigDataSerializer!
   updateBulkConfig(filter: QueryFilterDto!, data: UpdateConfigDto!): TotalSerializer!
+  createSetting(data: CreateSettingDto!): SettingDataSerializer!
+  createBulkSetting(items: [CreateSettingDto!]!): SettingItemsSerializer!
+  deleteOneSetting(id: String!, ref: String): SettingDataSerializer!
+  restoreOneSetting(id: String!, ref: String): SettingDataSerializer!
+  destroyOneSetting(id: String!, ref: String): SettingDataSerializer!
+  updateOneSetting(id: String!, data: UpdateSettingDto!, ref: String): SettingDataSerializer!
+  updateBulkSetting(filter: QueryFilterDto!, data: UpdateSettingDto!): TotalSerializer!
   createApp(data: CreateAppDto!): AppDataSerializer!
   createBulkApp(items: [CreateAppDto!]!): AppItemsSerializer!
   deleteOneApp(id: String!, ref: String): AppDataSerializer!
@@ -883,6 +943,18 @@ input CreateConfigDto {
 }
 
 input UpdateConfigDto {
+  value: JSON
+  key: String
+  type: ValueType
+}
+
+input CreateSettingDto {
+  value: JSON
+  key: String!
+  type: ValueType!
+}
+
+input UpdateSettingDto {
   value: JSON
   key: String
   type: ValueType

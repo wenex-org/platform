@@ -1,4 +1,4 @@
-import { ConfigProvider, configClientsModuleOptions } from '@app/common/providers';
+import { configClientsModuleOptions } from '@app/common/providers';
 import { ClientsModule } from '@nestjs/microservices';
 import { Module } from '@nestjs/common';
 
@@ -12,7 +12,5 @@ import { SettingsModule } from './crafts/settings';
     ),
     ...[ConfigsModule, SettingsModule],
   ],
-  providers: [ConfigProvider],
-  exports: [ConfigProvider],
 })
 export class ConfigModule {}

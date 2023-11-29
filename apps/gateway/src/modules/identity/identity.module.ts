@@ -1,4 +1,4 @@
-import { IdentityProvider, identityClientsModuleOptions } from '@app/common/providers';
+import { identityClientsModuleOptions } from '@app/common/providers';
 import { ClientsModule } from '@nestjs/microservices';
 import { Module } from '@nestjs/common';
 
@@ -13,7 +13,5 @@ import { SessionsModule } from './crafts/sessions';
     ),
     ...[UsersModule, ProfilesModule, SessionsModule],
   ],
-  providers: [IdentityProvider],
-  exports: [IdentityProvider],
 })
 export class IdentityModule {}
