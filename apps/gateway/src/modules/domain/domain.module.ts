@@ -9,8 +9,7 @@ import { ClientsModule } from './crafts/clients';
 @Module({
   imports: [
     GrpcClientsModule.register(domainClientsModuleOptions('modules/domain/domain.proto')),
-    AppsModule,
-    ClientsModule,
+    ...[AppsModule, ClientsModule],
   ],
   providers: [DomainProvider],
   exports: [DomainProvider],

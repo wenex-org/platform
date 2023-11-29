@@ -29,6 +29,32 @@ service ConfigsService {
   rpc UpdateById(UpdateConfigUnique) returns (ConfigData);
 }
 
+service SettingsService {
+  rpc Count(QueryFilter) returns (Total);
+
+  rpc Create(SettingData) returns (SettingData);
+  rpc CreateBulk(Settings) returns (Settings);
+
+  rpc Find(Filter) returns (Settings);
+  rpc Cursor(Filter) returns (stream Setting);
+
+  rpc FindOne(FilterOne) returns (SettingData);
+  rpc FindById(FilterID) returns (SettingData);
+
+  rpc DeleteOne(FilterOne) returns (SettingData);
+  rpc DeleteById(FilterID) returns (SettingData);
+
+  rpc RestoreOne(FilterOne) returns (SettingData);
+  rpc RestoreById(FilterID) returns (SettingData);
+
+  rpc DestroyOne(FilterOne) returns (SettingData);
+  rpc DestroyById(FilterID) returns (SettingData);
+
+  rpc UpdateOne(UpdateSettingOne) returns (SettingData);
+  rpc UpdateBulk(UpdateSettingBulk) returns (Total);
+  rpc UpdateById(UpdateSettingUnique) returns (SettingData);
+}
+
 // Common Messages
 
 message Total { int64 total = 1; }
@@ -110,3 +136,59 @@ message Config {
 }
 message Configs { repeated Config items = 1; }
 message ConfigData { optional Config data = 1; }
+
+// Setting Messages
+
+message UpdateSettingOne {
+  Setting update = 1;
+  FilterOne filter = 2;
+}
+message UpdateSettingBulk {
+  Setting update = 1;
+  QueryFilter filter = 2;
+}
+message UpdateSettingUnique {
+  Setting update = 1;
+  FilterID filter = 2;
+}
+
+message Setting {
+  // Base Interface
+  string owner = 1;
+
+  optional string id = 2;
+  optional string ref = 3;
+
+  repeated string shares = 4;
+  repeated string groups = 5;
+  repeated string clients = 6;
+
+  optional string created_at = 7;
+  optional string created_by = 8;
+  optional string created_in = 9;
+
+  optional string updated_at = 10;
+  optional string updated_by = 11;
+  optional string updated_in = 12;
+  optional string deleted_at = 13;
+  optional string deleted_by = 14;
+  optional string deleted_in = 15;
+  optional string restored_at = 16;
+  optional string restored_by = 17;
+  optional string restored_in = 18;
+
+  optional string description = 19;
+  optional string version = 20;
+  optional string props = 21;
+  repeated string tags = 22;
+
+  optional string rand = 23;
+  optional string timestamp = 24;
+
+  // Setting Interface
+  string key = 50;
+  string type = 51;
+  optional string value = 52;
+}
+message Settings { repeated Setting items = 1; }
+message SettingData { optional Setting data = 1; }

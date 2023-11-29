@@ -12,9 +12,7 @@ import { SessionsModule } from './crafts/sessions';
     ClientsModule.register(
       identityClientsModuleOptions('modules/identity/identity.proto'),
     ),
-    UsersModule,
-    ProfilesModule,
-    SessionsModule,
+    ...[UsersModule, ProfilesModule, SessionsModule],
   ],
   providers: [IdentityProvider],
   exports: [IdentityProvider],

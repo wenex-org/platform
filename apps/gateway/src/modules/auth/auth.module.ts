@@ -10,9 +10,7 @@ import { AuthenticationModule } from './crafts/authentication';
 @Module({
   imports: [
     ClientsModule.register(authClientsModuleOptions('modules/auth/auth.proto')),
-    AuthenticationModule,
-    AuthorizationModule,
-    GrantsModule,
+    ...[AuthenticationModule, AuthorizationModule, GrantsModule],
   ],
   providers: [AuthProvider],
   exports: [AuthProvider],
