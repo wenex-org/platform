@@ -14,6 +14,7 @@ import {
   AuthorizationCanRequestDto,
   AuthorizationPolicyRequestDto,
 } from '@app/common/dto';
+import { GatewayInterceptors } from '@app/common/interceptors';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -31,7 +32,7 @@ import { Observable, from } from 'rxjs';
 @Controller('auth')
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
-@UseInterceptors(new SentryInterceptor())
+@UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class AuthorizationController {
   constructor(readonly provider: AuthProvider) {}
 

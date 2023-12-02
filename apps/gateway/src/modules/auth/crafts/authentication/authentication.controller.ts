@@ -13,6 +13,7 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { AuthenticationRequestDto, TokenDto } from '@app/common/dto';
+import { GatewayInterceptors } from '@app/common/interceptors';
 import { AuthGuard, ScopeGuard } from '@app/common/guards';
 import { IsPublic, SetScope } from '@app/common/metadatas';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
@@ -31,7 +32,7 @@ import { Observable, from } from 'rxjs';
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard)
-@UseInterceptors(new SentryInterceptor())
+@UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class AuthenticationController {
   constructor(readonly provider: AuthProvider) {}
 
