@@ -98,7 +98,7 @@ message UpdateConfigUnique {
 
 message Config {
   // Base Interface
-  string owner = 1;
+  optional string owner = 1;
 
   optional string id = 2;
   optional string ref = 3;
@@ -130,8 +130,8 @@ message Config {
   optional string timestamp = 24;
 
   // Config Interface
-  string key = 50;
-  string type = 51;
+  optional string key = 50;
+  optional string type = 51;
   optional string value = 52;
 }
 message Configs { repeated Config items = 1; }
@@ -154,7 +154,7 @@ message UpdateSettingUnique {
 
 message Setting {
   // Base Interface
-  string owner = 1;
+  optional string owner = 1;
 
   optional string id = 2;
   optional string ref = 3;
@@ -186,8 +186,8 @@ message Setting {
   optional string timestamp = 24;
 
   // Setting Interface
-  string key = 50;
-  string type = 51;
+  optional string key = 50;
+  optional string type = 51;
   optional string value = 52;
 }
 message Settings { repeated Setting items = 1; }

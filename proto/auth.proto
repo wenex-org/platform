@@ -216,7 +216,7 @@ message UpdateGrantUnique {
 
 message Grant {
   // Base Interface
-  string owner = 1;
+  optional string owner = 1;
 
   optional string id = 2;
   optional string ref = 3;
@@ -248,9 +248,9 @@ message Grant {
   optional string timestamp = 24;
 
   // Grant Interface
-  string subject = 50;
-  string action = 51;
-  string object = 52;
+  optional string subject = 50;
+  optional string action = 51;
+  optional string object = 52;
 
   repeated string field = 53;
   repeated string filter = 54;
@@ -292,8 +292,8 @@ message Grant {
     optional string timestamp = 24;
 
     // Time Interface
-    int64 duration = 50;
-    string cron_exp = 51;
+    optional int64 duration = 50;
+    optional string cron_exp = 51;
   }
 }
 message Grants { repeated Grant items = 1; }

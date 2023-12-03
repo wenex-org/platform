@@ -124,7 +124,7 @@ message UpdateUserUnique {
 
 message User {
   // Base Interface
-  string owner = 1;
+  optional string owner = 1;
 
   optional string id = 2;
   optional string ref = 3;
@@ -156,7 +156,7 @@ message User {
   optional string timestamp = 24;
 
   // User Interface
-  string status = 50;
+  optional string status = 50;
 
   optional string tz = 51;
   optional string mfa = 52;
@@ -192,7 +192,7 @@ message UpdateSessionUnique {
 
 message Session {
   // Base Interface
-  string owner = 1;
+  optional string owner = 1;
 
   optional string id = 2;
   optional string ref = 3;
@@ -224,9 +224,9 @@ message Session {
   optional string timestamp = 24;
 
   // Session Interface
-  string ip = 50;
-  string agent = 51;
-  string expiration_date = 54;
+  optional string ip = 50;
+  optional string agent = 51;
+  optional string expiration_date = 54;
 }
 message Sessions { repeated Session items = 1; }
 message SessionData { optional Session data = 1; }
@@ -248,7 +248,7 @@ message UpdateProfileUnique {
 
 message Profile {
   // Base Interface
-  string owner = 1;
+  optional string owner = 1;
 
   optional string id = 2;
   optional string ref = 3;
@@ -280,9 +280,9 @@ message Profile {
   optional string timestamp = 24;
 
   // Profile Interface
-  string type = 50;
-  string state = 51;
-  string gender = 52;
+  optional string type = 50;
+  optional string state = 51;
+  optional string gender = 52;
 
   optional string cover = 53;
   optional string avatar = 54;

@@ -98,7 +98,7 @@ message UpdateAppUnique {
 
 message App {
   // Base Interface
-  string owner = 1;
+  optional string owner = 1;
 
   optional string id = 2;
   optional string ref = 3;
@@ -130,17 +130,17 @@ message App {
   optional string timestamp = 24;
 
   // App Interface
-  string cid = 50;
-  string type = 51;
+  optional string cid = 50;
+  optional string type = 51;
 
-  string name = 52;
-  string status = 53;
+  optional string name = 52;
+  optional string status = 53;
 
   repeated string scopes = 54;
   repeated string grant_types = 55;
 
-  int32 access_token_ttl = 56;
-  int32 refresh_token_ttl = 57;
+  optional int32 access_token_ttl = 56;
+  optional int32 refresh_token_ttl = 57;
 
   optional string url = 58;
   optional string logo = 59;
@@ -208,7 +208,7 @@ message UpdateClientUnique {
 
 message Client {
   // Base Interface
-  string owner = 1;
+  optional string owner = 1;
 
   optional string id = 2;
   optional string ref = 3;
@@ -240,28 +240,28 @@ message Client {
   optional string timestamp = 24;
 
   // Client Interface
-  string name = 50;
-  string plan = 51;
+  optional string name = 50;
+  optional string plan = 51;
 
   optional string url = 52;
   optional string logo = 53;
   optional string site = 54;
   optional string slogan = 55;
 
-  string state = 56;
-  string status = 57;
+  optional string state = 56;
+  optional string status = 57;
 
-  string client_id = 58;
-  string client_secret = 59;
-  string expiration_date = 60;
+  optional string client_id = 58;
+  optional string client_secret = 59;
+  optional string expiration_date = 60;
 
-  int32 access_token_ttl = 61;
-  int32 refresh_token_ttl = 62;
+  optional int32 access_token_ttl = 61;
+  optional int32 refresh_token_ttl = 62;
 
   repeated string scopes = 63;
   repeated string grant_types = 64;
 
-  string api_key = 65;
+  optional string api_key = 65;
 
   repeated string whitelist = 66;
   repeated string coworkers = 67;
@@ -304,8 +304,8 @@ message Client {
     optional string timestamp = 24;
 
     // Domain Interface
-    string name = 50;
-    string status = 51;
+    optional string name = 50;
+    optional string status = 51;
 
     repeated string subjects = 52;
   }
@@ -344,9 +344,9 @@ message Client {
     optional string timestamp = 24;
 
     // OtpService Interface
-    string type = 50;
-    string config = 51;
-    string provider = 52;
+    optional string type = 50;
+    optional string config = 51;
+    optional string provider = 52;
   }
 }
 message Clients { repeated Client items = 1; }
