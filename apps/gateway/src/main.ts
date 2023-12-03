@@ -7,6 +7,7 @@ import {
   XRequestIdInterceptor,
 } from '@app/common/interceptors';
 import { setupSwagger } from '@app/common/utils';
+import { prototyping } from '@app/common/utils';
 import { NODE_ENV } from '@app/common/configs';
 import { NestFactory } from '@nestjs/core';
 import { APP } from '@app/common/consts';
@@ -17,6 +18,7 @@ import { AppModule } from './app.module';
 
 const { GATEWAY } = APP;
 
+prototyping();
 async function bootstrap() {
   if (NODE_ENV().IS_PROD) await initTracing(['http', 'grpc', 'kafka']);
 
