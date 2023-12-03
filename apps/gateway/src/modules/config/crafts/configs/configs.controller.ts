@@ -113,7 +113,7 @@ export class ConfigsController
   @SetPolicy(Action.Read, Resource.ConfigConfigs)
   @ApiQuery({ type: FilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  Find(
+  find(
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Config>,
     @Session() session?: ClientSession,
@@ -126,7 +126,7 @@ export class ConfigsController
   @SetPolicy(Action.Read, Resource.ConfigConfigs)
   @ApiQuery({ type: FilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  Cursor(
+  cursor(
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Config>,
     @Session() session?: ClientSession,

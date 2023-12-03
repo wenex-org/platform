@@ -113,7 +113,7 @@ export class ProfilesController
   @SetPolicy(Action.Read, Resource.IdentityProfiles)
   @ApiQuery({ type: FilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  Find(
+  find(
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Profile>,
     @Session() session?: ClientSession,
@@ -126,7 +126,7 @@ export class ProfilesController
   @SetPolicy(Action.Read, Resource.IdentityProfiles)
   @ApiQuery({ type: FilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  Cursor(
+  cursor(
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Profile>,
     @Session() session?: ClientSession,
