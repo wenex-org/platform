@@ -162,6 +162,7 @@ type AuthorizationPolicyResponseSerializer {
 }
 
 type AuthorizationCanResponseSerializer {
+  policies: [PolicySerializer]!
   granted: Boolean!
 }
 
