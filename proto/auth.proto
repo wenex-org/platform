@@ -167,7 +167,10 @@ message AuthorizationCanRequest {
   optional string ip = 7;
   optional string time = 8;
 }
-message AuthorizationCanResponse { bool granted = 1; }
+message AuthorizationCanResponse {
+  bool granted = 1;
+  repeated Policy policies = 2;
+}
 
 message AuthorizationPolicyRequest {
   optional string token = 1;
@@ -177,24 +180,22 @@ message AuthorizationPolicyRequest {
   optional string action = 4;
   optional string object = 5;
 }
-message AuthorizationPolicyResponse {
-  repeated Policy policies = 1;
+message AuthorizationPolicyResponse { repeated Policy policies = 1; }
 
-  message Policy {
-    string subject = 50;
-    string action = 51;
-    string object = 52;
+message Policy {
+  string subject = 50;
+  string action = 51;
+  string object = 52;
 
-    repeated string field = 53;
-    repeated string filter = 54;
-    repeated string location = 55;
+  repeated string field = 53;
+  repeated string filter = 54;
+  repeated string location = 55;
 
-    repeated Time time = 56;
+  repeated Time time = 56;
 
-    message Time {
-      int64 duration = 50;
-      string cron_exp = 51;
-    }
+  message Time {
+    int64 duration = 50;
+    string cron_exp = 51;
   }
 }
 
