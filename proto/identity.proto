@@ -84,10 +84,6 @@ service ProfilesService {
 // Common Messages
 
 message Total { int64 total = 1; }
-message QueryID {
-  optional string id = 1;
-  optional string ref = 2;
-}
 
 message Filter {
   string query = 1;
@@ -101,7 +97,7 @@ message FilterOne {
   optional string projection = 3;
 }
 message FilterID {
-  QueryID query = 1;
+  string query = 1;
   optional string populate = 2;
   optional string projection = 3;
 }
