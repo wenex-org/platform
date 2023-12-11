@@ -23,9 +23,9 @@ import {
   App,
   AppDto,
 } from '@app/common/interfaces';
+import { Cache, Nested, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
-import { Cache, Nested, SetPolicy, SetScope } from '@app/common/metadatas';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
@@ -67,6 +67,7 @@ export class AppsResolver
 
   @Mutation(() => AppDataSerializer)
   @Cache('apps', 'flush')
+  @ShipStrategy('create')
   @SetScope(Scope.WriteDomainApps)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainApps)
@@ -80,6 +81,7 @@ export class AppsResolver
 
   @Mutation(() => AppItemsSerializer)
   @Cache('apps', 'flush')
+  @ShipStrategy('create')
   @SetScope(Scope.WriteDomainApps)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainApps)
@@ -170,6 +172,7 @@ export class AppsResolver
 
   @Mutation(() => AppDataSerializer)
   @Cache('apps', 'flush')
+  @ShipStrategy('update')
   @SetScope(Scope.WriteDomainApps)
   @SetPolicy(Action.Update, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -187,6 +190,7 @@ export class AppsResolver
 
   @Mutation(() => TotalSerializer)
   @Cache('apps', 'flush')
+  @ShipStrategy('update')
   @SetScope(Scope.ManageDomainApps)
   @SetPolicy(Action.Update, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

@@ -38,9 +38,9 @@ import {
   App,
   AppDto,
 } from '@app/common/interfaces';
+import { Cache, Nested, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Cache, Nested, SetPolicy, SetScope } from '@app/common/metadatas';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Filter, Meta, Session } from '@app/common/decorators';
@@ -84,6 +84,7 @@ export class AppsController
 
   @Post()
   @Cache('apps', 'flush')
+  @ShipStrategy('create')
   @SetScope(Scope.WriteDomainApps)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainApps)
@@ -97,6 +98,7 @@ export class AppsController
 
   @Post('bulk')
   @Cache('apps', 'flush')
+  @ShipStrategy('create')
   @SetScope(Scope.WriteDomainApps)
   @ApiBody({ type: [CreateAppDto] })
   @UseInterceptors(...WriteInterceptors)
@@ -206,6 +208,7 @@ export class AppsController
 
   @Patch(':id')
   @Cache('apps', 'flush')
+  @ShipStrategy('update')
   @SetScope(Scope.WriteDomainApps)
   @SetPolicy(Action.Update, Resource.DomainApps)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -224,6 +227,7 @@ export class AppsController
 
   @Patch('bulk')
   @Cache('apps', 'flush')
+  @ShipStrategy('update')
   @SetScope(Scope.ManageDomainApps)
   @SetPolicy(Action.Update, Resource.DomainApps)
   @ApiQuery({ type: QueryFilterDto, required: false })

@@ -38,11 +38,11 @@ import {
   Profile,
   ProfileDto,
 } from '@app/common/interfaces';
+import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
@@ -82,6 +82,7 @@ export class ProfilesController
   }
 
   @Post()
+  @ShipStrategy('create')
   @Cache('profiles', 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @UseInterceptors(...WriteInterceptors)
@@ -95,6 +96,7 @@ export class ProfilesController
   }
 
   @Post('bulk')
+  @ShipStrategy('create')
   @Cache('profiles', 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @ApiBody({ type: [CreateProfileDto] })
@@ -204,6 +206,7 @@ export class ProfilesController
   }
 
   @Patch(':id')
+  @ShipStrategy('update')
   @Cache('profiles', 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @SetPolicy(Action.Update, Resource.IdentityProfiles)
@@ -222,6 +225,7 @@ export class ProfilesController
   }
 
   @Patch('bulk')
+  @ShipStrategy('update')
   @Cache('profiles', 'flush')
   @SetScope(Scope.ManageIdentityProfiles)
   @SetPolicy(Action.Update, Resource.IdentityProfiles)

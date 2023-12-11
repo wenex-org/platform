@@ -23,9 +23,9 @@ import {
   Client,
   ClientDto,
 } from '@app/common/interfaces';
+import { Cache, Nested, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
-import { Cache, Nested, SetPolicy, SetScope } from '@app/common/metadatas';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
@@ -66,6 +66,7 @@ export class ClientsResolver
   }
 
   @Mutation(() => ClientDataSerializer)
+  @ShipStrategy('create')
   @Cache('clients', 'flush')
   @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
@@ -79,6 +80,7 @@ export class ClientsResolver
   }
 
   @Mutation(() => ClientItemsSerializer)
+  @ShipStrategy('create')
   @Cache('clients', 'flush')
   @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
@@ -169,6 +171,7 @@ export class ClientsResolver
   }
 
   @Mutation(() => ClientDataSerializer)
+  @ShipStrategy('update')
   @Cache('clients', 'flush')
   @SetScope(Scope.WriteDomainClients)
   @SetPolicy(Action.Update, Resource.DomainClients)
@@ -186,6 +189,7 @@ export class ClientsResolver
   }
 
   @Mutation(() => TotalSerializer)
+  @ShipStrategy('update')
   @Cache('clients', 'flush')
   @SetScope(Scope.ManageDomainClients)
   @SetPolicy(Action.Update, Resource.DomainClients)

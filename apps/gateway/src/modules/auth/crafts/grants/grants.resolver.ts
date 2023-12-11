@@ -23,9 +23,9 @@ import {
   Grant,
   GrantDto,
 } from '@app/common/interfaces';
+import { Cache, Nested, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
-import { Cache, Nested, SetPolicy, SetScope } from '@app/common/metadatas';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
@@ -66,6 +66,7 @@ export class GrantsResolver
   }
 
   @Mutation(() => GrantDataSerializer)
+  @ShipStrategy('create')
   @Cache('grants', 'flush')
   @SetScope(Scope.WriteAuthGrants)
   @UseInterceptors(...WriteInterceptors)
@@ -79,6 +80,7 @@ export class GrantsResolver
   }
 
   @Mutation(() => GrantItemsSerializer)
+  @ShipStrategy('create')
   @Cache('grants', 'flush')
   @SetScope(Scope.WriteAuthGrants)
   @UseInterceptors(...WriteInterceptors)
@@ -169,6 +171,7 @@ export class GrantsResolver
   }
 
   @Mutation(() => GrantDataSerializer)
+  @ShipStrategy('update')
   @Cache('grants', 'flush')
   @SetScope(Scope.WriteAuthGrants)
   @SetPolicy(Action.Update, Resource.AuthGrants)
@@ -186,6 +189,7 @@ export class GrantsResolver
   }
 
   @Mutation(() => TotalSerializer)
+  @ShipStrategy('update')
   @Cache('grants', 'flush')
   @SetScope(Scope.ManageAuthGrants)
   @SetPolicy(Action.Update, Resource.AuthGrants)

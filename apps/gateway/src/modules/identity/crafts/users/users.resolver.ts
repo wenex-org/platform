@@ -24,10 +24,10 @@ import {
   UserDto,
 } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
+import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
@@ -65,6 +65,7 @@ export class UsersResolver
   }
 
   @Mutation(() => UserDataSerializer)
+  @ShipStrategy('create')
   @Cache('users', 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
@@ -78,6 +79,7 @@ export class UsersResolver
   }
 
   @Mutation(() => UserItemsSerializer)
+  @ShipStrategy('create')
   @Cache('users', 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
@@ -168,6 +170,7 @@ export class UsersResolver
   }
 
   @Mutation(() => UserDataSerializer)
+  @ShipStrategy('update')
   @Cache('users', 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @SetPolicy(Action.Update, Resource.IdentityUsers)
@@ -185,6 +188,7 @@ export class UsersResolver
   }
 
   @Mutation(() => TotalSerializer)
+  @ShipStrategy('update')
   @Cache('users', 'flush')
   @SetScope(Scope.ManageIdentityUsers)
   @SetPolicy(Action.Update, Resource.IdentityUsers)

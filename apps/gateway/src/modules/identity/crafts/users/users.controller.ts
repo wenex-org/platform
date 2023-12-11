@@ -38,11 +38,11 @@ import {
   User,
   UserDto,
 } from '@app/common/interfaces';
+import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
@@ -82,6 +82,7 @@ export class UsersController
   }
 
   @Post()
+  @ShipStrategy('create')
   @Cache('users', 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
@@ -95,6 +96,7 @@ export class UsersController
   }
 
   @Post('bulk')
+  @ShipStrategy('create')
   @Cache('users', 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @ApiBody({ type: [CreateUserDto] })
@@ -204,6 +206,7 @@ export class UsersController
   }
 
   @Patch(':id')
+  @ShipStrategy('update')
   @Cache('users', 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @SetPolicy(Action.Update, Resource.IdentityUsers)
@@ -222,6 +225,7 @@ export class UsersController
   }
 
   @Patch('bulk')
+  @ShipStrategy('update')
   @Cache('users', 'flush')
   @SetScope(Scope.ManageIdentityUsers)
   @SetPolicy(Action.Update, Resource.IdentityUsers)

@@ -38,11 +38,11 @@ import {
   Setting,
   SettingDto,
 } from '@app/common/interfaces';
+import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
@@ -82,6 +82,7 @@ export class SettingsController
   }
 
   @Post()
+  @ShipStrategy('create')
   @Cache('settings', 'flush')
   @SetScope(Scope.WriteConfigSettings)
   @UseInterceptors(...WriteInterceptors)
@@ -95,6 +96,7 @@ export class SettingsController
   }
 
   @Post('bulk')
+  @ShipStrategy('create')
   @Cache('settings', 'flush')
   @SetScope(Scope.WriteConfigSettings)
   @ApiBody({ type: [CreateSettingDto] })
@@ -204,6 +206,7 @@ export class SettingsController
   }
 
   @Patch(':id')
+  @ShipStrategy('update')
   @Cache('settings', 'flush')
   @SetScope(Scope.WriteConfigSettings)
   @SetPolicy(Action.Update, Resource.ConfigSettings)
@@ -222,6 +225,7 @@ export class SettingsController
   }
 
   @Patch('bulk')
+  @ShipStrategy('update')
   @Cache('settings', 'flush')
   @SetScope(Scope.ManageConfigSettings)
   @SetPolicy(Action.Update, Resource.ConfigSettings)

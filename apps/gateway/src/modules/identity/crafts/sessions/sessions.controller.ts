@@ -38,11 +38,11 @@ import {
   Metadata,
   SessionDto,
 } from '@app/common/interfaces';
+import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
@@ -82,6 +82,7 @@ export class SessionsController
   }
 
   @Post()
+  @ShipStrategy('create')
   @Cache('sessions', 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @UseInterceptors(...WriteInterceptors)
@@ -95,6 +96,7 @@ export class SessionsController
   }
 
   @Post('bulk')
+  @ShipStrategy('create')
   @Cache('sessions', 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @ApiBody({ type: [CreateSessionDto] })
@@ -204,6 +206,7 @@ export class SessionsController
   }
 
   @Patch(':id')
+  @ShipStrategy('update')
   @Cache('sessions', 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @SetPolicy(Action.Update, Resource.IdentitySessions)
@@ -222,6 +225,7 @@ export class SessionsController
   }
 
   @Patch('bulk')
+  @ShipStrategy('update')
   @Cache('sessions', 'flush')
   @SetScope(Scope.ManageIdentitySessions)
   @SetPolicy(Action.Update, Resource.IdentitySessions)

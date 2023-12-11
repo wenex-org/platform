@@ -24,10 +24,10 @@ import {
   SessionDto,
 } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
+import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
@@ -65,6 +65,7 @@ export class SessionsResolver
   }
 
   @Mutation(() => SessionDataSerializer)
+  @ShipStrategy('create')
   @Cache('sessions', 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @UseInterceptors(...WriteInterceptors)
@@ -78,6 +79,7 @@ export class SessionsResolver
   }
 
   @Mutation(() => SessionItemsSerializer)
+  @ShipStrategy('create')
   @Cache('sessions', 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @UseInterceptors(...WriteInterceptors)
@@ -168,6 +170,7 @@ export class SessionsResolver
   }
 
   @Mutation(() => SessionDataSerializer)
+  @ShipStrategy('update')
   @Cache('sessions', 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @SetPolicy(Action.Update, Resource.IdentitySessions)
@@ -185,6 +188,7 @@ export class SessionsResolver
   }
 
   @Mutation(() => TotalSerializer)
+  @ShipStrategy('update')
   @Cache('sessions', 'flush')
   @SetScope(Scope.ManageIdentitySessions)
   @SetPolicy(Action.Update, Resource.IdentitySessions)
