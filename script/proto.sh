@@ -30,15 +30,15 @@ PROTOS[IDENTITY,3]=./apps/gateway/src/modules/identity/identity.proto
 # Main Program
 for KEY in "${!PROTOS[@]}"; do
   if [[ $KEY == *"AUTH"* ]]; then
-    if ! test -f ${PROTOS[$KEY]}; then ln $AUTH ${PROTOS[$KEY]}; fi
+    if ! test -f ${PROTOS[$KEY]}; then ln -f $AUTH ${PROTOS[$KEY]}; fi
   fi
   if [[ $KEY == *"CONFIG"* ]]; then
-    if ! test -f ${PROTOS[$KEY]}; then ln $CONFIG ${PROTOS[$KEY]}; fi
+    if ! test -f ${PROTOS[$KEY]}; then ln -f $CONFIG ${PROTOS[$KEY]}; fi
   fi
   if [[ $KEY == *"DOMAIN"* ]]; then
-    if ! test -f ${PROTOS[$KEY]}; then ln $DOMAIN ${PROTOS[$KEY]}; fi
+    if ! test -f ${PROTOS[$KEY]}; then ln -f $DOMAIN ${PROTOS[$KEY]}; fi
   fi
   if [[ $KEY == *"IDENTITY"* ]]; then
-    if ! test -f ${PROTOS[$KEY]}; then ln $IDENTITY ${PROTOS[$KEY]}; fi
+    if ! test -f ${PROTOS[$KEY]}; then ln -f $IDENTITY ${PROTOS[$KEY]}; fi
   fi
 done
