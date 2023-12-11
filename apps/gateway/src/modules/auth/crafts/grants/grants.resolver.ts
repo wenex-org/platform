@@ -25,9 +25,9 @@ import {
 } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Cache, Nested, SetPolicy, SetScope } from '@app/common/metadatas';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
@@ -39,6 +39,7 @@ import { ClientSession } from 'mongoose';
 import { Observable } from 'rxjs';
 
 @Resolver(() => GrantSerializer)
+@Nested<Grant>('time')
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)

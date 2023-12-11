@@ -40,9 +40,9 @@ import {
 } from '@app/common/interfaces';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Cache, Nested, SetPolicy, SetScope } from '@app/common/metadatas';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Cache, SetPolicy, SetScope } from '@app/common/metadatas';
 import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
@@ -55,6 +55,7 @@ import { Observable } from 'rxjs';
 @ApiBearerAuth()
 @ApiTags('grants')
 @Controller('grants')
+@Nested<Grant>('time')
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
