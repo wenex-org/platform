@@ -26,11 +26,6 @@
     "db:clean": "npm run command -- db clean",
     "db:seed": "npm run command -- db seed",
     "db:debug": "npm run command:debug -- db",
-    "mongo:drop": "npm run command -- mongo drop",
-    "mongo:seed": "npm run command -- mongo seed",
-    "mongo:debug": "npm run command:debug -- mongo",
-    "minio:init": "npm run command -- minio init",
-    "minio:debug": "npm run command:debug -- minio",
     "storage:init": "npm run command -- storage init",
     "storage:debug": "npm run command:debug -- storage",
     "doc": "npx compodoc -p tsconfig.json -n \"Wenex Documentation\" -d ./docs -s"
