@@ -49,6 +49,7 @@ import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { DomainProvider } from '@app/common/providers';
 import { refineFilterQuery } from '@app/common/utils';
+import { Nested } from '@app/common/metadatas';
 import { ClientSession } from 'mongoose';
 import { Observable } from 'rxjs';
 
@@ -85,6 +86,7 @@ export class ClientsController
   @Cache('clients', 'flush')
   @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
+  @Nested<Client>('domains', 'otp_services')
   @SetPolicy(Action.Create, Resource.DomainClients)
   create(
     @Meta() meta: Metadata,
@@ -99,6 +101,7 @@ export class ClientsController
   @SetScope(Scope.WriteDomainClients)
   @ApiBody({ type: [CreateClientDto] })
   @UseInterceptors(...WriteInterceptors)
+  @Nested<Client>('domains', 'otp_services')
   @SetPolicy(Action.Create, Resource.DomainClients)
   createBulk(
     @Meta() meta: Metadata,
@@ -206,6 +209,7 @@ export class ClientsController
   @Patch(':id')
   @Cache('clients', 'flush')
   @SetScope(Scope.WriteDomainClients)
+  @Nested<Client>('domains', 'otp_services')
   @SetPolicy(Action.Update, Resource.DomainClients)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -224,6 +228,7 @@ export class ClientsController
   @Patch('bulk')
   @Cache('clients', 'flush')
   @SetScope(Scope.ManageDomainClients)
+  @Nested<Client>('domains', 'otp_services')
   @SetPolicy(Action.Update, Resource.DomainClients)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

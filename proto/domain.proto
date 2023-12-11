@@ -147,7 +147,7 @@ message App {
 
   message ChangeLog {
     // Sub Interface
-    optional string uid = 1;
+    optional string owner = 1;
 
     optional string id = 2;
     optional string ref = 3;
@@ -268,7 +268,7 @@ message Client {
 
   message Domain {
     // Sub Interface
-    optional string uid = 1;
+    optional string owner = 1;
 
     optional string id = 2;
     optional string ref = 3;
@@ -308,7 +308,7 @@ message Client {
 
   message OtpService {
     // Sub Interface
-    optional string uid = 1;
+    optional string owner = 1;
 
     optional string id = 2;
     optional string ref = 3;
