@@ -6,6 +6,7 @@
     "datacenter",
     "kafkajs",
     "keyspace",
+    "luxon",
     "maxlength",
     "metadatas",
     "metatype",
