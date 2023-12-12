@@ -132,6 +132,8 @@ enum Resource {
   IdentityUsers
   IdentityProfiles
   IdentitySessions
+  Special
+  SpecialStats
 }
 
 type GrantDataSerializer {
@@ -420,6 +422,12 @@ enum Scope {
   ReadIdentitySessions
   WriteIdentitySessions
   ManageIdentitySessions
+  ReadSpecial
+  WriteSpecial
+  ManageSpecial
+  ReadSpecialStats
+  WriteSpecialStats
+  ManageSpecialStats
 }
 
 enum GrantType {
@@ -623,6 +631,14 @@ enum StatType {
   Monthly
 }
 
+type StatDataSerializer {
+  data: StatSerializer
+}
+
+type StatItemsSerializer {
+  items: [StatSerializer]!
+}
+
 type UserSerializer {
   props: JSON
   id: String!
@@ -797,6 +813,9 @@ type Query {
   countClient(filter: QueryFilterDto!): TotalSerializer!
   findClient(filter: FilterDto!): ClientItemsSerializer!
   findOneClient(id: String!, ref: String): ClientDataSerializer!
+  countStat(filter: QueryFilterDto!): TotalSerializer!
+  findStat(filter: FilterDto!): StatItemsSerializer!
+  findOneStat(id: String!, ref: String): StatDataSerializer!
   countUser(filter: QueryFilterDto!): TotalSerializer!
   findUser(filter: FilterDto!): UserItemsSerializer!
   findOneUser(id: String!, ref: String): UserDataSerializer!
@@ -873,6 +892,13 @@ type Mutation {
   destroyOneClient(id: String!, ref: String): ClientDataSerializer!
   updateOneClient(id: String!, data: UpdateClientDto!, ref: String): ClientDataSerializer!
   updateBulkClient(filter: QueryFilterDto!, data: UpdateClientDto!): TotalSerializer!
+  createStat(data: CreateStatDto!): StatDataSerializer!
+  createBulkStat(items: [CreateStatDto!]!): StatItemsSerializer!
+  deleteOneStat(id: String!, ref: String): StatDataSerializer!
+  restoreOneStat(id: String!, ref: String): StatDataSerializer!
+  destroyOneStat(id: String!, ref: String): StatDataSerializer!
+  updateOneStat(id: String!, data: UpdateStatDto!, ref: String): StatDataSerializer!
+  updateBulkStat(filter: QueryFilterDto!, data: UpdateStatDto!): TotalSerializer!
   createUser(data: CreateUserDto!): UserDataSerializer!
   createBulkUser(items: [CreateUserDto!]!): UserItemsSerializer!
   deleteOneUser(id: String!, ref: String): UserDataSerializer!
@@ -1118,6 +1144,32 @@ input UpdateClientOtpServiceDto {
   config: JSON!
   type: ClientOtpType!
   provider: ClientOtpProvider!
+}
+
+input CreateStatDto {
+  flags: JSON
+  type: StatType!
+  key: String!
+  value: Float!
+  day: Float
+  hours: [Float!]
+  month: Float
+  days: [Float!]
+  year: Float
+  months: [Float!]
+}
+
+input UpdateStatDto {
+  flags: JSON
+  type: StatType!
+  key: String!
+  value: Float!
+  day: Float
+  hours: [Float!]
+  month: Float
+  days: [Float!]
+  year: Float
+  months: [Float!]
 }
 
 input CreateUserDto {
