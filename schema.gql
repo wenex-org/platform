@@ -86,6 +86,7 @@ enum Action {
   Delete
   Restore
   Destroy
+  Collect
   Emit
   Send
   Init
@@ -380,6 +381,7 @@ enum Scope {
   Read
   Write
   Manage
+  Collect
   Emit
   Send
   Init
