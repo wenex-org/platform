@@ -4,6 +4,7 @@
     "compodoc",
     "consts",
     "datacenter",
+    "hasher",
     "kafkajs",
     "keyspace",
     "luxon",
