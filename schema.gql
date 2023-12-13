@@ -1153,6 +1153,7 @@ input CreateStatDto {
   type: StatType!
   key: String!
   value: Float!
+  hour: Float
   day: Float
   hours: [Float!]
   month: Float
