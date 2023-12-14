@@ -1153,6 +1153,7 @@ input CreateStatDto {
   type: StatType!
   key: String!
   value: Float!
+  alpha: Float
   hour: Float
   day: Float
   hours: [Float!]
@@ -1164,9 +1165,9 @@ input CreateStatDto {
 
 input UpdateStatDto {
   flags: JSON
-  type: StatType!
-  key: String!
-  value: Float!
+  type: StatType
+  key: String
+  value: Float
   day: Float
   hours: [Float!]
   month: Float
