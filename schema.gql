@@ -134,6 +134,7 @@ enum Resource {
   IdentityProfiles
   IdentitySessions
   Special
+  SpecialFiles
   SpecialStats
 }
 
@@ -427,6 +428,9 @@ enum Scope {
   ReadSpecial
   WriteSpecial
   ManageSpecial
+  ReadSpecialFiles
+  WriteSpecialFiles
+  ManageSpecialFiles
   ReadSpecialStats
   WriteSpecialStats
   ManageSpecialStats
@@ -588,6 +592,53 @@ type ClientDataSerializer {
 
 type ClientItemsSerializer {
   items: [ClientSerializer!]
+}
+
+type FileSerializer {
+  props: JSON
+  id: String!
+  ref: String
+  owner: String!
+  shares: [String!]
+  groups: [String!]
+  clients: [String!]!
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  tags: [String!]
+  rand: String!
+  timestamp: String!
+  field: String
+  original: String!
+  encoding: String
+  mimetype: String!
+  size: Float!
+  bucket: String!
+  key: String!
+  acl: String!
+  content_type: String
+  storage_class: String
+  location: String!
+  etag: String
+}
+
+type FileDataSerializer {
+  data: FileSerializer
+}
+
+type FileItemsSerializer {
+  items: [FileSerializer]!
 }
 
 type StatSerializer {
@@ -815,6 +866,9 @@ type Query {
   countClient(filter: QueryFilterDto!): TotalSerializer!
   findClient(filter: FilterDto!): ClientItemsSerializer!
   findOneClient(id: String!, ref: String): ClientDataSerializer!
+  countFile(filter: QueryFilterDto!): TotalSerializer!
+  findFile(filter: FilterDto!): FileItemsSerializer!
+  findOneFile(id: String!, ref: String): FileDataSerializer!
   countStat(filter: QueryFilterDto!): TotalSerializer!
   findStat(filter: FilterDto!): StatItemsSerializer!
   findOneStat(id: String!, ref: String): StatDataSerializer!
@@ -894,6 +948,13 @@ type Mutation {
   destroyOneClient(id: String!, ref: String): ClientDataSerializer!
   updateOneClient(id: String!, data: UpdateClientDto!, ref: String): ClientDataSerializer!
   updateBulkClient(filter: QueryFilterDto!, data: UpdateClientDto!): TotalSerializer!
+  createFile(data: CreateFileDto!): FileDataSerializer!
+  createBulkFile(items: [CreateFileDto!]!): FileItemsSerializer!
+  deleteOneFile(id: String!, ref: String): FileDataSerializer!
+  restoreOneFile(id: String!, ref: String): FileDataSerializer!
+  destroyOneFile(id: String!, ref: String): FileDataSerializer!
+  updateOneFile(id: String!, data: UpdateFileDto!, ref: String): FileDataSerializer!
+  updateBulkFile(filter: QueryFilterDto!, data: UpdateFileDto!): TotalSerializer!
   createStat(data: CreateStatDto!): StatDataSerializer!
   createBulkStat(items: [CreateStatDto!]!): StatItemsSerializer!
   deleteOneStat(id: String!, ref: String): StatDataSerializer!
@@ -1146,6 +1207,36 @@ input UpdateClientOtpServiceDto {
   config: JSON!
   type: ClientOtpType!
   provider: ClientOtpProvider!
+}
+
+input CreateFileDto {
+  field: String
+  original: String!
+  encoding: String
+  mimetype: String!
+  size: Float!
+  bucket: String!
+  key: String!
+  acl: String!
+  content_type: String
+  storage_class: String
+  location: String!
+  etag: String
+}
+
+input UpdateFileDto {
+  field: String
+  original: String
+  encoding: String
+  mimetype: String
+  size: Float
+  bucket: String
+  key: String
+  acl: String
+  content_type: String
+  storage_class: String
+  location: String
+  etag: String
 }
 
 input CreateStatDto {

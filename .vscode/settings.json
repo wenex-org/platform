@@ -4,6 +4,7 @@
     "compodoc",
     "consts",
     "datacenter",
+    "etag",
     "fieldname",
     "hasher",
     "kafkajs",
