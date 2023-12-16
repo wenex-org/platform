@@ -28,7 +28,7 @@ Gateway equipped with Swagger OpenAPIv3 documentation and Apollo GraphQL Playgro
 
 ```sh
 # clone the platform repository
-git clone git@github.com:wenex-back-end/platform.git
+git clone git@github.com:wenex-org/platform.git
 
 # install dependencies with pnpm
 cd admin-platform && pnpm install --frozen-lockfile
@@ -46,12 +46,11 @@ npm run db:seed
 npm run start gateway &
 
 # command to start other services
-npm run start platform/auth & \
-npm run start platform/domain & \
-npm run start platform/identity &
-
-# command to start touch service (email)
-npm run start platform/touch
+npm run start auth & \
+npm run start config & \
+npm run start domain & \
+npm run start identity & \
+npm run start special &
 ```
 
 > Note: Each service has it's own health check and metrics endpoint and also it's own sentry issue tracker.
