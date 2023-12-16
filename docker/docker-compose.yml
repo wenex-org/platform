@@ -2,12 +2,22 @@ version: '3.8'
 
 services:
   #######################
-  # UTILS
+  # CACHE
   #######################
+  
   redis:
     extends:
       file: docker-compose.util.yml
       service: redis
+
+  #######################
+  # STORAGE
+  #######################
+  
+  minio:
+    extends:
+      file: docker-compose.util.yml
+      service: minio
 
   #######################
   # BROKER
