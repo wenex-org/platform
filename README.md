@@ -28,7 +28,7 @@ Gateway equipped with Swagger OpenAPIv3 documentation and Apollo GraphQL Playgro
 
 ```sh
 # clone the platform repository
-git clone git@gitlab.com:coinoverse-back-end/admin-platform.git
+git clone git@github.com:wenex-back-end/platform.git
 
 # install dependencies with pnpm
 cd admin-platform && pnpm install --frozen-lockfile
