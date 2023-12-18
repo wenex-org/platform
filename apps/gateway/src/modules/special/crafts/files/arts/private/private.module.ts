@@ -5,6 +5,7 @@ import { MINIO_CONFIG } from '@app/common/configs';
 import { Module } from '@nestjs/common';
 import * as multerS3 from 'multer-s3';
 
+import { PrivateService } from './private.service';
 import { PrivateController } from './private.controller';
 
 const { PRIVATE_STORAGE } = MINIO_CONFIG();
@@ -17,7 +18,9 @@ const { PRIVATE_STORAGE } = MINIO_CONFIG();
       provide: PRIVATE_BUCKET,
       useValue: PRIVATE_STORAGE.s3,
     },
+    PrivateService,
     SpecialProvider,
   ],
+  exports: [PrivateService],
 })
 export class PrivateModule {}
