@@ -24,7 +24,6 @@ import { sdkStreamMixin } from '@smithy/util-stream';
 import { Metadata } from '@app/common/interfaces';
 import { QueryFilterDto } from '@app/common/dto';
 import { Response } from 'express';
-import { map } from 'rxjs';
 
 import { FilesService } from './files.service';
 
@@ -41,12 +40,9 @@ export class FilesInspector {
   @Get('download/:id')
   @SetScope(Scope.DownloadSpecialFiles)
   @UseInterceptors(AuthorityInterceptor)
+  @ApiResponse({ status: HttpStatus.OK })
   @SetPolicy(Action.Download, Resource.SpecialFiles)
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    content: { 'multipart/form-data': { schema: { type: 'string', format: 'binary' } } },
-  })
   async download(
     @Param('id', ParseIdPipe) id: string,
     @Res() res: Response,
@@ -58,10 +54,11 @@ export class FilesInspector {
     const { data, file } = await this.service.download(filter.query, { meta });
 
     res.set({
+      ETag: file.etag,
       'Content-Type': file.mimetype,
       'Content-Disposition': `attachment; filename="${file.original}"`,
     });
 
-    return sdkStreamMixin(data.pipe(map((res: any) => res.Body))).pipe(res);
+    return sdkStreamMixin(data.Body).pipe(res);
   }
 }

@@ -23,9 +23,9 @@ export class FilesService {
     expect(file?.id && isAvailable(file), 'File not found', HttpStatus.NOT_FOUND);
 
     if (file.bucket === PUBLIC_STORAGE.bucket) {
-      return { data: this.publicService.getObject(file), file };
+      return { data: await this.publicService.getObject(file), file };
     } else if (file.bucket === PRIVATE_STORAGE.bucket) {
-      return { data: this.privateService.getObject(file), file };
+      return { data: await this.privateService.getObject(file), file };
     } else throw new Error('unknown bucket');
   }
 }
