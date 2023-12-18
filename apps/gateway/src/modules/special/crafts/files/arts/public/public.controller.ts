@@ -10,18 +10,17 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { FileSerializer } from '@app/common/serializers';
+import { SpecialProvider } from '@app/common/providers';
 import { Metadata } from '@app/common/interfaces';
+import { CreateFileDto } from '@app/common/dto';
 import { Meta } from '@app/common/decorators';
 
-import { CreateFileDto } from '../../dto';
-import { PublicService } from './public.service';
-
-@ApiTags('assets')
-@Controller('assets')
+@ApiTags('files')
+@Controller('files')
 @UseFilters(AllExceptionsFilter)
 @UseInterceptors(new SentryInterceptor())
 export class PublicController {
-  constructor(private readonly service: PublicService) {}
+  constructor(readonly provider: SpecialProvider) {}
 
   @Post('upload/public')
   @ApiConsumes('multipart/form-data')
@@ -38,6 +37,6 @@ export class PublicController {
     @Meta() meta: Metadata,
     @UploadedFiles() files: CreateFileDto[],
   ): Promise<FileSerializer[]> {
-    return this.service.upload(files, { meta });
+    return this.provider.files.upload(files, { meta });
   }
 }
