@@ -20,7 +20,7 @@ export class FilesService {
   async download(query: Query<File>, options?: ServiceOptions) {
     const file = await this.provider.files.findOne({ query }, options);
 
-    expect(!file?.id && isAvailable(file), 'File not found', HttpStatus.NOT_FOUND);
+    expect(file?.id && isAvailable(file), 'File not found', HttpStatus.NOT_FOUND);
 
     if (file.bucket === PUBLIC_STORAGE.bucket) {
       return { data: this.publicService.getObject(file), file };
