@@ -11,9 +11,9 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { AuthorityInterceptor, GatewayInterceptors } from '@app/common/interceptors';
+import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SetPolicy, SetScope } from '@app/common/metadatas';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
@@ -42,6 +42,7 @@ export class FilesInspector {
   @SetScope(Scope.DownloadSpecialFiles)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Download, Resource.SpecialFiles)
+  @ApiQuery({ type: String, name: 'ref', required: false })
   @ApiResponse({
     status: HttpStatus.OK,
     content: { 'multipart/form-data': { schema: { type: 'string', format: 'binary' } } },

@@ -1,8 +1,8 @@
 import { File, Query, ServiceOptions } from '@app/common/interfaces';
 import { HttpStatus, Injectable } from '@nestjs/common';
+import { expect, isAvailable } from '@app/common/utils';
 import { SpecialProvider } from '@app/common/providers';
 import { MINIO_CONFIG } from '@app/common/configs';
-import { expect } from '@app/common/utils';
 
 import { PrivateService, PublicService } from './arts';
 
@@ -20,7 +20,7 @@ export class FilesService {
   async download(query: Query<File>, options?: ServiceOptions) {
     const file = await this.provider.files.findOne({ query }, options);
 
-    expect(!file?.id, 'File not found', HttpStatus.NOT_FOUND);
+    expect(!file?.id && isAvailable(file), 'File not found', HttpStatus.NOT_FOUND);
 
     if (file.bucket === PUBLIC_STORAGE.bucket) {
       return { data: this.publicService.getObject(file), file };
