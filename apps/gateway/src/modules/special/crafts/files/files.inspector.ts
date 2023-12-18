@@ -40,9 +40,9 @@ export class FilesInspector {
   @Get('download/:id')
   @SetScope(Scope.DownloadSpecialFiles)
   @UseInterceptors(AuthorityInterceptor)
-  @ApiResponse({ status: HttpStatus.OK })
   @SetPolicy(Action.Download, Resource.SpecialFiles)
   @ApiQuery({ type: String, name: 'ref', required: false })
+  @ApiResponse({ status: HttpStatus.OK, description: 'multipart/form-data' })
   async download(
     @Param('id', ParseIdPipe) id: string,
     @Res() res: Response,
