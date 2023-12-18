@@ -1,4 +1,3 @@
-import { SpecialProvider } from '@app/common/providers';
 import { Module } from '@nestjs/common';
 
 import { FilesService } from './files.service';
@@ -10,6 +9,6 @@ import { PrivateModule, PublicModule } from './arts';
 @Module({
   imports: [PublicModule, PrivateModule],
   controllers: [FilesController, FilesInspector],
-  providers: [FilesService, SpecialProvider, FilesResolver],
+  providers: [FilesService, FilesResolver],
 })
 export class FilesModule {}

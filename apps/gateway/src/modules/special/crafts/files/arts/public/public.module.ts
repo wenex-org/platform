@@ -1,4 +1,3 @@
-import { SpecialProvider } from '@app/common/providers';
 import { MulterModule } from '@nestjs/platform-express';
 import { PUBLIC_BUCKET } from '@app/common/consts';
 import { MINIO_CONFIG } from '@app/common/configs';
@@ -19,7 +18,6 @@ const { PUBLIC_STORAGE } = MINIO_CONFIG();
       useValue: PUBLIC_STORAGE.s3,
     },
     PublicService,
-    SpecialProvider,
   ],
   exports: [PublicService],
 })
