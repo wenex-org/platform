@@ -53,8 +53,8 @@ export class FilesInspector {
     refineFilterQuery(filter, { id, ref });
     const { data, file } = await this.service.download(filter.query, { meta });
 
-    res.set({
-      ETag: file.etag,
+    res.status(HttpStatus.OK).set({
+      ETag: `"${file.etag}"`,
       'Content-Type': file.mimetype,
       'Content-Disposition': `attachment; filename="${file.original}"`,
     });
