@@ -431,6 +431,7 @@ enum Scope {
   ReadSpecialFiles
   WriteSpecialFiles
   ManageSpecialFiles
+  UploadSpecialFiles
   DownloadSpecialFiles
   ReadSpecialStats
   WriteSpecialStats
