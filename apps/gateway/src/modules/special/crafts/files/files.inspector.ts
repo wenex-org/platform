@@ -64,11 +64,11 @@ export class FilesInspector {
     const etag = MD5.hash(file.etag + toString({ rotate, resize }));
     res.status(HttpStatus.OK).set({
       ETag: `"${resize || rotate ? etag : file.etag}"`,
-      'Content-Type': file.mimetype,
+      'Content-Type': file.content_type,
       'Content-Disposition': `attachment; filename="${file.original}"`,
     });
 
-    if (file.mimetype?.startsWith('image') && (resize || rotate)) {
+    if (file.content_type?.startsWith('image') && (resize || rotate)) {
       let sh: sharp.Sharp = sharp();
 
       if (resize) sh = sh.resize({ ...resize });
