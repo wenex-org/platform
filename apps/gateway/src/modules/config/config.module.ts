@@ -1,5 +1,4 @@
-import { configClientsModuleOptions } from '@app/common/providers';
-import { ClientsModule } from '@nestjs/microservices';
+import { ConfigProviderModule } from '@app/common/providers';
 import { Module } from '@nestjs/common';
 
 import { ConfigsModule } from './crafts/configs';
@@ -7,9 +6,7 @@ import { SettingsModule } from './crafts/settings';
 
 @Module({
   imports: [
-    ClientsModule.register(
-      configClientsModuleOptions('modules/config/config.proto', { isGlobal: true }),
-    ),
+    ConfigProviderModule.forRoot('modules/config/config.proto'),
     ...[ConfigsModule, SettingsModule],
   ],
 })

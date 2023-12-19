@@ -1,5 +1,4 @@
-import { identityClientsModuleOptions } from '@app/common/providers';
-import { ClientsModule } from '@nestjs/microservices';
+import { IdentityProviderModule } from '@app/common/providers';
 import { Module } from '@nestjs/common';
 
 import { UsersModule } from './crafts/users';
@@ -8,9 +7,7 @@ import { SessionsModule } from './crafts/sessions';
 
 @Module({
   imports: [
-    ClientsModule.register(
-      identityClientsModuleOptions('modules/identity/identity.proto', { isGlobal: true }),
-    ),
+    IdentityProviderModule.forRoot('modules/identity/identity.proto'),
     ...[UsersModule, ProfilesModule, SessionsModule],
   ],
 })

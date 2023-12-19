@@ -1,5 +1,4 @@
-import { AuthProvider, authClientsModuleOptions } from '@app/common/providers';
-import { ClientsModule } from '@nestjs/microservices';
+import { AuthProvider, AuthProviderModule } from '@app/common/providers';
 import { Global, Module } from '@nestjs/common';
 
 import { GrantsModule } from './crafts/grants';
@@ -9,9 +8,7 @@ import { AuthenticationModule } from './crafts/authentication';
 @Global()
 @Module({
   imports: [
-    ClientsModule.register(
-      authClientsModuleOptions('modules/auth/auth.proto', { isGlobal: true }),
-    ),
+    AuthProviderModule.forRoot('modules/auth/auth.proto'),
     ...[AuthenticationModule, AuthorizationModule, GrantsModule],
   ],
   providers: [AuthProvider],
