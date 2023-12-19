@@ -35,7 +35,7 @@ export class StatsInspector {
   @SetScope(Scope.CollectSpecialStats)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Collect, Resource.SpecialStats)
-  async collet(@Meta() meta: Metadata, @Body() data: CreateStatDto) {
+  async collect(@Meta() meta: Metadata, @Body() data: CreateStatDto) {
     return this.provider.stats.collect(data, { meta });
   }
 }
