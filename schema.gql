@@ -436,6 +436,7 @@ enum Scope {
   ReadSpecialStats
   WriteSpecialStats
   ManageSpecialStats
+  CollectSpecialStats
 }
 
 enum GrantType {
