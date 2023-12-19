@@ -1,4 +1,4 @@
-import { File, Query, ServiceOptions } from '@app/common/interfaces';
+import { QueryID, ServiceOptions } from '@app/common/interfaces';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { expect, isAvailable } from '@app/common/utils';
 import { SpecialProvider } from '@app/common/providers';
@@ -17,8 +17,8 @@ export class FilesService {
     private readonly privateService: PrivateService,
   ) {}
 
-  async download(query: Query<File>, options?: ServiceOptions) {
-    const file = await this.provider.files.findOne({ query }, options);
+  async download(query: QueryID, options?: ServiceOptions) {
+    const file = await this.provider.files.findById({ query }, options);
 
     expect(file?.id && isAvailable(file), 'File not found', HttpStatus.NOT_FOUND);
 

@@ -93,7 +93,8 @@
     "phone": "^3.1.41",
     "reflect-metadata": "^0.2.1",
     "rxjs": "^7.8.1",
-    "semver-increment": "^1.0.1"
+    "semver-increment": "^1.0.1",
+    "sharp": "^0.33.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.2.1",
