@@ -1,3 +1,6 @@
+# SonarQube
+.scannerwork
+
 # C4 model
 .structurizr
 workspace.json
