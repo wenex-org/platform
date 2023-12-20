@@ -6,8 +6,7 @@ import {
   NamingConventionsInterceptor,
   XRequestIdInterceptor,
 } from '@app/common/interceptors';
-import { setupSwagger } from '@app/common/utils';
-import { prototyping } from '@app/common/utils';
+import { setupSwagger, prototyping } from '@app/common/utils';
 import { NODE_ENV } from '@app/common/configs';
 import { NestFactory } from '@nestjs/core';
 import { APP } from '@app/common/consts';
