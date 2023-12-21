@@ -11,13 +11,13 @@ type ResultSerializer {
 }
 
 type GrantTimeSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
   props: JSON
   id: String!
   ref: String
-  owner: String!
-  shares: [String!]
   groups: [String!]
-  clients: [String!]!
   created_at: Date!
   created_by: String!
   created_in: String!
@@ -45,13 +45,13 @@ The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://
 scalar JSON
 
 type GrantSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
   props: JSON
   id: String!
   ref: String
-  owner: String!
-  shares: [String!]
   groups: [String!]
-  clients: [String!]!
   created_at: Date!
   created_by: String!
   created_in: String!
@@ -209,13 +209,13 @@ type AuthenticationResponseSerializer {
 }
 
 type ConfigSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
   props: JSON
   id: String!
   ref: String
-  owner: String!
-  shares: [String!]
   groups: [String!]
-  clients: [String!]!
   created_at: Date!
   created_by: String!
   created_in: String!
@@ -257,13 +257,13 @@ type ConfigItemsSerializer {
 }
 
 type SettingSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
   props: JSON
   id: String!
   ref: String
-  owner: String!
-  shares: [String!]
   groups: [String!]
-  clients: [String!]!
   created_at: Date!
   created_by: String!
   created_in: String!
@@ -295,13 +295,13 @@ type SettingItemsSerializer {
 }
 
 type AppChangeLogSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
   props: JSON
   id: String!
   ref: String
-  owner: String!
-  shares: [String!]
   groups: [String!]
-  clients: [String!]!
   created_at: Date!
   created_by: String!
   created_in: String!
@@ -325,13 +325,13 @@ type AppChangeLogSerializer {
 }
 
 type AppSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
   props: JSON
   id: String!
   ref: String
-  owner: String!
-  shares: [String!]
   groups: [String!]
-  clients: [String!]!
   created_at: Date!
   created_by: String!
   created_in: String!
@@ -457,13 +457,13 @@ type AppItemsSerializer {
 }
 
 type ClientDomainSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
   props: JSON
   id: String!
   ref: String
-  owner: String!
-  shares: [String!]
   groups: [String!]
-  clients: [String!]!
   created_at: Date!
   created_by: String!
   created_in: String!
@@ -487,13 +487,13 @@ type ClientDomainSerializer {
 }
 
 type ClientOtpServiceSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
   props: JSON
   id: String!
   ref: String
-  owner: String!
-  shares: [String!]
   groups: [String!]
-  clients: [String!]!
   created_at: Date!
   created_by: String!
   created_in: String!
@@ -528,13 +528,13 @@ enum ClientOtpProvider {
 }
 
 type ClientSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
   props: JSON
   id: String!
   ref: String
-  owner: String!
-  shares: [String!]
   groups: [String!]
-  clients: [String!]!
   created_at: Date!
   created_by: String!
   created_in: String!
@@ -598,13 +598,13 @@ type ClientItemsSerializer {
 }
 
 type FileSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
   props: JSON
   id: String!
   ref: String
-  owner: String!
-  shares: [String!]
   groups: [String!]
-  clients: [String!]!
   created_at: Date!
   created_by: String!
   created_in: String!
@@ -645,13 +645,13 @@ type FileItemsSerializer {
 }
 
 type StatSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
   props: JSON
   id: String!
   ref: String
-  owner: String!
-  shares: [String!]
   groups: [String!]
-  clients: [String!]!
   created_at: Date!
   created_by: String!
   created_in: String!
@@ -696,13 +696,13 @@ type StatItemsSerializer {
 }
 
 type UserSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
   props: JSON
   id: String!
   ref: String
-  owner: String!
-  shares: [String!]
   groups: [String!]
-  clients: [String!]!
   created_at: Date!
   created_by: String!
   created_in: String!
@@ -751,13 +751,13 @@ type UserItemsSerializer {
 }
 
 type ProfileSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
   props: JSON
   id: String!
   ref: String
-  owner: String!
-  shares: [String!]
   groups: [String!]
-  clients: [String!]!
   created_at: Date!
   created_by: String!
   created_in: String!
@@ -813,13 +813,13 @@ type ProfileItemsSerializer {
 }
 
 type SessionSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
   props: JSON
   id: String!
   ref: String
-  owner: String!
-  shares: [String!]
   groups: [String!]
-  clients: [String!]!
   created_at: Date!
   created_by: String!
   created_in: String!
