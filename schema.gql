@@ -672,7 +672,7 @@ type StatSerializer {
   flags: JSON
   type: StatType!
   key: String!
-  value: Float!
+  val: Float!
   day: Float
   hours: [Float!]
   month: Float
@@ -1246,7 +1246,7 @@ input CreateStatDto {
   flags: JSON
   type: StatType!
   key: String!
-  value: Float!
+  val: Float!
   alpha: Float
   hour: Float
   day: Float
@@ -1261,7 +1261,7 @@ input UpdateStatDto {
   flags: JSON
   type: StatType
   key: String
-  value: Float
+  val: Float
   day: Float
   hours: [Float!]
   month: Float
