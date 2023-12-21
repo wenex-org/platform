@@ -3,7 +3,9 @@ require('dotenv').config();
 require('log-node')();
 
 import {
+  ETagInterceptor,
   NamingConventionsInterceptor,
+  XPoweredByInterceptor,
   XRequestIdInterceptor,
 } from '@app/common/interceptors';
 import { setupSwagger, prototyping } from '@app/common/utils';
@@ -22,10 +24,13 @@ async function bootstrap() {
   if (NODE_ENV().IS_PROD) await initTracing(['http', 'grpc', 'kafka']);
 
   const app = await NestFactory.create(AppModule, { cors: true });
+  app.getHttpAdapter().getInstance().set('etag', false);
 
   app.use(helmet({ contentSecurityPolicy: false }));
 
   app.useGlobalInterceptors(
+    new ETagInterceptor(),
+    new XPoweredByInterceptor(),
     new XRequestIdInterceptor(),
     new NamingConventionsInterceptor(),
   );
