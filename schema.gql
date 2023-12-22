@@ -136,6 +136,8 @@ enum Resource {
   Special
   SpecialFiles
   SpecialStats
+  Touch
+  TouchMails
 }
 
 type GrantDataSerializer {
@@ -250,6 +252,14 @@ type MailSerializer {
   content: String
   reply_to: String
   attachments: [String!]
+}
+
+type MailDataSerializer {
+  data: MailSerializer
+}
+
+type MailItemsSerializer {
+  items: [MailSerializer!]
 }
 
 type ConfigSerializer {
@@ -481,6 +491,12 @@ enum Scope {
   WriteSpecialStats
   ManageSpecialStats
   CollectSpecialStats
+  ReadTouch
+  WriteTouch
+  ManageTouch
+  ReadTouchMails
+  WriteTouchMails
+  ManageTouchMails
 }
 
 enum GrantType {
@@ -901,6 +917,9 @@ type Query {
   countGrant(filter: QueryFilterDto!): TotalSerializer!
   findGrant(filter: FilterDto!): GrantItemsSerializer!
   findOneGrant(id: String!, ref: String): GrantDataSerializer!
+  countMail(filter: QueryFilterDto!): TotalSerializer!
+  findMail(filter: FilterDto!): MailItemsSerializer!
+  findOneMail(id: String!, ref: String): MailDataSerializer!
   countConfig(filter: QueryFilterDto!): TotalSerializer!
   findConfig(filter: FilterDto!): ConfigItemsSerializer!
   findOneConfig(id: String!, ref: String): ConfigDataSerializer!
@@ -967,6 +986,13 @@ type Mutation {
   destroyOneGrant(id: String!, ref: String): GrantDataSerializer!
   updateOneGrant(id: String!, data: UpdateGrantDto!, ref: String): GrantDataSerializer!
   updateBulkGrant(filter: QueryFilterDto!, data: UpdateGrantDto!): TotalSerializer!
+  createMail(data: CreateMailDto!): MailDataSerializer!
+  createBulkMail(items: [CreateMailDto!]!): MailItemsSerializer!
+  deleteOneMail(id: String!, ref: String): MailDataSerializer!
+  restoreOneMail(id: String!, ref: String): MailDataSerializer!
+  destroyOneMail(id: String!, ref: String): MailDataSerializer!
+  updateOneMail(id: String!, data: UpdateMailDto!, ref: String): MailDataSerializer!
+  updateBulkMail(filter: QueryFilterDto!, data: UpdateMailDto!): TotalSerializer!
   createConfig(data: CreateConfigDto!): ConfigDataSerializer!
   createBulkConfig(items: [CreateConfigDto!]!): ConfigItemsSerializer!
   deleteOneConfig(id: String!, ref: String): ConfigDataSerializer!
@@ -1114,6 +1140,46 @@ input UpdateGrantDto {
 input UpdateGrantTimeDto {
   cron_exp: String!
   duration: Float!
+}
+
+input CreateMailDto {
+  smtp: CreateMailSmtpDto
+  to: [String!]!
+  cc: [String!]
+  bcc: [String!]
+  from: String
+  subject: String
+  content: String
+  date: Date
+  reply_to: String
+  attachments: [String!]
+}
+
+input CreateMailSmtpDto {
+  identity: String
+  response: String
+  accepted: [String!]
+  rejected: [String!]
+}
+
+input UpdateMailDto {
+  smtp: UpdateMailSmtpDto
+  to: [String!]
+  cc: [String!]
+  bcc: [String!]
+  from: String
+  subject: String
+  content: String
+  date: Date
+  reply_to: String
+  attachments: [String!]
+}
+
+input UpdateMailSmtpDto {
+  identity: String
+  response: String
+  accepted: [String!]
+  rejected: [String!]
 }
 
 input CreateConfigDto {
