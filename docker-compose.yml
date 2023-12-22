@@ -83,6 +83,36 @@ services:
       SENTRY_DSN:
     <<: *common
 
+  #######################
+  # SPECIAL SERVICES
+  #######################
+  special:
+    container_name: special
+    build:
+      args:
+        SERVICE_NAME: special
+    ports:
+      - 3060:3060 # Rest
+    environment:
+      NODE_ENV: prod
+      SENTRY_DSN:
+    <<: *common
+
+  #######################
+  # TOUCH SERVICES
+  #######################
+  touch:
+    container_name: touch
+    build:
+      args:
+        SERVICE_NAME: touch
+    ports:
+      - 3070:3070 # Rest
+    environment:
+      NODE_ENV: prod
+      SENTRY_DSN:
+    <<: *common
+
 networks:
   localnet:
     driver: bridge
