@@ -142,6 +142,7 @@ export class AppsController
   @Cache('apps', 'fill')
   @SetScope(Scope.ReadDomainApps)
   @SetPolicy(Action.Read, Resource.DomainApps)
+  @ApiQuery({ type: FilterOneDto, required: false })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   FindOne(
