@@ -141,6 +141,7 @@ export class FilesController
   @Cache('files', 'fill')
   @SetScope(Scope.ReadSpecialFiles)
   @SetPolicy(Action.Read, Resource.SpecialFiles)
+  @ApiQuery({ type: FilterOneDto, required: false })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   FindOne(

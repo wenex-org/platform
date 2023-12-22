@@ -141,6 +141,7 @@ export class UsersController
   @Cache('users', 'fill')
   @SetScope(Scope.ReadIdentityUsers)
   @SetPolicy(Action.Read, Resource.IdentityUsers)
+  @ApiQuery({ type: FilterOneDto, required: false })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   FindOne(

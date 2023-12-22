@@ -141,6 +141,7 @@ export class StatsController
   @Cache('stats', 'fill')
   @SetScope(Scope.ReadSpecialStats)
   @SetPolicy(Action.Read, Resource.SpecialStats)
+  @ApiQuery({ type: FilterOneDto, required: false })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   FindOne(
