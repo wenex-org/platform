@@ -141,7 +141,6 @@ export class SettingsController
   @Cache('settings', 'fill')
   @SetScope(Scope.ReadConfigSettings)
   @SetPolicy(Action.Read, Resource.ConfigSettings)
-  @ApiQuery({ type: FilterOneDto, required: false })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   FindOne(
