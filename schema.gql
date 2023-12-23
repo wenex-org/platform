@@ -1150,7 +1150,7 @@ input CreateMailDto {
   cc: [String!]
   bcc: [String!]
   from: String
-  subject: String
+  subject: String!
   content: String
   date: Date
   reply_to: [String!]

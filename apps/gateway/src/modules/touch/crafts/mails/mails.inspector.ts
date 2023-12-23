@@ -14,6 +14,7 @@ import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { MailSerializer } from '@app/common/serializers';
 import { TouchProvider } from '@app/common/providers';
 import { ValidationPipe } from '@app/common/pipes';
 import { Metadata } from '@app/common/interfaces';
@@ -35,7 +36,10 @@ export class MailsInspector {
   @SetScope(Scope.SendTouchMails)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Collect, Resource.TouchMails)
-  async send(@Meta() meta: Metadata, @Body() data: CreateMailDto) {
+  async send(
+    @Meta() meta: Metadata,
+    @Body() data: CreateMailDto,
+  ): Promise<MailSerializer> {
     return this.provider.mails.send(data, { meta });
   }
 }
