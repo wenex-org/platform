@@ -264,7 +264,7 @@ message Client {
   repeated string redirect_uris = 68;
 
   repeated Domain domains = 69;
-  repeated OtpService otp_services = 70;
+  repeated Service services = 70;
 
   message Domain {
     // Sub Interface
@@ -306,7 +306,7 @@ message Client {
     repeated string subjects = 52;
   }
 
-  message OtpService {
+  message Service {
     // Sub Interface
     optional string owner = 1;
 
@@ -339,7 +339,7 @@ message Client {
     optional string rand = 23;
     optional string timestamp = 24;
 
-    // OtpService Interface
+    // Service Interface
     optional string type = 50;
     optional string config = 51;
     optional string provider = 52;

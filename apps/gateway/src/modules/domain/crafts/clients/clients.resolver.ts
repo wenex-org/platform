@@ -41,7 +41,7 @@ import { Observable } from 'rxjs';
 @Resolver(() => ClientSerializer)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
-@Nested<Client>('domains', 'otp_services')
+@Nested<Client>('domains', 'services')
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class ClientsResolver
