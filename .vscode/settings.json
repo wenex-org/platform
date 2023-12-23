@@ -9,6 +9,7 @@
     "hasher",
     "kafkajs",
     "keyspace",
+    "lmtp",
     "luxon",
     "maxlength",
     "metadatas",

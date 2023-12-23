@@ -21,6 +21,7 @@ PROTOS[CONFIG,3]=./apps/services/auth/src/protobuf/config.proto
 PROTOS[DOMAIN,1]=./apps/services/domain/src/app.proto
 PROTOS[DOMAIN,2]=./apps/gateway/src/modules/domain/domain.proto
 PROTOS[DOMAIN,3]=./apps/services/auth/src/protobuf/domain.proto
+PROTOS[DOMAIN,4]=./apps/services/touch/src/protobuf/domain.proto
 
 # Identity Proto
 PROTOS[IDENTITY,1]=./apps/services/identity/src/app.proto
