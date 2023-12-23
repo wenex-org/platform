@@ -250,7 +250,7 @@ type MailSerializer {
   bcc: [String!]
   subject: String
   content: String
-  reply_to: String
+  reply_to: [String!]
   in_reply_to: String
   attachments: [String!]
 }
@@ -498,6 +498,7 @@ enum Scope {
   ReadTouchMails
   WriteTouchMails
   ManageTouchMails
+  SendTouchMails
 }
 
 enum GrantType {
@@ -1152,7 +1153,7 @@ input CreateMailDto {
   subject: String
   content: String
   date: Date
-  reply_to: String
+  reply_to: [String!]
   in_reply_to: String
   attachments: [String!]
 }
@@ -1173,7 +1174,7 @@ input UpdateMailDto {
   subject: String
   content: String
   date: Date
-  reply_to: String
+  reply_to: [String!]
   in_reply_to: String
   attachments: [String!]
 }
@@ -1320,7 +1321,7 @@ input UpdateClientDomainDto {
 }
 
 input UpdateClientServiceDto {
-  config: JSON!
+  config: JSON
   type: ClientServiceType!
   provider: ClientServiceProvider
 }
