@@ -92,6 +92,7 @@
     "node-object-hash": "^3.0.0",
     "nodemailer": "^6.9.7",
     "opentelemetry-instrumentation-kafkajs": "^0.40.0",
+    "otpauth": "^9.2.1",
     "phone": "^3.1.41",
     "reflect-metadata": "^0.2.1",
     "rxjs": "^7.8.1",

@@ -188,6 +188,9 @@ dependencies:
   opentelemetry-instrumentation-kafkajs:
     specifier: ^0.40.0
     version: 0.40.0(@opentelemetry/api@1.6.0)
+  otpauth:
+    specifier: ^9.2.1
+    version: 9.2.1
   phone:
     specifier: ^3.1.41
     version: 3.1.41
@@ -8152,6 +8155,10 @@ packages:
       semver: 7.5.4
     dev: false
 
+  /jssha@3.3.1:
+    resolution: {integrity: sha512-VCMZj12FCFMQYcFLPRm/0lOBbLi8uM2BhXPTqw3U4YAfs4AZfiApOoBLoN8cQE60Z50m1MYMTQVCfgF/KaCVhQ==}
+    dev: false
+
   /jwa@1.4.1:
     resolution: {integrity: sha512-qiLX/xhEEFKUAJ6FiBMbes3w9ATzyk5W7Hvzpa/SLYdxNtng+gcurvrI7TbACjIXlsJyr05/S1oUhZrc63evQA==}
     dependencies:
@@ -8902,6 +8909,12 @@ packages:
   /os-tmpdir@1.0.2:
     resolution: {integrity: sha512-D2FR03Vir7FIu45XBY20mTb+/ZSWB00sjU9jdQXt83gDrI4Ztz5Fs7/yy74g2N5SVQY4xY1qDr4rNddwYRVX0g==}
     engines: {node: '>=0.10.0'}
+
+  /otpauth@9.2.1:
+    resolution: {integrity: sha512-/MRvcm63pzK20NCsIOe8Btun42/yWNylPbUo/h5dMpSRJpoAJstWodEUjm4zUDeT1+Vbqif2E8IcP4trl1U4gQ==}
+    dependencies:
+      jssha: 3.3.1
+    dev: false
 
   /p-limit@2.3.0:
     resolution: {integrity: sha512-//88mFWSJx8lxCzwdAABTJL2MyWB12+eIY7MDL2SqLmAkeKU9qxRvWuSyTjm3FUmpBEMuFfckAIqEaVGUDxb6w==}
