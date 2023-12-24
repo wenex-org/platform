@@ -248,7 +248,7 @@ type MailSerializer {
   to: [String!]!
   cc: [String!]
   bcc: [String!]
-  subject: String
+  subject: String!
   content: String
   reply_to: [String!]
   in_reply_to: String
