@@ -782,6 +782,7 @@ type UserSerializer {
   tags: [String!]
   rand: String!
   timestamp: String!
+  secret: Boolean
   status: Status!
   tz: String!
   mfa: UserMFA
