@@ -70,7 +70,7 @@ export class FilesInspector {
       'Content-Disposition': `attachment; filename="${file.original}"`,
     });
 
-    if (req.header('if-none-match') === resize || rotate ? etag : file.etag) {
+    if (req.header('if-none-match') === (resize || rotate ? etag : file.etag)) {
       res.status(HttpStatus.NOT_MODIFIED).end();
     } else {
       if (file.content_type?.startsWith('image') && (resize || rotate)) {
