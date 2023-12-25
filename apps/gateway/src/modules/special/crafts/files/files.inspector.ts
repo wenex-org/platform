@@ -4,6 +4,7 @@ import {
   HttpStatus,
   Param,
   Query,
+  Req,
   Res,
   UseFilters,
   UseGuards,
@@ -30,8 +31,8 @@ import { sdkStreamMixin } from '@smithy/util-stream';
 import { Metadata } from '@app/common/interfaces';
 import { Meta } from '@app/common/decorators';
 import { toString } from '@app/common/utils';
+import { Request, Response } from 'express';
 import { MD5 } from '@app/common/helpers';
-import { Response } from 'express';
 import * as sharp from 'sharp';
 
 import { FilesService } from './files.service';
@@ -53,6 +54,7 @@ export class FilesInspector {
   @ApiResponse({ status: HttpStatus.OK, description: 'multipart/form-data' })
   async download(
     @Param('id', ParseIdPipe) id: string,
+    @Req() req: Request,
     @Res() res: Response,
     @Meta() meta: Metadata,
     @Query('ref', ParseRefPipe) ref?: string,
@@ -68,13 +70,17 @@ export class FilesInspector {
       'Content-Disposition': `attachment; filename="${file.original}"`,
     });
 
-    if (file.content_type?.startsWith('image') && (resize || rotate)) {
-      let sh: sharp.Sharp = sharp();
+    if (req.header('if-none-match') === resize || rotate ? etag : file.etag) {
+      res.status(HttpStatus.NOT_MODIFIED).end();
+    } else {
+      if (file.content_type?.startsWith('image') && (resize || rotate)) {
+        let sh: sharp.Sharp = sharp();
 
-      if (resize) sh = sh.resize({ ...resize });
-      if (rotate) sh = sh.rotate(rotate.angle, { background: rotate.background });
+        if (resize) sh = sh.resize({ ...resize });
+        if (rotate) sh = sh.rotate(rotate.angle, { background: rotate.background });
 
-      return sdkStreamMixin(data.Body).pipe(sh).pipe(res);
-    } else return sdkStreamMixin(data.Body).pipe(res);
+        sdkStreamMixin(data.Body).pipe(sh).pipe(res);
+      } else sdkStreamMixin(data.Body).pipe(res);
+    }
   }
 }
