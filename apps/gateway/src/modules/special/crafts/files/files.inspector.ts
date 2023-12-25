@@ -63,14 +63,16 @@ export class FilesInspector {
   ) {
     const { data, file } = await this.service.download({ id, ref }, { meta });
 
-    const etag = MD5.hash(file.etag + toString({ rotate, resize }));
+    const eTag =
+      resize || rotate ? MD5.hash(file.etag + toString({ rotate, resize })) : file.etag;
+
     res.status(HttpStatus.OK).set({
-      ETag: `"${resize || rotate ? etag : file.etag}"`,
+      ETag: `"${eTag}"`,
       'Content-Type': file.content_type,
       'Content-Disposition': `attachment; filename="${file.original}"`,
     });
 
-    if (req.header('if-none-match') === (resize || rotate ? etag : file.etag)) {
+    if (req.header('if-none-match') === eTag) {
       res.status(HttpStatus.NOT_MODIFIED).end();
     } else {
       if (file.content_type?.startsWith('image') && (resize || rotate)) {
