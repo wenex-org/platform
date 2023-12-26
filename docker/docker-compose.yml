@@ -4,7 +4,7 @@ services:
   #######################
   # CACHE
   #######################
-  
+
   redis:
     extends:
       file: docker-compose.util.yml
@@ -13,7 +13,7 @@ services:
   #######################
   # STORAGE
   #######################
-  
+
   minio:
     extends:
       file: docker-compose.util.yml
@@ -22,6 +22,16 @@ services:
   #######################
   # BROKER
   #######################
+
+  emqx:
+    extends:
+      file: docker-compose.brk.yml
+      service: emqx
+
+  mqttx:
+    extends:
+      file: docker-compose.brk.yml
+      service: mqttx
 
   zookeeper:
     extends:
@@ -32,6 +42,11 @@ services:
     extends:
       file: docker-compose.brk.yml
       service: kafka
+
+  connect:
+    extends:
+      file: docker-compose.brk.yml
+      service: connect
 
   #######################
   # MONGO-RS
