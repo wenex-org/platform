@@ -92,6 +92,15 @@
         "tsConfigPath": "apps/services/touch/tsconfig.app.json"
       }
     },
+    "dispatcher": {
+      "type": "application",
+      "root": "apps/workers/dispatcher",
+      "entryFile": "main",
+      "sourceRoot": "apps/workers/dispatcher/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/workers/dispatcher/tsconfig.app.json"
+      }
+    },
     "blacklisted": {
       "type": "library",
       "root": "libs/blacklisted",

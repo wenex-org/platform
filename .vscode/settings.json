@@ -4,6 +4,7 @@
     "compodoc",
     "consts",
     "datacenter",
+    "emqx",
     "etag",
     "fieldname",
     "freesmtpservers",

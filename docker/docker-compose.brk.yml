@@ -66,11 +66,11 @@ services:
     container_name: connect
     image: confluentinc/cp-kafka-connect:7.4.2
     ports:
-      - '8083:8083'
+      - '8082:8082'
     environment:
       - KAFKA_JMX_HOSTNAME=localhost
       - CONNECT_BOOTSTRAP_SERVERS=kafka:9091
-      - CONNECT_REST_PORT=8083
+      - CONNECT_REST_PORT=8082
       - CONNECT_GROUP_ID=kafka-connect
       - CONNECT_AUTO_CREATE_TOPICS_ENABLE=true
       - CONNECT_ZOOKEEPER_CONNECT=zookeeper:2181
