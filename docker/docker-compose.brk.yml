@@ -1,6 +1,9 @@
 version: '3.8'
 
 services:
+  #######################
+  # EMQX
+  #######################
   emqx:
     image: emqx:5.3
     container_name: emqx
@@ -24,6 +27,9 @@ services:
     networks:
       - localnet
 
+  #######################
+  # KAFKA
+  #######################
   zookeeper:
     container_name: zookeeper
     image: bitnami/zookeeper:3.9
@@ -51,6 +57,48 @@ services:
       - KAFKA_INTER_BROKER_LISTENER_NAME=INTERNAL
     depends_on:
       - zookeeper
+    networks:
+      - localnet
+
+  connect:
+    container_name: connect
+    image: confluentinc/cp-kafka-connect:7.4.2
+    ports:
+      - '8083:8083'
+    environment:
+      - KAFKA_JMX_HOSTNAME=localhost
+      - CONNECT_BOOTSTRAP_SERVERS=kafka:9091
+      - CONNECT_REST_PORT=8083
+      - CONNECT_GROUP_ID=kafka-connect
+      - CONNECT_AUTO_CREATE_TOPICS_ENABLE=true
+      - CONNECT_ZOOKEEPER_CONNECT=zookeeper:2181
+      - CONNECT_CONFIG_STORAGE_TOPIC=_connect-configs
+      - CONNECT_OFFSET_STORAGE_TOPIC=_connect-offsets
+      - CONNECT_STATUS_STORAGE_TOPIC=_connect-status
+      - CONNECT_REST_ADVERTISED_HOST_NAME=kafka-connect
+      - CONNECT_KEY_CONVERTER=org.apache.kafka.connect.storage.StringConverter
+      - CONNECT_VALUE_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+      - CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR=1
+      - CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR=1
+      - CONNECT_STATUS_STORAGE_REPLICATION_FACTOR=1
+      - CONNECT_PLUGIN_PATH=/usr/share/java,/usr/share/confluent-hub-components,/data/connect-jars
+      - CONNECT_LOG4J_APPENDER_STDOUT_LAYOUT_CONVERSIONPATTERN="[%d] %p %X{connector.context}%m (%c:%L)%n"
+    depends_on:
+      - zookeeper
+      - kafka
+    command:
+      - bash
+      - -c
+      - |
+        echo "Installing Connector"
+        confluent-hub install --no-prompt --verbose mongodb/kafka-connect-mongodb:1.11.0
+        confluent-hub install --no-prompt --verbose debezium/debezium-connector-mysql:2.2.1
+        confluent-hub install --no-prompt --verbose debezium/debezium-connector-mongodb:2.2.1
+        #
+        echo "Launching Kafka Connect worker"
+        /etc/confluent/docker/run &
+        #
+        sleep infinity
     networks:
       - localnet
 
