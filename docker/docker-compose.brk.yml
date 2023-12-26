@@ -75,13 +75,13 @@ services:
 
   connect:
     container_name: connect
-    image: confluentinc/cp-kafka-connect:7.4.2
+    image: confluentinc/cp-kafka-connect:7.5.2
     ports:
-      - '8082:8082'
+      - '8082:8083'
     environment:
       - KAFKA_JMX_HOSTNAME=localhost
-      - CONNECT_BOOTSTRAP_SERVERS=kafka:9091
-      - CONNECT_REST_PORT=8082
+      - CONNECT_BOOTSTRAP_SERVERS=kafka:9092
+      - CONNECT_REST_PORT=8083
       - CONNECT_GROUP_ID=kafka-connect
       - CONNECT_AUTO_CREATE_TOPICS_ENABLE=true
       - CONNECT_ZOOKEEPER_CONNECT=zookeeper:2181
@@ -104,7 +104,7 @@ services:
       - -c
       - |
         echo "Installing Connector"
-        confluent-hub install --no-prompt --verbose mongodb/kafka-connect-mongodb:1.11.0
+        confluent-hub install --no-prompt --verbose mongodb/kafka-connect-mongodb:1.11.1
         confluent-hub install --no-prompt --verbose debezium/debezium-connector-mongodb:2.2.1
         #
         echo "Launching Kafka Connect worker"
