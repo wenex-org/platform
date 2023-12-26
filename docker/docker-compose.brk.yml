@@ -71,7 +71,7 @@ services:
     environment:
       - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
       - KAFKA_CLUSTERS_0_NAME=kafka
-      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9091
 
   connect:
     container_name: connect
@@ -80,7 +80,7 @@ services:
       - '8082:8083'
     environment:
       - KAFKA_JMX_HOSTNAME=localhost
-      - CONNECT_BOOTSTRAP_SERVERS=kafka:9092
+      - CONNECT_BOOTSTRAP_SERVERS=kafka:9091
       - CONNECT_REST_PORT=8083
       - CONNECT_GROUP_ID=kafka-connect
       - CONNECT_AUTO_CREATE_TOPICS_ENABLE=true
