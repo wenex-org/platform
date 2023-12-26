@@ -43,6 +43,11 @@ services:
       file: docker-compose.brk.yml
       service: kafka
 
+  kafka-ui:
+    extends:
+      file: docker-compose.brk.yml
+      service: kafka-ui
+
   connect:
     extends:
       file: docker-compose.brk.yml
