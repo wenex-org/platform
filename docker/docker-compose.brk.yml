@@ -85,6 +85,8 @@ services:
     hostname: connect
     container_name: connect
     image: confluentinc/cp-kafka-connect:7.5.2
+    ports:
+      - '8082:8083'
     environment:
       - KAFKA_JMX_HOSTNAME=localhost
       - CONNECT_BOOTSTRAP_SERVERS=kafka:9091
