@@ -72,10 +72,12 @@ services:
       - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
       - KAFKA_CLUSTERS_0_NAME=kafka
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9091
+      - KAFKA_CLUSTERS_0_KAFKACONNECT=http://connect:8083
     networks:
       - localnet
 
   connect:
+    hostname: connect
     container_name: connect
     image: confluentinc/cp-kafka-connect:7.5.2
     ports:
