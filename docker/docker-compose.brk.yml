@@ -72,7 +72,12 @@ services:
       - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
       - KAFKA_CLUSTERS_0_NAME=kafka
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9091
-      - KAFKA_CLUSTERS_0_KAFKACONNECT=http://connect:8083
+      - KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME=kafka-connect
+      - KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS=http://connect:8083
+    depends_on:
+      - zookeeper
+      - connect
+      - kafka
     networks:
       - localnet
 
