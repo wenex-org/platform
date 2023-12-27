@@ -8,6 +8,7 @@
     "build": "nest build",
     "prepare": "npm run script:setup",
     "script:setup": "sh ./script/setup.sh",
+    "script:proto": "sh ./script/proto.sh",
     "script:kafka-connect": "sh ./script/kafka-connect.sh",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
