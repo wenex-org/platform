@@ -30,6 +30,8 @@
     "db:debug": "npm run command:debug -- db",
     "storage:init": "npm run command -- storage init",
     "storage:debug": "npm run command:debug -- storage",
+    "broker:init": "npm run command -- broker init",
+    "broker:debug": "npm run command:debug -- broker",
     "doc": "npx compodoc -p tsconfig.json -n \"Wenex Documentation\" -d ./docs -s"
   },
   "dependencies": {

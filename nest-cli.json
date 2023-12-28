@@ -145,6 +145,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/redis/tsconfig.lib.json"
       }
+    },
+    "sdk": {
+      "type": "library",
+      "root": "libs/sdk",
+      "entryFile": "index",
+      "sourceRoot": "libs/sdk/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/sdk/tsconfig.lib.json"
+      }
     }
   }
 }
