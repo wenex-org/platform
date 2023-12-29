@@ -69,75 +69,13 @@ type GrantSerializer {
   tags: [String!]
   rand: String!
   timestamp: String!
+  action: String!
+  object: String!
   time: [GrantTimeSerializer]
   subject: String!
-  action: Action!
-  object: Resource!
   field: [String!]
   filter: [String!]
   location: [String!]
-}
-
-enum Action {
-  Any
-  Create
-  Read
-  Update
-  Delete
-  Restore
-  Destroy
-  Collect
-  Emit
-  Send
-  Init
-  Verify
-  Upload
-  Download
-  CreateOwn
-  ReadOwn
-  UpdateOwn
-  DeleteOwn
-  RestoreOwn
-  DestroyOwn
-  CreateShare
-  ReadShare
-  UpdateShare
-  DeleteShare
-  RestoreShare
-  DestroyShare
-  CreateGroup
-  ReadGroup
-  UpdateGroup
-  DeleteGroup
-  RestoreGroup
-  DestroyGroup
-  CreateClient
-  ReadClient
-  UpdateClient
-  DeleteClient
-  RestoreClient
-  DestroyClient
-}
-
-enum Resource {
-  All
-  Auth
-  AuthGrants
-  Config
-  ConfigConfigs
-  ConfigSettings
-  Domain
-  DomainApps
-  DomainClients
-  Identity
-  IdentityUsers
-  IdentityProfiles
-  IdentitySessions
-  Special
-  SpecialFiles
-  SpecialStats
-  Touch
-  TouchMails
 }
 
 type GrantDataSerializer {
