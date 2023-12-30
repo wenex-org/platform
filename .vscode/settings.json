@@ -12,6 +12,8 @@
     "datetime",
     "emqx",
     "etag",
+    "exhook",
+    "exhooks",
     "fieldname",
     "freesmtpservers",
     "hasher",
