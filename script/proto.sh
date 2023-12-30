@@ -29,6 +29,7 @@ PROTOS[DOMAIN,4]=./apps/services/touch/src/protobuf/domain.proto
 PROTOS[IDENTITY,1]=./apps/services/identity/src/app.proto
 PROTOS[IDENTITY,2]=./apps/services/auth/src/protobuf/identity.proto
 PROTOS[IDENTITY,3]=./apps/gateway/src/modules/identity/identity.proto
+PROTOS[IDENTITY,4]=./apps/workers/preserver/src/protobuf/identity.proto
 
 # Preserver Proto
 PROTOS[PRESERVER,1]=./apps/workers/preserver/src/app.proto
