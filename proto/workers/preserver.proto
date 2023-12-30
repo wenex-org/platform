@@ -18,8 +18,10 @@ syntax = "proto3";
 
 // The exhook proto version should be fixed as `v2` in EMQX v5.x
 // to make sure the exhook proto version is compatible
-package emqx.exhook.v2;
+// package emqx.exhook.v2;
+package preserver;
 
+// EMQX
 service HookProvider {
 
   rpc OnProviderLoaded(ProviderLoadedRequest) returns (LoadedResponse) {};

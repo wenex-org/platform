@@ -101,6 +101,15 @@
         "tsConfigPath": "apps/workers/dispatcher/tsconfig.app.json"
       }
     },
+    "preserver": {
+      "type": "application",
+      "root": "apps/workers/preserver",
+      "entryFile": "main",
+      "sourceRoot": "apps/workers/preserver/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/workers/preserver/tsconfig.app.json"
+      }
+    },
     "blacklisted": {
       "type": "library",
       "root": "libs/blacklisted",
