@@ -8,6 +8,6 @@ curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" 
     \"connector.class\": \"io.debezium.connector.mongodb.MongoDbConnector\",
     \"mongodb.connection.string\": \"mongodb://$MONGO_USER:$MONGO_PASS@$MONGO_HOST/?$MONGO_QUERY\",
     \"topic.prefix\": \"mongo\",
-    \"collection.include.list\": \"$MONGO_DB.*\"
+    \"collection.include.list\": \"$MONGO_DB[.].*\"
   }
 }"
