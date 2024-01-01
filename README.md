@@ -20,6 +20,12 @@ The platform consists of four main projects:
 
 ### Prerequisites
 
+```sh
+npm run db:clean && npm run db:seed
+npm run storage:init && npm run broker:init
+npm run script:setup && npm run script:kafka-connect
+```
+
 Docker with compose and node `>=18.x.x` shipped with npm needs to be installed. to start and run mandatory tools with the docker-compose enter the following command in your terminal `docker-compose -f compose/docker-compose.utils.yml up -d` this command will up and run the `mongodb` and `redis` used by the platform.
 
 ### Up & Running
