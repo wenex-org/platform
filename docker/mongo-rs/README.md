@@ -13,6 +13,7 @@ Add these lines to `/etc/hosts`:
 ```sh
 127.0.0.1 mongodb-primary
 127.0.0.1 mongodb-secondary
+127.0.0.1 mongodb-arbiter
 ```
 
 ## Connection URI
