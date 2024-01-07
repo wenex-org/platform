@@ -17,11 +17,6 @@ services:
       - 3010:3010 # Rest
     environment:
       SENTRY_DSN:
-
-      AUTH_HOST:
-      CONFIG_HOST:
-      DOMAIN_HOST:
-      IDENTITY_HOST:
     <<: *common
 
   #######################
@@ -38,10 +33,6 @@ services:
     environment:
       NODE_ENV: prod
       SENTRY_DSN:
-
-      CONFIG_HOST:
-      DOMAIN_HOST:
-      IDENTITY_HOST:
     <<: *common
 
   #######################
