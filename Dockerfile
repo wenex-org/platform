@@ -1,3 +1,4 @@
+# App Image
 FROM node:20-alpine AS build
 
 WORKDIR /app
@@ -5,8 +6,12 @@ WORKDIR /app
 COPY package*.json ./
 COPY pnpm-lock.yaml ./
 
-RUN pnpm install --frozen-lockfile
+RUN apk update && apk add bash
 
+RUN npm install -g pnpm && \
+  pnpm install --frozen-lockfile
+
+# Service Image
 FROM build
 
 COPY . .

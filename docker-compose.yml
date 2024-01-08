@@ -12,7 +12,7 @@ services:
   gateway:
     build:
       args:
-        APP_NAME: gateway
+        SERVICE_NAME: gateway
     ports:
       - 3010:3010 # Rest
     environment:
