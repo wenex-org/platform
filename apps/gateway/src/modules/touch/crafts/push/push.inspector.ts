@@ -14,32 +14,32 @@ import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { MailSerializer } from '@app/common/serializers';
+import { PushSerializer } from '@app/common/serializers';
 import { TouchProvider } from '@app/common/providers';
 import { ValidationPipe } from '@app/common/pipes';
 import { Metadata } from '@app/common/interfaces';
-import { CreateMailDto } from '@app/common/dto';
+import { CreatePushDto } from '@app/common/dto';
 import { Meta } from '@app/common/decorators';
 
 @ApiBearerAuth()
-@ApiTags('mails')
-@Controller('mails')
+@ApiTags('push')
+@Controller('push')
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class MailsInspector {
+export class PushInspector {
   constructor(readonly provider: TouchProvider) {}
 
   @Post('send')
   @ShipStrategy('create')
-  @SetScope(Scope.SendTouchMails)
+  @SetScope(Scope.SendTouchPush)
   @UseInterceptors(...WriteInterceptors)
-  @SetPolicy(Action.Send, Resource.TouchMails)
+  @SetPolicy(Action.Send, Resource.TouchPush)
   async send(
     @Meta() meta: Metadata,
-    @Body() data: CreateMailDto,
-  ): Promise<MailSerializer> {
-    return this.provider.mails.send(data, { meta });
+    @Body() data: CreatePushDto,
+  ): Promise<PushSerializer> {
+    return this.provider.push.send(data, { meta });
   }
 }

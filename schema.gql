@@ -201,6 +201,109 @@ type MailItemsSerializer {
   items: [MailSerializer!]
 }
 
+type PushHistoryResSerializer {
+  headers: JSON
+  body: String
+  status: Float!
+}
+
+type PushHistorySerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
+  props: JSON
+  id: String!
+  ref: String
+  groups: [String!]
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  tags: [String!]
+  rand: String!
+  timestamp: String!
+  headers: JSON
+  payload: JSON
+  response: PushHistoryResSerializer
+  topic: String
+  urgency: PushUrgency
+  ttl: Float
+  timeout: Float
+}
+
+enum PushUrgency {
+  Low
+  High
+  Normal
+  VeryLow
+}
+
+type PushHistoryDataSerializer {
+  data: PushHistorySerializer
+}
+
+type PushHistoryItemsSerializer {
+  items: [PushHistorySerializer!]
+}
+
+type PushVapidSerializer {
+  subject: String!
+  public_key: String!
+  private_key: String!
+}
+
+type PushSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
+  props: JSON
+  id: String!
+  ref: String
+  groups: [String!]
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  tags: [String!]
+  rand: String!
+  timestamp: String!
+  vapid: PushVapidSerializer
+  domain: String!
+  session: String!
+  endpoint: String
+  expiration: Float
+  blacklisted: [String!]
+  whitelisted: [String!]
+}
+
+type PushDataSerializer {
+  data: PushSerializer
+}
+
+type PushItemsSerializer {
+  items: [PushSerializer!]
+}
+
 type ConfigSerializer {
   owner: JSON!
   shares: [JSON]
@@ -433,6 +536,14 @@ enum Scope {
   ReadTouch
   WriteTouch
   ManageTouch
+  ReadTouchPush
+  WriteTouchPush
+  ManageTouchPush
+  SendTouchPush
+  ReadTouchPushHistories
+  WriteTouchPushHistories
+  ManageTouchPushHistories
+  SendTouchPushHistories
   ReadTouchMails
   WriteTouchMails
   ManageTouchMails
@@ -858,6 +969,12 @@ type Query {
   countGrant(filter: QueryFilterDto!): TotalSerializer!
   findGrant(filter: FilterDto!): GrantItemsSerializer!
   findOneGrant(id: String!, ref: String): GrantDataSerializer!
+  countPush(filter: QueryFilterDto!): TotalSerializer!
+  findPush(filter: FilterDto!): PushItemsSerializer!
+  findOnePush(id: String!, ref: String): PushDataSerializer!
+  countPushHistory(filter: QueryFilterDto!): TotalSerializer!
+  findPushHistory(filter: FilterDto!): PushHistoryItemsSerializer!
+  findOnePushHistory(id: String!, ref: String): PushHistoryDataSerializer!
   countMail(filter: QueryFilterDto!): TotalSerializer!
   findMail(filter: FilterDto!): MailItemsSerializer!
   findOneMail(id: String!, ref: String): MailDataSerializer!
@@ -927,6 +1044,20 @@ type Mutation {
   destroyOneGrant(id: String!, ref: String): GrantDataSerializer!
   updateOneGrant(id: String!, data: UpdateGrantDto!, ref: String): GrantDataSerializer!
   updateBulkGrant(filter: QueryFilterDto!, data: UpdateGrantDto!): TotalSerializer!
+  createPush(data: CreatePushDto!): PushDataSerializer!
+  createBulkPush(items: [CreatePushDto!]!): PushItemsSerializer!
+  deleteOnePush(id: String!, ref: String): PushDataSerializer!
+  restoreOnePush(id: String!, ref: String): PushDataSerializer!
+  destroyOnePush(id: String!, ref: String): PushDataSerializer!
+  updateOnePush(id: String!, data: UpdatePushDto!, ref: String): PushDataSerializer!
+  updateBulkPush(filter: QueryFilterDto!, data: UpdatePushDto!): TotalSerializer!
+  createPushHistory(data: CreatePushHistoryDto!): PushHistoryDataSerializer!
+  createBulkPushHistory(items: [CreatePushHistoryDto!]!): PushHistoryItemsSerializer!
+  deleteOnePushHistory(id: String!, ref: String): PushHistoryDataSerializer!
+  restoreOnePushHistory(id: String!, ref: String): PushHistoryDataSerializer!
+  destroyOnePushHistory(id: String!, ref: String): PushHistoryDataSerializer!
+  updateOnePushHistory(id: String!, data: UpdatePushHistoryDto!, ref: String): PushHistoryDataSerializer!
+  updateBulkPushHistory(filter: QueryFilterDto!, data: UpdatePushHistoryDto!): TotalSerializer!
   createMail(data: CreateMailDto!): MailDataSerializer!
   createBulkMail(items: [CreateMailDto!]!): MailItemsSerializer!
   deleteOneMail(id: String!, ref: String): MailDataSerializer!
@@ -1081,6 +1212,70 @@ input UpdateGrantDto {
 input UpdateGrantTimeDto {
   cron_exp: String!
   duration: Float!
+}
+
+input CreatePushDto {
+  vapid: CreatePushVapidDto
+  domain: String
+  session: String
+  endpoint: String
+  expiration: Float
+  blacklisted: [String!]
+  whitelisted: [String!]
+}
+
+input CreatePushVapidDto {
+  subject: String
+  public_key: String
+  private_key: String
+}
+
+input UpdatePushDto {
+  vapid: UpdatePushVapidDto
+  domain: String
+  session: String
+  endpoint: String
+  expiration: Float
+  blacklisted: [String!]
+  whitelisted: [String!]
+}
+
+input UpdatePushVapidDto {
+  subject: String
+  public_key: String
+  private_key: String
+}
+
+input CreatePushHistoryDto {
+  headers: JSON
+  payload: JSON
+  response: CreatePushHistoryResDto
+  topic: String
+  urgency: PushUrgency
+  ttl: Float
+  timeout: Float
+}
+
+input CreatePushHistoryResDto {
+  headers: JSON
+  body: String
+  status: Float!
+}
+
+input UpdatePushHistoryDto {
+  headers: JSON
+  payload: JSON
+  response: UpdatePushHistoryResDto
+  topic: String
+  urgency: PushUrgency
+  ttl: Float
+  timeout: Float
+}
+
+input UpdatePushHistoryResDto {
+  headers: JSON
+  body: String
+  status: Float!
 }
 
 input CreateMailDto {
