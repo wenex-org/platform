@@ -38,7 +38,7 @@ import {
   PushHistory,
   PushHistoryDto,
 } from '@app/common/interfaces';
-import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
+import { Cache, Nested, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
@@ -56,6 +56,7 @@ import { Observable } from 'rxjs';
 @ApiTags('push-histories')
 @Controller('push-histories')
 @UsePipes(ValidationPipe)
+@Nested<PushHistory>('replies')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())

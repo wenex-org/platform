@@ -23,8 +23,8 @@ import {
   PushHistory,
   PushHistoryDto,
 } from '@app/common/interfaces';
+import { Cache, Nested, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
-import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
@@ -40,6 +40,7 @@ import { Observable } from 'rxjs';
 
 @Resolver(() => PushHistorySerializer)
 @UsePipes(ValidationPipe)
+@Nested<PushHistory>('replies')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())

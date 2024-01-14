@@ -201,9 +201,32 @@ type MailItemsSerializer {
   items: [MailSerializer!]
 }
 
-type PushHistoryResSerializer {
-  headers: JSON
-  body: String
+type PushHistoryReplySerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
+  props: JSON
+  id: String!
+  ref: String
+  groups: [String!]
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  tags: [String!]
+  rand: String!
+  timestamp: String!
+  identity: String!
   status: Float!
 }
 
@@ -232,9 +255,10 @@ type PushHistorySerializer {
   tags: [String!]
   rand: String!
   timestamp: String!
-  headers: JSON
-  payload: JSON
-  response: PushHistoryResSerializer
+  payload: JSON!
+  replies: [PushHistoryReplySerializer]!
+  to: String!
+  from: String!
   topic: String
   urgency: PushUrgency
   ttl: Float
@@ -256,10 +280,9 @@ type PushHistoryItemsSerializer {
   items: [PushHistorySerializer!]
 }
 
-type PushVapidSerializer {
-  subject: String!
-  public_key: String!
-  private_key: String!
+type PushKeysSerializer {
+  auth: Boolean!
+  p256dh: String!
 }
 
 type PushSerializer {
@@ -287,13 +310,14 @@ type PushSerializer {
   tags: [String!]
   rand: String!
   timestamp: String!
-  vapid: PushVapidSerializer
+  keys: PushKeysSerializer!
   domain: String!
   session: String!
-  endpoint: String
-  expiration: Float
+  identity: String!
+  endpoint: String!
   blacklisted: [String!]
   whitelisted: [String!]
+  expiration_time: Float!
 }
 
 type PushDataSerializer {
@@ -1215,66 +1239,60 @@ input UpdateGrantTimeDto {
 }
 
 input CreatePushDto {
-  vapid: CreatePushVapidDto
-  domain: String
-  session: String
-  endpoint: String
-  expiration: Float
+  keys: CreatePushKeysDto!
+  endpoint: String!
   blacklisted: [String!]
   whitelisted: [String!]
+  expiration_time: Float!
 }
 
-input CreatePushVapidDto {
-  subject: String
-  public_key: String
-  private_key: String
+input CreatePushKeysDto {
+  auth: String!
+  p256dh: String!
 }
 
 input UpdatePushDto {
-  vapid: UpdatePushVapidDto
-  domain: String
-  session: String
+  keys: UpdatePushKeysDto
   endpoint: String
-  expiration: Float
   blacklisted: [String!]
   whitelisted: [String!]
+  expiration_time: Float
 }
 
-input UpdatePushVapidDto {
-  subject: String
-  public_key: String
-  private_key: String
+input UpdatePushKeysDto {
+  auth: String!
+  p256dh: String!
 }
 
 input CreatePushHistoryDto {
-  headers: JSON
-  payload: JSON
-  response: CreatePushHistoryResDto
+  payload: JSON!
+  replies: [CreatePushHistoryReplyDto]
+  to: String!
+  from: String
   topic: String
   urgency: PushUrgency
   ttl: Float
   timeout: Float
 }
 
-input CreatePushHistoryResDto {
-  headers: JSON
-  body: String
+input CreatePushHistoryReplyDto {
+  identity: String!
   status: Float!
 }
 
 input UpdatePushHistoryDto {
-  headers: JSON
   payload: JSON
-  response: UpdatePushHistoryResDto
+  replies: [UpdatePushHistoryReplyDto]
+  to: String
+  from: String
   topic: String
   urgency: PushUrgency
   ttl: Float
   timeout: Float
 }
 
-input UpdatePushHistoryResDto {
-  headers: JSON
-  body: String
+input UpdatePushHistoryReplyDto {
+  identity: String!
   status: Float!
 }
 
