@@ -10,15 +10,15 @@ import {
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
+import { PushHistorySerializer } from '@app/common/serializers';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { PushSerializer } from '@app/common/serializers';
+import { CreatePushHistoryDto } from '@app/common/dto';
 import { TouchProvider } from '@app/common/providers';
 import { ValidationPipe } from '@app/common/pipes';
 import { Metadata } from '@app/common/interfaces';
-import { CreatePushDto } from '@app/common/dto';
 import { Meta } from '@app/common/decorators';
 
 @ApiBearerAuth()
@@ -38,8 +38,8 @@ export class PushInspector {
   @SetPolicy(Action.Send, Resource.TouchPush)
   async send(
     @Meta() meta: Metadata,
-    @Body() data: CreatePushDto,
-  ): Promise<PushSerializer> {
+    @Body() data: CreatePushHistoryDto,
+  ): Promise<PushHistorySerializer[]> {
     return this.provider.push.send(data, { meta });
   }
 }

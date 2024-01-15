@@ -202,30 +202,6 @@ type MailItemsSerializer {
 }
 
 type PushHistoryReplySerializer {
-  owner: JSON!
-  shares: [JSON]
-  clients: [JSON]!
-  props: JSON
-  id: String!
-  ref: String
-  groups: [String!]
-  created_at: Date!
-  created_by: String!
-  created_in: String!
-  updated_at: Date
-  updated_by: String
-  updated_in: String
-  deleted_at: Date
-  deleted_by: String
-  deleted_in: String
-  restored_at: Date
-  restored_by: String
-  restored_in: String
-  description: String
-  version: String!
-  tags: [String!]
-  rand: String!
-  timestamp: String!
   identity: String!
   status: Float!
 }
@@ -256,7 +232,7 @@ type PushHistorySerializer {
   rand: String!
   timestamp: String!
   payload: JSON!
-  replies: [PushHistoryReplySerializer]!
+  reply: PushHistoryReplySerializer
   to: String!
   from: String!
   topic: String
@@ -325,7 +301,7 @@ type PushDataSerializer {
 }
 
 type PushItemsSerializer {
-  items: [PushSerializer!]
+  items: [PushSerializer]!
 }
 
 type ConfigSerializer {
@@ -1266,7 +1242,7 @@ input UpdatePushKeysDto {
 
 input CreatePushHistoryDto {
   payload: JSON!
-  replies: [CreatePushHistoryReplyDto]
+  reply: CreatePushHistoryReplyDto
   to: String!
   from: String
   topic: String
@@ -1282,7 +1258,7 @@ input CreatePushHistoryReplyDto {
 
 input UpdatePushHistoryDto {
   payload: JSON
-  replies: [UpdatePushHistoryReplyDto]
+  reply: UpdatePushHistoryReplyDto
   to: String
   from: String
   topic: String
