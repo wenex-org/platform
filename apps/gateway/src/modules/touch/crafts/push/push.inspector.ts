@@ -10,7 +10,6 @@ import {
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
-import { PushHistorySerializer } from '@app/common/serializers';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
@@ -36,10 +35,7 @@ export class PushInspector {
   @SetScope(Scope.SendTouchPush)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Send, Resource.TouchPush)
-  async send(
-    @Meta() meta: Metadata,
-    @Body() data: CreatePushHistoryDto,
-  ): Promise<PushHistorySerializer[]> {
+  async send(@Meta() meta: Metadata, @Body() data: CreatePushHistoryDto): Promise<void> {
     return this.provider.push.send(data, { meta });
   }
 }
