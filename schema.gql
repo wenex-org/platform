@@ -601,6 +601,7 @@ enum ClientServiceType {
   SMS
   Call
   Email
+  Webpush
 }
 
 enum ClientServiceProvider {
