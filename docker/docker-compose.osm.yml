@@ -5,7 +5,7 @@ services:
     container_name: tileserver
     image: overv/openstreetmap-tile-server:latest
     ports:
-      - 8080:8080
+      - 8090:80
     environment:
       - UPDATES=enabled
       - ALLOW_CORS=enabled
@@ -22,7 +22,7 @@ services:
     container_name: overpassapi
     image: wiktorn/overpass-api:latest
     ports:
-      - 8080:80
+      - 8091:80
     environment:
       - OVERPASS_META=yes
       - OVERPASS_MODE=init
@@ -38,7 +38,7 @@ services:
     container_name: valhallagis
     image: ghcr.io/gis-ops/docker-valhalla/valhalla:latest
     ports:
-      - 8002:8002
+      - 8092:8002
     environment:
       - tile_urls=http://download.geofabrik.de/asia/iran-latest.osm.pbf
     volumes:
