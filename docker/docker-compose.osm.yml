@@ -12,7 +12,7 @@ services:
       - DOWNLOAD_POLY=http://download.geofabrik.de/asia/iran.poly
       - UPDATES=enabled
       - MAX_INTERVAL_SECONDS=60
-      - REPLICATION_URL=http://download.geofabrik.de/asia/iran-updates/
+      - REPLICATION_URL=http://download.geofabrik.de/asia/iran-updates
     volumes:
       - ../.data/osm-tiles:/data/tiles/
       - ../.data/osm-data:/data/database/
@@ -28,7 +28,7 @@ services:
     environment:
       - OVERPASS_META=yes
       - OVERPASS_MODE=init
-      - OVERPASS_DIFF_URL=http://download.geofabrik.de/asia/iran-updates/
+      - OVERPASS_DIFF_URL=http://download.geofabrik.de/asia/iran-updates
       - OVERPASS_PLANET_URL=http://download.geofabrik.de/asia/iran-latest.osm.bz2
       - OVERPASS_RULES_LOAD=40
     volumes:
@@ -54,6 +54,9 @@ services:
     environment:
       - DOWNLOAD_PBF=http://download.geofabrik.de/asia/iran-latest.osm.pbf
       - DOWNLOAD_POLY=http://download.geofabrik.de/asia/iran.poly
+      - UPDATES=enabled
+      - MAX_INTERVAL_SECONDS=60
+      - REPLICATION_URL=http://download.geofabrik.de/asia/iran-updates
     volumes:
       - ../.data/osm-tiles:/data/tiles/
       - ../.data/osm-data:/data/database/
