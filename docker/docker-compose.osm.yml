@@ -3,7 +3,7 @@ version: '3.8'
 services:
   tileserver:
     container_name: tileserver
-    image: overv/openstreetmap-tile-server:2.3.0
+    image: overv/openstreetmap-tile-server:latest
     ports:
       - 8090:80
     environment:
@@ -48,7 +48,7 @@ services:
 
   tileserver-import:
     profiles: [ import ]
-    image: overv/openstreetmap-tile-server:2.3.0
+    image: overv/openstreetmap-tile-server:latest
     environment:
       - UPDATES=enabled
       - DOWNLOAD_PBF=http://download.geofabrik.de/asia/iran-latest.osm.pbf
