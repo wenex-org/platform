@@ -28,8 +28,8 @@ services:
     environment:
       - OVERPASS_META=yes
       - OVERPASS_MODE=init
+      - OVERPASS_DIFF_URL=http://download.geofabrik.de/asia/iran-updates/
       - OVERPASS_PLANET_URL=http://download.geofabrik.de/asia/iran-latest.osm.bz2
-      - OVERPASS_DIFF_URL=https://planet.openstreetmap.org/replication/minute/
       - OVERPASS_RULES_LOAD=40
     volumes:
       - ../.data/overpass:/db/
