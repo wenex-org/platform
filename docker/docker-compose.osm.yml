@@ -48,10 +48,7 @@ services:
 
   tileserver-import:
     profiles: [ import ]
-    container_name: tileserver-import
     image: overv/openstreetmap-tile-server:latest
-    ports:
-      - 8080:8080
     environment:
       - UPDATES=enabled
       - ALLOW_CORS=enabled
