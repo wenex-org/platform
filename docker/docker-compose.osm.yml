@@ -8,8 +8,8 @@ services:
       - 8090:80
     environment:
       - ALLOW_CORS=enabled
-      - DOWNLOAD_PBF=http://download.geofabrik.de/asia/iran-latest.osm.pbf
       - DOWNLOAD_POLY=http://download.geofabrik.de/asia/iran.poly
+      - DOWNLOAD_PBF=http://download.geofabrik.de/asia/iran-latest.osm.pbf
       - UPDATES=enabled
       - MAX_INTERVAL_SECONDS=60
       - REPLICATION_URL=https://planet.openstreetmap.org/replication/minute
@@ -52,11 +52,8 @@ services:
     profiles: [ import ]
     image: overv/openstreetmap-tile-server:latest
     environment:
-      - DOWNLOAD_PBF=http://download.geofabrik.de/asia/iran-latest.osm.pbf
       - DOWNLOAD_POLY=http://download.geofabrik.de/asia/iran.poly
-      - UPDATES=enabled
-      - MAX_INTERVAL_SECONDS=60
-      - REPLICATION_URL=https://planet.openstreetmap.org/replication/minute
+      - DOWNLOAD_PBF=http://download.geofabrik.de/asia/iran-latest.osm.pbf
     volumes:
       - ../.data/osm-tiles:/data/tiles/
       - ../.data/osm-data:/data/database/
