@@ -51,7 +51,6 @@ services:
     image: overv/openstreetmap-tile-server:latest
     environment:
       - UPDATES=enabled
-      - ALLOW_CORS=enabled
       - DOWNLOAD_PBF=http://download.geofabrik.de/asia/iran-latest.osm.pbf
       - DOWNLOAD_POLY=http://download.geofabrik.de/asia/iran.poly
     volumes:
