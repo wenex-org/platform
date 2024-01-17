@@ -30,8 +30,7 @@ services:
       - ./config/openssl/cert.pem:/etc/ssl/certs/cert.pem
     depends_on:
       - mysql
-    networks:
-      - localnet
+    network_mode: host
 
   mysql:
     image: bitnami/mysql:8.2
