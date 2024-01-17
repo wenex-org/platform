@@ -43,6 +43,8 @@ services:
       - tile_urls=http://download.geofabrik.de/asia/iran-latest.osm.pbf
     volumes:
       - ../.data/valhalla:/custom_files
+    networks:
+      - localnet
 
   tileserver-import:
     profiles: [ import ]
