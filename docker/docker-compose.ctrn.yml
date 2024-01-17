@@ -31,7 +31,6 @@ services:
     depends_on:
       - mysql
     networks:
-      - coturnet
       - localnet
 
   mysql:
@@ -48,7 +47,5 @@ services:
       - localnet
 
 networks:
-  coturnet:
-    driver: host
   localnet:
     driver: bridge
