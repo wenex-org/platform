@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  tileserver:
+    container_name: tileserver
+    image: overv/openstreetmap-tile-server:latest
+    ports:
+      - 8080:8080
+    environment:
+      - UPDATES=enabled
+      - ALLOW_CORS=enabled
+      - DOWNLOAD_PBF=http://download.geofabrik.de/asia/iran-latest.osm.pbf
+      - DOWNLOAD_POLY=http://download.geofabrik.de/asia/iran.poly
+    volumes:
+      - ../.data/osm-tiles:/data/tiles/
+      - ../.data/osm-data:/data/database/
+    networks:
+      - localnet
+    command: run
+
+  overpassapi:
+    container_name: overpassapi
+    image: wiktorn/overpass-api:latest
+    ports:
+      - 8080:80
+    environment:
+      - OVERPASS_META=yes
+      - OVERPASS_MODE=init
+      - OVERPASS_PLANET_URL=http://download.geofabrik.de/asia/iran-latest.osm.bz2
+      - OVERPASS_DIFF_URL=https://planet.openstreetmap.org/replication/minute/
+      - OVERPASS_RULES_LOAD=40
+    volumes:
+      - ../.data/overpass:/db/
+    networks:
+      - localnet
+
+  valhallagis:
+    container_name: valhallagis
+    image: ghcr.io/gis-ops/docker-valhalla/valhalla:latest
+    ports:
+      - 8002:8002
+    environment:
+      - tile_urls=http://download.geofabrik.de/asia/iran-latest.osm.pbf
+    volumes:
+      - ../.data/valhalla:/custom_files
+
+  tileserver-import:
+    profiles: [ import ]
+    container_name: tileserver-import
+    image: overv/openstreetmap-tile-server:latest
+    ports:
+      - 8080:8080
+    environment:
+      - UPDATES=enabled
+      - ALLOW_CORS=enabled
+      - DOWNLOAD_PBF=http://download.geofabrik.de/asia/iran-latest.osm.pbf
+      - DOWNLOAD_POLY=http://download.geofabrik.de/asia/iran.poly
+    volumes:
+      - ../.data/osm-tiles:/data/tiles/
+      - ../.data/osm-data:/data/database/
+    networks:
+      - localnet
+    command: import
+
+networks:
+  localnet:
+    driver: bridge
