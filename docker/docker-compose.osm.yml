@@ -12,7 +12,7 @@ services:
       - DOWNLOAD_POLY=http://download.geofabrik.de/asia/iran.poly
       - UPDATES=enabled
       - MAX_INTERVAL_SECONDS=60
-      - REPLICATION_URL=https://planet.openstreetmap.org/replication/minute
+      - REPLICATION_URL=http://download.geofabrik.de/asia/iran-updates/
     volumes:
       - ../.data/osm-tiles:/data/tiles/
       - ../.data/osm-data:/data/database/
