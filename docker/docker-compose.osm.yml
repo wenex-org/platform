@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   tileserver:
+    profiles: [ start ]
     container_name: tileserver
     image: overv/openstreetmap-tile-server:latest
     ports:
@@ -20,7 +21,21 @@ services:
       - localnet
     command: run
 
+  valhallagis:
+    profiles: [ start ]
+    container_name: valhallagis
+    image: ghcr.io/gis-ops/docker-valhalla/valhalla:latest
+    ports:
+      - 8092:8002
+    environment:
+      - tile_urls=http://download.geofabrik.de/asia/iran-latest.osm.pbf
+    volumes:
+      - ../.data/valhalla:/custom_files
+    networks:
+      - localnet
+
   overpassapi:
+    profiles: [ setup, start ]
     container_name: overpassapi
     image: wiktorn/overpass-api:latest
     ports:
@@ -36,20 +51,8 @@ services:
     networks:
       - localnet
 
-  valhallagis:
-    container_name: valhallagis
-    image: ghcr.io/gis-ops/docker-valhalla/valhalla:latest
-    ports:
-      - 8092:8002
-    environment:
-      - tile_urls=http://download.geofabrik.de/asia/iran-latest.osm.pbf
-    volumes:
-      - ../.data/valhalla:/custom_files
-    networks:
-      - localnet
-
   tileserver-import:
-    profiles: [ import ]
+    profiles: [ setup ]
     image: overv/openstreetmap-tile-server:latest
     environment:
       - DOWNLOAD_POLY=http://download.geofabrik.de/asia/iran.poly
