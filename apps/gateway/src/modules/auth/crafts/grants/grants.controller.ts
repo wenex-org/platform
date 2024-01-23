@@ -21,6 +21,7 @@ import {
   Post,
   Put,
   Query,
+  Res,
   UseFilters,
   UseGuards,
   UseInterceptors,
@@ -43,13 +44,14 @@ import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
+import { refineFilterQuery, toString } from '@app/common/utils';
 import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
-import { refineFilterQuery } from '@app/common/utils';
 import { AuthProvider } from '@app/common/providers';
 import { ClientSession } from 'mongoose';
+import { Response } from 'express';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
@@ -130,12 +132,19 @@ export class GrantsController
   @SetPolicy(Action.Read, Resource.AuthGrants)
   @ApiQuery({ type: FilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  cursor(
+  Cursor(
+    @Res() res: Response,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Grant>,
     @Session() session?: ClientSession,
-  ): Observable<GrantSerializer> {
-    return super.cursor(meta, filter, session);
+  ) {
+    res.setHeader('Content-Type', 'application/json');
+
+    super.cursor(meta, filter, session).subscribe({
+      next: (val) => res.write(toString(val) + '\n'),
+      complete: () => res.end(),
+      error: (err) => res.status(500).send(err),
+    });
   }
 
   @Get(':id')
