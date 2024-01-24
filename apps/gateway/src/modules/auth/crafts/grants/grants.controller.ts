@@ -138,11 +138,12 @@ export class GrantsController
     @Filter() filter: FilterDto<Grant>,
     @Session() session?: ClientSession,
   ) {
+    res.setHeader('Transfer-Encoding', 'chunked');
     res.setHeader('Content-Type', 'application/json');
 
     super.cursor(meta, filter, session).subscribe({
-      next: (val) => res.write(toString(val) + '\n'),
-      complete: () => res.end(),
+      next: (val) => res.write(toString(val) + '\r\n'),
+      complete: () => res.end('\r\n'),
       error: (err) => res.status(500).send(err),
     });
   }
