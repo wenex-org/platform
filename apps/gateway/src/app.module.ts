@@ -29,6 +29,7 @@ import * as modules from './modules';
         tracingPlugin: ApolloServerPlugin,
         metricsPlugin: ApolloServerPlugin,
       ) => ({
+        debug: true,
         tracing: true, // Required for plugins
         playground: false,
         introspection: true, // Required for plugins
