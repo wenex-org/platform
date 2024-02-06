@@ -29,8 +29,9 @@ import * as modules from './modules';
         tracingPlugin: ApolloServerPlugin,
         metricsPlugin: ApolloServerPlugin,
       ) => ({
-        tracing: true, // Tracing true is required for plugins
+        tracing: true, // Required for plugins
         playground: false,
+        introspection: true, // Required for plugins
         resolvers: { JSON: GraphQLJSON },
         subscriptions: { 'graphql-ws': true },
         autoSchemaFile: join(process.cwd(), 'schema.gql'),
