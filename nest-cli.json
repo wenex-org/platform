@@ -146,6 +146,15 @@
         "tsConfigPath": "libs/health/tsconfig.lib.json"
       }
     },
+    "prom": {
+      "type": "library",
+      "root": "libs/prom",
+      "entryFile": "index",
+      "sourceRoot": "libs/prom/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/prom/tsconfig.lib.json"
+      }
+    },
     "redis": {
       "type": "library",
       "root": "libs/redis",

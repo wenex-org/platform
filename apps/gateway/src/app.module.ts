@@ -1,10 +1,11 @@
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { JWT_SECRET, REDIS_CONFIG, SENTRY_CONFIG } from '@app/common/configs';
+import { METRICS_PLUGIN, PromModule, TRACING_PLUGIN } from '@app/prom';
 import { ComplexityPlugin, DateScalar } from '@app/common/plugins';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { DynamicModule, Module } from '@nestjs/common';
 import { SentryModule } from '@ntegral/nestjs-sentry';
+import { ApolloServerPlugin } from '@apollo/server';
 import { GraphQLModule } from '@nestjs/graphql';
 import GraphQLJSON from 'graphql-type-json';
 import { HealthModule } from '@app/health';
@@ -17,17 +18,31 @@ import * as modules from './modules';
 @Module({
   imports: [
     HealthModule.forRoot(['disk', 'memory', 'redis', 'kafka']),
-    PrometheusModule.register(),
+    PromModule.forRoot(),
     RedisModule.forRoot(REDIS_CONFIG()),
     SentryModule.forRoot(SENTRY_CONFIG()),
     JwtModule.register({ secret: JWT_SECRET(), global: true }),
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      playground: false,
+    GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
-      resolvers: { JSON: GraphQLJSON },
-      subscriptions: { 'graphql-ws': true },
-      autoSchemaFile: join(process.cwd(), 'schema.gql'),
-      plugins: [ApolloServerPluginLandingPageLocalDefault()],
+      useFactory: (
+        // Use provided plugins injected from below
+        tracingPlugin: ApolloServerPlugin,
+        metricsPlugin: ApolloServerPlugin,
+      ) => ({
+        tracing: true, // Tracing true is required for plugins
+        playground: false,
+        resolvers: { JSON: GraphQLJSON },
+        subscriptions: { 'graphql-ws': true },
+        autoSchemaFile: join(process.cwd(), 'schema.gql'),
+        // Plugins added to apollo server
+        plugins: [
+          tracingPlugin,
+          metricsPlugin,
+          ApolloServerPluginLandingPageLocalDefault(),
+        ],
+      }),
+      // We need to inject the provider keys
+      inject: [TRACING_PLUGIN, METRICS_PLUGIN],
     }),
 
     ...(Object.values(modules) as unknown as DynamicModule[]),
