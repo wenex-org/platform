@@ -145,8 +145,8 @@ export class ConfigsController
 
     super.cursor(meta, filter).subscribe({
       next: (data) => res.write(getMessageEvent({ id: data.id, data })),
-      complete: () => res.end(getMessageEvent({ event: 'close' })),
       error: (data) => res.end(getMessageEvent({ event: 'error', data })),
+      complete: () => res.end(getMessageEvent({ type: 'close', event: 'end' })),
     });
   }
 
