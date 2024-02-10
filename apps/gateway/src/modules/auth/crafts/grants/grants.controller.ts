@@ -43,8 +43,8 @@ import { Cache, Nested, SetPolicy, SetScope, ShipStrategy } from '@app/common/me
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
+import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { refineFilterQuery, toString } from '@app/common/utils';
 import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
@@ -133,18 +133,19 @@ export class GrantsController
   @ApiQuery({ type: FilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   Cursor(
-    @Res() res: Response,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Grant>,
     @Session() session?: ClientSession,
+    @Res({ passthrough: true }) res?: Response,
   ) {
+    // Server Sent-Event Headers
     res.setHeader('Transfer-Encoding', 'chunked');
-    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Type', 'text/event-stream');
 
     super.cursor(meta, filter, session).subscribe({
-      next: (val) => res.write(toString(val) + '\r\n'),
-      complete: () => res.end('\r\n'),
-      error: (err) => res.status(500).send(err),
+      next: (data) => res.write(getMessageEvent({ id: data.id, data })),
+      complete: () => res.end(getMessageEvent({ event: 'completed' })),
+      error: (data) => res.end(getMessageEvent({ event: 'error', data })),
     });
   }
 
