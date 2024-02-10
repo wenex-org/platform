@@ -16,11 +16,13 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
   Param,
   Patch,
   Post,
   Put,
   Query,
+  Res,
   UseFilters,
   UseGuards,
   UseInterceptors,
@@ -38,18 +40,19 @@ import {
   Profile,
   ProfileDto,
 } from '@app/common/interfaces';
+import { ApiBearerAuth, ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
-import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
+import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { IdentityProvider } from '@app/common/providers';
-import { refineFilterQuery } from '@app/common/utils';
 import { ClientSession } from 'mongoose';
+import { Response } from 'express';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
@@ -127,14 +130,24 @@ export class ProfilesController
   @Get('cursor')
   @SetScope(Scope.ReadIdentityProfiles)
   @SetPolicy(Action.Read, Resource.IdentityProfiles)
-  @ApiQuery({ type: FilterDto, required: false })
+  @ApiQuery({ type: FilterOneDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  cursor(
+  @ApiResponse({ status: HttpStatus.OK, type: ProfileSerializer, description: 'SSE' })
+  Cursor(
+    @Res() res: Response,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<Profile>,
-    @Session() session?: ClientSession,
-  ): Observable<ProfileSerializer> {
-    return super.cursor(meta, filter, session);
+    @Filter() filter: FilterOneDto<Profile>,
+  ) {
+    // Server Sent-Event Headers
+    res.setHeader('Transfer-Encoding', 'chunked');
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'private, no-cache, no-store');
+
+    super.cursor(meta, filter).subscribe({
+      next: (data) => res.write(getMessageEvent({ id: data.id, data })),
+      complete: () => res.end(getMessageEvent({ event: 'completed' })),
+      error: (data) => res.end(getMessageEvent({ event: 'error', data })),
+    });
   }
 
   @Get(':id')

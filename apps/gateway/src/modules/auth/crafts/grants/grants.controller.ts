@@ -16,6 +16,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -39,9 +40,9 @@ import {
   Grant,
   GrantDto,
 } from '@app/common/interfaces';
+import { ApiBearerAuth, ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Cache, Nested, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
-import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
 import { Controller as ControllerClass } from '@app/common/classes';
@@ -130,20 +131,20 @@ export class GrantsController
   @Get('cursor')
   @SetScope(Scope.ReadAuthGrants)
   @SetPolicy(Action.Read, Resource.AuthGrants)
-  @ApiQuery({ type: FilterDto, required: false })
+  @ApiQuery({ type: FilterOneDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @ApiResponse({ status: HttpStatus.OK, type: GrantSerializer, description: 'SSE' })
   Cursor(
     @Res() res: Response,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<Grant>,
-    @Session() session?: ClientSession,
+    @Filter() filter: FilterOneDto<Grant>,
   ) {
     // Server Sent-Event Headers
     res.setHeader('Transfer-Encoding', 'chunked');
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'private, no-cache, no-store');
 
-    super.cursor(meta, filter, session).subscribe({
+    super.cursor(meta, filter).subscribe({
       next: (data) => res.write(getMessageEvent({ id: data.id, data })),
       complete: () => res.end(getMessageEvent({ event: 'completed' })),
       error: (data) => res.end(getMessageEvent({ event: 'error', data })),
