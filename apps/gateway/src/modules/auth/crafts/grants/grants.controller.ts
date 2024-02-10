@@ -133,14 +133,15 @@ export class GrantsController
   @ApiQuery({ type: FilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   Cursor(
+    @Res() res: Response,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Grant>,
     @Session() session?: ClientSession,
-    @Res({ passthrough: true }) res?: Response,
   ) {
     // Server Sent-Event Headers
     res.setHeader('Transfer-Encoding', 'chunked');
     res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'private, no-cache, no-store');
 
     super.cursor(meta, filter, session).subscribe({
       next: (data) => res.write(getMessageEvent({ id: data.id, data })),
