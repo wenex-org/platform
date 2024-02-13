@@ -3,8 +3,7 @@ FROM node:20-alpine AS build
 
 WORKDIR /app
 
-COPY package*.json ./
-COPY pnpm-lock.yaml ./
+COPY . .
 
 RUN apk update && apk add bash
 
@@ -13,8 +12,6 @@ RUN npm install -g pnpm && \
 
 # Service Image
 FROM build
-
-COPY . .
 
 ARG SERVICE_NAME
 
