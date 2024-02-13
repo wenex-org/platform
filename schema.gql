@@ -329,19 +329,9 @@ type ConfigSerializer {
   tags: [String!]
   rand: String!
   timestamp: String!
+  type: String!
   value: JSON
   key: String!
-  type: ValueType!
-}
-
-enum ValueType {
-  Null
-  Array
-  Object
-  String
-  Number
-  Boolean
-  Undefined
 }
 
 type ConfigDataSerializer {
@@ -377,9 +367,9 @@ type SettingSerializer {
   tags: [String!]
   rand: String!
   timestamp: String!
+  type: String!
   value: JSON
   key: String!
-  type: ValueType!
 }
 
 type SettingDataSerializer {
@@ -1319,6 +1309,16 @@ input CreateConfigDto {
   value: JSON
   key: String!
   type: ValueType!
+}
+
+enum ValueType {
+  Null
+  Array
+  Object
+  String
+  Number
+  Boolean
+  Undefined
 }
 
 input UpdateConfigDto {
