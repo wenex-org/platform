@@ -66,11 +66,19 @@ export class FilesInspector {
     const eTag =
       resize || rotate ? MD5.hash(file.etag + toString({ rotate, resize })) : file.etag;
 
-    res.status(HttpStatus.OK).set({
-      ETag: `"${eTag}"`,
-      'Content-Type': file.content_type,
-      'Content-Disposition': `attachment; filename="${file.original}"`,
-    });
+    if (file.acl?.toLocaleLowerCase().includes('public')) {
+      res.status(HttpStatus.OK).set({
+        ETag: `"${eTag}"`,
+        'Content-Type': file.content_type,
+        'Content-Disposition': `attachment; filename="${file.original}"`,
+      });
+    } else {
+      res.status(HttpStatus.OK).set({
+        'Content-Type': file.content_type,
+        'Cache-Control': 'private, no-cache, no-store',
+        'Content-Disposition': `attachment; filename="${file.original}"`,
+      });
+    }
 
     if (req.header('if-none-match') === eTag) {
       res.status(HttpStatus.NOT_MODIFIED).end();
