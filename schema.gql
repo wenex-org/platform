@@ -1318,7 +1318,6 @@ enum ValueType {
   String
   Number
   Boolean
-  Undefined
 }
 
 input UpdateConfigDto {
