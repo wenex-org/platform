@@ -435,7 +435,7 @@ type AppSerializer {
   tags: [String!]
   rand: String!
   timestamp: String!
-  change_logs: [AppChangeLogSerializer]!
+  change_logs: [AppChangeLogSerializer]
   cid: String!
   type: AppType!
   name: String!
