@@ -435,13 +435,13 @@ type AppSerializer {
   tags: [String!]
   rand: String!
   timestamp: String!
+  type: String!
+  status: String!
+  scopes: [String!]!
+  grant_types: [String!]!
   change_logs: [AppChangeLogSerializer]
   cid: String!
-  type: AppType!
   name: String!
-  status: Status!
-  scopes: [Scope!]!
-  grant_types: [GrantType!]!
   access_token_ttl: Float!
   refresh_token_ttl: Float!
   url: String
@@ -449,104 +449,6 @@ type AppSerializer {
   site: String
   slogan: String
   redirect_uris: [String!]
-}
-
-enum AppType {
-  Web
-  Mobile
-  Desktop
-  Application
-}
-
-enum Status {
-  Active
-  Inactive
-}
-
-enum Scope {
-  Whole
-  Read
-  Write
-  Manage
-  Collect
-  Emit
-  Send
-  Init
-  Verify
-  Upload
-  Download
-  ReadAuth
-  WriteAuth
-  ManageAuth
-  ReadAuthGrants
-  WriteAuthGrants
-  ManageAuthGrants
-  ReadConfig
-  WriteConfig
-  ManageConfig
-  ReadConfigConfigs
-  WriteConfigConfigs
-  ManageConfigConfigs
-  ReadConfigSettings
-  WriteConfigSettings
-  ManageConfigSettings
-  ReadDomain
-  WriteDomain
-  ManageDomain
-  ReadDomainApps
-  WriteDomainApps
-  ManageDomainApps
-  ReadDomainClients
-  WriteDomainClients
-  ManageDomainClients
-  ReadIdentity
-  WriteIdentity
-  ManageIdentity
-  ReadIdentityUsers
-  WriteIdentityUsers
-  ManageIdentityUsers
-  ReadIdentityProfiles
-  WriteIdentityProfiles
-  ManageIdentityProfiles
-  ReadIdentitySessions
-  WriteIdentitySessions
-  ManageIdentitySessions
-  ReadSpecial
-  WriteSpecial
-  ManageSpecial
-  ReadSpecialFiles
-  WriteSpecialFiles
-  ManageSpecialFiles
-  UploadSpecialFiles
-  DownloadSpecialFiles
-  ReadSpecialStats
-  WriteSpecialStats
-  ManageSpecialStats
-  CollectSpecialStats
-  ReadTouch
-  WriteTouch
-  ManageTouch
-  ReadTouchPush
-  WriteTouchPush
-  ManageTouchPush
-  SendTouchPush
-  ReadTouchPushHistories
-  WriteTouchPushHistories
-  ManageTouchPushHistories
-  SendTouchPushHistories
-  ReadTouchMails
-  WriteTouchMails
-  ManageTouchMails
-  SendTouchMails
-}
-
-enum GrantType {
-  OTP
-  OAuth
-  Password
-  RefreshToken
-  ClientCredential
-  AuthorizationCode
 }
 
 type AppDataSerializer {
@@ -582,21 +484,9 @@ type ClientServiceSerializer {
   tags: [String!]
   rand: String!
   timestamp: String!
+  type: String!
   config: JSON
-  type: ClientServiceType!
-  provider: ClientServiceProvider
-}
-
-enum ClientServiceType {
-  SMS
-  Call
-  Email
-  Webpush
-}
-
-enum ClientServiceProvider {
-  Wenex
-  Unknown
+  provider: String
 }
 
 type ClientDomainSerializer {
@@ -624,8 +514,8 @@ type ClientDomainSerializer {
   tags: [String!]
   rand: String!
   timestamp: String!
+  status: String!
   name: String!
-  status: Status!
   subjects: [String!]!
 }
 
@@ -654,41 +544,27 @@ type ClientSerializer {
   tags: [String!]
   rand: String!
   timestamp: String!
+  plan: String!
+  state: String!
+  status: String!
+  scopes: [String!]!
   api_key: String!
+  grant_types: [String!]!
   domains: [ClientDomainSerializer]!
   services: [ClientServiceSerializer]!
   name: String!
-  plan: ClientPlan!
   url: String
   logo: String
   site: String
   slogan: String
-  state: State!
-  status: Status!
   client_id: String!
   client_secret: String!
   expiration_date: Date!
   access_token_ttl: Float!
   refresh_token_ttl: Float!
-  scopes: [Scope!]!
   whitelist: [String!]
   coworkers: [String!]
-  grant_types: [GrantType!]!
   redirect_uris: [String!]
-}
-
-enum ClientPlan {
-  Aluminum
-  Gold
-  Platinum
-}
-
-enum State {
-  Pending
-  Approved
-  Rejected
-  Verified
-  Unknown
 }
 
 type ClientDataSerializer {
@@ -834,6 +710,11 @@ type UserSerializer {
   subjects: [String!]!
 }
 
+enum Status {
+  Active
+  Inactive
+}
+
 enum UserMFA {
   SMS
   Time
@@ -899,6 +780,14 @@ enum ProfileType {
   Real
   Legal
   Govern
+}
+
+enum State {
+  Pending
+  Approved
+  Rejected
+  Verified
+  Unknown
 }
 
 enum Gender {
@@ -1147,6 +1036,15 @@ input AuthenticationRequestDto {
   coworkers: [String!]
 }
 
+enum GrantType {
+  OTP
+  OAuth
+  Password
+  RefreshToken
+  ClientCredential
+  AuthorizationCode
+}
+
 enum ResponseType {
   Code
   Token
@@ -1361,6 +1259,90 @@ input CreateAppChangeLogDto {
   deprecation_date: Date
 }
 
+enum AppType {
+  Web
+  Mobile
+  Desktop
+  Application
+}
+
+enum Scope {
+  Whole
+  Read
+  Write
+  Manage
+  Collect
+  Emit
+  Send
+  Init
+  Verify
+  Upload
+  Download
+  ReadAuth
+  WriteAuth
+  ManageAuth
+  ReadAuthGrants
+  WriteAuthGrants
+  ManageAuthGrants
+  ReadConfig
+  WriteConfig
+  ManageConfig
+  ReadConfigConfigs
+  WriteConfigConfigs
+  ManageConfigConfigs
+  ReadConfigSettings
+  WriteConfigSettings
+  ManageConfigSettings
+  ReadDomain
+  WriteDomain
+  ManageDomain
+  ReadDomainApps
+  WriteDomainApps
+  ManageDomainApps
+  ReadDomainClients
+  WriteDomainClients
+  ManageDomainClients
+  ReadIdentity
+  WriteIdentity
+  ManageIdentity
+  ReadIdentityUsers
+  WriteIdentityUsers
+  ManageIdentityUsers
+  ReadIdentityProfiles
+  WriteIdentityProfiles
+  ManageIdentityProfiles
+  ReadIdentitySessions
+  WriteIdentitySessions
+  ManageIdentitySessions
+  ReadSpecial
+  WriteSpecial
+  ManageSpecial
+  ReadSpecialFiles
+  WriteSpecialFiles
+  ManageSpecialFiles
+  UploadSpecialFiles
+  DownloadSpecialFiles
+  ReadSpecialStats
+  WriteSpecialStats
+  ManageSpecialStats
+  CollectSpecialStats
+  ReadTouch
+  WriteTouch
+  ManageTouch
+  ReadTouchPush
+  WriteTouchPush
+  ManageTouchPush
+  SendTouchPush
+  ReadTouchPushHistories
+  WriteTouchPushHistories
+  ManageTouchPushHistories
+  SendTouchPushHistories
+  ReadTouchMails
+  WriteTouchMails
+  ManageTouchMails
+  SendTouchMails
+}
+
 input UpdateAppDto {
   change_logs: [UpdateAppChangeLogDto]
   cid: String
@@ -1417,6 +1399,24 @@ input CreateClientServiceDto {
   config: JSON
   type: ClientServiceType!
   provider: ClientServiceProvider
+}
+
+enum ClientServiceType {
+  SMS
+  Call
+  Email
+  Webpush
+}
+
+enum ClientServiceProvider {
+  Wenex
+  Unknown
+}
+
+enum ClientPlan {
+  Aluminum
+  Gold
+  Platinum
 }
 
 input UpdateClientDto {
