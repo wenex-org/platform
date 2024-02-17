@@ -698,32 +698,16 @@ type UserSerializer {
   tags: [String!]
   rand: String!
   timestamp: String!
+  status: String!
+  mfa: String
+  oauth: [String!]
   secret: Boolean
-  status: Status!
   tz: String!
-  mfa: UserMFA
   i18n: String!
-  oauth: [UserOAuth!]
   email: String
   phone: String
   username: String
   subjects: [String!]!
-}
-
-enum Status {
-  Active
-  Inactive
-}
-
-enum UserMFA {
-  SMS
-  Time
-  Email
-}
-
-enum UserOAuth {
-  Google
-  Github
 }
 
 type UserDataSerializer {
@@ -1050,6 +1034,17 @@ enum ResponseType {
   Token
 }
 
+enum UserMFA {
+  SMS
+  Time
+  Email
+}
+
+enum UserOAuth {
+  Google
+  Github
+}
+
 input TokenDto {
   token: String
 }
@@ -1264,6 +1259,11 @@ enum AppType {
   Mobile
   Desktop
   Application
+}
+
+enum Status {
+  Active
+  Inactive
 }
 
 enum Scope {
