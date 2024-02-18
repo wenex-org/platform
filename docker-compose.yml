@@ -1,8 +1,6 @@
 version: '3.8'
 
 x-common: &common
-  build:
-    context: .
   env_file:
     - .env
   networks:
@@ -13,9 +11,11 @@ services:
     build:
       args:
         SERVICE_NAME: gateway
+      context: .
     ports:
       - 3010:3010 # Rest
     environment:
+      NODE_ENV: prod
       SENTRY_DSN:
     <<: *common
 
@@ -27,6 +27,7 @@ services:
     build:
       args:
         SERVICE_NAME: auth
+      context: .
     ports:
       - 3020:3020 # Rest
       - 5020:5020 # gRPC
@@ -43,6 +44,7 @@ services:
     build:
       args:
         SERVICE_NAME: configs
+      context: .
     ports:
       - 3030:3030 # Rest
       - 5030:5030 # gRPC
@@ -59,6 +61,7 @@ services:
     build:
       args:
         SERVICE_NAME: domain
+      context: .
     ports:
       - 3040:3040 # Rest
       - 5040:5040 # gRPC
@@ -75,6 +78,7 @@ services:
     build:
       args:
         SERVICE_NAME: identity
+      context: .
     ports:
       - 3050:3050 # Rest
       - 5050:5050 # gRPC
@@ -91,6 +95,7 @@ services:
     build:
       args:
         SERVICE_NAME: special
+      context: .
     ports:
       - 3060:3060 # Rest
     environment:
@@ -106,8 +111,44 @@ services:
     build:
       args:
         SERVICE_NAME: touch
+      context: .
     ports:
       - 3070:3070 # Rest
+    environment:
+      NODE_ENV: prod
+      SENTRY_DSN:
+    <<: *common
+
+  #######################
+  # DISPATCHER WORKER
+  #######################
+  dispatcher:
+    profiles: [ 'workers' ]
+    container_name: dispatcher
+    build:
+      args:
+        SERVICE_NAME: dispatcher
+      context: .
+    ports:
+      - 4010:4010 # Rest
+    environment:
+      NODE_ENV: prod
+      SENTRY_DSN:
+    <<: *common
+
+  #######################
+  # PRESERVER WORKER
+  #######################
+  preserver:
+    profiles: [ 'workers' ]
+    container_name: preserver
+    build:
+      args:
+        SERVICE_NAME: preserver
+      context: .
+    ports:
+      - 4020:4020 # Rest
+      - 6020:6020 # gRPC
     environment:
       NODE_ENV: prod
       SENTRY_DSN:
