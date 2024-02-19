@@ -120,6 +120,22 @@ services:
     <<: *common
 
   #######################
+  # FINANCIAL SERVICES
+  #######################
+  financial:
+    container_name: financial
+    build:
+      args:
+        SERVICE_NAME: financial
+      context: .
+    ports:
+      - 3080:3080 # Rest
+    environment:
+      NODE_ENV: prod
+      SENTRY_DSN:
+    <<: *common
+
+  #######################
   # DISPATCHER WORKER
   #######################
   dispatcher:
