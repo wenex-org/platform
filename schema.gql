@@ -826,6 +826,207 @@ type SessionItemsSerializer {
   items: [SessionSerializer]!
 }
 
+type CoinSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
+  props: JSON
+  id: String!
+  ref: String
+  groups: [String!]
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  tags: [String!]
+  rand: String!
+  timestamp: String!
+  type: String!
+  provider: String!
+  symbol: String
+  iso: String!
+  code: String
+  name: String
+  alias: String
+  network: String
+  contract: String
+  precision: Float!
+  countries: [String!]
+}
+
+type CoinDataSerializer {
+  data: CoinSerializer
+}
+
+type CoinItemsSerializer {
+  items: [CoinSerializer]!
+}
+
+type PaySerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
+  props: JSON
+  id: String!
+  ref: String
+  groups: [String!]
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  tags: [String!]
+  rand: String!
+  timestamp: String!
+  type: String!
+  wallet: String!
+  amount: Float
+  percent: Float
+}
+
+type WalletSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
+  props: JSON
+  id: String!
+  ref: String
+  groups: [String!]
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  tags: [String!]
+  rand: String!
+  timestamp: String!
+  provider: String!
+  coin: String!
+  accounts: [String!]!
+  amount: Float!
+  blocked: Float
+  internal: Float
+  external: Float
+}
+
+type WalletDataSerializer {
+  data: WalletSerializer
+}
+
+type WalletItemsSerializer {
+  items: [WalletSerializer]!
+}
+
+type AccountSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
+  props: JSON
+  id: String!
+  ref: String
+  groups: [String!]
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  tags: [String!]
+  rand: String!
+  timestamp: String!
+  type: String!
+  broker: String!
+  ownership: String!
+}
+
+type AccountDataSerializer {
+  data: AccountSerializer
+}
+
+type AccountItemsSerializer {
+  items: [AccountSerializer]!
+}
+
+type TransactionSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
+  props: JSON
+  id: String!
+  ref: String
+  groups: [String!]
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  tags: [String!]
+  rand: String!
+  timestamp: String!
+  type: String!
+  state: String!
+  reason: String!
+  payees: [PaySerializer]
+  payers: [PaySerializer]
+  amount: Float!
+  verified_at: Date
+  canceled_at: Date
+  invoice: String
+}
+
+type TransactionDataSerializer {
+  data: TransactionSerializer
+}
+
+type TransactionItemsSerializer {
+  items: [TransactionSerializer]!
+}
+
 """Date custom scalar type"""
 scalar Date
 
@@ -869,6 +1070,18 @@ type Query {
   countSession(filter: QueryFilterDto!): TotalSerializer!
   findSession(filter: FilterDto!): SessionItemsSerializer!
   findOneSession(id: String!, ref: String): SessionDataSerializer!
+  countAccount(filter: QueryFilterDto!): TotalSerializer!
+  findAccount(filter: FilterDto!): AccountItemsSerializer!
+  findOneAccount(id: String!, ref: String): AccountDataSerializer!
+  countCoin(filter: QueryFilterDto!): TotalSerializer!
+  findCoin(filter: FilterDto!): CoinItemsSerializer!
+  findOneCoin(id: String!, ref: String): CoinDataSerializer!
+  countWallet(filter: QueryFilterDto!): TotalSerializer!
+  findWallet(filter: FilterDto!): WalletItemsSerializer!
+  findOneWallet(id: String!, ref: String): WalletDataSerializer!
+  countTransaction(filter: QueryFilterDto!): TotalSerializer!
+  findTransaction(filter: FilterDto!): TransactionItemsSerializer!
+  findOneTransaction(id: String!, ref: String): TransactionDataSerializer!
 }
 
 input QueryFilterDto {
@@ -992,6 +1205,34 @@ type Mutation {
   destroyOneSession(id: String!, ref: String): SessionDataSerializer!
   updateOneSession(id: String!, data: UpdateSessionDto!, ref: String): SessionDataSerializer!
   updateBulkSession(filter: QueryFilterDto!, data: UpdateSessionDto!): TotalSerializer!
+  createAccount(data: CreateAccountDto!): AccountDataSerializer!
+  createBulkAccount(items: [CreateAccountDto!]!): AccountItemsSerializer!
+  deleteOneAccount(id: String!, ref: String): AccountDataSerializer!
+  restoreOneAccount(id: String!, ref: String): AccountDataSerializer!
+  destroyOneAccount(id: String!, ref: String): AccountDataSerializer!
+  updateOneAccount(id: String!, data: UpdateAccountDto!, ref: String): AccountDataSerializer!
+  updateBulkAccount(filter: QueryFilterDto!, data: UpdateAccountDto!): TotalSerializer!
+  createCoin(data: CreateCoinDto!): CoinDataSerializer!
+  createBulkCoin(items: [CreateCoinDto!]!): CoinItemsSerializer!
+  deleteOneCoin(id: String!, ref: String): CoinDataSerializer!
+  restoreOneCoin(id: String!, ref: String): CoinDataSerializer!
+  destroyOneCoin(id: String!, ref: String): CoinDataSerializer!
+  updateOneCoin(id: String!, data: UpdateCoinDto!, ref: String): CoinDataSerializer!
+  updateBulkCoin(filter: QueryFilterDto!, data: UpdateCoinDto!): TotalSerializer!
+  createWallet(data: CreateWalletDto!): WalletDataSerializer!
+  createBulkWallet(items: [CreateWalletDto!]!): WalletItemsSerializer!
+  deleteOneWallet(id: String!, ref: String): WalletDataSerializer!
+  restoreOneWallet(id: String!, ref: String): WalletDataSerializer!
+  destroyOneWallet(id: String!, ref: String): WalletDataSerializer!
+  updateOneWallet(id: String!, data: UpdateWalletDto!, ref: String): WalletDataSerializer!
+  updateBulkWallet(filter: QueryFilterDto!, data: UpdateWalletDto!): TotalSerializer!
+  createTransaction(data: CreateTransactionDto!): TransactionDataSerializer!
+  createBulkTransaction(items: [CreateTransactionDto!]!): TransactionItemsSerializer!
+  deleteOneTransaction(id: String!, ref: String): TransactionDataSerializer!
+  restoreOneTransaction(id: String!, ref: String): TransactionDataSerializer!
+  destroyOneTransaction(id: String!, ref: String): TransactionDataSerializer!
+  updateOneTransaction(id: String!, data: UpdateTransactionDto!, ref: String): TransactionDataSerializer!
+  updateBulkTransaction(filter: QueryFilterDto!, data: UpdateTransactionDto!): TotalSerializer!
 }
 
 input AuthenticationRequestDto {
@@ -1341,6 +1582,21 @@ enum Scope {
   WriteTouchMails
   ManageTouchMails
   SendTouchMails
+  ReadFinancial
+  WriteFinancial
+  ManageFinancial
+  ReadFinancialCoins
+  WriteFinancialCoins
+  ManageFinancialCoins
+  ReadFinancialWallets
+  WriteFinancialWallets
+  ManageFinancialWallets
+  ReadFinancialAccounts
+  WriteFinancialAccounts
+  ManageFinancialAccounts
+  ReadFinancialTransactions
+  WriteFinancialTransactions
+  ManageFinancialTransactions
 }
 
 input UpdateAppDto {
@@ -1586,4 +1842,150 @@ input UpdateSessionDto {
   ip: String
   agent: String
   expiration_date: Date
+}
+
+input CreateAccountDto {
+  type: AccountType!
+  broker: String
+  ownership: AccountOwnership!
+}
+
+enum AccountType {
+  SavingLong
+  SavingShort
+  Transaction
+}
+
+enum AccountOwnership {
+  Common
+  Personal
+}
+
+input UpdateAccountDto {
+  type: AccountType
+  broker: String
+  ownership: AccountOwnership
+}
+
+input CreateCoinDto {
+  symbol: String
+  provider: String
+  type: CoinType!
+  iso: String!
+  code: String
+  name: String
+  alias: String
+  network: String
+  contract: String
+  precision: Float!
+  countries: [String!]
+}
+
+enum CoinType {
+  Real
+  Virtual
+}
+
+input UpdateCoinDto {
+  symbol: String
+  provider: String
+  iso: String
+  code: String
+  name: String
+  alias: String
+  network: String
+  contract: String
+  precision: Float
+  countries: [String!]
+}
+
+input CreateWalletDto {
+  provider: String
+  coin: String!
+  accounts: [String!]!
+  amount: Float!
+  blocked: Float
+  internal: Float
+  external: Float
+}
+
+input UpdateWalletDto {
+  provider: String
+  accounts: [String!]
+  amount: Float
+  blocked: Float
+  internal: Float
+  external: Float
+}
+
+input CreateTransactionDto {
+  type: TransactionType!
+  state: TransactionState!
+  reason: TransactionReason!
+  amount: Float!
+  payees: [CreatePayDto!]
+  payers: [CreatePayDto!]
+  verified_at: Date
+  canceled_at: Date
+  invoice: String
+}
+
+enum TransactionType {
+  Service
+  Deposit
+  Withdraw
+  Transfer
+}
+
+enum TransactionState {
+  Failed
+  Pending
+  Verified
+  Rollback
+  Cancelled
+}
+
+enum TransactionReason {
+  Transfer
+  Reward
+  Cashback
+  Earning
+  Expense
+  InvoicePayNormal
+  InvoicePayRepeatable
+  InvoicePayReplication
+  InvoicePaySubscription
+}
+
+input CreatePayDto {
+  type: PayType!
+  amount: Float
+  wallet: String!
+  percent: Float
+}
+
+enum PayType {
+  Amount
+  Blocked
+  Internal
+  External
+}
+
+input UpdateTransactionDto {
+  type: TransactionType!
+  state: TransactionState!
+  reason: TransactionReason!
+  amount: Float!
+  payees: [UpdatePayDto!]
+  payers: [UpdatePayDto!]
+  verified_at: Date
+  canceled_at: Date
+  invoice: String
+}
+
+input UpdatePayDto {
+  type: PayType!
+  amount: Float
+  wallet: String!
+  percent: Float
 }
