@@ -647,22 +647,16 @@ type StatSerializer {
   tags: [String!]
   rand: String!
   timestamp: String!
+  type: String!
+  hours: [Float]
+  days: [Float]
+  months: [Float]
   flags: JSON
-  type: StatType!
   key: String!
   val: Float!
   day: Float
-  hours: [Float!]
   month: Float
-  days: [Float!]
   year: Float!
-  months: [Float!]
-}
-
-enum StatType {
-  Daily
-  Yearly
-  Monthly
 }
 
 type StatDataSerializer {
@@ -1753,6 +1747,12 @@ input CreateStatDto {
   days: [Float!]
   year: Float
   months: [Float!]
+}
+
+enum StatType {
+  Daily
+  Yearly
+  Monthly
 }
 
 input UpdateStatDto {
