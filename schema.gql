@@ -857,7 +857,6 @@ type CoinSerializer {
   iso: String
   subunit: CoinUnitSerializer
   sign: String
-  code: String
   name: String
   alias: String
   network: String
@@ -1882,7 +1881,6 @@ input CreateCoinDto {
   iso: String
   subunit: CreateCoinUnitDto
   sign: String
-  code: String
   name: String
   alias: String
   network: String
@@ -1908,7 +1906,6 @@ input UpdateCoinDto {
   iso: String
   subunit: UpdateCoinUnitDto
   sign: String
-  code: String
   name: String
   alias: String
   network: String
