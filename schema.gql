@@ -853,16 +853,30 @@ type CoinSerializer {
   timestamp: String!
   type: String!
   provider: String!
+  category: String
   symbol: String
   iso: String
   subunit: CoinUnitSerializer
   sign: String
-  name: String
-  alias: String
-  network: String
+  name: CoinName
+  token: String
+  network: CoinNetwork
   contract: String
   precision: Float!
   countries: [String!]
+}
+
+enum CoinName {
+  Tronix
+  Solana
+  Bitcoin
+  Ethereum
+  BinanceSmartChain
+}
+
+enum CoinNetwork {
+  Mainnet
+  Testnet
 }
 
 type CoinDataSerializer {
@@ -931,11 +945,13 @@ type WalletSerializer {
   timestamp: String!
   provider: String!
   coin: String!
-  accounts: [String!]!
+  account: String!
   amount: Float!
   blocked: Float
   internal: Float
   external: Float
+  address: String
+  private: String
 }
 
 type WalletDataSerializer {
@@ -973,7 +989,9 @@ type AccountSerializer {
   timestamp: String!
   type: String!
   broker: String!
+  provider: String!
   ownership: String!
+  members: [String!]!
 }
 
 type AccountDataSerializer {
@@ -1855,6 +1873,8 @@ input CreateAccountDto {
   type: AccountType!
   broker: String
   ownership: AccountOwnership!
+  provider: String
+  members: [String!]
 }
 
 enum AccountType {
@@ -1872,6 +1892,8 @@ input UpdateAccountDto {
   type: AccountType
   broker: String
   ownership: AccountOwnership
+  provider: String
+  members: [String!]
 }
 
 input CreateCoinDto {
@@ -1881,12 +1903,13 @@ input CreateCoinDto {
   iso: String
   subunit: CreateCoinUnitDto
   sign: String
-  name: String
-  alias: String
-  network: String
+  name: CoinName
+  token: String
+  network: CoinNetwork
   contract: String
   precision: Float!
   countries: [String!]
+  category: CoinCategory
 }
 
 enum CoinType {
@@ -1900,18 +1923,24 @@ input CreateCoinUnitDto {
   symbol: String
 }
 
+enum CoinCategory {
+  Coin
+  Token
+}
+
 input UpdateCoinDto {
   symbol: String
   provider: String
   iso: String
   subunit: UpdateCoinUnitDto
   sign: String
-  name: String
-  alias: String
-  network: String
+  name: CoinName
+  token: String
+  network: CoinNetwork
   contract: String
   precision: Float
   countries: [String!]
+  category: CoinCategory
 }
 
 input UpdateCoinUnitDto {
@@ -1923,20 +1952,24 @@ input UpdateCoinUnitDto {
 input CreateWalletDto {
   provider: String
   coin: String!
-  accounts: [String!]!
+  account: String!
   amount: Float!
   blocked: Float
   internal: Float
   external: Float
+  address: String
+  private: String
 }
 
 input UpdateWalletDto {
   provider: String
-  accounts: [String!]
+  accounts: String
   amount: Float
   blocked: Float
   internal: Float
   external: Float
+  address: String
+  private: String
 }
 
 input CreateTransactionDto {
