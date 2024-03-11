@@ -43,6 +43,7 @@
     "pttl",
     "QLJSON",
     "Responsed",
+    "SEMRESATTRS",
     "setex",
     "sockport",
     "Solana",

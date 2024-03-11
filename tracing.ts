@@ -4,9 +4,9 @@ import {
   BatchSpanProcessor,
 } from '@opentelemetry/sdk-trace-node';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
-import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 import { NestInstrumentation } from '@opentelemetry/instrumentation-nestjs-core';
 import { ExpressInstrumentation } from '@opentelemetry/instrumentation-express';
+import { SEMRESATTRS_SERVICE_NAME } from '@opentelemetry/semantic-conventions';
 import { KafkaJsInstrumentation } from 'opentelemetry-instrumentation-kafkajs';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
@@ -23,7 +23,7 @@ export const initTracing = async (modules: ('http' | 'grpc' | 'kafka')[]) => {
 
   const provider = new NodeTracerProvider({
     resource: new Resource({
-      [SemanticResourceAttributes.SERVICE_NAME]: process.env.OTLP_SERVICE_NAME,
+      [SEMRESATTRS_SERVICE_NAME]: process.env.OTLP_SERVICE_NAME,
     }),
   });
 
