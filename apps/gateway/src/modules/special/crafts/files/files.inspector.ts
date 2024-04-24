@@ -33,7 +33,7 @@ import { Meta } from '@app/common/decorators';
 import { toString } from '@app/common/utils';
 import { Request, Response } from 'express';
 import { MD5 } from '@app/common/helpers';
-import * as sharp from 'sharp';
+import sharp from 'sharp';
 
 import { FilesService } from './files.service';
 
