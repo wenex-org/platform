@@ -2,6 +2,8 @@
 require('dotenv').config();
 require('log-node')();
 
+import 'elastic-apm-node/start';
+
 import {
   ETagInterceptor,
   NamingConventionsInterceptor,
