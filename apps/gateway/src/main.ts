@@ -2,8 +2,6 @@
 require('dotenv').config();
 require('log-node')();
 
-import 'elastic-apm-node/start';
-
 import {
   ETagInterceptor,
   NamingConventionsInterceptor,
@@ -23,7 +21,10 @@ const { GATEWAY } = APP;
 
 prototyping();
 async function bootstrap() {
-  if (NODE_ENV().IS_PROD) await initTracing(['http', 'grpc', 'kafka']);
+  if (NODE_ENV().IS_PROD) {
+    require('elastic-apm-node').start();
+    await initTracing(['http', 'grpc', 'kafka']);
+  }
 
   const app = await NestFactory.create(AppModule, { cors: true });
   app.getHttpAdapter().getInstance().set('etag', false);
