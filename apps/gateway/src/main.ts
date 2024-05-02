@@ -8,7 +8,7 @@ import {
   XPoweredByInterceptor,
   XRequestIdInterceptor,
 } from '@app/common/interceptors';
-import { setupSwagger, prototyping } from '@app/common/utils';
+import { setupSwagger, prototyping, setupRedoc } from '@app/common/utils';
 import { NODE_ENV } from '@app/common/configs';
 import { NestFactory } from '@nestjs/core';
 import { APP } from '@app/common/consts';
@@ -38,12 +38,14 @@ async function bootstrap() {
     new NamingConventionsInterceptor(),
   );
 
+  setupRedoc(app);
   setupSwagger(app);
 
   await app.listen(GATEWAY.API_PORT);
 
   const url = await app.getUrl();
   console.log(`Gateway Successfully Started On Port ${GATEWAY.API_PORT}`);
+  console.log(`ReDoc UI is running on: ${url}/docs`);
   console.log(`Swagger UI is running on: ${url}/api`);
   console.log(`Prometheus is running on: ${url}/metrics`);
   console.log(`Health check is running on: ${url}/status`);

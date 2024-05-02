@@ -209,6 +209,9 @@ dependencies:
   prom-client:
     specifier: ^15.1.2
     version: 15.1.2
+  redoc-express:
+    specifier: ^2.1.0
+    version: 2.1.0
   reflect-metadata:
     specifier: ^0.2.2
     version: 0.2.2
@@ -10115,6 +10118,10 @@ packages:
     engines: {node: '>=4'}
     dependencies:
       redis-errors: 1.2.0
+
+  /redoc-express@2.1.0:
+    resolution: {integrity: sha512-gq6FvghNirD3dCJ7w8Z6escXYHnU1Hk50baQsIeGunQQ9YRoy6qR/MjEOJtDEKaPNB2NgkIzQ9ESNX5/27zkDA==}
+    dev: false
 
   /reflect-metadata@0.1.14:
     resolution: {integrity: sha512-ZhYeb6nRaXCfhnndflDK8qI6ZQ/YcWZCISRAWICW9XYqMUwjZM9Z0DveWX/ABN01oxSHwVxKQmxeYZSsm0jh5A==}
