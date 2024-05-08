@@ -852,31 +852,21 @@ type CoinSerializer {
   rand: String!
   timestamp: String!
   type: String!
-  provider: String!
-  category: String
-  symbol: String
-  iso: String
   subunit: CoinUnitSerializer
-  sign: String
-  name: CoinName
-  token: String
-  network: CoinNetwork
-  contract: String
+  supunit: CoinUnitSerializer
+  category: String
+  lib: String
+  provider: String
+  code: String
+  symbol: String!
   precision: Float!
   countries: [String!]
-}
-
-enum CoinName {
-  Tronix
-  Solana
-  Bitcoin
-  Ethereum
-  BinanceSmartChain
-}
-
-enum CoinNetwork {
-  Mainnet
-  Testnet
+  name: String
+  token: String
+  explore: String
+  network: String
+  contract: String
+  nodes: [String!]
 }
 
 type CoinDataSerializer {
@@ -943,7 +933,6 @@ type WalletSerializer {
   tags: [String!]
   rand: String!
   timestamp: String!
-  provider: String!
   coin: String!
   account: String!
   amount: Float!
@@ -988,10 +977,9 @@ type AccountSerializer {
   rand: String!
   timestamp: String!
   type: String!
-  broker: String!
   provider: String!
   ownership: String!
-  members: [String!]!
+  members: [String!]
 }
 
 type AccountDataSerializer {
@@ -1870,17 +1858,16 @@ input UpdateSessionDto {
 }
 
 input CreateAccountDto {
-  type: AccountType!
-  broker: String
-  ownership: AccountOwnership!
+  type: AccountType
   provider: String
+  ownership: AccountOwnership
   members: [String!]
 }
 
 enum AccountType {
+  Transaction
   SavingLong
   SavingShort
-  Transaction
 }
 
 enum AccountOwnership {
@@ -1890,26 +1877,28 @@ enum AccountOwnership {
 
 input UpdateAccountDto {
   type: AccountType
-  broker: String
-  ownership: AccountOwnership
   provider: String
+  ownership: AccountOwnership
   members: [String!]
 }
 
 input CreateCoinDto {
-  symbol: String
-  provider: String
   type: CoinType!
-  iso: String
-  subunit: CreateCoinUnitDto
-  sign: String
-  name: CoinName
-  token: String
-  network: CoinNetwork
-  contract: String
-  precision: Float!
+  code: String
+  symbol: String!
+  precision: Float
   countries: [String!]
+  name: String
+  token: String
+  explore: String
+  network: String
+  contract: String
+  subunit: CreateCoinUnitDto
+  supunit: CreateCoinUnitDto
   category: CoinCategory
+  lib: CoinLib
+  nodes: [String!]
+  provider: String
 }
 
 enum CoinType {
@@ -1928,19 +1917,30 @@ enum CoinCategory {
   Token
 }
 
+enum CoinLib {
+  Web3
+  Ethers
+  TronWeb
+  BitcoinJS
+  TonConnect
+  SolanaWeb3JS
+}
+
 input UpdateCoinDto {
+  code: String
   symbol: String
-  provider: String
-  iso: String
-  subunit: UpdateCoinUnitDto
-  sign: String
-  name: CoinName
-  token: String
-  network: CoinNetwork
-  contract: String
   precision: Float
   countries: [String!]
-  category: CoinCategory
+  name: String
+  token: String
+  explore: String
+  network: String
+  contract: String
+  subunit: UpdateCoinUnitDto
+  supunit: UpdateCoinUnitDto
+  lib: CoinLib
+  nodes: [String!]
+  provider: String
 }
 
 input UpdateCoinUnitDto {
@@ -1950,10 +1950,9 @@ input UpdateCoinUnitDto {
 }
 
 input CreateWalletDto {
-  provider: String
   coin: String!
   account: String!
-  amount: Float!
+  amount: Float
   blocked: Float
   internal: Float
   external: Float
@@ -1962,7 +1961,6 @@ input CreateWalletDto {
 }
 
 input UpdateWalletDto {
-  provider: String
   accounts: String
   amount: Float
   blocked: Float
@@ -1985,7 +1983,6 @@ input CreateTransactionDto {
 }
 
 enum TransactionType {
-  Service
   Deposit
   Withdraw
   Transfer
@@ -2000,8 +1997,9 @@ enum TransactionState {
 }
 
 enum TransactionReason {
-  Transfer
+  Sync
   Reward
+  Service
   Cashback
   Earning
   Expense
@@ -2026,9 +2024,9 @@ enum PayType {
 }
 
 input UpdateTransactionDto {
-  type: TransactionType!
-  state: TransactionState!
-  reason: TransactionReason!
+  type: TransactionType
+  state: TransactionState
+  reason: TransactionReason
   amount: Float!
   payees: [UpdatePayDto!]
   payers: [UpdatePayDto!]
