@@ -1992,7 +1992,6 @@ enum TransactionState {
   Failed
   Pending
   Verified
-  Rollback
   Cancelled
 }
 
