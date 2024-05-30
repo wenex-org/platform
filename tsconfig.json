@@ -28,6 +28,8 @@
       "@app/common/*": ["libs/common/src/*"],
       "@app/health": ["libs/health/src"],
       "@app/health/*": ["libs/health/src/*"],
+      "@app/prom": ["libs/prom/src"],
+      "@app/prom/*": ["libs/prom/src/*"],
       "@app/sdk": ["libs/sdk/src"],
       "@app/sdk/*": ["libs/sdk/src/*"]
     }

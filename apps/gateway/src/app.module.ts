@@ -1,6 +1,6 @@
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { JWT_SECRET, REDIS_CONFIG, SENTRY_CONFIG } from '@app/common/configs';
-import { METRICS_PLUGIN, PromModule, TRACING_PLUGIN } from '@app/sdk/prom';
+import { METRICS_PLUGIN, PromModule, TRACING_PLUGIN } from '@app/prom';
 import { ComplexityPlugin, DateScalar } from '@app/common/plugins';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { DynamicModule, Module } from '@nestjs/common';
