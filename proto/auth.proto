@@ -79,7 +79,7 @@ message JwtToken {
   string session = 8;
 
   string tz = 2;
-  string i18n = 5;
+  string lang = 5;
 
   string subject = 9;
   string client_id = 10;
@@ -117,7 +117,7 @@ message AuthenticationRequest {
 
   optional string tz = 17;
   optional string mfa = 18;
-  optional string i18n = 19;
+  optional string lang = 19;
   optional string oauth = 20;
 
   optional string refresh_token = 21;
@@ -136,7 +136,7 @@ message AuthenticationResponse {
   optional string subject = 5;
 
   optional string tz = 6;
-  optional string i18n = 7;
+  optional string lang = 7;
   optional string session = 8;
   optional string access_token = 9;
   optional string refresh_token = 10;

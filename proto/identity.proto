@@ -156,7 +156,7 @@ message User {
 
   optional string tz = 51;
   optional string mfa = 52;
-  optional string i18n = 53;
+  optional string lang = 53;
   repeated string oauth = 54;
   optional string secret = 55;
 
