@@ -96,8 +96,8 @@ importers:
         specifier: ^1.25.0
         version: 1.25.0
       '@smithy/util-stream':
-        specifier: ^3.0.2
-        version: 3.0.2
+        specifier: ^2.2.0
+        version: 2.2.0
       '@typegoose/typegoose':
         specifier: ^12.5.0
         version: 12.5.0(mongoose@8.4.1)
