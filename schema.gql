@@ -187,7 +187,8 @@ type MailSerializer {
   cc: [String!]
   bcc: [String!]
   subject: String!
-  content: String
+  html: String
+  text: String
   reply_to: [String!]
   in_reply_to: String
   attachments: [String!]
@@ -1411,7 +1412,8 @@ input CreateMailDto {
   bcc: [String!]
   from: String
   subject: String!
-  content: String
+  html: String
+  text: String
   date: Date
   reply_to: [String!]
   in_reply_to: String
@@ -1432,7 +1434,8 @@ input UpdateMailDto {
   bcc: [String!]
   from: String
   subject: String
-  content: String
+  html: String
+  text: String
   date: Date
   reply_to: [String!]
   in_reply_to: String
