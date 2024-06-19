@@ -8,7 +8,7 @@ import {
   XPoweredByInterceptor,
   XRequestIdInterceptor,
 } from '@app/common/interceptors';
-import { setupSwagger, prototyping, setupRedoc } from '@app/common/utils';
+import { setupSwagger, prototyping, setupReDoc } from '@app/common/utils';
 import { NODE_ENV } from '@app/common/configs';
 import { NestFactory } from '@nestjs/core';
 import { APP } from '@app/common/consts';
@@ -38,7 +38,7 @@ async function bootstrap() {
     new NamingConventionsInterceptor(),
   );
 
-  setupRedoc(app);
+  setupReDoc(app);
   setupSwagger(app);
 
   await app.listen(GATEWAY.API_PORT);
