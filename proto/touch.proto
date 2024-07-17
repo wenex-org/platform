@@ -1,0 +1,220 @@
+syntax = "proto3";
+package touch;
+
+// Package Services
+
+service MailsService {
+  rpc Count(QueryFilter) returns (Total);
+
+  rpc Create(MailData) returns (MailData);
+  rpc CreateBulk(Mails) returns (Mails);
+
+  rpc Find(Filter) returns (Mails);
+  rpc Cursor(Filter) returns (stream Mail);
+
+  rpc FindOne(FilterOne) returns (MailData);
+  rpc FindById(FilterID) returns (MailData);
+
+  rpc DeleteOne(FilterOne) returns (MailData);
+  rpc DeleteById(FilterID) returns (MailData);
+
+  rpc RestoreOne(FilterOne) returns (MailData);
+  rpc RestoreById(FilterID) returns (MailData);
+
+  rpc DestroyOne(FilterOne) returns (MailData);
+  rpc DestroyById(FilterID) returns (MailData);
+
+  rpc UpdateOne(UpdateMailOne) returns (MailData);
+  rpc UpdateBulk(UpdateMailBulk) returns (Total);
+  rpc UpdateById(UpdateMailUnique) returns (MailData);
+}
+
+service PushesService {
+  rpc Count(QueryFilter) returns (Total);
+
+  rpc Create(PushData) returns (PushData);
+  rpc CreateBulk(Pushes) returns (Pushes);
+
+  rpc Find(Filter) returns (Pushes);
+  rpc Cursor(Filter) returns (stream Push);
+
+  rpc FindOne(FilterOne) returns (PushData);
+  rpc FindById(FilterID) returns (PushData);
+
+  rpc DeleteOne(FilterOne) returns (PushData);
+  rpc DeleteById(FilterID) returns (PushData);
+
+  rpc RestoreOne(FilterOne) returns (PushData);
+  rpc RestoreById(FilterID) returns (PushData);
+
+  rpc DestroyOne(FilterOne) returns (PushData);
+  rpc DestroyById(FilterID) returns (PushData);
+
+  rpc UpdateOne(UpdatePushOne) returns (PushData);
+  rpc UpdateBulk(UpdatePushBulk) returns (Total);
+  rpc UpdateById(UpdatePushUnique) returns (PushData);
+}
+
+// Common Messages
+
+message Total { int64 total = 1; }
+
+message Filter {
+  string query = 1;
+  optional string populate = 2;
+  optional string projection = 3;
+  optional string pagination = 4;
+}
+message FilterOne {
+  string query = 1;
+  optional string populate = 2;
+  optional string projection = 3;
+}
+message FilterID {
+  string query = 1;
+  optional string populate = 2;
+  optional string projection = 3;
+}
+message QueryFilter { string query = 1; }
+
+// Mails Messages
+
+message UpdateMailOne {
+  Mail update = 1;
+  FilterOne filter = 2;
+}
+message UpdateMailBulk {
+  Mail update = 1;
+  QueryFilter filter = 2;
+}
+message UpdateMailUnique {
+  Mail update = 1;
+  FilterID filter = 2;
+}
+
+message Mail {
+  // Base Interface
+  optional string owner = 1;
+
+  optional string id = 2;
+  optional string ref = 3;
+
+  repeated string shares = 4;
+  repeated string groups = 5;
+  repeated string clients = 6;
+
+  optional string created_at = 7;
+  optional string created_by = 8;
+  optional string created_in = 9;
+
+  optional string updated_at = 10;
+  optional string updated_by = 11;
+  optional string updated_in = 12;
+  optional string deleted_at = 13;
+  optional string deleted_by = 14;
+  optional string deleted_in = 15;
+  optional string restored_at = 16;
+  optional string restored_by = 17;
+  optional string restored_in = 18;
+
+  optional string description = 19;
+  optional string version = 20;
+  optional string props = 21;
+  repeated string tags = 22;
+
+  optional string rand = 23;
+  optional string timestamp = 24;
+
+  // Mail Interface
+  repeated string to = 50;
+  repeated string cc = 51;
+  repeated string bcc = 52;
+
+  optional string from = 53;
+
+  optional string subject = 54;
+  optional string html = 55;
+  optional string text = 56;
+
+  optional string date = 57;
+  repeated string reply_to = 58;
+  optional string in_reply_to = 59;
+
+  repeated string attachments = 60;
+
+  optional MailSmtp smtp = 61;
+
+  message MailSmtp {
+    optional string identity = 51;
+    optional string response = 52;
+
+    repeated string accepted = 53;
+    repeated string rejected = 54;
+  }
+}
+message Mails { repeated Mail items = 1; }
+message MailData { optional Mail data = 1; }
+
+// Pushes Messages
+
+message UpdatePushOne {
+  Push update = 1;
+  FilterOne filter = 2;
+}
+message UpdatePushBulk {
+  Push update = 1;
+  QueryFilter filter = 2;
+}
+message UpdatePushUnique {
+  Push update = 1;
+  FilterID filter = 2;
+}
+
+message Push {
+  // Base Interface
+  optional string owner = 1;
+
+  optional string id = 2;
+  optional string ref = 3;
+
+  repeated string shares = 4;
+  repeated string groups = 5;
+  repeated string clients = 6;
+
+  optional string created_at = 7;
+  optional string created_by = 8;
+  optional string created_in = 9;
+
+  optional string updated_at = 10;
+  optional string updated_by = 11;
+  optional string updated_in = 12;
+  optional string deleted_at = 13;
+  optional string deleted_by = 14;
+  optional string deleted_in = 15;
+  optional string restored_at = 16;
+  optional string restored_by = 17;
+  optional string restored_in = 18;
+
+  optional string description = 19;
+  optional string version = 20;
+  optional string props = 21;
+  repeated string tags = 22;
+
+  optional string rand = 23;
+  optional string timestamp = 24;
+
+  // Push Interface
+  optional string domain = 50;
+  optional string session = 51;
+  optional string identity = 52;
+
+  optional string keys = 53;
+  optional string endpoint = 54;
+
+  optional string blacklisted = 55;
+  optional string whitelisted = 56;
+
+  optional string expiration_time = 57;
+}
+message Pushes { repeated Push items = 1; }
+message PushData { optional Push data = 1; }

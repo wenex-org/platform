@@ -222,7 +222,7 @@ message Session {
   // Session Interface
   optional string ip = 50;
   optional string agent = 51;
-  optional string expiration_date = 54;
+  optional string expiration_date = 52;
 }
 message Sessions { repeated Session items = 1; }
 message SessionData { optional Session data = 1; }

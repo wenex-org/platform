@@ -1,0 +1,438 @@
+syntax = "proto3";
+package financial;
+
+// Package Services
+
+service AccountsService {
+  rpc Count(QueryFilter) returns (Total);
+
+  rpc Create(AccountData) returns (AccountData);
+  rpc CreateBulk(Accounts) returns (Accounts);
+
+  rpc Find(Filter) returns (Accounts);
+  rpc Cursor(Filter) returns (stream Account);
+
+  rpc FindOne(FilterOne) returns (AccountData);
+  rpc FindById(FilterID) returns (AccountData);
+
+  rpc DeleteOne(FilterOne) returns (AccountData);
+  rpc DeleteById(FilterID) returns (AccountData);
+
+  rpc RestoreOne(FilterOne) returns (AccountData);
+  rpc RestoreById(FilterID) returns (AccountData);
+
+  rpc DestroyOne(FilterOne) returns (AccountData);
+  rpc DestroyById(FilterID) returns (AccountData);
+
+  rpc UpdateOne(UpdateAccountOne) returns (AccountData);
+  rpc UpdateBulk(UpdateAccountBulk) returns (Total);
+  rpc UpdateById(UpdateAccountUnique) returns (AccountData);
+}
+
+service CoinsService {
+  rpc Count(QueryFilter) returns (Total);
+
+  rpc Create(CoinData) returns (CoinData);
+  rpc CreateBulk(Coins) returns (Coins);
+
+  rpc Find(Filter) returns (Coins);
+  rpc Cursor(Filter) returns (stream Coin);
+
+  rpc FindOne(FilterOne) returns (CoinData);
+  rpc FindById(FilterID) returns (CoinData);
+
+  rpc DeleteOne(FilterOne) returns (CoinData);
+  rpc DeleteById(FilterID) returns (CoinData);
+
+  rpc RestoreOne(FilterOne) returns (CoinData);
+  rpc RestoreById(FilterID) returns (CoinData);
+
+  rpc DestroyOne(FilterOne) returns (CoinData);
+  rpc DestroyById(FilterID) returns (CoinData);
+
+  rpc UpdateOne(UpdateCoinOne) returns (CoinData);
+  rpc UpdateBulk(UpdateCoinBulk) returns (Total);
+  rpc UpdateById(UpdateCoinUnique) returns (CoinData);
+}
+
+service TransactionsService {
+  rpc Count(QueryFilter) returns (Total);
+
+  rpc Create(TransactionData) returns (TransactionData);
+  rpc CreateBulk(Transactions) returns (Transactions);
+
+  rpc Find(Filter) returns (Transactions);
+  rpc Cursor(Filter) returns (stream Transaction);
+
+  rpc FindOne(FilterOne) returns (TransactionData);
+  rpc FindById(FilterID) returns (TransactionData);
+
+  rpc DeleteOne(FilterOne) returns (TransactionData);
+  rpc DeleteById(FilterID) returns (TransactionData);
+
+  rpc RestoreOne(FilterOne) returns (TransactionData);
+  rpc RestoreById(FilterID) returns (TransactionData);
+
+  rpc DestroyOne(FilterOne) returns (TransactionData);
+  rpc DestroyById(FilterID) returns (TransactionData);
+
+  rpc UpdateOne(UpdateTransactionOne) returns (TransactionData);
+  rpc UpdateBulk(UpdateTransactionBulk) returns (Total);
+  rpc UpdateById(UpdateTransactionUnique) returns (TransactionData);
+}
+
+service WalletsService {
+  rpc Count(QueryFilter) returns (Total);
+
+  rpc Create(WalletData) returns (WalletData);
+  rpc CreateBulk(Wallets) returns (Wallets);
+
+  rpc Find(Filter) returns (Wallets);
+  rpc Cursor(Filter) returns (stream Wallet);
+
+  rpc FindOne(FilterOne) returns (WalletData);
+  rpc FindById(FilterID) returns (WalletData);
+
+  rpc DeleteOne(FilterOne) returns (WalletData);
+  rpc DeleteById(FilterID) returns (WalletData);
+
+  rpc RestoreOne(FilterOne) returns (WalletData);
+  rpc RestoreById(FilterID) returns (WalletData);
+
+  rpc DestroyOne(FilterOne) returns (WalletData);
+  rpc DestroyById(FilterID) returns (WalletData);
+
+  rpc UpdateOne(UpdateWalletOne) returns (WalletData);
+  rpc UpdateBulk(UpdateWalletBulk) returns (Total);
+  rpc UpdateById(UpdateWalletUnique) returns (WalletData);
+}
+
+// Common Messages
+
+message Total { int64 total = 1; }
+
+message Filter {
+  string query = 1;
+  optional string populate = 2;
+  optional string projection = 3;
+  optional string pagination = 4;
+}
+message FilterOne {
+  string query = 1;
+  optional string populate = 2;
+  optional string projection = 3;
+}
+message FilterID {
+  string query = 1;
+  optional string populate = 2;
+  optional string projection = 3;
+}
+message QueryFilter { string query = 1; }
+
+// Accounts Messages
+
+message UpdateAccountOne {
+  Account update = 1;
+  FilterOne filter = 2;
+}
+message UpdateAccountBulk {
+  Account update = 1;
+  QueryFilter filter = 2;
+}
+message UpdateAccountUnique {
+  Account update = 1;
+  FilterID filter = 2;
+}
+
+message Account {
+  // Base Interface
+  optional string owner = 1;
+
+  optional string id = 2;
+  optional string ref = 3;
+
+  repeated string shares = 4;
+  repeated string groups = 5;
+  repeated string clients = 6;
+
+  optional string created_at = 7;
+  optional string created_by = 8;
+  optional string created_in = 9;
+
+  optional string updated_at = 10;
+  optional string updated_by = 11;
+  optional string updated_in = 12;
+  optional string deleted_at = 13;
+  optional string deleted_by = 14;
+  optional string deleted_in = 15;
+  optional string restored_at = 16;
+  optional string restored_by = 17;
+  optional string restored_in = 18;
+
+  optional string description = 19;
+  optional string version = 20;
+  optional string props = 21;
+  repeated string tags = 22;
+
+  optional string rand = 23;
+  optional string timestamp = 24;
+
+  // Account Interface
+  optional string type = 50;
+  optional string provider = 51;
+  optional string ownership = 52;
+
+  repeated string members = 53;
+}
+message Accounts { repeated Account items = 1; }
+message AccountData { optional Account data = 1; }
+
+// Coins Messages
+
+message UpdateCoinOne {
+  Coin update = 1;
+  FilterOne filter = 2;
+}
+message UpdateCoinBulk {
+  Coin update = 1;
+  QueryFilter filter = 2;
+}
+message UpdateCoinUnique {
+  Coin update = 1;
+  FilterID filter = 2;
+}
+
+message Coin {
+  // Base Interface
+  optional string owner = 1;
+
+  optional string id = 2;
+  optional string ref = 3;
+
+  repeated string shares = 4;
+  repeated string groups = 5;
+  repeated string clients = 6;
+
+  optional string created_at = 7;
+  optional string created_by = 8;
+  optional string created_in = 9;
+
+  optional string updated_at = 10;
+  optional string updated_by = 11;
+  optional string updated_in = 12;
+  optional string deleted_at = 13;
+  optional string deleted_by = 14;
+  optional string deleted_in = 15;
+  optional string restored_at = 16;
+  optional string restored_by = 17;
+  optional string restored_in = 18;
+
+  optional string description = 19;
+  optional string version = 20;
+  optional string props = 21;
+  repeated string tags = 22;
+
+  optional string rand = 23;
+  optional string timestamp = 24;
+
+  // Coin Interface
+  optional string type = 50;
+
+  optional string code = 51;
+  optional string symbol = 52;
+  optional int64 precision = 53;
+  repeated string countries = 54;
+
+  optional string name = 55;
+  optional string token = 56;
+  optional string explore = 57;
+  optional string network = 58;
+  optional string contract = 59;
+
+  optional CoinUnit subunit = 60;
+  optional CoinUnit supunit = 61;
+
+  optional string category = 62;
+
+  optional string lib = 63;
+  repeated string nodes = 64;
+  optional string provider = 65;
+
+  message CoinUnit {
+    optional string name = 50;
+    optional string rate = 51;
+    optional string symbol = 52;
+  }
+}
+message Coins { repeated Coin items = 1; }
+message CoinData { optional Coin data = 1; }
+
+// Transactions Messages
+
+message UpdateTransactionOne {
+  Transaction update = 1;
+  FilterOne filter = 2;
+}
+message UpdateTransactionBulk {
+  Transaction update = 1;
+  QueryFilter filter = 2;
+}
+message UpdateTransactionUnique {
+  Transaction update = 1;
+  FilterID filter = 2;
+}
+
+message Transaction {
+  // Base Interface
+  optional string owner = 1;
+
+  optional string id = 2;
+  optional string ref = 3;
+
+  repeated string shares = 4;
+  repeated string groups = 5;
+  repeated string clients = 6;
+
+  optional string created_at = 7;
+  optional string created_by = 8;
+  optional string created_in = 9;
+
+  optional string updated_at = 10;
+  optional string updated_by = 11;
+  optional string updated_in = 12;
+  optional string deleted_at = 13;
+  optional string deleted_by = 14;
+  optional string deleted_in = 15;
+  optional string restored_at = 16;
+  optional string restored_by = 17;
+  optional string restored_in = 18;
+
+  optional string description = 19;
+  optional string version = 20;
+  optional string props = 21;
+  repeated string tags = 22;
+
+  optional string rand = 23;
+  optional string timestamp = 24;
+
+  // Transaction Interface
+  optional string type = 50;
+  optional string state = 51;
+  optional string reason = 52;
+
+  optional int64 amount = 53;
+
+  repeated string payees = 54;
+  repeated string payers = 55;
+
+  optional string verified_at = 56;
+  optional string canceled_at = 57;
+
+  optional string invoice = 58;
+
+  message Pay {
+    // Sub Interface
+    optional string owner = 1;
+
+    optional string id = 2;
+    optional string ref = 3;
+
+    repeated string shares = 4;
+    repeated string groups = 5;
+    repeated string clients = 6;
+
+    optional string created_at = 7;
+    optional string created_by = 8;
+    optional string created_in = 9;
+
+    optional string updated_at = 10;
+    optional string updated_by = 11;
+    optional string updated_in = 12;
+    optional string deleted_at = 13;
+    optional string deleted_by = 14;
+    optional string deleted_in = 15;
+    optional string restored_at = 16;
+    optional string restored_by = 17;
+    optional string restored_in = 18;
+
+    optional string description = 19;
+    optional string version = 20;
+    optional string props = 21;
+    repeated string tags = 22;
+
+    optional string rand = 23;
+    optional string timestamp = 24;
+
+    // Pay Interface
+    optional string type = 50;
+    optional string wallet = 51;
+
+    optional int64 amount = 52;
+    optional int64 percent = 53;
+  }
+}
+message Transactions { repeated Transaction items = 1; }
+message TransactionData { optional Transaction data = 1; }
+
+// Wallets Messages
+
+message UpdateWalletOne {
+  Wallet update = 1;
+  FilterOne filter = 2;
+}
+message UpdateWalletBulk {
+  Wallet update = 1;
+  QueryFilter filter = 2;
+}
+message UpdateWalletUnique {
+  Wallet update = 1;
+  FilterID filter = 2;
+}
+
+message Wallet {
+  // Base Interface
+  optional string owner = 1;
+
+  optional string id = 2;
+  optional string ref = 3;
+
+  repeated string shares = 4;
+  repeated string groups = 5;
+  repeated string clients = 6;
+
+  optional string created_at = 7;
+  optional string created_by = 8;
+  optional string created_in = 9;
+
+  optional string updated_at = 10;
+  optional string updated_by = 11;
+  optional string updated_in = 12;
+  optional string deleted_at = 13;
+  optional string deleted_by = 14;
+  optional string deleted_in = 15;
+  optional string restored_at = 16;
+  optional string restored_by = 17;
+  optional string restored_in = 18;
+
+  optional string description = 19;
+  optional string version = 20;
+  optional string props = 21;
+  repeated string tags = 22;
+
+  optional string rand = 23;
+  optional string timestamp = 24;
+
+  // Wallet Interface
+  optional string coin = 50;
+  optional string account = 51;
+
+  optional int64 amount = 52;
+  optional int64 blocked = 53;
+  optional int64 internal = 54;
+  optional int64 external = 55;
+
+  optional string address = 56;
+  optional string private = 57;
+}
+message Wallets { repeated Wallet items = 1; }
+message WalletData { optional Wallet data = 1; }

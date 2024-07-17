@@ -1,0 +1,216 @@
+syntax = "proto3";
+package special;
+
+// Package Services
+
+service FilesService {
+  rpc Count(QueryFilter) returns (Total);
+
+  rpc Create(FileData) returns (FileData);
+  rpc CreateBulk(Files) returns (Files);
+
+  rpc Find(Filter) returns (Files);
+  rpc Cursor(Filter) returns (stream File);
+
+  rpc FindOne(FilterOne) returns (FileData);
+  rpc FindById(FilterID) returns (FileData);
+
+  rpc DeleteOne(FilterOne) returns (FileData);
+  rpc DeleteById(FilterID) returns (FileData);
+
+  rpc RestoreOne(FilterOne) returns (FileData);
+  rpc RestoreById(FilterID) returns (FileData);
+
+  rpc DestroyOne(FilterOne) returns (FileData);
+  rpc DestroyById(FilterID) returns (FileData);
+
+  rpc UpdateOne(UpdateFileOne) returns (FileData);
+  rpc UpdateBulk(UpdateFileBulk) returns (Total);
+  rpc UpdateById(UpdateFileUnique) returns (FileData);
+}
+
+service StatsService {
+  rpc Count(QueryFilter) returns (Total);
+
+  rpc Create(StatData) returns (StatData);
+  rpc CreateBulk(Stats) returns (Stats);
+
+  rpc Find(Filter) returns (Stats);
+  rpc Cursor(Filter) returns (stream Stat);
+
+  rpc FindOne(FilterOne) returns (StatData);
+  rpc FindById(FilterID) returns (StatData);
+
+  rpc DeleteOne(FilterOne) returns (StatData);
+  rpc DeleteById(FilterID) returns (StatData);
+
+  rpc RestoreOne(FilterOne) returns (StatData);
+  rpc RestoreById(FilterID) returns (StatData);
+
+  rpc DestroyOne(FilterOne) returns (StatData);
+  rpc DestroyById(FilterID) returns (StatData);
+
+  rpc UpdateOne(UpdateStatOne) returns (StatData);
+  rpc UpdateBulk(UpdateStatBulk) returns (Total);
+  rpc UpdateById(UpdateStatUnique) returns (StatData);
+}
+
+// Common Messages
+
+message Total { int64 total = 1; }
+
+message Filter {
+  string query = 1;
+  optional string populate = 2;
+  optional string projection = 3;
+  optional string pagination = 4;
+}
+message FilterOne {
+  string query = 1;
+  optional string populate = 2;
+  optional string projection = 3;
+}
+message FilterID {
+  string query = 1;
+  optional string populate = 2;
+  optional string projection = 3;
+}
+message QueryFilter { string query = 1; }
+
+// Files Messages
+
+message UpdateFileOne {
+  File update = 1;
+  FilterOne filter = 2;
+}
+message UpdateFileBulk {
+  File update = 1;
+  QueryFilter filter = 2;
+}
+message UpdateFileUnique {
+  File update = 1;
+  FilterID filter = 2;
+}
+
+message File {
+  // Base Interface
+  optional string owner = 1;
+
+  optional string id = 2;
+  optional string ref = 3;
+
+  repeated string shares = 4;
+  repeated string groups = 5;
+  repeated string clients = 6;
+
+  optional string created_at = 7;
+  optional string created_by = 8;
+  optional string created_in = 9;
+
+  optional string updated_at = 10;
+  optional string updated_by = 11;
+  optional string updated_in = 12;
+  optional string deleted_at = 13;
+  optional string deleted_by = 14;
+  optional string deleted_in = 15;
+  optional string restored_at = 16;
+  optional string restored_by = 17;
+  optional string restored_in = 18;
+
+  optional string description = 19;
+  optional string version = 20;
+  optional string props = 21;
+  repeated string tags = 22;
+
+  optional string rand = 23;
+  optional string timestamp = 24;
+
+  // File Interface
+  optional string field = 50;
+
+  optional string original = 51;
+  optional string encoding = 52;
+  optional string mimetype = 53;
+
+  optional int64 size = 54;
+  optional string bucket = 55;
+
+  optional string key = 56;
+  optional string acl = 57;
+
+  optional string content_type = 58;
+  optional string storage_class = 59;
+
+  optional string location = 60;
+  optional string etag = 61;
+}
+message Files { repeated File items = 1; }
+message FileData { optional File data = 1; }
+
+// Stats Messages
+
+message UpdateStatOne {
+  Stat update = 1;
+  FilterOne filter = 2;
+}
+message UpdateStatBulk {
+  Stat update = 1;
+  QueryFilter filter = 2;
+}
+message UpdateStatUnique {
+  Stat update = 1;
+  FilterID filter = 2;
+}
+
+message Stat {
+  // Base Interface
+  optional string owner = 1;
+
+  optional string id = 2;
+  optional string ref = 3;
+
+  repeated string shares = 4;
+  repeated string groups = 5;
+  repeated string clients = 6;
+
+  optional string created_at = 7;
+  optional string created_by = 8;
+  optional string created_in = 9;
+
+  optional string updated_at = 10;
+  optional string updated_by = 11;
+  optional string updated_in = 12;
+  optional string deleted_at = 13;
+  optional string deleted_by = 14;
+  optional string deleted_in = 15;
+  optional string restored_at = 16;
+  optional string restored_by = 17;
+  optional string restored_in = 18;
+
+  optional string description = 19;
+  optional string version = 20;
+  optional string props = 21;
+  repeated string tags = 22;
+
+  optional string rand = 23;
+  optional string timestamp = 24;
+
+  // Stat Interface
+  optional string type = 51;
+
+  optional string key = 52;
+  optional int64 val = 53;
+
+  optional int64 day = 54;
+  repeated int64 hours = 55;
+
+  optional int64 month = 56;
+  repeated int64 days = 57;
+
+  optional int64 year = 58;
+  repeated int64 months = 59;
+
+  optional string flags = 60;
+}
+message Stats { repeated Stat items = 1; }
+message StatData { optional Stat data = 1; }
