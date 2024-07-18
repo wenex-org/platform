@@ -6,6 +6,7 @@ declare -A PROTOS
 AUTH=./proto/auth.proto
 CONFIG=./proto/config.proto
 DOMAIN=./proto/domain.proto
+SPECIAL=./proto/special.proto
 IDENTITY=./proto/identity.proto
 
 PRESERVER=./proto/workers/preserver.proto
@@ -24,6 +25,9 @@ PROTOS[DOMAIN,1]=./apps/services/domain/src/app.proto
 PROTOS[DOMAIN,2]=./apps/gateway/src/modules/domain/domain.proto
 PROTOS[DOMAIN,3]=./apps/services/auth/src/protobuf/domain.proto
 PROTOS[DOMAIN,4]=./apps/services/touch/src/protobuf/domain.proto
+
+# Special Proto
+PROTOS[SPECIAL,1]=./apps/services/special/src/app.proto
 
 # Identity Proto
 PROTOS[IDENTITY,1]=./apps/services/identity/src/app.proto
@@ -44,6 +48,9 @@ for KEY in "${!PROTOS[@]}"; do
   fi
   if [[ $KEY == *"DOMAIN"* ]]; then
     if ! test -f ${PROTOS[$KEY]}; then ln -f $DOMAIN ${PROTOS[$KEY]}; fi
+  fi
+  if [[ $KEY == *"SPECIAL"* ]]; then
+    if ! test -f ${PROTOS[$KEY]}; then ln -f $SPECIAL ${PROTOS[$KEY]}; fi
   fi
   if [[ $KEY == *"IDENTITY"* ]]; then
     if ! test -f ${PROTOS[$KEY]}; then ln -f $IDENTITY ${PROTOS[$KEY]}; fi
