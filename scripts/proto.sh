@@ -28,6 +28,7 @@ PROTOS[DOMAIN,4]=./apps/services/touch/src/protobuf/domain.proto
 
 # Special Proto
 PROTOS[SPECIAL,1]=./apps/services/special/src/app.proto
+PROTOS[SPECIAL,2]=./apps/services/identity/src/protobuf/special.proto
 
 # Identity Proto
 PROTOS[IDENTITY,1]=./apps/services/identity/src/app.proto
