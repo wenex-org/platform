@@ -4,13 +4,7 @@ import {
   TransactionItemsSerializer,
   TransactionSerializer,
 } from '@app/common/serializers';
-import {
-  CreateTransactionDto,
-  FilterDto,
-  FilterOneDto,
-  QueryFilterDto,
-  UpdateTransactionDto,
-} from '@app/common/dto';
+import { CreateTransactionDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateTransactionDto } from '@app/common/dto';
 import {
   Body,
   Controller,
@@ -26,18 +20,8 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
-import {
-  AuthorityInterceptor,
-  FilterInterceptor,
-  GatewayInterceptors,
-  WriteInterceptors,
-} from '@app/common/interceptors';
-import {
-  Controller as ControllerInterface,
-  Metadata,
-  Transaction,
-  TransactionDto,
-} from '@app/common/interfaces';
+import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { Controller as ControllerInterface, Metadata, Transaction, TransactionDto } from '@app/common/interfaces';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
@@ -73,11 +57,7 @@ export class TransactionsController
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.FinancialTransactions)
   @ApiQuery({ type: QueryFilterDto, required: false })
-  count(
-    @Meta() meta: Metadata,
-    @Filter() filter: QueryFilterDto,
-    @Session() session?: ClientSession,
-  ): Observable<TotalSerializer> {
+  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto, @Session() session?: ClientSession): Observable<TotalSerializer> {
     return super.count(meta, filter, session);
   }
 

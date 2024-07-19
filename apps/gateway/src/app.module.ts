@@ -37,11 +37,7 @@ import * as modules from './modules';
         subscriptions: { 'graphql-ws': true },
         autoSchemaFile: join(process.cwd(), 'schema.gql'),
         // Plugins added to apollo server
-        plugins: [
-          tracingPlugin,
-          metricsPlugin,
-          ApolloServerPluginLandingPageLocalDefault(),
-        ],
+        plugins: [tracingPlugin, metricsPlugin, ApolloServerPluginLandingPageLocalDefault()],
       }),
       // We need to inject the provider keys
       inject: [TRACING_PLUGIN, METRICS_PLUGIN],

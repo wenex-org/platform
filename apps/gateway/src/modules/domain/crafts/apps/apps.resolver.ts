@@ -1,28 +1,7 @@
-import {
-  TotalSerializer,
-  AppDataSerializer,
-  AppItemsSerializer,
-  AppSerializer,
-} from '@app/common/serializers';
-import {
-  CreateAppDto,
-  FilterDto,
-  FilterOneDto,
-  QueryFilterDto,
-  UpdateAppDto,
-} from '@app/common/dto';
-import {
-  AuthorityInterceptor,
-  FilterInterceptor,
-  GatewayInterceptors,
-  WriteInterceptors,
-} from '@app/common/interceptors';
-import {
-  Controller as ControllerInterface,
-  Metadata,
-  App,
-  AppDto,
-} from '@app/common/interfaces';
+import { TotalSerializer, AppDataSerializer, AppItemsSerializer, AppSerializer } from '@app/common/serializers';
+import { CreateAppDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateAppDto } from '@app/common/dto';
+import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { Controller as ControllerInterface, Metadata, App, AppDto } from '@app/common/interfaces';
 import { Cache, Nested, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
@@ -44,10 +23,7 @@ import { Observable } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class AppsResolver
-  extends ControllerClass<App, AppDto>
-  implements ControllerInterface<App, AppDto>
-{
+export class AppsResolver extends ControllerClass<App, AppDto> implements ControllerInterface<App, AppDto> {
   constructor(readonly provider: DomainProvider) {
     super(provider.apps, () => AppSerializer);
   }

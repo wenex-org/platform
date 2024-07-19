@@ -1,28 +1,7 @@
-import {
-  TotalSerializer,
-  SessionDataSerializer,
-  SessionItemsSerializer,
-  SessionSerializer,
-} from '@app/common/serializers';
-import {
-  CreateSessionDto,
-  FilterDto,
-  FilterOneDto,
-  QueryFilterDto,
-  UpdateSessionDto,
-} from '@app/common/dto';
-import {
-  AuthorityInterceptor,
-  FilterInterceptor,
-  GatewayInterceptors,
-  WriteInterceptors,
-} from '@app/common/interceptors';
-import {
-  Controller as ControllerInterface,
-  Session as ISession,
-  Metadata,
-  SessionDto,
-} from '@app/common/interfaces';
+import { TotalSerializer, SessionDataSerializer, SessionItemsSerializer, SessionSerializer } from '@app/common/serializers';
+import { CreateSessionDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateSessionDto } from '@app/common/dto';
+import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { Controller as ControllerInterface, Session as ISession, Metadata, SessionDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
@@ -43,10 +22,7 @@ import { Observable } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class SessionsResolver
-  extends ControllerClass<ISession, SessionDto>
-  implements ControllerInterface<ISession, SessionDto>
-{
+export class SessionsResolver extends ControllerClass<ISession, SessionDto> implements ControllerInterface<ISession, SessionDto> {
   constructor(readonly provider: IdentityProvider) {
     super(provider.sessions, () => SessionSerializer);
   }

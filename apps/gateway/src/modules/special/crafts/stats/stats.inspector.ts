@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Post,
-  UseFilters,
-  UseGuards,
-  UseInterceptors,
-  UsePipes,
-} from '@nestjs/common';
+import { Body, Controller, Post, UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';

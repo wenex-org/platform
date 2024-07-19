@@ -1,16 +1,5 @@
-import {
-  TotalSerializer,
-  CoinDataSerializer,
-  CoinItemsSerializer,
-  CoinSerializer,
-} from '@app/common/serializers';
-import {
-  CreateCoinDto,
-  FilterDto,
-  FilterOneDto,
-  QueryFilterDto,
-  UpdateCoinDto,
-} from '@app/common/dto';
+import { TotalSerializer, CoinDataSerializer, CoinItemsSerializer, CoinSerializer } from '@app/common/serializers';
+import { CreateCoinDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateCoinDto } from '@app/common/dto';
 import {
   Body,
   Controller,
@@ -26,18 +15,8 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
-import {
-  AuthorityInterceptor,
-  FilterInterceptor,
-  GatewayInterceptors,
-  WriteInterceptors,
-} from '@app/common/interceptors';
-import {
-  Controller as ControllerInterface,
-  Metadata,
-  Coin,
-  CoinDto,
-} from '@app/common/interfaces';
+import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { Controller as ControllerInterface, Metadata, Coin, CoinDto } from '@app/common/interfaces';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
@@ -59,10 +38,7 @@ import { Observable } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class CoinsController
-  extends ControllerClass<Coin, CoinDto>
-  implements ControllerInterface<Coin, CoinDto>
-{
+export class CoinsController extends ControllerClass<Coin, CoinDto> implements ControllerInterface<Coin, CoinDto> {
   constructor(readonly provider: FinancialProvider) {
     super(provider.coins, () => CoinSerializer);
   }
@@ -73,11 +49,7 @@ export class CoinsController
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.FinancialCoins)
   @ApiQuery({ type: QueryFilterDto, required: false })
-  count(
-    @Meta() meta: Metadata,
-    @Filter() filter: QueryFilterDto,
-    @Session() session?: ClientSession,
-  ): Observable<TotalSerializer> {
+  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto, @Session() session?: ClientSession): Observable<TotalSerializer> {
     return super.count(meta, filter, session);
   }
 
@@ -87,11 +59,7 @@ export class CoinsController
   @SetScope(Scope.WriteFinancialCoins)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialCoins)
-  create(
-    @Meta() meta: Metadata,
-    @Body() data: CreateCoinDto,
-    @Session() session?: ClientSession,
-  ): Observable<CoinDataSerializer> {
+  create(@Meta() meta: Metadata, @Body() data: CreateCoinDto, @Session() session?: ClientSession): Observable<CoinDataSerializer> {
     return super.create(meta, data, session);
   }
 

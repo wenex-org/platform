@@ -6,9 +6,6 @@ import { ProfilesModule } from './crafts/profiles';
 import { SessionsModule } from './crafts/sessions';
 
 @Module({
-  imports: [
-    IdentityProviderModule.forRoot('modules/identity/identity.proto'),
-    ...[UsersModule, ProfilesModule, SessionsModule],
-  ],
+  imports: [IdentityProviderModule.forRoot('modules/identity/identity.proto'), ...[UsersModule, ProfilesModule, SessionsModule]],
 })
 export class IdentityModule {}

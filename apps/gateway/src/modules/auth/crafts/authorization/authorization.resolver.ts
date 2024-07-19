@@ -1,11 +1,5 @@
-import {
-  AuthorizationCanResponseSerializer,
-  AuthorizationPolicyResponseSerializer,
-} from '@app/common/serializers';
-import {
-  AuthorizationCanRequestDto,
-  AuthorizationPolicyRequestDto,
-} from '@app/common/dto';
+import { AuthorizationCanResponseSerializer, AuthorizationPolicyResponseSerializer } from '@app/common/serializers';
+import { AuthorizationCanRequestDto, AuthorizationPolicyRequestDto } from '@app/common/dto';
 import { UseFilters, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
@@ -25,13 +19,8 @@ export class AuthorizationResolver {
   constructor(readonly provider: AuthProvider) {}
 
   @Mutation(() => AuthorizationCanResponseSerializer)
-  can(
-    @Meta() meta: Metadata,
-    @Args('data') data: AuthorizationCanRequestDto,
-  ): Observable<AuthorizationCanResponseSerializer> {
-    return from(this.provider.authorization.can(data, meta)).pipe(
-      mapToInstance(AuthorizationCanResponseSerializer),
-    );
+  can(@Meta() meta: Metadata, @Args('data') data: AuthorizationCanRequestDto): Observable<AuthorizationCanResponseSerializer> {
+    return from(this.provider.authorization.can(data, meta)).pipe(mapToInstance(AuthorizationCanResponseSerializer));
   }
 
   @Mutation(() => AuthorizationPolicyResponseSerializer)
@@ -39,8 +28,6 @@ export class AuthorizationResolver {
     @Meta() meta: Metadata,
     @Args('data') data: AuthorizationPolicyRequestDto,
   ): Observable<AuthorizationPolicyResponseSerializer> {
-    return from(this.provider.authorization.policy(data, meta)).pipe(
-      mapToInstance(AuthorizationPolicyResponseSerializer),
-    );
+    return from(this.provider.authorization.policy(data, meta)).pipe(mapToInstance(AuthorizationPolicyResponseSerializer));
   }
 }

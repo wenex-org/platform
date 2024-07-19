@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Post,
-  UploadedFiles,
-  UseFilters,
-  UseGuards,
-  UseInterceptors,
-  UsePipes,
-} from '@nestjs/common';
+import { Controller, Post, UploadedFiles, UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';

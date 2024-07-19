@@ -1,16 +1,5 @@
-import {
-  TotalSerializer,
-  AccountDataSerializer,
-  AccountItemsSerializer,
-  AccountSerializer,
-} from '@app/common/serializers';
-import {
-  CreateAccountDto,
-  FilterDto,
-  FilterOneDto,
-  QueryFilterDto,
-  UpdateAccountDto,
-} from '@app/common/dto';
+import { TotalSerializer, AccountDataSerializer, AccountItemsSerializer, AccountSerializer } from '@app/common/serializers';
+import { CreateAccountDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateAccountDto } from '@app/common/dto';
 import {
   Body,
   Controller,
@@ -26,18 +15,8 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
-import {
-  AuthorityInterceptor,
-  FilterInterceptor,
-  GatewayInterceptors,
-  WriteInterceptors,
-} from '@app/common/interceptors';
-import {
-  Controller as ControllerInterface,
-  Metadata,
-  Account,
-  AccountDto,
-} from '@app/common/interfaces';
+import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { Controller as ControllerInterface, Metadata, Account, AccountDto } from '@app/common/interfaces';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
@@ -59,10 +38,7 @@ import { Observable } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class AccountsController
-  extends ControllerClass<Account, AccountDto>
-  implements ControllerInterface<Account, AccountDto>
-{
+export class AccountsController extends ControllerClass<Account, AccountDto> implements ControllerInterface<Account, AccountDto> {
   constructor(readonly provider: FinancialProvider) {
     super(provider.accounts, () => AccountSerializer);
   }
@@ -73,11 +49,7 @@ export class AccountsController
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.FinancialAccounts)
   @ApiQuery({ type: QueryFilterDto, required: false })
-  count(
-    @Meta() meta: Metadata,
-    @Filter() filter: QueryFilterDto,
-    @Session() session?: ClientSession,
-  ): Observable<TotalSerializer> {
+  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto, @Session() session?: ClientSession): Observable<TotalSerializer> {
     return super.count(meta, filter, session);
   }
 

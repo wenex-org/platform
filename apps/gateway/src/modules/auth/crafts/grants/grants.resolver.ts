@@ -1,28 +1,7 @@
-import {
-  TotalSerializer,
-  GrantDataSerializer,
-  GrantItemsSerializer,
-  GrantSerializer,
-} from '@app/common/serializers';
-import {
-  CreateGrantDto,
-  FilterDto,
-  FilterOneDto,
-  QueryFilterDto,
-  UpdateGrantDto,
-} from '@app/common/dto';
-import {
-  AuthorityInterceptor,
-  FilterInterceptor,
-  GatewayInterceptors,
-  WriteInterceptors,
-} from '@app/common/interceptors';
-import {
-  Controller as ControllerInterface,
-  Metadata,
-  Grant,
-  GrantDto,
-} from '@app/common/interfaces';
+import { TotalSerializer, GrantDataSerializer, GrantItemsSerializer, GrantSerializer } from '@app/common/serializers';
+import { CreateGrantDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateGrantDto } from '@app/common/dto';
+import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { Controller as ControllerInterface, Metadata, Grant, GrantDto } from '@app/common/interfaces';
 import { Cache, Nested, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
@@ -44,10 +23,7 @@ import { Observable } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class GrantsResolver
-  extends ControllerClass<Grant, GrantDto>
-  implements ControllerInterface<Grant, GrantDto>
-{
+export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements ControllerInterface<Grant, GrantDto> {
   constructor(readonly provider: AuthProvider) {
     super(provider.grants, () => GrantSerializer);
   }

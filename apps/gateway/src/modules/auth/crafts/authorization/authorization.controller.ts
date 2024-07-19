@@ -1,19 +1,6 @@
-import {
-  AuthorizationCanResponseSerializer,
-  AuthorizationPolicyResponseSerializer,
-} from '@app/common/serializers';
-import {
-  Body,
-  Controller,
-  Post,
-  UseFilters,
-  UseInterceptors,
-  UsePipes,
-} from '@nestjs/common';
-import {
-  AuthorizationCanRequestDto,
-  AuthorizationPolicyRequestDto,
-} from '@app/common/dto';
+import { AuthorizationCanResponseSerializer, AuthorizationPolicyResponseSerializer } from '@app/common/serializers';
+import { Body, Controller, Post, UseFilters, UseInterceptors, UsePipes } from '@nestjs/common';
+import { AuthorizationCanRequestDto, AuthorizationPolicyRequestDto } from '@app/common/dto';
 import { GatewayInterceptors } from '@app/common/interceptors';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
@@ -38,23 +25,13 @@ export class AuthorizationController {
 
   @Post('can')
   @SetScope(Scope.ManageAuth)
-  can(
-    @Meta() meta: Metadata,
-    @Body() data: AuthorizationCanRequestDto,
-  ): Observable<AuthorizationCanResponseSerializer> {
-    return from(this.provider.authorization.can(data, meta)).pipe(
-      mapToInstance(AuthorizationCanResponseSerializer),
-    );
+  can(@Meta() meta: Metadata, @Body() data: AuthorizationCanRequestDto): Observable<AuthorizationCanResponseSerializer> {
+    return from(this.provider.authorization.can(data, meta)).pipe(mapToInstance(AuthorizationCanResponseSerializer));
   }
 
   @Post('policy')
   @SetScope(Scope.ManageAuth)
-  policy(
-    @Meta() meta: Metadata,
-    @Body() data: AuthorizationPolicyRequestDto,
-  ): Observable<AuthorizationPolicyResponseSerializer> {
-    return from(this.provider.authorization.policy(data, meta)).pipe(
-      mapToInstance(AuthorizationPolicyResponseSerializer),
-    );
+  policy(@Meta() meta: Metadata, @Body() data: AuthorizationPolicyRequestDto): Observable<AuthorizationPolicyResponseSerializer> {
+    return from(this.provider.authorization.policy(data, meta)).pipe(mapToInstance(AuthorizationPolicyResponseSerializer));
   }
 }

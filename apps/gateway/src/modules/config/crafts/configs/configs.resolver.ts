@@ -1,28 +1,7 @@
-import {
-  TotalSerializer,
-  ConfigDataSerializer,
-  ConfigItemsSerializer,
-  ConfigSerializer,
-} from '@app/common/serializers';
-import {
-  CreateConfigDto,
-  FilterDto,
-  FilterOneDto,
-  QueryFilterDto,
-  UpdateConfigDto,
-} from '@app/common/dto';
-import {
-  AuthorityInterceptor,
-  FilterInterceptor,
-  GatewayInterceptors,
-  WriteInterceptors,
-} from '@app/common/interceptors';
-import {
-  Controller as ControllerInterface,
-  Metadata,
-  Config,
-  ConfigDto,
-} from '@app/common/interfaces';
+import { TotalSerializer, ConfigDataSerializer, ConfigItemsSerializer, ConfigSerializer } from '@app/common/serializers';
+import { CreateConfigDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateConfigDto } from '@app/common/dto';
+import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { Controller as ControllerInterface, Metadata, Config, ConfigDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
@@ -43,10 +22,7 @@ import { Observable } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class ConfigsResolver
-  extends ControllerClass<Config, ConfigDto>
-  implements ControllerInterface<Config, ConfigDto>
-{
+export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implements ControllerInterface<Config, ConfigDto> {
   constructor(readonly provider: ConfigProvider) {
     super(provider.configs, () => ConfigSerializer);
   }

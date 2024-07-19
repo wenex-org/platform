@@ -7,10 +7,6 @@ import { AccountsModule } from './crafts/accounts';
 import { TransactionsModule } from './crafts/transactions';
 
 @Module({
-  imports: [
-    FinancialProviderModule,
-
-    ...[AccountsModule, CoinsModule, WalletsModule, TransactionsModule],
-  ],
+  imports: [FinancialProviderModule, ...[AccountsModule, CoinsModule, WalletsModule, TransactionsModule]],
 })
 export class FinancialModule {}

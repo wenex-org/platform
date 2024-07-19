@@ -1,8 +1,4 @@
-import {
-  AuthenticationResponseSerializer,
-  ResultSerializer,
-  JwtTokenSerializer,
-} from '@app/common/serializers';
+import { AuthenticationResponseSerializer, ResultSerializer, JwtTokenSerializer } from '@app/common/serializers';
 import { UseFilters, UseInterceptors, UsePipes } from '@nestjs/common';
 import { AuthenticationRequestDto, TokenDto } from '@app/common/dto';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
@@ -23,32 +19,17 @@ export class AuthenticationResolver {
   constructor(readonly provider: AuthProvider) {}
 
   @Mutation(() => AuthenticationResponseSerializer)
-  token(
-    @Meta() meta: Metadata,
-    @Args('data') data: AuthenticationRequestDto,
-  ): Observable<AuthenticationResponseSerializer> {
-    return from(this.provider.authentication.token(data, meta)).pipe(
-      mapToInstance(AuthenticationResponseSerializer),
-    );
+  token(@Meta() meta: Metadata, @Args('data') data: AuthenticationRequestDto): Observable<AuthenticationResponseSerializer> {
+    return from(this.provider.authentication.token(data, meta)).pipe(mapToInstance(AuthenticationResponseSerializer));
   }
 
   @Mutation(() => JwtTokenSerializer)
-  verify(
-    @Meta() meta: Metadata,
-    @Args('data') data: TokenDto,
-  ): Observable<JwtTokenSerializer> {
-    return from(this.provider.authentication.verify(data, meta)).pipe(
-      mapToInstance(JwtTokenSerializer),
-    );
+  verify(@Meta() meta: Metadata, @Args('data') data: TokenDto): Observable<JwtTokenSerializer> {
+    return from(this.provider.authentication.verify(data, meta)).pipe(mapToInstance(JwtTokenSerializer));
   }
 
   @Mutation(() => ResultSerializer)
-  logout(
-    @Meta() meta: Metadata,
-    @Args('data') data: TokenDto,
-  ): Observable<ResultSerializer> {
-    return from(this.provider.authentication.logout(data, meta)).pipe(
-      mapToInstance(ResultSerializer),
-    );
+  logout(@Meta() meta: Metadata, @Args('data') data: TokenDto): Observable<ResultSerializer> {
+    return from(this.provider.authentication.logout(data, meta)).pipe(mapToInstance(ResultSerializer));
   }
 }

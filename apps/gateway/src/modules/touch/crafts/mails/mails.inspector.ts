@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Post,
-  UseFilters,
-  UseGuards,
-  UseInterceptors,
-  UsePipes,
-} from '@nestjs/common';
+import { Body, Controller, Post, UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
@@ -36,10 +28,7 @@ export class MailsInspector {
   @SetScope(Scope.SendTouchMails)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Send, Resource.TouchMails)
-  async send(
-    @Meta() meta: Metadata,
-    @Body() data: CreateMailDto,
-  ): Promise<MailSerializer> {
+  async send(@Meta() meta: Metadata, @Body() data: CreateMailDto): Promise<MailSerializer> {
     return this.provider.mails.send(data, { meta });
   }
 }

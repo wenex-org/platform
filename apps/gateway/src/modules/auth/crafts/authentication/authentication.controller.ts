@@ -1,17 +1,5 @@
-import {
-  AuthenticationResponseSerializer,
-  ResultSerializer,
-  JwtTokenSerializer,
-} from '@app/common/serializers';
-import {
-  Body,
-  Controller,
-  Post,
-  UseFilters,
-  UseGuards,
-  UseInterceptors,
-  UsePipes,
-} from '@nestjs/common';
+import { AuthenticationResponseSerializer, ResultSerializer, JwtTokenSerializer } from '@app/common/serializers';
+import { Body, Controller, Post, UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { AuthenticationRequestDto, TokenDto } from '@app/common/dto';
 import { GatewayInterceptors } from '@app/common/interceptors';
 import { AuthGuard, ScopeGuard } from '@app/common/guards';
@@ -38,30 +26,21 @@ export class AuthenticationController {
 
   @IsPublic()
   @Post('token')
-  token(
-    @Meta() meta: Metadata,
-    @Body() data: AuthenticationRequestDto,
-  ): Observable<AuthenticationResponseSerializer> {
-    return from(this.provider.authentication.token(data, meta)).pipe(
-      mapToInstance(AuthenticationResponseSerializer),
-    );
+  token(@Meta() meta: Metadata, @Body() data: AuthenticationRequestDto): Observable<AuthenticationResponseSerializer> {
+    return from(this.provider.authentication.token(data, meta)).pipe(mapToInstance(AuthenticationResponseSerializer));
   }
 
   @Post('verify')
   @ApiBearerAuth()
   @SetScope(Scope.ManageAuth)
   verify(@Meta() meta: Metadata, @Body() data: TokenDto): Observable<JwtTokenSerializer> {
-    return from(this.provider.authentication.verify(data, meta)).pipe(
-      mapToInstance(JwtTokenSerializer),
-    );
+    return from(this.provider.authentication.verify(data, meta)).pipe(mapToInstance(JwtTokenSerializer));
   }
 
   @Post('logout')
   @ApiBearerAuth()
   @SetScope(Scope.ManageAuth)
   logout(@Meta() meta: Metadata, @Body() data: TokenDto): Observable<ResultSerializer> {
-    return from(this.provider.authentication.logout(data, meta)).pipe(
-      mapToInstance(ResultSerializer),
-    );
+    return from(this.provider.authentication.logout(data, meta)).pipe(mapToInstance(ResultSerializer));
   }
 }

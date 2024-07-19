@@ -1,28 +1,7 @@
-import {
-  TotalSerializer,
-  StatDataSerializer,
-  StatItemsSerializer,
-  StatSerializer,
-} from '@app/common/serializers';
-import {
-  CreateStatDto,
-  FilterDto,
-  FilterOneDto,
-  QueryFilterDto,
-  UpdateStatDto,
-} from '@app/common/dto';
-import {
-  AuthorityInterceptor,
-  FilterInterceptor,
-  GatewayInterceptors,
-  WriteInterceptors,
-} from '@app/common/interceptors';
-import {
-  Controller as ControllerInterface,
-  Metadata,
-  Stat,
-  StatDto,
-} from '@app/common/interfaces';
+import { TotalSerializer, StatDataSerializer, StatItemsSerializer, StatSerializer } from '@app/common/serializers';
+import { CreateStatDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateStatDto } from '@app/common/dto';
+import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { Controller as ControllerInterface, Metadata, Stat, StatDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
@@ -43,10 +22,7 @@ import { Observable } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class StatsResolver
-  extends ControllerClass<Stat, StatDto>
-  implements ControllerInterface<Stat, StatDto>
-{
+export class StatsResolver extends ControllerClass<Stat, StatDto> implements ControllerInterface<Stat, StatDto> {
   constructor(readonly provider: SpecialProvider) {
     super(provider.stats, () => StatSerializer);
   }

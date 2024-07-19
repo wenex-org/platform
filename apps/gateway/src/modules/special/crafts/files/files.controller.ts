@@ -1,16 +1,5 @@
-import {
-  TotalSerializer,
-  FileDataSerializer,
-  FileItemsSerializer,
-  FileSerializer,
-} from '@app/common/serializers';
-import {
-  CreateFileDto,
-  FilterDto,
-  FilterOneDto,
-  QueryFilterDto,
-  UpdateFileDto,
-} from '@app/common/dto';
+import { TotalSerializer, FileDataSerializer, FileItemsSerializer, FileSerializer } from '@app/common/serializers';
+import { CreateFileDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateFileDto } from '@app/common/dto';
 import {
   Body,
   Controller,
@@ -26,18 +15,8 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
-import {
-  AuthorityInterceptor,
-  FilterInterceptor,
-  GatewayInterceptors,
-  WriteInterceptors,
-} from '@app/common/interceptors';
-import {
-  Controller as ControllerInterface,
-  Metadata,
-  File,
-  FileDto,
-} from '@app/common/interfaces';
+import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { Controller as ControllerInterface, Metadata, File, FileDto } from '@app/common/interfaces';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
@@ -59,10 +38,7 @@ import { Observable } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class FilesController
-  extends ControllerClass<File, FileDto>
-  implements ControllerInterface<File, FileDto>
-{
+export class FilesController extends ControllerClass<File, FileDto> implements ControllerInterface<File, FileDto> {
   constructor(readonly provider: SpecialProvider) {
     super(provider.files, () => FileSerializer);
   }
@@ -73,11 +49,7 @@ export class FilesController
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.SpecialFiles)
   @ApiQuery({ type: QueryFilterDto, required: false })
-  count(
-    @Meta() meta: Metadata,
-    @Filter() filter: QueryFilterDto,
-    @Session() session?: ClientSession,
-  ): Observable<TotalSerializer> {
+  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto, @Session() session?: ClientSession): Observable<TotalSerializer> {
     return super.count(meta, filter, session);
   }
 
@@ -87,11 +59,7 @@ export class FilesController
   @SetScope(Scope.WriteSpecialFiles)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialFiles)
-  create(
-    @Meta() meta: Metadata,
-    @Body() data: CreateFileDto,
-    @Session() session?: ClientSession,
-  ): Observable<FileDataSerializer> {
+  create(@Meta() meta: Metadata, @Body() data: CreateFileDto, @Session() session?: ClientSession): Observable<FileDataSerializer> {
     return super.create(meta, data, session);
   }
 

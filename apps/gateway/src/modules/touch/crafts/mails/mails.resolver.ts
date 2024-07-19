@@ -1,28 +1,7 @@
-import {
-  TotalSerializer,
-  MailDataSerializer,
-  MailItemsSerializer,
-  MailSerializer,
-} from '@app/common/serializers';
-import {
-  CreateMailDto,
-  FilterDto,
-  FilterOneDto,
-  QueryFilterDto,
-  UpdateMailDto,
-} from '@app/common/dto';
-import {
-  AuthorityInterceptor,
-  FilterInterceptor,
-  GatewayInterceptors,
-  WriteInterceptors,
-} from '@app/common/interceptors';
-import {
-  Controller as ControllerInterface,
-  Metadata,
-  Mail,
-  MailDto,
-} from '@app/common/interfaces';
+import { TotalSerializer, MailDataSerializer, MailItemsSerializer, MailSerializer } from '@app/common/serializers';
+import { CreateMailDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateMailDto } from '@app/common/dto';
+import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { Controller as ControllerInterface, Metadata, Mail, MailDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
@@ -43,10 +22,7 @@ import { Observable } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class MailsResolver
-  extends ControllerClass<Mail, MailDto>
-  implements ControllerInterface<Mail, MailDto>
-{
+export class MailsResolver extends ControllerClass<Mail, MailDto> implements ControllerInterface<Mail, MailDto> {
   constructor(readonly provider: TouchProvider) {
     super(provider.mails, () => MailSerializer);
   }

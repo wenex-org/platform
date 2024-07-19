@@ -1,28 +1,7 @@
-import {
-  TotalSerializer,
-  WalletDataSerializer,
-  WalletItemsSerializer,
-  WalletSerializer,
-} from '@app/common/serializers';
-import {
-  CreateWalletDto,
-  FilterDto,
-  FilterOneDto,
-  QueryFilterDto,
-  UpdateWalletDto,
-} from '@app/common/dto';
-import {
-  AuthorityInterceptor,
-  FilterInterceptor,
-  GatewayInterceptors,
-  WriteInterceptors,
-} from '@app/common/interceptors';
-import {
-  Controller as ControllerInterface,
-  Metadata,
-  Wallet,
-  WalletDto,
-} from '@app/common/interfaces';
+import { TotalSerializer, WalletDataSerializer, WalletItemsSerializer, WalletSerializer } from '@app/common/serializers';
+import { CreateWalletDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateWalletDto } from '@app/common/dto';
+import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { Controller as ControllerInterface, Metadata, Wallet, WalletDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
@@ -43,10 +22,7 @@ import { Observable } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class WalletsResolver
-  extends ControllerClass<Wallet, WalletDto>
-  implements ControllerInterface<Wallet, WalletDto>
-{
+export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implements ControllerInterface<Wallet, WalletDto> {
   constructor(readonly provider: FinancialProvider) {
     super(provider.wallets, () => WalletSerializer);
   }

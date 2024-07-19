@@ -1,16 +1,5 @@
-import {
-  TotalSerializer,
-  PushDataSerializer,
-  PushItemsSerializer,
-  PushSerializer,
-} from '@app/common/serializers';
-import {
-  CreatePushDto,
-  FilterDto,
-  FilterOneDto,
-  QueryFilterDto,
-  UpdatePushDto,
-} from '@app/common/dto';
+import { TotalSerializer, PushDataSerializer, PushItemsSerializer, PushSerializer } from '@app/common/serializers';
+import { CreatePushDto, FilterDto, FilterOneDto, QueryFilterDto, UpdatePushDto } from '@app/common/dto';
 import {
   Body,
   Controller,
@@ -26,18 +15,8 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
-import {
-  AuthorityInterceptor,
-  FilterInterceptor,
-  GatewayInterceptors,
-  WriteInterceptors,
-} from '@app/common/interceptors';
-import {
-  Controller as ControllerInterface,
-  Metadata,
-  Push,
-  PushDto,
-} from '@app/common/interfaces';
+import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { Controller as ControllerInterface, Metadata, Push, PushDto } from '@app/common/interfaces';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
@@ -59,10 +38,7 @@ import { Observable } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class PushController
-  extends ControllerClass<Push, PushDto>
-  implements ControllerInterface<Push, PushDto>
-{
+export class PushController extends ControllerClass<Push, PushDto> implements ControllerInterface<Push, PushDto> {
   constructor(readonly provider: TouchProvider) {
     super(provider.push, () => PushSerializer);
   }
@@ -73,11 +49,7 @@ export class PushController
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.TouchPush)
   @ApiQuery({ type: QueryFilterDto, required: false })
-  count(
-    @Meta() meta: Metadata,
-    @Filter() filter: QueryFilterDto,
-    @Session() session?: ClientSession,
-  ): Observable<TotalSerializer> {
+  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto, @Session() session?: ClientSession): Observable<TotalSerializer> {
     return super.count(meta, filter, session);
   }
 
@@ -87,11 +59,7 @@ export class PushController
   @SetScope(Scope.WriteTouchPush)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchPush)
-  create(
-    @Meta() meta: Metadata,
-    @Body() data: CreatePushDto,
-    @Session() session?: ClientSession,
-  ): Observable<PushDataSerializer> {
+  create(@Meta() meta: Metadata, @Body() data: CreatePushDto, @Session() session?: ClientSession): Observable<PushDataSerializer> {
     return super.create(meta, data, session);
   }
 

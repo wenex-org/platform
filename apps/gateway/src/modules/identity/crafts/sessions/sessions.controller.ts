@@ -1,16 +1,5 @@
-import {
-  TotalSerializer,
-  SessionDataSerializer,
-  SessionItemsSerializer,
-  SessionSerializer,
-} from '@app/common/serializers';
-import {
-  CreateSessionDto,
-  FilterDto,
-  FilterOneDto,
-  QueryFilterDto,
-  UpdateSessionDto,
-} from '@app/common/dto';
+import { TotalSerializer, SessionDataSerializer, SessionItemsSerializer, SessionSerializer } from '@app/common/serializers';
+import { CreateSessionDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateSessionDto } from '@app/common/dto';
 import {
   Body,
   Controller,
@@ -28,18 +17,8 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
-import {
-  AuthorityInterceptor,
-  FilterInterceptor,
-  GatewayInterceptors,
-  WriteInterceptors,
-} from '@app/common/interceptors';
-import {
-  Controller as ControllerInterface,
-  Session as ISession,
-  Metadata,
-  SessionDto,
-} from '@app/common/interfaces';
+import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { Controller as ControllerInterface, Session as ISession, Metadata, SessionDto } from '@app/common/interfaces';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
@@ -62,10 +41,7 @@ import { Observable } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class SessionsController
-  extends ControllerClass<ISession, SessionDto>
-  implements ControllerInterface<ISession, SessionDto>
-{
+export class SessionsController extends ControllerClass<ISession, SessionDto> implements ControllerInterface<ISession, SessionDto> {
   constructor(readonly provider: IdentityProvider) {
     super(provider.sessions, () => SessionSerializer);
   }
@@ -76,11 +52,7 @@ export class SessionsController
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.IdentitySessions)
   @ApiQuery({ type: QueryFilterDto, required: false })
-  count(
-    @Meta() meta: Metadata,
-    @Filter() filter: QueryFilterDto,
-    @Session() session?: ClientSession,
-  ): Observable<TotalSerializer> {
+  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto, @Session() session?: ClientSession): Observable<TotalSerializer> {
     return super.count(meta, filter, session);
   }
 
@@ -133,11 +105,7 @@ export class SessionsController
   @ApiQuery({ type: FilterOneDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   @ApiResponse({ status: HttpStatus.OK, type: SessionSerializer, description: 'SSE' })
-  Cursor(
-    @Res() res: Response,
-    @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<ISession>,
-  ) {
+  Cursor(@Res() res: Response, @Meta() meta: Metadata, @Filter() filter: FilterOneDto<ISession>) {
     // Server Sent-Event Headers
     res.setHeader('Transfer-Encoding', 'chunked');
     res.setHeader('Content-Type', 'text/event-stream');

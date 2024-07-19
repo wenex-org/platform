@@ -1,16 +1,5 @@
-import {
-  TotalSerializer,
-  StatDataSerializer,
-  StatItemsSerializer,
-  StatSerializer,
-} from '@app/common/serializers';
-import {
-  CreateStatDto,
-  FilterDto,
-  FilterOneDto,
-  QueryFilterDto,
-  UpdateStatDto,
-} from '@app/common/dto';
+import { TotalSerializer, StatDataSerializer, StatItemsSerializer, StatSerializer } from '@app/common/serializers';
+import { CreateStatDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateStatDto } from '@app/common/dto';
 import {
   Body,
   Controller,
@@ -26,18 +15,8 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
-import {
-  AuthorityInterceptor,
-  FilterInterceptor,
-  GatewayInterceptors,
-  WriteInterceptors,
-} from '@app/common/interceptors';
-import {
-  Controller as ControllerInterface,
-  Metadata,
-  Stat,
-  StatDto,
-} from '@app/common/interfaces';
+import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { Controller as ControllerInterface, Metadata, Stat, StatDto } from '@app/common/interfaces';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
@@ -59,10 +38,7 @@ import { Observable } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class StatsController
-  extends ControllerClass<Stat, StatDto>
-  implements ControllerInterface<Stat, StatDto>
-{
+export class StatsController extends ControllerClass<Stat, StatDto> implements ControllerInterface<Stat, StatDto> {
   constructor(readonly provider: SpecialProvider) {
     super(provider.stats, () => StatSerializer);
   }
@@ -73,11 +49,7 @@ export class StatsController
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.SpecialStats)
   @ApiQuery({ type: QueryFilterDto, required: false })
-  count(
-    @Meta() meta: Metadata,
-    @Filter() filter: QueryFilterDto,
-    @Session() session?: ClientSession,
-  ): Observable<TotalSerializer> {
+  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto, @Session() session?: ClientSession): Observable<TotalSerializer> {
     return super.count(meta, filter, session);
   }
 
@@ -87,11 +59,7 @@ export class StatsController
   @SetScope(Scope.WriteSpecialStats)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialStats)
-  create(
-    @Meta() meta: Metadata,
-    @Body() data: CreateStatDto,
-    @Session() session?: ClientSession,
-  ): Observable<StatDataSerializer> {
+  create(@Meta() meta: Metadata, @Body() data: CreateStatDto, @Session() session?: ClientSession): Observable<StatDataSerializer> {
     return super.create(meta, data, session);
   }
 

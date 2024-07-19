@@ -11,15 +11,7 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
-import {
-  ParseIdPipe,
-  ParseRefPipe,
-  ParseResizePipe,
-  ParseRotatePipe,
-  Resize,
-  Rotate,
-  ValidationPipe,
-} from '@app/common/pipes';
+import { ParseIdPipe, ParseRefPipe, ParseResizePipe, ParseRotatePipe, Resize, Rotate, ValidationPipe } from '@app/common/pipes';
 import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { GatewayInterceptors } from '@app/common/interceptors';
@@ -63,8 +55,7 @@ export class FilesInspector {
   ) {
     const { data, file } = await this.service.download({ id, ref }, { meta });
 
-    const eTag =
-      resize || rotate ? MD5.hash(file.etag + toString({ rotate, resize })) : file.etag;
+    const eTag = resize || rotate ? MD5.hash(file.etag + toString({ rotate, resize })) : file.etag;
 
     if (file.acl?.toLocaleLowerCase().includes('public')) {
       res.status(HttpStatus.OK).set({

@@ -1,28 +1,7 @@
-import {
-  TotalSerializer,
-  ClientDataSerializer,
-  ClientItemsSerializer,
-  ClientSerializer,
-} from '@app/common/serializers';
-import {
-  CreateClientDto,
-  FilterDto,
-  FilterOneDto,
-  QueryFilterDto,
-  UpdateClientDto,
-} from '@app/common/dto';
-import {
-  AuthorityInterceptor,
-  FilterInterceptor,
-  GatewayInterceptors,
-  WriteInterceptors,
-} from '@app/common/interceptors';
-import {
-  Controller as ControllerInterface,
-  Metadata,
-  Client,
-  ClientDto,
-} from '@app/common/interfaces';
+import { TotalSerializer, ClientDataSerializer, ClientItemsSerializer, ClientSerializer } from '@app/common/serializers';
+import { CreateClientDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateClientDto } from '@app/common/dto';
+import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { Controller as ControllerInterface, Metadata, Client, ClientDto } from '@app/common/interfaces';
 import { Cache, Nested, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
@@ -44,10 +23,7 @@ import { Observable } from 'rxjs';
 @Nested<Client>('domains', 'services')
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class ClientsResolver
-  extends ControllerClass<Client, ClientDto>
-  implements ControllerInterface<Client, ClientDto>
-{
+export class ClientsResolver extends ControllerClass<Client, ClientDto> implements ControllerInterface<Client, ClientDto> {
   constructor(readonly provider: DomainProvider) {
     super(provider.clients, () => ClientSerializer);
   }

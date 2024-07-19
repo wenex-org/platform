@@ -1,16 +1,5 @@
-import {
-  TotalSerializer,
-  ClientDataSerializer,
-  ClientItemsSerializer,
-  ClientSerializer,
-} from '@app/common/serializers';
-import {
-  CreateClientDto,
-  FilterDto,
-  FilterOneDto,
-  QueryFilterDto,
-  UpdateClientDto,
-} from '@app/common/dto';
+import { TotalSerializer, ClientDataSerializer, ClientItemsSerializer, ClientSerializer } from '@app/common/serializers';
+import { CreateClientDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateClientDto } from '@app/common/dto';
 import {
   Body,
   Controller,
@@ -28,18 +17,8 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
-import {
-  AuthorityInterceptor,
-  FilterInterceptor,
-  GatewayInterceptors,
-  WriteInterceptors,
-} from '@app/common/interceptors';
-import {
-  Controller as ControllerInterface,
-  Metadata,
-  Client,
-  ClientDto,
-} from '@app/common/interfaces';
+import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { Controller as ControllerInterface, Metadata, Client, ClientDto } from '@app/common/interfaces';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Cache, Nested, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
@@ -63,10 +42,7 @@ import { Observable } from 'rxjs';
 @Nested<Client>('domains', 'services')
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class ClientsController
-  extends ControllerClass<Client, ClientDto>
-  implements ControllerInterface<Client, ClientDto>
-{
+export class ClientsController extends ControllerClass<Client, ClientDto> implements ControllerInterface<Client, ClientDto> {
   constructor(readonly provider: DomainProvider) {
     super(provider.clients, () => ClientSerializer);
   }
@@ -77,11 +53,7 @@ export class ClientsController
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.DomainClients)
   @ApiQuery({ type: QueryFilterDto, required: false })
-  count(
-    @Meta() meta: Metadata,
-    @Filter() filter: QueryFilterDto,
-    @Session() session?: ClientSession,
-  ): Observable<TotalSerializer> {
+  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto, @Session() session?: ClientSession): Observable<TotalSerializer> {
     return super.count(meta, filter, session);
   }
 
@@ -134,11 +106,7 @@ export class ClientsController
   @ApiQuery({ type: FilterOneDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   @ApiResponse({ status: HttpStatus.OK, type: ClientSerializer, description: 'SSE' })
-  Cursor(
-    @Res() res: Response,
-    @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<Client>,
-  ) {
+  Cursor(@Res() res: Response, @Meta() meta: Metadata, @Filter() filter: FilterOneDto<Client>) {
     // Server Sent-Event Headers
     res.setHeader('Transfer-Encoding', 'chunked');
     res.setHeader('Content-Type', 'text/event-stream');

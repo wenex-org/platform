@@ -1,28 +1,7 @@
-import {
-  TotalSerializer,
-  UserDataSerializer,
-  UserItemsSerializer,
-  UserSerializer,
-} from '@app/common/serializers';
-import {
-  CreateUserDto,
-  FilterDto,
-  FilterOneDto,
-  QueryFilterDto,
-  UpdateUserDto,
-} from '@app/common/dto';
-import {
-  AuthorityInterceptor,
-  FilterInterceptor,
-  GatewayInterceptors,
-  WriteInterceptors,
-} from '@app/common/interceptors';
-import {
-  Controller as ControllerInterface,
-  Metadata,
-  User,
-  UserDto,
-} from '@app/common/interfaces';
+import { TotalSerializer, UserDataSerializer, UserItemsSerializer, UserSerializer } from '@app/common/serializers';
+import { CreateUserDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateUserDto } from '@app/common/dto';
+import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { Controller as ControllerInterface, Metadata, User, UserDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
@@ -43,10 +22,7 @@ import { Observable } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class UsersResolver
-  extends ControllerClass<User, UserDto>
-  implements ControllerInterface<User, UserDto>
-{
+export class UsersResolver extends ControllerClass<User, UserDto> implements ControllerInterface<User, UserDto> {
   constructor(readonly provider: IdentityProvider) {
     super(provider.users, () => UserSerializer);
   }

@@ -1,28 +1,7 @@
-import {
-  TotalSerializer,
-  PushDataSerializer,
-  PushItemsSerializer,
-  PushSerializer,
-} from '@app/common/serializers';
-import {
-  CreatePushDto,
-  FilterDto,
-  FilterOneDto,
-  QueryFilterDto,
-  UpdatePushDto,
-} from '@app/common/dto';
-import {
-  AuthorityInterceptor,
-  FilterInterceptor,
-  GatewayInterceptors,
-  WriteInterceptors,
-} from '@app/common/interceptors';
-import {
-  Controller as ControllerInterface,
-  Metadata,
-  Push,
-  PushDto,
-} from '@app/common/interfaces';
+import { TotalSerializer, PushDataSerializer, PushItemsSerializer, PushSerializer } from '@app/common/serializers';
+import { CreatePushDto, FilterDto, FilterOneDto, QueryFilterDto, UpdatePushDto } from '@app/common/dto';
+import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { Controller as ControllerInterface, Metadata, Push, PushDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
@@ -43,10 +22,7 @@ import { Observable } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class PushResolver
-  extends ControllerClass<Push, PushDto>
-  implements ControllerInterface<Push, PushDto>
-{
+export class PushResolver extends ControllerClass<Push, PushDto> implements ControllerInterface<Push, PushDto> {
   constructor(readonly provider: TouchProvider) {
     super(provider.push, () => PushSerializer);
   }

@@ -1,28 +1,7 @@
-import {
-  TotalSerializer,
-  CoinDataSerializer,
-  CoinItemsSerializer,
-  CoinSerializer,
-} from '@app/common/serializers';
-import {
-  CreateCoinDto,
-  FilterDto,
-  FilterOneDto,
-  QueryFilterDto,
-  UpdateCoinDto,
-} from '@app/common/dto';
-import {
-  AuthorityInterceptor,
-  FilterInterceptor,
-  GatewayInterceptors,
-  WriteInterceptors,
-} from '@app/common/interceptors';
-import {
-  Controller as ControllerInterface,
-  Metadata,
-  Coin,
-  CoinDto,
-} from '@app/common/interfaces';
+import { TotalSerializer, CoinDataSerializer, CoinItemsSerializer, CoinSerializer } from '@app/common/serializers';
+import { CreateCoinDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateCoinDto } from '@app/common/dto';
+import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { Controller as ControllerInterface, Metadata, Coin, CoinDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
@@ -43,10 +22,7 @@ import { Observable } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class CoinsResolver
-  extends ControllerClass<Coin, CoinDto>
-  implements ControllerInterface<Coin, CoinDto>
-{
+export class CoinsResolver extends ControllerClass<Coin, CoinDto> implements ControllerInterface<Coin, CoinDto> {
   constructor(readonly provider: FinancialProvider) {
     super(provider.coins, () => CoinSerializer);
   }

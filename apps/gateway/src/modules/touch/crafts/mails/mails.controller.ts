@@ -1,16 +1,5 @@
-import {
-  TotalSerializer,
-  MailDataSerializer,
-  MailItemsSerializer,
-  MailSerializer,
-} from '@app/common/serializers';
-import {
-  CreateMailDto,
-  FilterDto,
-  FilterOneDto,
-  QueryFilterDto,
-  UpdateMailDto,
-} from '@app/common/dto';
+import { TotalSerializer, MailDataSerializer, MailItemsSerializer, MailSerializer } from '@app/common/serializers';
+import { CreateMailDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateMailDto } from '@app/common/dto';
 import {
   Body,
   Controller,
@@ -26,18 +15,8 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
-import {
-  AuthorityInterceptor,
-  FilterInterceptor,
-  GatewayInterceptors,
-  WriteInterceptors,
-} from '@app/common/interceptors';
-import {
-  Controller as ControllerInterface,
-  Metadata,
-  Mail,
-  MailDto,
-} from '@app/common/interfaces';
+import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { Controller as ControllerInterface, Metadata, Mail, MailDto } from '@app/common/interfaces';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
@@ -59,10 +38,7 @@ import { Observable } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class MailsController
-  extends ControllerClass<Mail, MailDto>
-  implements ControllerInterface<Mail, MailDto>
-{
+export class MailsController extends ControllerClass<Mail, MailDto> implements ControllerInterface<Mail, MailDto> {
   constructor(readonly provider: TouchProvider) {
     super(provider.mails, () => MailSerializer);
   }
@@ -73,11 +49,7 @@ export class MailsController
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.TouchMails)
   @ApiQuery({ type: QueryFilterDto, required: false })
-  count(
-    @Meta() meta: Metadata,
-    @Filter() filter: QueryFilterDto,
-    @Session() session?: ClientSession,
-  ): Observable<TotalSerializer> {
+  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto, @Session() session?: ClientSession): Observable<TotalSerializer> {
     return super.count(meta, filter, session);
   }
 
@@ -87,11 +59,7 @@ export class MailsController
   @SetScope(Scope.WriteTouchMails)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchMails)
-  create(
-    @Meta() meta: Metadata,
-    @Body() data: CreateMailDto,
-    @Session() session?: ClientSession,
-  ): Observable<MailDataSerializer> {
+  create(@Meta() meta: Metadata, @Body() data: CreateMailDto, @Session() session?: ClientSession): Observable<MailDataSerializer> {
     return super.create(meta, data, session);
   }
 

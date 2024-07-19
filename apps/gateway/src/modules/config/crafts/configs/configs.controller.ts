@@ -1,16 +1,5 @@
-import {
-  TotalSerializer,
-  ConfigDataSerializer,
-  ConfigItemsSerializer,
-  ConfigSerializer,
-} from '@app/common/serializers';
-import {
-  CreateConfigDto,
-  FilterDto,
-  FilterOneDto,
-  QueryFilterDto,
-  UpdateConfigDto,
-} from '@app/common/dto';
+import { TotalSerializer, ConfigDataSerializer, ConfigItemsSerializer, ConfigSerializer } from '@app/common/serializers';
+import { CreateConfigDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateConfigDto } from '@app/common/dto';
 import {
   Body,
   Controller,
@@ -28,18 +17,8 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
-import {
-  AuthorityInterceptor,
-  FilterInterceptor,
-  GatewayInterceptors,
-  WriteInterceptors,
-} from '@app/common/interceptors';
-import {
-  Controller as ControllerInterface,
-  Metadata,
-  Config,
-  ConfigDto,
-} from '@app/common/interfaces';
+import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { Controller as ControllerInterface, Metadata, Config, ConfigDto } from '@app/common/interfaces';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
@@ -62,10 +41,7 @@ import { Observable } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class ConfigsController
-  extends ControllerClass<Config, ConfigDto>
-  implements ControllerInterface<Config, ConfigDto>
-{
+export class ConfigsController extends ControllerClass<Config, ConfigDto> implements ControllerInterface<Config, ConfigDto> {
   constructor(readonly provider: ConfigProvider) {
     super(provider.configs, () => ConfigSerializer);
   }
@@ -76,11 +52,7 @@ export class ConfigsController
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ConfigConfigs)
   @ApiQuery({ type: QueryFilterDto, required: false })
-  count(
-    @Meta() meta: Metadata,
-    @Filter() filter: QueryFilterDto,
-    @Session() session?: ClientSession,
-  ): Observable<TotalSerializer> {
+  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto, @Session() session?: ClientSession): Observable<TotalSerializer> {
     return super.count(meta, filter, session);
   }
 
@@ -133,11 +105,7 @@ export class ConfigsController
   @ApiQuery({ type: FilterOneDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   @ApiResponse({ status: HttpStatus.OK, type: ConfigSerializer, description: 'SSE' })
-  Cursor(
-    @Res() res: Response,
-    @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<Config>,
-  ) {
+  Cursor(@Res() res: Response, @Meta() meta: Metadata, @Filter() filter: FilterOneDto<Config>) {
     // Server Sent-Event Headers
     res.setHeader('Transfer-Encoding', 'chunked');
     res.setHeader('Content-Type', 'text/event-stream');
