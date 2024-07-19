@@ -15,35 +15,38 @@ PRESERVER=./proto/workers/preserver.proto
 
 # Auth Proto
 PROTOS[AUTH,1]=./apps/services/auth/src/app.proto
-PROTOS[AUTH,2]=./apps/gateway/src/modules/auth/auth.proto
+PROTOS[AUTH,2]=./apps/gateway/src/protobuf/auth.proto
 
 # Touch Proto
 PROTOS[TOUCH,1]=./apps/services/touch/src/app.proto
+PROTOS[TOUCH,2]=./apps/gateway/src/protobuf/touch.proto
 
 # Config Proto
 PROTOS[CONFIG,1]=./apps/services/config/src/app.proto
-PROTOS[CONFIG,2]=./apps/gateway/src/modules/config/config.proto
+PROTOS[CONFIG,2]=./apps/gateway/src/protobuf/config.proto
 PROTOS[CONFIG,3]=./apps/services/auth/src/protobuf/config.proto
 
 # Domain Proto
 PROTOS[DOMAIN,1]=./apps/services/domain/src/app.proto
-PROTOS[DOMAIN,2]=./apps/gateway/src/modules/domain/domain.proto
+PROTOS[DOMAIN,2]=./apps/gateway/src/protobuf/domain.proto
 PROTOS[DOMAIN,3]=./apps/services/auth/src/protobuf/domain.proto
 PROTOS[DOMAIN,4]=./apps/services/touch/src/protobuf/domain.proto
 
 # Special Proto
 PROTOS[SPECIAL,1]=./apps/services/special/src/app.proto
+PROTOS[SPECIAL,2]=./apps/gateway/src/protobuf/special.proto
 PROTOS[SPECIAL,3]=./apps/services/touch/src/protobuf/special.proto
-PROTOS[SPECIAL,2]=./apps/services/identity/src/protobuf/special.proto
+PROTOS[SPECIAL,4]=./apps/services/identity/src/protobuf/special.proto
 
 # Identity Proto
 PROTOS[IDENTITY,1]=./apps/services/identity/src/app.proto
-PROTOS[IDENTITY,2]=./apps/services/auth/src/protobuf/identity.proto
-PROTOS[IDENTITY,3]=./apps/gateway/src/modules/identity/identity.proto
+PROTOS[IDENTITY,2]=./apps/gateway/src/protobuf/identity.proto
+PROTOS[IDENTITY,3]=./apps/services/auth/src/protobuf/identity.proto
 PROTOS[IDENTITY,4]=./apps/workers/preserver/src/protobuf/identity.proto
 
 # Financial Proto
 PROTOS[FINANCIAL,1]=./apps/services/financial/src/app.proto
+PROTOS[FINANCIAL,2]=./apps/gateway/src/protobuf/financial.proto
 
 # Preserver Proto
 PROTOS[PRESERVER,1]=./apps/workers/preserver/src/app.proto

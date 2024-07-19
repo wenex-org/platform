@@ -5,6 +5,6 @@ import { PushModule } from './crafts/push';
 import { MailsModule } from './crafts/mails';
 
 @Module({
-  imports: [TouchProviderModule, ...[PushModule, MailsModule]],
+  imports: [TouchProviderModule.forRoot(), ...[PushModule, MailsModule]],
 })
-export class TouchModule {}
+export class TouchModule { }

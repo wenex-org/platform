@@ -5,6 +5,6 @@ import { ConfigsModule } from './crafts/configs';
 import { SettingsModule } from './crafts/settings';
 
 @Module({
-  imports: [ConfigProviderModule.forRoot('modules/config/config.proto'), ...[ConfigsModule, SettingsModule]],
+  imports: [ConfigProviderModule.forRoot(), ...[ConfigsModule, SettingsModule]],
 })
-export class ConfigModule {}
+export class ConfigModule { }

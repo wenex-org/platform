@@ -5,6 +5,6 @@ import { StatsModule } from './crafts/stats';
 import { FilesModule } from './crafts/files';
 
 @Module({
-  imports: [SpecialProviderModule, ...[FilesModule, StatsModule]],
+  imports: [SpecialProviderModule.forRoot(), ...[FilesModule, StatsModule]],
 })
-export class SpecialModule {}
+export class SpecialModule { }

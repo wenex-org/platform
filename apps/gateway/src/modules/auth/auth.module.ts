@@ -7,8 +7,8 @@ import { AuthenticationModule } from './crafts/authentication';
 
 @Global()
 @Module({
-  imports: [AuthProviderModule.forRoot('modules/auth/auth.proto'), ...[AuthenticationModule, AuthorizationModule, GrantsModule]],
+  imports: [AuthProviderModule.forRoot(), ...[AuthenticationModule, AuthorizationModule, GrantsModule]],
   providers: [AuthProvider],
   exports: [AuthProvider],
 })
-export class AuthModule {}
+export class AuthModule { }

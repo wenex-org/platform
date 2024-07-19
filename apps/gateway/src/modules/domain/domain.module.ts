@@ -5,6 +5,6 @@ import { AppsModule } from './crafts/apps';
 import { ClientsModule } from './crafts/clients';
 
 @Module({
-  imports: [DomainProviderModule.forRoot('modules/domain/domain.proto'), ...[AppsModule, ClientsModule]],
+  imports: [DomainProviderModule.forRoot(), ...[AppsModule, ClientsModule]],
 })
-export class DomainModule {}
+export class DomainModule { }
