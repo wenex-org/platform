@@ -8,4 +8,4 @@ import { SessionsModule } from './crafts/sessions';
 @Module({
   imports: [IdentityProviderModule.forRoot(), ...[UsersModule, ProfilesModule, SessionsModule]],
 })
-export class IdentityModule { }
+export class IdentityModule {}

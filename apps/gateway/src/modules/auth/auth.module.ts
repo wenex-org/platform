@@ -11,4 +11,4 @@ import { AuthenticationModule } from './crafts/authentication';
   providers: [AuthProvider],
   exports: [AuthProvider],
 })
-export class AuthModule { }
+export class AuthModule {}

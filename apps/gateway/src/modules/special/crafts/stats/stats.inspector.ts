@@ -20,7 +20,7 @@ import { Meta } from '@app/common/decorators';
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class StatsInspector {
-  constructor(readonly provider: SpecialProvider) { }
+  constructor(readonly provider: SpecialProvider) {}
 
   @Post('collect')
   @ShipStrategy('create')

@@ -7,4 +7,4 @@ import { FilesModule } from './crafts/files';
 @Module({
   imports: [SpecialProviderModule.forRoot(), ...[FilesModule, StatsModule]],
 })
-export class SpecialModule { }
+export class SpecialModule {}

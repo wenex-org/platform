@@ -7,4 +7,4 @@ import { ClientsModule } from './crafts/clients';
 @Module({
   imports: [DomainProviderModule.forRoot(), ...[AppsModule, ClientsModule]],
 })
-export class DomainModule { }
+export class DomainModule {}

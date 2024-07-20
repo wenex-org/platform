@@ -7,4 +7,4 @@ import { SettingsModule } from './crafts/settings';
 @Module({
   imports: [ConfigProviderModule.forRoot(), ...[ConfigsModule, SettingsModule]],
 })
-export class ConfigModule { }
+export class ConfigModule {}

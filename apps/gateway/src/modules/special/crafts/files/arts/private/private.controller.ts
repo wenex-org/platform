@@ -22,7 +22,7 @@ import { Meta } from '@app/common/decorators';
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class PrivateController {
-  constructor(readonly provider: SpecialProvider) { }
+  constructor(readonly provider: SpecialProvider) {}
 
   @Post('upload/private')
   @ShipStrategy('create')
@@ -39,10 +39,7 @@ export class PrivateController {
       },
     },
   })
-  upload(
-    @Meta() meta: Metadata,
-    @UploadedFiles() files: CreateFileDto[],
-  ): Promise<FileSerializer[]> {
+  upload(@Meta() meta: Metadata, @UploadedFiles() files: CreateFileDto[]): Promise<FileSerializer[]> {
     return this.provider.files.upload(files, meta);
   }
 }

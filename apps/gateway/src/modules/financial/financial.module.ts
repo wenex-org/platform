@@ -7,9 +7,6 @@ import { AccountsModule } from './crafts/accounts';
 import { TransactionsModule } from './crafts/transactions';
 
 @Module({
-  imports: [
-    FinancialProviderModule.forRoot(),
-    ...[AccountsModule, CoinsModule, WalletsModule, TransactionsModule],
-  ],
+  imports: [FinancialProviderModule.forRoot(), ...[AccountsModule, CoinsModule, WalletsModule, TransactionsModule]],
 })
-export class FinancialModule { }
+export class FinancialModule {}

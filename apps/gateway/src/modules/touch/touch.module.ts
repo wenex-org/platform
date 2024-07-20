@@ -7,4 +7,4 @@ import { MailsModule } from './crafts/mails';
 @Module({
   imports: [TouchProviderModule.forRoot(), ...[PushModule, MailsModule]],
 })
-export class TouchModule { }
+export class TouchModule {}
