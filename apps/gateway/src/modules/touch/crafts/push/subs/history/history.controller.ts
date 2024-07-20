@@ -4,7 +4,6 @@ import {
   PushHistoryItemsSerializer,
   PushHistorySerializer,
 } from '@app/common/serializers';
-import { CreatePushHistoryDto, FilterDto, FilterOneDto, QueryFilterDto, UpdatePushHistoryDto } from '@app/common/dto';
 import {
   Body,
   Controller,
@@ -21,6 +20,7 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { CreatePushHistoryDto, FilterDto, FilterOneDto, QueryFilterDto, UpdatePushHistoryDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, PushHistory, PushHistoryDto } from '@app/common/interfaces';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
@@ -45,10 +45,9 @@ import { Observable } from 'rxjs';
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class PushHistoryController
   extends ControllerClass<PushHistory, PushHistoryDto>
-  implements ControllerInterface<PushHistory, PushHistoryDto>
-{
+  implements ControllerInterface<PushHistory, PushHistoryDto> {
   constructor(readonly provider: TouchProvider) {
-    super(provider.push.histories, () => PushHistorySerializer);
+    super(provider.pushes.histories, () => PushHistorySerializer);
   }
 
   @Get('count')

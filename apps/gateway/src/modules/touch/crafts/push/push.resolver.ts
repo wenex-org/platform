@@ -24,7 +24,7 @@ import { Observable } from 'rxjs';
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class PushResolver extends ControllerClass<Push, PushDto> implements ControllerInterface<Push, PushDto> {
   constructor(readonly provider: TouchProvider) {
-    super(provider.push, () => PushSerializer);
+    super(provider.pushes, () => PushSerializer);
   }
 
   @Query(() => TotalSerializer)

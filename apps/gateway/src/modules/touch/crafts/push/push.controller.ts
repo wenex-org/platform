@@ -1,5 +1,3 @@
-import { TotalSerializer, PushDataSerializer, PushItemsSerializer, PushSerializer } from '@app/common/serializers';
-import { CreatePushDto, FilterDto, FilterOneDto, QueryFilterDto, UpdatePushDto } from '@app/common/dto';
 import {
   Body,
   Controller,
@@ -16,6 +14,8 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { TotalSerializer, PushDataSerializer, PushItemsSerializer, PushSerializer } from '@app/common/serializers';
+import { CreatePushDto, FilterDto, FilterOneDto, QueryFilterDto, UpdatePushDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Push, PushDto } from '@app/common/interfaces';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
@@ -40,7 +40,7 @@ import { Observable } from 'rxjs';
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class PushController extends ControllerClass<Push, PushDto> implements ControllerInterface<Push, PushDto> {
   constructor(readonly provider: TouchProvider) {
-    super(provider.push, () => PushSerializer);
+    super(provider.pushes, () => PushSerializer);
   }
 
   @Get('count')

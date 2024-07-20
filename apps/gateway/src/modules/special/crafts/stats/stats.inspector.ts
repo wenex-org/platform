@@ -20,7 +20,7 @@ import { Meta } from '@app/common/decorators';
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class StatsInspector {
-  constructor(readonly provider: SpecialProvider) {}
+  constructor(readonly provider: SpecialProvider) { }
 
   @Post('collect')
   @ShipStrategy('create')
@@ -28,6 +28,6 @@ export class StatsInspector {
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Collect, Resource.SpecialStats)
   async collect(@Meta() meta: Metadata, @Body() data: CreateStatDto) {
-    return this.provider.stats.collect(data, { meta });
+    return this.provider.stats.collect(data, meta);
   }
 }

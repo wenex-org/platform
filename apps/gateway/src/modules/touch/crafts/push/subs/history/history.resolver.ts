@@ -29,10 +29,9 @@ import { Observable } from 'rxjs';
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class PushHistoryResolver
   extends ControllerClass<PushHistory, PushHistoryDto>
-  implements ControllerInterface<PushHistory, PushHistoryDto>
-{
+  implements ControllerInterface<PushHistory, PushHistoryDto> {
   constructor(readonly provider: TouchProvider) {
-    super(provider.push.histories, () => PushHistorySerializer);
+    super(provider.pushes.histories, () => PushHistorySerializer);
   }
 
   @Query(() => TotalSerializer)

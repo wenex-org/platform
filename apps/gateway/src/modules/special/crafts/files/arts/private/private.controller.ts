@@ -9,11 +9,10 @@ import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { FileSerializer } from '@app/common/serializers';
 import { SpecialProvider } from '@app/common/providers';
-import { Meta, Session } from '@app/common/decorators';
 import { ValidationPipe } from '@app/common/pipes';
 import { Metadata } from '@app/common/interfaces';
 import { CreateFileDto } from '@app/common/dto';
-import { ClientSession } from 'mongoose';
+import { Meta } from '@app/common/decorators';
 
 @ApiBearerAuth()
 @ApiTags('files')
@@ -23,7 +22,7 @@ import { ClientSession } from 'mongoose';
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class PrivateController {
-  constructor(readonly provider: SpecialProvider) {}
+  constructor(readonly provider: SpecialProvider) { }
 
   @Post('upload/private')
   @ShipStrategy('create')
@@ -43,8 +42,7 @@ export class PrivateController {
   upload(
     @Meta() meta: Metadata,
     @UploadedFiles() files: CreateFileDto[],
-    @Session() session?: ClientSession,
   ): Promise<FileSerializer[]> {
-    return this.provider.files.upload(files, { meta, session });
+    return this.provider.files.upload(files, meta);
   }
 }

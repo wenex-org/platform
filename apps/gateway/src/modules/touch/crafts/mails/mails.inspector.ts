@@ -21,7 +21,7 @@ import { Meta } from '@app/common/decorators';
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class MailsInspector {
-  constructor(readonly provider: TouchProvider) {}
+  constructor(readonly provider: TouchProvider) { }
 
   @Post('send')
   @ShipStrategy('create')
@@ -29,6 +29,6 @@ export class MailsInspector {
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Send, Resource.TouchMails)
   async send(@Meta() meta: Metadata, @Body() data: CreateMailDto): Promise<MailSerializer> {
-    return this.provider.mails.send(data, { meta });
+    return this.provider.mails.send(data, meta);
   }
 }
