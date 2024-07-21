@@ -853,8 +853,7 @@ type CoinSerializer {
   rand: String!
   timestamp: String!
   type: String!
-  subunit: CoinUnitSerializer
-  supunit: CoinUnitSerializer
+  subunits: [CoinUnitSerializer]
   category: String
   lib: String
   provider: String
@@ -1896,8 +1895,7 @@ input CreateCoinDto {
   explore: String
   network: String
   contract: String
-  subunit: CreateCoinUnitDto
-  supunit: CreateCoinUnitDto
+  subunits: [CreateCoinUnitDto!]
   category: CoinCategory
   lib: CoinLib
   nodes: [String!]
@@ -1939,8 +1937,7 @@ input UpdateCoinDto {
   explore: String
   network: String
   contract: String
-  subunit: UpdateCoinUnitDto
-  supunit: UpdateCoinUnitDto
+  subunits: [UpdateCoinUnitDto!]
   lib: CoinLib
   nodes: [String!]
   provider: String
