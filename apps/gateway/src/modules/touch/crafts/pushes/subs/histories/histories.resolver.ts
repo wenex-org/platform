@@ -1,7 +1,12 @@
-import { TotalSerializer, PushDataSerializer, PushItemsSerializer, PushSerializer } from '@app/common/serializers';
-import { CreatePushDto, FilterDto, FilterOneDto, QueryFilterDto, UpdatePushDto } from '@app/common/dto';
+import {
+  TotalSerializer,
+  PushHistoryDataSerializer,
+  PushHistoryItemsSerializer,
+  PushHistorySerializer,
+} from '@app/common/serializers';
+import { CreatePushHistoryDto, FilterDto, FilterOneDto, QueryFilterDto, UpdatePushHistoryDto } from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
-import { Controller as ControllerInterface, Metadata, Push, PushDto } from '@app/common/interfaces';
+import { Controller as ControllerInterface, Metadata, PushHistory, PushHistoryDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
@@ -17,22 +22,24 @@ import { refineFilterQuery } from '@app/common/utils';
 import { ClientSession } from 'mongoose';
 import { Observable } from 'rxjs';
 
-@Resolver(() => PushSerializer)
+@Resolver(() => PushHistorySerializer)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class PushResolver extends ControllerClass<Push, PushDto> implements ControllerInterface<Push, PushDto> {
+export class PushHistoriesResolver
+  extends ControllerClass<PushHistory, PushHistoryDto>
+  implements ControllerInterface<PushHistory, PushHistoryDto> {
   constructor(readonly provider: TouchProvider) {
-    super(provider.pushes, () => PushSerializer);
+    super(provider.pushes.histories, () => PushHistorySerializer);
   }
 
   @Query(() => TotalSerializer)
-  @Cache('push', 'fill')
-  @SetScope(Scope.ReadTouchPush)
+  @Cache('push-histories', 'fill')
   @UseInterceptors(AuthorityInterceptor)
-  @SetPolicy(Action.Read, Resource.TouchPush)
-  countPush(
+  @SetScope(Scope.ReadTouchPushHistories)
+  @SetPolicy(Action.Read, Resource.TouchPushHistories)
+  countPushHistory(
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: QueryFilterDto,
     @Session() session?: ClientSession,
@@ -40,139 +47,139 @@ export class PushResolver extends ControllerClass<Push, PushDto> implements Cont
     return super.count(meta, filter, session);
   }
 
-  @Mutation(() => PushDataSerializer)
+  @Mutation(() => PushHistoryDataSerializer)
   @ShipStrategy('create')
-  @Cache('push', 'flush')
-  @SetScope(Scope.WriteTouchPush)
+  @Cache('push-histories', 'flush')
   @UseInterceptors(...WriteInterceptors)
-  @SetPolicy(Action.Create, Resource.TouchPush)
-  createPush(
+  @SetScope(Scope.WriteTouchPushHistories)
+  @SetPolicy(Action.Create, Resource.TouchPushHistories)
+  createPushHistory(
     @Meta() meta: Metadata,
-    @Args('data') data: CreatePushDto,
+    @Args('data') data: CreatePushHistoryDto,
     @Session() session?: ClientSession,
-  ): Observable<PushDataSerializer> {
+  ): Observable<PushHistoryDataSerializer> {
     return super.create(meta, data, session);
   }
 
-  @Mutation(() => PushItemsSerializer)
+  @Mutation(() => PushHistoryItemsSerializer)
   @ShipStrategy('create')
-  @Cache('push', 'flush')
-  @SetScope(Scope.WriteTouchPush)
+  @Cache('push-histories', 'flush')
   @UseInterceptors(...WriteInterceptors)
-  @SetPolicy(Action.Create, Resource.TouchPush)
-  createBulkPush(
+  @SetScope(Scope.WriteTouchPushHistories)
+  @SetPolicy(Action.Create, Resource.TouchPushHistories)
+  createBulkPushHistory(
     @Meta() meta: Metadata,
-    @Args('items', { type: () => [CreatePushDto] }) items: CreatePushDto[],
+    @Args('items', { type: () => [CreatePushHistoryDto] }) items: CreatePushHistoryDto[],
     @Session() session?: ClientSession,
-  ): Observable<PushItemsSerializer> {
+  ): Observable<PushHistoryItemsSerializer> {
     return super.createBulk(meta, items, session);
   }
 
-  @Query(() => PushItemsSerializer)
-  @Cache('push', 'fill')
-  @SetScope(Scope.ReadTouchPush)
-  @SetPolicy(Action.Read, Resource.TouchPush)
+  @Query(() => PushHistoryItemsSerializer)
+  @Cache('push-histories', 'fill')
+  @SetScope(Scope.ReadTouchPushHistories)
+  @SetPolicy(Action.Read, Resource.TouchPushHistories)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  findPush(
+  findPushHistory(
     @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: FilterDto<Push>,
+    @Filter() @Args('filter') filter: FilterDto<PushHistory>,
     @Session() session?: ClientSession,
-  ): Observable<PushItemsSerializer> {
+  ): Observable<PushHistoryItemsSerializer> {
     return super.find(meta, filter, session);
   }
 
-  @Query(() => PushDataSerializer)
-  @Cache('push', 'fill')
-  @SetScope(Scope.ReadTouchPush)
-  @SetPolicy(Action.Read, Resource.TouchPush)
+  @Query(() => PushHistoryDataSerializer)
+  @Cache('push-histories', 'fill')
+  @SetScope(Scope.ReadTouchPushHistories)
+  @SetPolicy(Action.Read, Resource.TouchPushHistories)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  findOnePush(
+  findOnePushHistory(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<Push>,
+    @Filter() filter: FilterOneDto<PushHistory>,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
-  ): Observable<PushDataSerializer> {
+  ): Observable<PushHistoryDataSerializer> {
     refineFilterQuery(filter, { id, ref });
     return super.findOne(meta, filter, session);
   }
 
-  @Mutation(() => PushDataSerializer)
-  @Cache('push', 'flush')
-  @SetScope(Scope.WriteTouchPush)
-  @SetPolicy(Action.Delete, Resource.TouchPush)
+  @Mutation(() => PushHistoryDataSerializer)
+  @Cache('push-histories', 'flush')
+  @SetScope(Scope.WriteTouchPushHistories)
+  @SetPolicy(Action.Delete, Resource.TouchPushHistories)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  deleteOnePush(
+  deleteOnePushHistory(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<Push>,
+    @Filter() filter: FilterDto<PushHistory>,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
-  ): Observable<PushDataSerializer> {
+  ): Observable<PushHistoryDataSerializer> {
     refineFilterQuery(filter, { id, ref });
     return super.deleteOne(meta, filter, session);
   }
 
-  @Mutation(() => PushDataSerializer)
-  @Cache('push', 'flush')
-  @SetScope(Scope.WriteTouchPush)
-  @SetPolicy(Action.Restore, Resource.TouchPush)
+  @Mutation(() => PushHistoryDataSerializer)
+  @Cache('push-histories', 'flush')
+  @SetScope(Scope.WriteTouchPushHistories)
+  @SetPolicy(Action.Restore, Resource.TouchPushHistories)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  restoreOnePush(
+  restoreOnePushHistory(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<Push>,
+    @Filter() filter: FilterDto<PushHistory>,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
-  ): Observable<PushDataSerializer> {
+  ): Observable<PushHistoryDataSerializer> {
     refineFilterQuery(filter, { id, ref });
     return super.restoreOne(meta, filter, session);
   }
 
-  @Mutation(() => PushDataSerializer)
-  @Cache('push', 'flush')
-  @SetScope(Scope.ManageTouchPush)
-  @SetPolicy(Action.Destroy, Resource.TouchPush)
+  @Mutation(() => PushHistoryDataSerializer)
+  @Cache('push-histories', 'flush')
+  @SetScope(Scope.ManageTouchPushHistories)
+  @SetPolicy(Action.Destroy, Resource.TouchPushHistories)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  destroyOnePush(
+  destroyOnePushHistory(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<Push>,
+    @Filter() filter: FilterDto<PushHistory>,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
-  ): Observable<PushDataSerializer> {
+  ): Observable<PushHistoryDataSerializer> {
     refineFilterQuery(filter, { id, ref });
     return super.destroyOne(meta, filter, session);
   }
 
-  @Mutation(() => PushDataSerializer)
+  @Mutation(() => PushHistoryDataSerializer)
   @ShipStrategy('update')
-  @Cache('push', 'flush')
-  @SetScope(Scope.WriteTouchPush)
-  @SetPolicy(Action.Update, Resource.TouchPush)
+  @Cache('push-histories', 'flush')
+  @SetScope(Scope.WriteTouchPushHistories)
+  @SetPolicy(Action.Update, Resource.TouchPushHistories)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateOnePush(
+  updateOnePushHistory(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<Push>,
-    @Args('data') update: UpdatePushDto,
+    @Filter() filter: FilterOneDto<PushHistory>,
+    @Args('data') update: UpdatePushHistoryDto,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
-  ): Observable<PushDataSerializer> {
+  ): Observable<PushHistoryDataSerializer> {
     refineFilterQuery(filter, { id, ref });
     return super.updateOne(meta, filter, update, session);
   }
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @Cache('push', 'flush')
-  @SetScope(Scope.ManageTouchPush)
-  @SetPolicy(Action.Update, Resource.TouchPush)
+  @Cache('push-histories', 'flush')
+  @SetScope(Scope.ManageTouchPushHistories)
+  @SetPolicy(Action.Update, Resource.TouchPushHistories)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateBulkPush(
+  updateBulkPushHistory(
     @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: QueryFilterDto<Push>,
-    @Args('data') update: UpdatePushDto,
+    @Filter() @Args('filter') filter: QueryFilterDto<PushHistory>,
+    @Args('data') update: UpdatePushHistoryDto,
     @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
     return super.updateBulk(meta, filter, update, session);

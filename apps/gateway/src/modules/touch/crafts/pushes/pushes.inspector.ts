@@ -19,8 +19,8 @@ import { Meta } from '@app/common/decorators';
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class PushInspector {
-  constructor(readonly provider: TouchProvider) {}
+export class PushesInspector {
+  constructor(readonly provider: TouchProvider) { }
 
   @Post('send')
   @ShipStrategy('create')
