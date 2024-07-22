@@ -1,6 +1,6 @@
 import { TotalSerializer, ProfileDataSerializer, ProfileItemsSerializer, ProfileSerializer } from '@app/common/serializers';
-import { CreateProfileDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateProfileDto } from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { CreateProfileDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateProfileDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Profile, ProfileDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';

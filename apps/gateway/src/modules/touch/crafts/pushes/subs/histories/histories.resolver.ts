@@ -4,8 +4,8 @@ import {
   PushHistoryItemsSerializer,
   PushHistorySerializer,
 } from '@app/common/serializers';
-import { CreatePushHistoryDto, FilterDto, FilterOneDto, QueryFilterDto, UpdatePushHistoryDto } from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { CreatePushHistoryDto, FilterDto, FilterOneDto, QueryFilterDto, UpdatePushHistoryDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, PushHistory, PushHistoryDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
@@ -29,7 +29,8 @@ import { Observable } from 'rxjs';
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class PushHistoriesResolver
   extends ControllerClass<PushHistory, PushHistoryDto>
-  implements ControllerInterface<PushHistory, PushHistoryDto> {
+  implements ControllerInterface<PushHistory, PushHistoryDto>
+{
   constructor(readonly provider: TouchProvider) {
     super(provider.pushes.histories, () => PushHistorySerializer);
   }

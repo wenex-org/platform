@@ -1,6 +1,6 @@
+import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { TotalSerializer, ClientDataSerializer, ClientItemsSerializer, ClientSerializer } from '@app/common/serializers';
 import { CreateClientDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateClientDto } from '@app/common/dto';
-import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { Controller as ControllerInterface, Metadata, Client, ClientDto } from '@app/common/interfaces';
 import { Cache, Nested, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';

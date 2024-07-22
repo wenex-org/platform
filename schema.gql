@@ -1041,15 +1041,15 @@ type Query {
   countGrant(filter: QueryFilterDto!): TotalSerializer!
   findGrant(filter: FilterDto!): GrantItemsSerializer!
   findOneGrant(id: String!, ref: String): GrantDataSerializer!
+  countMail(filter: QueryFilterDto!): TotalSerializer!
+  findMail(filter: FilterDto!): MailItemsSerializer!
+  findOneMail(id: String!, ref: String): MailDataSerializer!
   countPush(filter: QueryFilterDto!): TotalSerializer!
   findPush(filter: FilterDto!): PushItemsSerializer!
   findOnePush(id: String!, ref: String): PushDataSerializer!
   countPushHistory(filter: QueryFilterDto!): TotalSerializer!
   findPushHistory(filter: FilterDto!): PushHistoryItemsSerializer!
   findOnePushHistory(id: String!, ref: String): PushHistoryDataSerializer!
-  countMail(filter: QueryFilterDto!): TotalSerializer!
-  findMail(filter: FilterDto!): MailItemsSerializer!
-  findOneMail(id: String!, ref: String): MailDataSerializer!
   countConfig(filter: QueryFilterDto!): TotalSerializer!
   findConfig(filter: FilterDto!): ConfigItemsSerializer!
   findOneConfig(id: String!, ref: String): ConfigDataSerializer!
@@ -1128,6 +1128,13 @@ type Mutation {
   destroyOneGrant(id: String!, ref: String): GrantDataSerializer!
   updateOneGrant(id: String!, data: UpdateGrantDto!, ref: String): GrantDataSerializer!
   updateBulkGrant(filter: QueryFilterDto!, data: UpdateGrantDto!): TotalSerializer!
+  createMail(data: CreateMailDto!): MailDataSerializer!
+  createBulkMail(items: [CreateMailDto!]!): MailItemsSerializer!
+  deleteOneMail(id: String!, ref: String): MailDataSerializer!
+  restoreOneMail(id: String!, ref: String): MailDataSerializer!
+  destroyOneMail(id: String!, ref: String): MailDataSerializer!
+  updateOneMail(id: String!, data: UpdateMailDto!, ref: String): MailDataSerializer!
+  updateBulkMail(filter: QueryFilterDto!, data: UpdateMailDto!): TotalSerializer!
   createPush(data: CreatePushDto!): PushDataSerializer!
   createBulkPush(items: [CreatePushDto!]!): PushItemsSerializer!
   deleteOnePush(id: String!, ref: String): PushDataSerializer!
@@ -1142,13 +1149,6 @@ type Mutation {
   destroyOnePushHistory(id: String!, ref: String): PushHistoryDataSerializer!
   updateOnePushHistory(id: String!, data: UpdatePushHistoryDto!, ref: String): PushHistoryDataSerializer!
   updateBulkPushHistory(filter: QueryFilterDto!, data: UpdatePushHistoryDto!): TotalSerializer!
-  createMail(data: CreateMailDto!): MailDataSerializer!
-  createBulkMail(items: [CreateMailDto!]!): MailItemsSerializer!
-  deleteOneMail(id: String!, ref: String): MailDataSerializer!
-  restoreOneMail(id: String!, ref: String): MailDataSerializer!
-  destroyOneMail(id: String!, ref: String): MailDataSerializer!
-  updateOneMail(id: String!, data: UpdateMailDto!, ref: String): MailDataSerializer!
-  updateBulkMail(filter: QueryFilterDto!, data: UpdateMailDto!): TotalSerializer!
   createConfig(data: CreateConfigDto!): ConfigDataSerializer!
   createBulkConfig(items: [CreateConfigDto!]!): ConfigItemsSerializer!
   deleteOneConfig(id: String!, ref: String): ConfigDataSerializer!
@@ -1346,6 +1346,50 @@ input UpdateGrantTimeDto {
   duration: Float!
 }
 
+input CreateMailDto {
+  smtp: CreateMailSmtpDto
+  to: [String!]!
+  cc: [String!]
+  bcc: [String!]
+  from: String
+  subject: String!
+  html: String
+  text: String
+  date: Date
+  reply_to: [String!]
+  in_reply_to: String
+  attachments: [String!]
+}
+
+input CreateMailSmtpDto {
+  identity: String
+  response: String
+  accepted: [String!]
+  rejected: [String!]
+}
+
+input UpdateMailDto {
+  smtp: UpdateMailSmtpDto
+  to: [String!]
+  cc: [String!]
+  bcc: [String!]
+  from: String
+  subject: String
+  html: String
+  text: String
+  date: Date
+  reply_to: [String!]
+  in_reply_to: String
+  attachments: [String!]
+}
+
+input UpdateMailSmtpDto {
+  identity: String
+  response: String
+  accepted: [String!]
+  rejected: [String!]
+}
+
 input CreatePushDto {
   keys: CreatePushKeysDto!
   endpoint: String!
@@ -1402,50 +1446,6 @@ input UpdatePushHistoryDto {
 input UpdatePushHistoryReplyDto {
   identity: String!
   status: Float!
-}
-
-input CreateMailDto {
-  smtp: CreateMailSmtpDto
-  to: [String!]!
-  cc: [String!]
-  bcc: [String!]
-  from: String
-  subject: String!
-  html: String
-  text: String
-  date: Date
-  reply_to: [String!]
-  in_reply_to: String
-  attachments: [String!]
-}
-
-input CreateMailSmtpDto {
-  identity: String
-  response: String
-  accepted: [String!]
-  rejected: [String!]
-}
-
-input UpdateMailDto {
-  smtp: UpdateMailSmtpDto
-  to: [String!]
-  cc: [String!]
-  bcc: [String!]
-  from: String
-  subject: String
-  html: String
-  text: String
-  date: Date
-  reply_to: [String!]
-  in_reply_to: String
-  attachments: [String!]
-}
-
-input UpdateMailSmtpDto {
-  identity: String
-  response: String
-  accepted: [String!]
-  rejected: [String!]
 }
 
 input CreateConfigDto {

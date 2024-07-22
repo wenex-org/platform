@@ -1,7 +1,7 @@
 import { TotalSerializer, SessionDataSerializer, SessionItemsSerializer, SessionSerializer } from '@app/common/serializers';
-import { CreateSessionDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateSessionDto } from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { Controller as ControllerInterface, Session as ISession, Metadata, SessionDto } from '@app/common/interfaces';
+import { CreateSessionDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateSessionDto } from '@app/common/dto';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';

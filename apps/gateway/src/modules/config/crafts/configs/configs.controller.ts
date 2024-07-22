@@ -1,5 +1,3 @@
-import { TotalSerializer, ConfigDataSerializer, ConfigItemsSerializer, ConfigSerializer } from '@app/common/serializers';
-import { CreateConfigDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateConfigDto } from '@app/common/dto';
 import {
   Body,
   Controller,
@@ -18,6 +16,8 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { TotalSerializer, ConfigDataSerializer, ConfigItemsSerializer, ConfigSerializer } from '@app/common/serializers';
+import { CreateConfigDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateConfigDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Config, ConfigDto } from '@app/common/interfaces';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';

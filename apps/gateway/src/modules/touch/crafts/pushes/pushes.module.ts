@@ -10,4 +10,4 @@ import { PushHistoriesModule } from './subs/histories';
   controllers: [PushesController, PushesInspector],
   providers: [PushesResolver],
 })
-export class PushesModule { }
+export class PushesModule {}

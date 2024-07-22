@@ -1,5 +1,3 @@
-import { TotalSerializer, WalletDataSerializer, WalletItemsSerializer, WalletSerializer } from '@app/common/serializers';
-import { CreateWalletDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateWalletDto } from '@app/common/dto';
 import {
   Body,
   Controller,
@@ -16,6 +14,8 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { TotalSerializer, WalletDataSerializer, WalletItemsSerializer, WalletSerializer } from '@app/common/serializers';
+import { CreateWalletDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateWalletDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Wallet, WalletDto } from '@app/common/interfaces';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';

@@ -1,5 +1,3 @@
-import { TotalSerializer, SettingDataSerializer, SettingItemsSerializer, SettingSerializer } from '@app/common/serializers';
-import { CreateSettingDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateSettingDto } from '@app/common/dto';
 import {
   Body,
   Controller,
@@ -17,7 +15,9 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import { TotalSerializer, SettingDataSerializer, SettingItemsSerializer, SettingSerializer } from '@app/common/serializers';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { CreateSettingDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateSettingDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Setting, SettingDto } from '@app/common/interfaces';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';

@@ -7,4 +7,4 @@ import { PushHistoriesController } from './histories.controller';
   controllers: [PushHistoriesController],
   providers: [PushHistoriesResolver],
 })
-export class PushHistoriesModule { }
+export class PushHistoriesModule {}
