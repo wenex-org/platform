@@ -205,8 +205,8 @@ message Cargo {
 
   // Cargo Interface
   optional string title = 51;
-  optional string travel = 52;
-  optional string product = 53;
+  optional string product = 52;
+  repeated string travels = 53;
 
   optional int64 weight = 54;
 
