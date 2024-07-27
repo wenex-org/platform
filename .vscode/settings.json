@@ -13,6 +13,7 @@
     "datacenter",
     "datetime",
     "dbname",
+    "2dsphere",
     "emqx",
     "etag",
     "exhook",
