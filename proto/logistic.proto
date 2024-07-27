@@ -204,21 +204,18 @@ message Cargo {
   optional string timestamp = 24;
 
   // Cargo Interface
-  optional string status = 50;
+  optional string title = 51;
+  optional string travel = 52;
+  optional string product = 53;
 
-  optional string tz = 51;
-  optional string mfa = 52;
-  optional string lang = 53;
-  repeated string oauth = 54;
-  optional string secret = 55;
+  optional int64 weight = 54;
 
-  optional string email = 56;
-  optional string phone = 57;
+  optional int64 width = 55;
+  optional int64 height = 56;
+  optional int64 length = 57;
 
-  optional string username = 58;
-  optional string password = 59;
-
-  repeated string subjects = 60;
+  optional bool fragile = 58;
+  optional bool perishable = 59;
 }
 message Cargoes { repeated Cargo items = 1; }
 message CargoData { optional Cargo data = 1; }
@@ -338,26 +335,130 @@ message Location {
   optional string timestamp = 24;
 
   // Location Interface
-  optional string type = 50;
-  optional string state = 51;
-  optional string gender = 52;
+  optional string identity = 50;
+  optional Geometry geometry = 51;
 
-  optional string cover = 53;
-  optional string avatar = 54;
-
-  optional string nickname = 55;
-  optional string last_name = 56;
-  optional string first_name = 57;
-  optional string middle_name = 58;
-
-  optional string nationality = 59;
-  optional string national_code = 60;
-
-  optional string verified_at = 61;
-  optional string verified_by = 62;
-  optional string verified_in = 63;
-
-  optional string birth_date = 64;
+  message Geometry {
+    optional string type = 50;
+    optional string coordinates = 51;
+  }
 }
 message Locations { repeated Location items = 1; }
 message LocationData { optional Location data = 1; }
+
+// Travels Messages
+
+message UpdateTravelOne {
+  Travel update = 1;
+  FilterOne filter = 2;
+}
+message UpdateTravelBulk {
+  Travel update = 1;
+  QueryFilter filter = 2;
+}
+message UpdateTravelUnique {
+  Travel update = 1;
+  FilterID filter = 2;
+}
+
+message Travel {
+  // Base Interface
+  optional string owner = 1;
+
+  optional string id = 2;
+  optional string ref = 3;
+
+  repeated string shares = 4;
+  repeated string groups = 5;
+  repeated string clients = 6;
+
+  optional string created_at = 7;
+  optional string created_by = 8;
+  optional string created_in = 9;
+
+  optional string updated_at = 10;
+  optional string updated_by = 11;
+  optional string updated_in = 12;
+  optional string deleted_at = 13;
+  optional string deleted_by = 14;
+  optional string deleted_in = 15;
+  optional string restored_at = 16;
+  optional string restored_by = 17;
+  optional string restored_in = 18;
+
+  optional string description = 19;
+  optional string version = 20;
+  optional string props = 21;
+  repeated string tags = 22;
+
+  optional string rand = 23;
+  optional string timestamp = 24;
+
+  // Travel Interface
+  repeated string cargoes = 51;
+  repeated string drivers = 52;
+  repeated string vehicles = 53;
+
+  repeated string locations = 54;
+}
+message Travels { repeated Travel items = 1; }
+message TravelData { optional Travel data = 1; }
+
+// Vehicles Messages
+
+message UpdateVehicleOne {
+  Vehicle update = 1;
+  FilterOne filter = 2;
+}
+message UpdateVehicleBulk {
+  Vehicle update = 1;
+  QueryFilter filter = 2;
+}
+message UpdateVehicleUnique {
+  Vehicle update = 1;
+  FilterID filter = 2;
+}
+
+message Vehicle {
+  // Base Interface
+  optional string owner = 1;
+
+  optional string id = 2;
+  optional string ref = 3;
+
+  repeated string shares = 4;
+  repeated string groups = 5;
+  repeated string clients = 6;
+
+  optional string created_at = 7;
+  optional string created_by = 8;
+  optional string created_in = 9;
+
+  optional string updated_at = 10;
+  optional string updated_by = 11;
+  optional string updated_in = 12;
+  optional string deleted_at = 13;
+  optional string deleted_by = 14;
+  optional string deleted_in = 15;
+  optional string restored_at = 16;
+  optional string restored_by = 17;
+  optional string restored_in = 18;
+
+  optional string description = 19;
+  optional string version = 20;
+  optional string props = 21;
+  repeated string tags = 22;
+
+  optional string rand = 23;
+  optional string timestamp = 24;
+
+  // Vehicle Interface
+  optional string type = 50;
+
+  optional string status = 51;
+
+  repeated string plates = 52;
+  optional string drivers = 53;
+}
+message Vehicles { repeated Vehicle items = 1; }
+message VehicleData { optional Vehicle data = 1; }

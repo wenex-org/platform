@@ -9,6 +9,7 @@ CONFIG=./proto/config.proto
 DOMAIN=./proto/domain.proto
 SPECIAL=./proto/special.proto
 IDENTITY=./proto/identity.proto
+LOGISTIC=./proto/logistic.proto
 FINANCIAL=./proto/financial.proto
 
 PRESERVER=./proto/workers/preserver.proto
@@ -44,6 +45,9 @@ PROTOS[IDENTITY,2]=./apps/gateway/src/protobuf/identity.proto
 PROTOS[IDENTITY,3]=./apps/services/auth/src/protobuf/identity.proto
 PROTOS[IDENTITY,4]=./apps/workers/preserver/src/protobuf/identity.proto
 
+# Logistic Proto
+PROTOS[LOGISTIC,1]=./apps/services/logistic/src/app.proto
+
 # Financial Proto
 PROTOS[FINANCIAL,1]=./apps/services/financial/src/app.proto
 PROTOS[FINANCIAL,2]=./apps/gateway/src/protobuf/financial.proto
@@ -70,6 +74,9 @@ for KEY in "${!PROTOS[@]}"; do
   fi
   if [[ $KEY == *"IDENTITY"* ]]; then
     if ! test -f ${PROTOS[$KEY]}; then ln -f $IDENTITY ${PROTOS[$KEY]}; fi
+  fi
+  if [[ $KEY == *"LOGISTIC"* ]]; then
+    if ! test -f ${PROTOS[$KEY]}; then ln -f $LOGISTIC ${PROTOS[$KEY]}; fi
   fi
   if [[ $KEY == *"FINANCIAL"* ]]; then
     if ! test -f ${PROTOS[$KEY]}; then ln -f $FINANCIAL ${PROTOS[$KEY]}; fi
