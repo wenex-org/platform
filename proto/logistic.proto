@@ -1,0 +1,363 @@
+syntax = "proto3";
+package logistic;
+
+// Package Services
+
+service CargoesService {
+  rpc Count(QueryFilter) returns (Total);
+
+  rpc Create(CargoData) returns (CargoData);
+  rpc CreateBulk(Cargoes) returns (Cargoes);
+
+  rpc Find(Filter) returns (Cargoes);
+  rpc Cursor(Filter) returns (stream Cargo);
+
+  rpc FindOne(FilterOne) returns (CargoData);
+  rpc FindById(FilterID) returns (CargoData);
+
+  rpc DeleteOne(FilterOne) returns (CargoData);
+  rpc DeleteById(FilterID) returns (CargoData);
+
+  rpc RestoreOne(FilterOne) returns (CargoData);
+  rpc RestoreById(FilterID) returns (CargoData);
+
+  rpc DestroyOne(FilterOne) returns (CargoData);
+  rpc DestroyById(FilterID) returns (CargoData);
+
+  rpc UpdateOne(UpdateCargoOne) returns (CargoData);
+  rpc UpdateBulk(UpdateCargoBulk) returns (Total);
+  rpc UpdateById(UpdateCargoUnique) returns (CargoData);
+}
+
+service DriversService {
+  rpc Count(QueryFilter) returns (Total);
+
+  rpc Create(DriverData) returns (DriverData);
+  rpc CreateBulk(Drivers) returns (Drivers);
+
+  rpc Find(Filter) returns (Drivers);
+  rpc Cursor(Filter) returns (stream Driver);
+
+  rpc FindOne(FilterOne) returns (DriverData);
+  rpc FindById(FilterID) returns (DriverData);
+
+  rpc DeleteOne(FilterOne) returns (DriverData);
+  rpc DeleteById(FilterID) returns (DriverData);
+
+  rpc RestoreOne(FilterOne) returns (DriverData);
+  rpc RestoreById(FilterID) returns (DriverData);
+
+  rpc DestroyOne(FilterOne) returns (DriverData);
+  rpc DestroyById(FilterID) returns (DriverData);
+
+  rpc UpdateOne(UpdateDriverOne) returns (DriverData);
+  rpc UpdateBulk(UpdateDriverBulk) returns (Total);
+  rpc UpdateById(UpdateDriverUnique) returns (DriverData);
+}
+
+service LocationsService {
+  rpc Count(QueryFilter) returns (Total);
+
+  rpc Create(LocationData) returns (LocationData);
+  rpc CreateBulk(Locations) returns (Locations);
+
+  rpc Find(Filter) returns (Locations);
+  rpc Cursor(Filter) returns (stream Location);
+
+  rpc FindOne(FilterOne) returns (LocationData);
+  rpc FindById(FilterID) returns (LocationData);
+
+  rpc DeleteOne(FilterOne) returns (LocationData);
+  rpc DeleteById(FilterID) returns (LocationData);
+
+  rpc RestoreOne(FilterOne) returns (LocationData);
+  rpc RestoreById(FilterID) returns (LocationData);
+
+  rpc DestroyOne(FilterOne) returns (LocationData);
+  rpc DestroyById(FilterID) returns (LocationData);
+
+  rpc UpdateOne(UpdateLocationOne) returns (LocationData);
+  rpc UpdateBulk(UpdateLocationBulk) returns (Total);
+  rpc UpdateById(UpdateLocationUnique) returns (LocationData);
+}
+
+service TravelsService {
+  rpc Count(QueryFilter) returns (Total);
+
+  rpc Create(TravelData) returns (TravelData);
+  rpc CreateBulk(Travels) returns (Travels);
+
+  rpc Find(Filter) returns (Travels);
+  rpc Cursor(Filter) returns (stream Travel);
+
+  rpc FindOne(FilterOne) returns (TravelData);
+  rpc FindById(FilterID) returns (TravelData);
+
+  rpc DeleteOne(FilterOne) returns (TravelData);
+  rpc DeleteById(FilterID) returns (TravelData);
+
+  rpc RestoreOne(FilterOne) returns (TravelData);
+  rpc RestoreById(FilterID) returns (TravelData);
+
+  rpc DestroyOne(FilterOne) returns (TravelData);
+  rpc DestroyById(FilterID) returns (TravelData);
+
+  rpc UpdateOne(UpdateTravelOne) returns (TravelData);
+  rpc UpdateBulk(UpdateTravelBulk) returns (Total);
+  rpc UpdateById(UpdateTravelUnique) returns (TravelData);
+}
+
+service VehiclesService {
+  rpc Count(QueryFilter) returns (Total);
+
+  rpc Create(VehicleData) returns (VehicleData);
+  rpc CreateBulk(Vehicles) returns (Vehicles);
+
+  rpc Find(Filter) returns (Vehicles);
+  rpc Cursor(Filter) returns (stream Vehicle);
+
+  rpc FindOne(FilterOne) returns (VehicleData);
+  rpc FindById(FilterID) returns (VehicleData);
+
+  rpc DeleteOne(FilterOne) returns (VehicleData);
+  rpc DeleteById(FilterID) returns (VehicleData);
+
+  rpc RestoreOne(FilterOne) returns (VehicleData);
+  rpc RestoreById(FilterID) returns (VehicleData);
+
+  rpc DestroyOne(FilterOne) returns (VehicleData);
+  rpc DestroyById(FilterID) returns (VehicleData);
+
+  rpc UpdateOne(UpdateVehicleOne) returns (VehicleData);
+  rpc UpdateBulk(UpdateVehicleBulk) returns (Total);
+  rpc UpdateById(UpdateVehicleUnique) returns (VehicleData);
+}
+
+// Common Messages
+
+message Total { int64 total = 1; }
+
+message Filter {
+  string query = 1;
+  optional string populate = 2;
+  optional string projection = 3;
+  optional string pagination = 4;
+}
+message FilterOne {
+  string query = 1;
+  optional string populate = 2;
+  optional string projection = 3;
+}
+message FilterID {
+  string query = 1;
+  optional string populate = 2;
+  optional string projection = 3;
+}
+message QueryFilter { string query = 1; }
+
+// Cargoes Messages
+
+message UpdateCargoOne {
+  Cargo update = 1;
+  FilterOne filter = 2;
+}
+message UpdateCargoBulk {
+  Cargo update = 1;
+  QueryFilter filter = 2;
+}
+message UpdateCargoUnique {
+  Cargo update = 1;
+  FilterID filter = 2;
+}
+
+message Cargo {
+  // Base Interface
+  optional string owner = 1;
+
+  optional string id = 2;
+  optional string ref = 3;
+
+  repeated string shares = 4;
+  repeated string groups = 5;
+  repeated string clients = 6;
+
+  optional string created_at = 7;
+  optional string created_by = 8;
+  optional string created_in = 9;
+
+  optional string updated_at = 10;
+  optional string updated_by = 11;
+  optional string updated_in = 12;
+  optional string deleted_at = 13;
+  optional string deleted_by = 14;
+  optional string deleted_in = 15;
+  optional string restored_at = 16;
+  optional string restored_by = 17;
+  optional string restored_in = 18;
+
+  optional string description = 19;
+  optional string version = 20;
+  optional string props = 21;
+  repeated string tags = 22;
+
+  optional string rand = 23;
+  optional string timestamp = 24;
+
+  // Cargo Interface
+  optional string status = 50;
+
+  optional string tz = 51;
+  optional string mfa = 52;
+  optional string lang = 53;
+  repeated string oauth = 54;
+  optional string secret = 55;
+
+  optional string email = 56;
+  optional string phone = 57;
+
+  optional string username = 58;
+  optional string password = 59;
+
+  repeated string subjects = 60;
+}
+message Cargoes { repeated Cargo items = 1; }
+message CargoData { optional Cargo data = 1; }
+
+// Drivers Messages
+
+message UpdateDriverOne {
+  Driver update = 1;
+  FilterOne filter = 2;
+}
+message UpdateDriverBulk {
+  Driver update = 1;
+  QueryFilter filter = 2;
+}
+message UpdateDriverUnique {
+  Driver update = 1;
+  FilterID filter = 2;
+}
+
+message Driver {
+  // Base Interface
+  optional string owner = 1;
+
+  optional string id = 2;
+  optional string ref = 3;
+
+  repeated string shares = 4;
+  repeated string groups = 5;
+  repeated string clients = 6;
+
+  optional string created_at = 7;
+  optional string created_by = 8;
+  optional string created_in = 9;
+
+  optional string updated_at = 10;
+  optional string updated_by = 11;
+  optional string updated_in = 12;
+  optional string deleted_at = 13;
+  optional string deleted_by = 14;
+  optional string deleted_in = 15;
+  optional string restored_at = 16;
+  optional string restored_by = 17;
+  optional string restored_in = 18;
+
+  optional string description = 19;
+  optional string version = 20;
+  optional string props = 21;
+  repeated string tags = 22;
+
+  optional string rand = 23;
+  optional string timestamp = 24;
+
+  // Driver Interface
+  optional string type = 50;
+  optional string gender = 51;
+
+  optional string state = 52;
+  optional string status = 53;
+
+  optional string license = 54;
+
+  optional string verified_at = 55;
+  optional string verified_by = 56;
+  optional string verified_in = 57;
+
+  optional string expiration_date = 58;
+}
+message Drivers { repeated Driver items = 1; }
+message DriverData { optional Driver data = 1; }
+
+// Locations Messages
+
+message UpdateLocationOne {
+  Location update = 1;
+  FilterOne filter = 2;
+}
+message UpdateLocationBulk {
+  Location update = 1;
+  QueryFilter filter = 2;
+}
+message UpdateLocationUnique {
+  Location update = 1;
+  FilterID filter = 2;
+}
+
+message Location {
+  // Base Interface
+  optional string owner = 1;
+
+  optional string id = 2;
+  optional string ref = 3;
+
+  repeated string shares = 4;
+  repeated string groups = 5;
+  repeated string clients = 6;
+
+  optional string created_at = 7;
+  optional string created_by = 8;
+  optional string created_in = 9;
+
+  optional string updated_at = 10;
+  optional string updated_by = 11;
+  optional string updated_in = 12;
+  optional string deleted_at = 13;
+  optional string deleted_by = 14;
+  optional string deleted_in = 15;
+  optional string restored_at = 16;
+  optional string restored_by = 17;
+  optional string restored_in = 18;
+
+  optional string description = 19;
+  optional string version = 20;
+  optional string props = 21;
+  repeated string tags = 22;
+
+  optional string rand = 23;
+  optional string timestamp = 24;
+
+  // Location Interface
+  optional string type = 50;
+  optional string state = 51;
+  optional string gender = 52;
+
+  optional string cover = 53;
+  optional string avatar = 54;
+
+  optional string nickname = 55;
+  optional string last_name = 56;
+  optional string first_name = 57;
+  optional string middle_name = 58;
+
+  optional string nationality = 59;
+  optional string national_code = 60;
+
+  optional string verified_at = 61;
+  optional string verified_by = 62;
+  optional string verified_in = 63;
+
+  optional string birth_date = 64;
+}
+message Locations { repeated Location items = 1; }
+message LocationData { optional Location data = 1; }
