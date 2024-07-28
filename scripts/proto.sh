@@ -8,6 +8,7 @@ TOUCH=./proto/touch.proto
 CONFIG=./proto/config.proto
 DOMAIN=./proto/domain.proto
 SPECIAL=./proto/special.proto
+GENERAL=./proto/general.proto
 IDENTITY=./proto/identity.proto
 LOGISTIC=./proto/logistic.proto
 FINANCIAL=./proto/financial.proto
@@ -38,6 +39,10 @@ PROTOS[SPECIAL,1]=./apps/services/special/src/app.proto
 PROTOS[SPECIAL,2]=./apps/gateway/src/protobuf/special.proto
 PROTOS[SPECIAL,3]=./apps/services/touch/src/protobuf/special.proto
 PROTOS[SPECIAL,4]=./apps/services/identity/src/protobuf/special.proto
+
+# General Proto
+PROTOS[GENERAL,1]=./apps/services/general/src/app.proto
+PROTOS[GENERAL,2]=./apps/gateway/src/protobuf/general.proto
 
 # Identity Proto
 PROTOS[IDENTITY,1]=./apps/services/identity/src/app.proto
@@ -72,6 +77,9 @@ for KEY in "${!PROTOS[@]}"; do
   fi
   if [[ $KEY == *"SPECIAL"* ]]; then
     if ! test -f ${PROTOS[$KEY]}; then ln -f $SPECIAL ${PROTOS[$KEY]}; fi
+  fi
+  if [[ $KEY == *"GENERAL"* ]]; then
+    if ! test -f ${PROTOS[$KEY]}; then ln -f $GENERAL ${PROTOS[$KEY]}; fi
   fi
   if [[ $KEY == *"IDENTITY"* ]]; then
     if ! test -f ${PROTOS[$KEY]}; then ln -f $IDENTITY ${PROTOS[$KEY]}; fi

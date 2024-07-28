@@ -65,6 +65,24 @@
         "tsConfigPath": "apps/services/domain/tsconfig.app.json"
       }
     },
+    "financial": {
+      "type": "application",
+      "root": "apps/services/financial",
+      "entryFile": "main",
+      "sourceRoot": "apps/services/financial/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/services/financial/tsconfig.app.json"
+      }
+    },
+    "general": {
+      "type": "application",
+      "root": "apps/services/general",
+      "entryFile": "main",
+      "sourceRoot": "apps/services/general/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/services/general/tsconfig.app.json"
+      }
+    },
     "identity": {
       "type": "application",
       "root": "apps/services/identity",
@@ -99,15 +117,6 @@
       "sourceRoot": "apps/services/touch/src",
       "compilerOptions": {
         "tsConfigPath": "apps/services/touch/tsconfig.app.json"
-      }
-    },
-    "financial": {
-      "type": "application",
-      "root": "apps/services/financial",
-      "entryFile": "main",
-      "sourceRoot": "apps/services/financial/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/services/financial/tsconfig.app.json"
       }
     },
     "dispatcher": {
