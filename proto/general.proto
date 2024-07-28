@@ -1,0 +1,208 @@
+syntax = "proto3";
+package general;
+
+// Package Services
+
+service ArtifactsService {
+  rpc Count(QueryFilter) returns (Total);
+
+  rpc Create(ArtifactData) returns (ArtifactData);
+  rpc CreateBulk(Artifacts) returns (Artifacts);
+
+  rpc Find(Filter) returns (Artifacts);
+  rpc Cursor(Filter) returns (stream Artifact);
+
+  rpc FindOne(FilterOne) returns (ArtifactData);
+  rpc FindById(FilterID) returns (ArtifactData);
+
+  rpc DeleteOne(FilterOne) returns (ArtifactData);
+  rpc DeleteById(FilterID) returns (ArtifactData);
+
+  rpc RestoreOne(FilterOne) returns (ArtifactData);
+  rpc RestoreById(FilterID) returns (ArtifactData);
+
+  rpc DestroyOne(FilterOne) returns (ArtifactData);
+  rpc DestroyById(FilterID) returns (ArtifactData);
+
+  rpc UpdateOne(UpdateArtifactOne) returns (ArtifactData);
+  rpc UpdateBulk(UpdateArtifactBulk) returns (Total);
+  rpc UpdateById(UpdateArtifactUnique) returns (ArtifactData);
+}
+
+service WorkflowsService {
+  rpc Count(QueryFilter) returns (Total);
+
+  rpc Create(WorkflowData) returns (WorkflowData);
+  rpc CreateBulk(Workflows) returns (Workflows);
+
+  rpc Find(Filter) returns (Workflows);
+  rpc Cursor(Filter) returns (stream Workflow);
+
+  rpc FindOne(FilterOne) returns (WorkflowData);
+  rpc FindById(FilterID) returns (WorkflowData);
+
+  rpc DeleteOne(FilterOne) returns (WorkflowData);
+  rpc DeleteById(FilterID) returns (WorkflowData);
+
+  rpc RestoreOne(FilterOne) returns (WorkflowData);
+  rpc RestoreById(FilterID) returns (WorkflowData);
+
+  rpc DestroyOne(FilterOne) returns (WorkflowData);
+  rpc DestroyById(FilterID) returns (WorkflowData);
+
+  rpc UpdateOne(UpdateWorkflowOne) returns (WorkflowData);
+  rpc UpdateBulk(UpdateWorkflowBulk) returns (Total);
+  rpc UpdateById(UpdateWorkflowUnique) returns (WorkflowData);
+}
+
+// Common Messages
+
+message Total { int64 total = 1; }
+
+message Filter {
+  string query = 1;
+  optional string populate = 2;
+  optional string projection = 3;
+  optional string pagination = 4;
+}
+message FilterOne {
+  string query = 1;
+  optional string populate = 2;
+  optional string projection = 3;
+}
+message FilterID {
+  string query = 1;
+  optional string populate = 2;
+  optional string projection = 3;
+}
+message QueryFilter { string query = 1; }
+
+// Artifacts Messages
+
+message UpdateArtifactOne {
+  Artifact update = 1;
+  FilterOne filter = 2;
+}
+message UpdateArtifactBulk {
+  Artifact update = 1;
+  QueryFilter filter = 2;
+}
+message UpdateArtifactUnique {
+  Artifact update = 1;
+  FilterID filter = 2;
+}
+
+message Artifact {
+  // Base Interface
+  optional string owner = 1;
+
+  optional string id = 2;
+  optional string ref = 3;
+
+  repeated string shares = 4;
+  repeated string groups = 5;
+  repeated string clients = 6;
+
+  optional string created_at = 7;
+  optional string created_by = 8;
+  optional string created_in = 9;
+
+  optional string updated_at = 10;
+  optional string updated_by = 11;
+  optional string updated_in = 12;
+  optional string deleted_at = 13;
+  optional string deleted_by = 14;
+  optional string deleted_in = 15;
+  optional string restored_at = 16;
+  optional string restored_by = 17;
+  optional string restored_in = 18;
+
+  optional string description = 19;
+  optional string version = 20;
+  optional string props = 21;
+  repeated string tags = 22;
+
+  optional string rand = 23;
+  optional string timestamp = 24;
+
+  // Artifact Interface
+  optional string key = 50;
+  optional string type = 51;
+  optional string value = 52;
+}
+message Artifacts { repeated Artifact items = 1; }
+message ArtifactData { optional Artifact data = 1; }
+
+// Workflow Messages
+
+message UpdateWorkflowOne {
+  Workflow update = 1;
+  FilterOne filter = 2;
+}
+message UpdateWorkflowBulk {
+  Workflow update = 1;
+  QueryFilter filter = 2;
+}
+message UpdateWorkflowUnique {
+  Workflow update = 1;
+  FilterID filter = 2;
+}
+
+message Workflow {
+  // Base Interface
+  optional string owner = 1;
+
+  optional string id = 2;
+  optional string ref = 3;
+
+  repeated string shares = 4;
+  repeated string groups = 5;
+  repeated string clients = 6;
+
+  optional string created_at = 7;
+  optional string created_by = 8;
+  optional string created_in = 9;
+
+  optional string updated_at = 10;
+  optional string updated_by = 11;
+  optional string updated_in = 12;
+  optional string deleted_at = 13;
+  optional string deleted_by = 14;
+  optional string deleted_in = 15;
+  optional string restored_at = 16;
+  optional string restored_by = 17;
+  optional string restored_in = 18;
+
+  optional string description = 19;
+  optional string version = 20;
+  optional string props = 21;
+  repeated string tags = 22;
+
+  optional string rand = 23;
+  optional string timestamp = 24;
+
+  // Workflow Interface
+  optional string entity = 50;
+  optional string identity = 51;
+
+  optional string status = 52;
+  repeated Token tokens = 53;
+
+  optional string data = 54;
+
+  message Token {
+    optional string id = 50;
+    optional string parent = 51;
+    optional bool locked = 52;
+    repeated State history = 53;
+
+    message State {
+      optional string ref = 50;
+      optional string name = 51;
+      optional string status = 52;
+      optional string value = 53;
+    }
+  }
+}
+message Workflows { repeated Workflow items = 1; }
+message WorkflowData { optional Workflow data = 1; }

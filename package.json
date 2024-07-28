@@ -66,6 +66,7 @@
     "@opentelemetry/semantic-conventions": "^1.25.0",
     "@smithy/util-stream": "^2.2.0",
     "@typegoose/typegoose": "^12.5.0",
+    "@vhidvz/wfjs": "^5.0.9",
     "@willsoto/nestjs-prometheus": "^6.0.1",
     "abacl": "^8.0.7",
     "abacl-redis": "^2.0.3",

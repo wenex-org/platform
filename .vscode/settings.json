@@ -1,5 +1,6 @@
 {
   "cSpell.words": [
+    "2dsphere",
     "abacl",
     "Acked",
     "bitcoinjs",
@@ -13,7 +14,6 @@
     "datacenter",
     "datetime",
     "dbname",
-    "2dsphere",
     "emqx",
     "etag",
     "exhook",
@@ -61,8 +61,10 @@
     "turnadmin",
     "turnusers",
     "Vahid",
+    "vhidvz",
     "webpush",
     "Wenex",
+    "wfjs",
     "willsoto",
     "Zipkin"
   ]
