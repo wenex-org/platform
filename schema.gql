@@ -668,6 +668,107 @@ type StatItemsSerializer {
   items: [StatSerializer]!
 }
 
+type ArtifactSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
+  props: JSON
+  id: String!
+  ref: String
+  groups: [String!]
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  tags: [String!]
+  rand: String!
+  timestamp: String!
+  type: String!
+  value: JSON
+  key: String!
+}
+
+type ArtifactDataSerializer {
+  data: ArtifactSerializer
+}
+
+type ArtifactItemsSerializer {
+  items: [ArtifactSerializer]!
+}
+
+type WorkflowStateSerializer {
+  value: JSON
+  ref: String!
+  name: String
+  status: WorkflowStatus!
+}
+
+enum WorkflowStatus {
+  Ready
+  Paused
+  Failed
+  Running
+  Completed
+  Terminated
+}
+
+type WorkflowTokenSerializer {
+  history: [WorkflowStateSerializer!]!
+  id: String!
+  parent: String
+  locked: Boolean
+}
+
+type WorkflowSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
+  props: JSON
+  id: String!
+  ref: String
+  groups: [String!]
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  tags: [String!]
+  rand: String!
+  timestamp: String!
+  tokens: [WorkflowTokenSerializer!]!
+  data: JSON
+  entity: String!
+  identity: String!
+  status: WorkflowStatus!
+}
+
+type WorkflowDataSerializer {
+  data: WorkflowSerializer
+}
+
+type WorkflowItemsSerializer {
+  items: [WorkflowSerializer!]
+}
+
 type UserSerializer {
   owner: JSON!
   shares: [JSON]
@@ -1295,6 +1396,12 @@ type Query {
   countStat(filter: QueryFilterDto!): TotalSerializer!
   findStat(filter: FilterDto!): StatItemsSerializer!
   findOneStat(id: String!, ref: String): StatDataSerializer!
+  countArtifact(filter: QueryFilterDto!): TotalSerializer!
+  findArtifact(filter: FilterDto!): ArtifactItemsSerializer!
+  findOneArtifact(id: String!, ref: String): ArtifactDataSerializer!
+  countWorkflow(filter: QueryFilterDto!): TotalSerializer!
+  findWorkflow(filter: FilterDto!): WorkflowItemsSerializer!
+  findOneWorkflow(id: String!, ref: String): WorkflowDataSerializer!
   countUser(filter: QueryFilterDto!): TotalSerializer!
   findUser(filter: FilterDto!): UserItemsSerializer!
   findOneUser(id: String!, ref: String): UserDataSerializer!
@@ -1433,6 +1540,20 @@ type Mutation {
   destroyOneStat(id: String!, ref: String): StatDataSerializer!
   updateOneStat(id: String!, data: UpdateStatDto!, ref: String): StatDataSerializer!
   updateBulkStat(filter: QueryFilterDto!, data: UpdateStatDto!): TotalSerializer!
+  createArtifact(data: CreateArtifactDto!): ArtifactDataSerializer!
+  createBulkArtifact(items: [CreateArtifactDto!]!): ArtifactItemsSerializer!
+  deleteOneArtifact(id: String!, ref: String): ArtifactDataSerializer!
+  restoreOneArtifact(id: String!, ref: String): ArtifactDataSerializer!
+  destroyOneArtifact(id: String!, ref: String): ArtifactDataSerializer!
+  updateOneArtifact(id: String!, data: UpdateArtifactDto!, ref: String): ArtifactDataSerializer!
+  updateBulkArtifact(filter: QueryFilterDto!, data: UpdateArtifactDto!): TotalSerializer!
+  createWorkflow(data: CreateWorkflowDto!): WorkflowDataSerializer!
+  createBulkWorkflow(items: [CreateWorkflowDto!]!): WorkflowItemsSerializer!
+  deleteOneWorkflow(id: String!, ref: String): WorkflowDataSerializer!
+  restoreOneWorkflow(id: String!, ref: String): WorkflowDataSerializer!
+  destroyOneWorkflow(id: String!, ref: String): WorkflowDataSerializer!
+  updateOneWorkflow(id: String!, data: UpdateWorkflowDto!, ref: String): WorkflowDataSerializer!
+  updateBulkWorkflow(filter: QueryFilterDto!, data: UpdateWorkflowDto!): TotalSerializer!
   createUser(data: CreateUserDto!): UserDataSerializer!
   createBulkUser(items: [CreateUserDto!]!): UserItemsSerializer!
   deleteOneUser(id: String!, ref: String): UserDataSerializer!
@@ -1866,6 +1987,15 @@ enum Scope {
   WriteSpecialStats
   ManageSpecialStats
   CollectSpecialStats
+  ReadGeneral
+  WriteGeneral
+  ManageGeneral
+  ReadGeneralArtifacts
+  WriteGeneralArtifacts
+  ManageGeneralArtifacts
+  ReadGeneralWorkflows
+  WriteGeneralWorkflows
+  ManageGeneralWorkflows
   ReadTouch
   WriteTouch
   ManageTouch
@@ -2071,6 +2201,62 @@ input UpdateStatDto {
   days: [Float!]
   year: Float
   months: [Float!]
+}
+
+input CreateArtifactDto {
+  value: JSON
+  key: String!
+  type: ValueType!
+}
+
+input UpdateArtifactDto {
+  value: JSON
+  key: String
+  type: ValueType
+}
+
+input CreateWorkflowDto {
+  tokens: [CreateWorkflowTokenDto!]!
+  data: JSON
+  entity: String!
+  identity: String!
+  status: WorkflowStatus!
+}
+
+input CreateWorkflowTokenDto {
+  history: [CreateWorkflowStateDto!]!
+  id: String!
+  parent: String
+  locked: Boolean
+}
+
+input CreateWorkflowStateDto {
+  value: JSON
+  ref: String!
+  name: String
+  status: WorkflowStatus!
+}
+
+input UpdateWorkflowDto {
+  tokens: [UpdateWorkflowTokenDto!]
+  data: JSON
+  entity: String
+  identity: String
+  status: WorkflowStatus
+}
+
+input UpdateWorkflowTokenDto {
+  history: [UpdateWorkflowStateDto!]!
+  id: String!
+  parent: String
+  locked: Boolean
+}
+
+input UpdateWorkflowStateDto {
+  value: JSON
+  ref: String!
+  name: String
+  status: WorkflowStatus!
 }
 
 input CreateUserDto {
