@@ -460,36 +460,6 @@ type AppItemsSerializer {
   items: [AppSerializer]!
 }
 
-type ClientServiceSerializer {
-  owner: JSON!
-  shares: [JSON]
-  clients: [JSON]!
-  props: JSON
-  id: String!
-  ref: String
-  groups: [String!]
-  created_at: Date!
-  created_by: String!
-  created_in: String!
-  updated_at: Date
-  updated_by: String
-  updated_in: String
-  deleted_at: Date
-  deleted_by: String
-  deleted_in: String
-  restored_at: Date
-  restored_by: String
-  restored_in: String
-  description: String
-  version: String!
-  tags: [String!]
-  rand: String!
-  timestamp: String!
-  type: String!
-  config: JSON
-  provider: String
-}
-
 type ClientDomainSerializer {
   owner: JSON!
   shares: [JSON]
@@ -518,6 +488,36 @@ type ClientDomainSerializer {
   status: String!
   name: String!
   subjects: [String!]!
+}
+
+type ClientServiceSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
+  props: JSON
+  id: String!
+  ref: String
+  groups: [String!]
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  tags: [String!]
+  rand: String!
+  timestamp: String!
+  type: String!
+  config: JSON
+  provider: String
 }
 
 type ClientSerializer {
@@ -821,6 +821,233 @@ type SessionItemsSerializer {
   items: [SessionSerializer]!
 }
 
+type CargoSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
+  props: JSON
+  id: String!
+  ref: String
+  groups: [String!]
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  tags: [String!]
+  rand: String!
+  timestamp: String!
+  title: String
+  product: String
+  travels: [String!]
+  weight: Float!
+  width: Float!
+  height: Float!
+  length: Float!
+  fragile: Boolean
+  perishable: Boolean
+}
+
+type CargoDataSerializer {
+  data: CargoSerializer
+}
+
+type CargoItemsSerializer {
+  items: [CargoSerializer]!
+}
+
+type TravelSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
+  props: JSON
+  id: String!
+  ref: String
+  groups: [String!]
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  tags: [String!]
+  rand: String!
+  timestamp: String!
+  cargoes: [String!]
+  drivers: [String!]
+  vehicles: [String!]
+  locations: [String!]!
+}
+
+type TravelDataSerializer {
+  data: TravelSerializer
+}
+
+type TravelItemsSerializer {
+  items: [TravelSerializer]!
+}
+
+type DriverSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
+  props: JSON
+  id: String!
+  ref: String
+  groups: [String!]
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  tags: [String!]
+  rand: String!
+  timestamp: String!
+  type: DriverType!
+  gender: Gender!
+  state: State!
+  status: Status!
+  license: String!
+  verified_at: Date
+  verified_by: String
+  verified_in: String
+  expiration_date: Date!
+}
+
+enum DriverType {
+  ClassA
+  ClassB
+  ClassC
+  ClassM
+  ClassE
+}
+
+enum Status {
+  Active
+  Inactive
+}
+
+type DriverDataSerializer {
+  data: DriverSerializer
+}
+
+type DriverItemsSerializer {
+  items: [DriverSerializer]!
+}
+
+type VehicleSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
+  props: JSON
+  id: String!
+  ref: String
+  groups: [String!]
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  tags: [String!]
+  rand: String!
+  timestamp: String!
+  type: VehicleType!
+  status: Status!
+  plates: [String!]!
+  drivers: [String!]
+}
+
+enum VehicleType {
+  Car
+  Truck
+  Motorcycle
+}
+
+type VehicleDataSerializer {
+  data: VehicleSerializer
+}
+
+type VehicleItemsSerializer {
+  items: [VehicleSerializer]!
+}
+
+type LocationGeometrySerializer {
+  type: String!
+  coordinates: JSON!
+}
+
+type LocationSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
+  props: JSON
+  id: String!
+  ref: String
+  groups: [String!]
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  tags: [String!]
+  rand: String!
+  timestamp: String!
+  identity: String
+  geometry: LocationGeometrySerializer!
+}
+
+type LocationDataSerializer {
+  data: LocationSerializer
+}
+
+type LocationItemsSerializer {
+  items: [LocationSerializer!]
+}
+
 type CoinUnitSerializer {
   name: String!
   rate: Float!
@@ -1077,6 +1304,21 @@ type Query {
   countSession(filter: QueryFilterDto!): TotalSerializer!
   findSession(filter: FilterDto!): SessionItemsSerializer!
   findOneSession(id: String!, ref: String): SessionDataSerializer!
+  countCargo(filter: QueryFilterDto!): TotalSerializer!
+  findCargo(filter: FilterDto!): CargoItemsSerializer!
+  findOneCargo(id: String!, ref: String): CargoDataSerializer!
+  countDriver(filter: QueryFilterDto!): TotalSerializer!
+  findDriver(filter: FilterDto!): DriverItemsSerializer!
+  findOneDriver(id: String!, ref: String): DriverDataSerializer!
+  countTravel(filter: QueryFilterDto!): TotalSerializer!
+  findTravel(filter: FilterDto!): TravelItemsSerializer!
+  findOneTravel(id: String!, ref: String): TravelDataSerializer!
+  countVehicle(filter: QueryFilterDto!): TotalSerializer!
+  findVehicle(filter: FilterDto!): VehicleItemsSerializer!
+  findOneVehicle(id: String!, ref: String): VehicleDataSerializer!
+  countLocation(filter: QueryFilterDto!): TotalSerializer!
+  findLocation(filter: FilterDto!): LocationItemsSerializer!
+  findOneLocation(id: String!, ref: String): LocationDataSerializer!
   countAccount(filter: QueryFilterDto!): TotalSerializer!
   findAccount(filter: FilterDto!): AccountItemsSerializer!
   findOneAccount(id: String!, ref: String): AccountDataSerializer!
@@ -1212,6 +1454,41 @@ type Mutation {
   destroyOneSession(id: String!, ref: String): SessionDataSerializer!
   updateOneSession(id: String!, data: UpdateSessionDto!, ref: String): SessionDataSerializer!
   updateBulkSession(filter: QueryFilterDto!, data: UpdateSessionDto!): TotalSerializer!
+  createCargo(data: CreateCargoDto!): CargoDataSerializer!
+  createBulkCargo(items: [CreateCargoDto!]!): CargoItemsSerializer!
+  deleteOneCargo(id: String!, ref: String): CargoDataSerializer!
+  restoreOneCargo(id: String!, ref: String): CargoDataSerializer!
+  destroyOneCargo(id: String!, ref: String): CargoDataSerializer!
+  updateOneCargo(id: String!, data: UpdateCargoDto!, ref: String): CargoDataSerializer!
+  updateBulkCargo(filter: QueryFilterDto!, data: UpdateCargoDto!): TotalSerializer!
+  createDriver(data: CreateDriverDto!): DriverDataSerializer!
+  createBulkDriver(items: [CreateDriverDto!]!): DriverItemsSerializer!
+  deleteOneDriver(id: String!, ref: String): DriverDataSerializer!
+  restoreOneDriver(id: String!, ref: String): DriverDataSerializer!
+  destroyOneDriver(id: String!, ref: String): DriverDataSerializer!
+  updateOneDriver(id: String!, data: UpdateDriverDto!, ref: String): DriverDataSerializer!
+  updateBulkDriver(filter: QueryFilterDto!, data: UpdateDriverDto!): TotalSerializer!
+  createTravel(data: CreateTravelDto!): TravelDataSerializer!
+  createBulkTravel(items: [CreateTravelDto!]!): TravelItemsSerializer!
+  deleteOneTravel(id: String!, ref: String): TravelDataSerializer!
+  restoreOneTravel(id: String!, ref: String): TravelDataSerializer!
+  destroyOneTravel(id: String!, ref: String): TravelDataSerializer!
+  updateOneTravel(id: String!, data: UpdateTravelDto!, ref: String): TravelDataSerializer!
+  updateBulkTravel(filter: QueryFilterDto!, data: UpdateTravelDto!): TotalSerializer!
+  createVehicle(data: CreateVehicleDto!): VehicleDataSerializer!
+  createBulkVehicle(items: [CreateVehicleDto!]!): VehicleItemsSerializer!
+  deleteOneVehicle(id: String!, ref: String): VehicleDataSerializer!
+  restoreOneVehicle(id: String!, ref: String): VehicleDataSerializer!
+  destroyOneVehicle(id: String!, ref: String): VehicleDataSerializer!
+  updateOneVehicle(id: String!, data: UpdateVehicleDto!, ref: String): VehicleDataSerializer!
+  updateBulkVehicle(filter: QueryFilterDto!, data: UpdateVehicleDto!): TotalSerializer!
+  createLocation(data: CreateLocationDto!): LocationDataSerializer!
+  createBulkLocation(items: [CreateLocationDto!]!): LocationItemsSerializer!
+  deleteOneLocation(id: String!, ref: String): LocationDataSerializer!
+  restoreOneLocation(id: String!, ref: String): LocationDataSerializer!
+  destroyOneLocation(id: String!, ref: String): LocationDataSerializer!
+  updateOneLocation(id: String!, data: UpdateLocationDto!, ref: String): LocationDataSerializer!
+  updateBulkLocation(filter: QueryFilterDto!, data: UpdateLocationDto!): TotalSerializer!
   createAccount(data: CreateAccountDto!): AccountDataSerializer!
   createBulkAccount(items: [CreateAccountDto!]!): AccountItemsSerializer!
   deleteOneAccount(id: String!, ref: String): AccountDataSerializer!
@@ -1511,11 +1788,6 @@ enum AppType {
   Application
 }
 
-enum Status {
-  Active
-  Inactive
-}
-
 enum Scope {
   Whole
   Read
@@ -1564,6 +1836,24 @@ enum Scope {
   ReadIdentitySessions
   WriteIdentitySessions
   ManageIdentitySessions
+  ReadLogistic
+  WriteLogistic
+  ManageLogistic
+  ReadLogisticCargoes
+  WriteLogisticCargoes
+  ManageLogisticCargoes
+  ReadLogisticDrivers
+  WriteLogisticDrivers
+  ManageLogisticDrivers
+  ReadLogisticTravels
+  WriteLogisticTravels
+  ManageLogisticTravels
+  ReadLogisticVehicles
+  WriteLogisticVehicles
+  ManageLogisticVehicles
+  ReadLogisticLocations
+  WriteLogisticLocations
+  ManageLogisticLocations
   ReadSpecial
   WriteSpecial
   ManageSpecial
@@ -1857,6 +2147,102 @@ input UpdateSessionDto {
   ip: String
   agent: String
   expiration_date: Date
+}
+
+input CreateCargoDto {
+  title: String
+  travels: [String!]
+  product: String
+  weight: Float!
+  width: Float!
+  height: Float!
+  length: Float!
+  fragile: Boolean
+  perishable: Boolean
+}
+
+input UpdateCargoDto {
+  title: String
+  travels: [String!]
+  product: String
+  weight: Float
+  width: Float
+  height: Float
+  length: Float
+  fragile: Boolean
+  perishable: Boolean
+}
+
+input CreateDriverDto {
+  state: State
+  status: Status
+  type: DriverType!
+  gender: Gender!
+  license: String!
+  verified_at: Date
+  verified_by: String
+  verified_in: String
+  expiration_date: Date!
+}
+
+input UpdateDriverDto {
+  state: State
+  status: Status
+  type: DriverType
+  gender: Gender
+  license: String
+  verified_at: Date
+  verified_by: String
+  verified_in: String
+  expiration_date: Date
+}
+
+input CreateTravelDto {
+  cargoes: [String!]
+  drivers: [String!]
+  vehicles: [String!]
+  locations: [String!]!
+}
+
+input UpdateTravelDto {
+  cargoes: [String!]
+  drivers: [String!]
+  vehicles: [String!]
+  locations: [String!]!
+}
+
+input CreateVehicleDto {
+  status: Status
+  type: VehicleType!
+  plates: [String!]!
+  drivers: [String!]
+}
+
+input UpdateVehicleDto {
+  status: Status
+  type: VehicleType!
+  plates: [String!]!
+  drivers: [String!]
+}
+
+input CreateLocationDto {
+  identity: String
+  geometry: CreateLocationGeometryDto!
+}
+
+input CreateLocationGeometryDto {
+  type: String!
+  coordinates: JSON!
+}
+
+input UpdateLocationDto {
+  identity: String
+  geometry: UpdateLocationGeometryDto
+}
+
+input UpdateLocationGeometryDto {
+  type: String!
+  coordinates: JSON!
 }
 
 input CreateAccountDto {

@@ -47,6 +47,7 @@ PROTOS[IDENTITY,4]=./apps/workers/preserver/src/protobuf/identity.proto
 
 # Logistic Proto
 PROTOS[LOGISTIC,1]=./apps/services/logistic/src/app.proto
+PROTOS[LOGISTIC,2]=./apps/gateway/src/protobuf/logistic.proto
 
 # Financial Proto
 PROTOS[FINANCIAL,1]=./apps/services/financial/src/app.proto
