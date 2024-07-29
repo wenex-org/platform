@@ -64,8 +64,6 @@
     "@opentelemetry/sdk-node": "^0.52.0",
     "@opentelemetry/sdk-trace-node": "^1.25.0",
     "@opentelemetry/semantic-conventions": "^1.25.0",
-    "@routingjs/core": "^0.3.0",
-    "@routingjs/valhalla": "^0.3.0",
     "@smithy/util-stream": "^2.2.0",
     "@typegoose/typegoose": "^12.5.0",
     "@vhidvz/wfjs": "^5.0.9",
