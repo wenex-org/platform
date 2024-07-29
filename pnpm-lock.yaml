@@ -95,6 +95,12 @@ importers:
       '@opentelemetry/semantic-conventions':
         specifier: ^1.25.0
         version: 1.25.0
+      '@routingjs/core':
+        specifier: ^0.3.0
+        version: 0.3.0
+      '@routingjs/valhalla':
+        specifier: ^0.3.0
+        version: 0.3.0
       '@smithy/util-stream':
         specifier: ^2.2.0
         version: 2.2.0
@@ -879,6 +885,9 @@ packages:
     peerDependencies:
       '@nestjs/common': ^10.x
       '@nestjs/core': ^10.x
+
+  '@googlemaps/polyline-codec@1.0.28':
+    resolution: {integrity: sha512-m7rh8sbxlrHvebXEweBHX8r1uPtToPRYxWDD6p6k2YG8hyhBe0Wi6xRUVFpxpEseMNgF+OBotFQC5senj8K7TQ==}
 
   '@graphql-tools/merge@8.3.18':
     resolution: {integrity: sha512-R8nBglvRWPAyLpZL/f3lxsY7wjnAeE0l056zHhcO/CgpvK76KYUt9oEkR05i8Hmt8DLRycBN0FiotJ0yDQWTVA==}
@@ -2036,6 +2045,12 @@ packages:
   '@protobufjs/utf8@1.1.0':
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
 
+  '@routingjs/core@0.3.0':
+    resolution: {integrity: sha512-U/RPCPu8LCfVf4bQZIUOoVgIJrZTpCtGC2gPwKk+2vSes7ZKBwqA3AMMjZ8a2KQi7gK2kVLkupEeotFT7e9aBw==}
+
+  '@routingjs/valhalla@0.3.0':
+    resolution: {integrity: sha512-lrj1zarRLf0ln5lv02xkMkKWl1Bws35J1EIQE7fv95piCWfu2KAJd82oXAq4C55oMcaOstXOlN4zzoA9L63+ug==}
+
   '@sentry-internal/tracing@7.74.0':
     resolution: {integrity: sha512-JK6IRGgdtZjswGfaGIHNWIThffhOHzVIIaGmglui+VFIzOsOqePjoxaDV0MEvzafxXZD7eWqGE5RGuZ0n6HFVg==}
     engines: {node: '>=8'}
@@ -3017,6 +3032,9 @@ packages:
 
   aws4@1.13.0:
     resolution: {integrity: sha512-3AungXC4I8kKsS9PuS4JH2nc+0bVY/mjgrephHTIi8fpEeGsTHBUJeosp0Wc1myYMElmD0B3Oc4XL/HVJ4PV2g==}
+
+  axios-retry@3.9.1:
+    resolution: {integrity: sha512-8PJDLJv7qTTMMwdnbMvrLYuvB47M81wRtxQmEdV5w4rgbTXTt+vtPkXwajOfOdSyv/wZICJOC+/UhXH4aQ/R+w==}
 
   axios@1.7.2:
     resolution: {integrity: sha512-2A8QhOMrbomlDuiLeK9XibIBzuHeRcqqNOHp0Cyp5EoJ1IFDh+XZH3A6BkXtv0K4gFGCI0Y4BM7B1wOEi0Rmgw==}
@@ -4341,6 +4359,10 @@ packages:
   is-regex@1.1.4:
     resolution: {integrity: sha512-kvRdxDsxZjhzUX07ZnLydzS1TU/TJlTUHHY4YLL87e37oUA49DfkLqgy+VjFocowy29cKvcSiu+kIv728jTTVg==}
     engines: {node: '>= 0.4'}
+
+  is-retry-allowed@2.2.0:
+    resolution: {integrity: sha512-XVm7LOeLpTW4jV19QSH38vkswxoLud8sQ57YwJVTPWdiaI9I8keEhGFpBlslyVsgdQy4Opg8QOLb8YRgsyZiQg==}
+    engines: {node: '>=10'}
 
   is-shared-array-buffer@1.0.2:
     resolution: {integrity: sha512-sqN2UDu1/0y6uvXyStCOzyhAjCSlHceFoMKJW8W9EU9cvic/QdsZ0kEU93HEy3IUEFZIiH/3w+AH/UQbPHNdhA==}
@@ -7282,6 +7304,8 @@ snapshots:
       '@nestjs/core': 10.3.9(@nestjs/common@10.3.9(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/microservices@10.3.9)(@nestjs/platform-express@10.3.9)(reflect-metadata@0.2.2)(rxjs@7.8.1)
       lodash: 4.17.21
 
+  '@googlemaps/polyline-codec@1.0.28': {}
+
   '@graphql-tools/merge@8.3.18(graphql@16.8.2)':
     dependencies:
       '@graphql-tools/utils': 9.2.1(graphql@16.8.2)
@@ -8676,6 +8700,20 @@ snapshots:
 
   '@protobufjs/utf8@1.1.0': {}
 
+  '@routingjs/core@0.3.0':
+    dependencies:
+      axios: 1.7.2
+      axios-retry: 3.9.1
+    transitivePeerDependencies:
+      - debug
+
+  '@routingjs/valhalla@0.3.0':
+    dependencies:
+      '@googlemaps/polyline-codec': 1.0.28
+      '@routingjs/core': 0.3.0
+    transitivePeerDependencies:
+      - debug
+
   '@sentry-internal/tracing@7.74.0':
     dependencies:
       '@sentry/core': 7.74.0
@@ -9975,6 +10013,11 @@ snapshots:
   aws-sign2@0.7.0: {}
 
   aws4@1.13.0: {}
+
+  axios-retry@3.9.1:
+    dependencies:
+      '@babel/runtime': 7.24.0
+      is-retry-allowed: 2.2.0
 
   axios@1.7.2:
     dependencies:
@@ -11581,6 +11624,8 @@ snapshots:
     dependencies:
       call-bind: 1.0.5
       has-tostringtag: 1.0.0
+
+  is-retry-allowed@2.2.0: {}
 
   is-shared-array-buffer@1.0.2:
     dependencies:
