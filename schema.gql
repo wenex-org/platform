@@ -1682,7 +1682,7 @@ enum ResponseType {
 
 enum UserMFA {
   SMS
-  Time
+  TOTP
   Email
 }
 
