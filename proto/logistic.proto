@@ -315,7 +315,7 @@ message BoundaryAdministrative {
   optional string district = 3;
   optional string city = 4;
   optional string village = 5;
-  optional string borough = 6;
+  optional string suburb = 6;
 }
 
 message Location {
