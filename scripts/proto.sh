@@ -63,34 +63,14 @@ PROTOS[PRESERVER,1]=./apps/workers/preserver/src/app.proto
 
 # Main Program
 for KEY in "${!PROTOS[@]}"; do
-  if [[ $KEY == *"AUTH"* ]]; then
-    if ! test -f ${PROTOS[$KEY]}; then ln -f $AUTH ${PROTOS[$KEY]}; fi
-  fi
-  if [[ $KEY == *"TOUCH"* ]]; then
-    if ! test -f ${PROTOS[$KEY]}; then ln -f $TOUCH ${PROTOS[$KEY]}; fi
-  fi
-  if [[ $KEY == *"CONFIG"* ]]; then
-    if ! test -f ${PROTOS[$KEY]}; then ln -f $CONFIG ${PROTOS[$KEY]}; fi
-  fi
-  if [[ $KEY == *"DOMAIN"* ]]; then
-    if ! test -f ${PROTOS[$KEY]}; then ln -f $DOMAIN ${PROTOS[$KEY]}; fi
-  fi
-  if [[ $KEY == *"SPECIAL"* ]]; then
-    if ! test -f ${PROTOS[$KEY]}; then ln -f $SPECIAL ${PROTOS[$KEY]}; fi
-  fi
-  if [[ $KEY == *"GENERAL"* ]]; then
-    if ! test -f ${PROTOS[$KEY]}; then ln -f $GENERAL ${PROTOS[$KEY]}; fi
-  fi
-  if [[ $KEY == *"IDENTITY"* ]]; then
-    if ! test -f ${PROTOS[$KEY]}; then ln -f $IDENTITY ${PROTOS[$KEY]}; fi
-  fi
-  if [[ $KEY == *"LOGISTIC"* ]]; then
-    if ! test -f ${PROTOS[$KEY]}; then ln -f $LOGISTIC ${PROTOS[$KEY]}; fi
-  fi
-  if [[ $KEY == *"FINANCIAL"* ]]; then
-    if ! test -f ${PROTOS[$KEY]}; then ln -f $FINANCIAL ${PROTOS[$KEY]}; fi
-  fi
-  if [[ $KEY == *"PRESERVER"* ]]; then
-    if ! test -f ${PROTOS[$KEY]}; then ln -f $PRESERVER ${PROTOS[$KEY]}; fi
-  fi
+  if [[ $KEY == *"AUTH"* ]]; then ln -f $AUTH ${PROTOS[$KEY]}; fi
+  if [[ $KEY == *"TOUCH"* ]]; then ln -f $TOUCH ${PROTOS[$KEY]}; fi
+  if [[ $KEY == *"CONFIG"* ]]; then ln -f $CONFIG ${PROTOS[$KEY]}; fi
+  if [[ $KEY == *"DOMAIN"* ]]; then ln -f $DOMAIN ${PROTOS[$KEY]}; fi
+  if [[ $KEY == *"SPECIAL"* ]]; then ln -f $SPECIAL ${PROTOS[$KEY]}; fi
+  if [[ $KEY == *"GENERAL"* ]]; then ln -f $GENERAL ${PROTOS[$KEY]}; fi
+  if [[ $KEY == *"IDENTITY"* ]]; then ln -f $IDENTITY ${PROTOS[$KEY]}; fi
+  if [[ $KEY == *"LOGISTIC"* ]]; then ln -f $LOGISTIC ${PROTOS[$KEY]}; fi
+  if [[ $KEY == *"FINANCIAL"* ]]; then ln -f $FINANCIAL ${PROTOS[$KEY]}; fi
+  if [[ $KEY == *"PRESERVER"* ]]; then ln -f $PRESERVER ${PROTOS[$KEY]}; fi
 done
