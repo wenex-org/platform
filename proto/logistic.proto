@@ -305,8 +305,8 @@ message UpdateLocationUnique {
 }
 
 message LatLng {
-  int64 lat = 1;
-  int64 lng = 2;
+  double lat = 1;
+  double lng = 2;
 }
 
 message BoundaryAdministrative {
