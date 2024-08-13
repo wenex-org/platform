@@ -33,6 +33,7 @@ service FilesService {
 }
 
 service StatsService {
+  rpc Obtain(StatData) returns (Result);
   rpc Collect(StatData) returns (Result);
 
   // Common Services
