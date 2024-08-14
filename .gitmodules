@@ -1,12 +1,16 @@
 [submodule "libs"]
 	path = libs
 	url = git@github.com:wenex-org/platform-libs.git
+	branch = main
 [submodule "apps/services"]
 	path = apps/services
 	url = git@github.com:wenex-org/platform-services.git
+	branch = main
 [submodule "apps/workers"]
 	path = apps/workers
 	url = git@github.com:wenex-org/platform-workers.git
+	branch = main
 [submodule "docker"]
 	path = docker
 	url = git@github.com:wenex-org/platform-docker.git
+	branch = main
