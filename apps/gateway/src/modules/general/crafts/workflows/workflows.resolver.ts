@@ -72,7 +72,7 @@ export class WorkflowsResolver
   @SetPolicy(Action.Create, Resource.GeneralWorkflows)
   createBulkWorkflow(
     @Meta() meta: Metadata,
-    @Args() data: CreateWorkflowItemsDto,
+    @Args('data') data: CreateWorkflowItemsDto,
     @Session() session?: ClientSession,
   ): Observable<WorkflowItemsSerializer> {
     return super.createBulk(meta, data, session);

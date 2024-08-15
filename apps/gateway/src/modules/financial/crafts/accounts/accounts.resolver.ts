@@ -69,7 +69,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   @SetPolicy(Action.Create, Resource.FinancialAccounts)
   createBulkAccount(
     @Meta() meta: Metadata,
-    @Args() data: CreateAccountItemsDto,
+    @Args('data') data: CreateAccountItemsDto,
     @Session() session?: ClientSession,
   ): Observable<AccountItemsSerializer> {
     return super.createBulk(meta, data, session);

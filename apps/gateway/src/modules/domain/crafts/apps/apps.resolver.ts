@@ -63,7 +63,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements Contro
   @SetPolicy(Action.Create, Resource.DomainApps)
   createBulkApp(
     @Meta() meta: Metadata,
-    @Args() data: CreateAppItemsDto,
+    @Args('data') data: CreateAppItemsDto,
     @Session() session?: ClientSession,
   ): Observable<AppItemsSerializer> {
     return super.createBulk(meta, data, session);

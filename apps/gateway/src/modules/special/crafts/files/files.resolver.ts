@@ -62,7 +62,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements Con
   @SetPolicy(Action.Create, Resource.SpecialFiles)
   createBulkFile(
     @Meta() meta: Metadata,
-    @Args() data: CreateFileItemsDto,
+    @Args('data') data: CreateFileItemsDto,
     @Session() session?: ClientSession,
   ): Observable<FileItemsSerializer> {
     return super.createBulk(meta, data, session);

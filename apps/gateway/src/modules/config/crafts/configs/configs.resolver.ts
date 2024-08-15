@@ -62,7 +62,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   @SetPolicy(Action.Create, Resource.ConfigConfigs)
   createBulkConfig(
     @Meta() meta: Metadata,
-    @Args() data: CreateConfigItemsDto,
+    @Args('data') data: CreateConfigItemsDto,
     @Session() session?: ClientSession,
   ): Observable<ConfigItemsSerializer> {
     return super.createBulk(meta, data, session);

@@ -72,7 +72,7 @@ export class LocationsResolver
   @SetPolicy(Action.Create, Resource.LogisticLocations)
   createBulkLocation(
     @Meta() meta: Metadata,
-    @Args() data: CreateLocationItemsDto,
+    @Args('data') data: CreateLocationItemsDto,
     @Session() session?: ClientSession,
   ): Observable<LocationItemsSerializer> {
     return super.createBulk(meta, data, session);

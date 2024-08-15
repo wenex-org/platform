@@ -62,7 +62,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   @SetPolicy(Action.Create, Resource.LogisticCargoes)
   createBulkCargo(
     @Meta() meta: Metadata,
-    @Args() data: CreateCargoItemsDto,
+    @Args('data') data: CreateCargoItemsDto,
     @Session() session?: ClientSession,
   ): Observable<CargoItemsSerializer> {
     return super.createBulk(meta, data, session);

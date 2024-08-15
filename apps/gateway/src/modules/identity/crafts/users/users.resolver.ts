@@ -62,7 +62,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements Con
   @SetPolicy(Action.Create, Resource.IdentityUsers)
   createBulkUser(
     @Meta() meta: Metadata,
-    @Args() data: CreateUserItemsDto,
+    @Args('data') data: CreateUserItemsDto,
     @Session() session?: ClientSession,
   ): Observable<UserItemsSerializer> {
     return super.createBulk(meta, data, session);

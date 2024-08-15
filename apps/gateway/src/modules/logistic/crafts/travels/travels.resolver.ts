@@ -62,7 +62,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   @SetPolicy(Action.Create, Resource.LogisticTravels)
   createBulkTravel(
     @Meta() meta: Metadata,
-    @Args() data: CreateTravelItemsDto,
+    @Args('data') data: CreateTravelItemsDto,
     @Session() session?: ClientSession,
   ): Observable<TravelItemsSerializer> {
     return super.createBulk(meta, data, session);

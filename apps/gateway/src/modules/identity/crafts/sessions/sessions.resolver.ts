@@ -69,7 +69,7 @@ export class SessionsResolver extends ControllerClass<ISession, SessionDto> impl
   @SetPolicy(Action.Create, Resource.IdentitySessions)
   createBulkSession(
     @Meta() meta: Metadata,
-    @Args() data: CreateSessionItemsDto,
+    @Args('data') data: CreateSessionItemsDto,
     @Session() session?: ClientSession,
   ): Observable<SessionItemsSerializer> {
     return super.createBulk(meta, data, session);

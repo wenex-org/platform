@@ -69,7 +69,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   @SetPolicy(Action.Create, Resource.ConfigSettings)
   createBulkSetting(
     @Meta() meta: Metadata,
-    @Args() data: CreateSettingItemsDto,
+    @Args('data') data: CreateSettingItemsDto,
     @Session() session?: ClientSession,
   ): Observable<SettingItemsSerializer> {
     return super.createBulk(meta, data, session);

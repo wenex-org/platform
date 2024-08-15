@@ -62,7 +62,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   @SetPolicy(Action.Create, Resource.LogisticDrivers)
   createBulkDriver(
     @Meta() meta: Metadata,
-    @Args() data: CreateDriverItemsDto,
+    @Args('data') data: CreateDriverItemsDto,
     @Session() session?: ClientSession,
   ): Observable<DriverItemsSerializer> {
     return super.createBulk(meta, data, session);

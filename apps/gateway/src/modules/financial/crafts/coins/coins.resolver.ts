@@ -62,7 +62,7 @@ export class CoinsResolver extends ControllerClass<Coin, CoinDto> implements Con
   @SetPolicy(Action.Create, Resource.FinancialCoins)
   createBulkCoin(
     @Meta() meta: Metadata,
-    @Args() data: CreateCoinItemsDto,
+    @Args('data') data: CreateCoinItemsDto,
     @Session() session?: ClientSession,
   ): Observable<CoinItemsSerializer> {
     return super.createBulk(meta, data, session);

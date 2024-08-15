@@ -77,7 +77,7 @@ export class PushHistoriesResolver
   @SetPolicy(Action.Create, Resource.TouchPushHistories)
   createBulkPushHistory(
     @Meta() meta: Metadata,
-    @Args() data: CreatePushHistoryItemsDto,
+    @Args('data') data: CreatePushHistoryItemsDto,
     @Session() session?: ClientSession,
   ): Observable<PushHistoryItemsSerializer> {
     return super.createBulk(meta, data, session);

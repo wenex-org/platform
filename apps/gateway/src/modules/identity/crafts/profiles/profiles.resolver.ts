@@ -69,7 +69,7 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   @SetPolicy(Action.Create, Resource.IdentityProfiles)
   createBulkProfile(
     @Meta() meta: Metadata,
-    @Args() data: CreateProfileItemsDto,
+    @Args('data') data: CreateProfileItemsDto,
     @Session() session?: ClientSession,
   ): Observable<ProfileItemsSerializer> {
     return super.createBulk(meta, data, session);

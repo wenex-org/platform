@@ -62,7 +62,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
   @SetPolicy(Action.Create, Resource.FinancialWallets)
   createBulkWallet(
     @Meta() meta: Metadata,
-    @Args() data: CreateWalletItemsDto,
+    @Args('data') data: CreateWalletItemsDto,
     @Session() session?: ClientSession,
   ): Observable<WalletItemsSerializer> {
     return super.createBulk(meta, data, session);

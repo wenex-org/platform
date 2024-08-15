@@ -62,7 +62,7 @@ export class MailsResolver extends ControllerClass<Mail, MailDto> implements Con
   @SetPolicy(Action.Create, Resource.TouchMails)
   createBulkMail(
     @Meta() meta: Metadata,
-    @Args() data: CreateMailItemsDto,
+    @Args('data') data: CreateMailItemsDto,
     @Session() session?: ClientSession,
   ): Observable<MailItemsSerializer> {
     return super.createBulk(meta, data, session);

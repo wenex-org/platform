@@ -62,7 +62,7 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements Co
   @SetPolicy(Action.Create, Resource.TouchPush)
   createBulkPush(
     @Meta() meta: Metadata,
-    @Args() data: CreatePushItemsDto,
+    @Args('data') data: CreatePushItemsDto,
     @Session() session?: ClientSession,
   ): Observable<PushItemsSerializer> {
     return super.createBulk(meta, data, session);

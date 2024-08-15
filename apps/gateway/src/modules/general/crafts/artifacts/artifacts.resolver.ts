@@ -72,7 +72,7 @@ export class ArtifactsResolver
   @SetPolicy(Action.Create, Resource.GeneralArtifacts)
   createBulkArtifact(
     @Meta() meta: Metadata,
-    @Args() data: CreateArtifactItemsDto,
+    @Args('data') data: CreateArtifactItemsDto,
     @Session() session?: ClientSession,
   ): Observable<ArtifactItemsSerializer> {
     return super.createBulk(meta, data, session);

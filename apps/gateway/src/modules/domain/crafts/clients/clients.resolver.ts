@@ -63,7 +63,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   @SetPolicy(Action.Create, Resource.DomainClients)
   createBulkClient(
     @Meta() meta: Metadata,
-    @Args() data: CreateClientItemsDto,
+    @Args('data') data: CreateClientItemsDto,
     @Session() session?: ClientSession,
   ): Observable<ClientItemsSerializer> {
     return super.createBulk(meta, data, session);

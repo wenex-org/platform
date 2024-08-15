@@ -77,7 +77,7 @@ export class TransactionsResolver
   @SetPolicy(Action.Create, Resource.FinancialTransactions)
   createBulkTransaction(
     @Meta() meta: Metadata,
-    @Args() data: CreateTransactionItemsDto,
+    @Args('data') data: CreateTransactionItemsDto,
     @Session() session?: ClientSession,
   ): Observable<TransactionItemsSerializer> {
     return super.createBulk(meta, data, session);

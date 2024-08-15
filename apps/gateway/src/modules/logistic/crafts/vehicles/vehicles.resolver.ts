@@ -69,7 +69,7 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   @SetPolicy(Action.Create, Resource.LogisticVehicles)
   createBulkVehicle(
     @Meta() meta: Metadata,
-    @Args() data: CreateVehicleItemsDto,
+    @Args('data') data: CreateVehicleItemsDto,
     @Session() session?: ClientSession,
   ): Observable<VehicleItemsSerializer> {
     return super.createBulk(meta, data, session);

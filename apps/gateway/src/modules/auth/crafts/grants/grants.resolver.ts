@@ -63,7 +63,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   @SetPolicy(Action.Create, Resource.AuthGrants)
   createBulkGrant(
     @Meta() meta: Metadata,
-    @Args() data: CreateGrantItemsDto,
+    @Args('data') data: CreateGrantItemsDto,
     @Session() session?: ClientSession,
   ): Observable<GrantItemsSerializer> {
     return super.createBulk(meta, data, session);

@@ -62,7 +62,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements Con
   @SetPolicy(Action.Create, Resource.SpecialStats)
   createBulkStat(
     @Meta() meta: Metadata,
-    @Args() data: CreateStatItemsDto,
+    @Args('data') data: CreateStatItemsDto,
     @Session() session?: ClientSession,
   ): Observable<StatItemsSerializer> {
     return super.createBulk(meta, data, session);
