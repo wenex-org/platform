@@ -19,14 +19,21 @@ import {
   PushHistoryItemsSerializer,
   PushHistorySerializer,
 } from '@app/common/serializers';
+import {
+  CreatePushHistoryDto,
+  CreatePushHistoryItemsDto,
+  FilterDto,
+  FilterOneDto,
+  QueryFilterDto,
+  UpdatePushHistoryDto,
+} from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
-import { CreatePushHistoryDto, FilterDto, FilterOneDto, QueryFilterDto, UpdatePushHistoryDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, PushHistory, PushHistoryDto } from '@app/common/interfaces';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
-import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
@@ -80,14 +87,13 @@ export class PushHistoriesController
   @Cache('push-histories', 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteTouchPushHistories)
-  @ApiBody({ type: [CreatePushHistoryDto] })
   @SetPolicy(Action.Create, Resource.TouchPushHistories)
   createBulk(
     @Meta() meta: Metadata,
-    @Body() items: CreatePushHistoryDto[],
+    @Body() data: CreatePushHistoryItemsDto,
     @Session() session?: ClientSession,
   ): Observable<PushHistoryItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Get()

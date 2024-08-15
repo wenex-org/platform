@@ -1,6 +1,6 @@
+import { CreateCoinDto, CreateCoinItemsDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateCoinDto } from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { TotalSerializer, CoinDataSerializer, CoinItemsSerializer, CoinSerializer } from '@app/common/serializers';
-import { CreateCoinDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateCoinDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Coin, CoinDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
@@ -62,10 +62,10 @@ export class CoinsResolver extends ControllerClass<Coin, CoinDto> implements Con
   @SetPolicy(Action.Create, Resource.FinancialCoins)
   createBulkCoin(
     @Meta() meta: Metadata,
-    @Args('items', { type: () => [CreateCoinDto] }) items: CreateCoinDto[],
+    @Args() data: CreateCoinItemsDto,
     @Session() session?: ClientSession,
   ): Observable<CoinItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Query(() => CoinItemsSerializer)

@@ -13,15 +13,15 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import { CreateMailDto, CreateMailItemsDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateMailDto } from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { TotalSerializer, MailDataSerializer, MailItemsSerializer, MailSerializer } from '@app/common/serializers';
-import { CreateMailDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateMailDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Mail, MailDto } from '@app/common/interfaces';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
-import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
@@ -67,15 +67,14 @@ export class MailsController extends ControllerClass<Mail, MailDto> implements C
   @ShipStrategy('create')
   @Cache('mails', 'flush')
   @SetScope(Scope.WriteTouchMails)
-  @ApiBody({ type: [CreateMailDto] })
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchMails)
   createBulk(
     @Meta() meta: Metadata,
-    @Body() items: CreateMailDto[],
+    @Body() data: CreateMailItemsDto,
     @Session() session?: ClientSession,
   ): Observable<MailItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Get()

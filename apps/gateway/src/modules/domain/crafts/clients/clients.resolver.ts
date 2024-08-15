@@ -1,6 +1,6 @@
+import { CreateClientDto, CreateClientItemsDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateClientDto } from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { TotalSerializer, ClientDataSerializer, ClientItemsSerializer, ClientSerializer } from '@app/common/serializers';
-import { CreateClientDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateClientDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Client, ClientDto } from '@app/common/interfaces';
 import { Cache, Nested, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
@@ -63,10 +63,10 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   @SetPolicy(Action.Create, Resource.DomainClients)
   createBulkClient(
     @Meta() meta: Metadata,
-    @Args('items', { type: () => [CreateClientDto] }) items: CreateClientDto[],
+    @Args() data: CreateClientItemsDto,
     @Session() session?: ClientSession,
   ): Observable<ClientItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Query(() => ClientItemsSerializer)

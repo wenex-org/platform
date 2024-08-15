@@ -13,15 +13,15 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import { CreateFileDto, CreateFileItemsDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateFileDto } from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { TotalSerializer, FileDataSerializer, FileItemsSerializer, FileSerializer } from '@app/common/serializers';
-import { CreateFileDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateFileDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, File, FileDto } from '@app/common/interfaces';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
-import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
@@ -67,15 +67,14 @@ export class FilesController extends ControllerClass<File, FileDto> implements C
   @ShipStrategy('create')
   @Cache('files', 'flush')
   @SetScope(Scope.WriteSpecialFiles)
-  @ApiBody({ type: [CreateFileDto] })
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialFiles)
   createBulk(
     @Meta() meta: Metadata,
-    @Body() items: CreateFileDto[],
+    @Body() data: CreateFileItemsDto,
     @Session() session?: ClientSession,
   ): Observable<FileItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Get()

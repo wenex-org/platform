@@ -4,8 +4,15 @@ import {
   PushHistoryItemsSerializer,
   PushHistorySerializer,
 } from '@app/common/serializers';
+import {
+  CreatePushHistoryDto,
+  CreatePushHistoryItemsDto,
+  FilterDto,
+  FilterOneDto,
+  QueryFilterDto,
+  UpdatePushHistoryDto,
+} from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
-import { CreatePushHistoryDto, FilterDto, FilterOneDto, QueryFilterDto, UpdatePushHistoryDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, PushHistory, PushHistoryDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
@@ -70,10 +77,10 @@ export class PushHistoriesResolver
   @SetPolicy(Action.Create, Resource.TouchPushHistories)
   createBulkPushHistory(
     @Meta() meta: Metadata,
-    @Args('items', { type: () => [CreatePushHistoryDto] }) items: CreatePushHistoryDto[],
+    @Args() data: CreatePushHistoryItemsDto,
     @Session() session?: ClientSession,
   ): Observable<PushHistoryItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Query(() => PushHistoryItemsSerializer)

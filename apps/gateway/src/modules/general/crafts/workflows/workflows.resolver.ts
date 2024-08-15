@@ -1,6 +1,13 @@
-import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import {
+  CreateWorkflowDto,
+  CreateWorkflowItemsDto,
+  FilterDto,
+  FilterOneDto,
+  QueryFilterDto,
+  UpdateWorkflowDto,
+} from '@app/common/dto';
 import { TotalSerializer, WorkflowDataSerializer, WorkflowItemsSerializer, WorkflowSerializer } from '@app/common/serializers';
-import { CreateWorkflowDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateWorkflowDto } from '@app/common/dto';
+import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { Controller as ControllerInterface, Metadata, Workflow, WorkflowDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
@@ -65,10 +72,10 @@ export class WorkflowsResolver
   @SetPolicy(Action.Create, Resource.GeneralWorkflows)
   createBulkWorkflow(
     @Meta() meta: Metadata,
-    @Args('items', { type: () => [CreateWorkflowDto] }) items: CreateWorkflowDto[],
+    @Args() data: CreateWorkflowItemsDto,
     @Session() session?: ClientSession,
   ): Observable<WorkflowItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Query(() => WorkflowItemsSerializer)

@@ -15,12 +15,12 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import { CreateClientDto, CreateClientItemsDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateClientDto } from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { TotalSerializer, ClientDataSerializer, ClientItemsSerializer, ClientSerializer } from '@app/common/serializers';
-import { CreateClientDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateClientDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Client, ClientDto } from '@app/common/interfaces';
-import { ApiBearerAuth, ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Cache, Nested, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
+import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
@@ -75,15 +75,14 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   @ShipStrategy('create')
   @Cache('clients', 'flush')
   @SetScope(Scope.WriteDomainClients)
-  @ApiBody({ type: [CreateClientDto] })
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainClients)
   createBulk(
     @Meta() meta: Metadata,
-    @Body() items: CreateClientDto[],
+    @Body() data: CreateClientItemsDto,
     @Session() session?: ClientSession,
   ): Observable<ClientItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Get()

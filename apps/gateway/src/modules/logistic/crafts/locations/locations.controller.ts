@@ -15,12 +15,19 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import {
+  CreateLocationDto,
+  CreateLocationItemsDto,
+  FilterDto,
+  FilterOneDto,
+  QueryFilterDto,
+  UpdateLocationDto,
+} from '@app/common/dto';
 import { TotalSerializer, LocationDataSerializer, LocationItemsSerializer, LocationSerializer } from '@app/common/serializers';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
-import { CreateLocationDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateLocationDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Location, LocationDto } from '@app/common/interfaces';
-import { ApiBearerAuth, ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
+import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
@@ -77,15 +84,14 @@ export class LocationsController
   @ShipStrategy('create')
   @Cache('locations', 'flush')
   @SetScope(Scope.WriteLogisticLocations)
-  @ApiBody({ type: [CreateLocationDto] })
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticLocations)
   createBulk(
     @Meta() meta: Metadata,
-    @Body() items: CreateLocationDto[],
+    @Body() data: CreateLocationItemsDto,
     @Session() session?: ClientSession,
   ): Observable<LocationItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Get()

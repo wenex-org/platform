@@ -15,12 +15,12 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
-import { TotalSerializer, DriverDataSerializer, DriverItemsSerializer, DriverSerializer } from '@app/common/serializers';
+import { CreateDriverDto, CreateDriverItemsDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateDriverDto } from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
-import { CreateDriverDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateDriverDto } from '@app/common/dto';
+import { TotalSerializer, DriverDataSerializer, DriverItemsSerializer, DriverSerializer } from '@app/common/serializers';
 import { Controller as ControllerInterface, Metadata, Driver, DriverDto } from '@app/common/interfaces';
-import { ApiBearerAuth, ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
+import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
@@ -74,15 +74,14 @@ export class DriversController extends ControllerClass<Driver, DriverDto> implem
   @ShipStrategy('create')
   @Cache('drivers', 'flush')
   @SetScope(Scope.WriteLogisticDrivers)
-  @ApiBody({ type: [CreateDriverDto] })
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticDrivers)
   createBulk(
     @Meta() meta: Metadata,
-    @Body() items: CreateDriverDto[],
+    @Body() data: CreateDriverItemsDto,
     @Session() session?: ClientSession,
   ): Observable<DriverItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Get()

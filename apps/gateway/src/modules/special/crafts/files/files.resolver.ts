@@ -1,6 +1,6 @@
+import { CreateFileDto, CreateFileItemsDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateFileDto } from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { TotalSerializer, FileDataSerializer, FileItemsSerializer, FileSerializer } from '@app/common/serializers';
-import { CreateFileDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateFileDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, File, FileDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
@@ -62,10 +62,10 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements Con
   @SetPolicy(Action.Create, Resource.SpecialFiles)
   createBulkFile(
     @Meta() meta: Metadata,
-    @Args('items', { type: () => [CreateFileDto] }) items: CreateFileDto[],
+    @Args() data: CreateFileItemsDto,
     @Session() session?: ClientSession,
   ): Observable<FileItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Query(() => FileItemsSerializer)

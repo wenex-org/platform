@@ -1,6 +1,13 @@
+import {
+  CreateArtifactDto,
+  CreateArtifactItemsDto,
+  FilterDto,
+  FilterOneDto,
+  QueryFilterDto,
+  UpdateArtifactDto,
+} from '@app/common/dto';
 import { TotalSerializer, ArtifactDataSerializer, ArtifactItemsSerializer, ArtifactSerializer } from '@app/common/serializers';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
-import { CreateArtifactDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateArtifactDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Artifact, ArtifactDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
@@ -65,10 +72,10 @@ export class ArtifactsResolver
   @SetPolicy(Action.Create, Resource.GeneralArtifacts)
   createBulkArtifact(
     @Meta() meta: Metadata,
-    @Args('items', { type: () => [CreateArtifactDto] }) items: CreateArtifactDto[],
+    @Args() data: CreateArtifactItemsDto,
     @Session() session?: ClientSession,
   ): Observable<ArtifactItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Query(() => ArtifactItemsSerializer)

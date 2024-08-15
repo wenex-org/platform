@@ -1,6 +1,6 @@
+import { CreateConfigDto, CreateConfigItemsDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateConfigDto } from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { TotalSerializer, ConfigDataSerializer, ConfigItemsSerializer, ConfigSerializer } from '@app/common/serializers';
-import { CreateConfigDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateConfigDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Config, ConfigDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
@@ -62,10 +62,10 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   @SetPolicy(Action.Create, Resource.ConfigConfigs)
   createBulkConfig(
     @Meta() meta: Metadata,
-    @Args('items', { type: () => [CreateConfigDto] }) items: CreateConfigDto[],
+    @Args() data: CreateConfigItemsDto,
     @Session() session?: ClientSession,
   ): Observable<ConfigItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Query(() => ConfigItemsSerializer)

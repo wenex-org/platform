@@ -13,15 +13,22 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import {
+  CreateAccountDto,
+  CreateAccountItemsDto,
+  FilterDto,
+  FilterOneDto,
+  QueryFilterDto,
+  UpdateAccountDto,
+} from '@app/common/dto';
 import { TotalSerializer, AccountDataSerializer, AccountItemsSerializer, AccountSerializer } from '@app/common/serializers';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
-import { CreateAccountDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateAccountDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Account, AccountDto } from '@app/common/interfaces';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
-import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
@@ -70,16 +77,15 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   @Post('bulk')
   @ShipStrategy('create')
   @Cache('accounts', 'flush')
-  @SetScope(Scope.WriteFinancialAccounts)
-  @ApiBody({ type: [CreateAccountDto] })
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteFinancialAccounts)
   @SetPolicy(Action.Create, Resource.FinancialAccounts)
   createBulk(
     @Meta() meta: Metadata,
-    @Body() items: CreateAccountDto[],
+    @Body() data: CreateAccountItemsDto,
     @Session() session?: ClientSession,
   ): Observable<AccountItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Get()

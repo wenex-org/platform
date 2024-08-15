@@ -1,6 +1,13 @@
+import {
+  CreateLocationDto,
+  CreateLocationItemsDto,
+  FilterDto,
+  FilterOneDto,
+  QueryFilterDto,
+  UpdateLocationDto,
+} from '@app/common/dto';
 import { TotalSerializer, LocationDataSerializer, LocationItemsSerializer, LocationSerializer } from '@app/common/serializers';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
-import { CreateLocationDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateLocationDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Location, LocationDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
@@ -65,10 +72,10 @@ export class LocationsResolver
   @SetPolicy(Action.Create, Resource.LogisticLocations)
   createBulkLocation(
     @Meta() meta: Metadata,
-    @Args('items', { type: () => [CreateLocationDto] }) items: CreateLocationDto[],
+    @Args() data: CreateLocationItemsDto,
     @Session() session?: ClientSession,
   ): Observable<LocationItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Query(() => LocationItemsSerializer)

@@ -15,12 +15,12 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import { CreateGrantDto, CreateGrantItemsDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateGrantDto } from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { TotalSerializer, GrantDataSerializer, GrantItemsSerializer, GrantSerializer } from '@app/common/serializers';
-import { CreateGrantDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateGrantDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Grant, GrantDto } from '@app/common/interfaces';
-import { ApiBearerAuth, ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Cache, Nested, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
+import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
@@ -75,15 +75,14 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   @ShipStrategy('create')
   @Cache('grants', 'flush')
   @SetScope(Scope.WriteAuthGrants)
-  @ApiBody({ type: [CreateGrantDto] })
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.AuthGrants)
   createBulk(
     @Meta() meta: Metadata,
-    @Body() items: CreateGrantDto[],
+    @Body() data: CreateGrantItemsDto,
     @Session() session?: ClientSession,
   ): Observable<GrantItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Get()

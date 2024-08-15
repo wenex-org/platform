@@ -1,6 +1,13 @@
+import {
+  CreateProfileDto,
+  CreateProfileItemsDto,
+  FilterDto,
+  FilterOneDto,
+  QueryFilterDto,
+  UpdateProfileDto,
+} from '@app/common/dto';
 import { TotalSerializer, ProfileDataSerializer, ProfileItemsSerializer, ProfileSerializer } from '@app/common/serializers';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
-import { CreateProfileDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateProfileDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Profile, ProfileDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
@@ -62,10 +69,10 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   @SetPolicy(Action.Create, Resource.IdentityProfiles)
   createBulkProfile(
     @Meta() meta: Metadata,
-    @Args('items', { type: () => [CreateProfileDto] }) items: CreateProfileDto[],
+    @Args() data: CreateProfileItemsDto,
     @Session() session?: ClientSession,
   ): Observable<ProfileItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Query(() => ProfileItemsSerializer)

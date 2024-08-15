@@ -1,6 +1,6 @@
-import { TotalSerializer, CargoDataSerializer, CargoItemsSerializer, CargoSerializer } from '@app/common/serializers';
+import { CreateCargoDto, CreateCargoItemsDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateCargoDto } from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
-import { CreateCargoDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateCargoDto } from '@app/common/dto';
+import { TotalSerializer, CargoDataSerializer, CargoItemsSerializer, CargoSerializer } from '@app/common/serializers';
 import { Controller as ControllerInterface, Metadata, Cargo, CargoDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
@@ -62,10 +62,10 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   @SetPolicy(Action.Create, Resource.LogisticCargoes)
   createBulkCargo(
     @Meta() meta: Metadata,
-    @Args('items', { type: () => [CreateCargoDto] }) items: CreateCargoDto[],
+    @Args() data: CreateCargoItemsDto,
     @Session() session?: ClientSession,
   ): Observable<CargoItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Query(() => CargoItemsSerializer)

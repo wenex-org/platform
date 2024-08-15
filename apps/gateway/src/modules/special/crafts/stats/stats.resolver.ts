@@ -1,6 +1,6 @@
+import { CreateStatDto, CreateStatItemsDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateStatDto } from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { TotalSerializer, StatDataSerializer, StatItemsSerializer, StatSerializer } from '@app/common/serializers';
-import { CreateStatDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateStatDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Stat, StatDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
@@ -62,10 +62,10 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements Con
   @SetPolicy(Action.Create, Resource.SpecialStats)
   createBulkStat(
     @Meta() meta: Metadata,
-    @Args('items', { type: () => [CreateStatDto] }) items: CreateStatDto[],
+    @Args() data: CreateStatItemsDto,
     @Session() session?: ClientSession,
   ): Observable<StatItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Query(() => StatItemsSerializer)

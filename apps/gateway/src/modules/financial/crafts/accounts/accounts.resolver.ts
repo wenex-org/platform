@@ -1,6 +1,13 @@
+import {
+  CreateAccountDto,
+  CreateAccountItemsDto,
+  FilterDto,
+  FilterOneDto,
+  QueryFilterDto,
+  UpdateAccountDto,
+} from '@app/common/dto';
 import { TotalSerializer, AccountDataSerializer, AccountItemsSerializer, AccountSerializer } from '@app/common/serializers';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
-import { CreateAccountDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateAccountDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Account, AccountDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
@@ -57,15 +64,15 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   @Mutation(() => AccountItemsSerializer)
   @ShipStrategy('create')
   @Cache('accounts', 'flush')
-  @SetScope(Scope.WriteFinancialAccounts)
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteFinancialAccounts)
   @SetPolicy(Action.Create, Resource.FinancialAccounts)
   createBulkAccount(
     @Meta() meta: Metadata,
-    @Args('items', { type: () => [CreateAccountDto] }) items: CreateAccountDto[],
+    @Args() data: CreateAccountItemsDto,
     @Session() session?: ClientSession,
   ): Observable<AccountItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Query(() => AccountItemsSerializer)

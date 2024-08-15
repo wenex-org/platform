@@ -15,12 +15,12 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import { CreateUserDto, CreateUserItemsDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateUserDto } from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { TotalSerializer, UserDataSerializer, UserItemsSerializer, UserSerializer } from '@app/common/serializers';
-import { CreateUserDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateUserDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, User, UserDto } from '@app/common/interfaces';
-import { ApiBearerAuth, ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
+import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
@@ -70,15 +70,14 @@ export class UsersController extends ControllerClass<User, UserDto> implements C
   @ShipStrategy('create')
   @Cache('users', 'flush')
   @SetScope(Scope.WriteIdentityUsers)
-  @ApiBody({ type: [CreateUserDto] })
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentityUsers)
   createBulk(
     @Meta() meta: Metadata,
-    @Body() items: CreateUserDto[],
+    @Body() data: CreateUserItemsDto,
     @Session() session?: ClientSession,
   ): Observable<UserItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Get()

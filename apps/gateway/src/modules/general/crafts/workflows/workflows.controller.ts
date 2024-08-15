@@ -15,12 +15,19 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import {
+  CreateWorkflowDto,
+  CreateWorkflowItemsDto,
+  FilterDto,
+  FilterOneDto,
+  QueryFilterDto,
+  UpdateWorkflowDto,
+} from '@app/common/dto';
 import { TotalSerializer, WorkflowDataSerializer, WorkflowItemsSerializer, WorkflowSerializer } from '@app/common/serializers';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
-import { CreateWorkflowDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateWorkflowDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Workflow, WorkflowDto } from '@app/common/interfaces';
-import { ApiBearerAuth, ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
+import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
@@ -77,15 +84,14 @@ export class WorkflowsController
   @ShipStrategy('create')
   @Cache('workflows', 'flush')
   @SetScope(Scope.WriteGeneralWorkflows)
-  @ApiBody({ type: [CreateWorkflowDto] })
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.GeneralWorkflows)
   createBulk(
     @Meta() meta: Metadata,
-    @Body() items: CreateWorkflowDto[],
+    @Body() data: CreateWorkflowItemsDto,
     @Session() session?: ClientSession,
   ): Observable<WorkflowItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Get()

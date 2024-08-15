@@ -15,12 +15,19 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import {
+  CreateVehicleDto,
+  CreateVehicleItemsDto,
+  FilterDto,
+  FilterOneDto,
+  QueryFilterDto,
+  UpdateVehicleDto,
+} from '@app/common/dto';
 import { TotalSerializer, VehicleDataSerializer, VehicleItemsSerializer, VehicleSerializer } from '@app/common/serializers';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
-import { CreateVehicleDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateVehicleDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Vehicle, VehicleDto } from '@app/common/interfaces';
-import { ApiBearerAuth, ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
+import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
@@ -74,15 +81,14 @@ export class VehiclesController extends ControllerClass<Vehicle, VehicleDto> imp
   @ShipStrategy('create')
   @Cache('vehicles', 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
-  @ApiBody({ type: [CreateVehicleDto] })
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticVehicles)
   createBulk(
     @Meta() meta: Metadata,
-    @Body() items: CreateVehicleDto[],
+    @Body() data: CreateVehicleItemsDto,
     @Session() session?: ClientSession,
   ): Observable<VehicleItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Get()

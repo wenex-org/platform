@@ -15,12 +15,12 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
-import { TotalSerializer, TravelDataSerializer, TravelItemsSerializer, TravelSerializer } from '@app/common/serializers';
+import { CreateTravelDto, CreateTravelItemsDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateTravelDto } from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
-import { CreateTravelDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateTravelDto } from '@app/common/dto';
+import { TotalSerializer, TravelDataSerializer, TravelItemsSerializer, TravelSerializer } from '@app/common/serializers';
 import { Controller as ControllerInterface, Metadata, Travel, TravelDto } from '@app/common/interfaces';
-import { ApiBearerAuth, ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
+import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
@@ -74,15 +74,14 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   @ShipStrategy('create')
   @Cache('travels', 'flush')
   @SetScope(Scope.WriteLogisticTravels)
-  @ApiBody({ type: [CreateTravelDto] })
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticTravels)
   createBulk(
     @Meta() meta: Metadata,
-    @Body() items: CreateTravelDto[],
+    @Body() data: CreateTravelItemsDto,
     @Session() session?: ClientSession,
   ): Observable<TravelItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Get()

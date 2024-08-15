@@ -15,12 +15,19 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import {
+  CreateSettingDto,
+  CreateSettingItemsDto,
+  FilterDto,
+  FilterOneDto,
+  QueryFilterDto,
+  UpdateSettingDto,
+} from '@app/common/dto';
 import { TotalSerializer, SettingDataSerializer, SettingItemsSerializer, SettingSerializer } from '@app/common/serializers';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
-import { CreateSettingDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateSettingDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Setting, SettingDto } from '@app/common/interfaces';
-import { ApiBearerAuth, ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
+import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
@@ -74,15 +81,14 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   @ShipStrategy('create')
   @Cache('settings', 'flush')
   @SetScope(Scope.WriteConfigSettings)
-  @ApiBody({ type: [CreateSettingDto] })
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ConfigSettings)
   createBulk(
     @Meta() meta: Metadata,
-    @Body() items: CreateSettingDto[],
+    @Body() data: CreateSettingItemsDto,
     @Session() session?: ClientSession,
   ): Observable<SettingItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Get()

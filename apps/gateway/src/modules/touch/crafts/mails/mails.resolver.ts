@@ -1,6 +1,6 @@
+import { CreateMailDto, CreateMailItemsDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateMailDto } from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { TotalSerializer, MailDataSerializer, MailItemsSerializer, MailSerializer } from '@app/common/serializers';
-import { CreateMailDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateMailDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Mail, MailDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
@@ -62,10 +62,10 @@ export class MailsResolver extends ControllerClass<Mail, MailDto> implements Con
   @SetPolicy(Action.Create, Resource.TouchMails)
   createBulkMail(
     @Meta() meta: Metadata,
-    @Args('items', { type: () => [CreateMailDto] }) items: CreateMailDto[],
+    @Args() data: CreateMailItemsDto,
     @Session() session?: ClientSession,
   ): Observable<MailItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Query(() => MailItemsSerializer)

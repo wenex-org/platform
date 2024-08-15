@@ -1,6 +1,6 @@
-import { TotalSerializer, TravelDataSerializer, TravelItemsSerializer, TravelSerializer } from '@app/common/serializers';
+import { CreateTravelDto, CreateTravelItemsDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateTravelDto } from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
-import { CreateTravelDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateTravelDto } from '@app/common/dto';
+import { TotalSerializer, TravelDataSerializer, TravelItemsSerializer, TravelSerializer } from '@app/common/serializers';
 import { Controller as ControllerInterface, Metadata, Travel, TravelDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
@@ -62,10 +62,10 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   @SetPolicy(Action.Create, Resource.LogisticTravels)
   createBulkTravel(
     @Meta() meta: Metadata,
-    @Args('items', { type: () => [CreateTravelDto] }) items: CreateTravelDto[],
+    @Args() data: CreateTravelItemsDto,
     @Session() session?: ClientSession,
   ): Observable<TravelItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Query(() => TravelItemsSerializer)

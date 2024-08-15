@@ -4,8 +4,15 @@ import {
   TransactionItemsSerializer,
   TransactionSerializer,
 } from '@app/common/serializers';
+import {
+  CreateTransactionDto,
+  CreateTransactionItemsDto,
+  FilterDto,
+  FilterOneDto,
+  QueryFilterDto,
+  UpdateTransactionDto,
+} from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
-import { CreateTransactionDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateTransactionDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Transaction, TransactionDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
@@ -70,10 +77,10 @@ export class TransactionsResolver
   @SetPolicy(Action.Create, Resource.FinancialTransactions)
   createBulkTransaction(
     @Meta() meta: Metadata,
-    @Args('items', { type: () => [CreateTransactionDto] }) items: CreateTransactionDto[],
+    @Args() data: CreateTransactionItemsDto,
     @Session() session?: ClientSession,
   ): Observable<TransactionItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Query(() => TransactionItemsSerializer)

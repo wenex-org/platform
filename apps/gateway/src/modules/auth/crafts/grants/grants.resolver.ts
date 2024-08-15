@@ -1,6 +1,6 @@
+import { CreateGrantDto, CreateGrantItemsDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateGrantDto } from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { TotalSerializer, GrantDataSerializer, GrantItemsSerializer, GrantSerializer } from '@app/common/serializers';
-import { CreateGrantDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateGrantDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Grant, GrantDto } from '@app/common/interfaces';
 import { Cache, Nested, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
@@ -63,10 +63,10 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   @SetPolicy(Action.Create, Resource.AuthGrants)
   createBulkGrant(
     @Meta() meta: Metadata,
-    @Args('items', { type: () => [CreateGrantDto] }) items: CreateGrantDto[],
+    @Args() data: CreateGrantItemsDto,
     @Session() session?: ClientSession,
   ): Observable<GrantItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Query(() => GrantItemsSerializer)

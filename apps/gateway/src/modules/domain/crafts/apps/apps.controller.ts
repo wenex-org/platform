@@ -16,11 +16,11 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { CreateAppDto, CreateAppItemsDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateAppDto } from '@app/common/dto';
 import { TotalSerializer, AppDataSerializer, AppItemsSerializer, AppSerializer } from '@app/common/serializers';
-import { CreateAppDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateAppDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, App, AppDto } from '@app/common/interfaces';
-import { ApiBearerAuth, ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Cache, Nested, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
+import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
@@ -71,15 +71,14 @@ export class AppsController extends ControllerClass<App, AppDto> implements Cont
   @Cache('apps', 'flush')
   @ShipStrategy('create')
   @SetScope(Scope.WriteDomainApps)
-  @ApiBody({ type: [CreateAppDto] })
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainApps)
   createBulk(
     @Meta() meta: Metadata,
-    @Body() items: CreateAppDto[],
+    @Body() data: CreateAppItemsDto,
     @Session() session?: ClientSession,
   ): Observable<AppItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Get()

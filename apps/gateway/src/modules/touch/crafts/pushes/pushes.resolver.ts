@@ -1,6 +1,6 @@
+import { CreatePushDto, CreatePushItemsDto, FilterDto, FilterOneDto, QueryFilterDto, UpdatePushDto } from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { TotalSerializer, PushDataSerializer, PushItemsSerializer, PushSerializer } from '@app/common/serializers';
-import { CreatePushDto, FilterDto, FilterOneDto, QueryFilterDto, UpdatePushDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Push, PushDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
@@ -62,10 +62,10 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements Co
   @SetPolicy(Action.Create, Resource.TouchPush)
   createBulkPush(
     @Meta() meta: Metadata,
-    @Args('items', { type: () => [CreatePushDto] }) items: CreatePushDto[],
+    @Args() data: CreatePushItemsDto,
     @Session() session?: ClientSession,
   ): Observable<PushItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Query(() => PushItemsSerializer)

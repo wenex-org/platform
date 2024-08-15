@@ -15,12 +15,19 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import {
+  CreateSessionDto,
+  CreateSessionItemsDto,
+  FilterDto,
+  FilterOneDto,
+  QueryFilterDto,
+  UpdateSessionDto,
+} from '@app/common/dto';
 import { TotalSerializer, SessionDataSerializer, SessionItemsSerializer, SessionSerializer } from '@app/common/serializers';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { Controller as ControllerInterface, Session as ISession, Metadata, SessionDto } from '@app/common/interfaces';
-import { CreateSessionDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateSessionDto } from '@app/common/dto';
-import { ApiBearerAuth, ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
+import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
@@ -74,15 +81,14 @@ export class SessionsController extends ControllerClass<ISession, SessionDto> im
   @ShipStrategy('create')
   @Cache('sessions', 'flush')
   @SetScope(Scope.WriteIdentitySessions)
-  @ApiBody({ type: [CreateSessionDto] })
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentitySessions)
   createBulk(
     @Meta() meta: Metadata,
-    @Body() items: CreateSessionDto[],
+    @Body() data: CreateSessionItemsDto,
     @Session() session?: ClientSession,
   ): Observable<SessionItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Get()

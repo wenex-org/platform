@@ -1,6 +1,6 @@
+import { CreateUserDto, CreateUserItemsDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateUserDto } from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { TotalSerializer, UserDataSerializer, UserItemsSerializer, UserSerializer } from '@app/common/serializers';
-import { CreateUserDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateUserDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, User, UserDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
@@ -62,10 +62,10 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements Con
   @SetPolicy(Action.Create, Resource.IdentityUsers)
   createBulkUser(
     @Meta() meta: Metadata,
-    @Args('items', { type: () => [CreateUserDto] }) items: CreateUserDto[],
+    @Args() data: CreateUserItemsDto,
     @Session() session?: ClientSession,
   ): Observable<UserItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Query(() => UserItemsSerializer)

@@ -1,6 +1,6 @@
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
+import { CreateAppDto, CreateAppItemsDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateAppDto } from '@app/common/dto';
 import { TotalSerializer, AppDataSerializer, AppItemsSerializer, AppSerializer } from '@app/common/serializers';
-import { CreateAppDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateAppDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, App, AppDto } from '@app/common/interfaces';
 import { Cache, Nested, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
@@ -63,10 +63,10 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements Contro
   @SetPolicy(Action.Create, Resource.DomainApps)
   createBulkApp(
     @Meta() meta: Metadata,
-    @Args('items', { type: () => [CreateAppDto] }) items: CreateAppDto[],
+    @Args() data: CreateAppItemsDto,
     @Session() session?: ClientSession,
   ): Observable<AppItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Query(() => AppItemsSerializer)

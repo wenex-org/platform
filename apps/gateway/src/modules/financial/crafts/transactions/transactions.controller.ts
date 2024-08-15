@@ -19,14 +19,21 @@ import {
   TransactionItemsSerializer,
   TransactionSerializer,
 } from '@app/common/serializers';
+import {
+  CreateTransactionDto,
+  CreateTransactionItemsDto,
+  FilterDto,
+  FilterOneDto,
+  QueryFilterDto,
+  UpdateTransactionDto,
+} from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
-import { CreateTransactionDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateTransactionDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Transaction, TransactionDto } from '@app/common/interfaces';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
-import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
@@ -78,16 +85,15 @@ export class TransactionsController
   @Post('bulk')
   @ShipStrategy('create')
   @Cache('transactions', 'flush')
-  @SetScope(Scope.WriteFinancialTransactions)
-  @ApiBody({ type: [CreateTransactionDto] })
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteFinancialTransactions)
   @SetPolicy(Action.Create, Resource.FinancialTransactions)
   createBulk(
     @Meta() meta: Metadata,
-    @Body() items: CreateTransactionDto[],
+    @Body() data: CreateTransactionItemsDto,
     @Session() session?: ClientSession,
   ): Observable<TransactionItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Get()

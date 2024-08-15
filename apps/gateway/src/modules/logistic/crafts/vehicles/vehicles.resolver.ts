@@ -1,6 +1,13 @@
+import {
+  CreateVehicleDto,
+  CreateVehicleItemsDto,
+  FilterDto,
+  FilterOneDto,
+  QueryFilterDto,
+  UpdateVehicleDto,
+} from '@app/common/dto';
 import { TotalSerializer, VehicleDataSerializer, VehicleItemsSerializer, VehicleSerializer } from '@app/common/serializers';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
-import { CreateVehicleDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateVehicleDto } from '@app/common/dto';
 import { Controller as ControllerInterface, Metadata, Vehicle, VehicleDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
@@ -62,10 +69,10 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   @SetPolicy(Action.Create, Resource.LogisticVehicles)
   createBulkVehicle(
     @Meta() meta: Metadata,
-    @Args('items', { type: () => [CreateVehicleDto] }) items: CreateVehicleDto[],
+    @Args() data: CreateVehicleItemsDto,
     @Session() session?: ClientSession,
   ): Observable<VehicleItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Query(() => VehicleItemsSerializer)

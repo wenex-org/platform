@@ -1,6 +1,6 @@
-import { TotalSerializer, DriverDataSerializer, DriverItemsSerializer, DriverSerializer } from '@app/common/serializers';
+import { CreateDriverDto, CreateDriverItemsDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateDriverDto } from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
-import { CreateDriverDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateDriverDto } from '@app/common/dto';
+import { TotalSerializer, DriverDataSerializer, DriverItemsSerializer, DriverSerializer } from '@app/common/serializers';
 import { Controller as ControllerInterface, Metadata, Driver, DriverDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
@@ -62,10 +62,10 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   @SetPolicy(Action.Create, Resource.LogisticDrivers)
   createBulkDriver(
     @Meta() meta: Metadata,
-    @Args('items', { type: () => [CreateDriverDto] }) items: CreateDriverDto[],
+    @Args() data: CreateDriverItemsDto,
     @Session() session?: ClientSession,
   ): Observable<DriverItemsSerializer> {
-    return super.createBulk(meta, items, session);
+    return super.createBulk(meta, data, session);
   }
 
   @Query(() => DriverItemsSerializer)
