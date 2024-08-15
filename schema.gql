@@ -1447,168 +1447,168 @@ type Mutation {
   can(data: AuthorizationCanRequestDto!): AuthorizationCanResponseSerializer!
   policy(data: AuthorizationPolicyRequestDto!): AuthorizationPolicyResponseSerializer!
   createGrant(data: CreateGrantDto!): GrantDataSerializer!
-  createBulkGrant(items: [CreateGrantDto!]!): GrantItemsSerializer!
+  createBulkGrant(data: CreateGrantItemsDto!): GrantItemsSerializer!
   deleteOneGrant(id: String!, ref: String): GrantDataSerializer!
   restoreOneGrant(id: String!, ref: String): GrantDataSerializer!
   destroyOneGrant(id: String!, ref: String): GrantDataSerializer!
   updateOneGrant(id: String!, data: UpdateGrantDto!, ref: String): GrantDataSerializer!
   updateBulkGrant(filter: QueryFilterDto!, data: UpdateGrantDto!): TotalSerializer!
   createMail(data: CreateMailDto!): MailDataSerializer!
-  createBulkMail(items: [CreateMailDto!]!): MailItemsSerializer!
+  createBulkMail(data: CreateMailItemsDto!): MailItemsSerializer!
   deleteOneMail(id: String!, ref: String): MailDataSerializer!
   restoreOneMail(id: String!, ref: String): MailDataSerializer!
   destroyOneMail(id: String!, ref: String): MailDataSerializer!
   updateOneMail(id: String!, data: UpdateMailDto!, ref: String): MailDataSerializer!
   updateBulkMail(filter: QueryFilterDto!, data: UpdateMailDto!): TotalSerializer!
   createPush(data: CreatePushDto!): PushDataSerializer!
-  createBulkPush(items: [CreatePushDto!]!): PushItemsSerializer!
+  createBulkPush(data: CreatePushItemsDto!): PushItemsSerializer!
   deleteOnePush(id: String!, ref: String): PushDataSerializer!
   restoreOnePush(id: String!, ref: String): PushDataSerializer!
   destroyOnePush(id: String!, ref: String): PushDataSerializer!
   updateOnePush(id: String!, data: UpdatePushDto!, ref: String): PushDataSerializer!
   updateBulkPush(filter: QueryFilterDto!, data: UpdatePushDto!): TotalSerializer!
   createPushHistory(data: CreatePushHistoryDto!): PushHistoryDataSerializer!
-  createBulkPushHistory(items: [CreatePushHistoryDto!]!): PushHistoryItemsSerializer!
+  createBulkPushHistory(data: CreatePushHistoryItemsDto!): PushHistoryItemsSerializer!
   deleteOnePushHistory(id: String!, ref: String): PushHistoryDataSerializer!
   restoreOnePushHistory(id: String!, ref: String): PushHistoryDataSerializer!
   destroyOnePushHistory(id: String!, ref: String): PushHistoryDataSerializer!
   updateOnePushHistory(id: String!, data: UpdatePushHistoryDto!, ref: String): PushHistoryDataSerializer!
   updateBulkPushHistory(filter: QueryFilterDto!, data: UpdatePushHistoryDto!): TotalSerializer!
   createConfig(data: CreateConfigDto!): ConfigDataSerializer!
-  createBulkConfig(items: [CreateConfigDto!]!): ConfigItemsSerializer!
+  createBulkConfig(data: CreateConfigItemsDto!): ConfigItemsSerializer!
   deleteOneConfig(id: String!, ref: String): ConfigDataSerializer!
   restoreOneConfig(id: String!, ref: String): ConfigDataSerializer!
   destroyOneConfig(id: String!, ref: String): ConfigDataSerializer!
   updateOneConfig(id: String!, data: UpdateConfigDto!, ref: String): ConfigDataSerializer!
   updateBulkConfig(filter: QueryFilterDto!, data: UpdateConfigDto!): TotalSerializer!
   createSetting(data: CreateSettingDto!): SettingDataSerializer!
-  createBulkSetting(items: [CreateSettingDto!]!): SettingItemsSerializer!
+  createBulkSetting(data: CreateSettingItemsDto!): SettingItemsSerializer!
   deleteOneSetting(id: String!, ref: String): SettingDataSerializer!
   restoreOneSetting(id: String!, ref: String): SettingDataSerializer!
   destroyOneSetting(id: String!, ref: String): SettingDataSerializer!
   updateOneSetting(id: String!, data: UpdateSettingDto!, ref: String): SettingDataSerializer!
   updateBulkSetting(filter: QueryFilterDto!, data: UpdateSettingDto!): TotalSerializer!
   createApp(data: CreateAppDto!): AppDataSerializer!
-  createBulkApp(items: [CreateAppDto!]!): AppItemsSerializer!
+  createBulkApp(data: CreateAppItemsDto!): AppItemsSerializer!
   deleteOneApp(id: String!, ref: String): AppDataSerializer!
   restoreOneApp(id: String!, ref: String): AppDataSerializer!
   destroyOneApp(id: String!, ref: String): AppDataSerializer!
   updateOneApp(id: String!, data: UpdateAppDto!, ref: String): AppDataSerializer!
   updateBulkApp(filter: QueryFilterDto!, data: UpdateAppDto!): TotalSerializer!
   createClient(data: CreateClientDto!): ClientDataSerializer!
-  createBulkClient(items: [CreateClientDto!]!): ClientItemsSerializer!
+  createBulkClient(data: CreateClientItemsDto!): ClientItemsSerializer!
   deleteOneClient(id: String!, ref: String): ClientDataSerializer!
   restoreOneClient(id: String!, ref: String): ClientDataSerializer!
   destroyOneClient(id: String!, ref: String): ClientDataSerializer!
   updateOneClient(id: String!, data: UpdateClientDto!, ref: String): ClientDataSerializer!
   updateBulkClient(filter: QueryFilterDto!, data: UpdateClientDto!): TotalSerializer!
   createFile(data: CreateFileDto!): FileDataSerializer!
-  createBulkFile(items: [CreateFileDto!]!): FileItemsSerializer!
+  createBulkFile(data: CreateFileItemsDto!): FileItemsSerializer!
   deleteOneFile(id: String!, ref: String): FileDataSerializer!
   restoreOneFile(id: String!, ref: String): FileDataSerializer!
   destroyOneFile(id: String!, ref: String): FileDataSerializer!
   updateOneFile(id: String!, data: UpdateFileDto!, ref: String): FileDataSerializer!
   updateBulkFile(filter: QueryFilterDto!, data: UpdateFileDto!): TotalSerializer!
   createStat(data: CreateStatDto!): StatDataSerializer!
-  createBulkStat(items: [CreateStatDto!]!): StatItemsSerializer!
+  createBulkStat(data: CreateStatItemsDto!): StatItemsSerializer!
   deleteOneStat(id: String!, ref: String): StatDataSerializer!
   restoreOneStat(id: String!, ref: String): StatDataSerializer!
   destroyOneStat(id: String!, ref: String): StatDataSerializer!
   updateOneStat(id: String!, data: UpdateStatDto!, ref: String): StatDataSerializer!
   updateBulkStat(filter: QueryFilterDto!, data: UpdateStatDto!): TotalSerializer!
   createArtifact(data: CreateArtifactDto!): ArtifactDataSerializer!
-  createBulkArtifact(items: [CreateArtifactDto!]!): ArtifactItemsSerializer!
+  createBulkArtifact(data: CreateArtifactItemsDto!): ArtifactItemsSerializer!
   deleteOneArtifact(id: String!, ref: String): ArtifactDataSerializer!
   restoreOneArtifact(id: String!, ref: String): ArtifactDataSerializer!
   destroyOneArtifact(id: String!, ref: String): ArtifactDataSerializer!
   updateOneArtifact(id: String!, data: UpdateArtifactDto!, ref: String): ArtifactDataSerializer!
   updateBulkArtifact(filter: QueryFilterDto!, data: UpdateArtifactDto!): TotalSerializer!
   createWorkflow(data: CreateWorkflowDto!): WorkflowDataSerializer!
-  createBulkWorkflow(items: [CreateWorkflowDto!]!): WorkflowItemsSerializer!
+  createBulkWorkflow(data: CreateWorkflowItemsDto!): WorkflowItemsSerializer!
   deleteOneWorkflow(id: String!, ref: String): WorkflowDataSerializer!
   restoreOneWorkflow(id: String!, ref: String): WorkflowDataSerializer!
   destroyOneWorkflow(id: String!, ref: String): WorkflowDataSerializer!
   updateOneWorkflow(id: String!, data: UpdateWorkflowDto!, ref: String): WorkflowDataSerializer!
   updateBulkWorkflow(filter: QueryFilterDto!, data: UpdateWorkflowDto!): TotalSerializer!
   createUser(data: CreateUserDto!): UserDataSerializer!
-  createBulkUser(items: [CreateUserDto!]!): UserItemsSerializer!
+  createBulkUser(data: CreateUserItemsDto!): UserItemsSerializer!
   deleteOneUser(id: String!, ref: String): UserDataSerializer!
   restoreOneUser(id: String!, ref: String): UserDataSerializer!
   destroyOneUser(id: String!, ref: String): UserDataSerializer!
   updateOneUser(id: String!, data: UpdateUserDto!, ref: String): UserDataSerializer!
   updateBulkUser(filter: QueryFilterDto!, data: UpdateUserDto!): TotalSerializer!
   createProfile(data: CreateProfileDto!): ProfileDataSerializer!
-  createBulkProfile(items: [CreateProfileDto!]!): ProfileItemsSerializer!
+  createBulkProfile(data: CreateProfileItemsDto!): ProfileItemsSerializer!
   deleteOneProfile(id: String!, ref: String): ProfileDataSerializer!
   restoreOneProfile(id: String!, ref: String): ProfileDataSerializer!
   destroyOneProfile(id: String!, ref: String): ProfileDataSerializer!
   updateOneProfile(id: String!, data: UpdateProfileDto!, ref: String): ProfileDataSerializer!
   updateBulkProfile(filter: QueryFilterDto!, data: UpdateProfileDto!): TotalSerializer!
   createSession(data: CreateSessionDto!): SessionDataSerializer!
-  createBulkSession(items: [CreateSessionDto!]!): SessionItemsSerializer!
+  createBulkSession(data: CreateSessionItemsDto!): SessionItemsSerializer!
   deleteOneSession(id: String!, ref: String): SessionDataSerializer!
   restoreOneSession(id: String!, ref: String): SessionDataSerializer!
   destroyOneSession(id: String!, ref: String): SessionDataSerializer!
   updateOneSession(id: String!, data: UpdateSessionDto!, ref: String): SessionDataSerializer!
   updateBulkSession(filter: QueryFilterDto!, data: UpdateSessionDto!): TotalSerializer!
   createCargo(data: CreateCargoDto!): CargoDataSerializer!
-  createBulkCargo(items: [CreateCargoDto!]!): CargoItemsSerializer!
+  createBulkCargo(data: CreateCargoItemsDto!): CargoItemsSerializer!
   deleteOneCargo(id: String!, ref: String): CargoDataSerializer!
   restoreOneCargo(id: String!, ref: String): CargoDataSerializer!
   destroyOneCargo(id: String!, ref: String): CargoDataSerializer!
   updateOneCargo(id: String!, data: UpdateCargoDto!, ref: String): CargoDataSerializer!
   updateBulkCargo(filter: QueryFilterDto!, data: UpdateCargoDto!): TotalSerializer!
   createDriver(data: CreateDriverDto!): DriverDataSerializer!
-  createBulkDriver(items: [CreateDriverDto!]!): DriverItemsSerializer!
+  createBulkDriver(data: CreateDriverItemsDto!): DriverItemsSerializer!
   deleteOneDriver(id: String!, ref: String): DriverDataSerializer!
   restoreOneDriver(id: String!, ref: String): DriverDataSerializer!
   destroyOneDriver(id: String!, ref: String): DriverDataSerializer!
   updateOneDriver(id: String!, data: UpdateDriverDto!, ref: String): DriverDataSerializer!
   updateBulkDriver(filter: QueryFilterDto!, data: UpdateDriverDto!): TotalSerializer!
   createTravel(data: CreateTravelDto!): TravelDataSerializer!
-  createBulkTravel(items: [CreateTravelDto!]!): TravelItemsSerializer!
+  createBulkTravel(data: CreateTravelItemsDto!): TravelItemsSerializer!
   deleteOneTravel(id: String!, ref: String): TravelDataSerializer!
   restoreOneTravel(id: String!, ref: String): TravelDataSerializer!
   destroyOneTravel(id: String!, ref: String): TravelDataSerializer!
   updateOneTravel(id: String!, data: UpdateTravelDto!, ref: String): TravelDataSerializer!
   updateBulkTravel(filter: QueryFilterDto!, data: UpdateTravelDto!): TotalSerializer!
   createVehicle(data: CreateVehicleDto!): VehicleDataSerializer!
-  createBulkVehicle(items: [CreateVehicleDto!]!): VehicleItemsSerializer!
+  createBulkVehicle(data: CreateVehicleItemsDto!): VehicleItemsSerializer!
   deleteOneVehicle(id: String!, ref: String): VehicleDataSerializer!
   restoreOneVehicle(id: String!, ref: String): VehicleDataSerializer!
   destroyOneVehicle(id: String!, ref: String): VehicleDataSerializer!
   updateOneVehicle(id: String!, data: UpdateVehicleDto!, ref: String): VehicleDataSerializer!
   updateBulkVehicle(filter: QueryFilterDto!, data: UpdateVehicleDto!): TotalSerializer!
   createLocation(data: CreateLocationDto!): LocationDataSerializer!
-  createBulkLocation(items: [CreateLocationDto!]!): LocationItemsSerializer!
+  createBulkLocation(data: CreateLocationItemsDto!): LocationItemsSerializer!
   deleteOneLocation(id: String!, ref: String): LocationDataSerializer!
   restoreOneLocation(id: String!, ref: String): LocationDataSerializer!
   destroyOneLocation(id: String!, ref: String): LocationDataSerializer!
   updateOneLocation(id: String!, data: UpdateLocationDto!, ref: String): LocationDataSerializer!
   updateBulkLocation(filter: QueryFilterDto!, data: UpdateLocationDto!): TotalSerializer!
   createAccount(data: CreateAccountDto!): AccountDataSerializer!
-  createBulkAccount(items: [CreateAccountDto!]!): AccountItemsSerializer!
+  createBulkAccount(data: CreateAccountItemsDto!): AccountItemsSerializer!
   deleteOneAccount(id: String!, ref: String): AccountDataSerializer!
   restoreOneAccount(id: String!, ref: String): AccountDataSerializer!
   destroyOneAccount(id: String!, ref: String): AccountDataSerializer!
   updateOneAccount(id: String!, data: UpdateAccountDto!, ref: String): AccountDataSerializer!
   updateBulkAccount(filter: QueryFilterDto!, data: UpdateAccountDto!): TotalSerializer!
   createCoin(data: CreateCoinDto!): CoinDataSerializer!
-  createBulkCoin(items: [CreateCoinDto!]!): CoinItemsSerializer!
+  createBulkCoin(data: CreateCoinItemsDto!): CoinItemsSerializer!
   deleteOneCoin(id: String!, ref: String): CoinDataSerializer!
   restoreOneCoin(id: String!, ref: String): CoinDataSerializer!
   destroyOneCoin(id: String!, ref: String): CoinDataSerializer!
   updateOneCoin(id: String!, data: UpdateCoinDto!, ref: String): CoinDataSerializer!
   updateBulkCoin(filter: QueryFilterDto!, data: UpdateCoinDto!): TotalSerializer!
   createWallet(data: CreateWalletDto!): WalletDataSerializer!
-  createBulkWallet(items: [CreateWalletDto!]!): WalletItemsSerializer!
+  createBulkWallet(data: CreateWalletItemsDto!): WalletItemsSerializer!
   deleteOneWallet(id: String!, ref: String): WalletDataSerializer!
   restoreOneWallet(id: String!, ref: String): WalletDataSerializer!
   destroyOneWallet(id: String!, ref: String): WalletDataSerializer!
   updateOneWallet(id: String!, data: UpdateWalletDto!, ref: String): WalletDataSerializer!
   updateBulkWallet(filter: QueryFilterDto!, data: UpdateWalletDto!): TotalSerializer!
   createTransaction(data: CreateTransactionDto!): TransactionDataSerializer!
-  createBulkTransaction(items: [CreateTransactionDto!]!): TransactionItemsSerializer!
+  createBulkTransaction(data: CreateTransactionItemsDto!): TransactionItemsSerializer!
   deleteOneTransaction(id: String!, ref: String): TransactionDataSerializer!
   restoreOneTransaction(id: String!, ref: String): TransactionDataSerializer!
   destroyOneTransaction(id: String!, ref: String): TransactionDataSerializer!
@@ -1705,6 +1705,10 @@ input CreateGrantTimeDto {
   duration: Float!
 }
 
+input CreateGrantItemsDto {
+  items: [CreateGrantDto!]!
+}
+
 input UpdateGrantDto {
   action: String
   object: String
@@ -1742,6 +1746,10 @@ input CreateMailSmtpDto {
   rejected: [String!]
 }
 
+input CreateMailItemsDto {
+  items: [CreateMailDto!]!
+}
+
 input UpdateMailDto {
   smtp: UpdateMailSmtpDto
   to: [String!]
@@ -1777,6 +1785,10 @@ input CreatePushKeysDto {
   p256dh: String!
 }
 
+input CreatePushItemsDto {
+  items: [CreatePushDto!]!
+}
+
 input UpdatePushDto {
   keys: UpdatePushKeysDto
   endpoint: String
@@ -1804,6 +1816,10 @@ input CreatePushHistoryDto {
 input CreatePushHistoryReplyDto {
   identity: String!
   status: Float!
+}
+
+input CreatePushHistoryItemsDto {
+  items: [CreatePushHistoryDto!]!
 }
 
 input UpdatePushHistoryDto {
@@ -1837,6 +1853,10 @@ enum ValueType {
   Boolean
 }
 
+input CreateConfigItemsDto {
+  items: [CreateConfigDto!]!
+}
+
 input UpdateConfigDto {
   value: JSON
   key: String
@@ -1847,6 +1867,10 @@ input CreateSettingDto {
   value: JSON
   key: String!
   type: ValueType!
+}
+
+input CreateSettingItemsDto {
+  items: [CreateSettingDto!]!
 }
 
 input UpdateSettingDto {
@@ -2004,6 +2028,10 @@ enum Scope {
   ManageFinancialTransactions
 }
 
+input CreateAppItemsDto {
+  items: [CreateAppDto!]!
+}
+
 input UpdateAppDto {
   change_logs: [UpdateAppChangeLogDto]
   cid: String
@@ -2080,6 +2108,10 @@ enum ClientPlan {
   Platinum
 }
 
+input CreateClientItemsDto {
+  items: [CreateClientDto!]!
+}
+
 input UpdateClientDto {
   domains: [UpdateClientDomainDto!]
   services: [UpdateClientServiceDto]
@@ -2130,6 +2162,10 @@ input CreateFileDto {
   etag: String
 }
 
+input CreateFileItemsDto {
+  items: [CreateFileDto!]!
+}
+
 input UpdateFileDto {
   field: String
   original: String
@@ -2166,6 +2202,10 @@ enum StatType {
   Monthly
 }
 
+input CreateStatItemsDto {
+  items: [CreateStatDto!]!
+}
+
 input UpdateStatDto {
   flags: JSON
   type: StatType
@@ -2183,6 +2223,10 @@ input CreateArtifactDto {
   value: JSON
   key: String!
   type: ValueType!
+}
+
+input CreateArtifactItemsDto {
+  items: [CreateArtifactDto!]!
 }
 
 input UpdateArtifactDto {
@@ -2211,6 +2255,10 @@ input CreateWorkflowStateDto {
   ref: String!
   name: String
   status: WorkflowStatus!
+}
+
+input CreateWorkflowItemsDto {
+  items: [CreateWorkflowDto!]!
 }
 
 input UpdateWorkflowDto {
@@ -2249,6 +2297,10 @@ input CreateUserDto {
   subjects: [String!]!
 }
 
+input CreateUserItemsDto {
+  items: [CreateUserDto!]!
+}
+
 input UpdateUserDto {
   status: Status
   tz: String
@@ -2281,6 +2333,10 @@ input CreateProfileDto {
   birth_date: Date
 }
 
+input CreateProfileItemsDto {
+  items: [CreateProfileDto!]!
+}
+
 input UpdateProfileDto {
   type: ProfileType
   state: State
@@ -2305,6 +2361,10 @@ input CreateSessionDto {
   expiration_date: Date!
 }
 
+input CreateSessionItemsDto {
+  items: [CreateSessionDto!]!
+}
+
 input UpdateSessionDto {
   ip: String
   agent: String
@@ -2321,6 +2381,10 @@ input CreateCargoDto {
   length: Float!
   fragile: Boolean
   perishable: Boolean
+}
+
+input CreateCargoItemsDto {
+  items: [CreateCargoDto!]!
 }
 
 input UpdateCargoDto {
@@ -2347,6 +2411,10 @@ input CreateDriverDto {
   expiration_date: Date!
 }
 
+input CreateDriverItemsDto {
+  items: [CreateDriverDto!]!
+}
+
 input UpdateDriverDto {
   state: State
   status: Status
@@ -2366,6 +2434,10 @@ input CreateTravelDto {
   locations: [String!]!
 }
 
+input CreateTravelItemsDto {
+  items: [CreateTravelDto!]!
+}
+
 input UpdateTravelDto {
   cargoes: [String!]
   drivers: [String!]
@@ -2378,6 +2450,10 @@ input CreateVehicleDto {
   type: VehicleType!
   plates: [String!]!
   drivers: [String!]
+}
+
+input CreateVehicleItemsDto {
+  items: [CreateVehicleDto!]!
 }
 
 input UpdateVehicleDto {
@@ -2395,6 +2471,10 @@ input CreateLocationDto {
 input CreateLocationGeometryDto {
   type: String!
   coordinates: JSON!
+}
+
+input CreateLocationItemsDto {
+  items: [CreateLocationDto!]!
 }
 
 input UpdateLocationDto {
@@ -2423,6 +2503,10 @@ enum AccountType {
 enum AccountOwnership {
   Common
   Personal
+}
+
+input CreateAccountItemsDto {
+  items: [CreateAccountDto!]!
 }
 
 input UpdateAccountDto {
@@ -2475,6 +2559,10 @@ enum CoinLib {
   SolanaWeb3JS
 }
 
+input CreateCoinItemsDto {
+  items: [CreateCoinDto!]!
+}
+
 input UpdateCoinDto {
   code: String
   symbol: String
@@ -2506,6 +2594,10 @@ input CreateWalletDto {
   external: Float
   address: String
   private: String
+}
+
+input CreateWalletItemsDto {
+  items: [CreateWalletDto!]!
 }
 
 input UpdateWalletDto {
@@ -2568,6 +2660,10 @@ enum PayType {
   Blocked
   Internal
   External
+}
+
+input CreateTransactionItemsDto {
+  items: [CreateTransactionDto!]!
 }
 
 input UpdateTransactionDto {
