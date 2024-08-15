@@ -37,8 +37,9 @@ PROTOS[DOMAIN,4]=./apps/services/touch/src/protobuf/domain.proto
 # Special Proto
 PROTOS[SPECIAL,1]=./apps/services/special/src/app.proto
 PROTOS[SPECIAL,2]=./apps/gateway/src/protobuf/special.proto
-PROTOS[SPECIAL,3]=./apps/services/touch/src/protobuf/special.proto
-PROTOS[SPECIAL,4]=./apps/services/identity/src/protobuf/special.proto
+PROTOS[SPECIAL,3]=./apps/services/auth/src/protobuf/special.proto
+PROTOS[SPECIAL,4]=./apps/services/touch/src/protobuf/special.proto
+PROTOS[SPECIAL,5]=./apps/services/identity/src/protobuf/special.proto
 
 # General Proto
 PROTOS[GENERAL,1]=./apps/services/general/src/app.proto
