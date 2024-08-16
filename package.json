@@ -95,7 +95,7 @@
     "log-node": "^8.0.3",
     "luxon": "^3.4.4",
     "mongodb": "^6.7.0",
-    "mongodb-session-serializer": "^2.0.3",
+    "mongodb-session-serializer": "^2.1.1",
     "mongoose": "^8.5.1",
     "mqtt": "^5.7.0",
     "multer-s3": "^3.0.1",

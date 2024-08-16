@@ -189,8 +189,8 @@ importers:
         specifier: ^6.7.0
         version: 6.7.0
       mongodb-session-serializer:
-        specifier: ^2.0.3
-        version: 2.0.3(mongodb@6.7.0)(mongoose@8.5.1)
+        specifier: ^2.1.1
+        version: 2.1.1(mongodb@6.7.0)(mongoose@8.5.1)
       mongoose:
         specifier: ^8.5.1
         version: 8.5.1
@@ -4901,8 +4901,8 @@ packages:
   mongodb-connection-string-url@3.0.0:
     resolution: {integrity: sha512-t1Vf+m1I5hC2M5RJx/7AtxgABy1cZmIPQRMXw+gEIPn/cZNF3Oiy+l0UIypUwVB5trcWHq3crg2g3uAR9aAwsQ==}
 
-  mongodb-session-serializer@2.0.3:
-    resolution: {integrity: sha512-NIGEqaB7JeetvsnmTcA5AxeIisgVJXnnPyujoaTiSYzflaEFgq25sYiF22v3wmJTJrSjgfq6uQdG+OUhQ1VxEA==}
+  mongodb-session-serializer@2.1.1:
+    resolution: {integrity: sha512-BrzVKOYz2K/4mgJFcYOcsZSsux5o94rErX00QnqT8ewJfkCejC0DcYRqgIxEcyc+FrLBs2QBpCfb2clNiv2Xvg==}
     peerDependencies:
       mongodb: ^5.x || ^6.x
       mongoose: ^7.x || ^8.x
@@ -12317,7 +12317,7 @@ snapshots:
       '@types/whatwg-url': 11.0.3
       whatwg-url: 13.0.0
 
-  mongodb-session-serializer@2.0.3(mongodb@6.7.0)(mongoose@8.5.1):
+  mongodb-session-serializer@2.1.1(mongodb@6.7.0)(mongoose@8.5.1):
     dependencies:
       mongodb: 6.7.0
     optionalDependencies:
