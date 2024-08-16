@@ -18,10 +18,12 @@ import * as modules from './modules';
 @Module({
   imports: [
     HealthModule.forRoot(['disk', 'memory', 'redis', 'kafka']),
+
     PromModule.forRoot(),
     RedisModule.forRoot(REDIS_CONFIG()),
     SentryModule.forRoot(SENTRY_CONFIG()),
     JwtModule.register({ secret: JWT_SECRET(), global: true }),
+
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
       useFactory: (
@@ -47,4 +49,4 @@ import * as modules from './modules';
   ],
   providers: [DateScalar, ComplexityPlugin],
 })
-export class AppModule {}
+export class AppModule { }
