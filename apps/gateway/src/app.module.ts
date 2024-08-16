@@ -49,4 +49,4 @@ import * as modules from './modules';
   ],
   providers: [DateScalar, ComplexityPlugin],
 })
-export class AppModule { }
+export class AppModule {}
