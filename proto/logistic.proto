@@ -56,7 +56,7 @@ service DriversService {
 }
 
 service LocationsService {
-  rpc LocationToAddress(LatLng) returns (BoundaryAdministrative);
+  rpc LocationToAddress(LatLngData) returns (BoundaryAdministrativeData);
 
   // Common Services
   rpc Count(QueryFilter) returns (Total);
@@ -305,9 +305,10 @@ message UpdateLocationUnique {
 }
 
 message LatLng {
-  double lat = 1;
-  double lng = 2;
+  optional double lat = 1;
+  optional double lng = 2;
 }
+message LatLngData { optional LatLng data = 1; }
 
 message BoundaryAdministrative {
   optional string province = 1;
@@ -317,6 +318,7 @@ message BoundaryAdministrative {
   optional string village = 5;
   optional string suburb = 6;
 }
+message BoundaryAdministrativeData { optional BoundaryAdministrative data = 1; }
 
 message Location {
   // Base Interface
