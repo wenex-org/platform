@@ -1921,6 +1921,7 @@ enum Scope {
   Verify
   Upload
   Download
+  Resolve
   ReadAuth
   WriteAuth
   ManageAuth
@@ -1975,6 +1976,7 @@ enum Scope {
   ReadLogisticLocations
   WriteLogisticLocations
   ManageLogisticLocations
+  ResolveLogisticLocations
   ReadSpecial
   WriteSpecial
   ManageSpecial
