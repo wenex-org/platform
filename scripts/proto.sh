@@ -51,7 +51,6 @@ PROTOS[GENERAL,2]=./apps/gateway/src/protobuf/general.proto
 PROTOS[IDENTITY,1]=./apps/services/identity/src/app.proto
 PROTOS[IDENTITY,2]=./apps/gateway/src/protobuf/identity.proto
 PROTOS[IDENTITY,3]=./apps/services/auth/src/protobuf/identity.proto
-PROTOS[IDENTITY,4]=./apps/workers/preserver/src/protobuf/identity.proto
 
 # Logistic Proto
 PROTOS[LOGISTIC,1]=./apps/services/logistic/src/app.proto
