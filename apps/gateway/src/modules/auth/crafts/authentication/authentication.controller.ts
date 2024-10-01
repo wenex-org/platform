@@ -21,7 +21,7 @@ import { Observable, from } from 'rxjs';
 @UseFilters(AllExceptionsFilter)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class AuthenticationController {
-  constructor(readonly provider: AuthProvider) { }
+  constructor(readonly provider: AuthProvider) {}
 
   @IsPublic()
   @Post('token')

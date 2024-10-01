@@ -8,4 +8,4 @@ import { LocationsController } from './locations.controller';
   controllers: [LocationsController, LocationsInspector],
   providers: [LocationsResolver],
 })
-export class LocationsModule { }
+export class LocationsModule {}

@@ -21,7 +21,7 @@ import { LatLngDto } from '@app/common/dto';
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class LocationsInspector {
-  constructor(readonly provider: LogisticProvider) { }
+  constructor(readonly provider: LogisticProvider) {}
 
   @Post('location-to-address')
   @SetScope(Scope.ResolveLogisticLocations)
