@@ -281,82 +281,6 @@ type PushItemsSerializer {
   items: [PushSerializer]!
 }
 
-type ConfigSerializer {
-  owner: JSON!
-  shares: [JSON]
-  clients: [JSON]!
-  props: JSON
-  id: String!
-  ref: String
-  groups: [String!]
-  created_at: Date!
-  created_by: String!
-  created_in: String!
-  updated_at: Date
-  updated_by: String
-  updated_in: String
-  deleted_at: Date
-  deleted_by: String
-  deleted_in: String
-  restored_at: Date
-  restored_by: String
-  restored_in: String
-  description: String
-  version: String!
-  tags: [String!]
-  rand: String!
-  timestamp: String!
-  type: String!
-  value: JSON
-  key: String!
-}
-
-type ConfigDataSerializer {
-  data: ConfigSerializer
-}
-
-type ConfigItemsSerializer {
-  items: [ConfigSerializer]!
-}
-
-type SettingSerializer {
-  owner: JSON!
-  shares: [JSON]
-  clients: [JSON]!
-  props: JSON
-  id: String!
-  ref: String
-  groups: [String!]
-  created_at: Date!
-  created_by: String!
-  created_in: String!
-  updated_at: Date
-  updated_by: String
-  updated_in: String
-  deleted_at: Date
-  deleted_by: String
-  deleted_in: String
-  restored_at: Date
-  restored_by: String
-  restored_in: String
-  description: String
-  version: String!
-  tags: [String!]
-  rand: String!
-  timestamp: String!
-  type: String!
-  value: JSON
-  key: String!
-}
-
-type SettingDataSerializer {
-  data: SettingSerializer
-}
-
-type SettingItemsSerializer {
-  items: [SettingSerializer]!
-}
-
 type AppChangeLogSerializer {
   owner: JSON!
   shares: [JSON]
@@ -550,6 +474,82 @@ type ClientDataSerializer {
 
 type ClientItemsSerializer {
   items: [ClientSerializer!]
+}
+
+type ConfigSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
+  props: JSON
+  id: String!
+  ref: String
+  groups: [String!]
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  tags: [String!]
+  rand: String!
+  timestamp: String!
+  type: String!
+  value: JSON
+  key: String!
+}
+
+type ConfigDataSerializer {
+  data: ConfigSerializer
+}
+
+type ConfigItemsSerializer {
+  items: [ConfigSerializer]!
+}
+
+type SettingSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
+  props: JSON
+  id: String!
+  ref: String
+  groups: [String!]
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  tags: [String!]
+  rand: String!
+  timestamp: String!
+  type: String!
+  value: JSON
+  key: String!
+}
+
+type SettingDataSerializer {
+  data: SettingSerializer
+}
+
+type SettingItemsSerializer {
+  items: [SettingSerializer]!
 }
 
 type FileSerializer {
@@ -1354,18 +1354,18 @@ type Query {
   countPushHistory(filter: QueryFilterDto!): TotalSerializer!
   findPushHistory(filter: FilterDto!): PushHistoryItemsSerializer!
   findOnePushHistory(id: String!, ref: String): PushHistoryDataSerializer!
-  countConfig(filter: QueryFilterDto!): TotalSerializer!
-  findConfig(filter: FilterDto!): ConfigItemsSerializer!
-  findOneConfig(id: String!, ref: String): ConfigDataSerializer!
-  countSetting(filter: QueryFilterDto!): TotalSerializer!
-  findSetting(filter: FilterDto!): SettingItemsSerializer!
-  findOneSetting(id: String!, ref: String): SettingDataSerializer!
   countApp(filter: QueryFilterDto!): TotalSerializer!
   findApp(filter: FilterDto!): AppItemsSerializer!
   findOneApp(id: String!, ref: String): AppDataSerializer!
   countClient(filter: QueryFilterDto!): TotalSerializer!
   findClient(filter: FilterDto!): ClientItemsSerializer!
   findOneClient(id: String!, ref: String): ClientDataSerializer!
+  countConfig(filter: QueryFilterDto!): TotalSerializer!
+  findConfig(filter: FilterDto!): ConfigItemsSerializer!
+  findOneConfig(id: String!, ref: String): ConfigDataSerializer!
+  countSetting(filter: QueryFilterDto!): TotalSerializer!
+  findSetting(filter: FilterDto!): SettingItemsSerializer!
+  findOneSetting(id: String!, ref: String): SettingDataSerializer!
   countFile(filter: QueryFilterDto!): TotalSerializer!
   findFile(filter: FilterDto!): FileItemsSerializer!
   findOneFile(id: String!, ref: String): FileDataSerializer!
@@ -1474,20 +1474,6 @@ type Mutation {
   destroyOnePushHistory(id: String!, ref: String): PushHistoryDataSerializer!
   updateOnePushHistory(id: String!, data: UpdatePushHistoryDto!, ref: String): PushHistoryDataSerializer!
   updateBulkPushHistory(filter: QueryFilterDto!, data: UpdatePushHistoryDto!): TotalSerializer!
-  createConfig(data: CreateConfigDto!): ConfigDataSerializer!
-  createBulkConfig(data: CreateConfigItemsDto!): ConfigItemsSerializer!
-  deleteOneConfig(id: String!, ref: String): ConfigDataSerializer!
-  restoreOneConfig(id: String!, ref: String): ConfigDataSerializer!
-  destroyOneConfig(id: String!, ref: String): ConfigDataSerializer!
-  updateOneConfig(id: String!, data: UpdateConfigDto!, ref: String): ConfigDataSerializer!
-  updateBulkConfig(filter: QueryFilterDto!, data: UpdateConfigDto!): TotalSerializer!
-  createSetting(data: CreateSettingDto!): SettingDataSerializer!
-  createBulkSetting(data: CreateSettingItemsDto!): SettingItemsSerializer!
-  deleteOneSetting(id: String!, ref: String): SettingDataSerializer!
-  restoreOneSetting(id: String!, ref: String): SettingDataSerializer!
-  destroyOneSetting(id: String!, ref: String): SettingDataSerializer!
-  updateOneSetting(id: String!, data: UpdateSettingDto!, ref: String): SettingDataSerializer!
-  updateBulkSetting(filter: QueryFilterDto!, data: UpdateSettingDto!): TotalSerializer!
   createApp(data: CreateAppDto!): AppDataSerializer!
   createBulkApp(data: CreateAppItemsDto!): AppItemsSerializer!
   deleteOneApp(id: String!, ref: String): AppDataSerializer!
@@ -1502,6 +1488,20 @@ type Mutation {
   destroyOneClient(id: String!, ref: String): ClientDataSerializer!
   updateOneClient(id: String!, data: UpdateClientDto!, ref: String): ClientDataSerializer!
   updateBulkClient(filter: QueryFilterDto!, data: UpdateClientDto!): TotalSerializer!
+  createConfig(data: CreateConfigDto!): ConfigDataSerializer!
+  createBulkConfig(data: CreateConfigItemsDto!): ConfigItemsSerializer!
+  deleteOneConfig(id: String!, ref: String): ConfigDataSerializer!
+  restoreOneConfig(id: String!, ref: String): ConfigDataSerializer!
+  destroyOneConfig(id: String!, ref: String): ConfigDataSerializer!
+  updateOneConfig(id: String!, data: UpdateConfigDto!, ref: String): ConfigDataSerializer!
+  updateBulkConfig(filter: QueryFilterDto!, data: UpdateConfigDto!): TotalSerializer!
+  createSetting(data: CreateSettingDto!): SettingDataSerializer!
+  createBulkSetting(data: CreateSettingItemsDto!): SettingItemsSerializer!
+  deleteOneSetting(id: String!, ref: String): SettingDataSerializer!
+  restoreOneSetting(id: String!, ref: String): SettingDataSerializer!
+  destroyOneSetting(id: String!, ref: String): SettingDataSerializer!
+  updateOneSetting(id: String!, data: UpdateSettingDto!, ref: String): SettingDataSerializer!
+  updateBulkSetting(filter: QueryFilterDto!, data: UpdateSettingDto!): TotalSerializer!
   createFile(data: CreateFileDto!): FileDataSerializer!
   createBulkFile(data: CreateFileItemsDto!): FileItemsSerializer!
   deleteOneFile(id: String!, ref: String): FileDataSerializer!
@@ -1838,47 +1838,6 @@ input UpdatePushHistoryReplyDto {
   status: Float!
 }
 
-input CreateConfigDto {
-  value: JSON
-  key: String!
-  type: ValueType!
-}
-
-enum ValueType {
-  Null
-  Array
-  Object
-  String
-  Number
-  Boolean
-}
-
-input CreateConfigItemsDto {
-  items: [CreateConfigDto!]!
-}
-
-input UpdateConfigDto {
-  value: JSON
-  key: String
-  type: ValueType
-}
-
-input CreateSettingDto {
-  value: JSON
-  key: String!
-  type: ValueType!
-}
-
-input CreateSettingItemsDto {
-  items: [CreateSettingDto!]!
-}
-
-input UpdateSettingDto {
-  value: JSON
-  key: String
-  type: ValueType
-}
-
 input CreateAppDto {
   change_logs: [CreateAppChangeLogDto]
   cid: String!
@@ -1928,15 +1887,6 @@ enum Scope {
   ReadAuthGrants
   WriteAuthGrants
   ManageAuthGrants
-  ReadConfig
-  WriteConfig
-  ManageConfig
-  ReadConfigConfigs
-  WriteConfigConfigs
-  ManageConfigConfigs
-  ReadConfigSettings
-  WriteConfigSettings
-  ManageConfigSettings
   ReadDomain
   WriteDomain
   ManageDomain
@@ -1946,6 +1896,15 @@ enum Scope {
   ReadDomainClients
   WriteDomainClients
   ManageDomainClients
+  ReadContext
+  WriteContext
+  ManageContext
+  ReadContextConfigs
+  WriteContextConfigs
+  ManageContextConfigs
+  ReadContextSettings
+  WriteContextSettings
+  ManageContextSettings
   ReadIdentity
   WriteIdentity
   ManageIdentity
@@ -2147,6 +2106,47 @@ input UpdateClientServiceDto {
   config: JSON
   type: ClientServiceType!
   provider: ClientServiceProvider
+}
+
+input CreateConfigDto {
+  value: JSON
+  key: String!
+  type: ValueType!
+}
+
+enum ValueType {
+  Null
+  Array
+  Object
+  String
+  Number
+  Boolean
+}
+
+input CreateConfigItemsDto {
+  items: [CreateConfigDto!]!
+}
+
+input UpdateConfigDto {
+  value: JSON
+  key: String
+  type: ValueType
+}
+
+input CreateSettingDto {
+  value: JSON
+  key: String!
+  type: ValueType!
+}
+
+input CreateSettingItemsDto {
+  items: [CreateSettingDto!]!
+}
+
+input UpdateSettingDto {
+  value: JSON
+  key: String
+  type: ValueType
 }
 
 input CreateFileDto {

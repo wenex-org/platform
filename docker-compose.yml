@@ -35,23 +35,6 @@ services:
     <<: *common
 
   #######################
-  # CONFIGS SERVICE
-  #######################
-  configs:
-    container_name: configs
-    build:
-      args:
-        SERVICE_NAME: configs
-      context: .
-    ports:
-      - 3030:3030 # Rest
-      - 5030:5030 # gRPC
-    environment:
-      NODE_ENV: prod
-      SENTRY_DSN:
-    <<: *common
-
-  #######################
   # DOMAIN SERVICES
   #######################
   domain:
@@ -63,6 +46,23 @@ services:
     ports:
       - 3040:3040 # Rest
       - 5040:5040 # gRPC
+    environment:
+      NODE_ENV: prod
+      SENTRY_DSN:
+    <<: *common
+
+  #######################
+  # CONTEXT SERVICE
+  #######################
+  context:
+    container_name: context
+    build:
+      args:
+        SERVICE_NAME: context
+      context: .
+    ports:
+      - 3030:3030 # Rest
+      - 5030:5030 # gRPC
     environment:
       NODE_ENV: prod
       SENTRY_DSN:

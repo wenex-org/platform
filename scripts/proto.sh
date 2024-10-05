@@ -5,8 +5,8 @@ declare -A PROTOS
 # Protos
 AUTH=./proto/auth.proto
 TOUCH=./proto/touch.proto
-CONFIG=./proto/config.proto
 DOMAIN=./proto/domain.proto
+CONTEXT=./proto/context.proto
 SPECIAL=./proto/special.proto
 GENERAL=./proto/general.proto
 IDENTITY=./proto/identity.proto
@@ -23,24 +23,24 @@ PROTOS[AUTH,2]=./apps/gateway/src/protobuf/auth.proto
 PROTOS[TOUCH,1]=./apps/services/touch/src/app.proto
 PROTOS[TOUCH,2]=./apps/gateway/src/protobuf/touch.proto
 
-# Config Proto
-PROTOS[CONFIG,1]=./apps/services/config/src/app.proto
-PROTOS[CONFIG,2]=./apps/gateway/src/protobuf/config.proto
-PROTOS[CONFIG,3]=./apps/services/auth/src/protobuf/config.proto
-
 # Domain Proto
 PROTOS[DOMAIN,1]=./apps/services/domain/src/app.proto
 PROTOS[DOMAIN,2]=./apps/gateway/src/protobuf/domain.proto
 PROTOS[DOMAIN,3]=./apps/services/auth/src/protobuf/domain.proto
 PROTOS[DOMAIN,4]=./apps/services/touch/src/protobuf/domain.proto
 
+# Context Proto
+PROTOS[CONTEXT,1]=./apps/services/context/src/app.proto
+PROTOS[CONTEXT,2]=./apps/gateway/src/protobuf/context.proto
+PROTOS[CONTEXT,3]=./apps/services/auth/src/protobuf/context.proto
+
 # Special Proto
 PROTOS[SPECIAL,1]=./apps/services/special/src/app.proto
 PROTOS[SPECIAL,2]=./apps/gateway/src/protobuf/special.proto
 PROTOS[SPECIAL,3]=./apps/services/auth/src/protobuf/special.proto
 PROTOS[SPECIAL,4]=./apps/services/touch/src/protobuf/special.proto
-PROTOS[SPECIAL,5]=./apps/services/config/src/protobuf/special.proto
-PROTOS[SPECIAL,6]=./apps/services/domain/src/protobuf/special.proto
+PROTOS[SPECIAL,5]=./apps/services/domain/src/protobuf/special.proto
+PROTOS[SPECIAL,6]=./apps/services/context/src/protobuf/special.proto
 PROTOS[SPECIAL,7]=./apps/services/identity/src/protobuf/special.proto
 
 # General Proto
@@ -67,8 +67,8 @@ PROTOS[PRESERVER,1]=./apps/workers/preserver/src/app.proto
 for KEY in "${!PROTOS[@]}"; do
   if [[ $KEY == *"AUTH"* ]]; then ln -f $AUTH ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"TOUCH"* ]]; then ln -f $TOUCH ${PROTOS[$KEY]}; fi
-  if [[ $KEY == *"CONFIG"* ]]; then ln -f $CONFIG ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"DOMAIN"* ]]; then ln -f $DOMAIN ${PROTOS[$KEY]}; fi
+  if [[ $KEY == *"CONTEXT"* ]]; then ln -f $CONTEXT ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"SPECIAL"* ]]; then ln -f $SPECIAL ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"GENERAL"* ]]; then ln -f $GENERAL ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"IDENTITY"* ]]; then ln -f $IDENTITY ${PROTOS[$KEY]}; fi

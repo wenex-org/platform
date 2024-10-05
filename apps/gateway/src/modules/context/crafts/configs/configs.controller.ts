@@ -29,7 +29,7 @@ import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
-import { ConfigProvider } from '@app/common/providers';
+import { ContextProvider } from '@app/common/providers';
 import { ClientSession } from 'mongoose';
 import { Response } from 'express';
 import { Observable } from 'rxjs';
@@ -42,15 +42,15 @@ import { Observable } from 'rxjs';
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class ConfigsController extends ControllerClass<Config, ConfigDto> implements ControllerInterface<Config, ConfigDto> {
-  constructor(readonly provider: ConfigProvider) {
+  constructor(readonly provider: ContextProvider) {
     super(provider.configs, () => ConfigSerializer);
   }
 
   @Get('count')
   @Cache('configs', 'fill')
-  @SetScope(Scope.ReadConfigConfigs)
+  @SetScope(Scope.ReadContextConfigs)
   @UseInterceptors(AuthorityInterceptor)
-  @SetPolicy(Action.Read, Resource.ConfigConfigs)
+  @SetPolicy(Action.Read, Resource.ContextConfigs)
   @ApiQuery({ type: QueryFilterDto, required: false })
   count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto, @Session() session?: ClientSession): Observable<TotalSerializer> {
     return super.count(meta, filter, session);
@@ -59,9 +59,9 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   @Post()
   @ShipStrategy('create')
   @Cache('configs', 'flush')
-  @SetScope(Scope.WriteConfigConfigs)
+  @SetScope(Scope.WriteContextConfigs)
   @UseInterceptors(...WriteInterceptors)
-  @SetPolicy(Action.Create, Resource.ConfigConfigs)
+  @SetPolicy(Action.Create, Resource.ContextConfigs)
   create(
     @Meta() meta: Metadata,
     @Body() data: CreateConfigDto,
@@ -73,9 +73,9 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   @Post('bulk')
   @ShipStrategy('create')
   @Cache('configs', 'flush')
-  @SetScope(Scope.WriteConfigConfigs)
+  @SetScope(Scope.WriteContextConfigs)
   @UseInterceptors(...WriteInterceptors)
-  @SetPolicy(Action.Create, Resource.ConfigConfigs)
+  @SetPolicy(Action.Create, Resource.ContextConfigs)
   createBulk(
     @Meta() meta: Metadata,
     @Body() data: CreateConfigItemsDto,
@@ -86,8 +86,8 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
 
   @Get()
   @Cache('configs', 'fill')
-  @SetScope(Scope.ReadConfigConfigs)
-  @SetPolicy(Action.Read, Resource.ConfigConfigs)
+  @SetScope(Scope.ReadContextConfigs)
+  @SetPolicy(Action.Read, Resource.ContextConfigs)
   @ApiQuery({ type: FilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   find(
@@ -99,8 +99,8 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Get('cursor')
-  @SetScope(Scope.ReadConfigConfigs)
-  @SetPolicy(Action.Read, Resource.ConfigConfigs)
+  @SetScope(Scope.ReadContextConfigs)
+  @SetPolicy(Action.Read, Resource.ContextConfigs)
   @ApiQuery({ type: FilterOneDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   @ApiResponse({ status: HttpStatus.OK, type: ConfigSerializer, description: 'SSE' })
@@ -119,8 +119,8 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
 
   @Get(':id')
   @Cache('configs', 'fill')
-  @SetScope(Scope.ReadConfigConfigs)
-  @SetPolicy(Action.Read, Resource.ConfigConfigs)
+  @SetScope(Scope.ReadContextConfigs)
+  @SetPolicy(Action.Read, Resource.ContextConfigs)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   FindOne(
@@ -136,8 +136,8 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
 
   @Delete(':id')
   @Cache('configs', 'flush')
-  @SetScope(Scope.WriteConfigConfigs)
-  @SetPolicy(Action.Delete, Resource.ConfigConfigs)
+  @SetScope(Scope.WriteContextConfigs)
+  @SetPolicy(Action.Delete, Resource.ContextConfigs)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   DeleteOne(
@@ -153,8 +153,8 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
 
   @Put(':id/restore')
   @Cache('configs', 'flush')
-  @SetScope(Scope.WriteConfigConfigs)
-  @SetPolicy(Action.Restore, Resource.ConfigConfigs)
+  @SetScope(Scope.WriteContextConfigs)
+  @SetPolicy(Action.Restore, Resource.ContextConfigs)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   RestoreOne(
@@ -170,8 +170,8 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
 
   @Delete(':id/destroy')
   @Cache('configs', 'flush')
-  @SetScope(Scope.ManageConfigConfigs)
-  @SetPolicy(Action.Destroy, Resource.ConfigConfigs)
+  @SetScope(Scope.ManageContextConfigs)
+  @SetPolicy(Action.Destroy, Resource.ContextConfigs)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   DestroyOne(
@@ -188,8 +188,8 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   @Patch(':id')
   @ShipStrategy('update')
   @Cache('configs', 'flush')
-  @SetScope(Scope.WriteConfigConfigs)
-  @SetPolicy(Action.Update, Resource.ConfigConfigs)
+  @SetScope(Scope.WriteContextConfigs)
+  @SetPolicy(Action.Update, Resource.ContextConfigs)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   UpdateOne(
@@ -207,8 +207,8 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   @Patch('bulk')
   @ShipStrategy('update')
   @Cache('configs', 'flush')
-  @SetScope(Scope.ManageConfigConfigs)
-  @SetPolicy(Action.Update, Resource.ConfigConfigs)
+  @SetScope(Scope.ManageContextConfigs)
+  @SetPolicy(Action.Update, Resource.ContextConfigs)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   UpdateBulk(

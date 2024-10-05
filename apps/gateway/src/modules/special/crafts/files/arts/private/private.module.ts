@@ -1,6 +1,6 @@
 import { MulterModule } from '@nestjs/platform-express';
 import { PRIVATE_BUCKET } from '@app/common/consts';
-import { MINIO_CONFIG } from '@app/common/configs';
+import { MINIO_CONFIG } from '@app/common/envs';
 import { Module } from '@nestjs/common';
 import multerS3 from 'multer-s3';
 

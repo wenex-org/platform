@@ -1,14 +1,7 @@
-import {
-  CreateSettingDto,
-  CreateSettingItemsDto,
-  FilterDto,
-  FilterOneDto,
-  QueryFilterDto,
-  UpdateSettingDto,
-} from '@app/common/dto';
-import { TotalSerializer, SettingDataSerializer, SettingItemsSerializer, SettingSerializer } from '@app/common/serializers';
+import { CreateConfigDto, CreateConfigItemsDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateConfigDto } from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
-import { Controller as ControllerInterface, Metadata, Setting, SettingDto } from '@app/common/interfaces';
+import { TotalSerializer, ConfigDataSerializer, ConfigItemsSerializer, ConfigSerializer } from '@app/common/serializers';
+import { Controller as ControllerInterface, Metadata, Config, ConfigDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
@@ -19,27 +12,27 @@ import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
-import { ConfigProvider } from '@app/common/providers';
+import { ContextProvider } from '@app/common/providers';
 import { refineFilterQuery } from '@app/common/utils';
 import { ClientSession } from 'mongoose';
 import { Observable } from 'rxjs';
 
-@Resolver(() => SettingSerializer)
+@Resolver(() => ConfigSerializer)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class SettingsResolver extends ControllerClass<Setting, SettingDto> implements ControllerInterface<Setting, SettingDto> {
-  constructor(readonly provider: ConfigProvider) {
-    super(provider.settings, () => SettingSerializer);
+export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implements ControllerInterface<Config, ConfigDto> {
+  constructor(readonly provider: ContextProvider) {
+    super(provider.configs, () => ConfigSerializer);
   }
 
   @Query(() => TotalSerializer)
-  @Cache('settings', 'fill')
-  @SetScope(Scope.ReadConfigSettings)
+  @Cache('configs', 'fill')
+  @SetScope(Scope.ReadContextConfigs)
   @UseInterceptors(AuthorityInterceptor)
-  @SetPolicy(Action.Read, Resource.ConfigSettings)
-  countSetting(
+  @SetPolicy(Action.Read, Resource.ContextConfigs)
+  countConfig(
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: QueryFilterDto,
     @Session() session?: ClientSession,
@@ -47,139 +40,139 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
     return super.count(meta, filter, session);
   }
 
-  @Mutation(() => SettingDataSerializer)
+  @Mutation(() => ConfigDataSerializer)
   @ShipStrategy('create')
-  @Cache('settings', 'flush')
-  @SetScope(Scope.WriteConfigSettings)
+  @Cache('configs', 'flush')
+  @SetScope(Scope.WriteContextConfigs)
   @UseInterceptors(...WriteInterceptors)
-  @SetPolicy(Action.Create, Resource.ConfigSettings)
-  createSetting(
+  @SetPolicy(Action.Create, Resource.ContextConfigs)
+  createConfig(
     @Meta() meta: Metadata,
-    @Args('data') data: CreateSettingDto,
+    @Args('data') data: CreateConfigDto,
     @Session() session?: ClientSession,
-  ): Observable<SettingDataSerializer> {
+  ): Observable<ConfigDataSerializer> {
     return super.create(meta, data, session);
   }
 
-  @Mutation(() => SettingItemsSerializer)
+  @Mutation(() => ConfigItemsSerializer)
   @ShipStrategy('create')
-  @Cache('settings', 'flush')
-  @SetScope(Scope.WriteConfigSettings)
+  @Cache('configs', 'flush')
+  @SetScope(Scope.WriteContextConfigs)
   @UseInterceptors(...WriteInterceptors)
-  @SetPolicy(Action.Create, Resource.ConfigSettings)
-  createBulkSetting(
+  @SetPolicy(Action.Create, Resource.ContextConfigs)
+  createBulkConfig(
     @Meta() meta: Metadata,
-    @Args('data') data: CreateSettingItemsDto,
+    @Args('data') data: CreateConfigItemsDto,
     @Session() session?: ClientSession,
-  ): Observable<SettingItemsSerializer> {
+  ): Observable<ConfigItemsSerializer> {
     return super.createBulk(meta, data, session);
   }
 
-  @Query(() => SettingItemsSerializer)
-  @Cache('settings', 'fill')
-  @SetScope(Scope.ReadConfigSettings)
-  @SetPolicy(Action.Read, Resource.ConfigSettings)
+  @Query(() => ConfigItemsSerializer)
+  @Cache('configs', 'fill')
+  @SetScope(Scope.ReadContextConfigs)
+  @SetPolicy(Action.Read, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  findSetting(
+  findConfig(
     @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: FilterDto<Setting>,
+    @Filter() @Args('filter') filter: FilterDto<Config>,
     @Session() session?: ClientSession,
-  ): Observable<SettingItemsSerializer> {
+  ): Observable<ConfigItemsSerializer> {
     return super.find(meta, filter, session);
   }
 
-  @Query(() => SettingDataSerializer)
-  @Cache('settings', 'fill')
-  @SetScope(Scope.ReadConfigSettings)
-  @SetPolicy(Action.Read, Resource.ConfigSettings)
+  @Query(() => ConfigDataSerializer)
+  @Cache('configs', 'fill')
+  @SetScope(Scope.ReadContextConfigs)
+  @SetPolicy(Action.Read, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  findOneSetting(
+  findOneConfig(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<Setting>,
+    @Filter() filter: FilterOneDto<Config>,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
-  ): Observable<SettingDataSerializer> {
+  ): Observable<ConfigDataSerializer> {
     refineFilterQuery(filter, { id, ref });
     return super.findOne(meta, filter, session);
   }
 
-  @Mutation(() => SettingDataSerializer)
-  @Cache('settings', 'flush')
-  @SetScope(Scope.WriteConfigSettings)
-  @SetPolicy(Action.Delete, Resource.ConfigSettings)
+  @Mutation(() => ConfigDataSerializer)
+  @Cache('configs', 'flush')
+  @SetScope(Scope.WriteContextConfigs)
+  @SetPolicy(Action.Delete, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  deleteOneSetting(
+  deleteOneConfig(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<Setting>,
+    @Filter() filter: FilterDto<Config>,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
-  ): Observable<SettingDataSerializer> {
+  ): Observable<ConfigDataSerializer> {
     refineFilterQuery(filter, { id, ref });
     return super.deleteOne(meta, filter, session);
   }
 
-  @Mutation(() => SettingDataSerializer)
-  @Cache('settings', 'flush')
-  @SetScope(Scope.WriteConfigSettings)
-  @SetPolicy(Action.Restore, Resource.ConfigSettings)
+  @Mutation(() => ConfigDataSerializer)
+  @Cache('configs', 'flush')
+  @SetScope(Scope.WriteContextConfigs)
+  @SetPolicy(Action.Restore, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  restoreOneSetting(
+  restoreOneConfig(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<Setting>,
+    @Filter() filter: FilterDto<Config>,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
-  ): Observable<SettingDataSerializer> {
+  ): Observable<ConfigDataSerializer> {
     refineFilterQuery(filter, { id, ref });
     return super.restoreOne(meta, filter, session);
   }
 
-  @Mutation(() => SettingDataSerializer)
-  @Cache('settings', 'flush')
-  @SetScope(Scope.ManageConfigSettings)
-  @SetPolicy(Action.Destroy, Resource.ConfigSettings)
+  @Mutation(() => ConfigDataSerializer)
+  @Cache('configs', 'flush')
+  @SetScope(Scope.ManageContextConfigs)
+  @SetPolicy(Action.Destroy, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  destroyOneSetting(
+  destroyOneConfig(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<Setting>,
+    @Filter() filter: FilterDto<Config>,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
-  ): Observable<SettingDataSerializer> {
+  ): Observable<ConfigDataSerializer> {
     refineFilterQuery(filter, { id, ref });
     return super.destroyOne(meta, filter, session);
   }
 
-  @Mutation(() => SettingDataSerializer)
+  @Mutation(() => ConfigDataSerializer)
   @ShipStrategy('update')
-  @Cache('settings', 'flush')
-  @SetScope(Scope.WriteConfigSettings)
-  @SetPolicy(Action.Update, Resource.ConfigSettings)
+  @Cache('configs', 'flush')
+  @SetScope(Scope.WriteContextConfigs)
+  @SetPolicy(Action.Update, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateOneSetting(
+  updateOneConfig(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<Setting>,
-    @Args('data') update: UpdateSettingDto,
+    @Filter() filter: FilterOneDto<Config>,
+    @Args('data') update: UpdateConfigDto,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
-  ): Observable<SettingDataSerializer> {
+  ): Observable<ConfigDataSerializer> {
     refineFilterQuery(filter, { id, ref });
     return super.updateOne(meta, filter, update, session);
   }
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @Cache('settings', 'flush')
-  @SetScope(Scope.ManageConfigSettings)
-  @SetPolicy(Action.Update, Resource.ConfigSettings)
+  @Cache('configs', 'flush')
+  @SetScope(Scope.ManageContextConfigs)
+  @SetPolicy(Action.Update, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateBulkSetting(
+  updateBulkConfig(
     @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: QueryFilterDto<Setting>,
-    @Args('data') update: UpdateSettingDto,
+    @Filter() @Args('filter') filter: QueryFilterDto<Config>,
+    @Args('data') update: UpdateConfigDto,
     @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
     return super.updateBulk(meta, filter, update, session);
