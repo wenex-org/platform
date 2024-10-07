@@ -27,6 +27,8 @@ async function bootstrap() {
   }
 
   const app = await NestFactory.create(AppModule, { cors: true });
+  app.enableShutdownHooks();
+
   app.getHttpAdapter().getInstance().set('etag', false);
 
   app.use(helmet({ contentSecurityPolicy: false }));
