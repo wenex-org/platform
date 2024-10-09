@@ -4,6 +4,7 @@
     "abacl",
     "Acked",
     "bitcoinjs",
+    "bullmq",
     "clientid",
     "clientinfo",
     "compodoc",
