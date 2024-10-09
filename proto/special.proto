@@ -62,6 +62,64 @@ service StatsService {
   rpc UpdateById(UpdateStatUnique) returns (StatData);
 }
 
+service SagasService {
+  rpc Start(SagaOption) returns (SagaSession);
+  rpc Commit(SagaSession) returns (Result);
+  rpc Abort(SagaSession) returns (Result);
+
+  // Common Services
+  rpc Count(QueryFilter) returns (Total);
+
+  rpc Create(SagaData) returns (SagaData);
+  rpc CreateBulk(Sagas) returns (Sagas);
+
+  rpc Find(Filter) returns (Sagas);
+  rpc Cursor(Filter) returns (stream Saga);
+
+  rpc FindOne(FilterOne) returns (SagaData);
+  rpc FindById(FilterID) returns (SagaData);
+
+  rpc DeleteOne(FilterOne) returns (SagaData);
+  rpc DeleteById(FilterID) returns (SagaData);
+
+  rpc RestoreOne(FilterOne) returns (SagaData);
+  rpc RestoreById(FilterID) returns (SagaData);
+
+  rpc DestroyOne(FilterOne) returns (SagaData);
+  rpc DestroyById(FilterID) returns (SagaData);
+
+  rpc UpdateOne(UpdateSagaOne) returns (SagaData);
+  rpc UpdateBulk(UpdateSagaBulk) returns (Total);
+  rpc UpdateById(UpdateSagaUnique) returns (SagaData);
+}
+
+service SagaHistoriesService {
+  // Common Services
+  rpc Count(QueryFilter) returns (Total);
+
+  rpc Create(SagaHistoryData) returns (SagaHistoryData);
+  rpc CreateBulk(SagaHistories) returns (SagaHistories);
+
+  rpc Find(Filter) returns (SagaHistories);
+  rpc Cursor(Filter) returns (stream SagaHistory);
+
+  rpc FindOne(FilterOne) returns (SagaHistoryData);
+  rpc FindById(FilterID) returns (SagaHistoryData);
+
+  rpc DeleteOne(FilterOne) returns (SagaHistoryData);
+  rpc DeleteById(FilterID) returns (SagaHistoryData);
+
+  rpc RestoreOne(FilterOne) returns (SagaHistoryData);
+  rpc RestoreById(FilterID) returns (SagaHistoryData);
+
+  rpc DestroyOne(FilterOne) returns (SagaHistoryData);
+  rpc DestroyById(FilterID) returns (SagaHistoryData);
+
+  rpc UpdateOne(UpdateSagaHistoryOne) returns (SagaHistoryData);
+  rpc UpdateBulk(UpdateSagaHistoryBulk) returns (Total);
+  rpc UpdateById(UpdateSagaHistoryUnique) returns (SagaHistoryData);
+}
+
 // Common Messages
 
 message Total { int64 total = 1; }
@@ -204,21 +262,146 @@ message Stat {
   optional string timestamp = 24;
 
   // Stat Interface
-  optional string type = 51;
+  optional string type = 50;
 
-  optional string key = 52;
-  optional int64 val = 53;
+  optional string key = 51;
+  optional int64 val = 52;
 
-  optional int64 day = 54;
-  repeated int64 hours = 55;
+  optional int64 day = 53;
+  repeated int64 hours = 54;
 
-  optional int64 month = 56;
-  repeated int64 days = 57;
+  optional int64 month = 55;
+  repeated int64 days = 56;
 
-  optional int64 year = 58;
-  repeated int64 months = 59;
+  optional int64 year = 57;
+  repeated int64 months = 58;
 
-  optional string flags = 60;
+  optional string flags = 59;
 }
 message Stats { repeated Stat items = 1; }
 message StatData { optional Stat data = 1; }
+
+// Sagas Messages
+
+message UpdateSagaOne {
+  Saga update = 1;
+  FilterOne filter = 2;
+}
+message UpdateSagaBulk {
+  Saga update = 1;
+  QueryFilter filter = 2;
+}
+message UpdateSagaUnique {
+  Saga update = 1;
+  FilterID filter = 2;
+}
+
+message Saga {
+  // Base Interface
+  optional string owner = 1;
+
+  optional string id = 2;
+  optional string ref = 3;
+
+  repeated string shares = 4;
+  repeated string groups = 5;
+  repeated string clients = 6;
+
+  optional string created_at = 7;
+  optional string created_by = 8;
+  optional string created_in = 9;
+
+  optional string updated_at = 10;
+  optional string updated_by = 11;
+  optional string updated_in = 12;
+  optional string deleted_at = 13;
+  optional string deleted_by = 14;
+  optional string deleted_in = 15;
+  optional string restored_at = 16;
+  optional string restored_by = 17;
+  optional string restored_in = 18;
+
+  optional string description = 19;
+  optional string version = 20;
+  optional string props = 21;
+  repeated string tags = 22;
+
+  optional string rand = 23;
+  optional string timestamp = 24;
+
+  // Saga Interface
+  optional int64 ttl = 50;
+  optional string job = 51;
+
+  optional string state = 52;
+  optional string session = 53;
+
+  optional string aborted_at = 54;
+  optional string committed_at = 55;
+}
+message Sagas { repeated Saga items = 1; }
+message SagaData { optional Saga data = 1; }
+
+message SagaOption { optional int64 ttl = 1; }
+message SagaSession { optional string session = 1; }
+
+// Saga Histories Messages
+
+message UpdateSagaHistoryOne {
+  SagaHistory update = 1;
+  FilterOne filter = 2;
+}
+message UpdateSagaHistoryBulk {
+  SagaHistory update = 1;
+  QueryFilter filter = 2;
+}
+message UpdateSagaHistoryUnique {
+  SagaHistory update = 1;
+  FilterID filter = 2;
+}
+
+message SagaHistory {
+  // Base Interface
+  optional string owner = 1;
+
+  optional string id = 2;
+  optional string ref = 3;
+
+  repeated string shares = 4;
+  repeated string groups = 5;
+  repeated string clients = 6;
+
+  optional string created_at = 7;
+  optional string created_by = 8;
+  optional string created_in = 9;
+
+  optional string updated_at = 10;
+  optional string updated_by = 11;
+  optional string updated_in = 12;
+  optional string deleted_at = 13;
+  optional string deleted_by = 14;
+  optional string deleted_in = 15;
+  optional string restored_at = 16;
+  optional string restored_by = 17;
+  optional string restored_in = 18;
+
+  optional string description = 19;
+  optional string version = 20;
+  optional string props = 21;
+  repeated string tags = 22;
+
+  optional string rand = 23;
+  optional string timestamp = 24;
+
+  // Saga History Interface
+  optional string saga = 50;
+
+  optional string method = 51;
+  optional string database = 52;
+  optional string collection = 53;
+
+  optional string req = 54;
+  optional string res = 55;
+}
+message SagaHistories { repeated SagaHistory items = 1; }
+message SagaHistoryData { optional SagaHistory data = 1; }
