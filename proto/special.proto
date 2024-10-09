@@ -396,9 +396,9 @@ message SagaHistory {
   // Saga History Interface
   optional string saga = 50;
 
-  optional string method = 51;
-  optional string database = 52;
-  optional string collection = 53;
+  optional string fn = 51;
+  optional string db = 52;
+  optional string tb = 53;
 
   optional string req = 54;
   optional string res = 55;
