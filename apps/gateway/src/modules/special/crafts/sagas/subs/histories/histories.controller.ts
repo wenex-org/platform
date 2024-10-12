@@ -52,7 +52,8 @@ import { Observable } from 'rxjs';
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class SagaHistoriesController
   extends ControllerClass<SagaHistory, SagaHistoryDto>
-  implements ControllerInterface<SagaHistory, SagaHistoryDto> {
+  implements ControllerInterface<SagaHistory, SagaHistoryDto>
+{
   constructor(readonly provider: SpecialProvider) {
     super(provider.sagas.histories, () => SagaHistorySerializer);
   }

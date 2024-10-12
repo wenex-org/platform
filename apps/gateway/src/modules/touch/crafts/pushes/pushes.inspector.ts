@@ -20,7 +20,7 @@ import { Meta } from '@app/common/decorators';
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class PushesInspector {
-  constructor(readonly provider: TouchProvider) { }
+  constructor(readonly provider: TouchProvider) {}
 
   @Post('send')
   @ShipStrategy('create')
