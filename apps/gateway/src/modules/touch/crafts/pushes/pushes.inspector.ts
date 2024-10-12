@@ -13,14 +13,14 @@ import { ValidationPipe } from '@app/common/pipes';
 import { Meta } from '@app/common/decorators';
 
 @ApiBearerAuth()
-@ApiTags('push')
-@Controller('push')
+@ApiTags('pushes')
+@Controller('pushes')
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class PushesInspector {
-  constructor(readonly provider: TouchProvider) {}
+  constructor(readonly provider: TouchProvider) { }
 
   @Post('send')
   @ShipStrategy('create')
