@@ -32,8 +32,8 @@ import { ClientSession } from 'mongoose';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('push')
-@Controller('push')
+@ApiTags('pushes')
+@Controller('pushes')
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -44,7 +44,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   }
 
   @Get('count')
-  @Cache('push', 'fill')
+  @Cache('pushes', 'fill')
   @SetScope(Scope.ReadTouchPushes)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.TouchPushes)
@@ -55,7 +55,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
 
   @Post()
   @ShipStrategy('create')
-  @Cache('push', 'flush')
+  @Cache('pushes', 'flush')
   @SetScope(Scope.WriteTouchPushes)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchPushes)
@@ -65,7 +65,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache('push', 'flush')
+  @Cache('pushes', 'flush')
   @SetScope(Scope.WriteTouchPushes)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchPushes)
@@ -78,7 +78,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   }
 
   @Get()
-  @Cache('push', 'fill')
+  @Cache('pushes', 'fill')
   @SetScope(Scope.ReadTouchPushes)
   @SetPolicy(Action.Read, Resource.TouchPushes)
   @ApiQuery({ type: FilterDto, required: false })
@@ -105,7 +105,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   }
 
   @Get(':id')
-  @Cache('push', 'fill')
+  @Cache('pushes', 'fill')
   @SetScope(Scope.ReadTouchPushes)
   @SetPolicy(Action.Read, Resource.TouchPushes)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -122,7 +122,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   }
 
   @Delete(':id')
-  @Cache('push', 'flush')
+  @Cache('pushes', 'flush')
   @SetScope(Scope.WriteTouchPushes)
   @SetPolicy(Action.Delete, Resource.TouchPushes)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -139,7 +139,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   }
 
   @Put(':id/restore')
-  @Cache('push', 'flush')
+  @Cache('pushes', 'flush')
   @SetScope(Scope.WriteTouchPushes)
   @SetPolicy(Action.Restore, Resource.TouchPushes)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -156,7 +156,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   }
 
   @Delete(':id/destroy')
-  @Cache('push', 'flush')
+  @Cache('pushes', 'flush')
   @SetScope(Scope.ManageTouchPushes)
   @SetPolicy(Action.Destroy, Resource.TouchPushes)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -174,7 +174,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache('push', 'flush')
+  @Cache('pushes', 'flush')
   @SetScope(Scope.WriteTouchPushes)
   @SetPolicy(Action.Update, Resource.TouchPushes)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -193,7 +193,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache('push', 'flush')
+  @Cache('pushes', 'flush')
   @SetScope(Scope.ManageTouchPushes)
   @SetPolicy(Action.Update, Resource.TouchPushes)
   @ApiQuery({ type: QueryFilterDto, required: false })

@@ -644,6 +644,88 @@ type StatItemsSerializer {
   items: [StatSerializer]!
 }
 
+type SagaHistorySerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
+  props: JSON
+  id: String!
+  ref: String
+  groups: [String!]
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  tags: [String!]
+  rand: String!
+  timestamp: String!
+  req: JSON!
+  res: JSON!
+  saga: String!
+  fn: String!
+  db: String!
+  tb: String!
+}
+
+type SagaHistoryDataSerializer {
+  data: SagaHistorySerializer
+}
+
+type SagaHistoryItemsSerializer {
+  items: [SagaHistorySerializer]!
+}
+
+type SagaSerializer {
+  owner: JSON!
+  shares: [JSON]
+  clients: [JSON]!
+  props: JSON
+  id: String!
+  ref: String
+  groups: [String!]
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  tags: [String!]
+  rand: String!
+  timestamp: String!
+  state: String!
+  ttl: Float!
+  job: String!
+  session: String!
+  aborted_at: Date
+  committed_at: Date
+}
+
+type SagaDataSerializer {
+  data: SagaSerializer
+}
+
+type SagaItemsSerializer {
+  items: [SagaSerializer]!
+}
+
 type ArtifactSerializer {
   owner: JSON!
   shares: [JSON]
@@ -1372,6 +1454,12 @@ type Query {
   countStat(filter: QueryFilterDto!): TotalSerializer!
   findStat(filter: FilterDto!): StatItemsSerializer!
   findOneStat(id: String!, ref: String): StatDataSerializer!
+  countSaga(filter: QueryFilterDto!): TotalSerializer!
+  findSaga(filter: FilterDto!): SagaItemsSerializer!
+  findOneSaga(id: String!, ref: String): SagaDataSerializer!
+  countSagaHistory(filter: QueryFilterDto!): TotalSerializer!
+  findSagaHistory(filter: FilterDto!): SagaHistoryItemsSerializer!
+  findOneSagaHistory(id: String!, ref: String): SagaHistoryDataSerializer!
   countArtifact(filter: QueryFilterDto!): TotalSerializer!
   findArtifact(filter: FilterDto!): ArtifactItemsSerializer!
   findOneArtifact(id: String!, ref: String): ArtifactDataSerializer!
@@ -1516,6 +1604,20 @@ type Mutation {
   destroyOneStat(id: String!, ref: String): StatDataSerializer!
   updateOneStat(id: String!, data: UpdateStatDto!, ref: String): StatDataSerializer!
   updateBulkStat(filter: QueryFilterDto!, data: UpdateStatDto!): TotalSerializer!
+  createSaga(data: CreateSagaDto!): SagaDataSerializer!
+  createBulkSaga(data: CreateSagaItemsDto!): SagaItemsSerializer!
+  deleteOneSaga(id: String!, ref: String): SagaDataSerializer!
+  restoreOneSaga(id: String!, ref: String): SagaDataSerializer!
+  destroyOneSaga(id: String!, ref: String): SagaDataSerializer!
+  updateOneSaga(id: String!, data: UpdateSagaDto!, ref: String): SagaDataSerializer!
+  updateBulkSaga(filter: QueryFilterDto!, data: UpdateSagaDto!): TotalSerializer!
+  createSagaHistory(data: CreateSagaHistoryDto!): SagaHistoryDataSerializer!
+  createBulkSagaHistory(data: CreateSagaHistoryItemsDto!): SagaHistoryItemsSerializer!
+  deleteOneSagaHistory(id: String!, ref: String): SagaHistoryDataSerializer!
+  restoreOneSagaHistory(id: String!, ref: String): SagaHistoryDataSerializer!
+  destroyOneSagaHistory(id: String!, ref: String): SagaHistoryDataSerializer!
+  updateOneSagaHistory(id: String!, data: UpdateSagaHistoryDto!, ref: String): SagaHistoryDataSerializer!
+  updateBulkSagaHistory(filter: QueryFilterDto!, data: UpdateSagaHistoryDto!): TotalSerializer!
   createArtifact(data: CreateArtifactDto!): ArtifactDataSerializer!
   createBulkArtifact(data: CreateArtifactItemsDto!): ArtifactItemsSerializer!
   deleteOneArtifact(id: String!, ref: String): ArtifactDataSerializer!
@@ -1948,6 +2050,12 @@ enum Scope {
   WriteSpecialStats
   ManageSpecialStats
   CollectSpecialStats
+  ReadSpecialSagas
+  WriteSpecialSagas
+  ManageSpecialSagas
+  ReadSpecialSagaHistories
+  WriteSpecialSagaHistories
+  ManageSpecialSagaHistories
   ReadGeneral
   WriteGeneral
   ManageGeneral
@@ -1960,10 +2068,10 @@ enum Scope {
   ReadTouch
   WriteTouch
   ManageTouch
-  ReadTouchPush
-  WriteTouchPush
-  ManageTouchPush
-  SendTouchPush
+  ReadTouchPushes
+  WriteTouchPushes
+  ManageTouchPushes
+  SendTouchPushes
   ReadTouchPushHistories
   WriteTouchPushHistories
   ManageTouchPushHistories
@@ -2219,6 +2327,58 @@ input UpdateStatDto {
   days: [Float!]
   year: Float
   months: [Float!]
+}
+
+input CreateSagaDto {
+  ttl: Float!
+  job: String!
+  state: SagaState
+  session: String!
+  aborted_at: Date
+  committed_at: Date
+}
+
+enum SagaState {
+  Failed
+  Aborted
+  Awaiting
+  Committed
+  Rollback
+}
+
+input CreateSagaItemsDto {
+  items: [CreateSagaDto!]!
+}
+
+input UpdateSagaDto {
+  ttl: Float
+  job: String
+  state: SagaState
+  session: String
+  aborted_at: Date
+  committed_at: Date
+}
+
+input CreateSagaHistoryDto {
+  req: JSON
+  res: JSON
+  saga: String!
+  fn: String!
+  db: String!
+  tb: String!
+}
+
+input CreateSagaHistoryItemsDto {
+  items: [CreateSagaHistoryDto!]!
+}
+
+input UpdateSagaHistoryDto {
+  req: JSON
+  res: JSON
+  saga: String
+  fn: String
+  db: String
+  tb: String
 }
 
 input CreateArtifactDto {
@@ -2639,15 +2799,10 @@ enum TransactionState {
 
 enum TransactionReason {
   Sync
-  Reward
-  Service
-  Cashback
-  Earning
-  Expense
-  InvoicePayNormal
-  InvoicePayRepeatable
-  InvoicePayReplication
-  InvoicePaySubscription
+  Payment
+  Transfer
+  Deposit
+  Withdraw
 }
 
 input CreatePayDto {

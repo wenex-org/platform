@@ -44,22 +44,21 @@ import { ClientSession } from 'mongoose';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('push-histories')
-@Controller('push-histories')
+@ApiTags('saga-histories')
+@Controller('saga-histories')
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class SagaHistoriesController
   extends ControllerClass<SagaHistory, SagaHistoryDto>
-  implements ControllerInterface<SagaHistory, SagaHistoryDto>
-{
+  implements ControllerInterface<SagaHistory, SagaHistoryDto> {
   constructor(readonly provider: SpecialProvider) {
     super(provider.sagas.histories, () => SagaHistorySerializer);
   }
 
   @Get('count')
-  @Cache('push-histories', 'fill')
+  @Cache('saga-histories', 'fill')
   @UseInterceptors(AuthorityInterceptor)
   @SetScope(Scope.ReadSpecialSagaHistories)
   @SetPolicy(Action.Read, Resource.SpecialSagaHistories)
@@ -70,7 +69,7 @@ export class SagaHistoriesController
 
   @Post()
   @ShipStrategy('create')
-  @Cache('push-histories', 'flush')
+  @Cache('saga-histories', 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteSpecialSagaHistories)
   @SetPolicy(Action.Create, Resource.SpecialSagaHistories)
@@ -84,7 +83,7 @@ export class SagaHistoriesController
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache('push-histories', 'flush')
+  @Cache('saga-histories', 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteSpecialSagaHistories)
   @SetPolicy(Action.Create, Resource.SpecialSagaHistories)
@@ -97,7 +96,7 @@ export class SagaHistoriesController
   }
 
   @Get()
-  @Cache('push-histories', 'fill')
+  @Cache('saga-histories', 'fill')
   @SetScope(Scope.ReadSpecialSagaHistories)
   @ApiQuery({ type: FilterDto, required: false })
   @SetPolicy(Action.Read, Resource.SpecialSagaHistories)
@@ -124,7 +123,7 @@ export class SagaHistoriesController
   }
 
   @Get(':id')
-  @Cache('push-histories', 'fill')
+  @Cache('saga-histories', 'fill')
   @SetScope(Scope.ReadSpecialSagaHistories)
   @SetPolicy(Action.Read, Resource.SpecialSagaHistories)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -141,7 +140,7 @@ export class SagaHistoriesController
   }
 
   @Delete(':id')
-  @Cache('push-histories', 'flush')
+  @Cache('saga-histories', 'flush')
   @SetScope(Scope.WriteSpecialSagaHistories)
   @SetPolicy(Action.Delete, Resource.SpecialSagaHistories)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -158,7 +157,7 @@ export class SagaHistoriesController
   }
 
   @Put(':id/restore')
-  @Cache('push-histories', 'flush')
+  @Cache('saga-histories', 'flush')
   @SetScope(Scope.WriteSpecialSagaHistories)
   @SetPolicy(Action.Restore, Resource.SpecialSagaHistories)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -175,7 +174,7 @@ export class SagaHistoriesController
   }
 
   @Delete(':id/destroy')
-  @Cache('push-histories', 'flush')
+  @Cache('saga-histories', 'flush')
   @SetScope(Scope.ManageSpecialSagaHistories)
   @SetPolicy(Action.Destroy, Resource.SpecialSagaHistories)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -193,7 +192,7 @@ export class SagaHistoriesController
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache('push-histories', 'flush')
+  @Cache('saga-histories', 'flush')
   @SetScope(Scope.WriteSpecialSagaHistories)
   @SetPolicy(Action.Update, Resource.SpecialSagaHistories)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -212,7 +211,7 @@ export class SagaHistoriesController
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache('push-histories', 'flush')
+  @Cache('saga-histories', 'flush')
   @SetScope(Scope.ManageSpecialSagaHistories)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @SetPolicy(Action.Update, Resource.SpecialSagaHistories)
