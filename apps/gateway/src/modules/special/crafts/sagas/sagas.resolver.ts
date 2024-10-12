@@ -1,7 +1,7 @@
-import { CreatePushDto, CreatePushItemsDto, FilterDto, FilterOneDto, QueryFilterDto, UpdatePushDto } from '@app/common/dto';
+import { CreateSagaDto, CreateSagaItemsDto, FilterDto, FilterOneDto, QueryFilterDto, UpdateSagaDto } from '@app/common/dto';
 import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
-import { TotalSerializer, PushDataSerializer, PushItemsSerializer, PushSerializer } from '@app/common/serializers';
-import { Controller as ControllerInterface, Metadata, Push, PushDto } from '@app/common/interfaces';
+import { TotalSerializer, SagaDataSerializer, SagaItemsSerializer, SagaSerializer } from '@app/common/serializers';
+import { Controller as ControllerInterface, Metadata, Saga, SagaDto } from '@app/common/interfaces';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
@@ -12,27 +12,27 @@ import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
-import { TouchProvider } from '@app/common/providers';
+import { SpecialProvider } from '@app/common/providers';
 import { refineFilterQuery } from '@app/common/utils';
 import { ClientSession } from 'mongoose';
 import { Observable } from 'rxjs';
 
-@Resolver(() => PushSerializer)
+@Resolver(() => SagaSerializer)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class PushesResolver extends ControllerClass<Push, PushDto> implements ControllerInterface<Push, PushDto> {
-  constructor(readonly provider: TouchProvider) {
-    super(provider.pushes, () => PushSerializer);
+export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ControllerInterface<Saga, SagaDto> {
+  constructor(readonly provider: SpecialProvider) {
+    super(provider.sagas, () => SagaSerializer);
   }
 
   @Query(() => TotalSerializer)
-  @Cache('push', 'fill')
-  @SetScope(Scope.ReadTouchPushes)
+  @Cache('sagas', 'fill')
+  @SetScope(Scope.ReadSpecialSagas)
   @UseInterceptors(AuthorityInterceptor)
-  @SetPolicy(Action.Read, Resource.TouchPushes)
-  countPush(
+  @SetPolicy(Action.Read, Resource.SpecialSagas)
+  countSaga(
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: QueryFilterDto,
     @Session() session?: ClientSession,
@@ -40,139 +40,139 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements Co
     return super.count(meta, filter, session);
   }
 
-  @Mutation(() => PushDataSerializer)
+  @Mutation(() => SagaDataSerializer)
   @ShipStrategy('create')
-  @Cache('push', 'flush')
-  @SetScope(Scope.WriteTouchPushes)
+  @Cache('sagas', 'flush')
+  @SetScope(Scope.WriteSpecialSagas)
   @UseInterceptors(...WriteInterceptors)
-  @SetPolicy(Action.Create, Resource.TouchPushes)
-  createPush(
+  @SetPolicy(Action.Create, Resource.SpecialSagas)
+  createSaga(
     @Meta() meta: Metadata,
-    @Args('data') data: CreatePushDto,
+    @Args('data') data: CreateSagaDto,
     @Session() session?: ClientSession,
-  ): Observable<PushDataSerializer> {
+  ): Observable<SagaDataSerializer> {
     return super.create(meta, data, session);
   }
 
-  @Mutation(() => PushItemsSerializer)
+  @Mutation(() => SagaItemsSerializer)
   @ShipStrategy('create')
-  @Cache('push', 'flush')
-  @SetScope(Scope.WriteTouchPushes)
+  @Cache('sagas', 'flush')
+  @SetScope(Scope.WriteSpecialSagas)
   @UseInterceptors(...WriteInterceptors)
-  @SetPolicy(Action.Create, Resource.TouchPushes)
-  createBulkPush(
+  @SetPolicy(Action.Create, Resource.SpecialSagas)
+  createBulkSaga(
     @Meta() meta: Metadata,
-    @Args('data') data: CreatePushItemsDto,
+    @Args('data') data: CreateSagaItemsDto,
     @Session() session?: ClientSession,
-  ): Observable<PushItemsSerializer> {
+  ): Observable<SagaItemsSerializer> {
     return super.createBulk(meta, data, session);
   }
 
-  @Query(() => PushItemsSerializer)
-  @Cache('push', 'fill')
-  @SetScope(Scope.ReadTouchPushes)
-  @SetPolicy(Action.Read, Resource.TouchPushes)
+  @Query(() => SagaItemsSerializer)
+  @Cache('sagas', 'fill')
+  @SetScope(Scope.ReadSpecialSagas)
+  @SetPolicy(Action.Read, Resource.SpecialSagas)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  findPush(
+  findSaga(
     @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: FilterDto<Push>,
+    @Filter() @Args('filter') filter: FilterDto<Saga>,
     @Session() session?: ClientSession,
-  ): Observable<PushItemsSerializer> {
+  ): Observable<SagaItemsSerializer> {
     return super.find(meta, filter, session);
   }
 
-  @Query(() => PushDataSerializer)
-  @Cache('push', 'fill')
-  @SetScope(Scope.ReadTouchPushes)
-  @SetPolicy(Action.Read, Resource.TouchPushes)
+  @Query(() => SagaDataSerializer)
+  @Cache('sagas', 'fill')
+  @SetScope(Scope.ReadSpecialSagas)
+  @SetPolicy(Action.Read, Resource.SpecialSagas)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  findOnePush(
+  findOneSaga(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<Push>,
+    @Filter() filter: FilterOneDto<Saga>,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
-  ): Observable<PushDataSerializer> {
+  ): Observable<SagaDataSerializer> {
     refineFilterQuery(filter, { id, ref });
     return super.findOne(meta, filter, session);
   }
 
-  @Mutation(() => PushDataSerializer)
-  @Cache('push', 'flush')
-  @SetScope(Scope.WriteTouchPushes)
-  @SetPolicy(Action.Delete, Resource.TouchPushes)
+  @Mutation(() => SagaDataSerializer)
+  @Cache('sagas', 'flush')
+  @SetScope(Scope.WriteSpecialSagas)
+  @SetPolicy(Action.Delete, Resource.SpecialSagas)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  deleteOnePush(
+  deleteOneSaga(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<Push>,
+    @Filter() filter: FilterDto<Saga>,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
-  ): Observable<PushDataSerializer> {
+  ): Observable<SagaDataSerializer> {
     refineFilterQuery(filter, { id, ref });
     return super.deleteOne(meta, filter, session);
   }
 
-  @Mutation(() => PushDataSerializer)
-  @Cache('push', 'flush')
-  @SetScope(Scope.WriteTouchPushes)
-  @SetPolicy(Action.Restore, Resource.TouchPushes)
+  @Mutation(() => SagaDataSerializer)
+  @Cache('sagas', 'flush')
+  @SetScope(Scope.WriteSpecialSagas)
+  @SetPolicy(Action.Restore, Resource.SpecialSagas)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  restoreOnePush(
+  restoreOneSaga(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<Push>,
+    @Filter() filter: FilterDto<Saga>,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
-  ): Observable<PushDataSerializer> {
+  ): Observable<SagaDataSerializer> {
     refineFilterQuery(filter, { id, ref });
     return super.restoreOne(meta, filter, session);
   }
 
-  @Mutation(() => PushDataSerializer)
-  @Cache('push', 'flush')
-  @SetScope(Scope.ManageTouchPushes)
-  @SetPolicy(Action.Destroy, Resource.TouchPushes)
+  @Mutation(() => SagaDataSerializer)
+  @Cache('sagas', 'flush')
+  @SetScope(Scope.ManageSpecialSagas)
+  @SetPolicy(Action.Destroy, Resource.SpecialSagas)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  destroyOnePush(
+  destroyOneSaga(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<Push>,
+    @Filter() filter: FilterDto<Saga>,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
-  ): Observable<PushDataSerializer> {
+  ): Observable<SagaDataSerializer> {
     refineFilterQuery(filter, { id, ref });
     return super.destroyOne(meta, filter, session);
   }
 
-  @Mutation(() => PushDataSerializer)
+  @Mutation(() => SagaDataSerializer)
   @ShipStrategy('update')
-  @Cache('push', 'flush')
-  @SetScope(Scope.WriteTouchPushes)
-  @SetPolicy(Action.Update, Resource.TouchPushes)
+  @Cache('sagas', 'flush')
+  @SetScope(Scope.WriteSpecialSagas)
+  @SetPolicy(Action.Update, Resource.SpecialSagas)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateOnePush(
+  updateOneSaga(
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<Push>,
-    @Args('data') update: UpdatePushDto,
+    @Filter() filter: FilterOneDto<Saga>,
+    @Args('data') update: UpdateSagaDto,
     @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
-  ): Observable<PushDataSerializer> {
+  ): Observable<SagaDataSerializer> {
     refineFilterQuery(filter, { id, ref });
     return super.updateOne(meta, filter, update, session);
   }
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @Cache('push', 'flush')
-  @SetScope(Scope.ManageTouchPushes)
-  @SetPolicy(Action.Update, Resource.TouchPushes)
+  @Cache('sagas', 'flush')
+  @SetScope(Scope.ManageSpecialSagas)
+  @SetPolicy(Action.Update, Resource.SpecialSagas)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateBulkPush(
+  updateBulkSaga(
     @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: QueryFilterDto<Push>,
-    @Args('data') update: UpdatePushDto,
+    @Filter() @Args('filter') filter: QueryFilterDto<Saga>,
+    @Args('data') update: UpdateSagaDto,
     @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
     return super.updateBulk(meta, filter, update, session);

@@ -24,9 +24,9 @@ export class PushesInspector {
 
   @Post('send')
   @ShipStrategy('create')
-  @SetScope(Scope.SendTouchPush)
+  @SetScope(Scope.SendTouchPushes)
   @UseInterceptors(...WriteInterceptors)
-  @SetPolicy(Action.Send, Resource.TouchPush)
+  @SetPolicy(Action.Send, Resource.TouchPushes)
   async send(@Meta() meta: Metadata, @Body() data: CreatePushHistoryDto): Promise<Result> {
     return this.provider.pushes.send(data, meta);
   }
