@@ -63,9 +63,10 @@ service StatsService {
 }
 
 service SagasService {
-  rpc Start(SagaOption) returns (SagaSession);
-  rpc Commit(SagaSession) returns (Result);
-  rpc Abort(SagaSession) returns (Result);
+  rpc Start(SagaData) returns (SagaData);
+  rpc Append(SagaHistoryData) returns (SagaHistoryData);
+  rpc Commit(FilterOne) returns (SagaData);
+  rpc Abort(FilterOne) returns (SagaData);
 
   // Common Services
   rpc Count(QueryFilter) returns (Total);
@@ -341,9 +342,6 @@ message Saga {
 }
 message Sagas { repeated Saga items = 1; }
 message SagaData { optional Saga data = 1; }
-
-message SagaOption { optional int64 ttl = 1; }
-message SagaSession { optional string session = 1; }
 
 // Saga Histories Messages
 

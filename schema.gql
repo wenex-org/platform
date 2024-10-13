@@ -1976,13 +1976,17 @@ enum Scope {
   Write
   Manage
   Collect
+  Resolve
   Emit
   Send
   Init
   Verify
   Upload
   Download
-  Resolve
+  Start
+  Append
+  Commit
+  Abort
   ReadAuth
   WriteAuth
   ManageAuth
@@ -2053,6 +2057,10 @@ enum Scope {
   ReadSpecialSagas
   WriteSpecialSagas
   ManageSpecialSagas
+  StartSpecialSagas
+  AppendSpecialSagas
+  CommitSpecialSagas
+  AbortSpecialSagas
   ReadSpecialSagaHistories
   WriteSpecialSagaHistories
   ManageSpecialSagaHistories
