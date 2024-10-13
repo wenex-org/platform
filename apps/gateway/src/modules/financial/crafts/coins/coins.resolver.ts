@@ -8,13 +8,12 @@ import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { FinancialProvider } from '@app/common/providers';
 import { refineFilterQuery } from '@app/common/utils';
-import { ClientSession } from 'mongoose';
+import { Filter, Meta } from '@app/common/decorators';
 import { Observable } from 'rxjs';
 
 @Resolver(() => CoinSerializer)
@@ -32,12 +31,8 @@ export class CoinsResolver extends ControllerClass<Coin, CoinDto> implements Con
   @SetScope(Scope.ReadFinancialCoins)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.FinancialCoins)
-  countCoin(
-    @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: QueryFilterDto,
-    @Session() session?: ClientSession,
-  ): Observable<TotalSerializer> {
-    return super.count(meta, filter, session);
+  countCoin(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+    return super.count(meta, filter);
   }
 
   @Mutation(() => CoinDataSerializer)
@@ -46,12 +41,8 @@ export class CoinsResolver extends ControllerClass<Coin, CoinDto> implements Con
   @SetScope(Scope.WriteFinancialCoins)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialCoins)
-  createCoin(
-    @Meta() meta: Metadata,
-    @Args('data') data: CreateCoinDto,
-    @Session() session?: ClientSession,
-  ): Observable<CoinDataSerializer> {
-    return super.create(meta, data, session);
+  createCoin(@Meta() meta: Metadata, @Args('data') data: CreateCoinDto): Observable<CoinDataSerializer> {
+    return super.create(meta, data);
   }
 
   @Mutation(() => CoinItemsSerializer)
@@ -60,12 +51,8 @@ export class CoinsResolver extends ControllerClass<Coin, CoinDto> implements Con
   @SetScope(Scope.WriteFinancialCoins)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialCoins)
-  createBulkCoin(
-    @Meta() meta: Metadata,
-    @Args('data') data: CreateCoinItemsDto,
-    @Session() session?: ClientSession,
-  ): Observable<CoinItemsSerializer> {
-    return super.createBulk(meta, data, session);
+  createBulkCoin(@Meta() meta: Metadata, @Args('data') data: CreateCoinItemsDto): Observable<CoinItemsSerializer> {
+    return super.createBulk(meta, data);
   }
 
   @Query(() => CoinItemsSerializer)
@@ -73,12 +60,8 @@ export class CoinsResolver extends ControllerClass<Coin, CoinDto> implements Con
   @SetScope(Scope.ReadFinancialCoins)
   @SetPolicy(Action.Read, Resource.FinancialCoins)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  findCoin(
-    @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: FilterDto<Coin>,
-    @Session() session?: ClientSession,
-  ): Observable<CoinItemsSerializer> {
-    return super.find(meta, filter, session);
+  findCoin(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Coin>): Observable<CoinItemsSerializer> {
+    return super.find(meta, filter);
   }
 
   @Query(() => CoinDataSerializer)
@@ -90,11 +73,10 @@ export class CoinsResolver extends ControllerClass<Coin, CoinDto> implements Con
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Coin>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<CoinDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.findOne(meta, filter, session);
+    return super.findOne(meta, filter);
   }
 
   @Mutation(() => CoinDataSerializer)
@@ -106,11 +88,10 @@ export class CoinsResolver extends ControllerClass<Coin, CoinDto> implements Con
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Coin>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<CoinDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.deleteOne(meta, filter, session);
+    return super.deleteOne(meta, filter);
   }
 
   @Mutation(() => CoinDataSerializer)
@@ -122,11 +103,10 @@ export class CoinsResolver extends ControllerClass<Coin, CoinDto> implements Con
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Coin>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<CoinDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.restoreOne(meta, filter, session);
+    return super.restoreOne(meta, filter);
   }
 
   @Mutation(() => CoinDataSerializer)
@@ -138,11 +118,10 @@ export class CoinsResolver extends ControllerClass<Coin, CoinDto> implements Con
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Coin>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<CoinDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.destroyOne(meta, filter, session);
+    return super.destroyOne(meta, filter);
   }
 
   @Mutation(() => CoinDataSerializer)
@@ -156,11 +135,10 @@ export class CoinsResolver extends ControllerClass<Coin, CoinDto> implements Con
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Coin>,
     @Args('data') update: UpdateCoinDto,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<CoinDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.updateOne(meta, filter, update, session);
+    return super.updateOne(meta, filter, update);
   }
 
   @Mutation(() => TotalSerializer)
@@ -173,8 +151,7 @@ export class CoinsResolver extends ControllerClass<Coin, CoinDto> implements Con
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: QueryFilterDto<Coin>,
     @Args('data') update: UpdateCoinDto,
-    @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
-    return super.updateBulk(meta, filter, update, session);
+    return super.updateBulk(meta, filter, update);
   }
 }

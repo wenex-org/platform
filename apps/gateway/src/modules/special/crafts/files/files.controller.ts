@@ -22,13 +22,12 @@ import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { SpecialProvider } from '@app/common/providers';
 import { refineFilterQuery } from '@app/common/utils';
-import { ClientSession } from 'mongoose';
+import { Filter, Meta } from '@app/common/decorators';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
@@ -49,8 +48,8 @@ export class FilesController extends ControllerClass<File, FileDto> implements C
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.SpecialFiles)
   @ApiQuery({ type: QueryFilterDto, required: false })
-  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto, @Session() session?: ClientSession): Observable<TotalSerializer> {
-    return super.count(meta, filter, session);
+  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto): Observable<TotalSerializer> {
+    return super.count(meta, filter);
   }
 
   @Post()
@@ -59,8 +58,8 @@ export class FilesController extends ControllerClass<File, FileDto> implements C
   @SetScope(Scope.WriteSpecialFiles)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialFiles)
-  create(@Meta() meta: Metadata, @Body() data: CreateFileDto, @Session() session?: ClientSession): Observable<FileDataSerializer> {
-    return super.create(meta, data, session);
+  create(@Meta() meta: Metadata, @Body() data: CreateFileDto): Observable<FileDataSerializer> {
+    return super.create(meta, data);
   }
 
   @Post('bulk')
@@ -69,12 +68,8 @@ export class FilesController extends ControllerClass<File, FileDto> implements C
   @SetScope(Scope.WriteSpecialFiles)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialFiles)
-  createBulk(
-    @Meta() meta: Metadata,
-    @Body() data: CreateFileItemsDto,
-    @Session() session?: ClientSession,
-  ): Observable<FileItemsSerializer> {
-    return super.createBulk(meta, data, session);
+  createBulk(@Meta() meta: Metadata, @Body() data: CreateFileItemsDto): Observable<FileItemsSerializer> {
+    return super.createBulk(meta, data);
   }
 
   @Get()
@@ -83,12 +78,8 @@ export class FilesController extends ControllerClass<File, FileDto> implements C
   @SetPolicy(Action.Read, Resource.SpecialFiles)
   @ApiQuery({ type: FilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  find(
-    @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<File>,
-    @Session() session?: ClientSession,
-  ): Observable<FileItemsSerializer> {
-    return super.find(meta, filter, session);
+  find(@Meta() meta: Metadata, @Filter() filter: FilterDto<File>): Observable<FileItemsSerializer> {
+    return super.find(meta, filter);
   }
 
   @Get('cursor')
@@ -96,12 +87,8 @@ export class FilesController extends ControllerClass<File, FileDto> implements C
   @SetPolicy(Action.Read, Resource.SpecialFiles)
   @ApiQuery({ type: FilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  cursor(
-    @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<File>,
-    @Session() session?: ClientSession,
-  ): Observable<FileSerializer> {
-    return super.cursor(meta, filter, session);
+  cursor(@Meta() meta: Metadata, @Filter() filter: FilterDto<File>): Observable<FileSerializer> {
+    return super.cursor(meta, filter);
   }
 
   @Get(':id')
@@ -114,11 +101,10 @@ export class FilesController extends ControllerClass<File, FileDto> implements C
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<File>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<FileDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.findOne(meta, filter, session);
+    return super.findOne(meta, filter);
   }
 
   @Delete(':id')
@@ -131,11 +117,10 @@ export class FilesController extends ControllerClass<File, FileDto> implements C
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<File>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<FileDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.deleteOne(meta, filter, session);
+    return super.deleteOne(meta, filter);
   }
 
   @Put(':id/restore')
@@ -148,11 +133,10 @@ export class FilesController extends ControllerClass<File, FileDto> implements C
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<File>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<FileDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.restoreOne(meta, filter, session);
+    return super.restoreOne(meta, filter);
   }
 
   @Delete(':id/destroy')
@@ -165,11 +149,10 @@ export class FilesController extends ControllerClass<File, FileDto> implements C
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<File>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<FileDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.destroyOne(meta, filter, session);
+    return super.destroyOne(meta, filter);
   }
 
   @Patch(':id')
@@ -184,11 +167,10 @@ export class FilesController extends ControllerClass<File, FileDto> implements C
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<File>,
     @Body() update: UpdateFileDto,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<FileDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.updateOne(meta, filter, update, session);
+    return super.updateOne(meta, filter, update);
   }
 
   @Patch('bulk')
@@ -202,8 +184,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements C
     @Meta() meta: Metadata,
     @Filter() filter: QueryFilterDto<File>,
     @Body() update: UpdateFileDto,
-    @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
-    return super.updateBulk(meta, filter, update, session);
+    return super.updateBulk(meta, filter, update);
   }
 }

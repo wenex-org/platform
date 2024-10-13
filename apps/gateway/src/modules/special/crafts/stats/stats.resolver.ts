@@ -8,13 +8,12 @@ import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { SpecialProvider } from '@app/common/providers';
 import { refineFilterQuery } from '@app/common/utils';
-import { ClientSession } from 'mongoose';
+import { Filter, Meta } from '@app/common/decorators';
 import { Observable } from 'rxjs';
 
 @Resolver(() => StatSerializer)
@@ -32,12 +31,8 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements Con
   @SetScope(Scope.ReadSpecialStats)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.SpecialStats)
-  countStat(
-    @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: QueryFilterDto,
-    @Session() session?: ClientSession,
-  ): Observable<TotalSerializer> {
-    return super.count(meta, filter, session);
+  countStat(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+    return super.count(meta, filter);
   }
 
   @Mutation(() => StatDataSerializer)
@@ -46,12 +41,8 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements Con
   @SetScope(Scope.WriteSpecialStats)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialStats)
-  createStat(
-    @Meta() meta: Metadata,
-    @Args('data') data: CreateStatDto,
-    @Session() session?: ClientSession,
-  ): Observable<StatDataSerializer> {
-    return super.create(meta, data, session);
+  createStat(@Meta() meta: Metadata, @Args('data') data: CreateStatDto): Observable<StatDataSerializer> {
+    return super.create(meta, data);
   }
 
   @Mutation(() => StatItemsSerializer)
@@ -60,12 +51,8 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements Con
   @SetScope(Scope.WriteSpecialStats)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialStats)
-  createBulkStat(
-    @Meta() meta: Metadata,
-    @Args('data') data: CreateStatItemsDto,
-    @Session() session?: ClientSession,
-  ): Observable<StatItemsSerializer> {
-    return super.createBulk(meta, data, session);
+  createBulkStat(@Meta() meta: Metadata, @Args('data') data: CreateStatItemsDto): Observable<StatItemsSerializer> {
+    return super.createBulk(meta, data);
   }
 
   @Query(() => StatItemsSerializer)
@@ -73,12 +60,8 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements Con
   @SetScope(Scope.ReadSpecialStats)
   @SetPolicy(Action.Read, Resource.SpecialStats)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  findStat(
-    @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: FilterDto<Stat>,
-    @Session() session?: ClientSession,
-  ): Observable<StatItemsSerializer> {
-    return super.find(meta, filter, session);
+  findStat(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Stat>): Observable<StatItemsSerializer> {
+    return super.find(meta, filter);
   }
 
   @Query(() => StatDataSerializer)
@@ -90,11 +73,10 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements Con
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Stat>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<StatDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.findOne(meta, filter, session);
+    return super.findOne(meta, filter);
   }
 
   @Mutation(() => StatDataSerializer)
@@ -106,11 +88,10 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements Con
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Stat>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<StatDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.deleteOne(meta, filter, session);
+    return super.deleteOne(meta, filter);
   }
 
   @Mutation(() => StatDataSerializer)
@@ -122,11 +103,10 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements Con
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Stat>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<StatDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.restoreOne(meta, filter, session);
+    return super.restoreOne(meta, filter);
   }
 
   @Mutation(() => StatDataSerializer)
@@ -138,11 +118,10 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements Con
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Stat>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<StatDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.destroyOne(meta, filter, session);
+    return super.destroyOne(meta, filter);
   }
 
   @Mutation(() => StatDataSerializer)
@@ -156,11 +135,10 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements Con
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Stat>,
     @Args('data') update: UpdateStatDto,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<StatDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.updateOne(meta, filter, update, session);
+    return super.updateOne(meta, filter, update);
   }
 
   @Mutation(() => TotalSerializer)
@@ -173,8 +151,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements Con
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: QueryFilterDto<Stat>,
     @Args('data') update: UpdateStatDto,
-    @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
-    return super.updateBulk(meta, filter, update, session);
+    return super.updateBulk(meta, filter, update);
   }
 }

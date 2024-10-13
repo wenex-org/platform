@@ -8,13 +8,12 @@ import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { LogisticProvider } from '@app/common/providers';
 import { refineFilterQuery } from '@app/common/utils';
-import { ClientSession } from 'mongoose';
+import { Filter, Meta } from '@app/common/decorators';
 import { Observable } from 'rxjs';
 
 @Resolver(() => CargoSerializer)
@@ -32,12 +31,8 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   @SetScope(Scope.ReadLogisticCargoes)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.LogisticCargoes)
-  countCargo(
-    @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: QueryFilterDto,
-    @Session() session?: ClientSession,
-  ): Observable<TotalSerializer> {
-    return super.count(meta, filter, session);
+  countCargo(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+    return super.count(meta, filter);
   }
 
   @Mutation(() => CargoDataSerializer)
@@ -46,12 +41,8 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   @SetScope(Scope.WriteLogisticCargoes)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticCargoes)
-  createCargo(
-    @Meta() meta: Metadata,
-    @Args('data') data: CreateCargoDto,
-    @Session() session?: ClientSession,
-  ): Observable<CargoDataSerializer> {
-    return super.create(meta, data, session);
+  createCargo(@Meta() meta: Metadata, @Args('data') data: CreateCargoDto): Observable<CargoDataSerializer> {
+    return super.create(meta, data);
   }
 
   @Mutation(() => CargoItemsSerializer)
@@ -60,12 +51,8 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   @SetScope(Scope.WriteLogisticCargoes)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticCargoes)
-  createBulkCargo(
-    @Meta() meta: Metadata,
-    @Args('data') data: CreateCargoItemsDto,
-    @Session() session?: ClientSession,
-  ): Observable<CargoItemsSerializer> {
-    return super.createBulk(meta, data, session);
+  createBulkCargo(@Meta() meta: Metadata, @Args('data') data: CreateCargoItemsDto): Observable<CargoItemsSerializer> {
+    return super.createBulk(meta, data);
   }
 
   @Query(() => CargoItemsSerializer)
@@ -73,12 +60,8 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   @SetScope(Scope.ReadLogisticCargoes)
   @SetPolicy(Action.Read, Resource.LogisticCargoes)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  findCargo(
-    @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: FilterDto<Cargo>,
-    @Session() session?: ClientSession,
-  ): Observable<CargoItemsSerializer> {
-    return super.find(meta, filter, session);
+  findCargo(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Cargo>): Observable<CargoItemsSerializer> {
+    return super.find(meta, filter);
   }
 
   @Query(() => CargoDataSerializer)
@@ -90,11 +73,10 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Cargo>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<CargoDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.findOne(meta, filter, session);
+    return super.findOne(meta, filter);
   }
 
   @Mutation(() => CargoDataSerializer)
@@ -106,11 +88,10 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Cargo>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<CargoDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.deleteOne(meta, filter, session);
+    return super.deleteOne(meta, filter);
   }
 
   @Mutation(() => CargoDataSerializer)
@@ -122,11 +103,10 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Cargo>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<CargoDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.restoreOne(meta, filter, session);
+    return super.restoreOne(meta, filter);
   }
 
   @Mutation(() => CargoDataSerializer)
@@ -138,11 +118,10 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Cargo>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<CargoDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.destroyOne(meta, filter, session);
+    return super.destroyOne(meta, filter);
   }
 
   @Mutation(() => CargoDataSerializer)
@@ -156,11 +135,10 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Cargo>,
     @Args('data') update: UpdateCargoDto,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<CargoDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.updateOne(meta, filter, update, session);
+    return super.updateOne(meta, filter, update);
   }
 
   @Mutation(() => TotalSerializer)
@@ -173,8 +151,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: QueryFilterDto<Cargo>,
     @Args('data') update: UpdateCargoDto,
-    @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
-    return super.updateBulk(meta, filter, update, session);
+    return super.updateBulk(meta, filter, update);
   }
 }

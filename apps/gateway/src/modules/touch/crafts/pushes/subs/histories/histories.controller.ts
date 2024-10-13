@@ -34,13 +34,12 @@ import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { TouchProvider } from '@app/common/providers';
 import { refineFilterQuery } from '@app/common/utils';
-import { ClientSession } from 'mongoose';
+import { Filter, Meta } from '@app/common/decorators';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
@@ -64,8 +63,8 @@ export class PushHistoriesController
   @SetScope(Scope.ReadTouchPushHistories)
   @SetPolicy(Action.Read, Resource.TouchPushHistories)
   @ApiQuery({ type: QueryFilterDto, required: false })
-  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto, @Session() session?: ClientSession): Observable<TotalSerializer> {
-    return super.count(meta, filter, session);
+  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto): Observable<TotalSerializer> {
+    return super.count(meta, filter);
   }
 
   @Post()
@@ -74,12 +73,8 @@ export class PushHistoriesController
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteTouchPushHistories)
   @SetPolicy(Action.Create, Resource.TouchPushHistories)
-  create(
-    @Meta() meta: Metadata,
-    @Body() data: CreatePushHistoryDto,
-    @Session() session?: ClientSession,
-  ): Observable<PushHistoryDataSerializer> {
-    return super.create(meta, data, session);
+  create(@Meta() meta: Metadata, @Body() data: CreatePushHistoryDto): Observable<PushHistoryDataSerializer> {
+    return super.create(meta, data);
   }
 
   @Post('bulk')
@@ -88,12 +83,8 @@ export class PushHistoriesController
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteTouchPushHistories)
   @SetPolicy(Action.Create, Resource.TouchPushHistories)
-  createBulk(
-    @Meta() meta: Metadata,
-    @Body() data: CreatePushHistoryItemsDto,
-    @Session() session?: ClientSession,
-  ): Observable<PushHistoryItemsSerializer> {
-    return super.createBulk(meta, data, session);
+  createBulk(@Meta() meta: Metadata, @Body() data: CreatePushHistoryItemsDto): Observable<PushHistoryItemsSerializer> {
+    return super.createBulk(meta, data);
   }
 
   @Get()
@@ -102,12 +93,8 @@ export class PushHistoriesController
   @ApiQuery({ type: FilterDto, required: false })
   @SetPolicy(Action.Read, Resource.TouchPushHistories)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  find(
-    @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<PushHistory>,
-    @Session() session?: ClientSession,
-  ): Observable<PushHistoryItemsSerializer> {
-    return super.find(meta, filter, session);
+  find(@Meta() meta: Metadata, @Filter() filter: FilterDto<PushHistory>): Observable<PushHistoryItemsSerializer> {
+    return super.find(meta, filter);
   }
 
   @Get('cursor')
@@ -115,12 +102,8 @@ export class PushHistoriesController
   @ApiQuery({ type: FilterDto, required: false })
   @SetPolicy(Action.Read, Resource.TouchPushHistories)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  cursor(
-    @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<PushHistory>,
-    @Session() session?: ClientSession,
-  ): Observable<PushHistorySerializer> {
-    return super.cursor(meta, filter, session);
+  cursor(@Meta() meta: Metadata, @Filter() filter: FilterDto<PushHistory>): Observable<PushHistorySerializer> {
+    return super.cursor(meta, filter);
   }
 
   @Get(':id')
@@ -133,11 +116,10 @@ export class PushHistoriesController
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<PushHistory>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<PushHistoryDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.findOne(meta, filter, session);
+    return super.findOne(meta, filter);
   }
 
   @Delete(':id')
@@ -150,11 +132,10 @@ export class PushHistoriesController
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<PushHistory>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<PushHistoryDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.deleteOne(meta, filter, session);
+    return super.deleteOne(meta, filter);
   }
 
   @Put(':id/restore')
@@ -167,11 +148,10 @@ export class PushHistoriesController
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<PushHistory>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<PushHistoryDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.restoreOne(meta, filter, session);
+    return super.restoreOne(meta, filter);
   }
 
   @Delete(':id/destroy')
@@ -184,11 +164,10 @@ export class PushHistoriesController
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<PushHistory>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<PushHistoryDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.destroyOne(meta, filter, session);
+    return super.destroyOne(meta, filter);
   }
 
   @Patch(':id')
@@ -203,11 +182,10 @@ export class PushHistoriesController
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<PushHistory>,
     @Body() update: UpdatePushHistoryDto,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<PushHistoryDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.updateOne(meta, filter, update, session);
+    return super.updateOne(meta, filter, update);
   }
 
   @Patch('bulk')
@@ -221,8 +199,7 @@ export class PushHistoriesController
     @Meta() meta: Metadata,
     @Filter() filter: QueryFilterDto<PushHistory>,
     @Body() update: UpdatePushHistoryDto,
-    @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
-    return super.updateBulk(meta, filter, update, session);
+    return super.updateBulk(meta, filter, update);
   }
 }

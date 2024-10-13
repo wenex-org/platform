@@ -15,13 +15,12 @@ import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { ContextProvider } from '@app/common/providers';
 import { refineFilterQuery } from '@app/common/utils';
-import { ClientSession } from 'mongoose';
+import { Filter, Meta } from '@app/common/decorators';
 import { Observable } from 'rxjs';
 
 @Resolver(() => SettingSerializer)
@@ -39,12 +38,8 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   @SetScope(Scope.ReadContextSettings)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ContextSettings)
-  countSetting(
-    @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: QueryFilterDto,
-    @Session() session?: ClientSession,
-  ): Observable<TotalSerializer> {
-    return super.count(meta, filter, session);
+  countSetting(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+    return super.count(meta, filter);
   }
 
   @Mutation(() => SettingDataSerializer)
@@ -53,12 +48,8 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   @SetScope(Scope.WriteContextSettings)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContextSettings)
-  createSetting(
-    @Meta() meta: Metadata,
-    @Args('data') data: CreateSettingDto,
-    @Session() session?: ClientSession,
-  ): Observable<SettingDataSerializer> {
-    return super.create(meta, data, session);
+  createSetting(@Meta() meta: Metadata, @Args('data') data: CreateSettingDto): Observable<SettingDataSerializer> {
+    return super.create(meta, data);
   }
 
   @Mutation(() => SettingItemsSerializer)
@@ -67,12 +58,8 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   @SetScope(Scope.WriteContextSettings)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContextSettings)
-  createBulkSetting(
-    @Meta() meta: Metadata,
-    @Args('data') data: CreateSettingItemsDto,
-    @Session() session?: ClientSession,
-  ): Observable<SettingItemsSerializer> {
-    return super.createBulk(meta, data, session);
+  createBulkSetting(@Meta() meta: Metadata, @Args('data') data: CreateSettingItemsDto): Observable<SettingItemsSerializer> {
+    return super.createBulk(meta, data);
   }
 
   @Query(() => SettingItemsSerializer)
@@ -80,12 +67,8 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   @SetScope(Scope.ReadContextSettings)
   @SetPolicy(Action.Read, Resource.ContextSettings)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  findSetting(
-    @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: FilterDto<Setting>,
-    @Session() session?: ClientSession,
-  ): Observable<SettingItemsSerializer> {
-    return super.find(meta, filter, session);
+  findSetting(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Setting>): Observable<SettingItemsSerializer> {
+    return super.find(meta, filter);
   }
 
   @Query(() => SettingDataSerializer)
@@ -97,11 +80,10 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Setting>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<SettingDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.findOne(meta, filter, session);
+    return super.findOne(meta, filter);
   }
 
   @Mutation(() => SettingDataSerializer)
@@ -113,11 +95,10 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Setting>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<SettingDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.deleteOne(meta, filter, session);
+    return super.deleteOne(meta, filter);
   }
 
   @Mutation(() => SettingDataSerializer)
@@ -129,11 +110,10 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Setting>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<SettingDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.restoreOne(meta, filter, session);
+    return super.restoreOne(meta, filter);
   }
 
   @Mutation(() => SettingDataSerializer)
@@ -145,11 +125,10 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Setting>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<SettingDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.destroyOne(meta, filter, session);
+    return super.destroyOne(meta, filter);
   }
 
   @Mutation(() => SettingDataSerializer)
@@ -163,11 +142,10 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Setting>,
     @Args('data') update: UpdateSettingDto,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<SettingDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.updateOne(meta, filter, update, session);
+    return super.updateOne(meta, filter, update);
   }
 
   @Mutation(() => TotalSerializer)
@@ -180,8 +158,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: QueryFilterDto<Setting>,
     @Args('data') update: UpdateSettingDto,
-    @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
-    return super.updateBulk(meta, filter, update, session);
+    return super.updateBulk(meta, filter, update);
   }
 }

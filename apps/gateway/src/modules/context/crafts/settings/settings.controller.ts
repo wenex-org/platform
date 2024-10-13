@@ -32,12 +32,11 @@ import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { ContextProvider } from '@app/common/providers';
-import { ClientSession } from 'mongoose';
+import { Filter, Meta } from '@app/common/decorators';
 import { Response } from 'express';
 import { Observable } from 'rxjs';
 
@@ -59,8 +58,8 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ContextSettings)
   @ApiQuery({ type: QueryFilterDto, required: false })
-  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto, @Session() session?: ClientSession): Observable<TotalSerializer> {
-    return super.count(meta, filter, session);
+  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto): Observable<TotalSerializer> {
+    return super.count(meta, filter);
   }
 
   @Post()
@@ -69,12 +68,8 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   @SetScope(Scope.WriteContextSettings)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContextSettings)
-  create(
-    @Meta() meta: Metadata,
-    @Body() data: CreateSettingDto,
-    @Session() session?: ClientSession,
-  ): Observable<SettingDataSerializer> {
-    return super.create(meta, data, session);
+  create(@Meta() meta: Metadata, @Body() data: CreateSettingDto): Observable<SettingDataSerializer> {
+    return super.create(meta, data);
   }
 
   @Post('bulk')
@@ -83,12 +78,8 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   @SetScope(Scope.WriteContextSettings)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContextSettings)
-  createBulk(
-    @Meta() meta: Metadata,
-    @Body() data: CreateSettingItemsDto,
-    @Session() session?: ClientSession,
-  ): Observable<SettingItemsSerializer> {
-    return super.createBulk(meta, data, session);
+  createBulk(@Meta() meta: Metadata, @Body() data: CreateSettingItemsDto): Observable<SettingItemsSerializer> {
+    return super.createBulk(meta, data);
   }
 
   @Get()
@@ -97,12 +88,8 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   @SetPolicy(Action.Read, Resource.ContextSettings)
   @ApiQuery({ type: FilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  find(
-    @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<Setting>,
-    @Session() session?: ClientSession,
-  ): Observable<SettingItemsSerializer> {
-    return super.find(meta, filter, session);
+  find(@Meta() meta: Metadata, @Filter() filter: FilterDto<Setting>): Observable<SettingItemsSerializer> {
+    return super.find(meta, filter);
   }
 
   @Get('cursor')
@@ -134,11 +121,10 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Setting>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<SettingDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.findOne(meta, filter, session);
+    return super.findOne(meta, filter);
   }
 
   @Delete(':id')
@@ -151,11 +137,10 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Setting>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<SettingDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.deleteOne(meta, filter, session);
+    return super.deleteOne(meta, filter);
   }
 
   @Put(':id/restore')
@@ -168,11 +153,10 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Setting>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<SettingDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.restoreOne(meta, filter, session);
+    return super.restoreOne(meta, filter);
   }
 
   @Delete(':id/destroy')
@@ -185,11 +169,10 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Setting>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<SettingDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.destroyOne(meta, filter, session);
+    return super.destroyOne(meta, filter);
   }
 
   @Patch(':id')
@@ -204,11 +187,10 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Setting>,
     @Body() update: UpdateSettingDto,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<SettingDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.updateOne(meta, filter, update, session);
+    return super.updateOne(meta, filter, update);
   }
 
   @Patch('bulk')
@@ -222,8 +204,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
     @Meta() meta: Metadata,
     @Filter() filter: QueryFilterDto<Setting>,
     @Body() update: UpdateSettingDto,
-    @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
-    return super.updateBulk(meta, filter, update, session);
+    return super.updateBulk(meta, filter, update);
   }
 }

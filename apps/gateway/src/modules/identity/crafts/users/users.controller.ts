@@ -25,12 +25,11 @@ import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { IdentityProvider } from '@app/common/providers';
-import { ClientSession } from 'mongoose';
+import { Filter, Meta } from '@app/common/decorators';
 import { Response } from 'express';
 import { Observable } from 'rxjs';
 
@@ -52,8 +51,8 @@ export class UsersController extends ControllerClass<User, UserDto> implements C
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.IdentityUsers)
   @ApiQuery({ type: QueryFilterDto, required: false })
-  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto, @Session() session?: ClientSession): Observable<TotalSerializer> {
-    return super.count(meta, filter, session);
+  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto): Observable<TotalSerializer> {
+    return super.count(meta, filter);
   }
 
   @Post()
@@ -62,8 +61,8 @@ export class UsersController extends ControllerClass<User, UserDto> implements C
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentityUsers)
-  create(@Meta() meta: Metadata, @Body() data: CreateUserDto, @Session() session?: ClientSession): Observable<UserDataSerializer> {
-    return super.create(meta, data, session);
+  create(@Meta() meta: Metadata, @Body() data: CreateUserDto): Observable<UserDataSerializer> {
+    return super.create(meta, data);
   }
 
   @Post('bulk')
@@ -72,12 +71,8 @@ export class UsersController extends ControllerClass<User, UserDto> implements C
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentityUsers)
-  createBulk(
-    @Meta() meta: Metadata,
-    @Body() data: CreateUserItemsDto,
-    @Session() session?: ClientSession,
-  ): Observable<UserItemsSerializer> {
-    return super.createBulk(meta, data, session);
+  createBulk(@Meta() meta: Metadata, @Body() data: CreateUserItemsDto): Observable<UserItemsSerializer> {
+    return super.createBulk(meta, data);
   }
 
   @Get()
@@ -86,12 +81,8 @@ export class UsersController extends ControllerClass<User, UserDto> implements C
   @SetPolicy(Action.Read, Resource.IdentityUsers)
   @ApiQuery({ type: FilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  find(
-    @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<User>,
-    @Session() session?: ClientSession,
-  ): Observable<UserItemsSerializer> {
-    return super.find(meta, filter, session);
+  find(@Meta() meta: Metadata, @Filter() filter: FilterDto<User>): Observable<UserItemsSerializer> {
+    return super.find(meta, filter);
   }
 
   @Get('cursor')
@@ -123,11 +114,10 @@ export class UsersController extends ControllerClass<User, UserDto> implements C
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<User>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<UserDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.findOne(meta, filter, session);
+    return super.findOne(meta, filter);
   }
 
   @Delete(':id')
@@ -140,11 +130,10 @@ export class UsersController extends ControllerClass<User, UserDto> implements C
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<User>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<UserDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.deleteOne(meta, filter, session);
+    return super.deleteOne(meta, filter);
   }
 
   @Put(':id/restore')
@@ -157,11 +146,10 @@ export class UsersController extends ControllerClass<User, UserDto> implements C
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<User>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<UserDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.restoreOne(meta, filter, session);
+    return super.restoreOne(meta, filter);
   }
 
   @Delete(':id/destroy')
@@ -174,11 +162,10 @@ export class UsersController extends ControllerClass<User, UserDto> implements C
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<User>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<UserDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.destroyOne(meta, filter, session);
+    return super.destroyOne(meta, filter);
   }
 
   @Patch(':id')
@@ -193,11 +180,10 @@ export class UsersController extends ControllerClass<User, UserDto> implements C
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<User>,
     @Body() update: UpdateUserDto,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<UserDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.updateOne(meta, filter, update, session);
+    return super.updateOne(meta, filter, update);
   }
 
   @Patch('bulk')
@@ -211,8 +197,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements C
     @Meta() meta: Metadata,
     @Filter() filter: QueryFilterDto<User>,
     @Body() update: UpdateUserDto,
-    @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
-    return super.updateBulk(meta, filter, update, session);
+    return super.updateBulk(meta, filter, update);
   }
 }

@@ -8,13 +8,12 @@ import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { DomainProvider } from '@app/common/providers';
 import { refineFilterQuery } from '@app/common/utils';
-import { ClientSession } from 'mongoose';
+import { Filter, Meta } from '@app/common/decorators';
 import { Observable } from 'rxjs';
 
 @Resolver(() => AppSerializer)
@@ -33,12 +32,8 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements Contro
   @SetScope(Scope.ReadDomainApps)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.DomainApps)
-  countApp(
-    @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: QueryFilterDto,
-    @Session() session?: ClientSession,
-  ): Observable<TotalSerializer> {
-    return super.count(meta, filter, session);
+  countApp(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+    return super.count(meta, filter);
   }
 
   @Mutation(() => AppDataSerializer)
@@ -47,12 +42,8 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements Contro
   @SetScope(Scope.WriteDomainApps)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainApps)
-  createApp(
-    @Meta() meta: Metadata,
-    @Args('data') data: CreateAppDto,
-    @Session() session?: ClientSession,
-  ): Observable<AppDataSerializer> {
-    return super.create(meta, data, session);
+  createApp(@Meta() meta: Metadata, @Args('data') data: CreateAppDto): Observable<AppDataSerializer> {
+    return super.create(meta, data);
   }
 
   @Mutation(() => AppItemsSerializer)
@@ -61,12 +52,8 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements Contro
   @SetScope(Scope.WriteDomainApps)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainApps)
-  createBulkApp(
-    @Meta() meta: Metadata,
-    @Args('data') data: CreateAppItemsDto,
-    @Session() session?: ClientSession,
-  ): Observable<AppItemsSerializer> {
-    return super.createBulk(meta, data, session);
+  createBulkApp(@Meta() meta: Metadata, @Args('data') data: CreateAppItemsDto): Observable<AppItemsSerializer> {
+    return super.createBulk(meta, data);
   }
 
   @Query(() => AppItemsSerializer)
@@ -74,12 +61,8 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements Contro
   @SetScope(Scope.ReadDomainApps)
   @SetPolicy(Action.Read, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  findApp(
-    @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: FilterDto<App>,
-    @Session() session?: ClientSession,
-  ): Observable<AppItemsSerializer> {
-    return super.find(meta, filter, session);
+  findApp(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<App>): Observable<AppItemsSerializer> {
+    return super.find(meta, filter);
   }
 
   @Query(() => AppDataSerializer)
@@ -91,11 +74,10 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements Contro
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<App>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<AppDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.findOne(meta, filter, session);
+    return super.findOne(meta, filter);
   }
 
   @Mutation(() => AppDataSerializer)
@@ -107,11 +89,10 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements Contro
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<App>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<AppDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.deleteOne(meta, filter, session);
+    return super.deleteOne(meta, filter);
   }
 
   @Mutation(() => AppDataSerializer)
@@ -123,11 +104,10 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements Contro
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<App>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<AppDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.restoreOne(meta, filter, session);
+    return super.restoreOne(meta, filter);
   }
 
   @Mutation(() => AppDataSerializer)
@@ -139,11 +119,10 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements Contro
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<App>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<AppDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.destroyOne(meta, filter, session);
+    return super.destroyOne(meta, filter);
   }
 
   @Mutation(() => AppDataSerializer)
@@ -157,11 +136,10 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements Contro
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<App>,
     @Args('data') update: UpdateAppDto,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<AppDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.updateOne(meta, filter, update, session);
+    return super.updateOne(meta, filter, update);
   }
 
   @Mutation(() => TotalSerializer)
@@ -174,8 +152,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements Contro
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: QueryFilterDto<App>,
     @Args('data') update: UpdateAppDto,
-    @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
-    return super.updateBulk(meta, filter, update, session);
+    return super.updateBulk(meta, filter, update);
   }
 }

@@ -34,13 +34,12 @@ import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { SpecialProvider } from '@app/common/providers';
 import { refineFilterQuery } from '@app/common/utils';
-import { ClientSession } from 'mongoose';
+import { Filter, Meta } from '@app/common/decorators';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
@@ -64,8 +63,8 @@ export class SagaHistoriesController
   @SetScope(Scope.ReadSpecialSagaHistories)
   @SetPolicy(Action.Read, Resource.SpecialSagaHistories)
   @ApiQuery({ type: QueryFilterDto, required: false })
-  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto, @Session() session?: ClientSession): Observable<TotalSerializer> {
-    return super.count(meta, filter, session);
+  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto): Observable<TotalSerializer> {
+    return super.count(meta, filter);
   }
 
   @Post()
@@ -74,12 +73,8 @@ export class SagaHistoriesController
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteSpecialSagaHistories)
   @SetPolicy(Action.Create, Resource.SpecialSagaHistories)
-  create(
-    @Meta() meta: Metadata,
-    @Body() data: CreateSagaHistoryDto,
-    @Session() session?: ClientSession,
-  ): Observable<SagaHistoryDataSerializer> {
-    return super.create(meta, data, session);
+  create(@Meta() meta: Metadata, @Body() data: CreateSagaHistoryDto): Observable<SagaHistoryDataSerializer> {
+    return super.create(meta, data);
   }
 
   @Post('bulk')
@@ -88,12 +83,8 @@ export class SagaHistoriesController
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteSpecialSagaHistories)
   @SetPolicy(Action.Create, Resource.SpecialSagaHistories)
-  createBulk(
-    @Meta() meta: Metadata,
-    @Body() data: CreateSagaHistoryItemsDto,
-    @Session() session?: ClientSession,
-  ): Observable<SagaHistoryItemsSerializer> {
-    return super.createBulk(meta, data, session);
+  createBulk(@Meta() meta: Metadata, @Body() data: CreateSagaHistoryItemsDto): Observable<SagaHistoryItemsSerializer> {
+    return super.createBulk(meta, data);
   }
 
   @Get()
@@ -102,12 +93,8 @@ export class SagaHistoriesController
   @ApiQuery({ type: FilterDto, required: false })
   @SetPolicy(Action.Read, Resource.SpecialSagaHistories)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  find(
-    @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<SagaHistory>,
-    @Session() session?: ClientSession,
-  ): Observable<SagaHistoryItemsSerializer> {
-    return super.find(meta, filter, session);
+  find(@Meta() meta: Metadata, @Filter() filter: FilterDto<SagaHistory>): Observable<SagaHistoryItemsSerializer> {
+    return super.find(meta, filter);
   }
 
   @Get('cursor')
@@ -115,12 +102,8 @@ export class SagaHistoriesController
   @ApiQuery({ type: FilterDto, required: false })
   @SetPolicy(Action.Read, Resource.SpecialSagaHistories)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  cursor(
-    @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<SagaHistory>,
-    @Session() session?: ClientSession,
-  ): Observable<SagaHistorySerializer> {
-    return super.cursor(meta, filter, session);
+  cursor(@Meta() meta: Metadata, @Filter() filter: FilterDto<SagaHistory>): Observable<SagaHistorySerializer> {
+    return super.cursor(meta, filter);
   }
 
   @Get(':id')
@@ -133,11 +116,10 @@ export class SagaHistoriesController
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<SagaHistory>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<SagaHistoryDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.findOne(meta, filter, session);
+    return super.findOne(meta, filter);
   }
 
   @Delete(':id')
@@ -150,11 +132,10 @@ export class SagaHistoriesController
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<SagaHistory>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<SagaHistoryDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.deleteOne(meta, filter, session);
+    return super.deleteOne(meta, filter);
   }
 
   @Put(':id/restore')
@@ -167,11 +148,10 @@ export class SagaHistoriesController
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<SagaHistory>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<SagaHistoryDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.restoreOne(meta, filter, session);
+    return super.restoreOne(meta, filter);
   }
 
   @Delete(':id/destroy')
@@ -184,11 +164,10 @@ export class SagaHistoriesController
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<SagaHistory>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<SagaHistoryDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.destroyOne(meta, filter, session);
+    return super.destroyOne(meta, filter);
   }
 
   @Patch(':id')
@@ -203,11 +182,10 @@ export class SagaHistoriesController
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<SagaHistory>,
     @Body() update: UpdateSagaHistoryDto,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<SagaHistoryDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.updateOne(meta, filter, update, session);
+    return super.updateOne(meta, filter, update);
   }
 
   @Patch('bulk')
@@ -221,8 +199,7 @@ export class SagaHistoriesController
     @Meta() meta: Metadata,
     @Filter() filter: QueryFilterDto<SagaHistory>,
     @Body() update: UpdateSagaHistoryDto,
-    @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
-    return super.updateBulk(meta, filter, update, session);
+    return super.updateBulk(meta, filter, update);
   }
 }

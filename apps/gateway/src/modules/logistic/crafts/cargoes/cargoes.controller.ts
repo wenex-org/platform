@@ -25,12 +25,11 @@ import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { LogisticProvider } from '@app/common/providers';
-import { ClientSession } from 'mongoose';
+import { Filter, Meta } from '@app/common/decorators';
 import { Response } from 'express';
 import { Observable } from 'rxjs';
 
@@ -52,8 +51,8 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.LogisticCargoes)
   @ApiQuery({ type: QueryFilterDto, required: false })
-  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto, @Session() session?: ClientSession): Observable<TotalSerializer> {
-    return super.count(meta, filter, session);
+  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto): Observable<TotalSerializer> {
+    return super.count(meta, filter);
   }
 
   @Post()
@@ -62,12 +61,8 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   @SetScope(Scope.WriteLogisticCargoes)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticCargoes)
-  create(
-    @Meta() meta: Metadata,
-    @Body() data: CreateCargoDto,
-    @Session() session?: ClientSession,
-  ): Observable<CargoDataSerializer> {
-    return super.create(meta, data, session);
+  create(@Meta() meta: Metadata, @Body() data: CreateCargoDto): Observable<CargoDataSerializer> {
+    return super.create(meta, data);
   }
 
   @Post('bulk')
@@ -76,12 +71,8 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   @SetScope(Scope.WriteLogisticCargoes)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticCargoes)
-  createBulk(
-    @Meta() meta: Metadata,
-    @Body() data: CreateCargoItemsDto,
-    @Session() session?: ClientSession,
-  ): Observable<CargoItemsSerializer> {
-    return super.createBulk(meta, data, session);
+  createBulk(@Meta() meta: Metadata, @Body() data: CreateCargoItemsDto): Observable<CargoItemsSerializer> {
+    return super.createBulk(meta, data);
   }
 
   @Get()
@@ -90,12 +81,8 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   @SetPolicy(Action.Read, Resource.LogisticCargoes)
   @ApiQuery({ type: FilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  find(
-    @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<Cargo>,
-    @Session() session?: ClientSession,
-  ): Observable<CargoItemsSerializer> {
-    return super.find(meta, filter, session);
+  find(@Meta() meta: Metadata, @Filter() filter: FilterDto<Cargo>): Observable<CargoItemsSerializer> {
+    return super.find(meta, filter);
   }
 
   @Get('cursor')
@@ -127,11 +114,10 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Cargo>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<CargoDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.findOne(meta, filter, session);
+    return super.findOne(meta, filter);
   }
 
   @Delete(':id')
@@ -144,11 +130,10 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Cargo>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<CargoDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.deleteOne(meta, filter, session);
+    return super.deleteOne(meta, filter);
   }
 
   @Put(':id/restore')
@@ -161,11 +146,10 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Cargo>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<CargoDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.restoreOne(meta, filter, session);
+    return super.restoreOne(meta, filter);
   }
 
   @Delete(':id/destroy')
@@ -178,11 +162,10 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Cargo>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<CargoDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.destroyOne(meta, filter, session);
+    return super.destroyOne(meta, filter);
   }
 
   @Patch(':id')
@@ -197,11 +180,10 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Cargo>,
     @Body() update: UpdateCargoDto,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<CargoDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.updateOne(meta, filter, update, session);
+    return super.updateOne(meta, filter, update);
   }
 
   @Patch('bulk')
@@ -215,8 +197,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
     @Meta() meta: Metadata,
     @Filter() filter: QueryFilterDto<Cargo>,
     @Body() update: UpdateCargoDto,
-    @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
-    return super.updateBulk(meta, filter, update, session);
+    return super.updateBulk(meta, filter, update);
   }
 }

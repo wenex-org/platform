@@ -8,13 +8,12 @@ import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { DomainProvider } from '@app/common/providers';
 import { refineFilterQuery } from '@app/common/utils';
-import { ClientSession } from 'mongoose';
+import { Filter, Meta } from '@app/common/decorators';
 import { Observable } from 'rxjs';
 
 @Resolver(() => ClientSerializer)
@@ -33,12 +32,8 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   @SetScope(Scope.ReadDomainClients)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.DomainClients)
-  countClient(
-    @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: QueryFilterDto,
-    @Session() session?: ClientSession,
-  ): Observable<TotalSerializer> {
-    return super.count(meta, filter, session);
+  countClient(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+    return super.count(meta, filter);
   }
 
   @Mutation(() => ClientDataSerializer)
@@ -47,12 +42,8 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainClients)
-  createClient(
-    @Meta() meta: Metadata,
-    @Args('data') data: CreateClientDto,
-    @Session() session?: ClientSession,
-  ): Observable<ClientDataSerializer> {
-    return super.create(meta, data, session);
+  createClient(@Meta() meta: Metadata, @Args('data') data: CreateClientDto): Observable<ClientDataSerializer> {
+    return super.create(meta, data);
   }
 
   @Mutation(() => ClientItemsSerializer)
@@ -61,12 +52,8 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainClients)
-  createBulkClient(
-    @Meta() meta: Metadata,
-    @Args('data') data: CreateClientItemsDto,
-    @Session() session?: ClientSession,
-  ): Observable<ClientItemsSerializer> {
-    return super.createBulk(meta, data, session);
+  createBulkClient(@Meta() meta: Metadata, @Args('data') data: CreateClientItemsDto): Observable<ClientItemsSerializer> {
+    return super.createBulk(meta, data);
   }
 
   @Query(() => ClientItemsSerializer)
@@ -74,12 +61,8 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   @SetScope(Scope.ReadDomainClients)
   @SetPolicy(Action.Read, Resource.DomainClients)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  findClient(
-    @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: FilterDto<Client>,
-    @Session() session?: ClientSession,
-  ): Observable<ClientItemsSerializer> {
-    return super.find(meta, filter, session);
+  findClient(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Client>): Observable<ClientItemsSerializer> {
+    return super.find(meta, filter);
   }
 
   @Query(() => ClientDataSerializer)
@@ -91,11 +74,10 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Client>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<ClientDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.findOne(meta, filter, session);
+    return super.findOne(meta, filter);
   }
 
   @Mutation(() => ClientDataSerializer)
@@ -107,11 +89,10 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Client>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<ClientDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.deleteOne(meta, filter, session);
+    return super.deleteOne(meta, filter);
   }
 
   @Mutation(() => ClientDataSerializer)
@@ -123,11 +104,10 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Client>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<ClientDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.restoreOne(meta, filter, session);
+    return super.restoreOne(meta, filter);
   }
 
   @Mutation(() => ClientDataSerializer)
@@ -139,11 +119,10 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Client>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<ClientDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.destroyOne(meta, filter, session);
+    return super.destroyOne(meta, filter);
   }
 
   @Mutation(() => ClientDataSerializer)
@@ -157,11 +136,10 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Client>,
     @Args('data') update: UpdateClientDto,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<ClientDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.updateOne(meta, filter, update, session);
+    return super.updateOne(meta, filter, update);
   }
 
   @Mutation(() => TotalSerializer)
@@ -174,8 +152,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: QueryFilterDto<Client>,
     @Args('data') update: UpdateClientDto,
-    @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
-    return super.updateBulk(meta, filter, update, session);
+    return super.updateBulk(meta, filter, update);
   }
 }

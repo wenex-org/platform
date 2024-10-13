@@ -8,13 +8,12 @@ import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { refineFilterQuery } from '@app/common/utils';
+import { Filter, Meta } from '@app/common/decorators';
 import { AuthProvider } from '@app/common/providers';
-import { ClientSession } from 'mongoose';
 import { Observable } from 'rxjs';
 
 @Resolver(() => GrantSerializer)
@@ -33,12 +32,8 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   @SetScope(Scope.ReadAuthGrants)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.AuthGrants)
-  countGrant(
-    @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: QueryFilterDto,
-    @Session() session?: ClientSession,
-  ): Observable<TotalSerializer> {
-    return super.count(meta, filter, session);
+  countGrant(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+    return super.count(meta, filter);
   }
 
   @Mutation(() => GrantDataSerializer)
@@ -47,12 +42,8 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   @SetScope(Scope.WriteAuthGrants)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.AuthGrants)
-  createGrant(
-    @Meta() meta: Metadata,
-    @Args('data') data: CreateGrantDto,
-    @Session() session?: ClientSession,
-  ): Observable<GrantDataSerializer> {
-    return super.create(meta, data, session);
+  createGrant(@Meta() meta: Metadata, @Args('data') data: CreateGrantDto): Observable<GrantDataSerializer> {
+    return super.create(meta, data);
   }
 
   @Mutation(() => GrantItemsSerializer)
@@ -61,12 +52,8 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   @SetScope(Scope.WriteAuthGrants)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.AuthGrants)
-  createBulkGrant(
-    @Meta() meta: Metadata,
-    @Args('data') data: CreateGrantItemsDto,
-    @Session() session?: ClientSession,
-  ): Observable<GrantItemsSerializer> {
-    return super.createBulk(meta, data, session);
+  createBulkGrant(@Meta() meta: Metadata, @Args('data') data: CreateGrantItemsDto): Observable<GrantItemsSerializer> {
+    return super.createBulk(meta, data);
   }
 
   @Query(() => GrantItemsSerializer)
@@ -74,12 +61,8 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   @SetScope(Scope.ReadAuthGrants)
   @SetPolicy(Action.Read, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  findGrant(
-    @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: FilterDto<Grant>,
-    @Session() session?: ClientSession,
-  ): Observable<GrantItemsSerializer> {
-    return super.find(meta, filter, session);
+  findGrant(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Grant>): Observable<GrantItemsSerializer> {
+    return super.find(meta, filter);
   }
 
   @Query(() => GrantDataSerializer)
@@ -91,11 +74,10 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Grant>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<GrantDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.findOne(meta, filter, session);
+    return super.findOne(meta, filter);
   }
 
   @Mutation(() => GrantDataSerializer)
@@ -107,11 +89,10 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Grant>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<GrantDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.deleteOne(meta, filter, session);
+    return super.deleteOne(meta, filter);
   }
 
   @Mutation(() => GrantDataSerializer)
@@ -123,11 +104,10 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Grant>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<GrantDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.restoreOne(meta, filter, session);
+    return super.restoreOne(meta, filter);
   }
 
   @Mutation(() => GrantDataSerializer)
@@ -139,11 +119,10 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Grant>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<GrantDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.destroyOne(meta, filter, session);
+    return super.destroyOne(meta, filter);
   }
 
   @Mutation(() => GrantDataSerializer)
@@ -157,11 +136,10 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Grant>,
     @Args('data') update: UpdateGrantDto,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<GrantDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.updateOne(meta, filter, update, session);
+    return super.updateOne(meta, filter, update);
   }
 
   @Mutation(() => TotalSerializer)
@@ -174,8 +152,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: QueryFilterDto<Grant>,
     @Args('data') update: UpdateGrantDto,
-    @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
-    return super.updateBulk(meta, filter, update, session);
+    return super.updateBulk(meta, filter, update);
   }
 }

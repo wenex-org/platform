@@ -15,13 +15,12 @@ import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { LogisticProvider } from '@app/common/providers';
 import { refineFilterQuery } from '@app/common/utils';
-import { ClientSession } from 'mongoose';
+import { Filter, Meta } from '@app/common/decorators';
 import { Observable } from 'rxjs';
 
 @Resolver(() => VehicleSerializer)
@@ -39,12 +38,8 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   @SetScope(Scope.ReadLogisticVehicles)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.LogisticVehicles)
-  countVehicle(
-    @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: QueryFilterDto,
-    @Session() session?: ClientSession,
-  ): Observable<TotalSerializer> {
-    return super.count(meta, filter, session);
+  countVehicle(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+    return super.count(meta, filter);
   }
 
   @Mutation(() => VehicleDataSerializer)
@@ -53,12 +48,8 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   @SetScope(Scope.WriteLogisticVehicles)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticVehicles)
-  createVehicle(
-    @Meta() meta: Metadata,
-    @Args('data') data: CreateVehicleDto,
-    @Session() session?: ClientSession,
-  ): Observable<VehicleDataSerializer> {
-    return super.create(meta, data, session);
+  createVehicle(@Meta() meta: Metadata, @Args('data') data: CreateVehicleDto): Observable<VehicleDataSerializer> {
+    return super.create(meta, data);
   }
 
   @Mutation(() => VehicleItemsSerializer)
@@ -67,12 +58,8 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   @SetScope(Scope.WriteLogisticVehicles)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticVehicles)
-  createBulkVehicle(
-    @Meta() meta: Metadata,
-    @Args('data') data: CreateVehicleItemsDto,
-    @Session() session?: ClientSession,
-  ): Observable<VehicleItemsSerializer> {
-    return super.createBulk(meta, data, session);
+  createBulkVehicle(@Meta() meta: Metadata, @Args('data') data: CreateVehicleItemsDto): Observable<VehicleItemsSerializer> {
+    return super.createBulk(meta, data);
   }
 
   @Query(() => VehicleItemsSerializer)
@@ -80,12 +67,8 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   @SetScope(Scope.ReadLogisticVehicles)
   @SetPolicy(Action.Read, Resource.LogisticVehicles)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  findVehicle(
-    @Meta() meta: Metadata,
-    @Filter() @Args('filter') filter: FilterDto<Vehicle>,
-    @Session() session?: ClientSession,
-  ): Observable<VehicleItemsSerializer> {
-    return super.find(meta, filter, session);
+  findVehicle(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Vehicle>): Observable<VehicleItemsSerializer> {
+    return super.find(meta, filter);
   }
 
   @Query(() => VehicleDataSerializer)
@@ -97,11 +80,10 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Vehicle>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<VehicleDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.findOne(meta, filter, session);
+    return super.findOne(meta, filter);
   }
 
   @Mutation(() => VehicleDataSerializer)
@@ -113,11 +95,10 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Vehicle>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<VehicleDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.deleteOne(meta, filter, session);
+    return super.deleteOne(meta, filter);
   }
 
   @Mutation(() => VehicleDataSerializer)
@@ -129,11 +110,10 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Vehicle>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<VehicleDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.restoreOne(meta, filter, session);
+    return super.restoreOne(meta, filter);
   }
 
   @Mutation(() => VehicleDataSerializer)
@@ -145,11 +125,10 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
     @Args('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Vehicle>,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<VehicleDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.destroyOne(meta, filter, session);
+    return super.destroyOne(meta, filter);
   }
 
   @Mutation(() => VehicleDataSerializer)
@@ -163,11 +142,10 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Vehicle>,
     @Args('data') update: UpdateVehicleDto,
-    @Session() session?: ClientSession,
     @Args('ref', { nullable: true }, ParseRefPipe) ref?: string,
   ): Observable<VehicleDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.updateOne(meta, filter, update, session);
+    return super.updateOne(meta, filter, update);
   }
 
   @Mutation(() => TotalSerializer)
@@ -180,8 +158,7 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: QueryFilterDto<Vehicle>,
     @Args('data') update: UpdateVehicleDto,
-    @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
-    return super.updateBulk(meta, filter, update, session);
+    return super.updateBulk(meta, filter, update);
   }
 }

@@ -25,12 +25,11 @@ import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
+import { Filter, Meta } from '@app/common/decorators';
 import { AuthProvider } from '@app/common/providers';
-import { ClientSession } from 'mongoose';
 import { Response } from 'express';
 import { Observable } from 'rxjs';
 
@@ -53,8 +52,8 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.AuthGrants)
   @ApiQuery({ type: QueryFilterDto, required: false })
-  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto, @Session() session?: ClientSession): Observable<TotalSerializer> {
-    return super.count(meta, filter, session);
+  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto): Observable<TotalSerializer> {
+    return super.count(meta, filter);
   }
 
   @Post()
@@ -63,12 +62,8 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   @SetScope(Scope.WriteAuthGrants)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.AuthGrants)
-  create(
-    @Meta() meta: Metadata,
-    @Body() data: CreateGrantDto,
-    @Session() session?: ClientSession,
-  ): Observable<GrantDataSerializer> {
-    return super.create(meta, data, session);
+  create(@Meta() meta: Metadata, @Body() data: CreateGrantDto): Observable<GrantDataSerializer> {
+    return super.create(meta, data);
   }
 
   @Post('bulk')
@@ -77,12 +72,8 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   @SetScope(Scope.WriteAuthGrants)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.AuthGrants)
-  createBulk(
-    @Meta() meta: Metadata,
-    @Body() data: CreateGrantItemsDto,
-    @Session() session?: ClientSession,
-  ): Observable<GrantItemsSerializer> {
-    return super.createBulk(meta, data, session);
+  createBulk(@Meta() meta: Metadata, @Body() data: CreateGrantItemsDto): Observable<GrantItemsSerializer> {
+    return super.createBulk(meta, data);
   }
 
   @Get()
@@ -91,12 +82,8 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   @SetPolicy(Action.Read, Resource.AuthGrants)
   @ApiQuery({ type: FilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  find(
-    @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<Grant>,
-    @Session() session?: ClientSession,
-  ): Observable<GrantItemsSerializer> {
-    return super.find(meta, filter, session);
+  find(@Meta() meta: Metadata, @Filter() filter: FilterDto<Grant>): Observable<GrantItemsSerializer> {
+    return super.find(meta, filter);
   }
 
   @Get('cursor')
@@ -128,11 +115,10 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Grant>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<GrantDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.findOne(meta, filter, session);
+    return super.findOne(meta, filter);
   }
 
   @Delete(':id')
@@ -145,11 +131,10 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Grant>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<GrantDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.deleteOne(meta, filter, session);
+    return super.deleteOne(meta, filter);
   }
 
   @Put(':id/restore')
@@ -162,11 +147,10 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Grant>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<GrantDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.restoreOne(meta, filter, session);
+    return super.restoreOne(meta, filter);
   }
 
   @Delete(':id/destroy')
@@ -179,11 +163,10 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Grant>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<GrantDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.destroyOne(meta, filter, session);
+    return super.destroyOne(meta, filter);
   }
 
   @Patch(':id')
@@ -198,11 +181,10 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Grant>,
     @Body() update: UpdateGrantDto,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<GrantDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.updateOne(meta, filter, update, session);
+    return super.updateOne(meta, filter, update);
   }
 
   @Patch('bulk')
@@ -216,8 +198,7 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
     @Meta() meta: Metadata,
     @Filter() filter: QueryFilterDto<Grant>,
     @Body() update: UpdateGrantDto,
-    @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
-    return super.updateBulk(meta, filter, update, session);
+    return super.updateBulk(meta, filter, update);
   }
 }

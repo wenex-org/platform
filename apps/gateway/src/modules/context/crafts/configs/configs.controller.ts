@@ -25,12 +25,11 @@ import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { ContextProvider } from '@app/common/providers';
-import { ClientSession } from 'mongoose';
+import { Filter, Meta } from '@app/common/decorators';
 import { Response } from 'express';
 import { Observable } from 'rxjs';
 
@@ -52,8 +51,8 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ContextConfigs)
   @ApiQuery({ type: QueryFilterDto, required: false })
-  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto, @Session() session?: ClientSession): Observable<TotalSerializer> {
-    return super.count(meta, filter, session);
+  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto): Observable<TotalSerializer> {
+    return super.count(meta, filter);
   }
 
   @Post()
@@ -62,12 +61,8 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   @SetScope(Scope.WriteContextConfigs)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContextConfigs)
-  create(
-    @Meta() meta: Metadata,
-    @Body() data: CreateConfigDto,
-    @Session() session?: ClientSession,
-  ): Observable<ConfigDataSerializer> {
-    return super.create(meta, data, session);
+  create(@Meta() meta: Metadata, @Body() data: CreateConfigDto): Observable<ConfigDataSerializer> {
+    return super.create(meta, data);
   }
 
   @Post('bulk')
@@ -76,12 +71,8 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   @SetScope(Scope.WriteContextConfigs)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContextConfigs)
-  createBulk(
-    @Meta() meta: Metadata,
-    @Body() data: CreateConfigItemsDto,
-    @Session() session?: ClientSession,
-  ): Observable<ConfigItemsSerializer> {
-    return super.createBulk(meta, data, session);
+  createBulk(@Meta() meta: Metadata, @Body() data: CreateConfigItemsDto): Observable<ConfigItemsSerializer> {
+    return super.createBulk(meta, data);
   }
 
   @Get()
@@ -90,12 +81,8 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   @SetPolicy(Action.Read, Resource.ContextConfigs)
   @ApiQuery({ type: FilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  find(
-    @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<Config>,
-    @Session() session?: ClientSession,
-  ): Observable<ConfigItemsSerializer> {
-    return super.find(meta, filter, session);
+  find(@Meta() meta: Metadata, @Filter() filter: FilterDto<Config>): Observable<ConfigItemsSerializer> {
+    return super.find(meta, filter);
   }
 
   @Get('cursor')
@@ -127,11 +114,10 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Config>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<ConfigDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.findOne(meta, filter, session);
+    return super.findOne(meta, filter);
   }
 
   @Delete(':id')
@@ -144,11 +130,10 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Config>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<ConfigDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.deleteOne(meta, filter, session);
+    return super.deleteOne(meta, filter);
   }
 
   @Put(':id/restore')
@@ -161,11 +146,10 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Config>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<ConfigDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.restoreOne(meta, filter, session);
+    return super.restoreOne(meta, filter);
   }
 
   @Delete(':id/destroy')
@@ -178,11 +162,10 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Config>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<ConfigDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.destroyOne(meta, filter, session);
+    return super.destroyOne(meta, filter);
   }
 
   @Patch(':id')
@@ -197,11 +180,10 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Config>,
     @Body() update: UpdateConfigDto,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<ConfigDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.updateOne(meta, filter, update, session);
+    return super.updateOne(meta, filter, update);
   }
 
   @Patch('bulk')
@@ -215,8 +197,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
     @Meta() meta: Metadata,
     @Filter() filter: QueryFilterDto<Config>,
     @Body() update: UpdateConfigDto,
-    @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
-    return super.updateBulk(meta, filter, update, session);
+    return super.updateBulk(meta, filter, update);
   }
 }

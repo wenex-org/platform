@@ -22,13 +22,12 @@ import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Filter, Meta, Session } from '@app/common/decorators';
 import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { FinancialProvider } from '@app/common/providers';
 import { refineFilterQuery } from '@app/common/utils';
-import { ClientSession } from 'mongoose';
+import { Filter, Meta } from '@app/common/decorators';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
@@ -49,8 +48,8 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.FinancialWallets)
   @ApiQuery({ type: QueryFilterDto, required: false })
-  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto, @Session() session?: ClientSession): Observable<TotalSerializer> {
-    return super.count(meta, filter, session);
+  count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto): Observable<TotalSerializer> {
+    return super.count(meta, filter);
   }
 
   @Post()
@@ -59,12 +58,8 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
   @SetScope(Scope.WriteFinancialWallets)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialWallets)
-  create(
-    @Meta() meta: Metadata,
-    @Body() data: CreateWalletDto,
-    @Session() session?: ClientSession,
-  ): Observable<WalletDataSerializer> {
-    return super.create(meta, data, session);
+  create(@Meta() meta: Metadata, @Body() data: CreateWalletDto): Observable<WalletDataSerializer> {
+    return super.create(meta, data);
   }
 
   @Post('bulk')
@@ -73,12 +68,8 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
   @SetScope(Scope.WriteFinancialWallets)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialWallets)
-  createBulk(
-    @Meta() meta: Metadata,
-    @Body() data: CreateWalletItemsDto,
-    @Session() session?: ClientSession,
-  ): Observable<WalletItemsSerializer> {
-    return super.createBulk(meta, data, session);
+  createBulk(@Meta() meta: Metadata, @Body() data: CreateWalletItemsDto): Observable<WalletItemsSerializer> {
+    return super.createBulk(meta, data);
   }
 
   @Get()
@@ -87,12 +78,8 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
   @SetPolicy(Action.Read, Resource.FinancialWallets)
   @ApiQuery({ type: FilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  find(
-    @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<Wallet>,
-    @Session() session?: ClientSession,
-  ): Observable<WalletItemsSerializer> {
-    return super.find(meta, filter, session);
+  find(@Meta() meta: Metadata, @Filter() filter: FilterDto<Wallet>): Observable<WalletItemsSerializer> {
+    return super.find(meta, filter);
   }
 
   @Get('cursor')
@@ -100,12 +87,8 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
   @SetPolicy(Action.Read, Resource.FinancialWallets)
   @ApiQuery({ type: FilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  cursor(
-    @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<Wallet>,
-    @Session() session?: ClientSession,
-  ): Observable<WalletSerializer> {
-    return super.cursor(meta, filter, session);
+  cursor(@Meta() meta: Metadata, @Filter() filter: FilterDto<Wallet>): Observable<WalletSerializer> {
+    return super.cursor(meta, filter);
   }
 
   @Get(':id')
@@ -118,11 +101,10 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Wallet>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<WalletDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.findOne(meta, filter, session);
+    return super.findOne(meta, filter);
   }
 
   @Delete(':id')
@@ -135,11 +117,10 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Wallet>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<WalletDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.deleteOne(meta, filter, session);
+    return super.deleteOne(meta, filter);
   }
 
   @Put(':id/restore')
@@ -152,11 +133,10 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Wallet>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<WalletDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.restoreOne(meta, filter, session);
+    return super.restoreOne(meta, filter);
   }
 
   @Delete(':id/destroy')
@@ -169,11 +149,10 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
     @Param('id', ParseIdPipe) id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Wallet>,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<WalletDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.destroyOne(meta, filter, session);
+    return super.destroyOne(meta, filter);
   }
 
   @Patch(':id')
@@ -188,11 +167,10 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Wallet>,
     @Body() update: UpdateWalletDto,
-    @Session() session?: ClientSession,
     @Query('ref', ParseRefPipe) ref?: string,
   ): Observable<WalletDataSerializer> {
     refineFilterQuery(filter, { id, ref });
-    return super.updateOne(meta, filter, update, session);
+    return super.updateOne(meta, filter, update);
   }
 
   @Patch('bulk')
@@ -206,8 +184,7 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
     @Meta() meta: Metadata,
     @Filter() filter: QueryFilterDto<Wallet>,
     @Body() update: UpdateWalletDto,
-    @Session() session?: ClientSession,
   ): Observable<TotalSerializer> {
-    return super.updateBulk(meta, filter, update, session);
+    return super.updateBulk(meta, filter, update);
   }
 }
