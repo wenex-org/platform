@@ -14,6 +14,15 @@ importers:
       '@aws-sdk/client-s3':
         specifier: ^3.598.0
         version: 3.598.0
+      '@bull-board/api':
+        specifier: ^6.2.1
+        version: 6.2.1(@bull-board/ui@6.2.1)
+      '@bull-board/express':
+        specifier: ^6.2.1
+        version: 6.2.1
+      '@bull-board/nestjs':
+        specifier: ^6.2.1
+        version: 6.2.1(@bull-board/api@6.2.1(@bull-board/ui@6.2.1))(@bull-board/express@6.2.1)(@nestjs/common@10.4.4(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.4(@nestjs/common@10.4.4(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/microservices@10.4.4)(@nestjs/platform-express@10.4.4)(reflect-metadata@0.2.2)(rxjs@7.8.1))(reflect-metadata@0.2.2)(rxjs@7.8.1)
       '@grpc/grpc-js':
         specifier: ^1.10.9
         version: 1.10.9
@@ -834,6 +843,27 @@ packages:
 
   '@bcoe/v8-coverage@0.2.3':
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
+
+  '@bull-board/api@6.2.1':
+    resolution: {integrity: sha512-UZwYpqeIxF3UcsXAQIzqvYcIGjdltoo5YtGkENpyFr1PuIq2Mr/2wVChVlulzthe93xxbbhvt3rBbjKXrMjYTg==}
+    peerDependencies:
+      '@bull-board/ui': 6.2.1
+
+  '@bull-board/express@6.2.1':
+    resolution: {integrity: sha512-YwNQ+z5ib4eLGJRtbGC9fA9dbPqgwF8WmBOG4XzU/ukIBqmYCQse+wLqddqB0f2PwDcmibm+J81aq9JvYDJA0Q==}
+
+  '@bull-board/nestjs@6.2.1':
+    resolution: {integrity: sha512-xoV/NwViRKuTzff9ZQpT0M4H0jwHEn4/oWVDEi0tYbB+76MYbHQ6OIwK1WGaJHAn1tN+/+N5IBcWOFwsG1IIKQ==}
+    peerDependencies:
+      '@bull-board/api': ^6.2.1
+      '@bull-board/express': ^6.2.1
+      '@nestjs/common': ^9.0.0 || ^10.0.0
+      '@nestjs/core': ^9.0.0 || ^10.0.0
+      reflect-metadata: ^0.1.13 || ^0.2.0
+      rxjs: ^7.8.1
+
+  '@bull-board/ui@6.2.1':
+    resolution: {integrity: sha512-U/iwLhY9R3HaThP0lzxW+GuC8LzoXc2KEP3AN2cKNgzWsHqqdM0/wRoV8mmj45JuM+hVRpx07vIz9xEaV6daRA==}
 
   '@colors/colors@1.5.0':
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
@@ -3574,6 +3604,11 @@ packages:
   ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
 
+  ejs@3.1.10:
+    resolution: {integrity: sha512-UeJmFfOrAQS8OJWPZ4qtgHyWExa088/MtK5UEyoJGFH67cDEXkZSviOiKRCZ4Xij0zxI3JECgYs3oKx+AizQBA==}
+    engines: {node: '>=0.10.0'}
+    hasBin: true
+
   elastic-apm-node@4.7.0:
     resolution: {integrity: sha512-fOcDYOcZ/180Ib0p8xLNF8iDu9e1QGqZiEizOntdh1GmkurN3sIGVgGlE25s9LRBUMmD2bMWwlER56T8moW+tg==}
     engines: {node: '>=14.17.0'}
@@ -3855,6 +3890,9 @@ packages:
   file-type@3.9.0:
     resolution: {integrity: sha512-RLoqTXE8/vPmMuTI88DAzhMYC99I8BWv7zYP4A1puo5HIjEJ5EX48ighy4ZyKMG9EDXxBgW6e++cn7d1xuFghA==}
     engines: {node: '>=0.10.0'}
+
+  filelist@1.0.4:
+    resolution: {integrity: sha512-w1cEuf3S+DrLCQL7ET6kz+gmlJdbq9J7yXCSjK/OZCPA+qEN1WyF4ZAf0YYJa4/shHJra2t/d/r8SV4Ji+x+8Q==}
 
   fill-range@7.0.1:
     resolution: {integrity: sha512-qOo9F+dMUmC2Lcb4BbVvnKJxTPjCm+RRpe4gDuGrzkL7mEVl/djYSu2OdQ2Pa302N4oqkSg9ir6jaLWJ2USVpQ==}
@@ -4434,6 +4472,11 @@ packages:
     resolution: {integrity: sha512-N3yCS/NegsOBokc8GAdM8UcmfsKiSS8cipheD/nivzr700H+nsMOxJjQnvwOcRYVuFkdH0wGUvW2WbXGmrZGbQ==}
     engines: {node: '>=14'}
 
+  jake@10.9.2:
+    resolution: {integrity: sha512-2P4SQ0HrLQ+fw6llpLnOaGAvN2Zu6778SJMrCUwns4fOoG9ayrTiZk3VV8sCPkVZF8ab0zksVpS8FDY5pRCNBA==}
+    engines: {node: '>=10'}
+    hasBin: true
+
   jest-changed-files@29.7.0:
     resolution: {integrity: sha512-fEArFiwf1BpQ+4bXSprcDc3/x4HSzL4al2tozwVpDFpsxALjLYdyiIK4e5Vz66GQJIbXJ82+35PtysofptNX2w==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -4878,6 +4921,10 @@ packages:
 
   minimatch@3.1.2:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
+
+  minimatch@5.1.6:
+    resolution: {integrity: sha512-lKwV/1brpG6mBUFHtb7NUmtABCb2WZZmm2wNiOA5hAb8VdCS4B3dtMWyvcoViccwAW/COERjXLt0zP1zXUN26g==}
+    engines: {node: '>=10'}
 
   minimatch@8.0.4:
     resolution: {integrity: sha512-W0Wvr9HyFXZRGIDgCicunpQ299OKXs9RgZfaukz4qAW/pJhcpUfupc9c+OObPOFueNy8VSrZgEmDtk6Kh4WzDA==}
@@ -5442,6 +5489,9 @@ packages:
   redis-errors@1.2.0:
     resolution: {integrity: sha512-1qny3OExCf0UvUV/5wpYKf2YwPcOqXzkwKKSmKHiE6ZMQs5heeE/c8eXK+PNllPvmjgAbfnsbpkGZWy8cBpn9w==}
     engines: {node: '>=4'}
+
+  redis-info@3.1.0:
+    resolution: {integrity: sha512-ER4L9Sh/vm63DkIE0bkSjxluQlioBiBgf5w1UuldaW/3vPcecdljVDisZhmnCMvsxHNiARTTDDHGg9cGwTfrKg==}
 
   redis-parser@3.0.0:
     resolution: {integrity: sha512-DJnGAeenTdpMEH6uAJRK/uiyEIH9WVsUmoLwzudwGJUwZPp80PDBWPHXSAGNPwNvIXAbe7MSUB1zQFugFml66A==}
@@ -7273,6 +7323,34 @@ snapshots:
 
   '@bcoe/v8-coverage@0.2.3': {}
 
+  '@bull-board/api@6.2.1(@bull-board/ui@6.2.1)':
+    dependencies:
+      '@bull-board/ui': 6.2.1
+      redis-info: 3.1.0
+
+  '@bull-board/express@6.2.1':
+    dependencies:
+      '@bull-board/api': 6.2.1(@bull-board/ui@6.2.1)
+      '@bull-board/ui': 6.2.1
+      ejs: 3.1.10
+      express: 4.21.0
+    transitivePeerDependencies:
+      - supports-color
+
+  '@bull-board/nestjs@6.2.1(@bull-board/api@6.2.1(@bull-board/ui@6.2.1))(@bull-board/express@6.2.1)(@nestjs/common@10.4.4(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.4(@nestjs/common@10.4.4(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/microservices@10.4.4)(@nestjs/platform-express@10.4.4)(reflect-metadata@0.2.2)(rxjs@7.8.1))(reflect-metadata@0.2.2)(rxjs@7.8.1)':
+    dependencies:
+      '@bull-board/api': 6.2.1(@bull-board/ui@6.2.1)
+      '@bull-board/express': 6.2.1
+      '@nestjs/bull-shared': 10.2.1(@nestjs/common@10.4.4(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.4(@nestjs/common@10.4.4(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/microservices@10.4.4)(@nestjs/platform-express@10.4.4)(reflect-metadata@0.2.2)(rxjs@7.8.1))
+      '@nestjs/common': 10.4.4(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+      '@nestjs/core': 10.4.4(@nestjs/common@10.4.4(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/microservices@10.4.4)(@nestjs/platform-express@10.4.4)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+      reflect-metadata: 0.2.2
+      rxjs: 7.8.1
+
+  '@bull-board/ui@6.2.1':
+    dependencies:
+      '@bull-board/api': 6.2.1(@bull-board/ui@6.2.1)
+
   '@colors/colors@1.5.0':
     optional: true
 
@@ -8724,20 +8802,20 @@ snapshots:
       '@sentry/core': 7.74.0
       '@sentry/types': 7.74.0
       '@sentry/utils': 7.74.0
-      tslib: 2.6.3
+      tslib: 2.7.0
 
   '@sentry/core@7.74.0':
     dependencies:
       '@sentry/types': 7.74.0
       '@sentry/utils': 7.74.0
-      tslib: 2.6.3
+      tslib: 2.7.0
 
   '@sentry/hub@7.74.0':
     dependencies:
       '@sentry/core': 7.74.0
       '@sentry/types': 7.74.0
       '@sentry/utils': 7.74.0
-      tslib: 2.6.3
+      tslib: 2.7.0
 
   '@sentry/node@7.74.0':
     dependencies:
@@ -8748,7 +8826,7 @@ snapshots:
       cookie: 0.5.0
       https-proxy-agent: 5.0.1
       lru_map: 0.3.3
-      tslib: 2.6.3
+      tslib: 2.7.0
     transitivePeerDependencies:
       - supports-color
 
@@ -8757,7 +8835,7 @@ snapshots:
   '@sentry/utils@7.74.0':
     dependencies:
       '@sentry/types': 7.74.0
-      tslib: 2.6.3
+      tslib: 2.7.0
 
   '@sinclair/typebox@0.27.8': {}
 
@@ -10640,6 +10718,10 @@ snapshots:
 
   ee-first@1.1.1: {}
 
+  ejs@3.1.10:
+    dependencies:
+      jake: 10.9.2
+
   elastic-apm-node@4.7.0:
     dependencies:
       '@elastic/ecs-pino-format': 1.5.0
@@ -11084,6 +11166,10 @@ snapshots:
       flat-cache: 3.2.0
 
   file-type@3.9.0: {}
+
+  filelist@1.0.4:
+    dependencies:
+      minimatch: 5.1.6
 
   fill-range@7.0.1:
     dependencies:
@@ -11730,6 +11816,13 @@ snapshots:
     optionalDependencies:
       '@pkgjs/parseargs': 0.11.0
 
+  jake@10.9.2:
+    dependencies:
+      async: 3.2.5
+      chalk: 4.1.2
+      filelist: 1.0.4
+      minimatch: 3.1.2
+
   jest-changed-files@29.7.0:
     dependencies:
       execa: 5.1.1
@@ -12333,6 +12426,10 @@ snapshots:
   minimatch@3.1.2:
     dependencies:
       brace-expansion: 1.1.11
+
+  minimatch@5.1.6:
+    dependencies:
+      brace-expansion: 2.0.1
 
   minimatch@8.0.4:
     dependencies:
@@ -12965,6 +13062,10 @@ snapshots:
       resolve: 1.22.6
 
   redis-errors@1.2.0: {}
+
+  redis-info@3.1.0:
+    dependencies:
+      lodash: 4.17.21
 
   redis-parser@3.0.0:
     dependencies:
