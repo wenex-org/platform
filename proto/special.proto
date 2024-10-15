@@ -339,6 +339,7 @@ message Saga {
 
   optional string aborted_at = 54;
   optional string committed_at = 55;
+  optional string rollbacked_at = 56;
 }
 message Sagas { repeated Saga items = 1; }
 message SagaData { optional Saga data = 1; }
