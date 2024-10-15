@@ -716,6 +716,7 @@ type SagaSerializer {
   session: String!
   aborted_at: Date
   committed_at: Date
+  rollbacked_at: Date
 }
 
 type SagaDataSerializer {
@@ -2344,6 +2345,7 @@ input CreateSagaDto {
   session: String!
   aborted_at: Date
   committed_at: Date
+  rollbacked_at: Date
 }
 
 enum SagaState {
@@ -2351,7 +2353,7 @@ enum SagaState {
   Aborted
   Awaiting
   Committed
-  Rollback
+  Rollbacked
 }
 
 input CreateSagaItemsDto {
