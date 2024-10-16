@@ -95,7 +95,6 @@ service SagasService {
 }
 
 service SagaHistoriesService {
-  // Common Services
   rpc Count(QueryFilter) returns (Total);
 
   rpc Create(SagaHistoryData) returns (SagaHistoryData);
