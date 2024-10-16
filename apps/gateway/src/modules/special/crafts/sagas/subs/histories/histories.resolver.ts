@@ -17,10 +17,10 @@ import { Controller as ControllerInterface, Metadata, SagaHistory, SagaHistoryDt
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { SpecialProvider } from '@app/common/providers';
@@ -42,8 +42,8 @@ export class SagaHistoriesResolver
   }
 
   @Query(() => TotalSerializer)
-  @Cache('saga-histories', 'fill')
   @UseInterceptors(AuthorityInterceptor)
+  @Cache(Collection.SagaHistories, 'fill')
   @SetScope(Scope.ReadSpecialSagaHistories)
   @SetPolicy(Action.Read, Resource.SpecialSagaHistories)
   countSagaHistory(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
@@ -52,8 +52,8 @@ export class SagaHistoriesResolver
 
   @Mutation(() => SagaHistoryDataSerializer)
   @ShipStrategy('create')
-  @Cache('saga-histories', 'flush')
   @UseInterceptors(...WriteInterceptors)
+  @Cache(Collection.SagaHistories, 'flush')
   @SetScope(Scope.WriteSpecialSagaHistories)
   @SetPolicy(Action.Create, Resource.SpecialSagaHistories)
   createSagaHistory(@Meta() meta: Metadata, @Args('data') data: CreateSagaHistoryDto): Observable<SagaHistoryDataSerializer> {
@@ -62,8 +62,8 @@ export class SagaHistoriesResolver
 
   @Mutation(() => SagaHistoryItemsSerializer)
   @ShipStrategy('create')
-  @Cache('saga-histories', 'flush')
   @UseInterceptors(...WriteInterceptors)
+  @Cache(Collection.SagaHistories, 'flush')
   @SetScope(Scope.WriteSpecialSagaHistories)
   @SetPolicy(Action.Create, Resource.SpecialSagaHistories)
   createBulkSagaHistory(
@@ -74,7 +74,7 @@ export class SagaHistoriesResolver
   }
 
   @Query(() => SagaHistoryItemsSerializer)
-  @Cache('saga-histories', 'fill')
+  @Cache(Collection.SagaHistories, 'fill')
   @SetScope(Scope.ReadSpecialSagaHistories)
   @SetPolicy(Action.Read, Resource.SpecialSagaHistories)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -86,7 +86,7 @@ export class SagaHistoriesResolver
   }
 
   @Query(() => SagaHistoryDataSerializer)
-  @Cache('saga-histories', 'fill')
+  @Cache(Collection.SagaHistories, 'fill')
   @SetScope(Scope.ReadSpecialSagaHistories)
   @SetPolicy(Action.Read, Resource.SpecialSagaHistories)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -101,7 +101,7 @@ export class SagaHistoriesResolver
   }
 
   @Mutation(() => SagaHistoryDataSerializer)
-  @Cache('saga-histories', 'flush')
+  @Cache(Collection.SagaHistories, 'flush')
   @SetScope(Scope.WriteSpecialSagaHistories)
   @SetPolicy(Action.Delete, Resource.SpecialSagaHistories)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -116,7 +116,7 @@ export class SagaHistoriesResolver
   }
 
   @Mutation(() => SagaHistoryDataSerializer)
-  @Cache('saga-histories', 'flush')
+  @Cache(Collection.SagaHistories, 'flush')
   @SetScope(Scope.WriteSpecialSagaHistories)
   @SetPolicy(Action.Restore, Resource.SpecialSagaHistories)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -131,7 +131,7 @@ export class SagaHistoriesResolver
   }
 
   @Mutation(() => SagaHistoryDataSerializer)
-  @Cache('saga-histories', 'flush')
+  @Cache(Collection.SagaHistories, 'flush')
   @SetScope(Scope.ManageSpecialSagaHistories)
   @SetPolicy(Action.Destroy, Resource.SpecialSagaHistories)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -147,7 +147,7 @@ export class SagaHistoriesResolver
 
   @Mutation(() => SagaHistoryDataSerializer)
   @ShipStrategy('update')
-  @Cache('saga-histories', 'flush')
+  @Cache(Collection.SagaHistories, 'flush')
   @SetScope(Scope.WriteSpecialSagaHistories)
   @SetPolicy(Action.Update, Resource.SpecialSagaHistories)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -164,7 +164,7 @@ export class SagaHistoriesResolver
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @Cache('saga-histories', 'flush')
+  @Cache(Collection.SagaHistories, 'flush')
   @SetScope(Scope.ManageSpecialSagaHistories)
   @SetPolicy(Action.Update, Resource.SpecialSagaHistories)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

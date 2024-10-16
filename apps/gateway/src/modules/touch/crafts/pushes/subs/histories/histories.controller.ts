@@ -31,10 +31,10 @@ import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInte
 import { Controller as ControllerInterface, Metadata, PushHistory, PushHistoryDto } from '@app/common/interfaces';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { TouchProvider } from '@app/common/providers';
@@ -43,10 +43,10 @@ import { Filter, Meta } from '@app/common/decorators';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('push-histories')
-@Controller('push-histories')
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
+@ApiTags(Collection.PushHistories)
+@Controller(Collection.PushHistories)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class PushHistoriesController
@@ -58,9 +58,9 @@ export class PushHistoriesController
   }
 
   @Get('count')
-  @Cache('push-histories', 'fill')
   @UseInterceptors(AuthorityInterceptor)
   @SetScope(Scope.ReadTouchPushHistories)
+  @Cache(Collection.PushHistories, 'fill')
   @SetPolicy(Action.Read, Resource.TouchPushHistories)
   @ApiQuery({ type: QueryFilterDto, required: false })
   count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto): Observable<TotalSerializer> {
@@ -69,9 +69,9 @@ export class PushHistoriesController
 
   @Post()
   @ShipStrategy('create')
-  @Cache('push-histories', 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteTouchPushHistories)
+  @Cache(Collection.PushHistories, 'flush')
   @SetPolicy(Action.Create, Resource.TouchPushHistories)
   create(@Meta() meta: Metadata, @Body() data: CreatePushHistoryDto): Observable<PushHistoryDataSerializer> {
     return super.create(meta, data);
@@ -79,17 +79,17 @@ export class PushHistoriesController
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache('push-histories', 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteTouchPushHistories)
+  @Cache(Collection.PushHistories, 'flush')
   @SetPolicy(Action.Create, Resource.TouchPushHistories)
   createBulk(@Meta() meta: Metadata, @Body() data: CreatePushHistoryItemsDto): Observable<PushHistoryItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
   @Get()
-  @Cache('push-histories', 'fill')
   @SetScope(Scope.ReadTouchPushHistories)
+  @Cache(Collection.PushHistories, 'fill')
   @ApiQuery({ type: FilterDto, required: false })
   @SetPolicy(Action.Read, Resource.TouchPushHistories)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -107,8 +107,8 @@ export class PushHistoriesController
   }
 
   @Get(':id')
-  @Cache('push-histories', 'fill')
   @SetScope(Scope.ReadTouchPushHistories)
+  @Cache(Collection.PushHistories, 'fill')
   @SetPolicy(Action.Read, Resource.TouchPushHistories)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -123,8 +123,8 @@ export class PushHistoriesController
   }
 
   @Delete(':id')
-  @Cache('push-histories', 'flush')
   @SetScope(Scope.WriteTouchPushHistories)
+  @Cache(Collection.PushHistories, 'flush')
   @SetPolicy(Action.Delete, Resource.TouchPushHistories)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -139,8 +139,8 @@ export class PushHistoriesController
   }
 
   @Put(':id/restore')
-  @Cache('push-histories', 'flush')
   @SetScope(Scope.WriteTouchPushHistories)
+  @Cache(Collection.PushHistories, 'flush')
   @SetPolicy(Action.Restore, Resource.TouchPushHistories)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -155,7 +155,7 @@ export class PushHistoriesController
   }
 
   @Delete(':id/destroy')
-  @Cache('push-histories', 'flush')
+  @Cache(Collection.PushHistories, 'flush')
   @SetScope(Scope.ManageTouchPushHistories)
   @SetPolicy(Action.Destroy, Resource.TouchPushHistories)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -172,8 +172,8 @@ export class PushHistoriesController
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache('push-histories', 'flush')
   @SetScope(Scope.WriteTouchPushHistories)
+  @Cache(Collection.PushHistories, 'flush')
   @SetPolicy(Action.Update, Resource.TouchPushHistories)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -190,7 +190,7 @@ export class PushHistoriesController
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache('push-histories', 'flush')
+  @Cache(Collection.PushHistories, 'flush')
   @SetScope(Scope.ManageTouchPushHistories)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @SetPolicy(Action.Update, Resource.TouchPushHistories)

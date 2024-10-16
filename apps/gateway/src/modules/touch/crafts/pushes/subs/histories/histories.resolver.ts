@@ -17,10 +17,10 @@ import { Controller as ControllerInterface, Metadata, PushHistory, PushHistoryDt
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { TouchProvider } from '@app/common/providers';
@@ -42,9 +42,9 @@ export class PushHistoriesResolver
   }
 
   @Query(() => TotalSerializer)
-  @Cache('push-histories', 'fill')
   @UseInterceptors(AuthorityInterceptor)
   @SetScope(Scope.ReadTouchPushHistories)
+  @Cache(Collection.PushHistories, 'fill')
   @SetPolicy(Action.Read, Resource.TouchPushHistories)
   countPushHistory(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
@@ -52,9 +52,9 @@ export class PushHistoriesResolver
 
   @Mutation(() => PushHistoryDataSerializer)
   @ShipStrategy('create')
-  @Cache('push-histories', 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteTouchPushHistories)
+  @Cache(Collection.PushHistories, 'flush')
   @SetPolicy(Action.Create, Resource.TouchPushHistories)
   createPushHistory(@Meta() meta: Metadata, @Args('data') data: CreatePushHistoryDto): Observable<PushHistoryDataSerializer> {
     return super.create(meta, data);
@@ -62,9 +62,9 @@ export class PushHistoriesResolver
 
   @Mutation(() => PushHistoryItemsSerializer)
   @ShipStrategy('create')
-  @Cache('push-histories', 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteTouchPushHistories)
+  @Cache(Collection.PushHistories, 'flush')
   @SetPolicy(Action.Create, Resource.TouchPushHistories)
   createBulkPushHistory(
     @Meta() meta: Metadata,
@@ -74,8 +74,8 @@ export class PushHistoriesResolver
   }
 
   @Query(() => PushHistoryItemsSerializer)
-  @Cache('push-histories', 'fill')
   @SetScope(Scope.ReadTouchPushHistories)
+  @Cache(Collection.PushHistories, 'fill')
   @SetPolicy(Action.Read, Resource.TouchPushHistories)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findPushHistory(
@@ -86,8 +86,8 @@ export class PushHistoriesResolver
   }
 
   @Query(() => PushHistoryDataSerializer)
-  @Cache('push-histories', 'fill')
   @SetScope(Scope.ReadTouchPushHistories)
+  @Cache(Collection.PushHistories, 'fill')
   @SetPolicy(Action.Read, Resource.TouchPushHistories)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findOnePushHistory(
@@ -101,8 +101,8 @@ export class PushHistoriesResolver
   }
 
   @Mutation(() => PushHistoryDataSerializer)
-  @Cache('push-histories', 'flush')
   @SetScope(Scope.WriteTouchPushHistories)
+  @Cache(Collection.PushHistories, 'flush')
   @SetPolicy(Action.Delete, Resource.TouchPushHistories)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   deleteOnePushHistory(
@@ -116,8 +116,8 @@ export class PushHistoriesResolver
   }
 
   @Mutation(() => PushHistoryDataSerializer)
-  @Cache('push-histories', 'flush')
   @SetScope(Scope.WriteTouchPushHistories)
+  @Cache(Collection.PushHistories, 'flush')
   @SetPolicy(Action.Restore, Resource.TouchPushHistories)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   restoreOnePushHistory(
@@ -131,7 +131,7 @@ export class PushHistoriesResolver
   }
 
   @Mutation(() => PushHistoryDataSerializer)
-  @Cache('push-histories', 'flush')
+  @Cache(Collection.PushHistories, 'flush')
   @SetScope(Scope.ManageTouchPushHistories)
   @SetPolicy(Action.Destroy, Resource.TouchPushHistories)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -147,8 +147,8 @@ export class PushHistoriesResolver
 
   @Mutation(() => PushHistoryDataSerializer)
   @ShipStrategy('update')
-  @Cache('push-histories', 'flush')
   @SetScope(Scope.WriteTouchPushHistories)
+  @Cache(Collection.PushHistories, 'flush')
   @SetPolicy(Action.Update, Resource.TouchPushHistories)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateOnePushHistory(
@@ -164,7 +164,7 @@ export class PushHistoriesResolver
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @Cache('push-histories', 'flush')
+  @Cache(Collection.PushHistories, 'flush')
   @SetScope(Scope.ManageTouchPushHistories)
   @SetPolicy(Action.Update, Resource.TouchPushHistories)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

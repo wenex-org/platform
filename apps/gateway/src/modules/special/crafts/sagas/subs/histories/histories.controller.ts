@@ -31,10 +31,10 @@ import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInte
 import { Controller as ControllerInterface, Metadata, SagaHistory, SagaHistoryDto } from '@app/common/interfaces';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { SpecialProvider } from '@app/common/providers';
@@ -43,10 +43,10 @@ import { Filter, Meta } from '@app/common/decorators';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('saga-histories')
-@Controller('saga-histories')
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
+@ApiTags(Collection.SagaHistories)
+@Controller(Collection.SagaHistories)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class SagaHistoriesController
@@ -58,8 +58,8 @@ export class SagaHistoriesController
   }
 
   @Get('count')
-  @Cache('saga-histories', 'fill')
   @UseInterceptors(AuthorityInterceptor)
+  @Cache(Collection.SagaHistories, 'fill')
   @SetScope(Scope.ReadSpecialSagaHistories)
   @SetPolicy(Action.Read, Resource.SpecialSagaHistories)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -69,8 +69,8 @@ export class SagaHistoriesController
 
   @Post()
   @ShipStrategy('create')
-  @Cache('saga-histories', 'flush')
   @UseInterceptors(...WriteInterceptors)
+  @Cache(Collection.SagaHistories, 'flush')
   @SetScope(Scope.WriteSpecialSagaHistories)
   @SetPolicy(Action.Create, Resource.SpecialSagaHistories)
   create(@Meta() meta: Metadata, @Body() data: CreateSagaHistoryDto): Observable<SagaHistoryDataSerializer> {
@@ -79,8 +79,8 @@ export class SagaHistoriesController
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache('saga-histories', 'flush')
   @UseInterceptors(...WriteInterceptors)
+  @Cache(Collection.SagaHistories, 'flush')
   @SetScope(Scope.WriteSpecialSagaHistories)
   @SetPolicy(Action.Create, Resource.SpecialSagaHistories)
   createBulk(@Meta() meta: Metadata, @Body() data: CreateSagaHistoryItemsDto): Observable<SagaHistoryItemsSerializer> {
@@ -88,7 +88,7 @@ export class SagaHistoriesController
   }
 
   @Get()
-  @Cache('saga-histories', 'fill')
+  @Cache(Collection.SagaHistories, 'fill')
   @SetScope(Scope.ReadSpecialSagaHistories)
   @ApiQuery({ type: FilterDto, required: false })
   @SetPolicy(Action.Read, Resource.SpecialSagaHistories)
@@ -107,7 +107,7 @@ export class SagaHistoriesController
   }
 
   @Get(':id')
-  @Cache('saga-histories', 'fill')
+  @Cache(Collection.SagaHistories, 'fill')
   @SetScope(Scope.ReadSpecialSagaHistories)
   @SetPolicy(Action.Read, Resource.SpecialSagaHistories)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -123,7 +123,7 @@ export class SagaHistoriesController
   }
 
   @Delete(':id')
-  @Cache('saga-histories', 'flush')
+  @Cache(Collection.SagaHistories, 'flush')
   @SetScope(Scope.WriteSpecialSagaHistories)
   @SetPolicy(Action.Delete, Resource.SpecialSagaHistories)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -139,7 +139,7 @@ export class SagaHistoriesController
   }
 
   @Put(':id/restore')
-  @Cache('saga-histories', 'flush')
+  @Cache(Collection.SagaHistories, 'flush')
   @SetScope(Scope.WriteSpecialSagaHistories)
   @SetPolicy(Action.Restore, Resource.SpecialSagaHistories)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -155,7 +155,7 @@ export class SagaHistoriesController
   }
 
   @Delete(':id/destroy')
-  @Cache('saga-histories', 'flush')
+  @Cache(Collection.SagaHistories, 'flush')
   @SetScope(Scope.ManageSpecialSagaHistories)
   @SetPolicy(Action.Destroy, Resource.SpecialSagaHistories)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -172,7 +172,7 @@ export class SagaHistoriesController
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache('saga-histories', 'flush')
+  @Cache(Collection.SagaHistories, 'flush')
   @SetScope(Scope.WriteSpecialSagaHistories)
   @SetPolicy(Action.Update, Resource.SpecialSagaHistories)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -190,7 +190,7 @@ export class SagaHistoriesController
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache('saga-histories', 'flush')
+  @Cache(Collection.SagaHistories, 'flush')
   @SetScope(Scope.ManageSpecialSagaHistories)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @SetPolicy(Action.Update, Resource.SpecialSagaHistories)
