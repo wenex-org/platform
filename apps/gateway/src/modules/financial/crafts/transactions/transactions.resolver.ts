@@ -17,10 +17,10 @@ import { Controller as ControllerInterface, Metadata, Transaction, TransactionDt
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { FinancialProvider } from '@app/common/providers';
@@ -42,9 +42,9 @@ export class TransactionsResolver
   }
 
   @Query(() => TotalSerializer)
-  @Cache('transactions', 'fill')
-  @SetScope(Scope.ReadFinancialTransactions)
   @UseInterceptors(AuthorityInterceptor)
+  @Cache(Collection.Transactions, 'fill')
+  @SetScope(Scope.ReadFinancialTransactions)
   @SetPolicy(Action.Read, Resource.FinancialTransactions)
   countTransaction(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
@@ -52,9 +52,9 @@ export class TransactionsResolver
 
   @Mutation(() => TransactionDataSerializer)
   @ShipStrategy('create')
-  @Cache('transactions', 'flush')
-  @SetScope(Scope.WriteFinancialTransactions)
   @UseInterceptors(...WriteInterceptors)
+  @Cache(Collection.Transactions, 'flush')
+  @SetScope(Scope.WriteFinancialTransactions)
   @SetPolicy(Action.Create, Resource.FinancialTransactions)
   createTransaction(@Meta() meta: Metadata, @Args('data') data: CreateTransactionDto): Observable<TransactionDataSerializer> {
     return super.create(meta, data);
@@ -62,9 +62,9 @@ export class TransactionsResolver
 
   @Mutation(() => TransactionItemsSerializer)
   @ShipStrategy('create')
-  @Cache('transactions', 'flush')
-  @SetScope(Scope.WriteFinancialTransactions)
   @UseInterceptors(...WriteInterceptors)
+  @Cache(Collection.Transactions, 'flush')
+  @SetScope(Scope.WriteFinancialTransactions)
   @SetPolicy(Action.Create, Resource.FinancialTransactions)
   createBulkTransaction(
     @Meta() meta: Metadata,
@@ -74,7 +74,7 @@ export class TransactionsResolver
   }
 
   @Query(() => TransactionItemsSerializer)
-  @Cache('transactions', 'fill')
+  @Cache(Collection.Transactions, 'fill')
   @SetScope(Scope.ReadFinancialTransactions)
   @SetPolicy(Action.Read, Resource.FinancialTransactions)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -86,7 +86,7 @@ export class TransactionsResolver
   }
 
   @Query(() => TransactionDataSerializer)
-  @Cache('transactions', 'fill')
+  @Cache(Collection.Transactions, 'fill')
   @SetScope(Scope.ReadFinancialTransactions)
   @SetPolicy(Action.Read, Resource.FinancialTransactions)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -101,7 +101,7 @@ export class TransactionsResolver
   }
 
   @Mutation(() => TransactionDataSerializer)
-  @Cache('transactions', 'flush')
+  @Cache(Collection.Transactions, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @SetPolicy(Action.Delete, Resource.FinancialTransactions)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -116,7 +116,7 @@ export class TransactionsResolver
   }
 
   @Mutation(() => TransactionDataSerializer)
-  @Cache('transactions', 'flush')
+  @Cache(Collection.Transactions, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @SetPolicy(Action.Restore, Resource.FinancialTransactions)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -131,7 +131,7 @@ export class TransactionsResolver
   }
 
   @Mutation(() => TransactionDataSerializer)
-  @Cache('transactions', 'flush')
+  @Cache(Collection.Transactions, 'flush')
   @SetScope(Scope.ManageFinancialTransactions)
   @SetPolicy(Action.Destroy, Resource.FinancialTransactions)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -147,7 +147,7 @@ export class TransactionsResolver
 
   @Mutation(() => TransactionDataSerializer)
   @ShipStrategy('update')
-  @Cache('transactions', 'flush')
+  @Cache(Collection.Transactions, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @SetPolicy(Action.Update, Resource.FinancialTransactions)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -164,7 +164,7 @@ export class TransactionsResolver
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @Cache('transactions', 'flush')
+  @Cache(Collection.Transactions, 'flush')
   @SetScope(Scope.ManageFinancialTransactions)
   @SetPolicy(Action.Update, Resource.FinancialTransactions)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

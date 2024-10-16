@@ -29,10 +29,10 @@ import { Controller as ControllerInterface, Metadata, Artifact, ArtifactDto } fr
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { GeneralProvider } from '@app/common/providers';
@@ -41,10 +41,10 @@ import { Response } from 'express';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('artifacts')
-@Controller('artifacts')
 @UsePipes(ValidationPipe)
+@ApiTags(Collection.Artifacts)
 @UseFilters(AllExceptionsFilter)
+@Controller(Collection.Artifacts)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class ArtifactsController
@@ -56,7 +56,7 @@ export class ArtifactsController
   }
 
   @Get('count')
-  @Cache('artifacts', 'fill')
+  @Cache(Collection.Artifacts, 'fill')
   @SetScope(Scope.ReadGeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.GeneralArtifacts)
@@ -67,7 +67,7 @@ export class ArtifactsController
 
   @Post()
   @ShipStrategy('create')
-  @Cache('artifacts', 'flush')
+  @Cache(Collection.Artifacts, 'flush')
   @SetScope(Scope.WriteGeneralArtifacts)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.GeneralArtifacts)
@@ -77,7 +77,7 @@ export class ArtifactsController
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache('artifacts', 'flush')
+  @Cache(Collection.Artifacts, 'flush')
   @SetScope(Scope.WriteGeneralArtifacts)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.GeneralArtifacts)
@@ -86,7 +86,7 @@ export class ArtifactsController
   }
 
   @Get()
-  @Cache('artifacts', 'fill')
+  @Cache(Collection.Artifacts, 'fill')
   @SetScope(Scope.ReadGeneralArtifacts)
   @SetPolicy(Action.Read, Resource.GeneralArtifacts)
   @ApiQuery({ type: FilterDto, required: false })
@@ -115,7 +115,7 @@ export class ArtifactsController
   }
 
   @Get(':id')
-  @Cache('artifacts', 'fill')
+  @Cache(Collection.Artifacts, 'fill')
   @SetScope(Scope.ReadGeneralArtifacts)
   @SetPolicy(Action.Read, Resource.GeneralArtifacts)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -131,7 +131,7 @@ export class ArtifactsController
   }
 
   @Delete(':id')
-  @Cache('artifacts', 'flush')
+  @Cache(Collection.Artifacts, 'flush')
   @SetScope(Scope.WriteGeneralArtifacts)
   @SetPolicy(Action.Delete, Resource.GeneralArtifacts)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -147,7 +147,7 @@ export class ArtifactsController
   }
 
   @Put(':id/restore')
-  @Cache('artifacts', 'flush')
+  @Cache(Collection.Artifacts, 'flush')
   @SetScope(Scope.WriteGeneralArtifacts)
   @SetPolicy(Action.Restore, Resource.GeneralArtifacts)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -163,7 +163,7 @@ export class ArtifactsController
   }
 
   @Delete(':id/destroy')
-  @Cache('artifacts', 'flush')
+  @Cache(Collection.Artifacts, 'flush')
   @SetScope(Scope.ManageGeneralArtifacts)
   @SetPolicy(Action.Destroy, Resource.GeneralArtifacts)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -180,7 +180,7 @@ export class ArtifactsController
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache('artifacts', 'flush')
+  @Cache(Collection.Artifacts, 'flush')
   @SetScope(Scope.WriteGeneralArtifacts)
   @SetPolicy(Action.Update, Resource.GeneralArtifacts)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -198,7 +198,7 @@ export class ArtifactsController
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache('artifacts', 'flush')
+  @Cache(Collection.Artifacts, 'flush')
   @SetScope(Scope.ManageGeneralArtifacts)
   @SetPolicy(Action.Update, Resource.GeneralArtifacts)
   @ApiQuery({ type: QueryFilterDto, required: false })

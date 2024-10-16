@@ -23,9 +23,9 @@ import { Cache, Nested, SetPolicy, SetScope, ShipStrategy } from '@app/common/me
 import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { Filter, Meta } from '@app/common/decorators';
@@ -34,10 +34,10 @@ import { Response } from 'express';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('grants')
-@Controller('grants')
 @Nested<Grant>('time')
 @UsePipes(ValidationPipe)
+@ApiTags(Collection.Grants)
+@Controller(Collection.Grants)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -47,8 +47,8 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   }
 
   @Get('count')
-  @Cache('grants', 'fill')
   @SetScope(Scope.ReadAuthGrants)
+  @Cache(Collection.Grants, 'fill')
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.AuthGrants)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -58,8 +58,8 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
 
   @Post()
   @ShipStrategy('create')
-  @Cache('grants', 'flush')
   @SetScope(Scope.WriteAuthGrants)
+  @Cache(Collection.Grants, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.AuthGrants)
   create(@Meta() meta: Metadata, @Body() data: CreateGrantDto): Observable<GrantDataSerializer> {
@@ -68,8 +68,8 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache('grants', 'flush')
   @SetScope(Scope.WriteAuthGrants)
+  @Cache(Collection.Grants, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.AuthGrants)
   createBulk(@Meta() meta: Metadata, @Body() data: CreateGrantItemsDto): Observable<GrantItemsSerializer> {
@@ -77,8 +77,8 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   }
 
   @Get()
-  @Cache('grants', 'fill')
   @SetScope(Scope.ReadAuthGrants)
+  @Cache(Collection.Grants, 'fill')
   @SetPolicy(Action.Read, Resource.AuthGrants)
   @ApiQuery({ type: FilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -106,8 +106,8 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   }
 
   @Get(':id')
-  @Cache('grants', 'fill')
   @SetScope(Scope.ReadAuthGrants)
+  @Cache(Collection.Grants, 'fill')
   @SetPolicy(Action.Read, Resource.AuthGrants)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -122,8 +122,8 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   }
 
   @Delete(':id')
-  @Cache('grants', 'flush')
   @SetScope(Scope.WriteAuthGrants)
+  @Cache(Collection.Grants, 'flush')
   @SetPolicy(Action.Delete, Resource.AuthGrants)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -138,8 +138,8 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   }
 
   @Put(':id/restore')
-  @Cache('grants', 'flush')
   @SetScope(Scope.WriteAuthGrants)
+  @Cache(Collection.Grants, 'flush')
   @SetPolicy(Action.Restore, Resource.AuthGrants)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -154,8 +154,8 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   }
 
   @Delete(':id/destroy')
-  @Cache('grants', 'flush')
   @SetScope(Scope.ManageAuthGrants)
+  @Cache(Collection.Grants, 'flush')
   @SetPolicy(Action.Destroy, Resource.AuthGrants)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -171,8 +171,8 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache('grants', 'flush')
   @SetScope(Scope.WriteAuthGrants)
+  @Cache(Collection.Grants, 'flush')
   @SetPolicy(Action.Update, Resource.AuthGrants)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -189,8 +189,8 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache('grants', 'flush')
   @SetScope(Scope.ManageAuthGrants)
+  @Cache(Collection.Grants, 'flush')
   @SetPolicy(Action.Update, Resource.AuthGrants)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

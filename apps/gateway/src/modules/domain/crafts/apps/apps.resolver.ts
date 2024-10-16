@@ -5,10 +5,10 @@ import { Controller as ControllerInterface, Metadata, App, AppDto } from '@app/c
 import { Cache, Nested, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { DomainProvider } from '@app/common/providers';
@@ -28,7 +28,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements Contro
   }
 
   @Query(() => TotalSerializer)
-  @Cache('apps', 'fill')
+  @Cache(Collection.Apps, 'fill')
   @SetScope(Scope.ReadDomainApps)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.DomainApps)
@@ -37,8 +37,8 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements Contro
   }
 
   @Mutation(() => AppDataSerializer)
-  @Cache('apps', 'flush')
   @ShipStrategy('create')
+  @Cache(Collection.Apps, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainApps)
@@ -47,8 +47,8 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements Contro
   }
 
   @Mutation(() => AppItemsSerializer)
-  @Cache('apps', 'flush')
   @ShipStrategy('create')
+  @Cache(Collection.Apps, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainApps)
@@ -57,7 +57,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements Contro
   }
 
   @Query(() => AppItemsSerializer)
-  @Cache('apps', 'fill')
+  @Cache(Collection.Apps, 'fill')
   @SetScope(Scope.ReadDomainApps)
   @SetPolicy(Action.Read, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -66,7 +66,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements Contro
   }
 
   @Query(() => AppDataSerializer)
-  @Cache('apps', 'fill')
+  @Cache(Collection.Apps, 'fill')
   @SetScope(Scope.ReadDomainApps)
   @SetPolicy(Action.Read, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -81,7 +81,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements Contro
   }
 
   @Mutation(() => AppDataSerializer)
-  @Cache('apps', 'flush')
+  @Cache(Collection.Apps, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @SetPolicy(Action.Delete, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -96,7 +96,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements Contro
   }
 
   @Mutation(() => AppDataSerializer)
-  @Cache('apps', 'flush')
+  @Cache(Collection.Apps, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @SetPolicy(Action.Restore, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -111,7 +111,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements Contro
   }
 
   @Mutation(() => AppDataSerializer)
-  @Cache('apps', 'flush')
+  @Cache(Collection.Apps, 'flush')
   @SetScope(Scope.ManageDomainApps)
   @SetPolicy(Action.Destroy, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -126,8 +126,8 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements Contro
   }
 
   @Mutation(() => AppDataSerializer)
-  @Cache('apps', 'flush')
   @ShipStrategy('update')
+  @Cache(Collection.Apps, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @SetPolicy(Action.Update, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -143,8 +143,8 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements Contro
   }
 
   @Mutation(() => TotalSerializer)
-  @Cache('apps', 'flush')
   @ShipStrategy('update')
+  @Cache(Collection.Apps, 'flush')
   @SetScope(Scope.ManageDomainApps)
   @SetPolicy(Action.Update, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

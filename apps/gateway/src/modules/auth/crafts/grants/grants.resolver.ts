@@ -5,10 +5,10 @@ import { Controller as ControllerInterface, Metadata, Grant, GrantDto } from '@a
 import { Cache, Nested, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { refineFilterQuery } from '@app/common/utils';
@@ -28,8 +28,8 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Query(() => TotalSerializer)
-  @Cache('grants', 'fill')
   @SetScope(Scope.ReadAuthGrants)
+  @Cache(Collection.Grants, 'fill')
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.AuthGrants)
   countGrant(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
@@ -38,8 +38,8 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
 
   @Mutation(() => GrantDataSerializer)
   @ShipStrategy('create')
-  @Cache('grants', 'flush')
   @SetScope(Scope.WriteAuthGrants)
+  @Cache(Collection.Grants, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.AuthGrants)
   createGrant(@Meta() meta: Metadata, @Args('data') data: CreateGrantDto): Observable<GrantDataSerializer> {
@@ -48,8 +48,8 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
 
   @Mutation(() => GrantItemsSerializer)
   @ShipStrategy('create')
-  @Cache('grants', 'flush')
   @SetScope(Scope.WriteAuthGrants)
+  @Cache(Collection.Grants, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.AuthGrants)
   createBulkGrant(@Meta() meta: Metadata, @Args('data') data: CreateGrantItemsDto): Observable<GrantItemsSerializer> {
@@ -57,8 +57,8 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Query(() => GrantItemsSerializer)
-  @Cache('grants', 'fill')
   @SetScope(Scope.ReadAuthGrants)
+  @Cache(Collection.Grants, 'fill')
   @SetPolicy(Action.Read, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findGrant(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Grant>): Observable<GrantItemsSerializer> {
@@ -66,8 +66,8 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Query(() => GrantDataSerializer)
-  @Cache('grants', 'fill')
   @SetScope(Scope.ReadAuthGrants)
+  @Cache(Collection.Grants, 'fill')
   @SetPolicy(Action.Read, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findOneGrant(
@@ -81,8 +81,8 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Mutation(() => GrantDataSerializer)
-  @Cache('grants', 'flush')
   @SetScope(Scope.WriteAuthGrants)
+  @Cache(Collection.Grants, 'flush')
   @SetPolicy(Action.Delete, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   deleteOneGrant(
@@ -96,8 +96,8 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Mutation(() => GrantDataSerializer)
-  @Cache('grants', 'flush')
   @SetScope(Scope.WriteAuthGrants)
+  @Cache(Collection.Grants, 'flush')
   @SetPolicy(Action.Restore, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   restoreOneGrant(
@@ -111,8 +111,8 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Mutation(() => GrantDataSerializer)
-  @Cache('grants', 'flush')
   @SetScope(Scope.ManageAuthGrants)
+  @Cache(Collection.Grants, 'flush')
   @SetPolicy(Action.Destroy, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   destroyOneGrant(
@@ -127,8 +127,8 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
 
   @Mutation(() => GrantDataSerializer)
   @ShipStrategy('update')
-  @Cache('grants', 'flush')
   @SetScope(Scope.WriteAuthGrants)
+  @Cache(Collection.Grants, 'flush')
   @SetPolicy(Action.Update, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateOneGrant(
@@ -144,8 +144,8 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @Cache('grants', 'flush')
   @SetScope(Scope.ManageAuthGrants)
+  @Cache(Collection.Grants, 'flush')
   @SetPolicy(Action.Update, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateBulkGrant(

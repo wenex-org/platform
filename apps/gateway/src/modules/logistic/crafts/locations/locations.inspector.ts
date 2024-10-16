@@ -1,8 +1,8 @@
 import { Body, Controller, Post, UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { FieldInterceptor, FilterInterceptor, GatewayInterceptors } from '@app/common/interceptors';
 import { BoundaryAdministrativeSerializer } from '@app/common/serializers';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SetPolicy, SetScope } from '@app/common/metadatas';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
@@ -14,10 +14,10 @@ import { Meta } from '@app/common/decorators';
 import { LatLngDto } from '@app/common/dto';
 
 @ApiBearerAuth()
-@ApiTags('locations')
-@Controller('locations')
 @UsePipes(ValidationPipe)
+@ApiTags(Collection.Locations)
 @UseFilters(AllExceptionsFilter)
+@Controller(Collection.Locations)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class LocationsInspector {

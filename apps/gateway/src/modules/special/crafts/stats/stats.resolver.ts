@@ -5,10 +5,10 @@ import { Controller as ControllerInterface, Metadata, Stat, StatDto } from '@app
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { SpecialProvider } from '@app/common/providers';
@@ -27,7 +27,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements Con
   }
 
   @Query(() => TotalSerializer)
-  @Cache('stats', 'fill')
+  @Cache(Collection.Stats, 'fill')
   @SetScope(Scope.ReadSpecialStats)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.SpecialStats)
@@ -37,7 +37,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements Con
 
   @Mutation(() => StatDataSerializer)
   @ShipStrategy('create')
-  @Cache('stats', 'flush')
+  @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialStats)
@@ -47,7 +47,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements Con
 
   @Mutation(() => StatItemsSerializer)
   @ShipStrategy('create')
-  @Cache('stats', 'flush')
+  @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialStats)
@@ -56,7 +56,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements Con
   }
 
   @Query(() => StatItemsSerializer)
-  @Cache('stats', 'fill')
+  @Cache(Collection.Stats, 'fill')
   @SetScope(Scope.ReadSpecialStats)
   @SetPolicy(Action.Read, Resource.SpecialStats)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -65,7 +65,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements Con
   }
 
   @Query(() => StatDataSerializer)
-  @Cache('stats', 'fill')
+  @Cache(Collection.Stats, 'fill')
   @SetScope(Scope.ReadSpecialStats)
   @SetPolicy(Action.Read, Resource.SpecialStats)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -80,7 +80,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements Con
   }
 
   @Mutation(() => StatDataSerializer)
-  @Cache('stats', 'flush')
+  @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @SetPolicy(Action.Delete, Resource.SpecialStats)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -95,7 +95,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements Con
   }
 
   @Mutation(() => StatDataSerializer)
-  @Cache('stats', 'flush')
+  @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @SetPolicy(Action.Restore, Resource.SpecialStats)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -110,7 +110,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements Con
   }
 
   @Mutation(() => StatDataSerializer)
-  @Cache('stats', 'flush')
+  @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.ManageSpecialStats)
   @SetPolicy(Action.Destroy, Resource.SpecialStats)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -126,7 +126,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements Con
 
   @Mutation(() => StatDataSerializer)
   @ShipStrategy('update')
-  @Cache('stats', 'flush')
+  @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @SetPolicy(Action.Update, Resource.SpecialStats)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -143,7 +143,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements Con
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @Cache('stats', 'flush')
+  @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.ManageSpecialStats)
   @SetPolicy(Action.Update, Resource.SpecialStats)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

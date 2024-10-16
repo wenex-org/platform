@@ -19,10 +19,10 @@ import { TotalSerializer, WalletDataSerializer, WalletItemsSerializer, WalletSer
 import { Controller as ControllerInterface, Metadata, Wallet, WalletDto } from '@app/common/interfaces';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { FinancialProvider } from '@app/common/providers';
@@ -31,9 +31,9 @@ import { Filter, Meta } from '@app/common/decorators';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('wallets')
-@Controller('wallets')
 @UsePipes(ValidationPipe)
+@ApiTags(Collection.Wallets)
+@Controller(Collection.Wallets)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -43,7 +43,7 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
   }
 
   @Get('count')
-  @Cache('wallets', 'fill')
+  @Cache(Collection.Wallets, 'fill')
   @SetScope(Scope.ReadFinancialWallets)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.FinancialWallets)
@@ -54,7 +54,7 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
 
   @Post()
   @ShipStrategy('create')
-  @Cache('wallets', 'flush')
+  @Cache(Collection.Wallets, 'flush')
   @SetScope(Scope.WriteFinancialWallets)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialWallets)
@@ -64,7 +64,7 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache('wallets', 'flush')
+  @Cache(Collection.Wallets, 'flush')
   @SetScope(Scope.WriteFinancialWallets)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialWallets)
@@ -73,10 +73,10 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
   }
 
   @Get()
-  @Cache('wallets', 'fill')
+  @Cache(Collection.Wallets, 'fill')
   @SetScope(Scope.ReadFinancialWallets)
-  @SetPolicy(Action.Read, Resource.FinancialWallets)
   @ApiQuery({ type: FilterDto, required: false })
+  @SetPolicy(Action.Read, Resource.FinancialWallets)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   find(@Meta() meta: Metadata, @Filter() filter: FilterDto<Wallet>): Observable<WalletItemsSerializer> {
     return super.find(meta, filter);
@@ -84,15 +84,15 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
 
   @Get('cursor')
   @SetScope(Scope.ReadFinancialWallets)
-  @SetPolicy(Action.Read, Resource.FinancialWallets)
   @ApiQuery({ type: FilterDto, required: false })
+  @SetPolicy(Action.Read, Resource.FinancialWallets)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   cursor(@Meta() meta: Metadata, @Filter() filter: FilterDto<Wallet>): Observable<WalletSerializer> {
     return super.cursor(meta, filter);
   }
 
   @Get(':id')
-  @Cache('wallets', 'fill')
+  @Cache(Collection.Wallets, 'fill')
   @SetScope(Scope.ReadFinancialWallets)
   @SetPolicy(Action.Read, Resource.FinancialWallets)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -108,7 +108,7 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
   }
 
   @Delete(':id')
-  @Cache('wallets', 'flush')
+  @Cache(Collection.Wallets, 'flush')
   @SetScope(Scope.WriteFinancialWallets)
   @SetPolicy(Action.Delete, Resource.FinancialWallets)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -124,7 +124,7 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
   }
 
   @Put(':id/restore')
-  @Cache('wallets', 'flush')
+  @Cache(Collection.Wallets, 'flush')
   @SetScope(Scope.WriteFinancialWallets)
   @SetPolicy(Action.Restore, Resource.FinancialWallets)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -140,7 +140,7 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
   }
 
   @Delete(':id/destroy')
-  @Cache('wallets', 'flush')
+  @Cache(Collection.Wallets, 'flush')
   @SetScope(Scope.ManageFinancialWallets)
   @SetPolicy(Action.Destroy, Resource.FinancialWallets)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -157,7 +157,7 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache('wallets', 'flush')
+  @Cache(Collection.Wallets, 'flush')
   @SetScope(Scope.WriteFinancialWallets)
   @SetPolicy(Action.Update, Resource.FinancialWallets)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -175,7 +175,7 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache('wallets', 'flush')
+  @Cache(Collection.Wallets, 'flush')
   @SetScope(Scope.ManageFinancialWallets)
   @SetPolicy(Action.Update, Resource.FinancialWallets)
   @ApiQuery({ type: QueryFilterDto, required: false })

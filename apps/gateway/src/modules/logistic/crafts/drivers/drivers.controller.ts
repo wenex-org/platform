@@ -22,10 +22,10 @@ import { Controller as ControllerInterface, Metadata, Driver, DriverDto } from '
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { LogisticProvider } from '@app/common/providers';
@@ -34,8 +34,8 @@ import { Response } from 'express';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('drivers')
-@Controller('drivers')
+@ApiTags(Collection.Drivers)
+@Controller(Collection.Drivers)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -46,7 +46,7 @@ export class DriversController extends ControllerClass<Driver, DriverDto> implem
   }
 
   @Get('count')
-  @Cache('drivers', 'fill')
+  @Cache(Collection.Drivers, 'fill')
   @SetScope(Scope.ReadLogisticDrivers)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.LogisticDrivers)
@@ -57,7 +57,7 @@ export class DriversController extends ControllerClass<Driver, DriverDto> implem
 
   @Post()
   @ShipStrategy('create')
-  @Cache('drivers', 'flush')
+  @Cache(Collection.Drivers, 'flush')
   @SetScope(Scope.WriteLogisticDrivers)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticDrivers)
@@ -67,7 +67,7 @@ export class DriversController extends ControllerClass<Driver, DriverDto> implem
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache('drivers', 'flush')
+  @Cache(Collection.Drivers, 'flush')
   @SetScope(Scope.WriteLogisticDrivers)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticDrivers)
@@ -76,10 +76,10 @@ export class DriversController extends ControllerClass<Driver, DriverDto> implem
   }
 
   @Get()
-  @Cache('drivers', 'fill')
+  @Cache(Collection.Drivers, 'fill')
   @SetScope(Scope.ReadLogisticDrivers)
-  @SetPolicy(Action.Read, Resource.LogisticDrivers)
   @ApiQuery({ type: FilterDto, required: false })
+  @SetPolicy(Action.Read, Resource.LogisticDrivers)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   find(@Meta() meta: Metadata, @Filter() filter: FilterDto<Driver>): Observable<DriverItemsSerializer> {
     return super.find(meta, filter);
@@ -105,7 +105,7 @@ export class DriversController extends ControllerClass<Driver, DriverDto> implem
   }
 
   @Get(':id')
-  @Cache('drivers', 'fill')
+  @Cache(Collection.Drivers, 'fill')
   @SetScope(Scope.ReadLogisticDrivers)
   @SetPolicy(Action.Read, Resource.LogisticDrivers)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -121,7 +121,7 @@ export class DriversController extends ControllerClass<Driver, DriverDto> implem
   }
 
   @Delete(':id')
-  @Cache('drivers', 'flush')
+  @Cache(Collection.Drivers, 'flush')
   @SetScope(Scope.WriteLogisticDrivers)
   @SetPolicy(Action.Delete, Resource.LogisticDrivers)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -137,7 +137,7 @@ export class DriversController extends ControllerClass<Driver, DriverDto> implem
   }
 
   @Put(':id/restore')
-  @Cache('drivers', 'flush')
+  @Cache(Collection.Drivers, 'flush')
   @SetScope(Scope.WriteLogisticDrivers)
   @SetPolicy(Action.Restore, Resource.LogisticDrivers)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -153,7 +153,7 @@ export class DriversController extends ControllerClass<Driver, DriverDto> implem
   }
 
   @Delete(':id/destroy')
-  @Cache('drivers', 'flush')
+  @Cache(Collection.Drivers, 'flush')
   @SetScope(Scope.ManageLogisticDrivers)
   @SetPolicy(Action.Destroy, Resource.LogisticDrivers)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -170,7 +170,7 @@ export class DriversController extends ControllerClass<Driver, DriverDto> implem
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache('drivers', 'flush')
+  @Cache(Collection.Drivers, 'flush')
   @SetScope(Scope.WriteLogisticDrivers)
   @SetPolicy(Action.Update, Resource.LogisticDrivers)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -188,7 +188,7 @@ export class DriversController extends ControllerClass<Driver, DriverDto> implem
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache('drivers', 'flush')
+  @Cache(Collection.Drivers, 'flush')
   @SetScope(Scope.ManageLogisticDrivers)
   @SetPolicy(Action.Update, Resource.LogisticDrivers)
   @ApiQuery({ type: QueryFilterDto, required: false })

@@ -29,10 +29,10 @@ import { Controller as ControllerInterface, Metadata, Setting, SettingDto } from
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { ContextProvider } from '@app/common/providers';
@@ -41,9 +41,9 @@ import { Response } from 'express';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('settings')
-@Controller('settings')
 @UsePipes(ValidationPipe)
+@ApiTags(Collection.Settings)
+@Controller(Collection.Settings)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -53,7 +53,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Get('count')
-  @Cache('settings', 'fill')
+  @Cache(Collection.Settings, 'fill')
   @SetScope(Scope.ReadContextSettings)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ContextSettings)
@@ -64,7 +64,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
 
   @Post()
   @ShipStrategy('create')
-  @Cache('settings', 'flush')
+  @Cache(Collection.Settings, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContextSettings)
@@ -74,7 +74,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache('settings', 'flush')
+  @Cache(Collection.Settings, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContextSettings)
@@ -83,7 +83,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Get()
-  @Cache('settings', 'fill')
+  @Cache(Collection.Settings, 'fill')
   @SetScope(Scope.ReadContextSettings)
   @SetPolicy(Action.Read, Resource.ContextSettings)
   @ApiQuery({ type: FilterDto, required: false })
@@ -112,7 +112,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Get(':id')
-  @Cache('settings', 'fill')
+  @Cache(Collection.Settings, 'fill')
   @SetScope(Scope.ReadContextSettings)
   @SetPolicy(Action.Read, Resource.ContextSettings)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -128,7 +128,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Delete(':id')
-  @Cache('settings', 'flush')
+  @Cache(Collection.Settings, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @SetPolicy(Action.Delete, Resource.ContextSettings)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -144,7 +144,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Put(':id/restore')
-  @Cache('settings', 'flush')
+  @Cache(Collection.Settings, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @SetPolicy(Action.Restore, Resource.ContextSettings)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -160,7 +160,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Delete(':id/destroy')
-  @Cache('settings', 'flush')
+  @Cache(Collection.Settings, 'flush')
   @SetScope(Scope.ManageContextSettings)
   @SetPolicy(Action.Destroy, Resource.ContextSettings)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -177,7 +177,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache('settings', 'flush')
+  @Cache(Collection.Settings, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @SetPolicy(Action.Update, Resource.ContextSettings)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -195,7 +195,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache('settings', 'flush')
+  @Cache(Collection.Settings, 'flush')
   @SetScope(Scope.ManageContextSettings)
   @SetPolicy(Action.Update, Resource.ContextSettings)
   @ApiQuery({ type: QueryFilterDto, required: false })

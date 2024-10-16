@@ -22,10 +22,10 @@ import { Controller as ControllerInterface, Metadata, Cargo, CargoDto } from '@a
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { LogisticProvider } from '@app/common/providers';
@@ -34,9 +34,9 @@ import { Response } from 'express';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('cargoes')
-@Controller('cargoes')
 @UsePipes(ValidationPipe)
+@ApiTags(Collection.Cargoes)
+@Controller(Collection.Cargoes)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -46,7 +46,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   }
 
   @Get('count')
-  @Cache('cargoes', 'fill')
+  @Cache(Collection.Cargoes, 'fill')
   @SetScope(Scope.ReadLogisticCargoes)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.LogisticCargoes)
@@ -57,7 +57,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
 
   @Post()
   @ShipStrategy('create')
-  @Cache('cargoes', 'flush')
+  @Cache(Collection.Cargoes, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticCargoes)
@@ -67,7 +67,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache('cargoes', 'flush')
+  @Cache(Collection.Cargoes, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticCargoes)
@@ -76,10 +76,10 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   }
 
   @Get()
-  @Cache('cargoes', 'fill')
+  @Cache(Collection.Cargoes, 'fill')
   @SetScope(Scope.ReadLogisticCargoes)
-  @SetPolicy(Action.Read, Resource.LogisticCargoes)
   @ApiQuery({ type: FilterDto, required: false })
+  @SetPolicy(Action.Read, Resource.LogisticCargoes)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   find(@Meta() meta: Metadata, @Filter() filter: FilterDto<Cargo>): Observable<CargoItemsSerializer> {
     return super.find(meta, filter);
@@ -105,7 +105,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   }
 
   @Get(':id')
-  @Cache('cargoes', 'fill')
+  @Cache(Collection.Cargoes, 'fill')
   @SetScope(Scope.ReadLogisticCargoes)
   @SetPolicy(Action.Read, Resource.LogisticCargoes)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -121,7 +121,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   }
 
   @Delete(':id')
-  @Cache('cargoes', 'flush')
+  @Cache(Collection.Cargoes, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @SetPolicy(Action.Delete, Resource.LogisticCargoes)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -137,7 +137,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   }
 
   @Put(':id/restore')
-  @Cache('cargoes', 'flush')
+  @Cache(Collection.Cargoes, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @SetPolicy(Action.Restore, Resource.LogisticCargoes)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -153,7 +153,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   }
 
   @Delete(':id/destroy')
-  @Cache('cargoes', 'flush')
+  @Cache(Collection.Cargoes, 'flush')
   @SetScope(Scope.ManageLogisticCargoes)
   @SetPolicy(Action.Destroy, Resource.LogisticCargoes)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -170,7 +170,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache('cargoes', 'flush')
+  @Cache(Collection.Cargoes, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @SetPolicy(Action.Update, Resource.LogisticCargoes)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -188,7 +188,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache('cargoes', 'flush')
+  @Cache(Collection.Cargoes, 'flush')
   @SetScope(Scope.ManageLogisticCargoes)
   @SetPolicy(Action.Update, Resource.LogisticCargoes)
   @ApiQuery({ type: QueryFilterDto, required: false })

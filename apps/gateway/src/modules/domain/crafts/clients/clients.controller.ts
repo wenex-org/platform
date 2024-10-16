@@ -22,10 +22,10 @@ import { Controller as ControllerInterface, Metadata, Client, ClientDto } from '
 import { Cache, Nested, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { DomainProvider } from '@app/common/providers';
@@ -34,9 +34,9 @@ import { Response } from 'express';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('clients')
-@Controller('clients')
 @UsePipes(ValidationPipe)
+@ApiTags(Collection.Clients)
+@Controller(Collection.Clients)
 @UseFilters(AllExceptionsFilter)
 @Nested<Client>('domains', 'services')
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -47,7 +47,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   }
 
   @Get('count')
-  @Cache('clients', 'fill')
+  @Cache(Collection.Clients, 'fill')
   @SetScope(Scope.ReadDomainClients)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.DomainClients)
@@ -58,7 +58,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
 
   @Post()
   @ShipStrategy('create')
-  @Cache('clients', 'flush')
+  @Cache(Collection.Clients, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainClients)
@@ -68,7 +68,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache('clients', 'flush')
+  @Cache(Collection.Clients, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainClients)
@@ -77,7 +77,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   }
 
   @Get()
-  @Cache('clients', 'fill')
+  @Cache(Collection.Clients, 'fill')
   @SetScope(Scope.ReadDomainClients)
   @SetPolicy(Action.Read, Resource.DomainClients)
   @ApiQuery({ type: FilterDto, required: false })
@@ -106,7 +106,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   }
 
   @Get(':id')
-  @Cache('clients', 'fill')
+  @Cache(Collection.Clients, 'fill')
   @SetScope(Scope.ReadDomainClients)
   @SetPolicy(Action.Read, Resource.DomainClients)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -122,7 +122,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   }
 
   @Delete(':id')
-  @Cache('clients', 'flush')
+  @Cache(Collection.Clients, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @SetPolicy(Action.Delete, Resource.DomainClients)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -138,7 +138,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   }
 
   @Put(':id/restore')
-  @Cache('clients', 'flush')
+  @Cache(Collection.Clients, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @SetPolicy(Action.Restore, Resource.DomainClients)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -154,7 +154,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   }
 
   @Delete(':id/destroy')
-  @Cache('clients', 'flush')
+  @Cache(Collection.Clients, 'flush')
   @SetScope(Scope.ManageDomainClients)
   @SetPolicy(Action.Destroy, Resource.DomainClients)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -171,7 +171,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache('clients', 'flush')
+  @Cache(Collection.Clients, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @SetPolicy(Action.Update, Resource.DomainClients)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -189,7 +189,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache('clients', 'flush')
+  @Cache(Collection.Clients, 'flush')
   @SetScope(Scope.ManageDomainClients)
   @SetPolicy(Action.Update, Resource.DomainClients)
   @ApiQuery({ type: QueryFilterDto, required: false })

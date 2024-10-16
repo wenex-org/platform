@@ -4,10 +4,10 @@ import { SagaDataSerializer, SagaHistoryDataSerializer } from '@app/common/seria
 import { AppendSagaHistoryDto, FilterOneDto, StartSagaDto } from '@app/common/dto';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { mapInstanceTo, refineFilterQuery } from '@app/common/utils';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { SpecialProvider } from '@app/common/providers';
@@ -16,9 +16,9 @@ import { Filter, Meta } from '@app/common/decorators';
 import { from, Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('sagas')
-@Controller('sagas')
 @UsePipes(ValidationPipe)
+@ApiTags(Collection.Sagas)
+@Controller(Collection.Sagas)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())

@@ -29,10 +29,10 @@ import { Controller as ControllerInterface, Session as ISession, Metadata, Sessi
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { IdentityProvider } from '@app/common/providers';
@@ -41,9 +41,9 @@ import { Response } from 'express';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('sessions')
-@Controller('sessions')
 @UsePipes(ValidationPipe)
+@ApiTags(Collection.Sessions)
+@Controller(Collection.Sessions)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -53,7 +53,7 @@ export class SessionsController extends ControllerClass<ISession, SessionDto> im
   }
 
   @Get('count')
-  @Cache('sessions', 'fill')
+  @Cache(Collection.Sessions, 'fill')
   @SetScope(Scope.ReadIdentitySessions)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.IdentitySessions)
@@ -64,7 +64,7 @@ export class SessionsController extends ControllerClass<ISession, SessionDto> im
 
   @Post()
   @ShipStrategy('create')
-  @Cache('sessions', 'flush')
+  @Cache(Collection.Sessions, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentitySessions)
@@ -74,7 +74,7 @@ export class SessionsController extends ControllerClass<ISession, SessionDto> im
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache('sessions', 'flush')
+  @Cache(Collection.Sessions, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentitySessions)
@@ -83,10 +83,10 @@ export class SessionsController extends ControllerClass<ISession, SessionDto> im
   }
 
   @Get()
-  @Cache('sessions', 'fill')
+  @Cache(Collection.Sessions, 'fill')
   @SetScope(Scope.ReadIdentitySessions)
-  @SetPolicy(Action.Read, Resource.IdentitySessions)
   @ApiQuery({ type: FilterDto, required: false })
+  @SetPolicy(Action.Read, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   find(@Meta() meta: Metadata, @Filter() filter: FilterDto<ISession>): Observable<SessionItemsSerializer> {
     return super.find(meta, filter);
@@ -112,7 +112,7 @@ export class SessionsController extends ControllerClass<ISession, SessionDto> im
   }
 
   @Get(':id')
-  @Cache('sessions', 'fill')
+  @Cache(Collection.Sessions, 'fill')
   @SetScope(Scope.ReadIdentitySessions)
   @SetPolicy(Action.Read, Resource.IdentitySessions)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -128,7 +128,7 @@ export class SessionsController extends ControllerClass<ISession, SessionDto> im
   }
 
   @Delete(':id')
-  @Cache('sessions', 'flush')
+  @Cache(Collection.Sessions, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @SetPolicy(Action.Delete, Resource.IdentitySessions)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -144,7 +144,7 @@ export class SessionsController extends ControllerClass<ISession, SessionDto> im
   }
 
   @Put(':id/restore')
-  @Cache('sessions', 'flush')
+  @Cache(Collection.Sessions, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @SetPolicy(Action.Restore, Resource.IdentitySessions)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -160,7 +160,7 @@ export class SessionsController extends ControllerClass<ISession, SessionDto> im
   }
 
   @Delete(':id/destroy')
-  @Cache('sessions', 'flush')
+  @Cache(Collection.Sessions, 'flush')
   @SetScope(Scope.ManageIdentitySessions)
   @SetPolicy(Action.Destroy, Resource.IdentitySessions)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -177,7 +177,7 @@ export class SessionsController extends ControllerClass<ISession, SessionDto> im
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache('sessions', 'flush')
+  @Cache(Collection.Sessions, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @SetPolicy(Action.Update, Resource.IdentitySessions)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -195,7 +195,7 @@ export class SessionsController extends ControllerClass<ISession, SessionDto> im
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache('sessions', 'flush')
+  @Cache(Collection.Sessions, 'flush')
   @SetScope(Scope.ManageIdentitySessions)
   @SetPolicy(Action.Update, Resource.IdentitySessions)
   @ApiQuery({ type: QueryFilterDto, required: false })

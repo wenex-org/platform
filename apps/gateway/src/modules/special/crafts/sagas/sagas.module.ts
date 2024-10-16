@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { SagasResolver } from './sagas.resolver';
 import { SagasInspector } from './sagas.inspector';
 import { SagasController } from './sagas.controller';
-import { SagaHistoriesModule } from './subs/histories';
+import { SagaHistoriesModule } from './arts/histories';
 
 @Module({
   imports: [SagaHistoriesModule],

@@ -19,10 +19,10 @@ import { TotalSerializer, StatDataSerializer, StatItemsSerializer, StatSerialize
 import { Controller as ControllerInterface, Metadata, Stat, StatDto } from '@app/common/interfaces';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { SpecialProvider } from '@app/common/providers';
@@ -31,9 +31,9 @@ import { Filter, Meta } from '@app/common/decorators';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('stats')
-@Controller('stats')
 @UsePipes(ValidationPipe)
+@ApiTags(Collection.Stats)
+@Controller(Collection.Stats)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -43,7 +43,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements C
   }
 
   @Get('count')
-  @Cache('stats', 'fill')
+  @Cache(Collection.Stats, 'fill')
   @SetScope(Scope.ReadSpecialStats)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.SpecialStats)
@@ -54,7 +54,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements C
 
   @Post()
   @ShipStrategy('create')
-  @Cache('stats', 'flush')
+  @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialStats)
@@ -64,7 +64,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements C
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache('stats', 'flush')
+  @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialStats)
@@ -73,7 +73,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements C
   }
 
   @Get()
-  @Cache('stats', 'fill')
+  @Cache(Collection.Stats, 'fill')
   @SetScope(Scope.ReadSpecialStats)
   @SetPolicy(Action.Read, Resource.SpecialStats)
   @ApiQuery({ type: FilterDto, required: false })
@@ -92,7 +92,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements C
   }
 
   @Get(':id')
-  @Cache('stats', 'fill')
+  @Cache(Collection.Stats, 'fill')
   @SetScope(Scope.ReadSpecialStats)
   @SetPolicy(Action.Read, Resource.SpecialStats)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -108,7 +108,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements C
   }
 
   @Delete(':id')
-  @Cache('stats', 'flush')
+  @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @SetPolicy(Action.Delete, Resource.SpecialStats)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -124,7 +124,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements C
   }
 
   @Put(':id/restore')
-  @Cache('stats', 'flush')
+  @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @SetPolicy(Action.Restore, Resource.SpecialStats)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -140,7 +140,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements C
   }
 
   @Delete(':id/destroy')
-  @Cache('stats', 'flush')
+  @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.ManageSpecialStats)
   @SetPolicy(Action.Destroy, Resource.SpecialStats)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -157,7 +157,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements C
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache('stats', 'flush')
+  @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @SetPolicy(Action.Update, Resource.SpecialStats)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -175,7 +175,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements C
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache('stats', 'flush')
+  @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.ManageSpecialStats)
   @SetPolicy(Action.Update, Resource.SpecialStats)
   @ApiQuery({ type: QueryFilterDto, required: false })

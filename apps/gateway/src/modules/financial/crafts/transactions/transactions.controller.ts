@@ -31,10 +31,10 @@ import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInte
 import { Controller as ControllerInterface, Metadata, Transaction, TransactionDto } from '@app/common/interfaces';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { FinancialProvider } from '@app/common/providers';
@@ -43,10 +43,10 @@ import { Filter, Meta } from '@app/common/decorators';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('transactions')
-@Controller('transactions')
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
+@ApiTags(Collection.Transactions)
+@Controller(Collection.Transactions)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class TransactionsController
@@ -58,7 +58,7 @@ export class TransactionsController
   }
 
   @Get('count')
-  @Cache('transactions', 'fill')
+  @Cache(Collection.Transactions, 'fill')
   @SetScope(Scope.ReadFinancialTransactions)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.FinancialTransactions)
@@ -69,9 +69,9 @@ export class TransactionsController
 
   @Post()
   @ShipStrategy('create')
-  @Cache('transactions', 'flush')
-  @SetScope(Scope.WriteFinancialTransactions)
   @UseInterceptors(...WriteInterceptors)
+  @Cache(Collection.Transactions, 'flush')
+  @SetScope(Scope.WriteFinancialTransactions)
   @SetPolicy(Action.Create, Resource.FinancialTransactions)
   create(@Meta() meta: Metadata, @Body() data: CreateTransactionDto): Observable<TransactionDataSerializer> {
     return super.create(meta, data);
@@ -79,8 +79,8 @@ export class TransactionsController
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache('transactions', 'flush')
   @UseInterceptors(...WriteInterceptors)
+  @Cache(Collection.Transactions, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @SetPolicy(Action.Create, Resource.FinancialTransactions)
   createBulk(@Meta() meta: Metadata, @Body() data: CreateTransactionItemsDto): Observable<TransactionItemsSerializer> {
@@ -88,7 +88,7 @@ export class TransactionsController
   }
 
   @Get()
-  @Cache('transactions', 'fill')
+  @Cache(Collection.Transactions, 'fill')
   @SetScope(Scope.ReadFinancialTransactions)
   @SetPolicy(Action.Read, Resource.FinancialTransactions)
   @ApiQuery({ type: FilterDto, required: false })
@@ -107,7 +107,7 @@ export class TransactionsController
   }
 
   @Get(':id')
-  @Cache('transactions', 'fill')
+  @Cache(Collection.Transactions, 'fill')
   @SetScope(Scope.ReadFinancialTransactions)
   @SetPolicy(Action.Read, Resource.FinancialTransactions)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -123,7 +123,7 @@ export class TransactionsController
   }
 
   @Delete(':id')
-  @Cache('transactions', 'flush')
+  @Cache(Collection.Transactions, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @SetPolicy(Action.Delete, Resource.FinancialTransactions)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -139,7 +139,7 @@ export class TransactionsController
   }
 
   @Put(':id/restore')
-  @Cache('transactions', 'flush')
+  @Cache(Collection.Transactions, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @SetPolicy(Action.Restore, Resource.FinancialTransactions)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -155,7 +155,7 @@ export class TransactionsController
   }
 
   @Delete(':id/destroy')
-  @Cache('transactions', 'flush')
+  @Cache(Collection.Transactions, 'flush')
   @SetScope(Scope.ManageFinancialTransactions)
   @SetPolicy(Action.Destroy, Resource.FinancialTransactions)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -172,7 +172,7 @@ export class TransactionsController
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache('transactions', 'flush')
+  @Cache(Collection.Transactions, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @SetPolicy(Action.Update, Resource.FinancialTransactions)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -190,7 +190,7 @@ export class TransactionsController
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache('transactions', 'flush')
+  @Cache(Collection.Transactions, 'flush')
   @SetScope(Scope.ManageFinancialTransactions)
   @SetPolicy(Action.Update, Resource.FinancialTransactions)
   @ApiQuery({ type: QueryFilterDto, required: false })

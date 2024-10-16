@@ -5,10 +5,10 @@ import { Controller as ControllerInterface, Metadata, Cargo, CargoDto } from '@a
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { LogisticProvider } from '@app/common/providers';
@@ -27,7 +27,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   }
 
   @Query(() => TotalSerializer)
-  @Cache('cargoes', 'fill')
+  @Cache(Collection.Cargoes, 'fill')
   @SetScope(Scope.ReadLogisticCargoes)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.LogisticCargoes)
@@ -37,7 +37,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
 
   @Mutation(() => CargoDataSerializer)
   @ShipStrategy('create')
-  @Cache('cargoes', 'flush')
+  @Cache(Collection.Cargoes, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticCargoes)
@@ -47,7 +47,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
 
   @Mutation(() => CargoItemsSerializer)
   @ShipStrategy('create')
-  @Cache('cargoes', 'flush')
+  @Cache(Collection.Cargoes, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticCargoes)
@@ -56,7 +56,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   }
 
   @Query(() => CargoItemsSerializer)
-  @Cache('cargoes', 'fill')
+  @Cache(Collection.Cargoes, 'fill')
   @SetScope(Scope.ReadLogisticCargoes)
   @SetPolicy(Action.Read, Resource.LogisticCargoes)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -65,7 +65,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   }
 
   @Query(() => CargoDataSerializer)
-  @Cache('cargoes', 'fill')
+  @Cache(Collection.Cargoes, 'fill')
   @SetScope(Scope.ReadLogisticCargoes)
   @SetPolicy(Action.Read, Resource.LogisticCargoes)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -80,7 +80,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   }
 
   @Mutation(() => CargoDataSerializer)
-  @Cache('cargoes', 'flush')
+  @Cache(Collection.Cargoes, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @SetPolicy(Action.Delete, Resource.LogisticCargoes)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -95,7 +95,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   }
 
   @Mutation(() => CargoDataSerializer)
-  @Cache('cargoes', 'flush')
+  @Cache(Collection.Cargoes, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @SetPolicy(Action.Restore, Resource.LogisticCargoes)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -110,7 +110,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   }
 
   @Mutation(() => CargoDataSerializer)
-  @Cache('cargoes', 'flush')
+  @Cache(Collection.Cargoes, 'flush')
   @SetScope(Scope.ManageLogisticCargoes)
   @SetPolicy(Action.Destroy, Resource.LogisticCargoes)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -126,7 +126,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
 
   @Mutation(() => CargoDataSerializer)
   @ShipStrategy('update')
-  @Cache('cargoes', 'flush')
+  @Cache(Collection.Cargoes, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @SetPolicy(Action.Update, Resource.LogisticCargoes)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -143,7 +143,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @Cache('cargoes', 'flush')
+  @Cache(Collection.Cargoes, 'flush')
   @SetScope(Scope.ManageLogisticCargoes)
   @SetPolicy(Action.Update, Resource.LogisticCargoes)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

@@ -5,10 +5,10 @@ import { Controller as ControllerInterface, Metadata, File, FileDto } from '@app
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { SpecialProvider } from '@app/common/providers';
@@ -27,7 +27,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements Con
   }
 
   @Query(() => TotalSerializer)
-  @Cache('files', 'fill')
+  @Cache(Collection.Files, 'fill')
   @SetScope(Scope.ReadSpecialFiles)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.SpecialFiles)
@@ -37,7 +37,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements Con
 
   @Mutation(() => FileDataSerializer)
   @ShipStrategy('create')
-  @Cache('files', 'flush')
+  @Cache(Collection.Files, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialFiles)
@@ -47,7 +47,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements Con
 
   @Mutation(() => FileItemsSerializer)
   @ShipStrategy('create')
-  @Cache('files', 'flush')
+  @Cache(Collection.Files, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialFiles)
@@ -56,7 +56,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements Con
   }
 
   @Query(() => FileItemsSerializer)
-  @Cache('files', 'fill')
+  @Cache(Collection.Files, 'fill')
   @SetScope(Scope.ReadSpecialFiles)
   @SetPolicy(Action.Read, Resource.SpecialFiles)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -65,7 +65,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements Con
   }
 
   @Query(() => FileDataSerializer)
-  @Cache('files', 'fill')
+  @Cache(Collection.Files, 'fill')
   @SetScope(Scope.ReadSpecialFiles)
   @SetPolicy(Action.Read, Resource.SpecialFiles)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -80,7 +80,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements Con
   }
 
   @Mutation(() => FileDataSerializer)
-  @Cache('files', 'flush')
+  @Cache(Collection.Files, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @SetPolicy(Action.Delete, Resource.SpecialFiles)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -95,7 +95,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements Con
   }
 
   @Mutation(() => FileDataSerializer)
-  @Cache('files', 'flush')
+  @Cache(Collection.Files, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @SetPolicy(Action.Restore, Resource.SpecialFiles)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -110,7 +110,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements Con
   }
 
   @Mutation(() => FileDataSerializer)
-  @Cache('files', 'flush')
+  @Cache(Collection.Files, 'flush')
   @SetScope(Scope.ManageSpecialFiles)
   @SetPolicy(Action.Destroy, Resource.SpecialFiles)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -126,7 +126,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements Con
 
   @Mutation(() => FileDataSerializer)
   @ShipStrategy('update')
-  @Cache('files', 'flush')
+  @Cache(Collection.Files, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @SetPolicy(Action.Update, Resource.SpecialFiles)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -143,7 +143,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements Con
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @Cache('files', 'flush')
+  @Cache(Collection.Files, 'flush')
   @SetScope(Scope.ManageSpecialFiles)
   @SetPolicy(Action.Update, Resource.SpecialFiles)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

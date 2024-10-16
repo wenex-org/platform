@@ -5,10 +5,10 @@ import { Controller as ControllerInterface, Metadata, Mail, MailDto } from '@app
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { TouchProvider } from '@app/common/providers';
@@ -27,8 +27,8 @@ export class MailsResolver extends ControllerClass<Mail, MailDto> implements Con
   }
 
   @Query(() => TotalSerializer)
-  @Cache('mails', 'fill')
   @SetScope(Scope.ReadTouchMails)
+  @Cache(Collection.Mails, 'fill')
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.TouchMails)
   countMail(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
@@ -37,8 +37,8 @@ export class MailsResolver extends ControllerClass<Mail, MailDto> implements Con
 
   @Mutation(() => MailDataSerializer)
   @ShipStrategy('create')
-  @Cache('mails', 'flush')
   @SetScope(Scope.WriteTouchMails)
+  @Cache(Collection.Mails, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchMails)
   createMail(@Meta() meta: Metadata, @Args('data') data: CreateMailDto): Observable<MailDataSerializer> {
@@ -47,8 +47,8 @@ export class MailsResolver extends ControllerClass<Mail, MailDto> implements Con
 
   @Mutation(() => MailItemsSerializer)
   @ShipStrategy('create')
-  @Cache('mails', 'flush')
   @SetScope(Scope.WriteTouchMails)
+  @Cache(Collection.Mails, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchMails)
   createBulkMail(@Meta() meta: Metadata, @Args('data') data: CreateMailItemsDto): Observable<MailItemsSerializer> {
@@ -56,8 +56,8 @@ export class MailsResolver extends ControllerClass<Mail, MailDto> implements Con
   }
 
   @Query(() => MailItemsSerializer)
-  @Cache('mails', 'fill')
   @SetScope(Scope.ReadTouchMails)
+  @Cache(Collection.Mails, 'fill')
   @SetPolicy(Action.Read, Resource.TouchMails)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findMail(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Mail>): Observable<MailItemsSerializer> {
@@ -65,8 +65,8 @@ export class MailsResolver extends ControllerClass<Mail, MailDto> implements Con
   }
 
   @Query(() => MailDataSerializer)
-  @Cache('mails', 'fill')
   @SetScope(Scope.ReadTouchMails)
+  @Cache(Collection.Mails, 'fill')
   @SetPolicy(Action.Read, Resource.TouchMails)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findOneMail(
@@ -80,8 +80,8 @@ export class MailsResolver extends ControllerClass<Mail, MailDto> implements Con
   }
 
   @Mutation(() => MailDataSerializer)
-  @Cache('mails', 'flush')
   @SetScope(Scope.WriteTouchMails)
+  @Cache(Collection.Mails, 'flush')
   @SetPolicy(Action.Delete, Resource.TouchMails)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   deleteOneMail(
@@ -95,8 +95,8 @@ export class MailsResolver extends ControllerClass<Mail, MailDto> implements Con
   }
 
   @Mutation(() => MailDataSerializer)
-  @Cache('mails', 'flush')
   @SetScope(Scope.WriteTouchMails)
+  @Cache(Collection.Mails, 'flush')
   @SetPolicy(Action.Restore, Resource.TouchMails)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   restoreOneMail(
@@ -110,7 +110,7 @@ export class MailsResolver extends ControllerClass<Mail, MailDto> implements Con
   }
 
   @Mutation(() => MailDataSerializer)
-  @Cache('mails', 'flush')
+  @Cache(Collection.Mails, 'flush')
   @SetScope(Scope.ManageTouchMails)
   @SetPolicy(Action.Destroy, Resource.TouchMails)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -126,8 +126,8 @@ export class MailsResolver extends ControllerClass<Mail, MailDto> implements Con
 
   @Mutation(() => MailDataSerializer)
   @ShipStrategy('update')
-  @Cache('mails', 'flush')
   @SetScope(Scope.WriteTouchMails)
+  @Cache(Collection.Mails, 'flush')
   @SetPolicy(Action.Update, Resource.TouchMails)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateOneMail(
@@ -143,7 +143,7 @@ export class MailsResolver extends ControllerClass<Mail, MailDto> implements Con
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @Cache('mails', 'flush')
+  @Cache(Collection.Mails, 'flush')
   @SetScope(Scope.ManageTouchMails)
   @SetPolicy(Action.Update, Resource.TouchMails)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

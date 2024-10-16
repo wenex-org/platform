@@ -29,10 +29,10 @@ import { Controller as ControllerInterface, Metadata, Profile, ProfileDto } from
 import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { IdentityProvider } from '@app/common/providers';
@@ -41,9 +41,9 @@ import { Response } from 'express';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('profiles')
-@Controller('profiles')
 @UsePipes(ValidationPipe)
+@ApiTags(Collection.Profiles)
+@Controller(Collection.Profiles)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -53,7 +53,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Get('count')
-  @Cache('profiles', 'fill')
+  @Cache(Collection.Profiles, 'fill')
   @SetScope(Scope.ReadIdentityProfiles)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.IdentityProfiles)
@@ -64,7 +64,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
 
   @Post()
   @ShipStrategy('create')
-  @Cache('profiles', 'flush')
+  @Cache(Collection.Profiles, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentityProfiles)
@@ -74,7 +74,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache('profiles', 'flush')
+  @Cache(Collection.Profiles, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentityProfiles)
@@ -83,10 +83,10 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Get()
-  @Cache('profiles', 'fill')
+  @Cache(Collection.Profiles, 'fill')
   @SetScope(Scope.ReadIdentityProfiles)
-  @SetPolicy(Action.Read, Resource.IdentityProfiles)
   @ApiQuery({ type: FilterDto, required: false })
+  @SetPolicy(Action.Read, Resource.IdentityProfiles)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   find(@Meta() meta: Metadata, @Filter() filter: FilterDto<Profile>): Observable<ProfileItemsSerializer> {
     return super.find(meta, filter);
@@ -112,7 +112,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Get(':id')
-  @Cache('profiles', 'fill')
+  @Cache(Collection.Profiles, 'fill')
   @SetScope(Scope.ReadIdentityProfiles)
   @SetPolicy(Action.Read, Resource.IdentityProfiles)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -128,7 +128,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Delete(':id')
-  @Cache('profiles', 'flush')
+  @Cache(Collection.Profiles, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @SetPolicy(Action.Delete, Resource.IdentityProfiles)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -144,7 +144,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Put(':id/restore')
-  @Cache('profiles', 'flush')
+  @Cache(Collection.Profiles, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @SetPolicy(Action.Restore, Resource.IdentityProfiles)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -160,7 +160,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Delete(':id/destroy')
-  @Cache('profiles', 'flush')
+  @Cache(Collection.Profiles, 'flush')
   @SetScope(Scope.ManageIdentityProfiles)
   @SetPolicy(Action.Destroy, Resource.IdentityProfiles)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -177,7 +177,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache('profiles', 'flush')
+  @Cache(Collection.Profiles, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @SetPolicy(Action.Update, Resource.IdentityProfiles)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -195,7 +195,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache('profiles', 'flush')
+  @Cache(Collection.Profiles, 'flush')
   @SetScope(Scope.ManageIdentityProfiles)
   @SetPolicy(Action.Update, Resource.IdentityProfiles)
   @ApiQuery({ type: QueryFilterDto, required: false })

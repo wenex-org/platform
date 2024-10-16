@@ -5,10 +5,10 @@ import { Controller as ControllerInterface, Metadata, Wallet, WalletDto } from '
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { FinancialProvider } from '@app/common/providers';
@@ -27,7 +27,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
   }
 
   @Query(() => TotalSerializer)
-  @Cache('wallets', 'fill')
+  @Cache(Collection.Wallets, 'fill')
   @SetScope(Scope.ReadFinancialWallets)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.FinancialWallets)
@@ -37,7 +37,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
 
   @Mutation(() => WalletDataSerializer)
   @ShipStrategy('create')
-  @Cache('wallets', 'flush')
+  @Cache(Collection.Wallets, 'flush')
   @SetScope(Scope.WriteFinancialWallets)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialWallets)
@@ -47,7 +47,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
 
   @Mutation(() => WalletItemsSerializer)
   @ShipStrategy('create')
-  @Cache('wallets', 'flush')
+  @Cache(Collection.Wallets, 'flush')
   @SetScope(Scope.WriteFinancialWallets)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialWallets)
@@ -56,7 +56,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
   }
 
   @Query(() => WalletItemsSerializer)
-  @Cache('wallets', 'fill')
+  @Cache(Collection.Wallets, 'fill')
   @SetScope(Scope.ReadFinancialWallets)
   @SetPolicy(Action.Read, Resource.FinancialWallets)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -65,7 +65,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
   }
 
   @Query(() => WalletDataSerializer)
-  @Cache('wallets', 'fill')
+  @Cache(Collection.Wallets, 'fill')
   @SetScope(Scope.ReadFinancialWallets)
   @SetPolicy(Action.Read, Resource.FinancialWallets)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -80,7 +80,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
   }
 
   @Mutation(() => WalletDataSerializer)
-  @Cache('wallets', 'flush')
+  @Cache(Collection.Wallets, 'flush')
   @SetScope(Scope.WriteFinancialWallets)
   @SetPolicy(Action.Delete, Resource.FinancialWallets)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -95,7 +95,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
   }
 
   @Mutation(() => WalletDataSerializer)
-  @Cache('wallets', 'flush')
+  @Cache(Collection.Wallets, 'flush')
   @SetScope(Scope.WriteFinancialWallets)
   @SetPolicy(Action.Restore, Resource.FinancialWallets)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -110,7 +110,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
   }
 
   @Mutation(() => WalletDataSerializer)
-  @Cache('wallets', 'flush')
+  @Cache(Collection.Wallets, 'flush')
   @SetScope(Scope.ManageFinancialWallets)
   @SetPolicy(Action.Destroy, Resource.FinancialWallets)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -126,7 +126,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
 
   @Mutation(() => WalletDataSerializer)
   @ShipStrategy('update')
-  @Cache('wallets', 'flush')
+  @Cache(Collection.Wallets, 'flush')
   @SetScope(Scope.WriteFinancialWallets)
   @SetPolicy(Action.Update, Resource.FinancialWallets)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -143,7 +143,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @Cache('wallets', 'flush')
+  @Cache(Collection.Wallets, 'flush')
   @SetScope(Scope.ManageFinancialWallets)
   @SetPolicy(Action.Update, Resource.FinancialWallets)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

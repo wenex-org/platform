@@ -12,10 +12,10 @@ import { Controller as ControllerInterface, Metadata, Artifact, ArtifactDto } fr
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { GeneralProvider } from '@app/common/providers';
@@ -37,7 +37,7 @@ export class ArtifactsResolver
   }
 
   @Query(() => TotalSerializer)
-  @Cache('artifacts', 'fill')
+  @Cache(Collection.Artifacts, 'fill')
   @SetScope(Scope.ReadGeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.GeneralArtifacts)
@@ -47,7 +47,7 @@ export class ArtifactsResolver
 
   @Mutation(() => ArtifactDataSerializer)
   @ShipStrategy('create')
-  @Cache('artifacts', 'flush')
+  @Cache(Collection.Artifacts, 'flush')
   @SetScope(Scope.WriteGeneralArtifacts)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.GeneralArtifacts)
@@ -57,7 +57,7 @@ export class ArtifactsResolver
 
   @Mutation(() => ArtifactItemsSerializer)
   @ShipStrategy('create')
-  @Cache('artifacts', 'flush')
+  @Cache(Collection.Artifacts, 'flush')
   @SetScope(Scope.WriteGeneralArtifacts)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.GeneralArtifacts)
@@ -66,7 +66,7 @@ export class ArtifactsResolver
   }
 
   @Query(() => ArtifactItemsSerializer)
-  @Cache('artifacts', 'fill')
+  @Cache(Collection.Artifacts, 'fill')
   @SetScope(Scope.ReadGeneralArtifacts)
   @SetPolicy(Action.Read, Resource.GeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -75,7 +75,7 @@ export class ArtifactsResolver
   }
 
   @Query(() => ArtifactDataSerializer)
-  @Cache('artifacts', 'fill')
+  @Cache(Collection.Artifacts, 'fill')
   @SetScope(Scope.ReadGeneralArtifacts)
   @SetPolicy(Action.Read, Resource.GeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -90,7 +90,7 @@ export class ArtifactsResolver
   }
 
   @Mutation(() => ArtifactDataSerializer)
-  @Cache('artifacts', 'flush')
+  @Cache(Collection.Artifacts, 'flush')
   @SetScope(Scope.WriteGeneralArtifacts)
   @SetPolicy(Action.Delete, Resource.GeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -105,7 +105,7 @@ export class ArtifactsResolver
   }
 
   @Mutation(() => ArtifactDataSerializer)
-  @Cache('artifacts', 'flush')
+  @Cache(Collection.Artifacts, 'flush')
   @SetScope(Scope.WriteGeneralArtifacts)
   @SetPolicy(Action.Restore, Resource.GeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -120,7 +120,7 @@ export class ArtifactsResolver
   }
 
   @Mutation(() => ArtifactDataSerializer)
-  @Cache('artifacts', 'flush')
+  @Cache(Collection.Artifacts, 'flush')
   @SetScope(Scope.ManageGeneralArtifacts)
   @SetPolicy(Action.Destroy, Resource.GeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -136,7 +136,7 @@ export class ArtifactsResolver
 
   @Mutation(() => ArtifactDataSerializer)
   @ShipStrategy('update')
-  @Cache('artifacts', 'flush')
+  @Cache(Collection.Artifacts, 'flush')
   @SetScope(Scope.WriteGeneralArtifacts)
   @SetPolicy(Action.Update, Resource.GeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -153,7 +153,7 @@ export class ArtifactsResolver
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @Cache('artifacts', 'flush')
+  @Cache(Collection.Artifacts, 'flush')
   @SetScope(Scope.ManageGeneralArtifacts)
   @SetPolicy(Action.Update, Resource.GeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

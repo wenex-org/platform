@@ -5,10 +5,10 @@ import { Controller as ControllerInterface, Metadata, Coin, CoinDto } from '@app
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { FinancialProvider } from '@app/common/providers';
@@ -27,7 +27,7 @@ export class CoinsResolver extends ControllerClass<Coin, CoinDto> implements Con
   }
 
   @Query(() => TotalSerializer)
-  @Cache('coins', 'fill')
+  @Cache(Collection.Coins, 'fill')
   @SetScope(Scope.ReadFinancialCoins)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.FinancialCoins)
@@ -37,7 +37,7 @@ export class CoinsResolver extends ControllerClass<Coin, CoinDto> implements Con
 
   @Mutation(() => CoinDataSerializer)
   @ShipStrategy('create')
-  @Cache('coins', 'flush')
+  @Cache(Collection.Coins, 'flush')
   @SetScope(Scope.WriteFinancialCoins)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialCoins)
@@ -47,7 +47,7 @@ export class CoinsResolver extends ControllerClass<Coin, CoinDto> implements Con
 
   @Mutation(() => CoinItemsSerializer)
   @ShipStrategy('create')
-  @Cache('coins', 'flush')
+  @Cache(Collection.Coins, 'flush')
   @SetScope(Scope.WriteFinancialCoins)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialCoins)
@@ -56,7 +56,7 @@ export class CoinsResolver extends ControllerClass<Coin, CoinDto> implements Con
   }
 
   @Query(() => CoinItemsSerializer)
-  @Cache('coins', 'fill')
+  @Cache(Collection.Coins, 'fill')
   @SetScope(Scope.ReadFinancialCoins)
   @SetPolicy(Action.Read, Resource.FinancialCoins)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -65,7 +65,7 @@ export class CoinsResolver extends ControllerClass<Coin, CoinDto> implements Con
   }
 
   @Query(() => CoinDataSerializer)
-  @Cache('coins', 'fill')
+  @Cache(Collection.Coins, 'fill')
   @SetScope(Scope.ReadFinancialCoins)
   @SetPolicy(Action.Read, Resource.FinancialCoins)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -80,7 +80,7 @@ export class CoinsResolver extends ControllerClass<Coin, CoinDto> implements Con
   }
 
   @Mutation(() => CoinDataSerializer)
-  @Cache('coins', 'flush')
+  @Cache(Collection.Coins, 'flush')
   @SetScope(Scope.WriteFinancialCoins)
   @SetPolicy(Action.Delete, Resource.FinancialCoins)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -95,7 +95,7 @@ export class CoinsResolver extends ControllerClass<Coin, CoinDto> implements Con
   }
 
   @Mutation(() => CoinDataSerializer)
-  @Cache('coins', 'flush')
+  @Cache(Collection.Coins, 'flush')
   @SetScope(Scope.WriteFinancialCoins)
   @SetPolicy(Action.Restore, Resource.FinancialCoins)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -110,7 +110,7 @@ export class CoinsResolver extends ControllerClass<Coin, CoinDto> implements Con
   }
 
   @Mutation(() => CoinDataSerializer)
-  @Cache('coins', 'flush')
+  @Cache(Collection.Coins, 'flush')
   @SetScope(Scope.ManageFinancialCoins)
   @SetPolicy(Action.Destroy, Resource.FinancialCoins)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -126,7 +126,7 @@ export class CoinsResolver extends ControllerClass<Coin, CoinDto> implements Con
 
   @Mutation(() => CoinDataSerializer)
   @ShipStrategy('update')
-  @Cache('coins', 'flush')
+  @Cache(Collection.Coins, 'flush')
   @SetScope(Scope.WriteFinancialCoins)
   @SetPolicy(Action.Update, Resource.FinancialCoins)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -143,7 +143,7 @@ export class CoinsResolver extends ControllerClass<Coin, CoinDto> implements Con
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @Cache('coins', 'flush')
+  @Cache(Collection.Coins, 'flush')
   @SetScope(Scope.ManageFinancialCoins)
   @SetPolicy(Action.Update, Resource.FinancialCoins)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

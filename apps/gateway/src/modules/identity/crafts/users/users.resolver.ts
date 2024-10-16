@@ -5,10 +5,10 @@ import { Controller as ControllerInterface, Metadata, User, UserDto } from '@app
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { IdentityProvider } from '@app/common/providers';
@@ -27,7 +27,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements Con
   }
 
   @Query(() => TotalSerializer)
-  @Cache('users', 'fill')
+  @Cache(Collection.Users, 'fill')
   @SetScope(Scope.ReadIdentityUsers)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.IdentityUsers)
@@ -37,7 +37,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements Con
 
   @Mutation(() => UserDataSerializer)
   @ShipStrategy('create')
-  @Cache('users', 'flush')
+  @Cache(Collection.Users, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentityUsers)
@@ -47,7 +47,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements Con
 
   @Mutation(() => UserItemsSerializer)
   @ShipStrategy('create')
-  @Cache('users', 'flush')
+  @Cache(Collection.Users, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentityUsers)
@@ -56,7 +56,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements Con
   }
 
   @Query(() => UserItemsSerializer)
-  @Cache('users', 'fill')
+  @Cache(Collection.Users, 'fill')
   @SetScope(Scope.ReadIdentityUsers)
   @SetPolicy(Action.Read, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -65,7 +65,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements Con
   }
 
   @Query(() => UserDataSerializer)
-  @Cache('users', 'fill')
+  @Cache(Collection.Users, 'fill')
   @SetScope(Scope.ReadIdentityUsers)
   @SetPolicy(Action.Read, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -80,7 +80,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements Con
   }
 
   @Mutation(() => UserDataSerializer)
-  @Cache('users', 'flush')
+  @Cache(Collection.Users, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @SetPolicy(Action.Delete, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -95,7 +95,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements Con
   }
 
   @Mutation(() => UserDataSerializer)
-  @Cache('users', 'flush')
+  @Cache(Collection.Users, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @SetPolicy(Action.Restore, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -110,7 +110,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements Con
   }
 
   @Mutation(() => UserDataSerializer)
-  @Cache('users', 'flush')
+  @Cache(Collection.Users, 'flush')
   @SetScope(Scope.ManageIdentityUsers)
   @SetPolicy(Action.Destroy, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -126,7 +126,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements Con
 
   @Mutation(() => UserDataSerializer)
   @ShipStrategy('update')
-  @Cache('users', 'flush')
+  @Cache(Collection.Users, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @SetPolicy(Action.Update, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -143,7 +143,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements Con
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @Cache('users', 'flush')
+  @Cache(Collection.Users, 'flush')
   @SetScope(Scope.ManageIdentityUsers)
   @SetPolicy(Action.Update, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

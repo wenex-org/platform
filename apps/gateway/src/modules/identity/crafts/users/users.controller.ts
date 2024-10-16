@@ -22,10 +22,10 @@ import { Controller as ControllerInterface, Metadata, User, UserDto } from '@app
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { IdentityProvider } from '@app/common/providers';
@@ -34,9 +34,9 @@ import { Response } from 'express';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('users')
-@Controller('users')
 @UsePipes(ValidationPipe)
+@ApiTags(Collection.Users)
+@Controller(Collection.Users)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -46,7 +46,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements C
   }
 
   @Get('count')
-  @Cache('users', 'fill')
+  @Cache(Collection.Users, 'fill')
   @SetScope(Scope.ReadIdentityUsers)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.IdentityUsers)
@@ -57,7 +57,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements C
 
   @Post()
   @ShipStrategy('create')
-  @Cache('users', 'flush')
+  @Cache(Collection.Users, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentityUsers)
@@ -67,7 +67,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements C
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache('users', 'flush')
+  @Cache(Collection.Users, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentityUsers)
@@ -76,7 +76,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements C
   }
 
   @Get()
-  @Cache('users', 'fill')
+  @Cache(Collection.Users, 'fill')
   @SetScope(Scope.ReadIdentityUsers)
   @SetPolicy(Action.Read, Resource.IdentityUsers)
   @ApiQuery({ type: FilterDto, required: false })
@@ -105,7 +105,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements C
   }
 
   @Get(':id')
-  @Cache('users', 'fill')
+  @Cache(Collection.Users, 'fill')
   @SetScope(Scope.ReadIdentityUsers)
   @SetPolicy(Action.Read, Resource.IdentityUsers)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -121,7 +121,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements C
   }
 
   @Delete(':id')
-  @Cache('users', 'flush')
+  @Cache(Collection.Users, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @SetPolicy(Action.Delete, Resource.IdentityUsers)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -137,7 +137,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements C
   }
 
   @Put(':id/restore')
-  @Cache('users', 'flush')
+  @Cache(Collection.Users, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @SetPolicy(Action.Restore, Resource.IdentityUsers)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -153,7 +153,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements C
   }
 
   @Delete(':id/destroy')
-  @Cache('users', 'flush')
+  @Cache(Collection.Users, 'flush')
   @SetScope(Scope.ManageIdentityUsers)
   @SetPolicy(Action.Destroy, Resource.IdentityUsers)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -170,7 +170,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements C
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache('users', 'flush')
+  @Cache(Collection.Users, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @SetPolicy(Action.Update, Resource.IdentityUsers)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -188,7 +188,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements C
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache('users', 'flush')
+  @Cache(Collection.Users, 'flush')
   @SetScope(Scope.ManageIdentityUsers)
   @SetPolicy(Action.Update, Resource.IdentityUsers)
   @ApiQuery({ type: QueryFilterDto, required: false })

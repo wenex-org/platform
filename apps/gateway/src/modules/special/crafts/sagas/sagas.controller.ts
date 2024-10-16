@@ -19,10 +19,10 @@ import { TotalSerializer, SagaDataSerializer, SagaItemsSerializer, SagaSerialize
 import { Controller as ControllerInterface, Metadata, Saga, SagaDto } from '@app/common/interfaces';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { SpecialProvider } from '@app/common/providers';
@@ -31,9 +31,9 @@ import { Filter, Meta } from '@app/common/decorators';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('sagas')
-@Controller('sagas')
 @UsePipes(ValidationPipe)
+@ApiTags(Collection.Sagas)
+@Controller(Collection.Sagas)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -43,7 +43,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements C
   }
 
   @Get('count')
-  @Cache('sagas', 'fill')
+  @Cache(Collection.Sagas, 'fill')
   @SetScope(Scope.ReadSpecialSagas)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.SpecialSagas)
@@ -54,7 +54,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements C
 
   @Post()
   @ShipStrategy('create')
-  @Cache('sagas', 'flush')
+  @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.WriteSpecialSagas)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialSagas)
@@ -64,7 +64,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements C
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache('sagas', 'flush')
+  @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.WriteSpecialSagas)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialSagas)
@@ -73,7 +73,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements C
   }
 
   @Get()
-  @Cache('sagas', 'fill')
+  @Cache(Collection.Sagas, 'fill')
   @SetScope(Scope.ReadSpecialSagas)
   @SetPolicy(Action.Read, Resource.SpecialSagas)
   @ApiQuery({ type: FilterDto, required: false })
@@ -92,7 +92,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements C
   }
 
   @Get(':id')
-  @Cache('sagas', 'fill')
+  @Cache(Collection.Sagas, 'fill')
   @SetScope(Scope.ReadSpecialSagas)
   @SetPolicy(Action.Read, Resource.SpecialSagas)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -108,7 +108,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements C
   }
 
   @Delete(':id')
-  @Cache('sagas', 'flush')
+  @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.WriteSpecialSagas)
   @SetPolicy(Action.Delete, Resource.SpecialSagas)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -124,7 +124,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements C
   }
 
   @Put(':id/restore')
-  @Cache('sagas', 'flush')
+  @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.WriteSpecialSagas)
   @SetPolicy(Action.Restore, Resource.SpecialSagas)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -140,7 +140,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements C
   }
 
   @Delete(':id/destroy')
-  @Cache('sagas', 'flush')
+  @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.ManageSpecialSagas)
   @SetPolicy(Action.Destroy, Resource.SpecialSagas)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -157,7 +157,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements C
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache('sagas', 'flush')
+  @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.WriteSpecialSagas)
   @SetPolicy(Action.Update, Resource.SpecialSagas)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -175,7 +175,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements C
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache('sagas', 'flush')
+  @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.ManageSpecialSagas)
   @SetPolicy(Action.Update, Resource.SpecialSagas)
   @ApiQuery({ type: QueryFilterDto, required: false })

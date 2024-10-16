@@ -12,10 +12,10 @@ import { Controller as ControllerInterface, Metadata, Account, AccountDto } from
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { FinancialProvider } from '@app/common/providers';
@@ -34,7 +34,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   }
 
   @Query(() => TotalSerializer)
-  @Cache('accounts', 'fill')
+  @Cache(Collection.Accounts, 'fill')
   @SetScope(Scope.ReadFinancialAccounts)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.FinancialAccounts)
@@ -44,7 +44,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
 
   @Mutation(() => AccountDataSerializer)
   @ShipStrategy('create')
-  @Cache('accounts', 'flush')
+  @Cache(Collection.Accounts, 'flush')
   @SetScope(Scope.WriteFinancialAccounts)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialAccounts)
@@ -54,7 +54,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
 
   @Mutation(() => AccountItemsSerializer)
   @ShipStrategy('create')
-  @Cache('accounts', 'flush')
+  @Cache(Collection.Accounts, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteFinancialAccounts)
   @SetPolicy(Action.Create, Resource.FinancialAccounts)
@@ -63,7 +63,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   }
 
   @Query(() => AccountItemsSerializer)
-  @Cache('accounts', 'fill')
+  @Cache(Collection.Accounts, 'fill')
   @SetScope(Scope.ReadFinancialAccounts)
   @SetPolicy(Action.Read, Resource.FinancialAccounts)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -72,7 +72,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   }
 
   @Query(() => AccountDataSerializer)
-  @Cache('accounts', 'fill')
+  @Cache(Collection.Accounts, 'fill')
   @SetScope(Scope.ReadFinancialAccounts)
   @SetPolicy(Action.Read, Resource.FinancialAccounts)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -87,7 +87,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   }
 
   @Mutation(() => AccountDataSerializer)
-  @Cache('accounts', 'flush')
+  @Cache(Collection.Accounts, 'flush')
   @SetScope(Scope.WriteFinancialAccounts)
   @SetPolicy(Action.Delete, Resource.FinancialAccounts)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -102,7 +102,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   }
 
   @Mutation(() => AccountDataSerializer)
-  @Cache('accounts', 'flush')
+  @Cache(Collection.Accounts, 'flush')
   @SetScope(Scope.WriteFinancialAccounts)
   @SetPolicy(Action.Restore, Resource.FinancialAccounts)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -117,7 +117,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   }
 
   @Mutation(() => AccountDataSerializer)
-  @Cache('accounts', 'flush')
+  @Cache(Collection.Accounts, 'flush')
   @SetScope(Scope.ManageFinancialAccounts)
   @SetPolicy(Action.Destroy, Resource.FinancialAccounts)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -133,7 +133,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
 
   @Mutation(() => AccountDataSerializer)
   @ShipStrategy('update')
-  @Cache('accounts', 'flush')
+  @Cache(Collection.Accounts, 'flush')
   @SetScope(Scope.WriteFinancialAccounts)
   @SetPolicy(Action.Update, Resource.FinancialAccounts)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -150,7 +150,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @Cache('accounts', 'flush')
+  @Cache(Collection.Accounts, 'flush')
   @SetScope(Scope.ManageFinancialAccounts)
   @SetPolicy(Action.Update, Resource.FinancialAccounts)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

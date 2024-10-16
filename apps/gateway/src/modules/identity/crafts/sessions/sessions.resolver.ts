@@ -12,10 +12,10 @@ import { Controller as ControllerInterface, Session as ISession, Metadata, Sessi
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { IdentityProvider } from '@app/common/providers';
@@ -34,7 +34,7 @@ export class SessionsResolver extends ControllerClass<ISession, SessionDto> impl
   }
 
   @Query(() => TotalSerializer)
-  @Cache('sessions', 'fill')
+  @Cache(Collection.Sessions, 'fill')
   @SetScope(Scope.ReadIdentitySessions)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.IdentitySessions)
@@ -44,7 +44,7 @@ export class SessionsResolver extends ControllerClass<ISession, SessionDto> impl
 
   @Mutation(() => SessionDataSerializer)
   @ShipStrategy('create')
-  @Cache('sessions', 'flush')
+  @Cache(Collection.Sessions, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentitySessions)
@@ -54,7 +54,7 @@ export class SessionsResolver extends ControllerClass<ISession, SessionDto> impl
 
   @Mutation(() => SessionItemsSerializer)
   @ShipStrategy('create')
-  @Cache('sessions', 'flush')
+  @Cache(Collection.Sessions, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentitySessions)
@@ -63,7 +63,7 @@ export class SessionsResolver extends ControllerClass<ISession, SessionDto> impl
   }
 
   @Query(() => SessionItemsSerializer)
-  @Cache('sessions', 'fill')
+  @Cache(Collection.Sessions, 'fill')
   @SetScope(Scope.ReadIdentitySessions)
   @SetPolicy(Action.Read, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -72,7 +72,7 @@ export class SessionsResolver extends ControllerClass<ISession, SessionDto> impl
   }
 
   @Query(() => SessionDataSerializer)
-  @Cache('sessions', 'fill')
+  @Cache(Collection.Sessions, 'fill')
   @SetScope(Scope.ReadIdentitySessions)
   @SetPolicy(Action.Read, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -87,7 +87,7 @@ export class SessionsResolver extends ControllerClass<ISession, SessionDto> impl
   }
 
   @Mutation(() => SessionDataSerializer)
-  @Cache('sessions', 'flush')
+  @Cache(Collection.Sessions, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @SetPolicy(Action.Delete, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -102,7 +102,7 @@ export class SessionsResolver extends ControllerClass<ISession, SessionDto> impl
   }
 
   @Mutation(() => SessionDataSerializer)
-  @Cache('sessions', 'flush')
+  @Cache(Collection.Sessions, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @SetPolicy(Action.Restore, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -117,7 +117,7 @@ export class SessionsResolver extends ControllerClass<ISession, SessionDto> impl
   }
 
   @Mutation(() => SessionDataSerializer)
-  @Cache('sessions', 'flush')
+  @Cache(Collection.Sessions, 'flush')
   @SetScope(Scope.ManageIdentitySessions)
   @SetPolicy(Action.Destroy, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -133,7 +133,7 @@ export class SessionsResolver extends ControllerClass<ISession, SessionDto> impl
 
   @Mutation(() => SessionDataSerializer)
   @ShipStrategy('update')
-  @Cache('sessions', 'flush')
+  @Cache(Collection.Sessions, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @SetPolicy(Action.Update, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -150,7 +150,7 @@ export class SessionsResolver extends ControllerClass<ISession, SessionDto> impl
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @Cache('sessions', 'flush')
+  @Cache(Collection.Sessions, 'flush')
   @SetScope(Scope.ManageIdentitySessions)
   @SetPolicy(Action.Update, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

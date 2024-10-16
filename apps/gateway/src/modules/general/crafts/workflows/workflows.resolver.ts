@@ -12,10 +12,10 @@ import { Controller as ControllerInterface, Metadata, Workflow, WorkflowDto } fr
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { GeneralProvider } from '@app/common/providers';
@@ -37,7 +37,7 @@ export class WorkflowsResolver
   }
 
   @Query(() => TotalSerializer)
-  @Cache('workflows', 'fill')
+  @Cache(Collection.Workflows, 'fill')
   @SetScope(Scope.ReadGeneralWorkflows)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.GeneralWorkflows)
@@ -47,7 +47,7 @@ export class WorkflowsResolver
 
   @Mutation(() => WorkflowDataSerializer)
   @ShipStrategy('create')
-  @Cache('workflows', 'flush')
+  @Cache(Collection.Workflows, 'flush')
   @SetScope(Scope.WriteGeneralWorkflows)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.GeneralWorkflows)
@@ -57,7 +57,7 @@ export class WorkflowsResolver
 
   @Mutation(() => WorkflowItemsSerializer)
   @ShipStrategy('create')
-  @Cache('workflows', 'flush')
+  @Cache(Collection.Workflows, 'flush')
   @SetScope(Scope.WriteGeneralWorkflows)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.GeneralWorkflows)
@@ -66,7 +66,7 @@ export class WorkflowsResolver
   }
 
   @Query(() => WorkflowItemsSerializer)
-  @Cache('workflows', 'fill')
+  @Cache(Collection.Workflows, 'fill')
   @SetScope(Scope.ReadGeneralWorkflows)
   @SetPolicy(Action.Read, Resource.GeneralWorkflows)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -75,7 +75,7 @@ export class WorkflowsResolver
   }
 
   @Query(() => WorkflowDataSerializer)
-  @Cache('workflows', 'fill')
+  @Cache(Collection.Workflows, 'fill')
   @SetScope(Scope.ReadGeneralWorkflows)
   @SetPolicy(Action.Read, Resource.GeneralWorkflows)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -90,7 +90,7 @@ export class WorkflowsResolver
   }
 
   @Mutation(() => WorkflowDataSerializer)
-  @Cache('workflows', 'flush')
+  @Cache(Collection.Workflows, 'flush')
   @SetScope(Scope.WriteGeneralWorkflows)
   @SetPolicy(Action.Delete, Resource.GeneralWorkflows)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -105,7 +105,7 @@ export class WorkflowsResolver
   }
 
   @Mutation(() => WorkflowDataSerializer)
-  @Cache('workflows', 'flush')
+  @Cache(Collection.Workflows, 'flush')
   @SetScope(Scope.WriteGeneralWorkflows)
   @SetPolicy(Action.Restore, Resource.GeneralWorkflows)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -120,7 +120,7 @@ export class WorkflowsResolver
   }
 
   @Mutation(() => WorkflowDataSerializer)
-  @Cache('workflows', 'flush')
+  @Cache(Collection.Workflows, 'flush')
   @SetScope(Scope.ManageGeneralWorkflows)
   @SetPolicy(Action.Destroy, Resource.GeneralWorkflows)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -136,7 +136,7 @@ export class WorkflowsResolver
 
   @Mutation(() => WorkflowDataSerializer)
   @ShipStrategy('update')
-  @Cache('workflows', 'flush')
+  @Cache(Collection.Workflows, 'flush')
   @SetScope(Scope.WriteGeneralWorkflows)
   @SetPolicy(Action.Update, Resource.GeneralWorkflows)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -153,7 +153,7 @@ export class WorkflowsResolver
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @Cache('workflows', 'flush')
+  @Cache(Collection.Workflows, 'flush')
   @SetScope(Scope.ManageGeneralWorkflows)
   @SetPolicy(Action.Update, Resource.GeneralWorkflows)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

@@ -19,10 +19,10 @@ import { TotalSerializer, MailDataSerializer, MailItemsSerializer, MailSerialize
 import { Controller as ControllerInterface, Metadata, Mail, MailDto } from '@app/common/interfaces';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { TouchProvider } from '@app/common/providers';
@@ -31,9 +31,9 @@ import { Filter, Meta } from '@app/common/decorators';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('mails')
-@Controller('mails')
 @UsePipes(ValidationPipe)
+@ApiTags(Collection.Mails)
+@Controller(Collection.Mails)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -43,8 +43,8 @@ export class MailsController extends ControllerClass<Mail, MailDto> implements C
   }
 
   @Get('count')
-  @Cache('mails', 'fill')
   @SetScope(Scope.ReadTouchMails)
+  @Cache(Collection.Mails, 'fill')
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.TouchMails)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -54,8 +54,8 @@ export class MailsController extends ControllerClass<Mail, MailDto> implements C
 
   @Post()
   @ShipStrategy('create')
-  @Cache('mails', 'flush')
   @SetScope(Scope.WriteTouchMails)
+  @Cache(Collection.Mails, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchMails)
   create(@Meta() meta: Metadata, @Body() data: CreateMailDto): Observable<MailDataSerializer> {
@@ -64,8 +64,8 @@ export class MailsController extends ControllerClass<Mail, MailDto> implements C
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache('mails', 'flush')
   @SetScope(Scope.WriteTouchMails)
+  @Cache(Collection.Mails, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchMails)
   createBulk(@Meta() meta: Metadata, @Body() data: CreateMailItemsDto): Observable<MailItemsSerializer> {
@@ -73,8 +73,8 @@ export class MailsController extends ControllerClass<Mail, MailDto> implements C
   }
 
   @Get()
-  @Cache('mails', 'fill')
   @SetScope(Scope.ReadTouchMails)
+  @Cache(Collection.Mails, 'fill')
   @SetPolicy(Action.Read, Resource.TouchMails)
   @ApiQuery({ type: FilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -92,8 +92,8 @@ export class MailsController extends ControllerClass<Mail, MailDto> implements C
   }
 
   @Get(':id')
-  @Cache('mails', 'fill')
   @SetScope(Scope.ReadTouchMails)
+  @Cache(Collection.Mails, 'fill')
   @SetPolicy(Action.Read, Resource.TouchMails)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -108,8 +108,8 @@ export class MailsController extends ControllerClass<Mail, MailDto> implements C
   }
 
   @Delete(':id')
-  @Cache('mails', 'flush')
   @SetScope(Scope.WriteTouchMails)
+  @Cache(Collection.Mails, 'flush')
   @SetPolicy(Action.Delete, Resource.TouchMails)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -124,8 +124,8 @@ export class MailsController extends ControllerClass<Mail, MailDto> implements C
   }
 
   @Put(':id/restore')
-  @Cache('mails', 'flush')
   @SetScope(Scope.WriteTouchMails)
+  @Cache(Collection.Mails, 'flush')
   @SetPolicy(Action.Restore, Resource.TouchMails)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -140,7 +140,7 @@ export class MailsController extends ControllerClass<Mail, MailDto> implements C
   }
 
   @Delete(':id/destroy')
-  @Cache('mails', 'flush')
+  @Cache(Collection.Mails, 'flush')
   @SetScope(Scope.ManageTouchMails)
   @SetPolicy(Action.Destroy, Resource.TouchMails)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -157,8 +157,8 @@ export class MailsController extends ControllerClass<Mail, MailDto> implements C
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache('mails', 'flush')
   @SetScope(Scope.WriteTouchMails)
+  @Cache(Collection.Mails, 'flush')
   @SetPolicy(Action.Update, Resource.TouchMails)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -175,7 +175,7 @@ export class MailsController extends ControllerClass<Mail, MailDto> implements C
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache('mails', 'flush')
+  @Cache(Collection.Mails, 'flush')
   @SetScope(Scope.ManageTouchMails)
   @SetPolicy(Action.Update, Resource.TouchMails)
   @ApiQuery({ type: QueryFilterDto, required: false })

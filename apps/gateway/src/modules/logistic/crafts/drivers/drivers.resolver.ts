@@ -5,10 +5,10 @@ import { Controller as ControllerInterface, Metadata, Driver, DriverDto } from '
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { LogisticProvider } from '@app/common/providers';
@@ -27,7 +27,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   }
 
   @Query(() => TotalSerializer)
-  @Cache('drivers', 'fill')
+  @Cache(Collection.Drivers, 'fill')
   @SetScope(Scope.ReadLogisticDrivers)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.LogisticDrivers)
@@ -37,7 +37,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
 
   @Mutation(() => DriverDataSerializer)
   @ShipStrategy('create')
-  @Cache('drivers', 'flush')
+  @Cache(Collection.Drivers, 'flush')
   @SetScope(Scope.WriteLogisticDrivers)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticDrivers)
@@ -47,7 +47,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
 
   @Mutation(() => DriverItemsSerializer)
   @ShipStrategy('create')
-  @Cache('drivers', 'flush')
+  @Cache(Collection.Drivers, 'flush')
   @SetScope(Scope.WriteLogisticDrivers)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticDrivers)
@@ -56,7 +56,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   }
 
   @Query(() => DriverItemsSerializer)
-  @Cache('drivers', 'fill')
+  @Cache(Collection.Drivers, 'fill')
   @SetScope(Scope.ReadLogisticDrivers)
   @SetPolicy(Action.Read, Resource.LogisticDrivers)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -65,7 +65,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   }
 
   @Query(() => DriverDataSerializer)
-  @Cache('drivers', 'fill')
+  @Cache(Collection.Drivers, 'fill')
   @SetScope(Scope.ReadLogisticDrivers)
   @SetPolicy(Action.Read, Resource.LogisticDrivers)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -80,7 +80,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   }
 
   @Mutation(() => DriverDataSerializer)
-  @Cache('drivers', 'flush')
+  @Cache(Collection.Drivers, 'flush')
   @SetScope(Scope.WriteLogisticDrivers)
   @SetPolicy(Action.Delete, Resource.LogisticDrivers)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -95,7 +95,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   }
 
   @Mutation(() => DriverDataSerializer)
-  @Cache('drivers', 'flush')
+  @Cache(Collection.Drivers, 'flush')
   @SetScope(Scope.WriteLogisticDrivers)
   @SetPolicy(Action.Restore, Resource.LogisticDrivers)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -110,7 +110,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   }
 
   @Mutation(() => DriverDataSerializer)
-  @Cache('drivers', 'flush')
+  @Cache(Collection.Drivers, 'flush')
   @SetScope(Scope.ManageLogisticDrivers)
   @SetPolicy(Action.Destroy, Resource.LogisticDrivers)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -126,7 +126,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
 
   @Mutation(() => DriverDataSerializer)
   @ShipStrategy('update')
-  @Cache('drivers', 'flush')
+  @Cache(Collection.Drivers, 'flush')
   @SetScope(Scope.WriteLogisticDrivers)
   @SetPolicy(Action.Update, Resource.LogisticDrivers)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -143,7 +143,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @Cache('drivers', 'flush')
+  @Cache(Collection.Drivers, 'flush')
   @SetScope(Scope.ManageLogisticDrivers)
   @SetPolicy(Action.Update, Resource.LogisticDrivers)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

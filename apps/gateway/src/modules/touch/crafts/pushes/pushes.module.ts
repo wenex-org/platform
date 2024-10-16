@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { PushesResolver } from './pushes.resolver';
 import { PushesInspector } from './pushes.inspector';
 import { PushesController } from './pushes.controller';
-import { PushHistoriesModule } from './subs/histories';
+import { PushHistoriesModule } from './arts/histories';
 
 @Module({
   imports: [PushHistoriesModule],

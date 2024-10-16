@@ -1,8 +1,8 @@
 import { Body, Controller, Post, UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -14,9 +14,9 @@ import { CreateMailDto } from '@app/common/dto';
 import { Meta } from '@app/common/decorators';
 
 @ApiBearerAuth()
-@ApiTags('mails')
-@Controller('mails')
 @UsePipes(ValidationPipe)
+@ApiTags(Collection.Mails)
+@Controller(Collection.Mails)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())

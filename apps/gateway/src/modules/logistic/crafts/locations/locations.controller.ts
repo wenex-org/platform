@@ -32,7 +32,7 @@ import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Action, Resource, Scope } from '@app/common/enums';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { LogisticProvider } from '@app/common/providers';
@@ -41,10 +41,10 @@ import { Response } from 'express';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('locations')
-@Controller('locations')
 @UsePipes(ValidationPipe)
+@ApiTags(Collection.Locations)
 @UseFilters(AllExceptionsFilter)
+@Controller(Collection.Locations)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class LocationsController
@@ -56,7 +56,7 @@ export class LocationsController
   }
 
   @Get('count')
-  @Cache('locations', 'fill')
+  @Cache(Collection.Locations, 'fill')
   @SetScope(Scope.ReadLogisticLocations)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.LogisticLocations)
@@ -67,7 +67,7 @@ export class LocationsController
 
   @Post()
   @ShipStrategy('create')
-  @Cache('locations', 'flush')
+  @Cache(Collection.Locations, 'flush')
   @SetScope(Scope.WriteLogisticLocations)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticLocations)
@@ -77,19 +77,19 @@ export class LocationsController
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache('locations', 'flush')
-  @SetScope(Scope.WriteLogisticLocations)
+  @Cache(Collection.Locations, 'flush')
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteLogisticLocations)
   @SetPolicy(Action.Create, Resource.LogisticLocations)
   createBulk(@Meta() meta: Metadata, @Body() data: CreateLocationItemsDto): Observable<LocationItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
   @Get()
-  @Cache('locations', 'fill')
+  @Cache(Collection.Locations, 'fill')
   @SetScope(Scope.ReadLogisticLocations)
-  @SetPolicy(Action.Read, Resource.LogisticLocations)
   @ApiQuery({ type: FilterDto, required: false })
+  @SetPolicy(Action.Read, Resource.LogisticLocations)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   find(@Meta() meta: Metadata, @Filter() filter: FilterDto<Location>): Observable<LocationItemsSerializer> {
     return super.find(meta, filter);
@@ -97,8 +97,8 @@ export class LocationsController
 
   @Get('cursor')
   @SetScope(Scope.ReadLogisticLocations)
-  @SetPolicy(Action.Read, Resource.LogisticLocations)
   @ApiQuery({ type: FilterOneDto, required: false })
+  @SetPolicy(Action.Read, Resource.LogisticLocations)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   @ApiResponse({ status: HttpStatus.OK, type: LocationSerializer, description: 'SSE' })
   Cursor(@Res() res: Response, @Meta() meta: Metadata, @Filter() filter: FilterOneDto<Location>) {
@@ -115,7 +115,7 @@ export class LocationsController
   }
 
   @Get(':id')
-  @Cache('locations', 'fill')
+  @Cache(Collection.Locations, 'fill')
   @SetScope(Scope.ReadLogisticLocations)
   @SetPolicy(Action.Read, Resource.LogisticLocations)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -131,7 +131,7 @@ export class LocationsController
   }
 
   @Delete(':id')
-  @Cache('locations', 'flush')
+  @Cache(Collection.Locations, 'flush')
   @SetScope(Scope.WriteLogisticLocations)
   @SetPolicy(Action.Delete, Resource.LogisticLocations)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -147,7 +147,7 @@ export class LocationsController
   }
 
   @Put(':id/restore')
-  @Cache('locations', 'flush')
+  @Cache(Collection.Locations, 'flush')
   @SetScope(Scope.WriteLogisticLocations)
   @SetPolicy(Action.Restore, Resource.LogisticLocations)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -163,7 +163,7 @@ export class LocationsController
   }
 
   @Delete(':id/destroy')
-  @Cache('locations', 'flush')
+  @Cache(Collection.Locations, 'flush')
   @SetScope(Scope.ManageLogisticLocations)
   @SetPolicy(Action.Destroy, Resource.LogisticLocations)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -180,7 +180,7 @@ export class LocationsController
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache('locations', 'flush')
+  @Cache(Collection.Locations, 'flush')
   @SetScope(Scope.WriteLogisticLocations)
   @SetPolicy(Action.Update, Resource.LogisticLocations)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -198,7 +198,7 @@ export class LocationsController
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache('locations', 'flush')
+  @Cache(Collection.Locations, 'flush')
   @SetScope(Scope.ManageLogisticLocations)
   @SetPolicy(Action.Update, Resource.LogisticLocations)
   @ApiQuery({ type: QueryFilterDto, required: false })

@@ -19,10 +19,10 @@ import { TotalSerializer, FileDataSerializer, FileItemsSerializer, FileSerialize
 import { Controller as ControllerInterface, Metadata, File, FileDto } from '@app/common/interfaces';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { SpecialProvider } from '@app/common/providers';
@@ -31,8 +31,8 @@ import { Filter, Meta } from '@app/common/decorators';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('files')
-@Controller('files')
+@ApiTags(Collection.Files)
+@Controller(Collection.Files)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -43,7 +43,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements C
   }
 
   @Get('count')
-  @Cache('files', 'fill')
+  @Cache(Collection.Files, 'fill')
   @SetScope(Scope.ReadSpecialFiles)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.SpecialFiles)
@@ -54,7 +54,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements C
 
   @Post()
   @ShipStrategy('create')
-  @Cache('files', 'flush')
+  @Cache(Collection.Files, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialFiles)
@@ -64,7 +64,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements C
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache('files', 'flush')
+  @Cache(Collection.Files, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialFiles)
@@ -73,7 +73,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements C
   }
 
   @Get()
-  @Cache('files', 'fill')
+  @Cache(Collection.Files, 'fill')
   @SetScope(Scope.ReadSpecialFiles)
   @SetPolicy(Action.Read, Resource.SpecialFiles)
   @ApiQuery({ type: FilterDto, required: false })
@@ -92,7 +92,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements C
   }
 
   @Get(':id')
-  @Cache('files', 'fill')
+  @Cache(Collection.Files, 'fill')
   @SetScope(Scope.ReadSpecialFiles)
   @SetPolicy(Action.Read, Resource.SpecialFiles)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -108,7 +108,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements C
   }
 
   @Delete(':id')
-  @Cache('files', 'flush')
+  @Cache(Collection.Files, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @SetPolicy(Action.Delete, Resource.SpecialFiles)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -124,7 +124,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements C
   }
 
   @Put(':id/restore')
-  @Cache('files', 'flush')
+  @Cache(Collection.Files, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @SetPolicy(Action.Restore, Resource.SpecialFiles)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -140,7 +140,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements C
   }
 
   @Delete(':id/destroy')
-  @Cache('files', 'flush')
+  @Cache(Collection.Files, 'flush')
   @SetScope(Scope.ManageSpecialFiles)
   @SetPolicy(Action.Destroy, Resource.SpecialFiles)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -157,7 +157,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements C
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache('files', 'flush')
+  @Cache(Collection.Files, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @SetPolicy(Action.Update, Resource.SpecialFiles)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -175,7 +175,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements C
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache('files', 'flush')
+  @Cache(Collection.Files, 'flush')
   @SetScope(Scope.ManageSpecialFiles)
   @SetPolicy(Action.Update, Resource.SpecialFiles)
   @ApiQuery({ type: QueryFilterDto, required: false })

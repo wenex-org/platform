@@ -2,8 +2,8 @@ import { Controller, Post, UploadedFiles, UseFilters, UseGuards, UseInterceptors
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
@@ -15,9 +15,9 @@ import { CreateFileDto } from '@app/common/dto';
 import { Meta } from '@app/common/decorators';
 
 @ApiBearerAuth()
-@ApiTags('files')
-@Controller('files')
 @UsePipes(ValidationPipe)
+@ApiTags(Collection.Files)
+@Controller(Collection.Files)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())

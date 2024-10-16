@@ -22,10 +22,10 @@ import { Controller as ControllerInterface, Metadata, Config, ConfigDto } from '
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { ContextProvider } from '@app/common/providers';
@@ -34,9 +34,9 @@ import { Response } from 'express';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('configs')
-@Controller('configs')
 @UsePipes(ValidationPipe)
+@ApiTags(Collection.Configs)
+@Controller(Collection.Configs)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -46,7 +46,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Get('count')
-  @Cache('configs', 'fill')
+  @Cache(Collection.Configs, 'fill')
   @SetScope(Scope.ReadContextConfigs)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ContextConfigs)
@@ -57,7 +57,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
 
   @Post()
   @ShipStrategy('create')
-  @Cache('configs', 'flush')
+  @Cache(Collection.Configs, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContextConfigs)
@@ -67,7 +67,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache('configs', 'flush')
+  @Cache(Collection.Configs, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContextConfigs)
@@ -76,7 +76,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Get()
-  @Cache('configs', 'fill')
+  @Cache(Collection.Configs, 'fill')
   @SetScope(Scope.ReadContextConfigs)
   @SetPolicy(Action.Read, Resource.ContextConfigs)
   @ApiQuery({ type: FilterDto, required: false })
@@ -105,7 +105,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Get(':id')
-  @Cache('configs', 'fill')
+  @Cache(Collection.Configs, 'fill')
   @SetScope(Scope.ReadContextConfigs)
   @SetPolicy(Action.Read, Resource.ContextConfigs)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -121,7 +121,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Delete(':id')
-  @Cache('configs', 'flush')
+  @Cache(Collection.Configs, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @SetPolicy(Action.Delete, Resource.ContextConfigs)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -137,7 +137,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Put(':id/restore')
-  @Cache('configs', 'flush')
+  @Cache(Collection.Configs, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @SetPolicy(Action.Restore, Resource.ContextConfigs)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -153,7 +153,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Delete(':id/destroy')
-  @Cache('configs', 'flush')
+  @Cache(Collection.Configs, 'flush')
   @SetScope(Scope.ManageContextConfigs)
   @SetPolicy(Action.Destroy, Resource.ContextConfigs)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -170,7 +170,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache('configs', 'flush')
+  @Cache(Collection.Configs, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @SetPolicy(Action.Update, Resource.ContextConfigs)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -188,7 +188,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache('configs', 'flush')
+  @Cache(Collection.Configs, 'flush')
   @SetScope(Scope.ManageContextConfigs)
   @SetPolicy(Action.Update, Resource.ContextConfigs)
   @ApiQuery({ type: QueryFilterDto, required: false })

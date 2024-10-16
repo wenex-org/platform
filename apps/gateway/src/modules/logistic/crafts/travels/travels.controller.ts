@@ -22,10 +22,10 @@ import { Controller as ControllerInterface, Metadata, Travel, TravelDto } from '
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { LogisticProvider } from '@app/common/providers';
@@ -34,9 +34,9 @@ import { Response } from 'express';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('travels')
-@Controller('travels')
 @UsePipes(ValidationPipe)
+@ApiTags(Collection.Travels)
+@Controller(Collection.Travels)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -46,7 +46,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   }
 
   @Get('count')
-  @Cache('travels', 'fill')
+  @Cache(Collection.Travels, 'fill')
   @SetScope(Scope.ReadLogisticTravels)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.LogisticTravels)
@@ -57,7 +57,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
 
   @Post()
   @ShipStrategy('create')
-  @Cache('travels', 'flush')
+  @Cache(Collection.Travels, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticTravels)
@@ -67,7 +67,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache('travels', 'flush')
+  @Cache(Collection.Travels, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticTravels)
@@ -76,10 +76,10 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   }
 
   @Get()
-  @Cache('travels', 'fill')
+  @Cache(Collection.Travels, 'fill')
   @SetScope(Scope.ReadLogisticTravels)
-  @SetPolicy(Action.Read, Resource.LogisticTravels)
   @ApiQuery({ type: FilterDto, required: false })
+  @SetPolicy(Action.Read, Resource.LogisticTravels)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   find(@Meta() meta: Metadata, @Filter() filter: FilterDto<Travel>): Observable<TravelItemsSerializer> {
     return super.find(meta, filter);
@@ -105,7 +105,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   }
 
   @Get(':id')
-  @Cache('travels', 'fill')
+  @Cache(Collection.Travels, 'fill')
   @SetScope(Scope.ReadLogisticTravels)
   @SetPolicy(Action.Read, Resource.LogisticTravels)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -121,7 +121,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   }
 
   @Delete(':id')
-  @Cache('travels', 'flush')
+  @Cache(Collection.Travels, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @SetPolicy(Action.Delete, Resource.LogisticTravels)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -137,7 +137,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   }
 
   @Put(':id/restore')
-  @Cache('travels', 'flush')
+  @Cache(Collection.Travels, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @SetPolicy(Action.Restore, Resource.LogisticTravels)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -153,7 +153,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   }
 
   @Delete(':id/destroy')
-  @Cache('travels', 'flush')
+  @Cache(Collection.Travels, 'flush')
   @SetScope(Scope.ManageLogisticTravels)
   @SetPolicy(Action.Destroy, Resource.LogisticTravels)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -170,7 +170,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache('travels', 'flush')
+  @Cache(Collection.Travels, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @SetPolicy(Action.Update, Resource.LogisticTravels)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -188,7 +188,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache('travels', 'flush')
+  @Cache(Collection.Travels, 'flush')
   @SetScope(Scope.ManageLogisticTravels)
   @SetPolicy(Action.Update, Resource.LogisticTravels)
   @ApiQuery({ type: QueryFilterDto, required: false })

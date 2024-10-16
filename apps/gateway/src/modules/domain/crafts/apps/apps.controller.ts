@@ -22,10 +22,10 @@ import { Controller as ControllerInterface, Metadata, App, AppDto } from '@app/c
 import { Cache, Nested, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { DomainProvider } from '@app/common/providers';
@@ -34,10 +34,10 @@ import { Response } from 'express';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('apps')
-@Controller('apps')
 @UsePipes(ValidationPipe)
+@ApiTags(Collection.Apps)
 @Nested<App>('change_logs')
+@Controller(Collection.Apps)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -47,7 +47,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements Cont
   }
 
   @Get('count')
-  @Cache('apps', 'fill')
+  @Cache(Collection.Apps, 'fill')
   @SetScope(Scope.ReadDomainApps)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.DomainApps)
@@ -57,8 +57,8 @@ export class AppsController extends ControllerClass<App, AppDto> implements Cont
   }
 
   @Post()
-  @Cache('apps', 'flush')
   @ShipStrategy('create')
+  @Cache(Collection.Apps, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainApps)
@@ -67,8 +67,8 @@ export class AppsController extends ControllerClass<App, AppDto> implements Cont
   }
 
   @Post('bulk')
-  @Cache('apps', 'flush')
   @ShipStrategy('create')
+  @Cache(Collection.Apps, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainApps)
@@ -77,7 +77,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements Cont
   }
 
   @Get()
-  @Cache('apps', 'fill')
+  @Cache(Collection.Apps, 'fill')
   @SetScope(Scope.ReadDomainApps)
   @SetPolicy(Action.Read, Resource.DomainApps)
   @ApiQuery({ type: FilterDto, required: false })
@@ -106,7 +106,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements Cont
   }
 
   @Get(':id')
-  @Cache('apps', 'fill')
+  @Cache(Collection.Apps, 'fill')
   @SetScope(Scope.ReadDomainApps)
   @SetPolicy(Action.Read, Resource.DomainApps)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -122,7 +122,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements Cont
   }
 
   @Delete(':id')
-  @Cache('apps', 'flush')
+  @Cache(Collection.Apps, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @SetPolicy(Action.Delete, Resource.DomainApps)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -138,7 +138,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements Cont
   }
 
   @Put(':id/restore')
-  @Cache('apps', 'flush')
+  @Cache(Collection.Apps, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @SetPolicy(Action.Restore, Resource.DomainApps)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -154,7 +154,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements Cont
   }
 
   @Delete(':id/destroy')
-  @Cache('apps', 'flush')
+  @Cache(Collection.Apps, 'flush')
   @SetScope(Scope.ManageDomainApps)
   @SetPolicy(Action.Destroy, Resource.DomainApps)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -170,8 +170,8 @@ export class AppsController extends ControllerClass<App, AppDto> implements Cont
   }
 
   @Patch(':id')
-  @Cache('apps', 'flush')
   @ShipStrategy('update')
+  @Cache(Collection.Apps, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @SetPolicy(Action.Update, Resource.DomainApps)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -188,8 +188,8 @@ export class AppsController extends ControllerClass<App, AppDto> implements Cont
   }
 
   @Patch('bulk')
-  @Cache('apps', 'flush')
   @ShipStrategy('update')
+  @Cache(Collection.Apps, 'flush')
   @SetScope(Scope.ManageDomainApps)
   @SetPolicy(Action.Update, Resource.DomainApps)
   @ApiQuery({ type: QueryFilterDto, required: false })

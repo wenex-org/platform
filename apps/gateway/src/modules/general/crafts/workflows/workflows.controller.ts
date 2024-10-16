@@ -29,10 +29,10 @@ import { Controller as ControllerInterface, Metadata, Workflow, WorkflowDto } fr
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { GeneralProvider } from '@app/common/providers';
@@ -41,10 +41,10 @@ import { Response } from 'express';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('workflows')
-@Controller('workflows')
 @UsePipes(ValidationPipe)
+@ApiTags(Collection.Workflows)
 @UseFilters(AllExceptionsFilter)
+@Controller(Collection.Workflows)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class WorkflowsController
@@ -56,7 +56,7 @@ export class WorkflowsController
   }
 
   @Get('count')
-  @Cache('workflows', 'fill')
+  @Cache(Collection.Workflows, 'fill')
   @SetScope(Scope.ReadGeneralWorkflows)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.GeneralWorkflows)
@@ -67,7 +67,7 @@ export class WorkflowsController
 
   @Post()
   @ShipStrategy('create')
-  @Cache('workflows', 'flush')
+  @Cache(Collection.Workflows, 'flush')
   @SetScope(Scope.WriteGeneralWorkflows)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.GeneralWorkflows)
@@ -77,7 +77,7 @@ export class WorkflowsController
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache('workflows', 'flush')
+  @Cache(Collection.Workflows, 'flush')
   @SetScope(Scope.WriteGeneralWorkflows)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.GeneralWorkflows)
@@ -86,7 +86,7 @@ export class WorkflowsController
   }
 
   @Get()
-  @Cache('workflows', 'fill')
+  @Cache(Collection.Workflows, 'fill')
   @SetScope(Scope.ReadGeneralWorkflows)
   @SetPolicy(Action.Read, Resource.GeneralWorkflows)
   @ApiQuery({ type: FilterDto, required: false })
@@ -115,7 +115,7 @@ export class WorkflowsController
   }
 
   @Get(':id')
-  @Cache('workflows', 'fill')
+  @Cache(Collection.Workflows, 'fill')
   @SetScope(Scope.ReadGeneralWorkflows)
   @SetPolicy(Action.Read, Resource.GeneralWorkflows)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -131,7 +131,7 @@ export class WorkflowsController
   }
 
   @Delete(':id')
-  @Cache('workflows', 'flush')
+  @Cache(Collection.Workflows, 'flush')
   @SetScope(Scope.WriteGeneralWorkflows)
   @SetPolicy(Action.Delete, Resource.GeneralWorkflows)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -147,7 +147,7 @@ export class WorkflowsController
   }
 
   @Put(':id/restore')
-  @Cache('workflows', 'flush')
+  @Cache(Collection.Workflows, 'flush')
   @SetScope(Scope.WriteGeneralWorkflows)
   @SetPolicy(Action.Restore, Resource.GeneralWorkflows)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -163,7 +163,7 @@ export class WorkflowsController
   }
 
   @Delete(':id/destroy')
-  @Cache('workflows', 'flush')
+  @Cache(Collection.Workflows, 'flush')
   @SetScope(Scope.ManageGeneralWorkflows)
   @SetPolicy(Action.Destroy, Resource.GeneralWorkflows)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -180,7 +180,7 @@ export class WorkflowsController
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache('workflows', 'flush')
+  @Cache(Collection.Workflows, 'flush')
   @SetScope(Scope.WriteGeneralWorkflows)
   @SetPolicy(Action.Update, Resource.GeneralWorkflows)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -198,7 +198,7 @@ export class WorkflowsController
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache('workflows', 'flush')
+  @Cache(Collection.Workflows, 'flush')
   @SetScope(Scope.ManageGeneralWorkflows)
   @SetPolicy(Action.Update, Resource.GeneralWorkflows)
   @ApiQuery({ type: QueryFilterDto, required: false })

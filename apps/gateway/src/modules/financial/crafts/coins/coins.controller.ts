@@ -19,10 +19,10 @@ import { TotalSerializer, CoinDataSerializer, CoinItemsSerializer, CoinSerialize
 import { Controller as ControllerInterface, Metadata, Coin, CoinDto } from '@app/common/interfaces';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { FinancialProvider } from '@app/common/providers';
@@ -31,8 +31,8 @@ import { Filter, Meta } from '@app/common/decorators';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('coins')
-@Controller('coins')
+@ApiTags(Collection.Coins)
+@Controller(Collection.Coins)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -43,7 +43,7 @@ export class CoinsController extends ControllerClass<Coin, CoinDto> implements C
   }
 
   @Get('count')
-  @Cache('coins', 'fill')
+  @Cache(Collection.Coins, 'fill')
   @SetScope(Scope.ReadFinancialCoins)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.FinancialCoins)
@@ -54,7 +54,7 @@ export class CoinsController extends ControllerClass<Coin, CoinDto> implements C
 
   @Post()
   @ShipStrategy('create')
-  @Cache('coins', 'flush')
+  @Cache(Collection.Coins, 'flush')
   @SetScope(Scope.WriteFinancialCoins)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialCoins)
@@ -64,7 +64,7 @@ export class CoinsController extends ControllerClass<Coin, CoinDto> implements C
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache('coins', 'flush')
+  @Cache(Collection.Coins, 'flush')
   @SetScope(Scope.WriteFinancialCoins)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialCoins)
@@ -73,10 +73,10 @@ export class CoinsController extends ControllerClass<Coin, CoinDto> implements C
   }
 
   @Get()
-  @Cache('coins', 'fill')
+  @Cache(Collection.Coins, 'fill')
   @SetScope(Scope.ReadFinancialCoins)
-  @SetPolicy(Action.Read, Resource.FinancialCoins)
   @ApiQuery({ type: FilterDto, required: false })
+  @SetPolicy(Action.Read, Resource.FinancialCoins)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   find(@Meta() meta: Metadata, @Filter() filter: FilterDto<Coin>): Observable<CoinItemsSerializer> {
     return super.find(meta, filter);
@@ -84,15 +84,15 @@ export class CoinsController extends ControllerClass<Coin, CoinDto> implements C
 
   @Get('cursor')
   @SetScope(Scope.ReadFinancialCoins)
-  @SetPolicy(Action.Read, Resource.FinancialCoins)
   @ApiQuery({ type: FilterDto, required: false })
+  @SetPolicy(Action.Read, Resource.FinancialCoins)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   cursor(@Meta() meta: Metadata, @Filter() filter: FilterDto<Coin>): Observable<CoinSerializer> {
     return super.cursor(meta, filter);
   }
 
   @Get(':id')
-  @Cache('coins', 'fill')
+  @Cache(Collection.Coins, 'fill')
   @SetScope(Scope.ReadFinancialCoins)
   @SetPolicy(Action.Read, Resource.FinancialCoins)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -108,7 +108,7 @@ export class CoinsController extends ControllerClass<Coin, CoinDto> implements C
   }
 
   @Delete(':id')
-  @Cache('coins', 'flush')
+  @Cache(Collection.Coins, 'flush')
   @SetScope(Scope.WriteFinancialCoins)
   @SetPolicy(Action.Delete, Resource.FinancialCoins)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -124,7 +124,7 @@ export class CoinsController extends ControllerClass<Coin, CoinDto> implements C
   }
 
   @Put(':id/restore')
-  @Cache('coins', 'flush')
+  @Cache(Collection.Coins, 'flush')
   @SetScope(Scope.WriteFinancialCoins)
   @SetPolicy(Action.Restore, Resource.FinancialCoins)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -140,7 +140,7 @@ export class CoinsController extends ControllerClass<Coin, CoinDto> implements C
   }
 
   @Delete(':id/destroy')
-  @Cache('coins', 'flush')
+  @Cache(Collection.Coins, 'flush')
   @SetScope(Scope.ManageFinancialCoins)
   @SetPolicy(Action.Destroy, Resource.FinancialCoins)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -157,7 +157,7 @@ export class CoinsController extends ControllerClass<Coin, CoinDto> implements C
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache('coins', 'flush')
+  @Cache(Collection.Coins, 'flush')
   @SetScope(Scope.WriteFinancialCoins)
   @SetPolicy(Action.Update, Resource.FinancialCoins)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -175,7 +175,7 @@ export class CoinsController extends ControllerClass<Coin, CoinDto> implements C
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache('coins', 'flush')
+  @Cache(Collection.Coins, 'flush')
   @SetScope(Scope.ManageFinancialCoins)
   @SetPolicy(Action.Update, Resource.FinancialCoins)
   @ApiQuery({ type: QueryFilterDto, required: false })

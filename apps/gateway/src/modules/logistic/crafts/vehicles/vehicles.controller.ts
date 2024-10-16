@@ -29,10 +29,10 @@ import { Controller as ControllerInterface, Metadata, Vehicle, VehicleDto } from
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { getMessageEvent, refineFilterQuery } from '@app/common/utils';
 import { Controller as ControllerClass } from '@app/common/classes';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { LogisticProvider } from '@app/common/providers';
@@ -41,9 +41,9 @@ import { Response } from 'express';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('vehicles')
-@Controller('vehicles')
 @UsePipes(ValidationPipe)
+@ApiTags(Collection.Vehicles)
+@Controller(Collection.Vehicles)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -53,7 +53,7 @@ export class VehiclesController extends ControllerClass<Vehicle, VehicleDto> imp
   }
 
   @Get('count')
-  @Cache('vehicles', 'fill')
+  @Cache(Collection.Vehicles, 'fill')
   @SetScope(Scope.ReadLogisticVehicles)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.LogisticVehicles)
@@ -64,7 +64,7 @@ export class VehiclesController extends ControllerClass<Vehicle, VehicleDto> imp
 
   @Post()
   @ShipStrategy('create')
-  @Cache('vehicles', 'flush')
+  @Cache(Collection.Vehicles, 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticVehicles)
@@ -74,7 +74,7 @@ export class VehiclesController extends ControllerClass<Vehicle, VehicleDto> imp
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache('vehicles', 'flush')
+  @Cache(Collection.Vehicles, 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticVehicles)
@@ -83,10 +83,10 @@ export class VehiclesController extends ControllerClass<Vehicle, VehicleDto> imp
   }
 
   @Get()
-  @Cache('vehicles', 'fill')
+  @Cache(Collection.Vehicles, 'fill')
   @SetScope(Scope.ReadLogisticVehicles)
-  @SetPolicy(Action.Read, Resource.LogisticVehicles)
   @ApiQuery({ type: FilterDto, required: false })
+  @SetPolicy(Action.Read, Resource.LogisticVehicles)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   find(@Meta() meta: Metadata, @Filter() filter: FilterDto<Vehicle>): Observable<VehicleItemsSerializer> {
     return super.find(meta, filter);
@@ -112,7 +112,7 @@ export class VehiclesController extends ControllerClass<Vehicle, VehicleDto> imp
   }
 
   @Get(':id')
-  @Cache('vehicles', 'fill')
+  @Cache(Collection.Vehicles, 'fill')
   @SetScope(Scope.ReadLogisticVehicles)
   @SetPolicy(Action.Read, Resource.LogisticVehicles)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -128,7 +128,7 @@ export class VehiclesController extends ControllerClass<Vehicle, VehicleDto> imp
   }
 
   @Delete(':id')
-  @Cache('vehicles', 'flush')
+  @Cache(Collection.Vehicles, 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
   @SetPolicy(Action.Delete, Resource.LogisticVehicles)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -144,7 +144,7 @@ export class VehiclesController extends ControllerClass<Vehicle, VehicleDto> imp
   }
 
   @Put(':id/restore')
-  @Cache('vehicles', 'flush')
+  @Cache(Collection.Vehicles, 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
   @SetPolicy(Action.Restore, Resource.LogisticVehicles)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -160,7 +160,7 @@ export class VehiclesController extends ControllerClass<Vehicle, VehicleDto> imp
   }
 
   @Delete(':id/destroy')
-  @Cache('vehicles', 'flush')
+  @Cache(Collection.Vehicles, 'flush')
   @SetScope(Scope.ManageLogisticVehicles)
   @SetPolicy(Action.Destroy, Resource.LogisticVehicles)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -177,7 +177,7 @@ export class VehiclesController extends ControllerClass<Vehicle, VehicleDto> imp
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache('vehicles', 'flush')
+  @Cache(Collection.Vehicles, 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
   @SetPolicy(Action.Update, Resource.LogisticVehicles)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -195,7 +195,7 @@ export class VehiclesController extends ControllerClass<Vehicle, VehicleDto> imp
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache('vehicles', 'flush')
+  @Cache(Collection.Vehicles, 'flush')
   @SetScope(Scope.ManageLogisticVehicles)
   @SetPolicy(Action.Update, Resource.LogisticVehicles)
   @ApiQuery({ type: QueryFilterDto, required: false })

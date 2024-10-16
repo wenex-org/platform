@@ -5,10 +5,10 @@ import { Controller as ControllerInterface, Metadata, Saga, SagaDto } from '@app
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { SpecialProvider } from '@app/common/providers';
@@ -27,7 +27,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements Con
   }
 
   @Query(() => TotalSerializer)
-  @Cache('sagas', 'fill')
+  @Cache(Collection.Sagas, 'fill')
   @SetScope(Scope.ReadSpecialSagas)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.SpecialSagas)
@@ -37,7 +37,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements Con
 
   @Mutation(() => SagaDataSerializer)
   @ShipStrategy('create')
-  @Cache('sagas', 'flush')
+  @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.WriteSpecialSagas)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialSagas)
@@ -47,7 +47,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements Con
 
   @Mutation(() => SagaItemsSerializer)
   @ShipStrategy('create')
-  @Cache('sagas', 'flush')
+  @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.WriteSpecialSagas)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialSagas)
@@ -56,7 +56,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements Con
   }
 
   @Query(() => SagaItemsSerializer)
-  @Cache('sagas', 'fill')
+  @Cache(Collection.Sagas, 'fill')
   @SetScope(Scope.ReadSpecialSagas)
   @SetPolicy(Action.Read, Resource.SpecialSagas)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -65,7 +65,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements Con
   }
 
   @Query(() => SagaDataSerializer)
-  @Cache('sagas', 'fill')
+  @Cache(Collection.Sagas, 'fill')
   @SetScope(Scope.ReadSpecialSagas)
   @SetPolicy(Action.Read, Resource.SpecialSagas)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -80,7 +80,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements Con
   }
 
   @Mutation(() => SagaDataSerializer)
-  @Cache('sagas', 'flush')
+  @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.WriteSpecialSagas)
   @SetPolicy(Action.Delete, Resource.SpecialSagas)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -95,7 +95,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements Con
   }
 
   @Mutation(() => SagaDataSerializer)
-  @Cache('sagas', 'flush')
+  @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.WriteSpecialSagas)
   @SetPolicy(Action.Restore, Resource.SpecialSagas)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -110,7 +110,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements Con
   }
 
   @Mutation(() => SagaDataSerializer)
-  @Cache('sagas', 'flush')
+  @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.ManageSpecialSagas)
   @SetPolicy(Action.Destroy, Resource.SpecialSagas)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -126,7 +126,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements Con
 
   @Mutation(() => SagaDataSerializer)
   @ShipStrategy('update')
-  @Cache('sagas', 'flush')
+  @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.WriteSpecialSagas)
   @SetPolicy(Action.Update, Resource.SpecialSagas)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -143,7 +143,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements Con
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @Cache('sagas', 'flush')
+  @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.ManageSpecialSagas)
   @SetPolicy(Action.Update, Resource.SpecialSagas)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

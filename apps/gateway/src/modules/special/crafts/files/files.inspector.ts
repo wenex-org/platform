@@ -13,9 +13,9 @@ import {
 } from '@nestjs/common';
 import { ParseIdPipe, ParseRefPipe, ParseResizePipe, ParseRotatePipe, Resize, Rotate, ValidationPipe } from '@app/common/pipes';
 import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { GatewayInterceptors } from '@app/common/interceptors';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SetPolicy, SetScope } from '@app/common/metadatas';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
@@ -30,9 +30,9 @@ import sharp from 'sharp';
 import { FilesService } from './files.service';
 
 @ApiBearerAuth()
-@ApiTags('files')
-@Controller('files')
 @UsePipes(ValidationPipe)
+@ApiTags(Collection.Files)
+@Controller(Collection.Files)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())

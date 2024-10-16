@@ -26,10 +26,10 @@ import { AuthorityInterceptor, FilterInterceptor, GatewayInterceptors, WriteInte
 import { Controller as ControllerInterface, Metadata, Account, AccountDto } from '@app/common/interfaces';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { FinancialProvider } from '@app/common/providers';
@@ -38,9 +38,9 @@ import { Filter, Meta } from '@app/common/decorators';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('accounts')
-@Controller('accounts')
 @UsePipes(ValidationPipe)
+@ApiTags(Collection.Accounts)
+@Controller(Collection.Accounts)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -50,7 +50,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Get('count')
-  @Cache('accounts', 'fill')
+  @Cache(Collection.Accounts, 'fill')
   @SetScope(Scope.ReadFinancialAccounts)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.FinancialAccounts)
@@ -61,7 +61,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
 
   @Post()
   @ShipStrategy('create')
-  @Cache('accounts', 'flush')
+  @Cache(Collection.Accounts, 'flush')
   @SetScope(Scope.WriteFinancialAccounts)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialAccounts)
@@ -71,7 +71,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache('accounts', 'flush')
+  @Cache(Collection.Accounts, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteFinancialAccounts)
   @SetPolicy(Action.Create, Resource.FinancialAccounts)
@@ -80,7 +80,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Get()
-  @Cache('accounts', 'fill')
+  @Cache(Collection.Accounts, 'fill')
   @SetScope(Scope.ReadFinancialAccounts)
   @SetPolicy(Action.Read, Resource.FinancialAccounts)
   @ApiQuery({ type: FilterDto, required: false })
@@ -91,15 +91,15 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
 
   @Get('cursor')
   @SetScope(Scope.ReadFinancialAccounts)
-  @SetPolicy(Action.Read, Resource.FinancialAccounts)
   @ApiQuery({ type: FilterDto, required: false })
+  @SetPolicy(Action.Read, Resource.FinancialAccounts)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   cursor(@Meta() meta: Metadata, @Filter() filter: FilterDto<Account>): Observable<AccountSerializer> {
     return super.cursor(meta, filter);
   }
 
   @Get(':id')
-  @Cache('accounts', 'fill')
+  @Cache(Collection.Accounts, 'fill')
   @SetScope(Scope.ReadFinancialAccounts)
   @SetPolicy(Action.Read, Resource.FinancialAccounts)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -115,7 +115,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Delete(':id')
-  @Cache('accounts', 'flush')
+  @Cache(Collection.Accounts, 'flush')
   @SetScope(Scope.WriteFinancialAccounts)
   @SetPolicy(Action.Delete, Resource.FinancialAccounts)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -131,7 +131,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Put(':id/restore')
-  @Cache('accounts', 'flush')
+  @Cache(Collection.Accounts, 'flush')
   @SetScope(Scope.WriteFinancialAccounts)
   @SetPolicy(Action.Restore, Resource.FinancialAccounts)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -147,7 +147,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Delete(':id/destroy')
-  @Cache('accounts', 'flush')
+  @Cache(Collection.Accounts, 'flush')
   @SetScope(Scope.ManageFinancialAccounts)
   @SetPolicy(Action.Destroy, Resource.FinancialAccounts)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -164,7 +164,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache('accounts', 'flush')
+  @Cache(Collection.Accounts, 'flush')
   @SetScope(Scope.WriteFinancialAccounts)
   @SetPolicy(Action.Update, Resource.FinancialAccounts)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -182,7 +182,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache('accounts', 'flush')
+  @Cache(Collection.Accounts, 'flush')
   @SetScope(Scope.ManageFinancialAccounts)
   @SetPolicy(Action.Update, Resource.FinancialAccounts)
   @ApiQuery({ type: QueryFilterDto, required: false })

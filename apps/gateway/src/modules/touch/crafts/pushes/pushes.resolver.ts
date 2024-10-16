@@ -5,10 +5,10 @@ import { Controller as ControllerInterface, Metadata, Push, PushDto } from '@app
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { TouchProvider } from '@app/common/providers';
@@ -27,8 +27,8 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements Co
   }
 
   @Query(() => TotalSerializer)
-  @Cache('push', 'fill')
   @SetScope(Scope.ReadTouchPushes)
+  @Cache(Collection.Pushes, 'fill')
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.TouchPushes)
   countPush(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
@@ -37,8 +37,8 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements Co
 
   @Mutation(() => PushDataSerializer)
   @ShipStrategy('create')
-  @Cache('push', 'flush')
   @SetScope(Scope.WriteTouchPushes)
+  @Cache(Collection.Pushes, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchPushes)
   createPush(@Meta() meta: Metadata, @Args('data') data: CreatePushDto): Observable<PushDataSerializer> {
@@ -47,8 +47,8 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements Co
 
   @Mutation(() => PushItemsSerializer)
   @ShipStrategy('create')
-  @Cache('push', 'flush')
   @SetScope(Scope.WriteTouchPushes)
+  @Cache(Collection.Pushes, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchPushes)
   createBulkPush(@Meta() meta: Metadata, @Args('data') data: CreatePushItemsDto): Observable<PushItemsSerializer> {
@@ -56,8 +56,8 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements Co
   }
 
   @Query(() => PushItemsSerializer)
-  @Cache('push', 'fill')
   @SetScope(Scope.ReadTouchPushes)
+  @Cache(Collection.Pushes, 'fill')
   @SetPolicy(Action.Read, Resource.TouchPushes)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findPush(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Push>): Observable<PushItemsSerializer> {
@@ -65,8 +65,8 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements Co
   }
 
   @Query(() => PushDataSerializer)
-  @Cache('push', 'fill')
   @SetScope(Scope.ReadTouchPushes)
+  @Cache(Collection.Pushes, 'fill')
   @SetPolicy(Action.Read, Resource.TouchPushes)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findOnePush(
@@ -80,8 +80,8 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements Co
   }
 
   @Mutation(() => PushDataSerializer)
-  @Cache('push', 'flush')
   @SetScope(Scope.WriteTouchPushes)
+  @Cache(Collection.Pushes, 'flush')
   @SetPolicy(Action.Delete, Resource.TouchPushes)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   deleteOnePush(
@@ -95,8 +95,8 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements Co
   }
 
   @Mutation(() => PushDataSerializer)
-  @Cache('push', 'flush')
   @SetScope(Scope.WriteTouchPushes)
+  @Cache(Collection.Pushes, 'flush')
   @SetPolicy(Action.Restore, Resource.TouchPushes)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   restoreOnePush(
@@ -110,7 +110,7 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements Co
   }
 
   @Mutation(() => PushDataSerializer)
-  @Cache('push', 'flush')
+  @Cache(Collection.Pushes, 'flush')
   @SetScope(Scope.ManageTouchPushes)
   @SetPolicy(Action.Destroy, Resource.TouchPushes)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -126,8 +126,8 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements Co
 
   @Mutation(() => PushDataSerializer)
   @ShipStrategy('update')
-  @Cache('push', 'flush')
   @SetScope(Scope.WriteTouchPushes)
+  @Cache(Collection.Pushes, 'flush')
   @SetPolicy(Action.Update, Resource.TouchPushes)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateOnePush(
@@ -143,7 +143,7 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements Co
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @Cache('push', 'flush')
+  @Cache(Collection.Pushes, 'flush')
   @SetScope(Scope.ManageTouchPushes)
   @SetPolicy(Action.Update, Resource.TouchPushes)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

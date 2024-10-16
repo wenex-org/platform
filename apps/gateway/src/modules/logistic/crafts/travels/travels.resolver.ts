@@ -5,10 +5,10 @@ import { Controller as ControllerInterface, Metadata, Travel, TravelDto } from '
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { LogisticProvider } from '@app/common/providers';
@@ -27,7 +27,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   }
 
   @Query(() => TotalSerializer)
-  @Cache('travels', 'fill')
+  @Cache(Collection.Travels, 'fill')
   @SetScope(Scope.ReadLogisticTravels)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.LogisticTravels)
@@ -37,7 +37,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
 
   @Mutation(() => TravelDataSerializer)
   @ShipStrategy('create')
-  @Cache('travels', 'flush')
+  @Cache(Collection.Travels, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticTravels)
@@ -47,7 +47,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
 
   @Mutation(() => TravelItemsSerializer)
   @ShipStrategy('create')
-  @Cache('travels', 'flush')
+  @Cache(Collection.Travels, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticTravels)
@@ -56,7 +56,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   }
 
   @Query(() => TravelItemsSerializer)
-  @Cache('travels', 'fill')
+  @Cache(Collection.Travels, 'fill')
   @SetScope(Scope.ReadLogisticTravels)
   @SetPolicy(Action.Read, Resource.LogisticTravels)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -65,7 +65,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   }
 
   @Query(() => TravelDataSerializer)
-  @Cache('travels', 'fill')
+  @Cache(Collection.Travels, 'fill')
   @SetScope(Scope.ReadLogisticTravels)
   @SetPolicy(Action.Read, Resource.LogisticTravels)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -80,7 +80,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   }
 
   @Mutation(() => TravelDataSerializer)
-  @Cache('travels', 'flush')
+  @Cache(Collection.Travels, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @SetPolicy(Action.Delete, Resource.LogisticTravels)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -95,7 +95,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   }
 
   @Mutation(() => TravelDataSerializer)
-  @Cache('travels', 'flush')
+  @Cache(Collection.Travels, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @SetPolicy(Action.Restore, Resource.LogisticTravels)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -110,7 +110,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   }
 
   @Mutation(() => TravelDataSerializer)
-  @Cache('travels', 'flush')
+  @Cache(Collection.Travels, 'flush')
   @SetScope(Scope.ManageLogisticTravels)
   @SetPolicy(Action.Destroy, Resource.LogisticTravels)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -126,7 +126,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
 
   @Mutation(() => TravelDataSerializer)
   @ShipStrategy('update')
-  @Cache('travels', 'flush')
+  @Cache(Collection.Travels, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @SetPolicy(Action.Update, Resource.LogisticTravels)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -143,7 +143,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @Cache('travels', 'flush')
+  @Cache(Collection.Travels, 'flush')
   @SetScope(Scope.ManageLogisticTravels)
   @SetPolicy(Action.Update, Resource.LogisticTravels)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

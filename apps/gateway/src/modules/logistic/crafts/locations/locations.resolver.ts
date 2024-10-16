@@ -12,10 +12,10 @@ import { Controller as ControllerInterface, Metadata, Location, LocationDto } fr
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { LogisticProvider } from '@app/common/providers';
@@ -37,7 +37,7 @@ export class LocationsResolver
   }
 
   @Query(() => TotalSerializer)
-  @Cache('locations', 'fill')
+  @Cache(Collection.Locations, 'fill')
   @SetScope(Scope.ReadLogisticLocations)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.LogisticLocations)
@@ -47,9 +47,9 @@ export class LocationsResolver
 
   @Mutation(() => LocationDataSerializer)
   @ShipStrategy('create')
-  @Cache('locations', 'flush')
-  @SetScope(Scope.WriteLogisticLocations)
+  @Cache(Collection.Locations, 'flush')
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteLogisticLocations)
   @SetPolicy(Action.Create, Resource.LogisticLocations)
   createLocation(@Meta() meta: Metadata, @Args('data') data: CreateLocationDto): Observable<LocationDataSerializer> {
     return super.create(meta, data);
@@ -57,16 +57,16 @@ export class LocationsResolver
 
   @Mutation(() => LocationItemsSerializer)
   @ShipStrategy('create')
-  @Cache('locations', 'flush')
-  @SetScope(Scope.WriteLogisticLocations)
+  @Cache(Collection.Locations, 'flush')
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteLogisticLocations)
   @SetPolicy(Action.Create, Resource.LogisticLocations)
   createBulkLocation(@Meta() meta: Metadata, @Args('data') data: CreateLocationItemsDto): Observable<LocationItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
   @Query(() => LocationItemsSerializer)
-  @Cache('locations', 'fill')
+  @Cache(Collection.Locations, 'fill')
   @SetScope(Scope.ReadLogisticLocations)
   @SetPolicy(Action.Read, Resource.LogisticLocations)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -75,7 +75,7 @@ export class LocationsResolver
   }
 
   @Query(() => LocationDataSerializer)
-  @Cache('locations', 'fill')
+  @Cache(Collection.Locations, 'fill')
   @SetScope(Scope.ReadLogisticLocations)
   @SetPolicy(Action.Read, Resource.LogisticLocations)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -90,7 +90,7 @@ export class LocationsResolver
   }
 
   @Mutation(() => LocationDataSerializer)
-  @Cache('locations', 'flush')
+  @Cache(Collection.Locations, 'flush')
   @SetScope(Scope.WriteLogisticLocations)
   @SetPolicy(Action.Delete, Resource.LogisticLocations)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -105,7 +105,7 @@ export class LocationsResolver
   }
 
   @Mutation(() => LocationDataSerializer)
-  @Cache('locations', 'flush')
+  @Cache(Collection.Locations, 'flush')
   @SetScope(Scope.WriteLogisticLocations)
   @SetPolicy(Action.Restore, Resource.LogisticLocations)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -120,7 +120,7 @@ export class LocationsResolver
   }
 
   @Mutation(() => LocationDataSerializer)
-  @Cache('locations', 'flush')
+  @Cache(Collection.Locations, 'flush')
   @SetScope(Scope.ManageLogisticLocations)
   @SetPolicy(Action.Destroy, Resource.LogisticLocations)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -136,7 +136,7 @@ export class LocationsResolver
 
   @Mutation(() => LocationDataSerializer)
   @ShipStrategy('update')
-  @Cache('locations', 'flush')
+  @Cache(Collection.Locations, 'flush')
   @SetScope(Scope.WriteLogisticLocations)
   @SetPolicy(Action.Update, Resource.LogisticLocations)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -153,7 +153,7 @@ export class LocationsResolver
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @Cache('locations', 'flush')
+  @Cache(Collection.Locations, 'flush')
   @SetScope(Scope.ManageLogisticLocations)
   @SetPolicy(Action.Update, Resource.LogisticLocations)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

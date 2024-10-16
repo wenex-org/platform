@@ -2,7 +2,7 @@ import { Body, Controller, Post, UseFilters, UseGuards, UseInterceptors, UsePipe
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/interceptors';
 import { SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
-import { Action, Resource, Scope } from '@app/common/enums';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { Metadata, Result } from '@app/common/interfaces';
@@ -13,9 +13,9 @@ import { ValidationPipe } from '@app/common/pipes';
 import { Meta } from '@app/common/decorators';
 
 @ApiBearerAuth()
-@ApiTags('pushes')
-@Controller('pushes')
 @UsePipes(ValidationPipe)
+@ApiTags(Collection.Pushes)
+@Controller(Collection.Pushes)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())

@@ -12,10 +12,10 @@ import { Controller as ControllerInterface, Metadata, Setting, SettingDto } from
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/metadatas';
 import { ParseIdPipe, ParseRefPipe, ValidationPipe } from '@app/common/pipes';
+import { Action, Collection, Resource, Scope } from '@app/common/enums';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/guards';
 import { Controller as ControllerClass } from '@app/common/classes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Action, Resource, Scope } from '@app/common/enums';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { ContextProvider } from '@app/common/providers';
@@ -34,7 +34,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   }
 
   @Query(() => TotalSerializer)
-  @Cache('settings', 'fill')
+  @Cache(Collection.Settings, 'fill')
   @SetScope(Scope.ReadContextSettings)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ContextSettings)
@@ -44,7 +44,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
 
   @Mutation(() => SettingDataSerializer)
   @ShipStrategy('create')
-  @Cache('settings', 'flush')
+  @Cache(Collection.Settings, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContextSettings)
@@ -54,7 +54,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
 
   @Mutation(() => SettingItemsSerializer)
   @ShipStrategy('create')
-  @Cache('settings', 'flush')
+  @Cache(Collection.Settings, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContextSettings)
@@ -63,7 +63,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   }
 
   @Query(() => SettingItemsSerializer)
-  @Cache('settings', 'fill')
+  @Cache(Collection.Settings, 'fill')
   @SetScope(Scope.ReadContextSettings)
   @SetPolicy(Action.Read, Resource.ContextSettings)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -72,7 +72,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   }
 
   @Query(() => SettingDataSerializer)
-  @Cache('settings', 'fill')
+  @Cache(Collection.Settings, 'fill')
   @SetScope(Scope.ReadContextSettings)
   @SetPolicy(Action.Read, Resource.ContextSettings)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -87,7 +87,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   }
 
   @Mutation(() => SettingDataSerializer)
-  @Cache('settings', 'flush')
+  @Cache(Collection.Settings, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @SetPolicy(Action.Delete, Resource.ContextSettings)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -102,7 +102,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   }
 
   @Mutation(() => SettingDataSerializer)
-  @Cache('settings', 'flush')
+  @Cache(Collection.Settings, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @SetPolicy(Action.Restore, Resource.ContextSettings)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -117,7 +117,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   }
 
   @Mutation(() => SettingDataSerializer)
-  @Cache('settings', 'flush')
+  @Cache(Collection.Settings, 'flush')
   @SetScope(Scope.ManageContextSettings)
   @SetPolicy(Action.Destroy, Resource.ContextSettings)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -133,7 +133,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
 
   @Mutation(() => SettingDataSerializer)
   @ShipStrategy('update')
-  @Cache('settings', 'flush')
+  @Cache(Collection.Settings, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @SetPolicy(Action.Update, Resource.ContextSettings)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -150,7 +150,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @Cache('settings', 'flush')
+  @Cache(Collection.Settings, 'flush')
   @SetScope(Scope.ManageContextSettings)
   @SetPolicy(Action.Update, Resource.ContextSettings)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
