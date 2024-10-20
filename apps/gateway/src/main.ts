@@ -15,11 +15,10 @@ import { APP } from '@app/common/consts';
 import { initTracing } from 'tracing';
 import helmet from 'helmet';
 
+prototyping('GATEWAY');
 import { AppModule } from './app.module';
 
 const { GATEWAY } = APP;
-
-prototyping();
 async function bootstrap() {
   if (NODE_ENV().IS_PROD) {
     require('elastic-apm-node').start();
