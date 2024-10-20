@@ -669,8 +669,8 @@ type SagaHistorySerializer {
   tags: [String!]
   rand: String!
   timestamp: String!
-  fn: String!
-  tb: String!
+  action: String!
+  resource: String!
   req: JSON!
   res: JSON!
   saga: String!
@@ -2370,8 +2370,8 @@ input UpdateSagaDto {
 }
 
 input CreateSagaHistoryDto {
-  fn: String!
-  tb: String!
+  action: String!
+  resource: String!
   req: JSON
   res: JSON
   saga: String!
@@ -2383,8 +2383,8 @@ input CreateSagaHistoryItemsDto {
 }
 
 input UpdateSagaHistoryDto {
-  fn: String
-  tb: String
+  actions: String
+  resource: String
   req: JSON
   res: JSON
   saga: String
