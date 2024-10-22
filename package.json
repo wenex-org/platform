@@ -33,8 +33,8 @@
     "broker:init": "npm run command -- broker init",
     "broker:debug": "npm run command:debug -- broker",
     "doc": "npx compodoc -p tsconfig.json -n \"Wenex Documentation\" -d ./docs -s",
-    "cdc:check": "npx madge --circular --extensions ts ./",
-    "cdc:export": "npx madge --circular --extensions ts --image circular-dependencies.png ./"
+    "cd:check": "npx madge --circular --extensions ts ./",
+    "cd:export": "npx madge --circular --extensions ts --image circular-dependencies.png ./"
   },
   "dependencies": {
     "@apollo/server": "^4.10.4",
