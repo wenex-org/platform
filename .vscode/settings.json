@@ -5,6 +5,7 @@
     "Acked",
     "bitcoinjs",
     "bullmq",
+    "cdep",
     "clientid",
     "clientinfo",
     "compodoc",
