@@ -16,6 +16,14 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@app/command": ["libs/command/src"],
+      "@app/command/*": ["libs/command/src/*"],
+      "@app/common": ["libs/common/src"],
+      "@app/common/*": ["libs/common/src/*"],
+      "@app/module": ["libs/module/src"],
+      "@app/module/*": ["libs/module/src/*"]
+    }
   }
 }

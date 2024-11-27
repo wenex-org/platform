@@ -2,6 +2,8 @@
   "recommendations": [
     "streetsidesoftware.code-spell-checker",
     "kisstkondoros.vscode-codemetrics",
-    "dbaeumer.vscode-eslint"
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "pbkit.vscode-pbkit"
   ]
 }
