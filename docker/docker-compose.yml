@@ -1,0 +1,38 @@
+services:
+  #######################
+  # CACHE
+  #######################
+
+  # Redis
+  redis:
+    extends:
+      file: docker-compose.rds.yml
+      service: redis
+
+  #######################
+  # DATABASE
+  #######################
+
+  mongodb-primary:
+    extends:
+      file: docker-compose.mg.yml
+      service: mongodb-primary
+
+  mongodb-secondary:
+    extends:
+      file: docker-compose.mg.yml
+      service: mongodb-secondary
+    depends_on:
+      - mongodb-primary
+
+  mongodb-arbiter:
+    extends:
+      file: docker-compose.mg.yml
+      service: mongodb-arbiter
+    depends_on:
+      - mongodb-primary
+      - mongodb-secondary
+
+networks:
+  localnet:
+    driver: bridge
