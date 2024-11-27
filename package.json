@@ -27,7 +27,7 @@
     "madge": "madge --circular ./dist",
     "madge:ts": "madge --circular --ts-config ./tsconfig.json --extensions ts ./",
     "madge:report": "madge --circular --image circular-dependencies.svg ./dist",
-    "madge:report:ts": "madge --circular --ts-config ./tsconfig.json --extensions ts --image circular-dependencies.svg ./",
+    "madge:report:ts": "madge --circular --ts-config ./tsconfig.json --extensions ts --image circular-dependencies.png ./",
     "git": "bash ./scripts/git-submodule.sh",
     "git:clone": "git submodule update --init --recursive",
     "doc": "npx compodoc -p tsconfig.json -n \"Documentation\" -d ./docs -s"
