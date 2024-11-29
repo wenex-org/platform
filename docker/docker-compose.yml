@@ -3,7 +3,6 @@ services:
   # CACHE
   #######################
 
-  # Redis
   redis:
     extends:
       file: docker-compose.rds.yml
