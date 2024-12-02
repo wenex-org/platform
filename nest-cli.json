@@ -5,6 +5,8 @@
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": true,
+    "watchAssets": true,
+    "assets": ["**/*.proto"],
     "tsConfigPath": "apps/gateway/tsconfig.app.json"
   },
   "projects": {

@@ -15,6 +15,7 @@ const config: Config = {
   coverageDirectory: './coverage',
   coveragePathIgnorePatterns: ['.spec.ts'],
   testEnvironment: 'node',
+  setupFilesAfterEnv: ['./jest.setup.ts'],
   roots: ['<rootDir>/apps/', '<rootDir>/libs/'],
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {

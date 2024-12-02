@@ -4,6 +4,7 @@
     "kisstkondoros.vscode-codemetrics",
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
-    "pbkit.vscode-pbkit"
+    "pbkit.vscode-pbkit",
+    "mintlify.document"
   ]
 }
