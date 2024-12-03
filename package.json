@@ -12,7 +12,8 @@
   },
   "scripts": {
     "build": "nest build",
-    "prepare": "husky && npm run script:setup",
+    "prepare": "npm run script:setup",
+    "preinstall": "husky",
     "script:setup": "bash ./scripts/setup.sh",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
