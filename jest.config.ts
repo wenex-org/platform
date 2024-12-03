@@ -13,7 +13,7 @@ const config: Config = {
   },
   collectCoverageFrom: ['**/*.(t|j)s'],
   coverageDirectory: './coverage',
-  coveragePathIgnorePatterns: ['.e2e-spec.ts'],
+  coveragePathIgnorePatterns: ['index.ts', '.e2e-spec.ts', '.dto.ts', '.serializer.ts'],
   testEnvironment: 'node',
   setupFilesAfterEnv: ['./jest.setup.ts'],
   roots: ['<rootDir>/apps/', '<rootDir>/libs/'],
