@@ -30,7 +30,7 @@
     "madge:report:ts": "madge --circular --ts-config ./tsconfig.json --extensions ts --image circular-dependencies.png ./",
     "git": "bash ./scripts/git-submodule.sh",
     "git:clone": "git submodule update --init --recursive",
-    "doc": "npx compodoc -p tsconfig.json -n \"Documentation\" -d ./docs -s"
+    "doc": "npx @compodoc/compodoc -p tsconfig.json -n \"Documentation\" -d ./docs -s"
   },
   "dependencies": {
     "@apollo/server": "^4.11.2",
@@ -43,6 +43,7 @@
     "@nestjs/microservices": "^10.4.12",
     "@nestjs/mongoose": "^10.1.0",
     "@nestjs/platform-express": "^10.4.12",
+    "@nestjs/swagger": "^8.0.7",
     "@node-rs/bcrypt": "^1.10.5",
     "base-x": "^5.0.0",
     "class-transformer": "^0.5.1",
@@ -51,6 +52,7 @@
     "dotenv": "^16.4.5",
     "geojson": "^0.5.0",
     "graphql": "^16.9.0",
+    "graphql-type-json": "^0.3.2",
     "mongoose": "^8.8.3",
     "naming-conventions-modeler": "^1.4.4",
     "phone": "^3.1.55",
