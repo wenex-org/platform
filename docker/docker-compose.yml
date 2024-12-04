@@ -9,6 +9,15 @@ services:
       service: redis
 
   #######################
+  # STORAGE
+  #######################
+
+  minio:
+    extends:
+      file: docker-compose.mio.yml
+      service: minio
+
+  #######################
   # DATABASE
   #######################
 

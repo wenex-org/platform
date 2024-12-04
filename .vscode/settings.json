@@ -1,4 +1,19 @@
 {
-  "cSpell.words": ["bbox", "bitnami", "ciphertext", "dpdm", "localnet", "nestjs", "QLJSON", "tseslint", "Vahid", "Wenex", "Zipkin"],
+  "cSpell.words": [
+    "abacl",
+    "bbox",
+    "bitnami",
+    "ciphertext",
+    "dpdm",
+    "localnet",
+    "minioadmin",
+    "nestjs",
+    "otpauth",
+    "QLJSON",
+    "tseslint",
+    "Vahid",
+    "Wenex",
+    "Zipkin"
+  ],
   "editor.formatOnSave": true
 }
