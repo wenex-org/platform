@@ -35,13 +35,13 @@
         "tsConfigPath": "apps/gateway/tsconfig.app.json"
       }
     },
-    "services": {
+    "auth": {
       "type": "application",
-      "root": "apps/services",
+      "root": "apps/services/auth",
       "entryFile": "main",
-      "sourceRoot": "apps/services/src",
+      "sourceRoot": "apps/services/auth/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/services/tsconfig.app.json"
+        "tsConfigPath": "apps/services/auth/tsconfig.app.json"
       }
     },
     "workers": {

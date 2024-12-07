@@ -5,14 +5,18 @@
     "bitnami",
     "ciphertext",
     "dpdm",
+    "kafkajs",
     "localnet",
+    "metatype",
     "minioadmin",
     "nestjs",
+    "ntegral",
     "otpauth",
     "QLJSON",
     "tseslint",
     "Vahid",
     "Wenex",
+    "willsoto",
     "Zipkin"
   ],
   "editor.formatOnSave": true
