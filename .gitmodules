@@ -10,3 +10,6 @@
 [submodule "apps/workers"]
 	path = apps/workers
 	url = git@github.com:wenex-org/platform-workers.git
+[submodule "docker"]
+	path = docker
+	url = git@github.com:wenex-org/platform-docker.git
