@@ -7,3 +7,6 @@
 [submodule "protos"]
 	path = protos
 	url = git@github.com:wenex-org/platform-protos.git
+[submodule "apps/workers"]
+	path = apps/workers
+	url = git@github.com:wenex-org/platform-workers.git

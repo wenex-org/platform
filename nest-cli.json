@@ -44,13 +44,13 @@
         "tsConfigPath": "apps/services/auth/tsconfig.app.json"
       }
     },
-    "workers": {
+    "watcher": {
       "type": "application",
-      "root": "apps/workers",
+      "root": "apps/workers/watcher",
       "entryFile": "main",
-      "sourceRoot": "apps/workers/src",
+      "sourceRoot": "apps/workers/watcher/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/workers/tsconfig.app.json"
+        "tsConfigPath": "apps/workers/watcher/tsconfig.app.json"
       }
     },
     "command": {

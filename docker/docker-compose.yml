@@ -41,6 +41,39 @@ services:
       - mongodb-primary
       - mongodb-secondary
 
+  #######################
+  # BROKER
+  #######################
+
+  zookeeper:
+    extends:
+      file: docker-compose.kfk.yml
+      service: zookeeper
+
+  kafka:
+    extends:
+      file: docker-compose.kfk.yml
+      service: kafka
+    depends_on:
+      - zookeeper
+
+  kafka-ui:
+    extends:
+      file: docker-compose.kfk.yml
+      service: kafka-ui
+    depends_on:
+      - zookeeper
+      - connect
+      - kafka
+
+  connect:
+    extends:
+      file: docker-compose.kfk.yml
+      service: connect
+    depends_on:
+      - zookeeper
+      - kafka
+
 networks:
   localnet:
     driver: bridge
