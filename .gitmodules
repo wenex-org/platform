@@ -4,3 +4,6 @@
 [submodule "apps/services"]
 	path = apps/services
 	url = git@github.com:wenex-org/platform-services.git
+[submodule "protos"]
+	path = protos
+	url = git@github.com:wenex-org/platform-protos.git
