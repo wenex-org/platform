@@ -1,0 +1,14 @@
+services:
+  sonarqube:
+    image: sonarqube:lts
+    container_name: sonarqube
+    ports:
+      - 80:9000
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+    networks:
+      - localnet
+
+networks:
+  localnet:
+    driver: bridge
