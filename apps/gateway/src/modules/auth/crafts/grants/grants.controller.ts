@@ -18,9 +18,10 @@ import {
 import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
+import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { Cache, RateLimit, SetScope } from '@app/common/core/metadatas';
+import { FilterDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { GatewayInterceptors } from '@app/common/core/interceptors';
-import { AuthGuard, ScopeGuard } from '@app/common/core/guards';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { GrantSerializer } from '@app/common/serializers/auth';
 import { Grant, GrantDto } from '@app/common/interfaces/auth';
@@ -28,6 +29,7 @@ import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AuthProvider } from '@app/common/providers/auth';
 import { ValidationPipe } from '@app/common/core/pipes';
 import { Collection, Scope } from '@app/common/core';
+import { Filter } from '@app/common/core/decorators';
 import { Response } from 'express';
 import { Observable } from 'rxjs';
 
@@ -37,7 +39,7 @@ import { Observable } from 'rxjs';
 @ApiTags(Collection.Grants)
 @Controller(Collection.Grants)
 @UseFilters(AllExceptionsFilter)
-@UseGuards(AuthGuard, ScopeGuard) // TODO: PolicyGuard)
+@UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class GrantsController extends ControllerClass<Grant, GrantDto> implements IController<Grant, GrantDto> {
   constructor(readonly provider: AuthProvider) {

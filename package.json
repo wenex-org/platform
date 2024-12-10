@@ -4,12 +4,6 @@
   "description": "Wenex Platform",
   "author": "Vahid V. <vhid.vz@gmail.com>",
   "license": "Apache-2.0",
-  "lint-staged": {
-    "*.ts": [
-      "npm run format",
-      "npm run lint"
-    ]
-  },
   "scripts": {
     "build": "nest build",
     "prepare": "npm run script:setup",
@@ -46,6 +40,12 @@
     "git": "bash ./scripts/git-submodule.sh",
     "git:clone": "git submodule update --init --recursive",
     "doc": "npx @compodoc/compodoc -p tsconfig.json -n \"Documentation\" -d ./docs -s"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "npm run format",
+      "npm run lint"
+    ]
   },
   "dependencies": {
     "@apollo/server": "^4.11.2",
@@ -99,7 +99,7 @@
     "mongodb": "^6.11.0",
     "mongoose": "^8.8.3",
     "multer-s3": "^3.0.1",
-    "naming-conventions-modeler": "^1.4.4",
+    "naming-conventions-modeler": "^1.4.6",
     "nest-commander": "^3.15.0",
     "nestjs-minio-client": "^2.2.0",
     "opentelemetry-instrumentation-kafkajs": "^0.41.0",

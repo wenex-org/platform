@@ -162,8 +162,8 @@ importers:
         specifier: ^3.0.1
         version: 3.0.1(@aws-sdk/client-s3@3.705.0)
       naming-conventions-modeler:
-        specifier: ^1.4.4
-        version: 1.4.4
+        specifier: ^1.4.6
+        version: 1.4.6
       nest-commander:
         specifier: ^3.15.0
         version: 3.15.0(@nestjs/common@10.4.12(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.12)(@types/inquirer@8.2.10)(typescript@5.7.2)
@@ -4863,8 +4863,8 @@ packages:
     resolution: {integrity: sha512-avsJQhyd+680gKXyG/sQc0nXaC6rBkPOfyHYcFb9+hdkqQkR9bdnkJ0AMZhke0oesPqIO+mFFJ+IdBc7mst4IA==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
 
-  naming-conventions-modeler@1.4.4:
-    resolution: {integrity: sha512-5fNZeI+fTzwzeZbw/7fjiL9RLmOv8i87ErncKGB22Q1URaxVkQCUlHXFIVNU86DmTgwWKkYpROIMfn1GSpK4Iw==}
+  naming-conventions-modeler@1.4.6:
+    resolution: {integrity: sha512-soXMhLGhi/LkK/CNDHVSUIQW/uWs3GE5zBAAgkSK8kEyxhtW5SN+1zbL4PG/0rNkkqhAOmOlEaM3MDfDeBuupg==}
 
   nanoclone@0.2.1:
     resolution: {integrity: sha512-wynEP02LmIbLpcYw8uBKpcfF6dmg2vcpKqxeH5UcoKEYdExslsdUA4ugFauuaeYdTB76ez6gJW8XAZ6CgkXYxA==}
@@ -12078,7 +12078,7 @@ snapshots:
 
   mute-stream@1.0.0: {}
 
-  naming-conventions-modeler@1.4.4: {}
+  naming-conventions-modeler@1.4.6: {}
 
   nanoclone@0.2.1: {}
 
