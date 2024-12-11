@@ -2,6 +2,7 @@ import { SimpleSpanProcessor, NodeTracerProvider, BatchSpanProcessor } from '@op
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { NestInstrumentation } from '@opentelemetry/instrumentation-nestjs-core';
 import { ExpressInstrumentation } from '@opentelemetry/instrumentation-express';
+import { GraphQLInstrumentation } from '@opentelemetry/instrumentation-graphql';
 import { KafkaJsInstrumentation } from 'opentelemetry-instrumentation-kafkajs';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
@@ -31,7 +32,10 @@ export const initTracing = (modules: ('http' | 'grpc' | 'kafka')[]) => {
 
   const instrumentations: Instrumentation[] = [new ExpressInstrumentation(), new NestInstrumentation()];
 
-  if (modules.includes('http')) instrumentations.push(new HttpInstrumentation());
+  if (modules.includes('http')) {
+    instrumentations.push(new HttpInstrumentation());
+    instrumentations.push(new GraphQLInstrumentation());
+  }
   if (modules.includes('grpc')) instrumentations.push(new GrpcInstrumentation());
   if (modules.includes('kafka')) instrumentations.push(new KafkaJsInstrumentation());
 

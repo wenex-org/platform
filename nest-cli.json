@@ -2,6 +2,8 @@
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
   "sourceRoot": "apps/gateway/src",
+  "root": "apps/gateway",
+  "monorepo": true,
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": true,
@@ -80,7 +82,5 @@
         "tsConfigPath": "libs/module/tsconfig.lib.json"
       }
     }
-  },
-  "monorepo": true,
-  "root": "apps/gateway"
+  }
 }
