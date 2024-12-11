@@ -6,8 +6,8 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "nest build",
-    "prepare": "npm run script:setup",
-    "preinstall": "husky",
+    "prepare": "husky",
+    "preinstall": "npm run script:setup",
     "script:setup": "bash ./scripts/setup.sh",
     "script:proto": "bash ./scripts/proto.sh",
     "script:machine": "bash ./scripts/machine.sh",
