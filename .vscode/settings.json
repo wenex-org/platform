@@ -9,7 +9,9 @@
     "jaegertracing",
     "KAFKACONNECT",
     "kafkajs",
+    "Kavenegar",
     "localnet",
+    "Melipayamak",
     "metadatas",
     "metatype",
     "minioadmin",
@@ -26,6 +28,7 @@
     "sonarqube",
     "tseslint",
     "Vahid",
+    "webpush",
     "Wenex",
     "willsoto",
     "Zipkin"
