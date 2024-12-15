@@ -7,6 +7,7 @@ npm run dpdm:ts ./libs/command/src/main.ts -- --progress >> circular-dependencie
 # Services
 npm run dpdm:ts ./apps/services/auth/src/main.ts -- --progress >> circular-dependencies.txt
 npm run dpdm:ts ./apps/services/domain/src/main.ts -- --progress >> circular-dependencies.txt
+npm run dpdm:ts ./apps/services/context/src/main.ts -- --progress >> circular-dependencies.txt
 
 # Workers
 npm run dpdm:ts ./apps/workers/watcher/src/main.ts -- --progress >> circular-dependencies.txt

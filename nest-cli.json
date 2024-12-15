@@ -55,6 +55,15 @@
         "tsConfigPath": "apps/services/domain/tsconfig.app.json"
       }
     },
+    "context": {
+      "type": "application",
+      "root": "apps/services/context",
+      "entryFile": "main",
+      "sourceRoot": "apps/services/context/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/services/context/tsconfig.app.json"
+      }
+    },
     "watcher": {
       "type": "application",
       "root": "apps/workers/watcher",

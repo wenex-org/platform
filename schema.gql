@@ -8,7 +8,6 @@ type TotalSerializer {
 
 type GrantTimeSerializer {
   duration: Int!
-  cron_exp: String!
 }
 
 type GrantSerializer {
@@ -18,31 +17,12 @@ type GrantSerializer {
   clients: [JSON!]!
   props: JSON
   tags: [String!]
-  id: String!
-  ref: String
-  created_at: Date!
-  created_by: String!
-  created_in: String!
-  updated_at: Date
-  updated_by: String
-  updated_in: String
-  deleted_at: Date
-  deleted_by: String
-  deleted_in: String
-  restored_at: Date
-  restored_by: String
-  restored_in: String
-  description: String
-  version: String!
-  rand: String!
-  timestamp: String!
   action: String!
   object: String!
   field: [String!]
   filter: [String!]
   location: [String!]
   time: [GrantTimeSerializer!]
-  subject: String!
 }
 
 """
@@ -65,28 +45,7 @@ type AppChangeLogSerializer {
   clients: [JSON!]!
   props: JSON
   tags: [String!]
-  id: String!
-  ref: String
-  created_at: Date!
-  created_by: String!
-  created_in: String!
-  updated_at: Date
-  updated_by: String
-  updated_in: String
-  deleted_at: Date
-  deleted_by: String
-  deleted_in: String
-  restored_at: Date
-  restored_by: String
-  restored_in: String
-  description: String
-  version: String!
-  rand: String!
-  timestamp: String!
   changes: [String!]
-  code: String
-  semver: String!
-  deprecation_date: Date
 }
 
 type AppSerializer {
@@ -96,37 +55,9 @@ type AppSerializer {
   clients: [JSON!]!
   props: JSON
   tags: [String!]
-  id: String!
-  ref: String
-  created_at: Date!
-  created_by: String!
-  created_in: String!
-  updated_at: Date
-  updated_by: String
-  updated_in: String
-  deleted_at: Date
-  deleted_by: String
-  deleted_in: String
-  restored_at: Date
-  restored_by: String
-  restored_in: String
-  description: String
-  version: String!
-  rand: String!
-  timestamp: String!
   scopes: [String!]
   grant_types: [GrantType!]
   change_logs: [AppChangeLogSerializer!]
-  type: AppType!
-  cid: String!
-  name: String
-  status: Status!
-  url: String
-  logo: String
-  site: String
-  slogan: String
-  access_token_ttl: Float
-  refresh_token_ttl: Float
 }
 
 enum GrantType {
@@ -134,18 +65,6 @@ enum GrantType {
   refresh_token
   client_credential
   authorization_code
-}
-
-enum AppType {
-  WEB
-  MOBILE
-  DESKTOP
-  APPLICATION
-}
-
-enum Status {
-  ACTIVE
-  INACTIVE
 }
 
 type AppDataSerializer {
@@ -163,27 +82,7 @@ type ClientDomainSerializer {
   clients: [JSON!]!
   props: JSON
   tags: [String!]
-  id: String!
-  ref: String
-  created_at: Date!
-  created_by: String!
-  created_in: String!
-  updated_at: Date
-  updated_by: String
-  updated_in: String
-  deleted_at: Date
-  deleted_by: String
-  deleted_in: String
-  restored_at: Date
-  restored_by: String
-  restored_in: String
-  description: String
-  version: String!
-  rand: String!
-  timestamp: String!
   subjects: [String!]
-  name: String!
-  status: Status!
 }
 
 type ClientServiceSerializer {
@@ -193,41 +92,7 @@ type ClientServiceSerializer {
   clients: [JSON!]!
   props: JSON
   tags: [String!]
-  id: String!
-  ref: String
-  created_at: Date!
-  created_by: String!
-  created_in: String!
-  updated_at: Date
-  updated_by: String
-  updated_in: String
-  deleted_at: Date
-  deleted_by: String
-  deleted_in: String
-  restored_at: Date
-  restored_by: String
-  restored_in: String
-  description: String
-  version: String!
-  rand: String!
-  timestamp: String!
   config: JSON!
-  type: ClientServiceType!
-  provider: ClientServiceProvider!
-}
-
-enum ClientServiceType {
-  SMS
-  EMAIL
-  WEBPUSH
-}
-
-enum ClientServiceProvider {
-  WENEX
-  UNKNOWN
-  KAVENEGAR
-  NODEMAILER
-  MELIPAYAMAK
 }
 
 type ClientSerializer {
@@ -237,57 +102,12 @@ type ClientSerializer {
   clients: [JSON!]!
   props: JSON
   tags: [String!]
-  id: String!
-  ref: String
-  created_at: Date!
-  created_by: String!
-  created_in: String!
-  updated_at: Date
-  updated_by: String
-  updated_in: String
-  deleted_at: Date
-  deleted_by: String
-  deleted_in: String
-  restored_at: Date
-  restored_by: String
-  restored_in: String
-  description: String
-  version: String!
-  rand: String!
-  timestamp: String!
   scopes: [String!]!
   whitelist: [String!]
   coworkers: [String!]
   grant_types: [GrantType!]
   domains: [ClientDomainSerializer!]!
   services: [ClientServiceSerializer!]
-  name: String!
-  plan: ClientPlan!
-  url: String
-  logo: String
-  site: String
-  slogan: String
-  state: State!
-  status: Status!
-  api_key: String!
-  client_id: String!
-  expiration_date: Date!
-  access_token_ttl: Float
-  refresh_token_ttl: Float
-}
-
-enum ClientPlan {
-  ALUMINUM
-  GOLD
-  PLATINUM
-}
-
-enum State {
-  PENDING
-  APPROVED
-  REJECTED
-  VERIFIED
-  UNKNOWN
 }
 
 type ClientDataSerializer {
@@ -296,6 +116,42 @@ type ClientDataSerializer {
 
 type ClientItemsSerializer {
   items: [ClientSerializer]!
+}
+
+type ConfigSerializer {
+  owner: JSON!
+  shares: [JSON!]
+  groups: [String!]
+  clients: [JSON!]!
+  props: JSON
+  tags: [String!]
+  value: JSON
+}
+
+type ConfigDataSerializer {
+  data: ConfigSerializer
+}
+
+type ConfigItemsSerializer {
+  items: [ConfigSerializer]!
+}
+
+type SettingSerializer {
+  owner: JSON!
+  shares: [JSON!]
+  groups: [String!]
+  clients: [JSON!]!
+  props: JSON
+  tags: [String!]
+  value: JSON
+}
+
+type SettingDataSerializer {
+  data: SettingSerializer
+}
+
+type SettingItemsSerializer {
+  items: [SettingSerializer]!
 }
 
 """Date custom scalar type"""
@@ -311,6 +167,12 @@ type Query {
   countClient(filter: QueryFilterDto!): TotalSerializer!
   findClient(filter: FilterDto!): ClientItemsSerializer!
   findClientById(id: String!, ref: String): ClientDataSerializer!
+  countConfig(filter: QueryFilterDto!): TotalSerializer!
+  findConfig(filter: FilterDto!): ConfigItemsSerializer!
+  findConfigById(id: String!, ref: String): ConfigDataSerializer!
+  countSetting(filter: QueryFilterDto!): TotalSerializer!
+  findSetting(filter: FilterDto!): SettingItemsSerializer!
+  findSettingById(id: String!, ref: String): SettingDataSerializer!
 }
 
 input QueryFilterDto {
@@ -326,15 +188,12 @@ input FilterDto {
 
 input PopulateDto {
   match: JSON
-  select: JSON
+  select: JSON!
   options: PaginationDto
-  path: String!
 }
 
 input PaginationDto {
   sort: JSON
-  limit: Float
-  skip: Float
 }
 
 type Mutation {
@@ -359,6 +218,20 @@ type Mutation {
   destroyClientById(id: String!, ref: String): ClientDataSerializer!
   updateClientBulk(data: UpdateClientDto!, filter: QueryFilterDto!): TotalSerializer!
   updateClientById(id: String!, data: UpdateClientDto!, ref: String): ClientDataSerializer!
+  createConfig(data: CreateConfigDto!): ConfigDataSerializer!
+  createConfigBulk(data: CreateConfigItemsDto!): ConfigItemsSerializer!
+  deleteConfigById(id: String!, ref: String): ConfigDataSerializer!
+  restoreConfigById(id: String!, ref: String): ConfigDataSerializer!
+  destroyConfigById(id: String!, ref: String): ConfigDataSerializer!
+  updateConfigBulk(data: UpdateConfigDto!, filter: QueryFilterDto!): TotalSerializer!
+  updateConfigById(id: String!, data: UpdateConfigDto!, ref: String): ConfigDataSerializer!
+  createSetting(data: CreateSettingDto!): SettingDataSerializer!
+  createSettingBulk(data: CreateSettingItemsDto!): SettingItemsSerializer!
+  deleteSettingById(id: String!, ref: String): SettingDataSerializer!
+  restoreSettingById(id: String!, ref: String): SettingDataSerializer!
+  destroySettingById(id: String!, ref: String): SettingDataSerializer!
+  updateSettingBulk(data: UpdateSettingDto!, filter: QueryFilterDto!): TotalSerializer!
+  updateSettingById(id: String!, data: UpdateSettingDto!, ref: String): SettingDataSerializer!
 }
 
 input CreateGrantDto {
@@ -366,63 +239,10 @@ input CreateGrantDto {
   filter: [String!]
   location: [String!]
   time: [CreateGrantTimeDto!]
-  subject: String!
-  action: Action!
-  object: Resource!
 }
 
 input CreateGrantTimeDto {
   duration: Int!
-  cron_exp: String!
-}
-
-enum Action {
-  Any
-  Create
-  Read
-  Update
-  Delete
-  Restore
-  Destroy
-  Emit
-  Send
-  Init
-  Verify
-  Upload
-  Download
-  CreateOwn
-  ReadOwn
-  UpdateOwn
-  DeleteOwn
-  RestoreOwn
-  DestroyOwn
-  CreateShare
-  ReadShare
-  UpdateShare
-  DeleteShare
-  RestoreShare
-  DestroyShare
-  CreateGroup
-  ReadGroup
-  UpdateGroup
-  DeleteGroup
-  RestoreGroup
-  DestroyGroup
-  CreateClient
-  ReadClient
-  UpdateClient
-  DeleteClient
-  RestoreClient
-  DestroyClient
-}
-
-enum Resource {
-  All
-  Auth
-  AuthGrants
-  Domain
-  DomainApps
-  DomainClients
 }
 
 input CreateGrantItemsDto {
@@ -434,37 +254,20 @@ input UpdateGrantDto {
   filter: [String!]
   location: [String!]
   time: [UpdateGrantTimeDto!]
-  subject: String
-  action: Action
-  object: Resource
 }
 
 input UpdateGrantTimeDto {
   duration: Int!
-  cron_exp: String!
 }
 
 input CreateAppDto {
   scopes: [String!]
   grant_types: [GrantType!]
   change_logs: [CreateAppChangeLogDto!]
-  type: AppType!
-  cid: String!
-  name: String
-  status: Status!
-  url: String
-  logo: String
-  site: String
-  slogan: String
-  access_token_ttl: Float
-  refresh_token_ttl: Float
 }
 
 input CreateAppChangeLogDto {
   changes: [String!]!
-  code: String
-  semver: String!
-  deprecation_date: Date
 }
 
 input CreateAppItemsDto {
@@ -475,57 +278,27 @@ input UpdateAppDto {
   scopes: [String!]
   grant_types: [GrantType!]
   change_logs: [UpdateAppChangeLogDto!]
-  type: AppType
-  cid: String
-  name: String
-  status: Status
-  url: String
-  logo: String
-  site: String
-  slogan: String
-  access_token_ttl: Float
-  refresh_token_ttl: Float
 }
 
 input UpdateAppChangeLogDto {
   changes: [String!]!
-  code: String
-  semver: String!
-  deprecation_date: Date
 }
 
 input CreateClientDto {
   scopes: [String!]!
-  whitelist: [String!]
-  coworkers: [String!]
+  whitelist: [String!]!
+  coworkers: [String!]!
   grant_types: [GrantType!]!
   domains: [CreateClientDomainDto!]!
   services: [CreateClientServiceDto!]
-  name: String!
-  plan: ClientPlan!
-  url: String
-  logo: String
-  site: String
-  slogan: String
-  status: Status!
-  client_secret: String!
-  access_token_ttl: Float
-  refresh_token_ttl: Float
-  state: State
-  client_id: String
-  expiration_date: Date
 }
 
 input CreateClientDomainDto {
   subjects: [String!]!
-  name: String!
-  status: Status!
 }
 
 input CreateClientServiceDto {
   config: JSON!
-  type: ClientServiceType!
-  provider: ClientServiceProvider!
 }
 
 input CreateClientItemsDto {
@@ -533,35 +306,42 @@ input CreateClientItemsDto {
 }
 
 input UpdateClientDto {
-  scopes: [String!]
-  whitelist: [String!]
-  coworkers: [String!]
-  grant_types: [GrantType!]
-  domains: [UpdateClientDomainDto!]
+  scopes: [String!]!
+  whitelist: [String!]!
+  coworkers: [String!]!
+  grant_types: [GrantType!]!
+  domains: [UpdateClientDomainDto!]!
   services: [UpdateClientServiceDto!]
-  name: String
-  plan: ClientPlan
-  url: String
-  logo: String
-  site: String
-  slogan: String
-  status: Status
-  client_secret: String
-  access_token_ttl: Float
-  refresh_token_ttl: Float
-  state: State
-  client_id: String
-  expiration_date: Date
 }
 
 input UpdateClientDomainDto {
   subjects: [String!]!
-  name: String!
-  status: Status!
 }
 
 input UpdateClientServiceDto {
   config: JSON!
-  type: ClientServiceType!
-  provider: ClientServiceProvider!
+}
+
+input CreateConfigDto {
+  value: JSON
+}
+
+input CreateConfigItemsDto {
+  items: [CreateConfigDto!]!
+}
+
+input UpdateConfigDto {
+  value: JSON
+}
+
+input CreateSettingDto {
+  value: JSON
+}
+
+input CreateSettingItemsDto {
+  items: [CreateSettingDto!]!
+}
+
+input UpdateSettingDto {
+  value: JSON
 }
