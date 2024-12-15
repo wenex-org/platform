@@ -7,17 +7,17 @@ type TotalSerializer {
 }
 
 type GrantTimeSerializer {
+  duration: Int!
   cron_exp: String!
-  duration: Float!
 }
 
 type GrantSerializer {
   owner: JSON!
-  shares: [JSON]
-  groups: [String]
-  clients: [JSON]
+  shares: [JSON!]
+  groups: [String!]
+  clients: [JSON!]!
   props: JSON
-  tags: [String]
+  tags: [String!]
   id: String!
   ref: String
   created_at: Date!
@@ -38,10 +38,10 @@ type GrantSerializer {
   timestamp: String!
   action: String!
   object: String!
-  field: [String]
-  filter: [String]
-  location: [String]
-  time: [GrantTimeSerializer]
+  field: [String!]
+  filter: [String!]
+  location: [String!]
+  time: [GrantTimeSerializer!]
   subject: String!
 }
 
@@ -102,18 +102,18 @@ type Mutation {
 }
 
 input CreateGrantDto {
-  field: [String]
-  filter: [String]
-  location: [String]
-  time: [CreateGrantTimeDto]
+  field: [String!]
+  filter: [String!]
+  location: [String!]
+  time: [CreateGrantTimeDto!]
   subject: String!
   action: Action!
   object: Resource!
 }
 
 input CreateGrantTimeDto {
+  duration: Int!
   cron_exp: String!
-  duration: Float!
 }
 
 enum Action {
@@ -167,16 +167,16 @@ input CreateGrantItemsDto {
 }
 
 input UpdateGrantDto {
-  subject: String
-  action: Action
-  object: Resource
   field: [String!]
   filter: [String!]
   location: [String!]
   time: [UpdateGrantTimeDto!]
+  subject: String
+  action: Action
+  object: Resource
 }
 
 input UpdateGrantTimeDto {
+  duration: Int!
   cron_exp: String!
-  duration: Float!
 }
