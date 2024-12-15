@@ -1,7 +1,7 @@
 # Gateway
 npm run dpdm:ts ./apps/gateway/src/main.ts -- --progress > circular-dependencies.txt
 
-# Command
+# Commands
 npm run dpdm:ts ./libs/command/src/main.ts -- --progress >> circular-dependencies.txt
 
 # Services
