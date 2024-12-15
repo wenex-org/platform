@@ -58,6 +58,246 @@ type GrantItemsSerializer {
   items: [GrantSerializer]!
 }
 
+type AppChangeLogSerializer {
+  owner: JSON!
+  shares: [JSON!]
+  groups: [String!]
+  clients: [JSON!]!
+  props: JSON
+  tags: [String!]
+  id: String!
+  ref: String
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  rand: String!
+  timestamp: String!
+  changes: [String!]
+  code: String
+  semver: String!
+  deprecation_date: Date
+}
+
+type AppSerializer {
+  owner: JSON!
+  shares: [JSON!]
+  groups: [String!]
+  clients: [JSON!]!
+  props: JSON
+  tags: [String!]
+  id: String!
+  ref: String
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  rand: String!
+  timestamp: String!
+  scopes: [String!]
+  grant_types: [GrantType!]
+  change_logs: [AppChangeLogSerializer!]
+  type: AppType!
+  cid: String!
+  name: String
+  status: Status!
+  url: String
+  logo: String
+  site: String
+  slogan: String
+  access_token_ttl: Float
+  refresh_token_ttl: Float
+}
+
+enum GrantType {
+  password
+  refresh_token
+  client_credential
+  authorization_code
+}
+
+enum AppType {
+  WEB
+  MOBILE
+  DESKTOP
+  APPLICATION
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+}
+
+type AppDataSerializer {
+  data: AppSerializer
+}
+
+type AppItemsSerializer {
+  items: [AppSerializer]!
+}
+
+type ClientDomainSerializer {
+  owner: JSON!
+  shares: [JSON!]
+  groups: [String!]
+  clients: [JSON!]!
+  props: JSON
+  tags: [String!]
+  id: String!
+  ref: String
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  rand: String!
+  timestamp: String!
+  subjects: [String!]
+  name: String!
+  status: Status!
+}
+
+type ClientServiceSerializer {
+  owner: JSON!
+  shares: [JSON!]
+  groups: [String!]
+  clients: [JSON!]!
+  props: JSON
+  tags: [String!]
+  id: String!
+  ref: String
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  rand: String!
+  timestamp: String!
+  config: JSON!
+  type: ClientServiceType!
+  provider: ClientServiceProvider!
+}
+
+enum ClientServiceType {
+  SMS
+  EMAIL
+  WEBPUSH
+}
+
+enum ClientServiceProvider {
+  WENEX
+  UNKNOWN
+  KAVENEGAR
+  NODEMAILER
+  MELIPAYAMAK
+}
+
+type ClientSerializer {
+  owner: JSON!
+  shares: [JSON!]
+  groups: [String!]
+  clients: [JSON!]!
+  props: JSON
+  tags: [String!]
+  id: String!
+  ref: String
+  created_at: Date!
+  created_by: String!
+  created_in: String!
+  updated_at: Date
+  updated_by: String
+  updated_in: String
+  deleted_at: Date
+  deleted_by: String
+  deleted_in: String
+  restored_at: Date
+  restored_by: String
+  restored_in: String
+  description: String
+  version: String!
+  rand: String!
+  timestamp: String!
+  scopes: [String!]!
+  whitelist: [String!]
+  coworkers: [String!]
+  grant_types: [GrantType!]
+  domains: [ClientDomainSerializer!]!
+  services: [ClientServiceSerializer!]
+  name: String!
+  plan: ClientPlan!
+  url: String
+  logo: String
+  site: String
+  slogan: String
+  state: State!
+  status: Status!
+  api_key: String!
+  client_id: String!
+  expiration_date: Date!
+  access_token_ttl: Float
+  refresh_token_ttl: Float
+}
+
+enum ClientPlan {
+  ALUMINUM
+  GOLD
+  PLATINUM
+}
+
+enum State {
+  PENDING
+  APPROVED
+  REJECTED
+  VERIFIED
+  UNKNOWN
+}
+
+type ClientDataSerializer {
+  data: ClientSerializer
+}
+
+type ClientItemsSerializer {
+  items: [ClientSerializer]!
+}
+
 """Date custom scalar type"""
 scalar Date
 
@@ -65,6 +305,12 @@ type Query {
   countGrant(filter: QueryFilterDto!): TotalSerializer!
   findGrant(filter: FilterDto!): GrantItemsSerializer!
   findGrantById(id: String!, ref: String): GrantDataSerializer!
+  countApp(filter: QueryFilterDto!): TotalSerializer!
+  findApp(filter: FilterDto!): AppItemsSerializer!
+  findAppById(id: String!, ref: String): AppDataSerializer!
+  countClient(filter: QueryFilterDto!): TotalSerializer!
+  findClient(filter: FilterDto!): ClientItemsSerializer!
+  findClientById(id: String!, ref: String): ClientDataSerializer!
 }
 
 input QueryFilterDto {
@@ -99,6 +345,20 @@ type Mutation {
   destroyGrantById(id: String!, ref: String): GrantDataSerializer!
   updateGrantBulk(data: UpdateGrantDto!, filter: QueryFilterDto!): TotalSerializer!
   updateGrantById(id: String!, data: UpdateGrantDto!, ref: String): GrantDataSerializer!
+  createApp(data: CreateAppDto!): AppDataSerializer!
+  createAppBulk(data: CreateAppItemsDto!): AppItemsSerializer!
+  deleteAppById(id: String!, ref: String): AppDataSerializer!
+  restoreAppById(id: String!, ref: String): AppDataSerializer!
+  destroyAppById(id: String!, ref: String): AppDataSerializer!
+  updateAppBulk(data: UpdateAppDto!, filter: QueryFilterDto!): TotalSerializer!
+  updateAppById(id: String!, data: UpdateAppDto!, ref: String): AppDataSerializer!
+  createClient(data: CreateClientDto!): ClientDataSerializer!
+  createClientBulk(data: CreateClientItemsDto!): ClientItemsSerializer!
+  deleteClientById(id: String!, ref: String): ClientDataSerializer!
+  restoreClientById(id: String!, ref: String): ClientDataSerializer!
+  destroyClientById(id: String!, ref: String): ClientDataSerializer!
+  updateClientBulk(data: UpdateClientDto!, filter: QueryFilterDto!): TotalSerializer!
+  updateClientById(id: String!, data: UpdateClientDto!, ref: String): ClientDataSerializer!
 }
 
 input CreateGrantDto {
@@ -160,6 +420,9 @@ enum Resource {
   All
   Auth
   AuthGrants
+  Domain
+  DomainApps
+  DomainClients
 }
 
 input CreateGrantItemsDto {
@@ -179,4 +442,126 @@ input UpdateGrantDto {
 input UpdateGrantTimeDto {
   duration: Int!
   cron_exp: String!
+}
+
+input CreateAppDto {
+  scopes: [String!]
+  grant_types: [GrantType!]
+  change_logs: [CreateAppChangeLogDto!]
+  type: AppType!
+  cid: String!
+  name: String
+  status: Status!
+  url: String
+  logo: String
+  site: String
+  slogan: String
+  access_token_ttl: Float
+  refresh_token_ttl: Float
+}
+
+input CreateAppChangeLogDto {
+  changes: [String!]!
+  code: String
+  semver: String!
+  deprecation_date: Date
+}
+
+input CreateAppItemsDto {
+  items: [CreateAppDto!]!
+}
+
+input UpdateAppDto {
+  scopes: [String!]
+  grant_types: [GrantType!]
+  change_logs: [UpdateAppChangeLogDto!]
+  type: AppType
+  cid: String
+  name: String
+  status: Status
+  url: String
+  logo: String
+  site: String
+  slogan: String
+  access_token_ttl: Float
+  refresh_token_ttl: Float
+}
+
+input UpdateAppChangeLogDto {
+  changes: [String!]!
+  code: String
+  semver: String!
+  deprecation_date: Date
+}
+
+input CreateClientDto {
+  scopes: [String!]!
+  whitelist: [String!]
+  coworkers: [String!]
+  grant_types: [GrantType!]!
+  domains: [CreateClientDomainDto!]!
+  services: [CreateClientServiceDto!]
+  name: String!
+  plan: ClientPlan!
+  url: String
+  logo: String
+  site: String
+  slogan: String
+  status: Status!
+  client_secret: String!
+  access_token_ttl: Float
+  refresh_token_ttl: Float
+  state: State
+  client_id: String
+  expiration_date: Date
+}
+
+input CreateClientDomainDto {
+  subjects: [String!]!
+  name: String!
+  status: Status!
+}
+
+input CreateClientServiceDto {
+  config: JSON!
+  type: ClientServiceType!
+  provider: ClientServiceProvider!
+}
+
+input CreateClientItemsDto {
+  items: [CreateClientDto!]!
+}
+
+input UpdateClientDto {
+  scopes: [String!]
+  whitelist: [String!]
+  coworkers: [String!]
+  grant_types: [GrantType!]
+  domains: [UpdateClientDomainDto!]
+  services: [UpdateClientServiceDto!]
+  name: String
+  plan: ClientPlan
+  url: String
+  logo: String
+  site: String
+  slogan: String
+  status: Status
+  client_secret: String
+  access_token_ttl: Float
+  refresh_token_ttl: Float
+  state: State
+  client_id: String
+  expiration_date: Date
+}
+
+input UpdateClientDomainDto {
+  subjects: [String!]!
+  name: String!
+  status: Status!
+}
+
+input UpdateClientServiceDto {
+  config: JSON!
+  type: ClientServiceType!
+  provider: ClientServiceProvider!
 }
