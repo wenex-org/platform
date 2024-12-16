@@ -64,6 +64,15 @@
         "tsConfigPath": "apps/services/context/tsconfig.app.json"
       }
     },
+    "identity": {
+      "type": "application",
+      "root": "apps/services/identity",
+      "entryFile": "main",
+      "sourceRoot": "apps/services/identity/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/services/identity/tsconfig.app.json"
+      }
+    },
     "watcher": {
       "type": "application",
       "root": "apps/workers/watcher",
