@@ -81,6 +81,7 @@
     "@willsoto/nestjs-prometheus": "^6.0.1",
     "abacl": "^8.0.7",
     "abacl-redis": "^2.0.3",
+    "ajv": "^8.17.1",
     "apollo-metrics": "^1.0.1",
     "base-x": "^5.0.0",
     "class-transformer": "^0.5.1",
