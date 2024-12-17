@@ -6,6 +6,7 @@ declare -A PROTOS
 AUTH=./protos/auth.proto
 DOMAIN=./protos/domain.proto
 CONTEXT=./protos/context.proto
+ESSENTIAL=./protos/essential.proto
 IDENTITY=./protos/identity.proto
 
 # Auth Proto
@@ -23,6 +24,11 @@ PROTOS[CONTEXT,1]=./apps/services/context/src/app.proto
 PROTOS[CONTEXT,2]=./apps/gateway/src/protobuf/context.proto
 PROTOS[CONTEXT,3]=./libs/common/src/providers/context/protobuf/context.proto
 
+# Essential Proto
+PROTOS[ESSENTIAL,1]=./apps/services/essential/src/app.proto
+PROTOS[ESSENTIAL,2]=./apps/gateway/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,3]=./libs/common/src/providers/essential/protobuf/essential.proto
+
 # Identity Proto
 PROTOS[IDENTITY,1]=./apps/services/identity/src/app.proto
 PROTOS[IDENTITY,2]=./apps/gateway/src/protobuf/identity.proto
@@ -33,5 +39,6 @@ for KEY in "${!PROTOS[@]}"; do
   if [[ $KEY == *"AUTH"* ]]; then ln -f $AUTH ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"DOMAIN"* ]]; then ln -f $DOMAIN ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"CONTEXT"* ]]; then ln -f $CONTEXT ${PROTOS[$KEY]}; fi
+  if [[ $KEY == *"ESSENTIAL"* ]]; then ln -f $ESSENTIAL ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"IDENTITY"* ]]; then ln -f $IDENTITY ${PROTOS[$KEY]}; fi
 done
