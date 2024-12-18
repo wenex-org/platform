@@ -17,7 +17,8 @@ PROTOS[AUTH,3]=./libs/common/src/providers/auth/protobuf/auth.proto
 # Domain Proto
 PROTOS[DOMAIN,1]=./apps/services/domain/src/app.proto
 PROTOS[DOMAIN,2]=./apps/gateway/src/protobuf/domain.proto
-PROTOS[DOMAIN,3]=./libs/common/src/providers/domain/protobuf/domain.proto
+PROTOS[DOMAIN,3]=./apps/services/auth/src/protobuf/domain.proto
+PROTOS[DOMAIN,4]=./libs/common/src/providers/domain/protobuf/domain.proto
 
 # Context Proto
 PROTOS[CONTEXT,1]=./apps/services/context/src/app.proto
@@ -32,7 +33,8 @@ PROTOS[ESSENTIAL,3]=./libs/common/src/providers/essential/protobuf/essential.pro
 # Identity Proto
 PROTOS[IDENTITY,1]=./apps/services/identity/src/app.proto
 PROTOS[IDENTITY,2]=./apps/gateway/src/protobuf/identity.proto
-PROTOS[IDENTITY,3]=./libs/common/src/providers/identity/protobuf/identity.proto
+PROTOS[IDENTITY,3]=./apps/services/auth/src/protobuf/identity.proto
+PROTOS[IDENTITY,4]=./libs/common/src/providers/identity/protobuf/identity.proto
 
 # Main Program
 for KEY in "${!PROTOS[@]}"; do
