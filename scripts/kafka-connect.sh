@@ -10,7 +10,7 @@ if [ $MONGO_SOURCE_EXISTS -eq 200 ]; then
   curl -X DELETE localhost:8082/connectors/$MONGO_SOURCE
 fi
 
-
+MONGO_PREFIX=${1:-$MONGO_PREFIX}
 curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" localhost:8082/connectors/ -d "{
   \"name\": \"$MONGO_SOURCE\",
   \"config\": {
