@@ -1,8 +1,8 @@
 import { StatDataSerializer, StatItemsSerializer, StatSerializer } from '@app/common/serializers/essential';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { CreateStatDto, CreateStatItemsDto, UpdateStatDto } from '@app/common/dto/essential';
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { Cache, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -22,6 +22,7 @@ import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
 @Resolver(() => StatSerializer)
+@RateLimit('stats')
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
