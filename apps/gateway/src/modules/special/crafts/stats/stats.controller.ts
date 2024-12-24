@@ -13,9 +13,9 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
-import { StatDataSerializer, StatItemsSerializer, StatSerializer } from '@app/common/serializers/essential';
+import { StatDataSerializer, StatItemsSerializer, StatSerializer } from '@app/common/serializers/special';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
-import { CreateStatDto, CreateStatItemsDto, UpdateStatDto } from '@app/common/dto/essential';
+import { CreateStatDto, CreateStatItemsDto, UpdateStatDto } from '@app/common/dto/special';
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -25,8 +25,8 @@ import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
 import { FilterInterceptor } from '@app/common/core/interceptors/flow';
-import { EssentialProvider } from '@app/common/providers/essential';
-import { Stat, StatDto } from '@app/common/interfaces/essential';
+import { SpecialProvider } from '@app/common/providers/special';
+import { Stat, StatDto } from '@app/common/interfaces/special';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
@@ -46,15 +46,15 @@ import { Observable } from 'rxjs';
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class StatsController extends ControllerClass<Stat, StatDto> implements IController<Stat, StatDto> {
-  constructor(readonly provider: EssentialProvider) {
+  constructor(readonly provider: SpecialProvider) {
     super(provider.stats, StatSerializer);
   }
 
   @Get('count')
-  @SetScope(Scope.ReadEssentialStats)
+  @SetScope(Scope.ReadSpecialStats)
   @Cache(Collection.Stats, 'fill')
   @UseInterceptors(AuthorityInterceptor)
-  @SetPolicy(Action.Read, Resource.EssentialStats)
+  @SetPolicy(Action.Read, Resource.SpecialStats)
   @ApiQuery({ type: QueryFilterDto, required: false })
   override count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
@@ -62,30 +62,30 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
 
   @Post()
   @ShipStrategy('create')
-  @SetScope(Scope.WriteEssentialStats)
+  @SetScope(Scope.WriteSpecialStats)
   @Cache(Collection.Stats, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: StatDataSerializer })
-  @SetPolicy(Action.Create, Resource.EssentialStats)
+  @SetPolicy(Action.Create, Resource.SpecialStats)
   override create(@Meta() meta: Metadata, @Body() data: CreateStatDto): Observable<StatDataSerializer> {
     return super.create(meta, data);
   }
 
   @Post('bulk')
   @ShipStrategy('create')
-  @SetScope(Scope.WriteEssentialStats)
+  @SetScope(Scope.WriteSpecialStats)
   @Cache(Collection.Stats, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: StatItemsSerializer })
-  @SetPolicy(Action.Create, Resource.EssentialStats)
+  @SetPolicy(Action.Create, Resource.SpecialStats)
   override createBulk(@Meta() meta: Metadata, @Body() data: CreateStatItemsDto): Observable<StatItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
   @Get()
-  @SetScope(Scope.ReadEssentialStats)
+  @SetScope(Scope.ReadSpecialStats)
   @Cache(Collection.Stats, 'fill')
-  @SetPolicy(Action.Read, Resource.EssentialStats)
+  @SetPolicy(Action.Read, Resource.SpecialStats)
   @ApiResponse({ type: StatItemsSerializer })
   @ApiQuery({ type: FilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
@@ -94,8 +94,8 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Get('cursor')
-  @SetScope(Scope.ReadEssentialStats)
-  @SetPolicy(Action.Read, Resource.EssentialStats)
+  @SetScope(Scope.ReadSpecialStats)
+  @SetPolicy(Action.Read, Resource.SpecialStats)
   @ApiQuery({ type: FilterOneDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   @ApiResponse({ status: HttpStatus.OK, type: StatSerializer })
@@ -113,10 +113,10 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Get(':id')
-  @SetScope(Scope.ReadEssentialStats)
+  @SetScope(Scope.ReadSpecialStats)
   @Cache(Collection.Stats, 'fill')
   @ApiResponse({ type: StatDataSerializer })
-  @SetPolicy(Action.Read, Resource.EssentialStats)
+  @SetPolicy(Action.Read, Resource.SpecialStats)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override findOne(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<Stat>): Observable<StatDataSerializer> {
@@ -124,10 +124,10 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Delete(':id')
-  @SetScope(Scope.WriteEssentialStats)
+  @SetScope(Scope.WriteSpecialStats)
   @Cache(Collection.Stats, 'flush')
   @ApiResponse({ type: StatDataSerializer })
-  @SetPolicy(Action.Delete, Resource.EssentialStats)
+  @SetPolicy(Action.Delete, Resource.SpecialStats)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override deleteOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Stat>): Observable<StatDataSerializer> {
@@ -135,10 +135,10 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Put(':id/restore')
-  @SetScope(Scope.WriteEssentialStats)
+  @SetScope(Scope.WriteSpecialStats)
   @Cache(Collection.Stats, 'flush')
   @ApiResponse({ type: StatDataSerializer })
-  @SetPolicy(Action.Restore, Resource.EssentialStats)
+  @SetPolicy(Action.Restore, Resource.SpecialStats)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override restoreOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Stat>): Observable<StatDataSerializer> {
@@ -146,10 +146,10 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Delete(':id/destroy')
-  @SetScope(Scope.ManageEssentialStats)
+  @SetScope(Scope.ManageSpecialStats)
   @Cache(Collection.Stats, 'flush')
   @ApiResponse({ type: StatDataSerializer })
-  @SetPolicy(Action.Destroy, Resource.EssentialStats)
+  @SetPolicy(Action.Destroy, Resource.SpecialStats)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Stat>): Observable<StatDataSerializer> {
@@ -158,9 +158,9 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @SetScope(Scope.ManageEssentialStats)
+  @SetScope(Scope.ManageSpecialStats)
   @Cache(Collection.Stats, 'flush')
-  @SetPolicy(Action.Update, Resource.EssentialStats)
+  @SetPolicy(Action.Update, Resource.SpecialStats)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   override updateBulk(
@@ -173,10 +173,10 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
 
   @Patch(':id')
   @ShipStrategy('update')
-  @SetScope(Scope.WriteEssentialStats)
+  @SetScope(Scope.WriteSpecialStats)
   @Cache(Collection.Stats, 'flush')
   @ApiResponse({ type: StatDataSerializer })
-  @SetPolicy(Action.Update, Resource.EssentialStats)
+  @SetPolicy(Action.Update, Resource.SpecialStats)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   override updateOne(

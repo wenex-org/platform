@@ -6,8 +6,8 @@ declare -A PROTOS
 AUTH=./protos/auth.proto
 DOMAIN=./protos/domain.proto
 CONTEXT=./protos/context.proto
-ESSENTIAL=./protos/essential.proto
 IDENTITY=./protos/identity.proto
+SPECIAL=./protos/special.proto
 
 # Auth Proto
 PROTOS[AUTH,1]=./apps/services/auth/src/app.proto
@@ -25,22 +25,22 @@ PROTOS[CONTEXT,1]=./apps/services/context/src/app.proto
 PROTOS[CONTEXT,2]=./apps/gateway/src/protobuf/context.proto
 PROTOS[CONTEXT,3]=./libs/common/src/providers/context/protobuf/context.proto
 
-# Essential Proto
-PROTOS[ESSENTIAL,1]=./apps/services/essential/src/app.proto
-PROTOS[ESSENTIAL,2]=./apps/gateway/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,3]=./libs/common/src/providers/essential/protobuf/essential.proto
-
 # Identity Proto
 PROTOS[IDENTITY,1]=./apps/services/identity/src/app.proto
 PROTOS[IDENTITY,2]=./apps/gateway/src/protobuf/identity.proto
 PROTOS[IDENTITY,3]=./apps/services/auth/src/protobuf/identity.proto
 PROTOS[IDENTITY,4]=./libs/common/src/providers/identity/protobuf/identity.proto
 
+# Special Proto
+PROTOS[SPECIAL,1]=./apps/services/special/src/app.proto
+PROTOS[SPECIAL,2]=./apps/gateway/src/protobuf/special.proto
+PROTOS[SPECIAL,3]=./libs/common/src/providers/special/protobuf/special.proto
+
 # Main Program
 for KEY in "${!PROTOS[@]}"; do
   if [[ $KEY == *"AUTH"* ]]; then ln -f $AUTH ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"DOMAIN"* ]]; then ln -f $DOMAIN ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"CONTEXT"* ]]; then ln -f $CONTEXT ${PROTOS[$KEY]}; fi
-  if [[ $KEY == *"ESSENTIAL"* ]]; then ln -f $ESSENTIAL ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"IDENTITY"* ]]; then ln -f $IDENTITY ${PROTOS[$KEY]}; fi
+  if [[ $KEY == *"SPECIAL"* ]]; then ln -f $SPECIAL ${PROTOS[$KEY]}; fi
 done

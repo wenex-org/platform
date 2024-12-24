@@ -64,15 +64,6 @@
         "tsConfigPath": "apps/services/context/tsconfig.app.json"
       }
     },
-    "essential": {
-      "type": "application",
-      "root": "apps/services/essential",
-      "entryFile": "main",
-      "sourceRoot": "apps/services/essential/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/services/essential/tsconfig.app.json"
-      }
-    },
     "identity": {
       "type": "application",
       "root": "apps/services/identity",
@@ -80,6 +71,15 @@
       "sourceRoot": "apps/services/identity/src",
       "compilerOptions": {
         "tsConfigPath": "apps/services/identity/tsconfig.app.json"
+      }
+    },
+    "special": {
+      "type": "application",
+      "root": "apps/services/special",
+      "entryFile": "main",
+      "sourceRoot": "apps/services/special/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/services/special/tsconfig.app.json"
       }
     },
     "watcher": {
