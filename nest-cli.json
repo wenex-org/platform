@@ -82,6 +82,15 @@
         "tsConfigPath": "apps/services/special/tsconfig.app.json"
       }
     },
+    "observer": {
+      "type": "application",
+      "root": "apps/workers/observer",
+      "entryFile": "main",
+      "sourceRoot": "apps/workers/observer/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/workers/observer/tsconfig.app.json"
+      }
+    },
     "watcher": {
       "type": "application",
       "root": "apps/workers/watcher",
