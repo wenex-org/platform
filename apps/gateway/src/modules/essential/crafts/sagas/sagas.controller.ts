@@ -13,9 +13,9 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
-import { AppDataSerializer, AppItemsSerializer, AppSerializer } from '@app/common/serializers/domain';
+import { SagaDataSerializer, SagaItemsSerializer, SagaSerializer } from '@app/common/serializers/essential';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
-import { CreateAppDto, CreateAppItemsDto, UpdateAppDto } from '@app/common/dto/domain';
+import { CreateSagaDto, CreateSagaItemsDto, UpdateSagaDto } from '@app/common/dto/essential';
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -25,10 +25,10 @@ import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
 import { FilterInterceptor } from '@app/common/core/interceptors/flow';
+import { EssentialProvider } from '@app/common/providers/essential';
+import { Saga, SagaDto } from '@app/common/interfaces/essential';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
-import { DomainProvider } from '@app/common/providers/domain';
-import { App, AppDto } from '@app/common/interfaces/domain';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { Filter, Meta } from '@app/common/core/decorators';
 import { ValidationPipe } from '@app/common/core/pipes';
@@ -38,23 +38,23 @@ import { Response } from 'express';
 import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
-@RateLimit('apps')
+@RateLimit('sagas')
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Apps)
-@Controller(Collection.Apps)
+@ApiTags(Collection.Sagas)
+@Controller(Collection.Sagas)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class AppsController extends ControllerClass<App, AppDto> implements IController<App, AppDto> {
-  constructor(readonly provider: DomainProvider) {
-    super(provider.apps, AppSerializer);
+export class SagasController extends ControllerClass<Saga, SagaDto> implements IController<Saga, SagaDto> {
+  constructor(readonly provider: EssentialProvider) {
+    super(provider.sagas, SagaSerializer);
   }
 
   @Get('count')
-  @Cache(Collection.Apps, 'fill')
-  @SetScope(Scope.ReadDomainApps)
+  @Cache(Collection.Sagas, 'fill')
+  @SetScope(Scope.ReadEssentialSagas)
   @UseInterceptors(AuthorityInterceptor)
-  @SetPolicy(Action.Read, Resource.DomainApps)
+  @SetPolicy(Action.Read, Resource.EssentialSagas)
   @ApiQuery({ type: QueryFilterDto, required: false })
   override count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
@@ -62,44 +62,44 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
 
   @Post()
   @ShipStrategy('create')
-  @Cache(Collection.Apps, 'flush')
-  @SetScope(Scope.WriteDomainApps)
+  @Cache(Collection.Sagas, 'flush')
+  @SetScope(Scope.WriteEssentialSagas)
   @UseInterceptors(...WriteInterceptors)
-  @ApiResponse({ type: AppDataSerializer })
-  @SetPolicy(Action.Create, Resource.DomainApps)
-  override create(@Meta() meta: Metadata, @Body() data: CreateAppDto): Observable<AppDataSerializer> {
+  @ApiResponse({ type: SagaDataSerializer })
+  @SetPolicy(Action.Create, Resource.EssentialSagas)
+  override create(@Meta() meta: Metadata, @Body() data: CreateSagaDto): Observable<SagaDataSerializer> {
     return super.create(meta, data);
   }
 
   @Post('bulk')
   @ShipStrategy('create')
-  @Cache(Collection.Apps, 'flush')
-  @SetScope(Scope.WriteDomainApps)
+  @Cache(Collection.Sagas, 'flush')
+  @SetScope(Scope.WriteEssentialSagas)
   @UseInterceptors(...WriteInterceptors)
-  @ApiResponse({ type: AppItemsSerializer })
-  @SetPolicy(Action.Create, Resource.DomainApps)
-  override createBulk(@Meta() meta: Metadata, @Body() data: CreateAppItemsDto): Observable<AppItemsSerializer> {
+  @ApiResponse({ type: SagaItemsSerializer })
+  @SetPolicy(Action.Create, Resource.EssentialSagas)
+  override createBulk(@Meta() meta: Metadata, @Body() data: CreateSagaItemsDto): Observable<SagaItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
   @Get()
-  @Cache(Collection.Apps, 'fill')
-  @SetScope(Scope.ReadDomainApps)
-  @SetPolicy(Action.Read, Resource.DomainApps)
-  @ApiResponse({ type: AppItemsSerializer })
+  @Cache(Collection.Sagas, 'fill')
+  @SetScope(Scope.ReadEssentialSagas)
+  @SetPolicy(Action.Read, Resource.EssentialSagas)
+  @ApiResponse({ type: SagaItemsSerializer })
   @ApiQuery({ type: FilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  override find(@Meta() meta: Metadata, @Filter() filter: FilterDto<App>): Observable<AppItemsSerializer> {
+  override find(@Meta() meta: Metadata, @Filter() filter: FilterDto<Saga>): Observable<SagaItemsSerializer> {
     return super.find(meta, filter);
   }
 
   @Get('cursor')
-  @SetScope(Scope.ReadDomainApps)
-  @SetPolicy(Action.Read, Resource.DomainApps)
+  @SetScope(Scope.ReadEssentialSagas)
+  @SetPolicy(Action.Read, Resource.EssentialSagas)
   @ApiQuery({ type: FilterOneDto, required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  @ApiResponse({ status: HttpStatus.OK, type: AppSerializer })
-  Cursor(@Res() res: Response, @Meta() meta: Metadata, @Filter() filter: FilterOneDto<App>) {
+  @ApiResponse({ status: HttpStatus.OK, type: SagaSerializer })
+  Cursor(@Res() res: Response, @Meta() meta: Metadata, @Filter() filter: FilterOneDto<Saga>) {
     // Server Sent-Event Headers
     res.setHeader('Transfer-Encoding', 'chunked');
     res.setHeader('Content-Type', 'text/event-stream');
@@ -113,77 +113,77 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   }
 
   @Get(':id')
-  @Cache(Collection.Apps, 'fill')
-  @SetScope(Scope.ReadDomainApps)
-  @ApiResponse({ type: AppDataSerializer })
-  @SetPolicy(Action.Read, Resource.DomainApps)
+  @Cache(Collection.Sagas, 'fill')
+  @SetScope(Scope.ReadEssentialSagas)
+  @ApiResponse({ type: SagaDataSerializer })
+  @SetPolicy(Action.Read, Resource.EssentialSagas)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  override findOne(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<App>): Observable<AppDataSerializer> {
+  override findOne(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<Saga>): Observable<SagaDataSerializer> {
     return super.findOne(meta, filter);
   }
 
   @Delete(':id')
-  @Cache(Collection.Apps, 'flush')
-  @SetScope(Scope.WriteDomainApps)
-  @ApiResponse({ type: AppDataSerializer })
-  @SetPolicy(Action.Delete, Resource.DomainApps)
+  @Cache(Collection.Sagas, 'flush')
+  @SetScope(Scope.WriteEssentialSagas)
+  @ApiResponse({ type: SagaDataSerializer })
+  @SetPolicy(Action.Delete, Resource.EssentialSagas)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  override deleteOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<App>): Observable<AppDataSerializer> {
+  override deleteOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Saga>): Observable<SagaDataSerializer> {
     return super.deleteOne(meta, filter);
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Apps, 'flush')
-  @SetScope(Scope.WriteDomainApps)
-  @ApiResponse({ type: AppDataSerializer })
-  @SetPolicy(Action.Restore, Resource.DomainApps)
+  @Cache(Collection.Sagas, 'flush')
+  @SetScope(Scope.WriteEssentialSagas)
+  @ApiResponse({ type: SagaDataSerializer })
+  @SetPolicy(Action.Restore, Resource.EssentialSagas)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  override restoreOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<App>): Observable<AppDataSerializer> {
+  override restoreOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Saga>): Observable<SagaDataSerializer> {
     return super.restoreOne(meta, filter);
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Apps, 'flush')
-  @SetScope(Scope.ManageDomainApps)
-  @ApiResponse({ type: AppDataSerializer })
-  @SetPolicy(Action.Destroy, Resource.DomainApps)
+  @Cache(Collection.Sagas, 'flush')
+  @SetScope(Scope.ManageEssentialSagas)
+  @ApiResponse({ type: SagaDataSerializer })
+  @SetPolicy(Action.Destroy, Resource.EssentialSagas)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<App>): Observable<AppDataSerializer> {
+  override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Saga>): Observable<SagaDataSerializer> {
     return super.destroyOne(meta, filter);
   }
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @Cache(Collection.Apps, 'flush')
-  @SetScope(Scope.ManageDomainApps)
-  @SetPolicy(Action.Update, Resource.DomainApps)
+  @Cache(Collection.Sagas, 'flush')
+  @SetScope(Scope.ManageEssentialSagas)
+  @SetPolicy(Action.Update, Resource.EssentialSagas)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   override updateBulk(
     @Meta() meta: Metadata,
-    @Filter() filter: QueryFilterDto<App>,
-    @Body() update: UpdateAppDto,
+    @Filter() filter: QueryFilterDto<Saga>,
+    @Body() update: UpdateSagaDto,
   ): Observable<TotalSerializer> {
     return super.updateBulk(meta, filter, update);
   }
 
   @Patch(':id')
   @ShipStrategy('update')
-  @Cache(Collection.Apps, 'flush')
-  @SetScope(Scope.WriteDomainApps)
-  @ApiResponse({ type: AppDataSerializer })
-  @SetPolicy(Action.Update, Resource.DomainApps)
+  @Cache(Collection.Sagas, 'flush')
+  @SetScope(Scope.WriteEssentialSagas)
+  @ApiResponse({ type: SagaDataSerializer })
+  @SetPolicy(Action.Update, Resource.EssentialSagas)
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   override updateOne(
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<App>,
-    @Body() update: UpdateAppDto,
-  ): Observable<AppDataSerializer> {
+    @Filter() filter: FilterOneDto<Saga>,
+    @Body() update: UpdateSagaDto,
+  ): Observable<SagaDataSerializer> {
     return super.updateOne(meta, filter, update);
   }
 }

@@ -33,8 +33,8 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   }
 
   @Query(() => TotalSerializer)
-  @SetScope(Scope.ReadIdentityProfiles)
   @Cache(Collection.Profiles, 'fill')
+  @SetScope(Scope.ReadIdentityProfiles)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.IdentityProfiles)
   countProfile(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
@@ -43,8 +43,8 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
 
   @Mutation(() => ProfileDataSerializer)
   @ShipStrategy('create')
-  @SetScope(Scope.WriteIdentityProfiles)
   @Cache(Collection.Profiles, 'flush')
+  @SetScope(Scope.WriteIdentityProfiles)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentityProfiles)
   createProfile(@Meta() meta: Metadata, @Args('data') data: CreateProfileDto): Observable<ProfileDataSerializer> {
@@ -53,8 +53,8 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
 
   @Mutation(() => ProfileItemsSerializer)
   @ShipStrategy('create')
-  @SetScope(Scope.WriteIdentityProfiles)
   @Cache(Collection.Profiles, 'flush')
+  @SetScope(Scope.WriteIdentityProfiles)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentityProfiles)
   createProfileBulk(@Meta() meta: Metadata, @Args('data') data: CreateProfileItemsDto): Observable<ProfileItemsSerializer> {
@@ -62,8 +62,8 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   }
 
   @Query(() => ProfileItemsSerializer)
-  @SetScope(Scope.ReadIdentityProfiles)
   @Cache(Collection.Profiles, 'fill')
+  @SetScope(Scope.ReadIdentityProfiles)
   @SetPolicy(Action.Read, Resource.IdentityProfiles)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findProfile(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Profile>): Observable<ProfileItemsSerializer> {
@@ -71,8 +71,8 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   }
 
   @Query(() => ProfileDataSerializer)
-  @SetScope(Scope.ReadIdentityProfiles)
   @Cache(Collection.Profiles, 'fill')
+  @SetScope(Scope.ReadIdentityProfiles)
   @SetPolicy(Action.Read, Resource.IdentityProfiles)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findProfileById(
@@ -86,8 +86,8 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   }
 
   @Mutation(() => ProfileDataSerializer)
-  @SetScope(Scope.WriteIdentityProfiles)
   @Cache(Collection.Profiles, 'flush')
+  @SetScope(Scope.WriteIdentityProfiles)
   @SetPolicy(Action.Delete, Resource.IdentityProfiles)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   deleteProfileById(
@@ -101,8 +101,8 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   }
 
   @Mutation(() => ProfileDataSerializer)
-  @SetScope(Scope.WriteIdentityProfiles)
   @Cache(Collection.Profiles, 'flush')
+  @SetScope(Scope.WriteIdentityProfiles)
   @SetPolicy(Action.Restore, Resource.IdentityProfiles)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   restoreProfileById(
@@ -116,8 +116,8 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   }
 
   @Mutation(() => ProfileDataSerializer)
-  @SetScope(Scope.ManageIdentityProfiles)
   @Cache(Collection.Profiles, 'flush')
+  @SetScope(Scope.ManageIdentityProfiles)
   @SetPolicy(Action.Destroy, Resource.IdentityProfiles)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   destroyProfileById(
@@ -132,8 +132,8 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @SetScope(Scope.ManageIdentityProfiles)
   @Cache(Collection.Profiles, 'flush')
+  @SetScope(Scope.ManageIdentityProfiles)
   @SetPolicy(Action.Update, Resource.IdentityProfiles)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateProfileBulk(
@@ -146,8 +146,8 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
 
   @Mutation(() => ProfileDataSerializer)
   @ShipStrategy('update')
-  @SetScope(Scope.WriteIdentityProfiles)
   @Cache(Collection.Profiles, 'flush')
+  @SetScope(Scope.WriteIdentityProfiles)
   @SetPolicy(Action.Update, Resource.IdentityProfiles)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateProfileById(

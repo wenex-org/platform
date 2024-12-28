@@ -33,8 +33,8 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Query(() => TotalSerializer)
-  @SetScope(Scope.ReadIdentityUsers)
   @Cache(Collection.Users, 'fill')
+  @SetScope(Scope.ReadIdentityUsers)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.IdentityUsers)
   countUser(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
@@ -43,8 +43,8 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
 
   @Mutation(() => UserDataSerializer)
   @ShipStrategy('create')
-  @SetScope(Scope.WriteIdentityUsers)
   @Cache(Collection.Users, 'flush')
+  @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentityUsers)
   createUser(@Meta() meta: Metadata, @Args('data') data: CreateUserDto): Observable<UserDataSerializer> {
@@ -53,8 +53,8 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
 
   @Mutation(() => UserItemsSerializer)
   @ShipStrategy('create')
-  @SetScope(Scope.WriteIdentityUsers)
   @Cache(Collection.Users, 'flush')
+  @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentityUsers)
   createUserBulk(@Meta() meta: Metadata, @Args('data') data: CreateUserItemsDto): Observable<UserItemsSerializer> {
@@ -62,8 +62,8 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Query(() => UserItemsSerializer)
-  @SetScope(Scope.ReadIdentityUsers)
   @Cache(Collection.Users, 'fill')
+  @SetScope(Scope.ReadIdentityUsers)
   @SetPolicy(Action.Read, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findUser(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<User>): Observable<UserItemsSerializer> {
@@ -71,8 +71,8 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Query(() => UserDataSerializer)
-  @SetScope(Scope.ReadIdentityUsers)
   @Cache(Collection.Users, 'fill')
+  @SetScope(Scope.ReadIdentityUsers)
   @SetPolicy(Action.Read, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findUserById(
@@ -86,8 +86,8 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Mutation(() => UserDataSerializer)
-  @SetScope(Scope.WriteIdentityUsers)
   @Cache(Collection.Users, 'flush')
+  @SetScope(Scope.WriteIdentityUsers)
   @SetPolicy(Action.Delete, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   deleteUserById(
@@ -101,8 +101,8 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Mutation(() => UserDataSerializer)
-  @SetScope(Scope.WriteIdentityUsers)
   @Cache(Collection.Users, 'flush')
+  @SetScope(Scope.WriteIdentityUsers)
   @SetPolicy(Action.Restore, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   restoreUserById(
@@ -116,8 +116,8 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Mutation(() => UserDataSerializer)
-  @SetScope(Scope.ManageIdentityUsers)
   @Cache(Collection.Users, 'flush')
+  @SetScope(Scope.ManageIdentityUsers)
   @SetPolicy(Action.Destroy, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   destroyUserById(
@@ -132,8 +132,8 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @SetScope(Scope.ManageIdentityUsers)
   @Cache(Collection.Users, 'flush')
+  @SetScope(Scope.ManageIdentityUsers)
   @SetPolicy(Action.Update, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateUserBulk(
@@ -146,8 +146,8 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
 
   @Mutation(() => UserDataSerializer)
   @ShipStrategy('update')
-  @SetScope(Scope.WriteIdentityUsers)
   @Cache(Collection.Users, 'flush')
+  @SetScope(Scope.WriteIdentityUsers)
   @SetPolicy(Action.Update, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateUserById(

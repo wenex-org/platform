@@ -51,8 +51,8 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Get('count')
-  @SetScope(Scope.ReadContextConfigs)
   @Cache(Collection.Configs, 'fill')
+  @SetScope(Scope.ReadContextConfigs)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ContextConfigs)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -62,8 +62,8 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
 
   @Post()
   @ShipStrategy('create')
-  @SetScope(Scope.WriteContextConfigs)
   @Cache(Collection.Configs, 'flush')
+  @SetScope(Scope.WriteContextConfigs)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: ConfigDataSerializer })
   @SetPolicy(Action.Create, Resource.ContextConfigs)
@@ -73,8 +73,8 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
 
   @Post('bulk')
   @ShipStrategy('create')
-  @SetScope(Scope.WriteContextConfigs)
   @Cache(Collection.Configs, 'flush')
+  @SetScope(Scope.WriteContextConfigs)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: ConfigItemsSerializer })
   @SetPolicy(Action.Create, Resource.ContextConfigs)
@@ -83,8 +83,8 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Get()
-  @SetScope(Scope.ReadContextConfigs)
   @Cache(Collection.Configs, 'fill')
+  @SetScope(Scope.ReadContextConfigs)
   @SetPolicy(Action.Read, Resource.ContextConfigs)
   @ApiResponse({ type: ConfigItemsSerializer })
   @ApiQuery({ type: FilterDto, required: false })
@@ -113,8 +113,8 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Get(':id')
-  @SetScope(Scope.ReadContextConfigs)
   @Cache(Collection.Configs, 'fill')
+  @SetScope(Scope.ReadContextConfigs)
   @ApiResponse({ type: ConfigDataSerializer })
   @SetPolicy(Action.Read, Resource.ContextConfigs)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -124,8 +124,8 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Delete(':id')
-  @SetScope(Scope.WriteContextConfigs)
   @Cache(Collection.Configs, 'flush')
+  @SetScope(Scope.WriteContextConfigs)
   @ApiResponse({ type: ConfigDataSerializer })
   @SetPolicy(Action.Delete, Resource.ContextConfigs)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -135,8 +135,8 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Put(':id/restore')
-  @SetScope(Scope.WriteContextConfigs)
   @Cache(Collection.Configs, 'flush')
+  @SetScope(Scope.WriteContextConfigs)
   @ApiResponse({ type: ConfigDataSerializer })
   @SetPolicy(Action.Restore, Resource.ContextConfigs)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -146,8 +146,8 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Delete(':id/destroy')
-  @SetScope(Scope.ManageContextConfigs)
   @Cache(Collection.Configs, 'flush')
+  @SetScope(Scope.ManageContextConfigs)
   @ApiResponse({ type: ConfigDataSerializer })
   @SetPolicy(Action.Destroy, Resource.ContextConfigs)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -158,8 +158,8 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @SetScope(Scope.ManageContextConfigs)
   @Cache(Collection.Configs, 'flush')
+  @SetScope(Scope.ManageContextConfigs)
   @SetPolicy(Action.Update, Resource.ContextConfigs)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -173,8 +173,8 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
 
   @Patch(':id')
   @ShipStrategy('update')
-  @SetScope(Scope.WriteContextConfigs)
   @Cache(Collection.Configs, 'flush')
+  @SetScope(Scope.WriteContextConfigs)
   @ApiResponse({ type: ConfigDataSerializer })
   @SetPolicy(Action.Update, Resource.ContextConfigs)
   @ApiQuery({ type: String, name: 'ref', required: false })

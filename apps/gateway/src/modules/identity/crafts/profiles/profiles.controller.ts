@@ -51,8 +51,8 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Get('count')
-  @SetScope(Scope.ReadIdentityProfiles)
   @Cache(Collection.Profiles, 'fill')
+  @SetScope(Scope.ReadIdentityProfiles)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.IdentityProfiles)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -62,8 +62,8 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
 
   @Post()
   @ShipStrategy('create')
-  @SetScope(Scope.WriteIdentityProfiles)
   @Cache(Collection.Profiles, 'flush')
+  @SetScope(Scope.WriteIdentityProfiles)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: ProfileDataSerializer })
   @SetPolicy(Action.Create, Resource.IdentityProfiles)
@@ -73,8 +73,8 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
 
   @Post('bulk')
   @ShipStrategy('create')
-  @SetScope(Scope.WriteIdentityProfiles)
   @Cache(Collection.Profiles, 'flush')
+  @SetScope(Scope.WriteIdentityProfiles)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: ProfileItemsSerializer })
   @SetPolicy(Action.Create, Resource.IdentityProfiles)
@@ -83,8 +83,8 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Get()
-  @SetScope(Scope.ReadIdentityProfiles)
   @Cache(Collection.Profiles, 'fill')
+  @SetScope(Scope.ReadIdentityProfiles)
   @SetPolicy(Action.Read, Resource.IdentityProfiles)
   @ApiResponse({ type: ProfileItemsSerializer })
   @ApiQuery({ type: FilterDto, required: false })
@@ -113,8 +113,8 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Get(':id')
-  @SetScope(Scope.ReadIdentityProfiles)
   @Cache(Collection.Profiles, 'fill')
+  @SetScope(Scope.ReadIdentityProfiles)
   @ApiResponse({ type: ProfileDataSerializer })
   @SetPolicy(Action.Read, Resource.IdentityProfiles)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -124,8 +124,8 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Delete(':id')
-  @SetScope(Scope.WriteIdentityProfiles)
   @Cache(Collection.Profiles, 'flush')
+  @SetScope(Scope.WriteIdentityProfiles)
   @ApiResponse({ type: ProfileDataSerializer })
   @SetPolicy(Action.Delete, Resource.IdentityProfiles)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -135,8 +135,8 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Put(':id/restore')
-  @SetScope(Scope.WriteIdentityProfiles)
   @Cache(Collection.Profiles, 'flush')
+  @SetScope(Scope.WriteIdentityProfiles)
   @ApiResponse({ type: ProfileDataSerializer })
   @SetPolicy(Action.Restore, Resource.IdentityProfiles)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -146,8 +146,8 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Delete(':id/destroy')
-  @SetScope(Scope.ManageIdentityProfiles)
   @Cache(Collection.Profiles, 'flush')
+  @SetScope(Scope.ManageIdentityProfiles)
   @ApiResponse({ type: ProfileDataSerializer })
   @SetPolicy(Action.Destroy, Resource.IdentityProfiles)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -158,8 +158,8 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @SetScope(Scope.ManageIdentityProfiles)
   @Cache(Collection.Profiles, 'flush')
+  @SetScope(Scope.ManageIdentityProfiles)
   @SetPolicy(Action.Update, Resource.IdentityProfiles)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -173,8 +173,8 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
 
   @Patch(':id')
   @ShipStrategy('update')
-  @SetScope(Scope.WriteIdentityProfiles)
   @Cache(Collection.Profiles, 'flush')
+  @SetScope(Scope.WriteIdentityProfiles)
   @ApiResponse({ type: ProfileDataSerializer })
   @SetPolicy(Action.Update, Resource.IdentityProfiles)
   @ApiQuery({ type: String, name: 'ref', required: false })

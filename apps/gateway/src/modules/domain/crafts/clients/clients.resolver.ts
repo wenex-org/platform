@@ -33,8 +33,8 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Query(() => TotalSerializer)
-  @SetScope(Scope.ReadDomainClients)
   @Cache(Collection.Clients, 'fill')
+  @SetScope(Scope.ReadDomainClients)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.DomainClients)
   countClient(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
@@ -43,8 +43,8 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
 
   @Mutation(() => ClientDataSerializer)
   @ShipStrategy('create')
-  @SetScope(Scope.WriteDomainClients)
   @Cache(Collection.Clients, 'flush')
+  @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainClients)
   createClient(@Meta() meta: Metadata, @Args('data') data: CreateClientDto): Observable<ClientDataSerializer> {
@@ -53,8 +53,8 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
 
   @Mutation(() => ClientItemsSerializer)
   @ShipStrategy('create')
-  @SetScope(Scope.WriteDomainClients)
   @Cache(Collection.Clients, 'flush')
+  @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainClients)
   createClientBulk(@Meta() meta: Metadata, @Args('data') data: CreateClientItemsDto): Observable<ClientItemsSerializer> {
@@ -62,8 +62,8 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Query(() => ClientItemsSerializer)
-  @SetScope(Scope.ReadDomainClients)
   @Cache(Collection.Clients, 'fill')
+  @SetScope(Scope.ReadDomainClients)
   @SetPolicy(Action.Read, Resource.DomainClients)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findClient(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Client>): Observable<ClientItemsSerializer> {
@@ -71,8 +71,8 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Query(() => ClientDataSerializer)
-  @SetScope(Scope.ReadDomainClients)
   @Cache(Collection.Clients, 'fill')
+  @SetScope(Scope.ReadDomainClients)
   @SetPolicy(Action.Read, Resource.DomainClients)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findClientById(
@@ -86,8 +86,8 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Mutation(() => ClientDataSerializer)
-  @SetScope(Scope.WriteDomainClients)
   @Cache(Collection.Clients, 'flush')
+  @SetScope(Scope.WriteDomainClients)
   @SetPolicy(Action.Delete, Resource.DomainClients)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   deleteClientById(
@@ -101,8 +101,8 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Mutation(() => ClientDataSerializer)
-  @SetScope(Scope.WriteDomainClients)
   @Cache(Collection.Clients, 'flush')
+  @SetScope(Scope.WriteDomainClients)
   @SetPolicy(Action.Restore, Resource.DomainClients)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   restoreClientById(
@@ -116,8 +116,8 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Mutation(() => ClientDataSerializer)
-  @SetScope(Scope.ManageDomainClients)
   @Cache(Collection.Clients, 'flush')
+  @SetScope(Scope.ManageDomainClients)
   @SetPolicy(Action.Destroy, Resource.DomainClients)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   destroyClientById(
@@ -132,8 +132,8 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @SetScope(Scope.ManageDomainClients)
   @Cache(Collection.Clients, 'flush')
+  @SetScope(Scope.ManageDomainClients)
   @SetPolicy(Action.Update, Resource.DomainClients)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateClientBulk(
@@ -146,8 +146,8 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
 
   @Mutation(() => ClientDataSerializer)
   @ShipStrategy('update')
-  @SetScope(Scope.WriteDomainClients)
   @Cache(Collection.Clients, 'flush')
+  @SetScope(Scope.WriteDomainClients)
   @SetPolicy(Action.Update, Resource.DomainClients)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateClientById(

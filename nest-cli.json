@@ -55,6 +55,15 @@
         "tsConfigPath": "apps/services/domain/tsconfig.app.json"
       }
     },
+    "essential": {
+      "type": "application",
+      "root": "apps/services/essential",
+      "entryFile": "main",
+      "sourceRoot": "apps/services/essential/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/services/essential/tsconfig.app.json"
+      }
+    },
     "context": {
       "type": "application",
       "root": "apps/services/context",

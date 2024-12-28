@@ -51,8 +51,8 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   }
 
   @Get('count')
-  @SetScope(Scope.ReadDomainClients)
   @Cache(Collection.Clients, 'fill')
+  @SetScope(Scope.ReadDomainClients)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.DomainClients)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -62,8 +62,8 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
 
   @Post()
   @ShipStrategy('create')
-  @SetScope(Scope.WriteDomainClients)
   @Cache(Collection.Clients, 'flush')
+  @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: ClientDataSerializer })
   @SetPolicy(Action.Create, Resource.DomainClients)
@@ -73,8 +73,8 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
 
   @Post('bulk')
   @ShipStrategy('create')
-  @SetScope(Scope.WriteDomainClients)
   @Cache(Collection.Clients, 'flush')
+  @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: ClientItemsSerializer })
   @SetPolicy(Action.Create, Resource.DomainClients)
@@ -83,8 +83,8 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   }
 
   @Get()
-  @SetScope(Scope.ReadDomainClients)
   @Cache(Collection.Clients, 'fill')
+  @SetScope(Scope.ReadDomainClients)
   @SetPolicy(Action.Read, Resource.DomainClients)
   @ApiResponse({ type: ClientItemsSerializer })
   @ApiQuery({ type: FilterDto, required: false })
@@ -113,8 +113,8 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   }
 
   @Get(':id')
-  @SetScope(Scope.ReadDomainClients)
   @Cache(Collection.Clients, 'fill')
+  @SetScope(Scope.ReadDomainClients)
   @ApiResponse({ type: ClientDataSerializer })
   @SetPolicy(Action.Read, Resource.DomainClients)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -124,8 +124,8 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   }
 
   @Delete(':id')
-  @SetScope(Scope.WriteDomainClients)
   @Cache(Collection.Clients, 'flush')
+  @SetScope(Scope.WriteDomainClients)
   @ApiResponse({ type: ClientDataSerializer })
   @SetPolicy(Action.Delete, Resource.DomainClients)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -135,8 +135,8 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   }
 
   @Put(':id/restore')
-  @SetScope(Scope.WriteDomainClients)
   @Cache(Collection.Clients, 'flush')
+  @SetScope(Scope.WriteDomainClients)
   @ApiResponse({ type: ClientDataSerializer })
   @SetPolicy(Action.Restore, Resource.DomainClients)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -146,8 +146,8 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   }
 
   @Delete(':id/destroy')
-  @SetScope(Scope.ManageDomainClients)
   @Cache(Collection.Clients, 'flush')
+  @SetScope(Scope.ManageDomainClients)
   @ApiResponse({ type: ClientDataSerializer })
   @SetPolicy(Action.Destroy, Resource.DomainClients)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -158,8 +158,8 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @SetScope(Scope.ManageDomainClients)
   @Cache(Collection.Clients, 'flush')
+  @SetScope(Scope.ManageDomainClients)
   @SetPolicy(Action.Update, Resource.DomainClients)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -173,8 +173,8 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
 
   @Patch(':id')
   @ShipStrategy('update')
-  @SetScope(Scope.WriteDomainClients)
   @Cache(Collection.Clients, 'flush')
+  @SetScope(Scope.WriteDomainClients)
   @ApiResponse({ type: ClientDataSerializer })
   @SetPolicy(Action.Update, Resource.DomainClients)
   @ApiQuery({ type: String, name: 'ref', required: false })

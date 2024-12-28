@@ -51,8 +51,8 @@ export class SessionsController extends ControllerClass<Session, SessionDto> imp
   }
 
   @Get('count')
-  @SetScope(Scope.ReadIdentitySessions)
   @Cache(Collection.Sessions, 'fill')
+  @SetScope(Scope.ReadIdentitySessions)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.IdentitySessions)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -62,8 +62,8 @@ export class SessionsController extends ControllerClass<Session, SessionDto> imp
 
   @Post()
   @ShipStrategy('create')
-  @SetScope(Scope.WriteIdentitySessions)
   @Cache(Collection.Sessions, 'flush')
+  @SetScope(Scope.WriteIdentitySessions)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: SessionDataSerializer })
   @SetPolicy(Action.Create, Resource.IdentitySessions)
@@ -73,8 +73,8 @@ export class SessionsController extends ControllerClass<Session, SessionDto> imp
 
   @Post('bulk')
   @ShipStrategy('create')
-  @SetScope(Scope.WriteIdentitySessions)
   @Cache(Collection.Sessions, 'flush')
+  @SetScope(Scope.WriteIdentitySessions)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: SessionItemsSerializer })
   @SetPolicy(Action.Create, Resource.IdentitySessions)
@@ -83,8 +83,8 @@ export class SessionsController extends ControllerClass<Session, SessionDto> imp
   }
 
   @Get()
-  @SetScope(Scope.ReadIdentitySessions)
   @Cache(Collection.Sessions, 'fill')
+  @SetScope(Scope.ReadIdentitySessions)
   @SetPolicy(Action.Read, Resource.IdentitySessions)
   @ApiResponse({ type: SessionItemsSerializer })
   @ApiQuery({ type: FilterDto, required: false })
@@ -113,8 +113,8 @@ export class SessionsController extends ControllerClass<Session, SessionDto> imp
   }
 
   @Get(':id')
-  @SetScope(Scope.ReadIdentitySessions)
   @Cache(Collection.Sessions, 'fill')
+  @SetScope(Scope.ReadIdentitySessions)
   @ApiResponse({ type: SessionDataSerializer })
   @SetPolicy(Action.Read, Resource.IdentitySessions)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -124,8 +124,8 @@ export class SessionsController extends ControllerClass<Session, SessionDto> imp
   }
 
   @Delete(':id')
-  @SetScope(Scope.WriteIdentitySessions)
   @Cache(Collection.Sessions, 'flush')
+  @SetScope(Scope.WriteIdentitySessions)
   @ApiResponse({ type: SessionDataSerializer })
   @SetPolicy(Action.Delete, Resource.IdentitySessions)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -135,8 +135,8 @@ export class SessionsController extends ControllerClass<Session, SessionDto> imp
   }
 
   @Put(':id/restore')
-  @SetScope(Scope.WriteIdentitySessions)
   @Cache(Collection.Sessions, 'flush')
+  @SetScope(Scope.WriteIdentitySessions)
   @ApiResponse({ type: SessionDataSerializer })
   @SetPolicy(Action.Restore, Resource.IdentitySessions)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -146,8 +146,8 @@ export class SessionsController extends ControllerClass<Session, SessionDto> imp
   }
 
   @Delete(':id/destroy')
-  @SetScope(Scope.ManageIdentitySessions)
   @Cache(Collection.Sessions, 'flush')
+  @SetScope(Scope.ManageIdentitySessions)
   @ApiResponse({ type: SessionDataSerializer })
   @SetPolicy(Action.Destroy, Resource.IdentitySessions)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -158,8 +158,8 @@ export class SessionsController extends ControllerClass<Session, SessionDto> imp
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @SetScope(Scope.ManageIdentitySessions)
   @Cache(Collection.Sessions, 'flush')
+  @SetScope(Scope.ManageIdentitySessions)
   @SetPolicy(Action.Update, Resource.IdentitySessions)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -173,8 +173,8 @@ export class SessionsController extends ControllerClass<Session, SessionDto> imp
 
   @Patch(':id')
   @ShipStrategy('update')
-  @SetScope(Scope.WriteIdentitySessions)
   @Cache(Collection.Sessions, 'flush')
+  @SetScope(Scope.WriteIdentitySessions)
   @ApiResponse({ type: SessionDataSerializer })
   @SetPolicy(Action.Update, Resource.IdentitySessions)
   @ApiQuery({ type: String, name: 'ref', required: false })

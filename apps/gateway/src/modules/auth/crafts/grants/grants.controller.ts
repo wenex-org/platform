@@ -51,8 +51,8 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   }
 
   @Get('count')
-  @SetScope(Scope.ReadAuthGrants)
   @Cache(Collection.Grants, 'fill')
+  @SetScope(Scope.ReadAuthGrants)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.AuthGrants)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -62,8 +62,8 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
 
   @Post()
   @ShipStrategy('create')
-  @SetScope(Scope.WriteAuthGrants)
   @Cache(Collection.Grants, 'flush')
+  @SetScope(Scope.WriteAuthGrants)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: GrantDataSerializer })
   @SetPolicy(Action.Create, Resource.AuthGrants)
@@ -73,8 +73,8 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
 
   @Post('bulk')
   @ShipStrategy('create')
-  @SetScope(Scope.WriteAuthGrants)
   @Cache(Collection.Grants, 'flush')
+  @SetScope(Scope.WriteAuthGrants)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: GrantItemsSerializer })
   @SetPolicy(Action.Create, Resource.AuthGrants)
@@ -83,8 +83,8 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   }
 
   @Get()
-  @SetScope(Scope.ReadAuthGrants)
   @Cache(Collection.Grants, 'fill')
+  @SetScope(Scope.ReadAuthGrants)
   @SetPolicy(Action.Read, Resource.AuthGrants)
   @ApiResponse({ type: GrantItemsSerializer })
   @ApiQuery({ type: FilterDto, required: false })
@@ -113,8 +113,8 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   }
 
   @Get(':id')
-  @SetScope(Scope.ReadAuthGrants)
   @Cache(Collection.Grants, 'fill')
+  @SetScope(Scope.ReadAuthGrants)
   @ApiResponse({ type: GrantDataSerializer })
   @SetPolicy(Action.Read, Resource.AuthGrants)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -124,8 +124,8 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   }
 
   @Delete(':id')
-  @SetScope(Scope.WriteAuthGrants)
   @Cache(Collection.Grants, 'flush')
+  @SetScope(Scope.WriteAuthGrants)
   @ApiResponse({ type: GrantDataSerializer })
   @SetPolicy(Action.Delete, Resource.AuthGrants)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -135,8 +135,8 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   }
 
   @Put(':id/restore')
-  @SetScope(Scope.WriteAuthGrants)
   @Cache(Collection.Grants, 'flush')
+  @SetScope(Scope.WriteAuthGrants)
   @ApiResponse({ type: GrantDataSerializer })
   @SetPolicy(Action.Restore, Resource.AuthGrants)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -146,8 +146,8 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   }
 
   @Delete(':id/destroy')
-  @SetScope(Scope.ManageAuthGrants)
   @Cache(Collection.Grants, 'flush')
+  @SetScope(Scope.ManageAuthGrants)
   @ApiResponse({ type: GrantDataSerializer })
   @SetPolicy(Action.Destroy, Resource.AuthGrants)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -158,8 +158,8 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @SetScope(Scope.ManageAuthGrants)
   @Cache(Collection.Grants, 'flush')
+  @SetScope(Scope.ManageAuthGrants)
   @SetPolicy(Action.Update, Resource.AuthGrants)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -173,8 +173,8 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
 
   @Patch(':id')
   @ShipStrategy('update')
-  @SetScope(Scope.WriteAuthGrants)
   @Cache(Collection.Grants, 'flush')
+  @SetScope(Scope.WriteAuthGrants)
   @ApiResponse({ type: GrantDataSerializer })
   @SetPolicy(Action.Update, Resource.AuthGrants)
   @ApiQuery({ type: String, name: 'ref', required: false })

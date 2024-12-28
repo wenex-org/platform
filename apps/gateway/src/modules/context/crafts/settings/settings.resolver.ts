@@ -33,8 +33,8 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   }
 
   @Query(() => TotalSerializer)
-  @SetScope(Scope.ReadContextSettings)
   @Cache(Collection.Settings, 'fill')
+  @SetScope(Scope.ReadContextSettings)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ContextSettings)
   countSetting(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
@@ -43,8 +43,8 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
 
   @Mutation(() => SettingDataSerializer)
   @ShipStrategy('create')
-  @SetScope(Scope.WriteContextSettings)
   @Cache(Collection.Settings, 'flush')
+  @SetScope(Scope.WriteContextSettings)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContextSettings)
   createSetting(@Meta() meta: Metadata, @Args('data') data: CreateSettingDto): Observable<SettingDataSerializer> {
@@ -53,8 +53,8 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
 
   @Mutation(() => SettingItemsSerializer)
   @ShipStrategy('create')
-  @SetScope(Scope.WriteContextSettings)
   @Cache(Collection.Settings, 'flush')
+  @SetScope(Scope.WriteContextSettings)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContextSettings)
   createSettingBulk(@Meta() meta: Metadata, @Args('data') data: CreateSettingItemsDto): Observable<SettingItemsSerializer> {
@@ -62,8 +62,8 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   }
 
   @Query(() => SettingItemsSerializer)
-  @SetScope(Scope.ReadContextSettings)
   @Cache(Collection.Settings, 'fill')
+  @SetScope(Scope.ReadContextSettings)
   @SetPolicy(Action.Read, Resource.ContextSettings)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findSetting(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Setting>): Observable<SettingItemsSerializer> {
@@ -71,8 +71,8 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   }
 
   @Query(() => SettingDataSerializer)
-  @SetScope(Scope.ReadContextSettings)
   @Cache(Collection.Settings, 'fill')
+  @SetScope(Scope.ReadContextSettings)
   @SetPolicy(Action.Read, Resource.ContextSettings)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findSettingById(
@@ -86,8 +86,8 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   }
 
   @Mutation(() => SettingDataSerializer)
-  @SetScope(Scope.WriteContextSettings)
   @Cache(Collection.Settings, 'flush')
+  @SetScope(Scope.WriteContextSettings)
   @SetPolicy(Action.Delete, Resource.ContextSettings)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   deleteSettingById(
@@ -101,8 +101,8 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   }
 
   @Mutation(() => SettingDataSerializer)
-  @SetScope(Scope.WriteContextSettings)
   @Cache(Collection.Settings, 'flush')
+  @SetScope(Scope.WriteContextSettings)
   @SetPolicy(Action.Restore, Resource.ContextSettings)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   restoreSettingById(
@@ -116,8 +116,8 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   }
 
   @Mutation(() => SettingDataSerializer)
-  @SetScope(Scope.ManageContextSettings)
   @Cache(Collection.Settings, 'flush')
+  @SetScope(Scope.ManageContextSettings)
   @SetPolicy(Action.Destroy, Resource.ContextSettings)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   destroySettingById(
@@ -132,8 +132,8 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @SetScope(Scope.ManageContextSettings)
   @Cache(Collection.Settings, 'flush')
+  @SetScope(Scope.ManageContextSettings)
   @SetPolicy(Action.Update, Resource.ContextSettings)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateSettingBulk(
@@ -146,8 +146,8 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
 
   @Mutation(() => SettingDataSerializer)
   @ShipStrategy('update')
-  @SetScope(Scope.WriteContextSettings)
   @Cache(Collection.Settings, 'flush')
+  @SetScope(Scope.WriteContextSettings)
   @SetPolicy(Action.Update, Resource.ContextSettings)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateSettingById(

@@ -4,8 +4,9 @@ declare -A PROTOS
 
 # Protos
 AUTH=./protos/auth.proto
-DOMAIN=./protos/domain.proto
 CONTEXT=./protos/context.proto
+DOMAIN=./protos/domain.proto
+ESSENTIAL=./protos/essential.proto
 IDENTITY=./protos/identity.proto
 SPECIAL=./protos/special.proto
 
@@ -14,16 +15,21 @@ PROTOS[AUTH,1]=./apps/services/auth/src/app.proto
 PROTOS[AUTH,2]=./apps/gateway/src/protobuf/auth.proto
 PROTOS[AUTH,3]=./libs/common/src/providers/auth/protobuf/auth.proto
 
+# Context Proto
+PROTOS[CONTEXT,1]=./apps/services/context/src/app.proto
+PROTOS[CONTEXT,2]=./apps/gateway/src/protobuf/context.proto
+PROTOS[CONTEXT,3]=./libs/common/src/providers/context/protobuf/context.proto
+
 # Domain Proto
 PROTOS[DOMAIN,1]=./apps/services/domain/src/app.proto
 PROTOS[DOMAIN,2]=./apps/gateway/src/protobuf/domain.proto
 PROTOS[DOMAIN,3]=./apps/services/auth/src/protobuf/domain.proto
 PROTOS[DOMAIN,4]=./libs/common/src/providers/domain/protobuf/domain.proto
 
-# Context Proto
-PROTOS[CONTEXT,1]=./apps/services/context/src/app.proto
-PROTOS[CONTEXT,2]=./apps/gateway/src/protobuf/context.proto
-PROTOS[CONTEXT,3]=./libs/common/src/providers/context/protobuf/context.proto
+# Essential Proto
+PROTOS[ESSENTIAL,1]=./apps/services/essential/src/app.proto
+PROTOS[ESSENTIAL,2]=./apps/gateway/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,4]=./libs/common/src/providers/essential/protobuf/essential.proto
 
 # Identity Proto
 PROTOS[IDENTITY,1]=./apps/services/identity/src/app.proto
@@ -39,8 +45,9 @@ PROTOS[SPECIAL,3]=./libs/common/src/providers/special/protobuf/special.proto
 # Main Program
 for KEY in "${!PROTOS[@]}"; do
   if [[ $KEY == *"AUTH"* ]]; then ln -f $AUTH ${PROTOS[$KEY]}; fi
-  if [[ $KEY == *"DOMAIN"* ]]; then ln -f $DOMAIN ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"CONTEXT"* ]]; then ln -f $CONTEXT ${PROTOS[$KEY]}; fi
+  if [[ $KEY == *"DOMAIN"* ]]; then ln -f $DOMAIN ${PROTOS[$KEY]}; fi
+  if [[ $KEY == *"ESSENTIAL"* ]]; then ln -f $ESSENTIAL ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"IDENTITY"* ]]; then ln -f $IDENTITY ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"SPECIAL"* ]]; then ln -f $SPECIAL ${PROTOS[$KEY]}; fi
 done

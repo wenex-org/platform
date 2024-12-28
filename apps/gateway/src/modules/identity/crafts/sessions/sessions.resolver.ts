@@ -33,8 +33,8 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Query(() => TotalSerializer)
-  @SetScope(Scope.ReadIdentitySessions)
   @Cache(Collection.Sessions, 'fill')
+  @SetScope(Scope.ReadIdentitySessions)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.IdentitySessions)
   countSession(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
@@ -43,8 +43,8 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
 
   @Mutation(() => SessionDataSerializer)
   @ShipStrategy('create')
-  @SetScope(Scope.WriteIdentitySessions)
   @Cache(Collection.Sessions, 'flush')
+  @SetScope(Scope.WriteIdentitySessions)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentitySessions)
   createSession(@Meta() meta: Metadata, @Args('data') data: CreateSessionDto): Observable<SessionDataSerializer> {
@@ -53,8 +53,8 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
 
   @Mutation(() => SessionItemsSerializer)
   @ShipStrategy('create')
-  @SetScope(Scope.WriteIdentitySessions)
   @Cache(Collection.Sessions, 'flush')
+  @SetScope(Scope.WriteIdentitySessions)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentitySessions)
   createSessionBulk(@Meta() meta: Metadata, @Args('data') data: CreateSessionItemsDto): Observable<SessionItemsSerializer> {
@@ -62,8 +62,8 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Query(() => SessionItemsSerializer)
-  @SetScope(Scope.ReadIdentitySessions)
   @Cache(Collection.Sessions, 'fill')
+  @SetScope(Scope.ReadIdentitySessions)
   @SetPolicy(Action.Read, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findSession(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Session>): Observable<SessionItemsSerializer> {
@@ -71,8 +71,8 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Query(() => SessionDataSerializer)
-  @SetScope(Scope.ReadIdentitySessions)
   @Cache(Collection.Sessions, 'fill')
+  @SetScope(Scope.ReadIdentitySessions)
   @SetPolicy(Action.Read, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findSessionById(
@@ -86,8 +86,8 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Mutation(() => SessionDataSerializer)
-  @SetScope(Scope.WriteIdentitySessions)
   @Cache(Collection.Sessions, 'flush')
+  @SetScope(Scope.WriteIdentitySessions)
   @SetPolicy(Action.Delete, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   deleteSessionById(
@@ -101,8 +101,8 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Mutation(() => SessionDataSerializer)
-  @SetScope(Scope.WriteIdentitySessions)
   @Cache(Collection.Sessions, 'flush')
+  @SetScope(Scope.WriteIdentitySessions)
   @SetPolicy(Action.Restore, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   restoreSessionById(
@@ -116,8 +116,8 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Mutation(() => SessionDataSerializer)
-  @SetScope(Scope.ManageIdentitySessions)
   @Cache(Collection.Sessions, 'flush')
+  @SetScope(Scope.ManageIdentitySessions)
   @SetPolicy(Action.Destroy, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   destroySessionById(
@@ -132,8 +132,8 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @SetScope(Scope.ManageIdentitySessions)
   @Cache(Collection.Sessions, 'flush')
+  @SetScope(Scope.ManageIdentitySessions)
   @SetPolicy(Action.Update, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateSessionBulk(
@@ -146,8 +146,8 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
 
   @Mutation(() => SessionDataSerializer)
   @ShipStrategy('update')
-  @SetScope(Scope.WriteIdentitySessions)
   @Cache(Collection.Sessions, 'flush')
+  @SetScope(Scope.WriteIdentitySessions)
   @SetPolicy(Action.Update, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateSessionById(

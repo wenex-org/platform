@@ -51,8 +51,8 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Get('count')
-  @SetScope(Scope.ReadSpecialStats)
   @Cache(Collection.Stats, 'fill')
+  @SetScope(Scope.ReadSpecialStats)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.SpecialStats)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -62,8 +62,8 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
 
   @Post()
   @ShipStrategy('create')
-  @SetScope(Scope.WriteSpecialStats)
   @Cache(Collection.Stats, 'flush')
+  @SetScope(Scope.WriteSpecialStats)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: StatDataSerializer })
   @SetPolicy(Action.Create, Resource.SpecialStats)
@@ -73,8 +73,8 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
 
   @Post('bulk')
   @ShipStrategy('create')
-  @SetScope(Scope.WriteSpecialStats)
   @Cache(Collection.Stats, 'flush')
+  @SetScope(Scope.WriteSpecialStats)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: StatItemsSerializer })
   @SetPolicy(Action.Create, Resource.SpecialStats)
@@ -83,8 +83,8 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Get()
-  @SetScope(Scope.ReadSpecialStats)
   @Cache(Collection.Stats, 'fill')
+  @SetScope(Scope.ReadSpecialStats)
   @SetPolicy(Action.Read, Resource.SpecialStats)
   @ApiResponse({ type: StatItemsSerializer })
   @ApiQuery({ type: FilterDto, required: false })
@@ -113,8 +113,8 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Get(':id')
-  @SetScope(Scope.ReadSpecialStats)
   @Cache(Collection.Stats, 'fill')
+  @SetScope(Scope.ReadSpecialStats)
   @ApiResponse({ type: StatDataSerializer })
   @SetPolicy(Action.Read, Resource.SpecialStats)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -124,8 +124,8 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Delete(':id')
-  @SetScope(Scope.WriteSpecialStats)
   @Cache(Collection.Stats, 'flush')
+  @SetScope(Scope.WriteSpecialStats)
   @ApiResponse({ type: StatDataSerializer })
   @SetPolicy(Action.Delete, Resource.SpecialStats)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -135,8 +135,8 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Put(':id/restore')
-  @SetScope(Scope.WriteSpecialStats)
   @Cache(Collection.Stats, 'flush')
+  @SetScope(Scope.WriteSpecialStats)
   @ApiResponse({ type: StatDataSerializer })
   @SetPolicy(Action.Restore, Resource.SpecialStats)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -146,8 +146,8 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Delete(':id/destroy')
-  @SetScope(Scope.ManageSpecialStats)
   @Cache(Collection.Stats, 'flush')
+  @SetScope(Scope.ManageSpecialStats)
   @ApiResponse({ type: StatDataSerializer })
   @SetPolicy(Action.Destroy, Resource.SpecialStats)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -158,8 +158,8 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @SetScope(Scope.ManageSpecialStats)
   @Cache(Collection.Stats, 'flush')
+  @SetScope(Scope.ManageSpecialStats)
   @SetPolicy(Action.Update, Resource.SpecialStats)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -173,8 +173,8 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
 
   @Patch(':id')
   @ShipStrategy('update')
-  @SetScope(Scope.WriteSpecialStats)
   @Cache(Collection.Stats, 'flush')
+  @SetScope(Scope.WriteSpecialStats)
   @ApiResponse({ type: StatDataSerializer })
   @SetPolicy(Action.Update, Resource.SpecialStats)
   @ApiQuery({ type: String, name: 'ref', required: false })

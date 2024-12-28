@@ -51,8 +51,8 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Get('count')
-  @SetScope(Scope.ReadContextSettings)
   @Cache(Collection.Settings, 'fill')
+  @SetScope(Scope.ReadContextSettings)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ContextSettings)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -62,8 +62,8 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
 
   @Post()
   @ShipStrategy('create')
-  @SetScope(Scope.WriteContextSettings)
   @Cache(Collection.Settings, 'flush')
+  @SetScope(Scope.WriteContextSettings)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: SettingDataSerializer })
   @SetPolicy(Action.Create, Resource.ContextSettings)
@@ -73,8 +73,8 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
 
   @Post('bulk')
   @ShipStrategy('create')
-  @SetScope(Scope.WriteContextSettings)
   @Cache(Collection.Settings, 'flush')
+  @SetScope(Scope.WriteContextSettings)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: SettingItemsSerializer })
   @SetPolicy(Action.Create, Resource.ContextSettings)
@@ -83,8 +83,8 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Get()
-  @SetScope(Scope.ReadContextSettings)
   @Cache(Collection.Settings, 'fill')
+  @SetScope(Scope.ReadContextSettings)
   @SetPolicy(Action.Read, Resource.ContextSettings)
   @ApiResponse({ type: SettingItemsSerializer })
   @ApiQuery({ type: FilterDto, required: false })
@@ -113,8 +113,8 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Get(':id')
-  @SetScope(Scope.ReadContextSettings)
   @Cache(Collection.Settings, 'fill')
+  @SetScope(Scope.ReadContextSettings)
   @ApiResponse({ type: SettingDataSerializer })
   @SetPolicy(Action.Read, Resource.ContextSettings)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -124,8 +124,8 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Delete(':id')
-  @SetScope(Scope.WriteContextSettings)
   @Cache(Collection.Settings, 'flush')
+  @SetScope(Scope.WriteContextSettings)
   @ApiResponse({ type: SettingDataSerializer })
   @SetPolicy(Action.Delete, Resource.ContextSettings)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -135,8 +135,8 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Put(':id/restore')
-  @SetScope(Scope.WriteContextSettings)
   @Cache(Collection.Settings, 'flush')
+  @SetScope(Scope.WriteContextSettings)
   @ApiResponse({ type: SettingDataSerializer })
   @SetPolicy(Action.Restore, Resource.ContextSettings)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -146,8 +146,8 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Delete(':id/destroy')
-  @SetScope(Scope.ManageContextSettings)
   @Cache(Collection.Settings, 'flush')
+  @SetScope(Scope.ManageContextSettings)
   @ApiResponse({ type: SettingDataSerializer })
   @SetPolicy(Action.Destroy, Resource.ContextSettings)
   @ApiQuery({ type: String, name: 'ref', required: false })
@@ -158,8 +158,8 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
 
   @Patch('bulk')
   @ShipStrategy('update')
-  @SetScope(Scope.ManageContextSettings)
   @Cache(Collection.Settings, 'flush')
+  @SetScope(Scope.ManageContextSettings)
   @SetPolicy(Action.Update, Resource.ContextSettings)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -173,8 +173,8 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
 
   @Patch(':id')
   @ShipStrategy('update')
-  @SetScope(Scope.WriteContextSettings)
   @Cache(Collection.Settings, 'flush')
+  @SetScope(Scope.WriteContextSettings)
   @ApiResponse({ type: SettingDataSerializer })
   @SetPolicy(Action.Update, Resource.ContextSettings)
   @ApiQuery({ type: String, name: 'ref', required: false })

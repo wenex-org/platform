@@ -33,8 +33,8 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Query(() => TotalSerializer)
-  @SetScope(Scope.ReadDomainApps)
   @Cache(Collection.Apps, 'fill')
+  @SetScope(Scope.ReadDomainApps)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.DomainApps)
   countApp(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
@@ -43,8 +43,8 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
 
   @Mutation(() => AppDataSerializer)
   @ShipStrategy('create')
-  @SetScope(Scope.WriteDomainApps)
   @Cache(Collection.Apps, 'flush')
+  @SetScope(Scope.WriteDomainApps)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainApps)
   createApp(@Meta() meta: Metadata, @Args('data') data: CreateAppDto): Observable<AppDataSerializer> {
@@ -53,8 +53,8 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
 
   @Mutation(() => AppItemsSerializer)
   @ShipStrategy('create')
-  @SetScope(Scope.WriteDomainApps)
   @Cache(Collection.Apps, 'flush')
+  @SetScope(Scope.WriteDomainApps)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainApps)
   createAppBulk(@Meta() meta: Metadata, @Args('data') data: CreateAppItemsDto): Observable<AppItemsSerializer> {
@@ -62,8 +62,8 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Query(() => AppItemsSerializer)
-  @SetScope(Scope.ReadDomainApps)
   @Cache(Collection.Apps, 'fill')
+  @SetScope(Scope.ReadDomainApps)
   @SetPolicy(Action.Read, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findApp(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<App>): Observable<AppItemsSerializer> {
@@ -71,8 +71,8 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Query(() => AppDataSerializer)
-  @SetScope(Scope.ReadDomainApps)
   @Cache(Collection.Apps, 'fill')
+  @SetScope(Scope.ReadDomainApps)
   @SetPolicy(Action.Read, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findAppById(
@@ -86,8 +86,8 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Mutation(() => AppDataSerializer)
-  @SetScope(Scope.WriteDomainApps)
   @Cache(Collection.Apps, 'flush')
+  @SetScope(Scope.WriteDomainApps)
   @SetPolicy(Action.Delete, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   deleteAppById(
@@ -101,8 +101,8 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Mutation(() => AppDataSerializer)
-  @SetScope(Scope.WriteDomainApps)
   @Cache(Collection.Apps, 'flush')
+  @SetScope(Scope.WriteDomainApps)
   @SetPolicy(Action.Restore, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   restoreAppById(
@@ -116,8 +116,8 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Mutation(() => AppDataSerializer)
-  @SetScope(Scope.ManageDomainApps)
   @Cache(Collection.Apps, 'flush')
+  @SetScope(Scope.ManageDomainApps)
   @SetPolicy(Action.Destroy, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   destroyAppById(
@@ -132,8 +132,8 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @SetScope(Scope.ManageDomainApps)
   @Cache(Collection.Apps, 'flush')
+  @SetScope(Scope.ManageDomainApps)
   @SetPolicy(Action.Update, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateAppBulk(
@@ -146,8 +146,8 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
 
   @Mutation(() => AppDataSerializer)
   @ShipStrategy('update')
-  @SetScope(Scope.WriteDomainApps)
   @Cache(Collection.Apps, 'flush')
+  @SetScope(Scope.WriteDomainApps)
   @SetPolicy(Action.Update, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateAppById(

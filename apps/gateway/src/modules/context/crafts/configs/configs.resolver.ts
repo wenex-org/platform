@@ -33,8 +33,8 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Query(() => TotalSerializer)
-  @SetScope(Scope.ReadContextConfigs)
   @Cache(Collection.Configs, 'fill')
+  @SetScope(Scope.ReadContextConfigs)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ContextConfigs)
   countConfig(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
@@ -43,8 +43,8 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
 
   @Mutation(() => ConfigDataSerializer)
   @ShipStrategy('create')
-  @SetScope(Scope.WriteContextConfigs)
   @Cache(Collection.Configs, 'flush')
+  @SetScope(Scope.WriteContextConfigs)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContextConfigs)
   createConfig(@Meta() meta: Metadata, @Args('data') data: CreateConfigDto): Observable<ConfigDataSerializer> {
@@ -53,8 +53,8 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
 
   @Mutation(() => ConfigItemsSerializer)
   @ShipStrategy('create')
-  @SetScope(Scope.WriteContextConfigs)
   @Cache(Collection.Configs, 'flush')
+  @SetScope(Scope.WriteContextConfigs)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContextConfigs)
   createConfigBulk(@Meta() meta: Metadata, @Args('data') data: CreateConfigItemsDto): Observable<ConfigItemsSerializer> {
@@ -62,8 +62,8 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Query(() => ConfigItemsSerializer)
-  @SetScope(Scope.ReadContextConfigs)
   @Cache(Collection.Configs, 'fill')
+  @SetScope(Scope.ReadContextConfigs)
   @SetPolicy(Action.Read, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findConfig(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Config>): Observable<ConfigItemsSerializer> {
@@ -71,8 +71,8 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Query(() => ConfigDataSerializer)
-  @SetScope(Scope.ReadContextConfigs)
   @Cache(Collection.Configs, 'fill')
+  @SetScope(Scope.ReadContextConfigs)
   @SetPolicy(Action.Read, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findConfigById(
@@ -86,8 +86,8 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Mutation(() => ConfigDataSerializer)
-  @SetScope(Scope.WriteContextConfigs)
   @Cache(Collection.Configs, 'flush')
+  @SetScope(Scope.WriteContextConfigs)
   @SetPolicy(Action.Delete, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   deleteConfigById(
@@ -101,8 +101,8 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Mutation(() => ConfigDataSerializer)
-  @SetScope(Scope.WriteContextConfigs)
   @Cache(Collection.Configs, 'flush')
+  @SetScope(Scope.WriteContextConfigs)
   @SetPolicy(Action.Restore, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   restoreConfigById(
@@ -116,8 +116,8 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Mutation(() => ConfigDataSerializer)
-  @SetScope(Scope.ManageContextConfigs)
   @Cache(Collection.Configs, 'flush')
+  @SetScope(Scope.ManageContextConfigs)
   @SetPolicy(Action.Destroy, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   destroyConfigById(
@@ -132,8 +132,8 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @SetScope(Scope.ManageContextConfigs)
   @Cache(Collection.Configs, 'flush')
+  @SetScope(Scope.ManageContextConfigs)
   @SetPolicy(Action.Update, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateConfigBulk(
@@ -146,8 +146,8 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
 
   @Mutation(() => ConfigDataSerializer)
   @ShipStrategy('update')
-  @SetScope(Scope.WriteContextConfigs)
   @Cache(Collection.Configs, 'flush')
+  @SetScope(Scope.WriteContextConfigs)
   @SetPolicy(Action.Update, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateConfigById(

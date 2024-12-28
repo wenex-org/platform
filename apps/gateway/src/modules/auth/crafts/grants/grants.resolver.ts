@@ -33,8 +33,8 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Query(() => TotalSerializer)
-  @SetScope(Scope.ReadAuthGrants)
   @Cache(Collection.Grants, 'fill')
+  @SetScope(Scope.ReadAuthGrants)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.AuthGrants)
   countGrant(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
@@ -43,8 +43,8 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
 
   @Mutation(() => GrantDataSerializer)
   @ShipStrategy('create')
-  @SetScope(Scope.WriteAuthGrants)
   @Cache(Collection.Grants, 'flush')
+  @SetScope(Scope.WriteAuthGrants)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.AuthGrants)
   createGrant(@Meta() meta: Metadata, @Args('data') data: CreateGrantDto): Observable<GrantDataSerializer> {
@@ -53,8 +53,8 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
 
   @Mutation(() => GrantItemsSerializer)
   @ShipStrategy('create')
-  @SetScope(Scope.WriteAuthGrants)
   @Cache(Collection.Grants, 'flush')
+  @SetScope(Scope.WriteAuthGrants)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.AuthGrants)
   createGrantBulk(@Meta() meta: Metadata, @Args('data') data: CreateGrantItemsDto): Observable<GrantItemsSerializer> {
@@ -62,8 +62,8 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Query(() => GrantItemsSerializer)
-  @SetScope(Scope.ReadAuthGrants)
   @Cache(Collection.Grants, 'fill')
+  @SetScope(Scope.ReadAuthGrants)
   @SetPolicy(Action.Read, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findGrant(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Grant>): Observable<GrantItemsSerializer> {
@@ -71,8 +71,8 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Query(() => GrantDataSerializer)
-  @SetScope(Scope.ReadAuthGrants)
   @Cache(Collection.Grants, 'fill')
+  @SetScope(Scope.ReadAuthGrants)
   @SetPolicy(Action.Read, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   findGrantById(
@@ -86,8 +86,8 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Mutation(() => GrantDataSerializer)
-  @SetScope(Scope.WriteAuthGrants)
   @Cache(Collection.Grants, 'flush')
+  @SetScope(Scope.WriteAuthGrants)
   @SetPolicy(Action.Delete, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   deleteGrantById(
@@ -101,8 +101,8 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Mutation(() => GrantDataSerializer)
-  @SetScope(Scope.WriteAuthGrants)
   @Cache(Collection.Grants, 'flush')
+  @SetScope(Scope.WriteAuthGrants)
   @SetPolicy(Action.Restore, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   restoreGrantById(
@@ -116,8 +116,8 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Mutation(() => GrantDataSerializer)
-  @SetScope(Scope.ManageAuthGrants)
   @Cache(Collection.Grants, 'flush')
+  @SetScope(Scope.ManageAuthGrants)
   @SetPolicy(Action.Destroy, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   destroyGrantById(
@@ -132,8 +132,8 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @SetScope(Scope.ManageAuthGrants)
   @Cache(Collection.Grants, 'flush')
+  @SetScope(Scope.ManageAuthGrants)
   @SetPolicy(Action.Update, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateGrantBulk(
@@ -146,8 +146,8 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
 
   @Mutation(() => GrantDataSerializer)
   @ShipStrategy('update')
-  @SetScope(Scope.WriteAuthGrants)
   @Cache(Collection.Grants, 'flush')
+  @SetScope(Scope.WriteAuthGrants)
   @SetPolicy(Action.Update, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateGrantById(
