@@ -13,9 +13,15 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
-import { SagaDataSerializer, SagaItemsSerializer, SagaSerializer } from '@app/common/serializers/essential';
+import {
+  SagaDataSerializer,
+  SagaItemsSerializer,
+  SagaSerializer,
+  SagaStageDataSerializer,
+  SagaStageSerializer,
+} from '@app/common/serializers/essential';
+import { AddSagaStageDto, CreateSagaDto, CreateSagaItemsDto, StartSagaDto, UpdateSagaDto } from '@app/common/dto/essential';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
-import { CreateSagaDto, CreateSagaItemsDto, UpdateSagaDto } from '@app/common/dto/essential';
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -25,6 +31,7 @@ import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
 import { FilterInterceptor } from '@app/common/core/interceptors/flow';
+import { getSseMessage, mapToInstance } from '@app/common/core/utils';
 import { EssentialProvider } from '@app/common/providers/essential';
 import { Saga, SagaDto } from '@app/common/interfaces/essential';
 import { AllExceptionsFilter } from '@app/common/core/filters';
@@ -32,10 +39,9 @@ import { TotalSerializer } from '@app/common/core/serializers';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { Filter, Meta } from '@app/common/core/decorators';
 import { ValidationPipe } from '@app/common/core/pipes';
-import { getSseMessage } from '@app/common/core/utils';
 import { Metadata } from '@app/common/core/interfaces';
+import { from, Observable } from 'rxjs';
 import { Response } from 'express';
-import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
 @RateLimit('sagas')
@@ -49,6 +55,54 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   constructor(readonly provider: EssentialProvider) {
     super(provider.sagas, SagaSerializer);
   }
+
+  @Post('start')
+  @ShipStrategy('create')
+  @Cache(Collection.Sagas, 'flush')
+  @SetScope(Scope.StartEssentialSagas)
+  @UseInterceptors(...WriteInterceptors)
+  @ApiResponse({ type: SagaDataSerializer })
+  @SetPolicy(Action.Start, Resource.EssentialSagas)
+  start(@Meta() meta: Metadata, @Body() data: StartSagaDto): Observable<SagaDataSerializer> {
+    return from(this.provider.sagas.start(data, { meta })).pipe(mapToInstance(SagaSerializer, 'data'));
+  }
+
+  @Post('add')
+  @ShipStrategy('create')
+  @Cache(Collection.Sagas, 'flush')
+  @SetScope(Scope.AddEssentialSagas)
+  @UseInterceptors(...WriteInterceptors)
+  @ApiResponse({ type: SagaDataSerializer })
+  @SetPolicy(Action.Add, Resource.EssentialSagas)
+  add(@Meta() meta: Metadata, @Body() data: AddSagaStageDto): Observable<SagaStageDataSerializer> {
+    return from(this.provider.sagas.add(data, { meta })).pipe(mapToInstance(SagaStageSerializer, 'data'));
+  }
+
+  @Get(':id/abort')
+  @Cache(Collection.Sagas, 'flush')
+  @SetScope(Scope.AbortEssentialSagas)
+  @ApiResponse({ type: SagaDataSerializer })
+  @SetPolicy(Action.Abort, Resource.EssentialSagas)
+  @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  abort(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<Saga>): Observable<SagaDataSerializer> {
+    return from(this.provider.sagas.abort(filter, { meta })).pipe(mapToInstance(SagaSerializer, 'data'));
+  }
+
+  @Get(':id/commit')
+  @Cache(Collection.Sagas, 'flush')
+  @SetScope(Scope.CommitEssentialSagas)
+  @ApiResponse({ type: SagaDataSerializer })
+  @SetPolicy(Action.Commit, Resource.EssentialSagas)
+  @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  commit(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<Saga>): Observable<SagaDataSerializer> {
+    return from(this.provider.sagas.commit(filter, { meta })).pipe(mapToInstance(SagaSerializer, 'data'));
+  }
+
+  // ##############################
+  // Common Method's
+  // ##############################
 
   @Get('count')
   @Cache(Collection.Sagas, 'fill')
