@@ -29,7 +29,12 @@ PROTOS[DOMAIN,4]=./libs/common/src/providers/domain/protobuf/domain.proto
 # Essential Proto
 PROTOS[ESSENTIAL,1]=./apps/services/essential/src/app.proto
 PROTOS[ESSENTIAL,2]=./apps/gateway/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,4]=./libs/common/src/providers/essential/protobuf/essential.proto
+PROTOS[ESSENTIAL,3]=./apps/services/auth/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,4]=./apps/services/domain/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,5]=./apps/services/context/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,6]=./apps/services/special/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,7]=./apps/services/identity/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,8]=./libs/common/src/providers/essential/protobuf/essential.proto
 
 # Identity Proto
 PROTOS[IDENTITY,1]=./apps/services/identity/src/app.proto
