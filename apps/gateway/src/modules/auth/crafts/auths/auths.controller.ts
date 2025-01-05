@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { AuthenticationSerializer, AuthorizationSerializer } from '@app/common/serializers/auth';
 import { AuthenticationDto, AuthorizationDto } from '@app/common/dto/auth';
 import { JwtTokenSerializer } from '@app/common/core/serializers/auth';
@@ -36,13 +36,13 @@ export class AuthsController {
     return from(this.provider.auths.token(data, { meta })).pipe(mapToInstance(AuthenticationSerializer));
   }
 
-  @Post('verify')
+  @Get('verify')
   @ApiBearerAuth()
   verify(@Meta() meta: Metadata): Observable<JwtTokenSerializer> {
     return from(this.provider.auths.verify({ meta })).pipe(mapToInstance(JwtTokenSerializer));
   }
 
-  @Post('logout')
+  @Get('logout')
   @ApiBearerAuth()
   logout(@Meta() meta: Metadata): Observable<ResultSerializer> {
     return from(this.provider.auths.logout({ meta })).pipe(
