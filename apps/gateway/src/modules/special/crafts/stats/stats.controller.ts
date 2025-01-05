@@ -13,9 +13,9 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import { CollectStatDto, CreateStatDto, CreateStatItemsDto, UpdateStatDto } from '@app/common/dto/special';
 import { StatDataSerializer, StatItemsSerializer, StatSerializer } from '@app/common/serializers/special';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
-import { CreateStatDto, CreateStatItemsDto, UpdateStatDto } from '@app/common/dto/special';
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -25,6 +25,7 @@ import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
 import { FilterInterceptor } from '@app/common/core/interceptors/flow';
+import { getSseMessage, mapToInstance } from '@app/common/core/utils';
 import { SpecialProvider } from '@app/common/providers/special';
 import { Stat, StatDto } from '@app/common/interfaces/special';
 import { AllExceptionsFilter } from '@app/common/core/filters';
@@ -32,10 +33,9 @@ import { TotalSerializer } from '@app/common/core/serializers';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { Filter, Meta } from '@app/common/core/decorators';
 import { ValidationPipe } from '@app/common/core/pipes';
-import { getSseMessage } from '@app/common/core/utils';
 import { Metadata } from '@app/common/core/interfaces';
+import { from, Observable } from 'rxjs';
 import { Response } from 'express';
-import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
 @RateLimit('stats')
@@ -49,6 +49,21 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   constructor(readonly provider: SpecialProvider) {
     super(provider.stats, StatSerializer);
   }
+
+  @Post('collect')
+  @ShipStrategy('create')
+  @Cache(Collection.Stats, 'flush')
+  @SetScope(Scope.CollectSpecialStats)
+  @UseInterceptors(...WriteInterceptors)
+  @ApiResponse({ type: StatItemsSerializer })
+  @SetPolicy(Action.Collect, Resource.SpecialStats)
+  collect(@Meta() meta: Metadata, @Body() data: CollectStatDto): Observable<StatItemsSerializer> {
+    return from(this.provider.stats.collect(data, { meta })).pipe(mapToInstance(StatSerializer, 'items'));
+  }
+
+  // ##############################
+  // Common Method's
+  // ##############################
 
   @Get('count')
   @Cache(Collection.Stats, 'fill')
