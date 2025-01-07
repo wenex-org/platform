@@ -91,6 +91,15 @@
         "tsConfigPath": "apps/services/special/tsconfig.app.json"
       }
     },
+    "dispatcher": {
+      "type": "application",
+      "root": "apps/workers/dispatcher",
+      "entryFile": "main",
+      "sourceRoot": "apps/workers/dispatcher/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/workers/dispatcher/tsconfig.app.json"
+      }
+    },
     "observer": {
       "type": "application",
       "root": "apps/workers/observer",
