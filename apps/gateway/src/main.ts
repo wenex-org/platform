@@ -14,7 +14,7 @@ import { NestFactory } from '@nestjs/core';
 import { APP } from '@app/common/core';
 import helmet from 'helmet';
 
-prototyping();
+prototyping('GATEWAY');
 import { AppModule } from './app.module';
 
 const { GATEWAY } = APP;
