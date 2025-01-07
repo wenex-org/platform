@@ -27,6 +27,7 @@
     "psetex",
     "pttl",
     "QLJSON",
+    "Retriable",
     "setex",
     "sonarqube",
     "TOTP",
