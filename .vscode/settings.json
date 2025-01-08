@@ -23,6 +23,7 @@
     "otelcol",
     "otpauth",
     "PARTITIONER",
+    "pexpire",
     "PROTOS",
     "psetex",
     "pttl",
