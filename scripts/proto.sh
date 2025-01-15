@@ -10,6 +10,8 @@ ESSENTIAL=./protos/essential.proto
 IDENTITY=./protos/identity.proto
 SPECIAL=./protos/special.proto
 
+PRESERVER=./protos/workers/preserver.proto
+
 # Auth Proto
 PROTOS[AUTH,1]=./apps/services/auth/src/app.proto
 PROTOS[AUTH,2]=./apps/gateway/src/protobuf/auth.proto
@@ -47,6 +49,9 @@ PROTOS[SPECIAL,1]=./apps/services/special/src/app.proto
 PROTOS[SPECIAL,2]=./apps/gateway/src/protobuf/special.proto
 PROTOS[SPECIAL,3]=./libs/common/src/providers/special/protobuf/special.proto
 
+# Preserver Proto
+PROTOS[PRESERVER,1]=./apps/workers/preserver/src/app.proto
+
 # Main Program
 for KEY in "${!PROTOS[@]}"; do
   if [[ $KEY == *"AUTH"* ]]; then ln -f $AUTH ${PROTOS[$KEY]}; fi
@@ -55,4 +60,6 @@ for KEY in "${!PROTOS[@]}"; do
   if [[ $KEY == *"ESSENTIAL"* ]]; then ln -f $ESSENTIAL ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"IDENTITY"* ]]; then ln -f $IDENTITY ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"SPECIAL"* ]]; then ln -f $SPECIAL ${PROTOS[$KEY]}; fi
+
+  if [[ $KEY == *"PRESERVER"* ]]; then ln -f $PRESERVER ${PROTOS[$KEY]}; fi
 done
