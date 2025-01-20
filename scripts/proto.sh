@@ -28,7 +28,8 @@ PROTOS[CONTEXT,3]=./libs/common/src/providers/context/protobuf/context.proto
 PROTOS[DOMAIN,1]=./apps/services/domain/src/app.proto
 PROTOS[DOMAIN,2]=./apps/gateway/src/protobuf/domain.proto
 PROTOS[DOMAIN,3]=./apps/services/auth/src/protobuf/domain.proto
-PROTOS[DOMAIN,4]=./libs/common/src/providers/domain/protobuf/domain.proto
+PROTOS[DOMAIN,4]=./apps/services/touch/src/protobuf/domain.proto
+PROTOS[DOMAIN,5]=./libs/common/src/providers/domain/protobuf/domain.proto
 
 # Essential Proto
 PROTOS[ESSENTIAL,1]=./apps/services/essential/src/app.proto
