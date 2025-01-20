@@ -11,6 +11,7 @@ npm run dpdm:ts ./apps/services/domain/src/main.ts -- --progress >> circular-dep
 npm run dpdm:ts ./apps/services/essential/src/main.ts -- --progress >> circular-dependencies.txt
 npm run dpdm:ts ./apps/services/identity/src/main.ts -- --progress >> circular-dependencies.txt
 npm run dpdm:ts ./apps/services/special/src/main.ts -- --progress >> circular-dependencies.txt
+npm run dpdm:ts ./apps/services/touch/src/main.ts -- --progress >> circular-dependencies.txt
 
 # Workers
 npm run dpdm:ts ./apps/workers/dispatcher/src/main.ts -- --progress >> circular-dependencies.txt

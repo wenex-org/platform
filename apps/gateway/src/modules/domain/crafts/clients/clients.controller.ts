@@ -14,11 +14,11 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { ClientDataSerializer, ClientItemsSerializer, ClientSerializer } from '@app/common/serializers/domain';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
+import { Cache, Nested, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { CreateClientDto, CreateClientItemsDto, UpdateClientDto } from '@app/common/dto/domain';
+import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -43,6 +43,7 @@ import { Observable } from 'rxjs';
 @ApiTags(Collection.Clients)
 @Controller(Collection.Clients)
 @UseFilters(AllExceptionsFilter)
+@Nested<Client>('domains', 'services')
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class ClientsController extends ControllerClass<Client, ClientDto> implements IController<Client, ClientDto> {
@@ -117,6 +118,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   @SetScope(Scope.ReadDomainClients)
   @ApiResponse({ type: ClientDataSerializer })
   @SetPolicy(Action.Read, Resource.DomainClients)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override findOne(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<Client>): Observable<ClientDataSerializer> {
@@ -128,6 +130,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   @SetScope(Scope.WriteDomainClients)
   @ApiResponse({ type: ClientDataSerializer })
   @SetPolicy(Action.Delete, Resource.DomainClients)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override deleteOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Client>): Observable<ClientDataSerializer> {
@@ -139,6 +142,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   @SetScope(Scope.WriteDomainClients)
   @ApiResponse({ type: ClientDataSerializer })
   @SetPolicy(Action.Restore, Resource.DomainClients)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override restoreOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Client>): Observable<ClientDataSerializer> {
@@ -150,6 +154,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   @SetScope(Scope.ManageDomainClients)
   @ApiResponse({ type: ClientDataSerializer })
   @SetPolicy(Action.Destroy, Resource.DomainClients)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Client>): Observable<ClientDataSerializer> {
@@ -177,6 +182,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   @SetScope(Scope.WriteDomainClients)
   @ApiResponse({ type: ClientDataSerializer })
   @SetPolicy(Action.Update, Resource.DomainClients)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   override updateOne(

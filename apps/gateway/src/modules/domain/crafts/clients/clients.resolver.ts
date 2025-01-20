@@ -1,6 +1,6 @@
 import { ClientDataSerializer, ClientItemsSerializer, ClientSerializer } from '@app/common/serializers/domain';
+import { Cache, Nested, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { CreateClientDto, CreateClientItemsDto, UpdateClientDto } from '@app/common/dto/domain';
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
@@ -25,6 +25,7 @@ import { Observable } from 'rxjs';
 @RateLimit('clients')
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
+@Nested<Client>('domains', 'services')
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class ClientsResolver extends ControllerClass<Client, ClientDto> implements IController<Client, ClientDto> {

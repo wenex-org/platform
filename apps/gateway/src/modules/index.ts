@@ -4,3 +4,4 @@ export { DomainModule } from './domain';
 export { EssentialModule } from './essential';
 export { IdentityModule } from './identity';
 export { SpecialModule } from './special';
+export { TouchModule } from './touch';

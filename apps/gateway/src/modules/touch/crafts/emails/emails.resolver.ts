@@ -1,7 +1,7 @@
-import { Cache, Nested, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
-import { AppDataSerializer, AppItemsSerializer, AppSerializer } from '@app/common/serializers/domain';
+import { EmailDataSerializer, EmailItemsSerializer, EmailSerializer } from '@app/common/serializers/touch';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
-import { CreateAppDto, CreateAppItemsDto, UpdateAppDto } from '@app/common/dto/domain';
+import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
+import { CreateEmailDto, CreateEmailItemsDto, UpdateEmailDto } from '@app/common/dto/touch';
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -12,152 +12,151 @@ import { Action, Collection, Resource, Scope } from '@app/common/core';
 import { FilterInterceptor } from '@app/common/core/interceptors/flow';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
+import { Email, EmailDto } from '@app/common/interfaces/touch';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
-import { DomainProvider } from '@app/common/providers/domain';
-import { App, AppDto } from '@app/common/interfaces/domain';
+import { TouchProvider } from '@app/common/providers/touch';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { Filter, Meta } from '@app/common/core/decorators';
 import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
-@Resolver(() => AppSerializer)
-@RateLimit('apps')
+@Resolver(() => EmailSerializer)
+@RateLimit('emails')
 @UsePipes(ValidationPipe)
-@Nested<App>('change_logs')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class AppsResolver extends ControllerClass<App, AppDto> implements IController<App, AppDto> {
-  constructor(readonly provider: DomainProvider) {
-    super(provider.apps, AppSerializer);
+export class EmailsResolver extends ControllerClass<Email, EmailDto> implements IController<Email, EmailDto> {
+  constructor(readonly provider: TouchProvider) {
+    super(provider.emails, EmailSerializer);
   }
 
   @Query(() => TotalSerializer)
-  @Cache(Collection.Apps, 'fill')
-  @SetScope(Scope.ReadDomainApps)
+  @Cache(Collection.Emails, 'fill')
+  @SetScope(Scope.ReadTouchEmails)
   @UseInterceptors(AuthorityInterceptor)
-  @SetPolicy(Action.Read, Resource.DomainApps)
-  countApp(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  @SetPolicy(Action.Read, Resource.TouchEmails)
+  countEmail(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
-  @Mutation(() => AppDataSerializer)
+  @Mutation(() => EmailDataSerializer)
   @ShipStrategy('create')
-  @Cache(Collection.Apps, 'flush')
-  @SetScope(Scope.WriteDomainApps)
+  @Cache(Collection.Emails, 'flush')
+  @SetScope(Scope.WriteTouchEmails)
   @UseInterceptors(...WriteInterceptors)
-  @SetPolicy(Action.Create, Resource.DomainApps)
-  createApp(@Meta() meta: Metadata, @Args('data') data: CreateAppDto): Observable<AppDataSerializer> {
+  @SetPolicy(Action.Create, Resource.TouchEmails)
+  createEmail(@Meta() meta: Metadata, @Args('data') data: CreateEmailDto): Observable<EmailDataSerializer> {
     return super.create(meta, data);
   }
 
-  @Mutation(() => AppItemsSerializer)
+  @Mutation(() => EmailItemsSerializer)
   @ShipStrategy('create')
-  @Cache(Collection.Apps, 'flush')
-  @SetScope(Scope.WriteDomainApps)
+  @Cache(Collection.Emails, 'flush')
+  @SetScope(Scope.WriteTouchEmails)
   @UseInterceptors(...WriteInterceptors)
-  @SetPolicy(Action.Create, Resource.DomainApps)
-  createAppBulk(@Meta() meta: Metadata, @Args('data') data: CreateAppItemsDto): Observable<AppItemsSerializer> {
+  @SetPolicy(Action.Create, Resource.TouchEmails)
+  createEmailBulk(@Meta() meta: Metadata, @Args('data') data: CreateEmailItemsDto): Observable<EmailItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
-  @Query(() => AppItemsSerializer)
-  @Cache(Collection.Apps, 'fill')
-  @SetScope(Scope.ReadDomainApps)
-  @SetPolicy(Action.Read, Resource.DomainApps)
+  @Query(() => EmailItemsSerializer)
+  @Cache(Collection.Emails, 'fill')
+  @SetScope(Scope.ReadTouchEmails)
+  @SetPolicy(Action.Read, Resource.TouchEmails)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  findApp(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<App>): Observable<AppItemsSerializer> {
+  findEmail(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Email>): Observable<EmailItemsSerializer> {
     return super.find(meta, filter);
   }
 
-  @Query(() => AppDataSerializer)
-  @Cache(Collection.Apps, 'fill')
-  @SetScope(Scope.ReadDomainApps)
-  @SetPolicy(Action.Read, Resource.DomainApps)
+  @Query(() => EmailDataSerializer)
+  @Cache(Collection.Emails, 'fill')
+  @SetScope(Scope.ReadTouchEmails)
+  @SetPolicy(Action.Read, Resource.TouchEmails)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  findAppById(
+  findEmailById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<App>,
+    @Filter() filter: FilterOneDto<Email>,
     @Args('ref', { nullable: true }) ref?: string,
-  ): Observable<AppDataSerializer> {
+  ): Observable<EmailDataSerializer> {
     refineQueryGraphQL(filter, { id, ref });
     return super.findOne(meta, filter);
   }
 
-  @Mutation(() => AppDataSerializer)
-  @Cache(Collection.Apps, 'flush')
-  @SetScope(Scope.WriteDomainApps)
-  @SetPolicy(Action.Delete, Resource.DomainApps)
+  @Mutation(() => EmailDataSerializer)
+  @Cache(Collection.Emails, 'flush')
+  @SetScope(Scope.WriteTouchEmails)
+  @SetPolicy(Action.Delete, Resource.TouchEmails)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  deleteAppById(
+  deleteEmailById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<App>,
+    @Filter() filter: FilterDto<Email>,
     @Args('ref', { nullable: true }) ref?: string,
-  ): Observable<AppDataSerializer> {
+  ): Observable<EmailDataSerializer> {
     refineQueryGraphQL(filter, { id, ref });
     return super.deleteOne(meta, filter);
   }
 
-  @Mutation(() => AppDataSerializer)
-  @Cache(Collection.Apps, 'flush')
-  @SetScope(Scope.WriteDomainApps)
-  @SetPolicy(Action.Restore, Resource.DomainApps)
+  @Mutation(() => EmailDataSerializer)
+  @Cache(Collection.Emails, 'flush')
+  @SetScope(Scope.WriteTouchEmails)
+  @SetPolicy(Action.Restore, Resource.TouchEmails)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  restoreAppById(
+  restoreEmailById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<App>,
+    @Filter() filter: FilterDto<Email>,
     @Args('ref', { nullable: true }) ref?: string,
-  ): Observable<AppDataSerializer> {
+  ): Observable<EmailDataSerializer> {
     refineQueryGraphQL(filter, { id, ref });
     return super.restoreOne(meta, filter);
   }
 
-  @Mutation(() => AppDataSerializer)
-  @Cache(Collection.Apps, 'flush')
-  @SetScope(Scope.ManageDomainApps)
-  @SetPolicy(Action.Destroy, Resource.DomainApps)
+  @Mutation(() => EmailDataSerializer)
+  @Cache(Collection.Emails, 'flush')
+  @SetScope(Scope.ManageTouchEmails)
+  @SetPolicy(Action.Destroy, Resource.TouchEmails)
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
-  destroyAppById(
+  destroyEmailById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<App>,
+    @Filter() filter: FilterDto<Email>,
     @Args('ref', { nullable: true }) ref?: string,
-  ): Observable<AppDataSerializer> {
+  ): Observable<EmailDataSerializer> {
     refineQueryGraphQL(filter, { id, ref });
     return super.destroyOne(meta, filter);
   }
 
   @Mutation(() => TotalSerializer)
   @ShipStrategy('update')
-  @Cache(Collection.Apps, 'flush')
-  @SetScope(Scope.ManageDomainApps)
-  @SetPolicy(Action.Update, Resource.DomainApps)
+  @Cache(Collection.Emails, 'flush')
+  @SetScope(Scope.ManageTouchEmails)
+  @SetPolicy(Action.Update, Resource.TouchEmails)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateAppBulk(
+  updateEmailBulk(
     @Meta() meta: Metadata,
-    @Args('data') update: UpdateAppDto,
-    @Filter() @Args('filter') filter: QueryFilterDto<App>,
+    @Args('data') update: UpdateEmailDto,
+    @Filter() @Args('filter') filter: QueryFilterDto<Email>,
   ): Observable<TotalSerializer> {
     return super.updateBulk(meta, filter, update);
   }
 
-  @Mutation(() => AppDataSerializer)
+  @Mutation(() => EmailDataSerializer)
   @ShipStrategy('update')
-  @Cache(Collection.Apps, 'flush')
-  @SetScope(Scope.WriteDomainApps)
-  @SetPolicy(Action.Update, Resource.DomainApps)
+  @Cache(Collection.Emails, 'flush')
+  @SetScope(Scope.WriteTouchEmails)
+  @SetPolicy(Action.Update, Resource.TouchEmails)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateAppById(
+  updateEmailById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<App>,
-    @Args('data') update: UpdateAppDto,
+    @Filter() filter: FilterOneDto<Email>,
+    @Args('data') update: UpdateEmailDto,
     @Args('ref', { nullable: true }) ref?: string,
-  ): Observable<AppDataSerializer> {
+  ): Observable<EmailDataSerializer> {
     refineQueryGraphQL(filter, { id, ref });
     return super.updateOne(meta, filter, update);
   }

@@ -16,9 +16,9 @@ import {
 import { CollectStatDto, CreateStatDto, CreateStatItemsDto, UpdateStatDto } from '@app/common/dto/special';
 import { StatDataSerializer, StatItemsSerializer, StatSerializer } from '@app/common/serializers/special';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
+import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -132,6 +132,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   @SetScope(Scope.ReadSpecialStats)
   @ApiResponse({ type: StatDataSerializer })
   @SetPolicy(Action.Read, Resource.SpecialStats)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override findOne(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<Stat>): Observable<StatDataSerializer> {
@@ -143,6 +144,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   @SetScope(Scope.WriteSpecialStats)
   @ApiResponse({ type: StatDataSerializer })
   @SetPolicy(Action.Delete, Resource.SpecialStats)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override deleteOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Stat>): Observable<StatDataSerializer> {
@@ -154,6 +156,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   @SetScope(Scope.WriteSpecialStats)
   @ApiResponse({ type: StatDataSerializer })
   @SetPolicy(Action.Restore, Resource.SpecialStats)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override restoreOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Stat>): Observable<StatDataSerializer> {
@@ -165,6 +168,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   @SetScope(Scope.ManageSpecialStats)
   @ApiResponse({ type: StatDataSerializer })
   @SetPolicy(Action.Destroy, Resource.SpecialStats)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Stat>): Observable<StatDataSerializer> {
@@ -192,6 +196,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   @SetScope(Scope.WriteSpecialStats)
   @ApiResponse({ type: StatDataSerializer })
   @SetPolicy(Action.Update, Resource.SpecialStats)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   override updateOne(

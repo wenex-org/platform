@@ -16,9 +16,9 @@ import {
 import { ProfileDataSerializer, ProfileItemsSerializer, ProfileSerializer } from '@app/common/serializers/identity';
 import { CreateProfileDto, CreateProfileItemsDto, UpdateProfileDto } from '@app/common/dto/identity';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
+import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -117,6 +117,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   @SetScope(Scope.ReadIdentityProfiles)
   @ApiResponse({ type: ProfileDataSerializer })
   @SetPolicy(Action.Read, Resource.IdentityProfiles)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override findOne(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<Profile>): Observable<ProfileDataSerializer> {
@@ -128,6 +129,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   @SetScope(Scope.WriteIdentityProfiles)
   @ApiResponse({ type: ProfileDataSerializer })
   @SetPolicy(Action.Delete, Resource.IdentityProfiles)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override deleteOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Profile>): Observable<ProfileDataSerializer> {
@@ -139,6 +141,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   @SetScope(Scope.WriteIdentityProfiles)
   @ApiResponse({ type: ProfileDataSerializer })
   @SetPolicy(Action.Restore, Resource.IdentityProfiles)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override restoreOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Profile>): Observable<ProfileDataSerializer> {
@@ -150,6 +153,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   @SetScope(Scope.ManageIdentityProfiles)
   @ApiResponse({ type: ProfileDataSerializer })
   @SetPolicy(Action.Destroy, Resource.IdentityProfiles)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Profile>): Observable<ProfileDataSerializer> {
@@ -177,6 +181,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   @SetScope(Scope.WriteIdentityProfiles)
   @ApiResponse({ type: ProfileDataSerializer })
   @SetPolicy(Action.Update, Resource.IdentityProfiles)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   override updateOne(

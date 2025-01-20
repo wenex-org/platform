@@ -16,9 +16,9 @@ import {
 import { ConfigDataSerializer, ConfigItemsSerializer, ConfigSerializer } from '@app/common/serializers/context';
 import { CreateConfigDto, CreateConfigItemsDto, UpdateConfigDto } from '@app/common/dto/context';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
+import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -117,6 +117,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   @SetScope(Scope.ReadContextConfigs)
   @ApiResponse({ type: ConfigDataSerializer })
   @SetPolicy(Action.Read, Resource.ContextConfigs)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override findOne(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<Config>): Observable<ConfigDataSerializer> {
@@ -128,6 +129,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   @SetScope(Scope.WriteContextConfigs)
   @ApiResponse({ type: ConfigDataSerializer })
   @SetPolicy(Action.Delete, Resource.ContextConfigs)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override deleteOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Config>): Observable<ConfigDataSerializer> {
@@ -139,6 +141,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   @SetScope(Scope.WriteContextConfigs)
   @ApiResponse({ type: ConfigDataSerializer })
   @SetPolicy(Action.Restore, Resource.ContextConfigs)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override restoreOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Config>): Observable<ConfigDataSerializer> {
@@ -150,6 +153,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   @SetScope(Scope.ManageContextConfigs)
   @ApiResponse({ type: ConfigDataSerializer })
   @SetPolicy(Action.Destroy, Resource.ContextConfigs)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Config>): Observable<ConfigDataSerializer> {
@@ -177,6 +181,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   @SetScope(Scope.WriteContextConfigs)
   @ApiResponse({ type: ConfigDataSerializer })
   @SetPolicy(Action.Update, Resource.ContextConfigs)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   override updateOne(

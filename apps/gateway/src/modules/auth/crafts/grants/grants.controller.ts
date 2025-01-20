@@ -16,9 +16,9 @@ import {
 import { GrantDataSerializer, GrantItemsSerializer, GrantSerializer } from '@app/common/serializers/auth';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { CreateGrantDto, CreateGrantItemsDto, UpdateGrantDto } from '@app/common/dto/auth';
+import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -117,6 +117,7 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   @SetScope(Scope.ReadAuthGrants)
   @ApiResponse({ type: GrantDataSerializer })
   @SetPolicy(Action.Read, Resource.AuthGrants)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override findOne(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<Grant>): Observable<GrantDataSerializer> {
@@ -128,6 +129,7 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   @SetScope(Scope.WriteAuthGrants)
   @ApiResponse({ type: GrantDataSerializer })
   @SetPolicy(Action.Delete, Resource.AuthGrants)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override deleteOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Grant>): Observable<GrantDataSerializer> {
@@ -139,6 +141,7 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   @SetScope(Scope.WriteAuthGrants)
   @ApiResponse({ type: GrantDataSerializer })
   @SetPolicy(Action.Restore, Resource.AuthGrants)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override restoreOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Grant>): Observable<GrantDataSerializer> {
@@ -150,6 +153,7 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   @SetScope(Scope.ManageAuthGrants)
   @ApiResponse({ type: GrantDataSerializer })
   @SetPolicy(Action.Destroy, Resource.AuthGrants)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Grant>): Observable<GrantDataSerializer> {
@@ -177,6 +181,7 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   @SetScope(Scope.WriteAuthGrants)
   @ApiResponse({ type: GrantDataSerializer })
   @SetPolicy(Action.Update, Resource.AuthGrants)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   override updateOne(

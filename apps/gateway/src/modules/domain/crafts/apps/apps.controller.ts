@@ -13,12 +13,12 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import { Cache, Nested, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { AppDataSerializer, AppItemsSerializer, AppSerializer } from '@app/common/serializers/domain';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
+import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateAppDto, CreateAppItemsDto, UpdateAppDto } from '@app/common/dto/domain';
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -41,6 +41,7 @@ import { Observable } from 'rxjs';
 @RateLimit('apps')
 @UsePipes(ValidationPipe)
 @ApiTags(Collection.Apps)
+@Nested<App>('change_logs')
 @Controller(Collection.Apps)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -117,6 +118,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   @SetScope(Scope.ReadDomainApps)
   @ApiResponse({ type: AppDataSerializer })
   @SetPolicy(Action.Read, Resource.DomainApps)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override findOne(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<App>): Observable<AppDataSerializer> {
@@ -128,6 +130,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   @SetScope(Scope.WriteDomainApps)
   @ApiResponse({ type: AppDataSerializer })
   @SetPolicy(Action.Delete, Resource.DomainApps)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override deleteOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<App>): Observable<AppDataSerializer> {
@@ -139,6 +142,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   @SetScope(Scope.WriteDomainApps)
   @ApiResponse({ type: AppDataSerializer })
   @SetPolicy(Action.Restore, Resource.DomainApps)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override restoreOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<App>): Observable<AppDataSerializer> {
@@ -150,6 +154,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   @SetScope(Scope.ManageDomainApps)
   @ApiResponse({ type: AppDataSerializer })
   @SetPolicy(Action.Destroy, Resource.DomainApps)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<App>): Observable<AppDataSerializer> {
@@ -177,6 +182,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   @SetScope(Scope.WriteDomainApps)
   @ApiResponse({ type: AppDataSerializer })
   @SetPolicy(Action.Update, Resource.DomainApps)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   override updateOne(

@@ -22,9 +22,9 @@ import {
 } from '@app/common/serializers/essential';
 import { AddSagaStageDto, CreateSagaDto, CreateSagaItemsDto, StartSagaDto, UpdateSagaDto } from '@app/common/dto/essential';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
+import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -83,6 +83,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   @SetScope(Scope.AbortEssentialSagas)
   @ApiResponse({ type: SagaDataSerializer })
   @SetPolicy(Action.Abort, Resource.EssentialSagas)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   abort(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<Saga>): Observable<SagaDataSerializer> {
@@ -94,6 +95,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   @SetScope(Scope.CommitEssentialSagas)
   @ApiResponse({ type: SagaDataSerializer })
   @SetPolicy(Action.Commit, Resource.EssentialSagas)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   commit(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<Saga>): Observable<SagaDataSerializer> {
@@ -171,6 +173,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   @SetScope(Scope.ReadEssentialSagas)
   @ApiResponse({ type: SagaDataSerializer })
   @SetPolicy(Action.Read, Resource.EssentialSagas)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override findOne(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<Saga>): Observable<SagaDataSerializer> {
@@ -182,6 +185,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   @SetScope(Scope.WriteEssentialSagas)
   @ApiResponse({ type: SagaDataSerializer })
   @SetPolicy(Action.Delete, Resource.EssentialSagas)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override deleteOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Saga>): Observable<SagaDataSerializer> {
@@ -193,6 +197,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   @SetScope(Scope.WriteEssentialSagas)
   @ApiResponse({ type: SagaDataSerializer })
   @SetPolicy(Action.Restore, Resource.EssentialSagas)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override restoreOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Saga>): Observable<SagaDataSerializer> {
@@ -204,6 +209,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   @SetScope(Scope.ManageEssentialSagas)
   @ApiResponse({ type: SagaDataSerializer })
   @SetPolicy(Action.Destroy, Resource.EssentialSagas)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Saga>): Observable<SagaDataSerializer> {
@@ -231,6 +237,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   @SetScope(Scope.WriteEssentialSagas)
   @ApiResponse({ type: SagaDataSerializer })
   @SetPolicy(Action.Update, Resource.EssentialSagas)
+  @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   override updateOne(

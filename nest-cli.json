@@ -91,6 +91,15 @@
         "tsConfigPath": "apps/services/special/tsconfig.app.json"
       }
     },
+    "touch": {
+      "type": "application",
+      "root": "apps/services/touch",
+      "entryFile": "main",
+      "sourceRoot": "apps/services/touch/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/services/touch/tsconfig.app.json"
+      }
+    },
     "dispatcher": {
       "type": "application",
       "root": "apps/workers/dispatcher",

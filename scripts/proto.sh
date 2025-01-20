@@ -9,6 +9,7 @@ DOMAIN=./protos/domain.proto
 ESSENTIAL=./protos/essential.proto
 IDENTITY=./protos/identity.proto
 SPECIAL=./protos/special.proto
+TOUCH=./protos/touch.proto
 
 PRESERVER=./protos/workers/preserver.proto
 
@@ -33,11 +34,12 @@ PROTOS[DOMAIN,4]=./libs/common/src/providers/domain/protobuf/domain.proto
 PROTOS[ESSENTIAL,1]=./apps/services/essential/src/app.proto
 PROTOS[ESSENTIAL,2]=./apps/gateway/src/protobuf/essential.proto
 PROTOS[ESSENTIAL,3]=./apps/services/auth/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,4]=./apps/services/domain/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,5]=./apps/services/context/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,6]=./apps/services/special/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,7]=./apps/services/identity/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,8]=./libs/common/src/providers/essential/protobuf/essential.proto
+PROTOS[ESSENTIAL,4]=./apps/services/touch/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,5]=./apps/services/domain/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,6]=./apps/services/context/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,7]=./apps/services/special/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,8]=./apps/services/identity/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,9]=./libs/common/src/providers/essential/protobuf/essential.proto
 
 # Identity Proto
 PROTOS[IDENTITY,1]=./apps/services/identity/src/app.proto
@@ -50,6 +52,11 @@ PROTOS[SPECIAL,1]=./apps/services/special/src/app.proto
 PROTOS[SPECIAL,2]=./apps/gateway/src/protobuf/special.proto
 PROTOS[SPECIAL,3]=./libs/common/src/providers/special/protobuf/special.proto
 
+# Touch Proto
+PROTOS[TOUCH,1]=./apps/services/touch/src/app.proto
+PROTOS[TOUCH,2]=./apps/gateway/src/protobuf/touch.proto
+PROTOS[TOUCH,3]=./libs/common/src/providers/touch/protobuf/touch.proto
+
 # Preserver Proto
 PROTOS[PRESERVER,1]=./apps/workers/preserver/src/app.proto
 
@@ -61,6 +68,7 @@ for KEY in "${!PROTOS[@]}"; do
   if [[ $KEY == *"ESSENTIAL"* ]]; then ln -f $ESSENTIAL ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"IDENTITY"* ]]; then ln -f $IDENTITY ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"SPECIAL"* ]]; then ln -f $SPECIAL ${PROTOS[$KEY]}; fi
+  if [[ $KEY == *"TOUCH"* ]]; then ln -f $TOUCH ${PROTOS[$KEY]}; fi
 
   if [[ $KEY == *"PRESERVER"* ]]; then ln -f $PRESERVER ${PROTOS[$KEY]}; fi
 done
