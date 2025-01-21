@@ -215,6 +215,9 @@ importers:
       nestjs-minio-client:
         specifier: ^2.2.0
         version: 2.2.0(@nestjs/common@10.4.15(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.15)
+      nodemailer:
+        specifier: ^6.9.16
+        version: 6.9.16
       opentelemetry-instrumentation-kafkajs:
         specifier: ^0.41.0
         version: 0.41.0(@opentelemetry/api@1.9.0)
@@ -288,6 +291,9 @@ importers:
       '@types/node':
         specifier: ^22.10.5
         version: 22.10.5
+      '@types/nodemailer':
+        specifier: ^6.4.17
+        version: 6.4.17
       '@types/semver':
         specifier: ^7.5.8
         version: 7.5.8
@@ -3150,6 +3156,9 @@ packages:
   '@types/node@22.10.7':
     resolution: {integrity: sha512-V09KvXxFiutGp6B7XkpaDXlNadZxrzajcY50EuoLIpQ6WWYCSvf19lVIazzfIzQvhUN2HjX12spLojTnhuKlGg==}
 
+  '@types/nodemailer@6.4.17':
+    resolution: {integrity: sha512-I9CCaIp6DTldEg7vyUTZi8+9Vo0hi1/T8gv3C89yk1rSAAzoKQ8H8ki/jBYJSFoH/BisgLP8tkZMlQ91CIquww==}
+
   '@types/pg-pool@2.0.6':
     resolution: {integrity: sha512-TaAUE5rq2VQYxab5Ts7WZhKNmuN78Q6PiFonTDdpbx8a1H0M1vhy3rhiMjl+e2iHmogyMw7jZF4FrE6eJUy5HQ==}
 
@@ -5960,6 +5969,10 @@ packages:
   node-source-walk@7.0.0:
     resolution: {integrity: sha512-1uiY543L+N7Og4yswvlm5NCKgPKDEXd9AUR9Jh3gen6oOeBsesr6LqhXom1er3eRzSUcVRWXzhv8tSNrIfGHKw==}
     engines: {node: '>=18'}
+
+  nodemailer@6.9.16:
+    resolution: {integrity: sha512-psAuZdTIRN08HKVd/E8ObdV6NO7NTBY3KsC30F7M4H1OnmLCUNaS56FpYxyb26zWLSyYF9Ozch9KYHhHegsiOQ==}
+    engines: {node: '>=6.0.0'}
 
   normalize-path@3.0.0:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
@@ -11337,6 +11350,10 @@ snapshots:
     dependencies:
       undici-types: 6.20.0
 
+  '@types/nodemailer@6.4.17':
+    dependencies:
+      '@types/node': 22.10.7
+
   '@types/pg-pool@2.0.6':
     dependencies:
       '@types/pg': 8.6.1
@@ -14716,6 +14733,8 @@ snapshots:
   node-source-walk@7.0.0:
     dependencies:
       '@babel/parser': 7.26.2
+
+  nodemailer@6.9.16: {}
 
   normalize-path@3.0.0: {}
 

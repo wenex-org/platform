@@ -14,10 +14,10 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { SmsDataSerializer, SmsItemsSerializer, SmsSerializer } from '@app/common/serializers/touch';
+import { CreateSmsDto, CreateSmsItemsDto, SendSmsDto, UpdateSmsDto } from '@app/common/dto/touch';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { CreateSmsDto, CreateSmsItemsDto, UpdateSmsDto } from '@app/common/dto/touch';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -25,6 +25,7 @@ import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
 import { FilterInterceptor } from '@app/common/core/interceptors/flow';
+import { getSseMessage, mapToInstance } from '@app/common/core/utils';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
 import { TouchProvider } from '@app/common/providers/touch';
@@ -32,10 +33,9 @@ import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { Filter, Meta } from '@app/common/core/decorators';
 import { Sms, SmsDto } from '@app/common/interfaces/touch';
 import { ValidationPipe } from '@app/common/core/pipes';
-import { getSseMessage } from '@app/common/core/utils';
 import { Metadata } from '@app/common/core/interfaces';
+import { from, Observable } from 'rxjs';
 import { Response } from 'express';
-import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
 @RateLimit('smss')
@@ -49,6 +49,21 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
   constructor(readonly provider: TouchProvider) {
     super(provider.smss, SmsSerializer);
   }
+
+  @Post('send')
+  @ShipStrategy('create')
+  @Cache(Collection.Smss, 'flush')
+  @SetScope(Scope.SendTouchSmss)
+  @UseInterceptors(...WriteInterceptors)
+  @ApiResponse({ type: SmsDataSerializer })
+  @SetPolicy(Action.Send, Resource.TouchSmss)
+  send(@Meta() meta: Metadata, @Body() data: SendSmsDto): Observable<SmsDataSerializer> {
+    return from(this.provider.smss.send(data, { meta })).pipe(mapToInstance(SmsSerializer, 'data'));
+  }
+
+  // ##############################
+  // Common Method's
+  // ##############################
 
   @Get('count')
   @Cache(Collection.Smss, 'fill')

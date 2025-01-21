@@ -14,8 +14,8 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { EmailDataSerializer, EmailItemsSerializer, EmailSerializer } from '@app/common/serializers/touch';
+import { CreateEmailDto, CreateEmailItemsDto, SendEmailDto, UpdateEmailDto } from '@app/common/dto/touch';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
-import { CreateEmailDto, CreateEmailItemsDto, UpdateEmailDto } from '@app/common/dto/touch';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
@@ -25,6 +25,7 @@ import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
 import { FilterInterceptor } from '@app/common/core/interceptors/flow';
+import { getSseMessage, mapToInstance } from '@app/common/core/utils';
 import { Email, EmailDto } from '@app/common/interfaces/touch';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
@@ -32,10 +33,9 @@ import { TouchProvider } from '@app/common/providers/touch';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { Filter, Meta } from '@app/common/core/decorators';
 import { ValidationPipe } from '@app/common/core/pipes';
-import { getSseMessage } from '@app/common/core/utils';
 import { Metadata } from '@app/common/core/interfaces';
+import { from, Observable } from 'rxjs';
 import { Response } from 'express';
-import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
 @RateLimit('emails')
@@ -49,6 +49,21 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   constructor(readonly provider: TouchProvider) {
     super(provider.emails, EmailSerializer);
   }
+
+  @Post('send')
+  @ShipStrategy('create')
+  @Cache(Collection.Emails, 'flush')
+  @SetScope(Scope.SendTouchEmails)
+  @UseInterceptors(...WriteInterceptors)
+  @ApiResponse({ type: EmailDataSerializer })
+  @SetPolicy(Action.Send, Resource.TouchEmails)
+  send(@Meta() meta: Metadata, @Body() data: SendEmailDto): Observable<EmailDataSerializer> {
+    return from(this.provider.emails.send(data, { meta })).pipe(mapToInstance(EmailSerializer, 'data'));
+  }
+
+  // ##############################
+  // Common Method's
+  // ##############################
 
   @Get('count')
   @Cache(Collection.Emails, 'fill')
