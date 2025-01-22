@@ -17,7 +17,7 @@ echo "Waiting for services to start..."
 sleep 90
 
 # Start additional services
-additional_services=("dispatcher" "observer" "preserver" "watcher")
+additional_services=("watcher" "preserver" "observer" "dispatcher")
 for service in "${additional_services[@]}"; do
   npm run start:dev:e2e "$service" 2> "logs/$service.log" &
   JOBS[$service]=$!
