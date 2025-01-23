@@ -13,6 +13,7 @@ import { NODE_ENV } from '@app/common/core/envs';
 import { NestFactory } from '@nestjs/core';
 import { APP } from '@app/common/core';
 import helmet from 'helmet';
+import qs from 'qs';
 
 prototyping('GATEWAY');
 import { AppModule } from './app.module';
@@ -28,7 +29,10 @@ async function bootstrap() {
   app.enableShutdownHooks();
 
   app.use(helmet({ contentSecurityPolicy: false }));
-  app.getHttpAdapter().getInstance().set('etag', false);
+
+  const express = app.getHttpAdapter().getInstance();
+  express.set('etag', false);
+  express.set('query parser', qs.parse);
 
   app.useGlobalInterceptors(
     new ETagInterceptor(),
