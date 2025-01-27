@@ -23,6 +23,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
+import { TransformerPipe, ValidationPipe } from '@app/common/core/pipes';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
 import { FilterInterceptor } from '@app/common/core/interceptors/flow';
 import { Session, SessionDto } from '@app/common/interfaces/identity';
@@ -31,7 +32,6 @@ import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { Filter, Meta } from '@app/common/core/decorators';
-import { ValidationPipe } from '@app/common/core/pipes';
 import { getSseMessage } from '@app/common/core/utils';
 import { Metadata } from '@app/common/core/interfaces';
 import { Response } from 'express';
@@ -39,10 +39,10 @@ import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
 @RateLimit('sessions')
-@UsePipes(ValidationPipe)
 @ApiTags(Collection.Sessions)
 @Controller(Collection.Sessions)
 @UseFilters(AllExceptionsFilter)
+@UsePipes(TransformerPipe, ValidationPipe)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class SessionsController extends ControllerClass<Session, SessionDto> implements IController<Session, SessionDto> {

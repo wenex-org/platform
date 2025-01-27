@@ -4,12 +4,12 @@ import { ApiBearerAuth, ApiBody, ApiConsumes, ApiResponse, ApiTags } from '@nest
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FileItemsSerializer, FileSerializer } from '@app/common/serializers/special';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
+import { TransformerPipe, ValidationPipe } from '@app/common/core/pipes';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
 import { SpecialProvider } from '@app/common/providers/special';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
-import { ValidationPipe } from '@app/common/core/pipes';
 import { CreateFileDto } from '@app/common/dto/special';
 import { mapToInstance } from '@app/common/core/utils';
 import { Metadata } from '@app/common/core/interfaces';
@@ -18,10 +18,10 @@ import { from, Observable } from 'rxjs';
 
 @ApiBearerAuth()
 @RateLimit('files')
-@UsePipes(ValidationPipe)
 @ApiTags(Collection.Files)
 @Controller(Collection.Files)
 @UseFilters(AllExceptionsFilter)
+@UsePipes(TransformerPipe, ValidationPipe)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class PublicController {

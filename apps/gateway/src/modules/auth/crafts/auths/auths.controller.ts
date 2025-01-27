@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post, UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { AuthenticationSerializer, AuthorizationSerializer } from '@app/common/serializers/auth';
 import { AuthenticationDto, AuthorizationDto } from '@app/common/dto/auth';
+import { TransformerPipe, ValidationPipe } from '@app/common/core/pipes';
 import { JwtTokenSerializer } from '@app/common/core/serializers/auth';
 import { GatewayInterceptors } from '@app/common/core/interceptors';
 import { IsPublic, RateLimit } from '@app/common/core/metadatas';
@@ -9,7 +10,6 @@ import { AllExceptionsFilter } from '@app/common/core/filters';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AuthProvider } from '@app/common/providers/auth';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { ValidationPipe } from '@app/common/core/pipes';
 import { mapToInstance } from '@app/common/core/utils';
 import { Metadata } from '@app/common/core/interfaces';
 import { AuthGuard } from '@app/common/core/guards';
@@ -20,8 +20,8 @@ import { from, map, Observable } from 'rxjs';
 @RateLimit('auth')
 @Controller('auth')
 @UseGuards(AuthGuard)
-@UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
+@UsePipes(TransformerPipe, ValidationPipe)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class AuthsController {
   constructor(readonly provider: AuthProvider) {}
