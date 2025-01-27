@@ -24,7 +24,6 @@ import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { SagaStage, SagaStageDto } from '@app/common/interfaces/essential';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { TransformerPipe, ValidationPipe } from '@app/common/core/pipes';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
 import { FilterInterceptor } from '@app/common/core/interceptors/flow';
 import { EssentialProvider } from '@app/common/providers/essential';
@@ -32,6 +31,7 @@ import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { Filter, Meta } from '@app/common/core/decorators';
+import { ValidationPipe } from '@app/common/core/pipes';
 import { getSseMessage } from '@app/common/core/utils';
 import { Metadata } from '@app/common/core/interfaces';
 import { Response } from 'express';
@@ -39,10 +39,10 @@ import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
 @RateLimit('saga-stages')
+@UsePipes(ValidationPipe)
 @ApiTags(Collection.SagaStages)
 @Controller(Collection.SagaStages)
 @UseFilters(AllExceptionsFilter)
-@UsePipes(TransformerPipe, ValidationPipe)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDto> implements IController<SagaStage, SagaStageDto> {

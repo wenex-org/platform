@@ -23,7 +23,6 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { TransformerPipe, ValidationPipe } from '@app/common/core/pipes';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
 import { FilterInterceptor } from '@app/common/core/interceptors/flow';
 import { AllExceptionsFilter } from '@app/common/core/filters';
@@ -32,6 +31,7 @@ import { DomainProvider } from '@app/common/providers/domain';
 import { App, AppDto } from '@app/common/interfaces/domain';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { Filter, Meta } from '@app/common/core/decorators';
+import { ValidationPipe } from '@app/common/core/pipes';
 import { getSseMessage } from '@app/common/core/utils';
 import { Metadata } from '@app/common/core/interfaces';
 import { Response } from 'express';
@@ -40,10 +40,10 @@ import { Observable } from 'rxjs';
 @ApiBearerAuth()
 @RateLimit('apps')
 @ApiTags(Collection.Apps)
+@UsePipes(ValidationPipe)
 @Nested<App>('change_logs')
 @Controller(Collection.Apps)
 @UseFilters(AllExceptionsFilter)
-@UsePipes(TransformerPipe, ValidationPipe)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class AppsController extends ControllerClass<App, AppDto> implements IController<App, AppDto> {

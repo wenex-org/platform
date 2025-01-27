@@ -1,7 +1,6 @@
 import { AuthenticationSerializer, AuthorizationSerializer } from '@app/common/serializers/auth';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { AuthenticationDto, AuthorizationDto } from '@app/common/dto/auth';
-import { TransformerPipe, ValidationPipe } from '@app/common/core/pipes';
 import { JwtTokenSerializer } from '@app/common/core/serializers/auth';
 import { GatewayInterceptors } from '@app/common/core/interceptors';
 import { IsPublic, RateLimit } from '@app/common/core/metadatas';
@@ -9,6 +8,7 @@ import { ResultSerializer } from '@app/common/core/serializers';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AuthProvider } from '@app/common/providers/auth';
+import { ValidationPipe } from '@app/common/core/pipes';
 import { mapToInstance } from '@app/common/core/utils';
 import { Metadata } from '@app/common/core/interfaces';
 import { AuthGuard } from '@app/common/core/guards';
@@ -18,8 +18,8 @@ import { from, Observable } from 'rxjs';
 
 @RateLimit('auth')
 @UseGuards(AuthGuard)
+@UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
-@UsePipes(TransformerPipe, ValidationPipe)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class AuthsResolver {
   constructor(readonly provider: AuthProvider) {}

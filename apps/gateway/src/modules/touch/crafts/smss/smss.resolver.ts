@@ -8,7 +8,6 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { TransformerPipe, ValidationPipe } from '@app/common/core/pipes';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
 import { FilterInterceptor } from '@app/common/core/interceptors/flow';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
@@ -19,13 +18,14 @@ import { TouchProvider } from '@app/common/providers/touch';
 import { Sms, SmsDto } from '@app/common/interfaces/touch';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { Filter, Meta } from '@app/common/core/decorators';
+import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
 @Resolver(() => SmsSerializer)
 @RateLimit('smss')
+@UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
-@UsePipes(TransformerPipe, ValidationPipe)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IController<Sms, SmsDto> {

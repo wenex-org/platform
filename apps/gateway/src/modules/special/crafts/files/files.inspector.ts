@@ -4,13 +4,13 @@ import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { TransformerPipe, ValidationPipe } from '@app/common/core/pipes';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
 import { GatewayInterceptors } from '@app/common/core/interceptors';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { QueryFilterDto } from '@app/common/core/dto/mongo';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { Filter, Meta } from '@app/common/core/decorators';
+import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { sdkStreamMixin } from '@smithy/util-stream';
 import { toString } from '@app/common/core/utils';
@@ -22,10 +22,10 @@ import { FilesService } from './files.service';
 
 @ApiBearerAuth()
 @RateLimit('files')
+@UsePipes(ValidationPipe)
 @ApiTags(Collection.Files)
 @Controller(Collection.Files)
 @UseFilters(AllExceptionsFilter)
-@UsePipes(TransformerPipe, ValidationPipe)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class FilesInspector {
