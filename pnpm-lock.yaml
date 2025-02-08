@@ -313,8 +313,8 @@ importers:
         specifier: ^6.0.2
         version: 6.0.2
       '@wenex/sdk':
-        specifier: ^1.0.7
-        version: 1.0.7
+        specifier: ^1.0.19
+        version: 1.0.19
       dpdm:
         specifier: ^3.14.0
         version: 3.14.0
@@ -3572,8 +3572,8 @@ packages:
   '@webassemblyjs/wast-printer@1.14.1':
     resolution: {integrity: sha512-kPSSXE6De1XOR820C90RIo2ogvZG+c3KiHzqUoO/F34Y2shGzesfqv7o57xrxovZJH/MetF5UjroJ/R/3isoiw==}
 
-  '@wenex/sdk@1.0.7':
-    resolution: {integrity: sha512-YNG0fFKiqtbHzZrvZnr6llRBs0+b3iStRZXuAzevXIiHLH2zqkqI96TBLeclJJp8YP2PWZcxyJ7UG5yUR8/gLg==}
+  '@wenex/sdk@1.0.19':
+    resolution: {integrity: sha512-eltZXNJrv1+O4aJMtC9AlH84KNsvBMvfPu7IOfcRi1znyLK8MySbuBXH5pRnJIZJLlRp8gL97BbAh8Sa5duZBw==}
 
   '@willsoto/nestjs-prometheus@6.0.2':
     resolution: {integrity: sha512-ePyLZYdIrOOdlOWovzzMisIgviXqhPVzFpSMKNNhn6xajhRHeBsjAzSdpxZTc6pnjR9hw1lNAHyKnKl7lAPaVg==}
@@ -12400,7 +12400,7 @@ snapshots:
       '@webassemblyjs/ast': 1.14.1
       '@xtuc/long': 4.2.2
 
-  '@wenex/sdk@1.0.7':
+  '@wenex/sdk@1.0.19':
     dependencies:
       '@microsoft/fetch-event-source': 2.0.1
       axios: 1.7.9(debug@4.4.0)
@@ -12409,6 +12409,7 @@ snapshots:
       class-validator: 0.14.1
       cron-validate: 1.4.5
       debug: 4.4.0
+      lodash: 4.17.21
       luxon: 3.5.0
       naming-conventions-modeler: 1.4.6
       phone: 3.1.57
