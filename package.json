@@ -107,6 +107,7 @@
     "class-validator": "^0.14.1",
     "cron-parser": "^4.9.0",
     "cron-validate": "^1.4.5",
+    "crypto-aio": "^0.0.3",
     "debug": "^4.4.0",
     "dotenv": "^16.4.7",
     "elastic-apm-node": "^4.11.0",

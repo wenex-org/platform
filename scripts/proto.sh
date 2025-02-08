@@ -42,7 +42,7 @@ PROTOS[ESSENTIAL,6]=./apps/services/context/src/protobuf/essential.proto
 PROTOS[ESSENTIAL,7]=./apps/services/special/src/protobuf/essential.proto
 PROTOS[ESSENTIAL,8]=./apps/services/identity/src/protobuf/essential.proto
 PROTOS[ESSENTIAL,9]=./apps/services/financial/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,10]=./libs/common/src/providers/essential/protobuf/essential.proto
+PROTOS[ESSENTIAL,A]=./libs/common/src/providers/essential/protobuf/essential.proto
 
 # Financial Proto
 PROTOS[FINANCIAL,1]=./apps/services/financial/src/app.proto
@@ -59,7 +59,8 @@ PROTOS[IDENTITY,4]=./libs/common/src/providers/identity/protobuf/identity.proto
 PROTOS[SPECIAL,1]=./apps/services/special/src/app.proto
 PROTOS[SPECIAL,2]=./apps/gateway/src/protobuf/special.proto
 PROTOS[SPECIAL,3]=./apps/services/touch/src/protobuf/special.proto
-PROTOS[SPECIAL,4]=./libs/common/src/providers/special/protobuf/special.proto
+PROTOS[SPECIAL,4]=./apps/services/financial/src/protobuf/special.proto
+PROTOS[SPECIAL,5]=./libs/common/src/providers/special/protobuf/special.proto
 
 # Touch Proto
 PROTOS[TOUCH,1]=./apps/services/touch/src/app.proto
