@@ -6,7 +6,7 @@ declare -A JOBS
 npm run db:clean:e2e && npm run db:seed:e2e
 
 # Start services and capture PIDs
-services=("auth" "context" "domain" "essential" "identity" "special" "touch" "gateway")
+services=("auth" "context" "domain" "essential" "financial" "identity" "special" "touch" "gateway")
 for service in "${services[@]}"; do
   npm run start:dev:e2e "$service" 2> "logs/$service.log" &
   JOBS[$service]=$!

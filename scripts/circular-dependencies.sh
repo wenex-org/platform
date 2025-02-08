@@ -9,6 +9,7 @@ npm run dpdm:ts ./apps/services/auth/src/main.ts -- --progress >> circular-depen
 npm run dpdm:ts ./apps/services/context/src/main.ts -- --progress >> circular-dependencies.txt
 npm run dpdm:ts ./apps/services/domain/src/main.ts -- --progress >> circular-dependencies.txt
 npm run dpdm:ts ./apps/services/essential/src/main.ts -- --progress >> circular-dependencies.txt
+npm run dpdm:ts ./apps/services/financial/src/main.ts -- --progress >> circular-dependencies.txt
 npm run dpdm:ts ./apps/services/identity/src/main.ts -- --progress >> circular-dependencies.txt
 npm run dpdm:ts ./apps/services/special/src/main.ts -- --progress >> circular-dependencies.txt
 npm run dpdm:ts ./apps/services/touch/src/main.ts -- --progress >> circular-dependencies.txt
