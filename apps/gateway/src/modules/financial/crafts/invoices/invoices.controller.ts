@@ -56,7 +56,7 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
     super(provider.invoices, InvoiceSerializer);
   }
 
-  @Post(':id/payment')
+  @Get(':id/payment')
   @SetScope(Scope.PaymentFinancialInvoices)
   @ApiResponse({ type: TransactionDataSerializer })
   @SetPolicy(Action.Payment, Resource.FinancialInvoices)
