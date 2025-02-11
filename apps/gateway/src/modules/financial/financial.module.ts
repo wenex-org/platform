@@ -11,6 +11,7 @@ import { TransactionsModule } from './crafts/transactions';
 @Module({
   imports: [
     FinancialProviderModule.forRoot(),
+
     ...[WalletsModule, AccountsModule, InvoicesModule, CurrenciesModule, TransactionsModule],
   ],
   providers: [FinancialProvider],

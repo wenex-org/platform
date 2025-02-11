@@ -13,8 +13,13 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import {
+  CreateTransactionDto,
+  CreateTransactionItemsDto,
+  InitTransactionDto,
+  UpdateTransactionDto,
+} from '@app/common/dto/financial';
 import { TransactionDataSerializer, TransactionItemsSerializer, TransactionSerializer } from '@app/common/serializers/financial';
-import { CreateTransactionDto, CreateTransactionItemsDto, UpdateTransactionDto } from '@app/common/dto/financial';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
@@ -26,16 +31,16 @@ import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
 import { FilterInterceptor } from '@app/common/core/interceptors/flow';
+import { getSseMessage, mapToInstance } from '@app/common/core/utils';
 import { FinancialProvider } from '@app/common/providers/financial';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { Filter, Meta } from '@app/common/core/decorators';
 import { ValidationPipe } from '@app/common/core/pipes';
-import { getSseMessage } from '@app/common/core/utils';
 import { Metadata } from '@app/common/core/interfaces';
+import { from, Observable } from 'rxjs';
 import { Response } from 'express';
-import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
 @RateLimit('transactions')
@@ -52,6 +57,45 @@ export class TransactionsController
   constructor(readonly provider: FinancialProvider) {
     super(provider.transactions, TransactionSerializer);
   }
+
+  @Post('init')
+  @ShipStrategy('create')
+  @Cache(Collection.Transactions, 'flush')
+  @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.InitFinancialTransaction)
+  @ApiResponse({ type: TransactionDataSerializer })
+  @SetPolicy(Action.Init, Resource.FinancialTransactions)
+  init(@Meta() meta: Metadata, @Body() data: InitTransactionDto): Observable<TransactionDataSerializer> {
+    return from(this.provider.transactions.init(data, { meta })).pipe(mapToInstance(TransactionSerializer, 'data'));
+  }
+
+  @Post(':id/abort')
+  @Cache(Collection.Transactions, 'flush')
+  @SetScope(Scope.AbortFinancialTransaction)
+  @ApiResponse({ type: TransactionDataSerializer })
+  @SetPolicy(Action.Abort, Resource.FinancialTransactions)
+  @ApiParam({ type: String, name: 'id', required: true })
+  @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  abort(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<Transaction>): Observable<TransactionDataSerializer> {
+    return from(this.provider.transactions.abort(filter, { meta })).pipe(mapToInstance(TransactionSerializer, 'data'));
+  }
+
+  @Post(':id/verify')
+  @Cache(Collection.Transactions, 'flush')
+  @SetScope(Scope.VerifyFinancialTransaction)
+  @ApiResponse({ type: TransactionDataSerializer })
+  @SetPolicy(Action.Verify, Resource.FinancialTransactions)
+  @ApiParam({ type: String, name: 'id', required: true })
+  @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  verify(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<Transaction>): Observable<TransactionDataSerializer> {
+    return from(this.provider.transactions.verify(filter, { meta })).pipe(mapToInstance(TransactionSerializer, 'data'));
+  }
+
+  // ##############################
+  // Common Method's
+  // ##############################
 
   @Get('count')
   @Cache(Collection.Transactions, 'fill')
