@@ -69,7 +69,7 @@ export class TransactionsController
     return from(this.provider.transactions.init(data, { meta })).pipe(mapToInstance(TransactionSerializer, 'data'));
   }
 
-  @Post(':id/abort')
+  @Get(':id/abort')
   @Cache(Collection.Transactions, 'flush')
   @SetScope(Scope.AbortFinancialTransaction)
   @ApiResponse({ type: TransactionDataSerializer })
@@ -81,7 +81,7 @@ export class TransactionsController
     return from(this.provider.transactions.abort(filter, { meta })).pipe(mapToInstance(TransactionSerializer, 'data'));
   }
 
-  @Post(':id/verify')
+  @Get(':id/verify')
   @Cache(Collection.Transactions, 'flush')
   @SetScope(Scope.VerifyFinancialTransaction)
   @ApiResponse({ type: TransactionDataSerializer })
