@@ -161,7 +161,7 @@
     "@types/qs": "^6.9.18",
     "@types/semver": "^7.5.8",
     "@types/supertest": "^6.0.2",
-    "@wenex/sdk": "^1.0.23",
+    "@wenex/sdk": "^1.0.24",
     "dpdm": "^3.14.0",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
