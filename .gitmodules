@@ -13,3 +13,6 @@
 [submodule "docker"]
 	path = docker
 	url = git@github.com:wenex-org/platform-docker.git
+[submodule "chart"]
+	path = chart
+	url = git@github.com:wenex-org/platform-chart.git
