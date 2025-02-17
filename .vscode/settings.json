@@ -17,6 +17,7 @@
     "Emqx",
     "exhook",
     "exhooks",
+    "isflash",
     "jaegertracing",
     "KAFKACONNECT",
     "kafkajs",
