@@ -19,6 +19,7 @@ import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { ResultSerializer, TotalSerializer } from '@app/common/core/serializers';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -29,7 +30,6 @@ import { getSseMessage, mapToInstance } from '@app/common/core/utils';
 import { SpecialProvider } from '@app/common/providers/special';
 import { Stat, StatDto } from '@app/common/interfaces/special';
 import { AllExceptionsFilter } from '@app/common/core/filters';
-import { TotalSerializer } from '@app/common/core/serializers';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { Filter, Meta } from '@app/common/core/decorators';
 import { ValidationPipe } from '@app/common/core/pipes';
@@ -59,6 +59,17 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   @SetPolicy(Action.Collect, Resource.SpecialStats)
   collect(@Meta() meta: Metadata, @Body() data: CollectStatDto): Observable<StatItemsSerializer> {
     return from(this.provider.stats.collect(data, { meta })).pipe(mapToInstance(StatSerializer, 'items'));
+  }
+
+  @Post('stackup')
+  @ShipStrategy('create')
+  @Cache(Collection.Stats, 'flush')
+  @SetScope(Scope.CollectSpecialStats)
+  @UseInterceptors(...WriteInterceptors)
+  @ApiResponse({ type: ResultSerializer })
+  @SetPolicy(Action.Collect, Resource.SpecialStats)
+  stackup(@Meta() meta: Metadata, @Body() data: CollectStatDto): Observable<ResultSerializer> {
+    return from(this.provider.stats.stackup(data, { meta })).pipe(mapToInstance(ResultSerializer));
   }
 
   // ##############################
