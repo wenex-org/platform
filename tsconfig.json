@@ -26,7 +26,9 @@
       "@app/module": ["libs/module/src"],
       "@app/module/*": ["libs/module/src/*"],
       "@financial": ["apps/services/financial/src"],
-      "@financial/*": ["apps/services/financial/src/*"]
+      "@financial/*": ["apps/services/financial/src/*"],
+      "@special": ["apps/services/special/src"],
+      "@special/*": ["apps/services/special/src/*"]
     }
   }
 }

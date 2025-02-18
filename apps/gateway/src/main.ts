@@ -53,4 +53,4 @@ async function bootstrap() {
   console.log(`OpenApi Spec is running on: ${url}/api-json`);
   console.log(`GraphQL playground is running on: ${url}/graphql`);
 }
-bootstrap();
+void bootstrap();
