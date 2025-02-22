@@ -1,7 +1,7 @@
 import { SessionDataSerializer, SessionItemsSerializer, SessionSerializer } from '@app/common/serializers/identity';
+import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateSessionDto, CreateSessionItemsDto, UpdateSessionDto } from '@app/common/dto/identity';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
-import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -9,7 +9,6 @@ import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
-import { FilterInterceptor } from '@app/common/core/interceptors/flow';
 import { Session, SessionDto } from '@app/common/interfaces/identity';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
@@ -66,7 +65,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   @Cache(Collection.Sessions, 'fill')
   @SetScope(Scope.ReadIdentitySessions)
   @SetPolicy(Action.Read, Resource.IdentitySessions)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   findSession(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Session>): Observable<SessionItemsSerializer> {
     return super.find(meta, filter);
   }
@@ -75,7 +74,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   @Cache(Collection.Sessions, 'fill')
   @SetScope(Scope.ReadIdentitySessions)
   @SetPolicy(Action.Read, Resource.IdentitySessions)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   findSessionById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -90,7 +89,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   @Cache(Collection.Sessions, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @SetPolicy(Action.Delete, Resource.IdentitySessions)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   deleteSessionById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -105,7 +104,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   @Cache(Collection.Sessions, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @SetPolicy(Action.Restore, Resource.IdentitySessions)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   restoreSessionById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -120,7 +119,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   @Cache(Collection.Sessions, 'flush')
   @SetScope(Scope.ManageIdentitySessions)
   @SetPolicy(Action.Destroy, Resource.IdentitySessions)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   destroySessionById(
     @Args('id') id: string,
     @Meta() meta: Metadata,

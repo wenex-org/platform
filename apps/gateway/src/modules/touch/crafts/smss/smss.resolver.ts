@@ -1,6 +1,6 @@
+import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { SmsDataSerializer, SmsItemsSerializer, SmsSerializer } from '@app/common/serializers/touch';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
-import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateSmsDto, CreateSmsItemsDto, UpdateSmsDto } from '@app/common/dto/touch';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
@@ -9,7 +9,6 @@ import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
-import { FilterInterceptor } from '@app/common/core/interceptors/flow';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
 import { AllExceptionsFilter } from '@app/common/core/filters';
@@ -66,7 +65,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   @Cache(Collection.Smss, 'fill')
   @SetScope(Scope.ReadTouchSmss)
   @SetPolicy(Action.Read, Resource.TouchSmss)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   findSms(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Sms>): Observable<SmsItemsSerializer> {
     return super.find(meta, filter);
   }
@@ -75,7 +74,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   @Cache(Collection.Smss, 'fill')
   @SetScope(Scope.ReadTouchSmss)
   @SetPolicy(Action.Read, Resource.TouchSmss)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   findSmsById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -90,7 +89,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   @Cache(Collection.Smss, 'flush')
   @SetScope(Scope.WriteTouchSmss)
   @SetPolicy(Action.Delete, Resource.TouchSmss)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   deleteSmsById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -105,7 +104,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   @Cache(Collection.Smss, 'flush')
   @SetScope(Scope.WriteTouchSmss)
   @SetPolicy(Action.Restore, Resource.TouchSmss)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   restoreSmsById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -120,7 +119,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   @Cache(Collection.Smss, 'flush')
   @SetScope(Scope.ManageTouchSmss)
   @SetPolicy(Action.Destroy, Resource.TouchSmss)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   destroySmsById(
     @Args('id') id: string,
     @Meta() meta: Metadata,

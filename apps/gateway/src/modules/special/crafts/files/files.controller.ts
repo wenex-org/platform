@@ -13,18 +13,17 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { FileDataSerializer, FileItemsSerializer, FileSerializer } from '@app/common/serializers/special';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { CreateFileDto, CreateFileItemsDto, UpdateFileDto } from '@app/common/dto/special';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
-import { FilterInterceptor } from '@app/common/core/interceptors/flow';
 import { SpecialProvider } from '@app/common/providers/special';
 import { File, FileDto } from '@app/common/interfaces/special';
 import { AllExceptionsFilter } from '@app/common/core/filters';
@@ -88,7 +87,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   @SetPolicy(Action.Read, Resource.SpecialFiles)
   @ApiResponse({ type: FileItemsSerializer })
   @ApiQuery({ type: FilterDto, required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override find(@Meta() meta: Metadata, @Filter() filter: FilterDto<File>): Observable<FileItemsSerializer> {
     return super.find(meta, filter);
   }
@@ -97,7 +96,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   @SetScope(Scope.ReadSpecialFiles)
   @SetPolicy(Action.Read, Resource.SpecialFiles)
   @ApiQuery({ type: FilterOneDto, required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   @ApiResponse({ status: HttpStatus.OK, type: FileSerializer })
   Cursor(@Res() res: Response, @Meta() meta: Metadata, @Filter() filter: FilterOneDto<File>) {
     // Server Sent-Event Headers
@@ -119,7 +118,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   @SetPolicy(Action.Read, Resource.SpecialFiles)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override findOne(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<File>): Observable<FileDataSerializer> {
     return super.findOne(meta, filter);
   }
@@ -131,7 +130,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   @SetPolicy(Action.Delete, Resource.SpecialFiles)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override deleteOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<File>): Observable<FileDataSerializer> {
     return super.deleteOne(meta, filter);
   }
@@ -143,7 +142,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   @SetPolicy(Action.Restore, Resource.SpecialFiles)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override restoreOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<File>): Observable<FileDataSerializer> {
     return super.restoreOne(meta, filter);
   }
@@ -155,7 +154,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   @SetPolicy(Action.Destroy, Resource.SpecialFiles)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<File>): Observable<FileDataSerializer> {
     return super.destroyOne(meta, filter);
   }

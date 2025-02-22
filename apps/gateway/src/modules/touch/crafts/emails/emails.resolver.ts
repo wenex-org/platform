@@ -1,7 +1,7 @@
+import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { EmailDataSerializer, EmailItemsSerializer, EmailSerializer } from '@app/common/serializers/touch';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { CreateEmailDto, CreateEmailItemsDto, UpdateEmailDto } from '@app/common/dto/touch';
-import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -9,7 +9,6 @@ import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
-import { FilterInterceptor } from '@app/common/core/interceptors/flow';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
 import { Email, EmailDto } from '@app/common/interfaces/touch';
@@ -66,7 +65,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   @Cache(Collection.Emails, 'fill')
   @SetScope(Scope.ReadTouchEmails)
   @SetPolicy(Action.Read, Resource.TouchEmails)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   findEmail(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Email>): Observable<EmailItemsSerializer> {
     return super.find(meta, filter);
   }
@@ -75,7 +74,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   @Cache(Collection.Emails, 'fill')
   @SetScope(Scope.ReadTouchEmails)
   @SetPolicy(Action.Read, Resource.TouchEmails)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   findEmailById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -90,7 +89,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   @Cache(Collection.Emails, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @SetPolicy(Action.Delete, Resource.TouchEmails)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   deleteEmailById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -105,7 +104,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   @Cache(Collection.Emails, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @SetPolicy(Action.Restore, Resource.TouchEmails)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   restoreEmailById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -120,7 +119,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   @Cache(Collection.Emails, 'flush')
   @SetScope(Scope.ManageTouchEmails)
   @SetPolicy(Action.Destroy, Resource.TouchEmails)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   destroyEmailById(
     @Args('id') id: string,
     @Meta() meta: Metadata,

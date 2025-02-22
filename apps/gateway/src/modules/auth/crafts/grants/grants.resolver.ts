@@ -1,7 +1,7 @@
+import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { GrantDataSerializer, GrantItemsSerializer, GrantSerializer } from '@app/common/serializers/auth';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { CreateGrantDto, CreateGrantItemsDto, UpdateGrantDto } from '@app/common/dto/auth';
-import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -9,7 +9,6 @@ import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
-import { FilterInterceptor } from '@app/common/core/interceptors/flow';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
 import { AllExceptionsFilter } from '@app/common/core/filters';
@@ -66,7 +65,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   @Cache(Collection.Grants, 'fill')
   @SetScope(Scope.ReadAuthGrants)
   @SetPolicy(Action.Read, Resource.AuthGrants)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   findGrant(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Grant>): Observable<GrantItemsSerializer> {
     return super.find(meta, filter);
   }
@@ -75,7 +74,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   @Cache(Collection.Grants, 'fill')
   @SetScope(Scope.ReadAuthGrants)
   @SetPolicy(Action.Read, Resource.AuthGrants)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   findGrantById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -90,7 +89,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   @Cache(Collection.Grants, 'flush')
   @SetScope(Scope.WriteAuthGrants)
   @SetPolicy(Action.Delete, Resource.AuthGrants)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   deleteGrantById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -105,7 +104,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   @Cache(Collection.Grants, 'flush')
   @SetScope(Scope.WriteAuthGrants)
   @SetPolicy(Action.Restore, Resource.AuthGrants)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   restoreGrantById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -120,7 +119,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   @Cache(Collection.Grants, 'flush')
   @SetScope(Scope.ManageAuthGrants)
   @SetPolicy(Action.Destroy, Resource.AuthGrants)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   destroyGrantById(
     @Args('id') id: string,
     @Meta() meta: Metadata,

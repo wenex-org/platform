@@ -1,7 +1,7 @@
 import { TransactionDataSerializer, TransactionItemsSerializer, TransactionSerializer } from '@app/common/serializers/financial';
 import { CreateTransactionDto, CreateTransactionItemsDto, UpdateTransactionDto } from '@app/common/dto/financial';
+import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
-import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -10,7 +10,6 @@ import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
-import { FilterInterceptor } from '@app/common/core/interceptors/flow';
 import { FinancialProvider } from '@app/common/providers/financial';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
@@ -72,7 +71,7 @@ export class TransactionsResolver
   @Cache(Collection.Transactions, 'fill')
   @SetScope(Scope.ReadFinancialTransactions)
   @SetPolicy(Action.Read, Resource.FinancialTransactions)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   findTransaction(
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: FilterDto<Transaction>,
@@ -84,7 +83,7 @@ export class TransactionsResolver
   @Cache(Collection.Transactions, 'fill')
   @SetScope(Scope.ReadFinancialTransactions)
   @SetPolicy(Action.Read, Resource.FinancialTransactions)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   findTransactionById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -99,7 +98,7 @@ export class TransactionsResolver
   @Cache(Collection.Transactions, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @SetPolicy(Action.Delete, Resource.FinancialTransactions)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   deleteTransactionById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -114,7 +113,7 @@ export class TransactionsResolver
   @Cache(Collection.Transactions, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @SetPolicy(Action.Restore, Resource.FinancialTransactions)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   restoreTransactionById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -129,7 +128,7 @@ export class TransactionsResolver
   @Cache(Collection.Transactions, 'flush')
   @SetScope(Scope.ManageFinancialTransactions)
   @SetPolicy(Action.Destroy, Resource.FinancialTransactions)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   destroyTransactionById(
     @Args('id') id: string,
     @Meta() meta: Metadata,

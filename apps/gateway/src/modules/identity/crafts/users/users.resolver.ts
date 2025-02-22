@@ -1,7 +1,7 @@
+import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { UserDataSerializer, UserItemsSerializer, UserSerializer } from '@app/common/serializers/identity';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { CreateUserDto, CreateUserItemsDto, UpdateUserDto } from '@app/common/dto/identity';
-import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -9,7 +9,6 @@ import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
-import { FilterInterceptor } from '@app/common/core/interceptors/flow';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
 import { IdentityProvider } from '@app/common/providers/identity';
@@ -66,7 +65,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   @Cache(Collection.Users, 'fill')
   @SetScope(Scope.ReadIdentityUsers)
   @SetPolicy(Action.Read, Resource.IdentityUsers)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   findUser(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<User>): Observable<UserItemsSerializer> {
     return super.find(meta, filter);
   }
@@ -75,7 +74,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   @Cache(Collection.Users, 'fill')
   @SetScope(Scope.ReadIdentityUsers)
   @SetPolicy(Action.Read, Resource.IdentityUsers)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   findUserById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -90,7 +89,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   @Cache(Collection.Users, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @SetPolicy(Action.Delete, Resource.IdentityUsers)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   deleteUserById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -105,7 +104,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   @Cache(Collection.Users, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @SetPolicy(Action.Restore, Resource.IdentityUsers)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   restoreUserById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -120,7 +119,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   @Cache(Collection.Users, 'flush')
   @SetScope(Scope.ManageIdentityUsers)
   @SetPolicy(Action.Destroy, Resource.IdentityUsers)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   destroyUserById(
     @Args('id') id: string,
     @Meta() meta: Metadata,

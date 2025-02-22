@@ -13,18 +13,17 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { EmailDataSerializer, EmailItemsSerializer, EmailSerializer } from '@app/common/serializers/touch';
 import { CreateEmailDto, CreateEmailItemsDto, SendEmailDto, UpdateEmailDto } from '@app/common/dto/touch';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
-import { FilterInterceptor } from '@app/common/core/interceptors/flow';
 import { getSseMessage, mapToInstance } from '@app/common/core/utils';
 import { Email, EmailDto } from '@app/common/interfaces/touch';
 import { AllExceptionsFilter } from '@app/common/core/filters';
@@ -103,7 +102,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   @SetPolicy(Action.Read, Resource.TouchEmails)
   @ApiResponse({ type: EmailItemsSerializer })
   @ApiQuery({ type: FilterDto, required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override find(@Meta() meta: Metadata, @Filter() filter: FilterDto<Email>): Observable<EmailItemsSerializer> {
     return super.find(meta, filter);
   }
@@ -112,7 +111,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   @SetScope(Scope.ReadTouchEmails)
   @SetPolicy(Action.Read, Resource.TouchEmails)
   @ApiQuery({ type: FilterOneDto, required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   @ApiResponse({ status: HttpStatus.OK, type: EmailSerializer })
   Cursor(@Res() res: Response, @Meta() meta: Metadata, @Filter() filter: FilterOneDto<Email>) {
     // Server Sent-Event Headers
@@ -134,7 +133,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   @SetPolicy(Action.Read, Resource.TouchEmails)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override findOne(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<Email>): Observable<EmailDataSerializer> {
     return super.findOne(meta, filter);
   }
@@ -146,7 +145,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   @SetPolicy(Action.Delete, Resource.TouchEmails)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override deleteOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Email>): Observable<EmailDataSerializer> {
     return super.deleteOne(meta, filter);
   }
@@ -158,7 +157,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   @SetPolicy(Action.Restore, Resource.TouchEmails)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override restoreOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Email>): Observable<EmailDataSerializer> {
     return super.restoreOne(meta, filter);
   }
@@ -170,7 +169,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   @SetPolicy(Action.Destroy, Resource.TouchEmails)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Email>): Observable<EmailDataSerializer> {
     return super.destroyOne(meta, filter);
   }

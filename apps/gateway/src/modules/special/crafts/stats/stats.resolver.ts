@@ -1,7 +1,7 @@
+import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { StatDataSerializer, StatItemsSerializer, StatSerializer } from '@app/common/serializers/special';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { CreateStatDto, CreateStatItemsDto, UpdateStatDto } from '@app/common/dto/special';
-import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -9,7 +9,6 @@ import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
-import { FilterInterceptor } from '@app/common/core/interceptors/flow';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
 import { SpecialProvider } from '@app/common/providers/special';
@@ -66,7 +65,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   @Cache(Collection.Stats, 'fill')
   @SetScope(Scope.ReadSpecialStats)
   @SetPolicy(Action.Read, Resource.SpecialStats)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   findStat(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Stat>): Observable<StatItemsSerializer> {
     return super.find(meta, filter);
   }
@@ -75,7 +74,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   @Cache(Collection.Stats, 'fill')
   @SetScope(Scope.ReadSpecialStats)
   @SetPolicy(Action.Read, Resource.SpecialStats)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   findStatById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -90,7 +89,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @SetPolicy(Action.Delete, Resource.SpecialStats)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   deleteStatById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -105,7 +104,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @SetPolicy(Action.Restore, Resource.SpecialStats)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   restoreStatById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -120,7 +119,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.ManageSpecialStats)
   @SetPolicy(Action.Destroy, Resource.SpecialStats)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   destroyStatById(
     @Args('id') id: string,
     @Meta() meta: Metadata,

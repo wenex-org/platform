@@ -14,10 +14,10 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { SagaStageDataSerializer, SagaStageItemsSerializer, SagaStageSerializer } from '@app/common/serializers/essential';
+import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateSagaStageDto, CreateSagaStageItemsDto, UpdateSagaStageDto } from '@app/common/dto/essential';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -25,7 +25,6 @@ import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { SagaStage, SagaStageDto } from '@app/common/interfaces/essential';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
-import { FilterInterceptor } from '@app/common/core/interceptors/flow';
 import { EssentialProvider } from '@app/common/providers/essential';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
@@ -88,7 +87,7 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   @SetPolicy(Action.Read, Resource.EssentialSagaStages)
   @ApiResponse({ type: SagaStageItemsSerializer })
   @ApiQuery({ type: FilterDto, required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override find(@Meta() meta: Metadata, @Filter() filter: FilterDto<SagaStage>): Observable<SagaStageItemsSerializer> {
     return super.find(meta, filter);
   }
@@ -97,7 +96,7 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   @SetScope(Scope.ReadEssentialSagaStages)
   @SetPolicy(Action.Read, Resource.EssentialSagaStages)
   @ApiQuery({ type: FilterOneDto, required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   @ApiResponse({ status: HttpStatus.OK, type: SagaStageSerializer })
   Cursor(@Res() res: Response, @Meta() meta: Metadata, @Filter() filter: FilterOneDto<SagaStage>) {
     // Server Sent-Event Headers
@@ -119,7 +118,7 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   @SetPolicy(Action.Read, Resource.EssentialSagaStages)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override findOne(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<SagaStage>): Observable<SagaStageDataSerializer> {
     return super.findOne(meta, filter);
   }
@@ -131,7 +130,7 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   @SetPolicy(Action.Delete, Resource.EssentialSagaStages)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override deleteOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<SagaStage>): Observable<SagaStageDataSerializer> {
     return super.deleteOne(meta, filter);
   }
@@ -143,7 +142,7 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   @SetPolicy(Action.Restore, Resource.EssentialSagaStages)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override restoreOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<SagaStage>): Observable<SagaStageDataSerializer> {
     return super.restoreOne(meta, filter);
   }
@@ -155,7 +154,7 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   @SetPolicy(Action.Destroy, Resource.EssentialSagaStages)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<SagaStage>): Observable<SagaStageDataSerializer> {
     return super.destroyOne(meta, filter);
   }

@@ -1,7 +1,7 @@
+import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { Cache, Nested, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { AppDataSerializer, AppItemsSerializer, AppSerializer } from '@app/common/serializers/domain';
 import { CreateAppDto, CreateAppItemsDto, UpdateAppDto } from '@app/common/dto/domain';
-import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -9,7 +9,6 @@ import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
-import { FilterInterceptor } from '@app/common/core/interceptors/flow';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
 import { AllExceptionsFilter } from '@app/common/core/filters';
@@ -67,7 +66,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   @Cache(Collection.Apps, 'fill')
   @SetScope(Scope.ReadDomainApps)
   @SetPolicy(Action.Read, Resource.DomainApps)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   findApp(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<App>): Observable<AppItemsSerializer> {
     return super.find(meta, filter);
   }
@@ -76,7 +75,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   @Cache(Collection.Apps, 'fill')
   @SetScope(Scope.ReadDomainApps)
   @SetPolicy(Action.Read, Resource.DomainApps)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   findAppById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -91,7 +90,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   @Cache(Collection.Apps, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @SetPolicy(Action.Delete, Resource.DomainApps)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   deleteAppById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -106,7 +105,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   @Cache(Collection.Apps, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @SetPolicy(Action.Restore, Resource.DomainApps)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   restoreAppById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -121,7 +120,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   @Cache(Collection.Apps, 'flush')
   @SetScope(Scope.ManageDomainApps)
   @SetPolicy(Action.Destroy, Resource.DomainApps)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   destroyAppById(
     @Args('id') id: string,
     @Meta() meta: Metadata,

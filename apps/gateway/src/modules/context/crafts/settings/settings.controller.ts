@@ -14,17 +14,16 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { SettingDataSerializer, SettingItemsSerializer, SettingSerializer } from '@app/common/serializers/context';
+import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateSettingDto, CreateSettingItemsDto, UpdateSettingDto } from '@app/common/dto/context';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
-import { FilterInterceptor } from '@app/common/core/interceptors/flow';
 import { Setting, SettingDto } from '@app/common/interfaces/context';
 import { ContextProvider } from '@app/common/providers/context';
 import { AllExceptionsFilter } from '@app/common/core/filters';
@@ -88,7 +87,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   @SetPolicy(Action.Read, Resource.ContextSettings)
   @ApiResponse({ type: SettingItemsSerializer })
   @ApiQuery({ type: FilterDto, required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override find(@Meta() meta: Metadata, @Filter() filter: FilterDto<Setting>): Observable<SettingItemsSerializer> {
     return super.find(meta, filter);
   }
@@ -97,7 +96,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   @SetScope(Scope.ReadContextSettings)
   @SetPolicy(Action.Read, Resource.ContextSettings)
   @ApiQuery({ type: FilterOneDto, required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   @ApiResponse({ status: HttpStatus.OK, type: SettingSerializer })
   Cursor(@Res() res: Response, @Meta() meta: Metadata, @Filter() filter: FilterOneDto<Setting>) {
     // Server Sent-Event Headers
@@ -119,7 +118,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   @SetPolicy(Action.Read, Resource.ContextSettings)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override findOne(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<Setting>): Observable<SettingDataSerializer> {
     return super.findOne(meta, filter);
   }
@@ -131,7 +130,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   @SetPolicy(Action.Delete, Resource.ContextSettings)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override deleteOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Setting>): Observable<SettingDataSerializer> {
     return super.deleteOne(meta, filter);
   }
@@ -143,7 +142,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   @SetPolicy(Action.Restore, Resource.ContextSettings)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override restoreOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Setting>): Observable<SettingDataSerializer> {
     return super.restoreOne(meta, filter);
   }
@@ -155,7 +154,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   @SetPolicy(Action.Destroy, Resource.ContextSettings)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Setting>): Observable<SettingDataSerializer> {
     return super.destroyOne(meta, filter);
   }

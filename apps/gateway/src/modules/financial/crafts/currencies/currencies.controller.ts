@@ -14,10 +14,10 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { CurrencyDataSerializer, CurrencyItemsSerializer, CurrencySerializer } from '@app/common/serializers/financial';
+import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateCurrencyDto, CreateCurrencyItemsDto, UpdateCurrencyDto } from '@app/common/dto/financial';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -25,7 +25,6 @@ import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Currency, CurrencyDto } from '@app/common/interfaces/financial';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
-import { FilterInterceptor } from '@app/common/core/interceptors/flow';
 import { FinancialProvider } from '@app/common/providers/financial';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
@@ -88,7 +87,7 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
   @SetPolicy(Action.Read, Resource.FinancialCurrencies)
   @ApiResponse({ type: CurrencyItemsSerializer })
   @ApiQuery({ type: FilterDto, required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override find(@Meta() meta: Metadata, @Filter() filter: FilterDto<Currency>): Observable<CurrencyItemsSerializer> {
     return super.find(meta, filter);
   }
@@ -97,7 +96,7 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
   @SetScope(Scope.ReadFinancialCurrencies)
   @SetPolicy(Action.Read, Resource.FinancialCurrencies)
   @ApiQuery({ type: FilterOneDto, required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   @ApiResponse({ status: HttpStatus.OK, type: CurrencySerializer })
   Cursor(@Res() res: Response, @Meta() meta: Metadata, @Filter() filter: FilterOneDto<Currency>) {
     // Server Sent-Event Headers
@@ -119,7 +118,7 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
   @SetPolicy(Action.Read, Resource.FinancialCurrencies)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override findOne(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<Currency>): Observable<CurrencyDataSerializer> {
     return super.findOne(meta, filter);
   }
@@ -131,7 +130,7 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
   @SetPolicy(Action.Delete, Resource.FinancialCurrencies)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override deleteOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Currency>): Observable<CurrencyDataSerializer> {
     return super.deleteOne(meta, filter);
   }
@@ -143,7 +142,7 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
   @SetPolicy(Action.Restore, Resource.FinancialCurrencies)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override restoreOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Currency>): Observable<CurrencyDataSerializer> {
     return super.restoreOne(meta, filter);
   }
@@ -155,7 +154,7 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
   @SetPolicy(Action.Destroy, Resource.FinancialCurrencies)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Currency>): Observable<CurrencyDataSerializer> {
     return super.destroyOne(meta, filter);
   }

@@ -14,17 +14,16 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { ClientDataSerializer, ClientItemsSerializer, ClientSerializer } from '@app/common/serializers/domain';
+import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { Cache, Nested, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { CreateClientDto, CreateClientItemsDto, UpdateClientDto } from '@app/common/dto/domain';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
-import { FilterInterceptor } from '@app/common/core/interceptors/flow';
 import { Client, ClientDto } from '@app/common/interfaces/domain';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
@@ -89,7 +88,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   @SetPolicy(Action.Read, Resource.DomainClients)
   @ApiResponse({ type: ClientItemsSerializer })
   @ApiQuery({ type: FilterDto, required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override find(@Meta() meta: Metadata, @Filter() filter: FilterDto<Client>): Observable<ClientItemsSerializer> {
     return super.find(meta, filter);
   }
@@ -98,7 +97,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   @SetScope(Scope.ReadDomainClients)
   @SetPolicy(Action.Read, Resource.DomainClients)
   @ApiQuery({ type: FilterOneDto, required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   @ApiResponse({ status: HttpStatus.OK, type: ClientSerializer })
   Cursor(@Res() res: Response, @Meta() meta: Metadata, @Filter() filter: FilterOneDto<Client>) {
     // Server Sent-Event Headers
@@ -120,7 +119,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   @SetPolicy(Action.Read, Resource.DomainClients)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override findOne(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<Client>): Observable<ClientDataSerializer> {
     return super.findOne(meta, filter);
   }
@@ -132,7 +131,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   @SetPolicy(Action.Delete, Resource.DomainClients)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override deleteOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Client>): Observable<ClientDataSerializer> {
     return super.deleteOne(meta, filter);
   }
@@ -144,7 +143,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   @SetPolicy(Action.Restore, Resource.DomainClients)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override restoreOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Client>): Observable<ClientDataSerializer> {
     return super.restoreOne(meta, filter);
   }
@@ -156,7 +155,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   @SetPolicy(Action.Destroy, Resource.DomainClients)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Client>): Observable<ClientDataSerializer> {
     return super.destroyOne(meta, filter);
   }

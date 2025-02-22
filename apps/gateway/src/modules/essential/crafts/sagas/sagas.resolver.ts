@@ -1,7 +1,7 @@
+import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { SagaDataSerializer, SagaItemsSerializer, SagaSerializer } from '@app/common/serializers/essential';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { CreateSagaDto, CreateSagaItemsDto, UpdateSagaDto } from '@app/common/dto/essential';
-import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -9,7 +9,6 @@ import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
-import { FilterInterceptor } from '@app/common/core/interceptors/flow';
 import { EssentialProvider } from '@app/common/providers/essential';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
@@ -66,7 +65,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   @Cache(Collection.Sagas, 'fill')
   @SetScope(Scope.ReadEssentialSagas)
   @SetPolicy(Action.Read, Resource.EssentialSagas)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   findSaga(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Saga>): Observable<SagaItemsSerializer> {
     return super.find(meta, filter);
   }
@@ -75,7 +74,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   @Cache(Collection.Sagas, 'fill')
   @SetScope(Scope.ReadEssentialSagas)
   @SetPolicy(Action.Read, Resource.EssentialSagas)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   findSagaById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -90,7 +89,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.WriteEssentialSagas)
   @SetPolicy(Action.Delete, Resource.EssentialSagas)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   deleteSagaById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -105,7 +104,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.WriteEssentialSagas)
   @SetPolicy(Action.Restore, Resource.EssentialSagas)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   restoreSagaById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -120,7 +119,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.ManageEssentialSagas)
   @SetPolicy(Action.Destroy, Resource.EssentialSagas)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   destroySagaById(
     @Args('id') id: string,
     @Meta() meta: Metadata,

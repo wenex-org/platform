@@ -13,11 +13,11 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { CollectStatDto, CreateStatDto, CreateStatItemsDto, UpdateStatDto } from '@app/common/dto/special';
 import { StatDataSerializer, StatItemsSerializer, StatSerializer } from '@app/common/serializers/special';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { ResultSerializer, TotalSerializer } from '@app/common/core/serializers';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -25,7 +25,6 @@ import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
-import { FilterInterceptor } from '@app/common/core/interceptors/flow';
 import { getSseMessage, mapToInstance } from '@app/common/core/utils';
 import { SpecialProvider } from '@app/common/providers/special';
 import { Stat, StatDto } from '@app/common/interfaces/special';
@@ -114,7 +113,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   @SetPolicy(Action.Read, Resource.SpecialStats)
   @ApiResponse({ type: StatItemsSerializer })
   @ApiQuery({ type: FilterDto, required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override find(@Meta() meta: Metadata, @Filter() filter: FilterDto<Stat>): Observable<StatItemsSerializer> {
     return super.find(meta, filter);
   }
@@ -123,7 +122,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   @SetScope(Scope.ReadSpecialStats)
   @SetPolicy(Action.Read, Resource.SpecialStats)
   @ApiQuery({ type: FilterOneDto, required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   @ApiResponse({ status: HttpStatus.OK, type: StatSerializer })
   Cursor(@Res() res: Response, @Meta() meta: Metadata, @Filter() filter: FilterOneDto<Stat>) {
     // Server Sent-Event Headers
@@ -145,7 +144,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   @SetPolicy(Action.Read, Resource.SpecialStats)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override findOne(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<Stat>): Observable<StatDataSerializer> {
     return super.findOne(meta, filter);
   }
@@ -157,7 +156,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   @SetPolicy(Action.Delete, Resource.SpecialStats)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override deleteOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Stat>): Observable<StatDataSerializer> {
     return super.deleteOne(meta, filter);
   }
@@ -169,7 +168,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   @SetPolicy(Action.Restore, Resource.SpecialStats)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override restoreOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Stat>): Observable<StatDataSerializer> {
     return super.restoreOne(meta, filter);
   }
@@ -181,7 +180,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   @SetPolicy(Action.Destroy, Resource.SpecialStats)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Stat>): Observable<StatDataSerializer> {
     return super.destroyOne(meta, filter);
   }

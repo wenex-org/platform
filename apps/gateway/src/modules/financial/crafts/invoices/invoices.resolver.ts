@@ -1,7 +1,7 @@
 import { InvoiceDataSerializer, InvoiceItemsSerializer, InvoiceSerializer } from '@app/common/serializers/financial';
+import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateInvoiceDto, CreateInvoiceItemsDto, UpdateInvoiceDto } from '@app/common/dto/financial';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
-import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -9,7 +9,6 @@ import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
-import { FilterInterceptor } from '@app/common/core/interceptors/flow';
 import { Invoice, InvoiceDto } from '@app/common/interfaces/financial';
 import { FinancialProvider } from '@app/common/providers/financial';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
@@ -66,7 +65,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   @Cache(Collection.Invoices, 'fill')
   @SetScope(Scope.ReadFinancialInvoices)
   @SetPolicy(Action.Read, Resource.FinancialInvoices)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   findInvoice(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Invoice>): Observable<InvoiceItemsSerializer> {
     return super.find(meta, filter);
   }
@@ -75,7 +74,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   @Cache(Collection.Invoices, 'fill')
   @SetScope(Scope.ReadFinancialInvoices)
   @SetPolicy(Action.Read, Resource.FinancialInvoices)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   findInvoiceById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -90,7 +89,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   @Cache(Collection.Invoices, 'flush')
   @SetScope(Scope.WriteFinancialInvoices)
   @SetPolicy(Action.Delete, Resource.FinancialInvoices)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   deleteInvoiceById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -105,7 +104,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   @Cache(Collection.Invoices, 'flush')
   @SetScope(Scope.WriteFinancialInvoices)
   @SetPolicy(Action.Restore, Resource.FinancialInvoices)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   restoreInvoiceById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -120,7 +119,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   @Cache(Collection.Invoices, 'flush')
   @SetScope(Scope.ManageFinancialInvoices)
   @SetPolicy(Action.Destroy, Resource.FinancialInvoices)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   destroyInvoiceById(
     @Args('id') id: string,
     @Meta() meta: Metadata,

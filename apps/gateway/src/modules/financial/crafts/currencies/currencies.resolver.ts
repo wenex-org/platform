@@ -1,7 +1,7 @@
 import { CurrencyDataSerializer, CurrencyItemsSerializer, CurrencySerializer } from '@app/common/serializers/financial';
+import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateCurrencyDto, CreateCurrencyItemsDto, UpdateCurrencyDto } from '@app/common/dto/financial';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
-import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -10,7 +10,6 @@ import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Currency, CurrencyDto } from '@app/common/interfaces/financial';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
-import { FilterInterceptor } from '@app/common/core/interceptors/flow';
 import { FinancialProvider } from '@app/common/providers/financial';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
@@ -66,7 +65,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   @Cache(Collection.Currencies, 'fill')
   @SetScope(Scope.ReadFinancialCurrencies)
   @SetPolicy(Action.Read, Resource.FinancialCurrencies)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   findCurrency(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Currency>): Observable<CurrencyItemsSerializer> {
     return super.find(meta, filter);
   }
@@ -75,7 +74,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   @Cache(Collection.Currencies, 'fill')
   @SetScope(Scope.ReadFinancialCurrencies)
   @SetPolicy(Action.Read, Resource.FinancialCurrencies)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   findCurrencyById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -90,7 +89,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   @Cache(Collection.Currencies, 'flush')
   @SetScope(Scope.WriteFinancialCurrencies)
   @SetPolicy(Action.Delete, Resource.FinancialCurrencies)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   deleteCurrencyById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -105,7 +104,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   @Cache(Collection.Currencies, 'flush')
   @SetScope(Scope.WriteFinancialCurrencies)
   @SetPolicy(Action.Restore, Resource.FinancialCurrencies)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   restoreCurrencyById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
@@ -120,7 +119,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   @Cache(Collection.Currencies, 'flush')
   @SetScope(Scope.ManageFinancialCurrencies)
   @SetPolicy(Action.Destroy, Resource.FinancialCurrencies)
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   destroyCurrencyById(
     @Args('id') id: string,
     @Meta() meta: Metadata,

@@ -34,7 +34,7 @@ export class PublicController {
   @SetScope(Scope.UploadSpecialFiles)
   @ApiResponse({ type: FileItemsSerializer })
   @SetPolicy(Action.Upload, Resource.SpecialFiles)
-  @UseInterceptors(...WriteInterceptors, FilesInterceptor('file'))
+  @UseInterceptors(FilesInterceptor('file'), ...WriteInterceptors)
   @ApiBody({
     schema: {
       type: 'object',

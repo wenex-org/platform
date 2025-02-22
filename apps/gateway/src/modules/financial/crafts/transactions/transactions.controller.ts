@@ -20,9 +20,9 @@ import {
   UpdateTransactionDto,
 } from '@app/common/dto/financial';
 import { TransactionDataSerializer, TransactionItemsSerializer, TransactionSerializer } from '@app/common/serializers/financial';
+import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Transaction, TransactionDto } from '@app/common/interfaces/financial';
@@ -30,7 +30,6 @@ import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
-import { FilterInterceptor } from '@app/common/core/interceptors/flow';
 import { getSseMessage, mapToInstance } from '@app/common/core/utils';
 import { FinancialProvider } from '@app/common/providers/financial';
 import { AllExceptionsFilter } from '@app/common/core/filters';
@@ -76,7 +75,7 @@ export class TransactionsController
   @SetPolicy(Action.Abort, Resource.FinancialTransactions)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   abort(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<Transaction>): Observable<TransactionDataSerializer> {
     return from(this.provider.transactions.abort(filter, { meta })).pipe(mapToInstance(TransactionSerializer, 'data'));
   }
@@ -88,7 +87,7 @@ export class TransactionsController
   @SetPolicy(Action.Verify, Resource.FinancialTransactions)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   verify(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<Transaction>): Observable<TransactionDataSerializer> {
     return from(this.provider.transactions.verify(filter, { meta })).pipe(mapToInstance(TransactionSerializer, 'data'));
   }
@@ -135,7 +134,7 @@ export class TransactionsController
   @SetPolicy(Action.Read, Resource.FinancialTransactions)
   @ApiResponse({ type: TransactionItemsSerializer })
   @ApiQuery({ type: FilterDto, required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override find(@Meta() meta: Metadata, @Filter() filter: FilterDto<Transaction>): Observable<TransactionItemsSerializer> {
     return super.find(meta, filter);
   }
@@ -144,7 +143,7 @@ export class TransactionsController
   @SetScope(Scope.ReadFinancialTransactions)
   @SetPolicy(Action.Read, Resource.FinancialTransactions)
   @ApiQuery({ type: FilterOneDto, required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   @ApiResponse({ status: HttpStatus.OK, type: TransactionSerializer })
   Cursor(@Res() res: Response, @Meta() meta: Metadata, @Filter() filter: FilterOneDto<Transaction>) {
     // Server Sent-Event Headers
@@ -166,7 +165,7 @@ export class TransactionsController
   @SetPolicy(Action.Read, Resource.FinancialTransactions)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override findOne(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<Transaction>): Observable<TransactionDataSerializer> {
     return super.findOne(meta, filter);
   }
@@ -178,7 +177,7 @@ export class TransactionsController
   @SetPolicy(Action.Delete, Resource.FinancialTransactions)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override deleteOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Transaction>): Observable<TransactionDataSerializer> {
     return super.deleteOne(meta, filter);
   }
@@ -190,7 +189,7 @@ export class TransactionsController
   @SetPolicy(Action.Restore, Resource.FinancialTransactions)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override restoreOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Transaction>): Observable<TransactionDataSerializer> {
     return super.restoreOne(meta, filter);
   }
@@ -202,7 +201,7 @@ export class TransactionsController
   @SetPolicy(Action.Destroy, Resource.FinancialTransactions)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, FilterInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Transaction>): Observable<TransactionDataSerializer> {
     return super.destroyOne(meta, filter);
   }
