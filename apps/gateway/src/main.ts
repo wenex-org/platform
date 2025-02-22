@@ -3,7 +3,7 @@ require('dotenv').config();
 
 import { initTracing } from 'tracing';
 import { ETagInterceptor, XPoweredByInterceptor, XRequestIdInterceptor } from '@app/common/core/interceptors';
-import { NConventionReqInterceptor } from '@app/common/core/interceptors/n-convention';
+import { NamingConventionReqInterceptor } from '@app/common/core/interceptors/n-convention';
 import { prototyping, setupSwagger } from '@app/common/core/utils';
 import { NODE_ENV } from '@app/common/core/envs';
 import { NestFactory } from '@nestjs/core';
@@ -34,7 +34,7 @@ async function bootstrap() {
     new XRequestIdInterceptor(),
     new XPoweredByInterceptor(),
     new ETagInterceptor(),
-    new NConventionReqInterceptor(),
+    new NamingConventionReqInterceptor(),
   );
 
   setupSwagger(app);
