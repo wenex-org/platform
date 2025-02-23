@@ -13,6 +13,4 @@
 [submodule "docker"]
 	path = docker
 	url = ../platform-docker.git
-[submodule "chart"]
-	path = chart
-	url = ../platform-chart.git
+	
