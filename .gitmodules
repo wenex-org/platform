@@ -1,18 +1,18 @@
 [submodule "libs"]
 	path = libs
-	url = git@github.com:wenex-org/platform-libs.git
+	url = ../platform-libs.git
 [submodule "apps/services"]
 	path = apps/services
-	url = git@github.com:wenex-org/platform-services.git
+	url = ../platform-services.git
 [submodule "protos"]
 	path = protos
-	url = git@github.com:wenex-org/platform-protos.git
+	url = ../platform-protos.git
 [submodule "apps/workers"]
 	path = apps/workers
-	url = git@github.com:wenex-org/platform-workers.git
+	url = ../platform-workers.git
 [submodule "docker"]
 	path = docker
-	url = git@github.com:wenex-org/platform-docker.git
+	url = ../platform-docker.git
 [submodule "chart"]
 	path = chart
-	url = git@github.com:wenex-org/platform-chart.git
+	url = ../platform-chart.git
