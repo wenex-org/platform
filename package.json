@@ -8,6 +8,8 @@
     "build": "nest build",
     "prepare": "npm run script:setup",
     "postinstall": "husky",
+    "script:start": "bash ./scripts/start.sh",
+    "script:build": "bash ./scripts/build.sh",
     "script:setup": "bash ./scripts/setup.sh",
     "script:proto": "bash ./scripts/proto.sh",
     "script:machine": "bash ./scripts/machine.sh",
