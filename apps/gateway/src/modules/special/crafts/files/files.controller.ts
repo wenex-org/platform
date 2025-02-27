@@ -15,10 +15,10 @@ import {
 } from '@nestjs/common';
 import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { FileDataSerializer, FileItemsSerializer, FileSerializer } from '@app/common/serializers/special';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { CreateFileDto, CreateFileItemsDto, UpdateFileDto } from '@app/common/dto/special';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -60,7 +60,6 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   }
 
   @Post()
-  @ShipStrategy('create')
   @Cache(Collection.Files, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @UseInterceptors(...WriteInterceptors)
@@ -71,7 +70,6 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   }
 
   @Post('bulk')
-  @ShipStrategy('create')
   @Cache(Collection.Files, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @UseInterceptors(...WriteInterceptors)
@@ -160,7 +158,6 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   }
 
   @Patch('bulk')
-  @ShipStrategy('update')
   @Cache(Collection.Files, 'flush')
   @SetScope(Scope.ManageSpecialFiles)
   @SetPolicy(Action.Update, Resource.SpecialFiles)
@@ -175,7 +172,6 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   }
 
   @Patch(':id')
-  @ShipStrategy('update')
   @Cache(Collection.Files, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @ApiResponse({ type: FileDataSerializer })

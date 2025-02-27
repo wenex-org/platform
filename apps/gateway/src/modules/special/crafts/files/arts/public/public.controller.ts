@@ -1,8 +1,8 @@
 import { Controller, Post, UploadedFiles, UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { FileItemsSerializer, FileSerializer } from '@app/common/serializers/special';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { TransformerPipe, ValidationPipe } from '@app/common/core/pipes';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
@@ -28,7 +28,6 @@ export class PublicController {
   constructor(readonly provider: SpecialProvider) {}
 
   @Post('upload/public')
-  @ShipStrategy('create')
   @ApiConsumes('multipart/form-data')
   @Cache(Collection.Files, 'flush')
   @SetScope(Scope.UploadSpecialFiles)

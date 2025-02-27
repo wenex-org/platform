@@ -21,9 +21,9 @@ import {
 } from '@app/common/dto/financial';
 import { TransactionDataSerializer, TransactionItemsSerializer, TransactionSerializer } from '@app/common/serializers/financial';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Transaction, TransactionDto } from '@app/common/interfaces/financial';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -58,7 +58,6 @@ export class TransactionsController
   }
 
   @Post('init')
-  @ShipStrategy('create')
   @Cache(Collection.Transactions, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.InitFinancialTransaction)
@@ -107,7 +106,6 @@ export class TransactionsController
   }
 
   @Post()
-  @ShipStrategy('create')
   @Cache(Collection.Transactions, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @UseInterceptors(...WriteInterceptors)
@@ -118,7 +116,6 @@ export class TransactionsController
   }
 
   @Post('bulk')
-  @ShipStrategy('create')
   @Cache(Collection.Transactions, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @UseInterceptors(...WriteInterceptors)
@@ -207,7 +204,6 @@ export class TransactionsController
   }
 
   @Patch('bulk')
-  @ShipStrategy('update')
   @Cache(Collection.Transactions, 'flush')
   @SetScope(Scope.ManageFinancialTransactions)
   @SetPolicy(Action.Update, Resource.FinancialTransactions)
@@ -222,7 +218,6 @@ export class TransactionsController
   }
 
   @Patch(':id')
-  @ShipStrategy('update')
   @Cache(Collection.Transactions, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @ApiResponse({ type: TransactionDataSerializer })

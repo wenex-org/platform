@@ -16,9 +16,9 @@ import {
 import { SettingDataSerializer, SettingItemsSerializer, SettingSerializer } from '@app/common/serializers/context';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateSettingDto, CreateSettingItemsDto, UpdateSettingDto } from '@app/common/dto/context';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -60,7 +60,6 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Post()
-  @ShipStrategy('create')
   @Cache(Collection.Settings, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @UseInterceptors(...WriteInterceptors)
@@ -71,7 +70,6 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Post('bulk')
-  @ShipStrategy('create')
   @Cache(Collection.Settings, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @UseInterceptors(...WriteInterceptors)
@@ -160,7 +158,6 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Patch('bulk')
-  @ShipStrategy('update')
   @Cache(Collection.Settings, 'flush')
   @SetScope(Scope.ManageContextSettings)
   @SetPolicy(Action.Update, Resource.ContextSettings)
@@ -175,7 +172,6 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Patch(':id')
-  @ShipStrategy('update')
   @Cache(Collection.Settings, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @ApiResponse({ type: SettingDataSerializer })

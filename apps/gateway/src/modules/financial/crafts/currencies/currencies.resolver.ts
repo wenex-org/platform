@@ -1,8 +1,8 @@
 import { CurrencyDataSerializer, CurrencyItemsSerializer, CurrencySerializer } from '@app/common/serializers/financial';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateCurrencyDto, CreateCurrencyItemsDto, UpdateCurrencyDto } from '@app/common/dto/financial';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -42,7 +42,6 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   }
 
   @Mutation(() => CurrencyDataSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Currencies, 'flush')
   @SetScope(Scope.WriteFinancialCurrencies)
   @UseInterceptors(...WriteInterceptors)
@@ -52,7 +51,6 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   }
 
   @Mutation(() => CurrencyItemsSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Currencies, 'flush')
   @SetScope(Scope.WriteFinancialCurrencies)
   @UseInterceptors(...WriteInterceptors)
@@ -131,7 +129,6 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   }
 
   @Mutation(() => TotalSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Currencies, 'flush')
   @SetScope(Scope.ManageFinancialCurrencies)
   @SetPolicy(Action.Update, Resource.FinancialCurrencies)
@@ -145,7 +142,6 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   }
 
   @Mutation(() => CurrencyDataSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Currencies, 'flush')
   @SetScope(Scope.WriteFinancialCurrencies)
   @SetPolicy(Action.Update, Resource.FinancialCurrencies)

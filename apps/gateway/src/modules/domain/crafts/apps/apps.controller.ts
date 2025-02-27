@@ -14,8 +14,8 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { Cache, Nested, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { AppDataSerializer, AppItemsSerializer, AppSerializer } from '@app/common/serializers/domain';
+import { Cache, Nested, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateAppDto, CreateAppItemsDto, UpdateAppDto } from '@app/common/dto/domain';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
@@ -61,7 +61,6 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   }
 
   @Post()
-  @ShipStrategy('create')
   @Cache(Collection.Apps, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @UseInterceptors(...WriteInterceptors)
@@ -72,7 +71,6 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   }
 
   @Post('bulk')
-  @ShipStrategy('create')
   @Cache(Collection.Apps, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @UseInterceptors(...WriteInterceptors)
@@ -161,7 +159,6 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   }
 
   @Patch('bulk')
-  @ShipStrategy('update')
   @Cache(Collection.Apps, 'flush')
   @SetScope(Scope.ManageDomainApps)
   @SetPolicy(Action.Update, Resource.DomainApps)
@@ -176,7 +173,6 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   }
 
   @Patch(':id')
-  @ShipStrategy('update')
   @Cache(Collection.Apps, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @ApiResponse({ type: AppDataSerializer })

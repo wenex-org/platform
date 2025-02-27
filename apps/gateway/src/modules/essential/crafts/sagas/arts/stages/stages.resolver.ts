@@ -1,8 +1,8 @@
 import { SagaStageDataSerializer, SagaStageItemsSerializer, SagaStageSerializer } from '@app/common/serializers/essential';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateSagaStageDto, CreateSagaStageItemsDto, UpdateSagaStageDto } from '@app/common/dto/essential';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -42,7 +42,6 @@ export class SagaStagesResolver extends ControllerClass<SagaStage, SagaStageDto>
   }
 
   @Mutation(() => SagaStageDataSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.SagaStages, 'flush')
   @SetScope(Scope.WriteEssentialSagaStages)
   @UseInterceptors(...WriteInterceptors)
@@ -52,7 +51,6 @@ export class SagaStagesResolver extends ControllerClass<SagaStage, SagaStageDto>
   }
 
   @Mutation(() => SagaStageItemsSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.SagaStages, 'flush')
   @SetScope(Scope.WriteEssentialSagaStages)
   @UseInterceptors(...WriteInterceptors)
@@ -134,7 +132,6 @@ export class SagaStagesResolver extends ControllerClass<SagaStage, SagaStageDto>
   }
 
   @Mutation(() => TotalSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.SagaStages, 'flush')
   @SetScope(Scope.ManageEssentialSagaStages)
   @SetPolicy(Action.Update, Resource.EssentialSagaStages)
@@ -148,7 +145,6 @@ export class SagaStagesResolver extends ControllerClass<SagaStage, SagaStageDto>
   }
 
   @Mutation(() => SagaStageDataSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.SagaStages, 'flush')
   @SetScope(Scope.WriteEssentialSagaStages)
   @SetPolicy(Action.Update, Resource.EssentialSagaStages)

@@ -1,8 +1,8 @@
 import { AccountDataSerializer, AccountItemsSerializer, AccountSerializer } from '@app/common/serializers/financial';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateAccountDto, CreateAccountItemsDto, UpdateAccountDto } from '@app/common/dto/financial';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -42,7 +42,6 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   }
 
   @Mutation(() => AccountDataSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Accounts, 'flush')
   @SetScope(Scope.WriteFinancialAccounts)
   @UseInterceptors(...WriteInterceptors)
@@ -52,7 +51,6 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   }
 
   @Mutation(() => AccountItemsSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Accounts, 'flush')
   @SetScope(Scope.WriteFinancialAccounts)
   @UseInterceptors(...WriteInterceptors)
@@ -131,7 +129,6 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   }
 
   @Mutation(() => TotalSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Accounts, 'flush')
   @SetScope(Scope.ManageFinancialAccounts)
   @SetPolicy(Action.Update, Resource.FinancialAccounts)
@@ -145,7 +142,6 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   }
 
   @Mutation(() => AccountDataSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Accounts, 'flush')
   @SetScope(Scope.WriteFinancialAccounts)
   @SetPolicy(Action.Update, Resource.FinancialAccounts)

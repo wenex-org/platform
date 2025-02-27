@@ -1,8 +1,8 @@
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { GrantDataSerializer, GrantItemsSerializer, GrantSerializer } from '@app/common/serializers/auth';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { CreateGrantDto, CreateGrantItemsDto, UpdateGrantDto } from '@app/common/dto/auth';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -42,7 +42,6 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Mutation(() => GrantDataSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Grants, 'flush')
   @SetScope(Scope.WriteAuthGrants)
   @UseInterceptors(...WriteInterceptors)
@@ -52,7 +51,6 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Mutation(() => GrantItemsSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Grants, 'flush')
   @SetScope(Scope.WriteAuthGrants)
   @UseInterceptors(...WriteInterceptors)
@@ -131,7 +129,6 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Mutation(() => TotalSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Grants, 'flush')
   @SetScope(Scope.ManageAuthGrants)
   @SetPolicy(Action.Update, Resource.AuthGrants)
@@ -145,7 +142,6 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Mutation(() => GrantDataSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Grants, 'flush')
   @SetScope(Scope.WriteAuthGrants)
   @SetPolicy(Action.Update, Resource.AuthGrants)

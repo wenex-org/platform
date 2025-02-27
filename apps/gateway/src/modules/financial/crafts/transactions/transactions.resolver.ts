@@ -1,8 +1,8 @@
 import { TransactionDataSerializer, TransactionItemsSerializer, TransactionSerializer } from '@app/common/serializers/financial';
 import { CreateTransactionDto, CreateTransactionItemsDto, UpdateTransactionDto } from '@app/common/dto/financial';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Transaction, TransactionDto } from '@app/common/interfaces/financial';
@@ -45,7 +45,6 @@ export class TransactionsResolver
   }
 
   @Mutation(() => TransactionDataSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Transactions, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @UseInterceptors(...WriteInterceptors)
@@ -55,7 +54,6 @@ export class TransactionsResolver
   }
 
   @Mutation(() => TransactionItemsSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Transactions, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @UseInterceptors(...WriteInterceptors)
@@ -140,7 +138,6 @@ export class TransactionsResolver
   }
 
   @Mutation(() => TotalSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Transactions, 'flush')
   @SetScope(Scope.ManageFinancialTransactions)
   @SetPolicy(Action.Update, Resource.FinancialTransactions)
@@ -154,7 +151,6 @@ export class TransactionsResolver
   }
 
   @Mutation(() => TransactionDataSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Transactions, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @SetPolicy(Action.Update, Resource.FinancialTransactions)

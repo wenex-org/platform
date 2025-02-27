@@ -1,7 +1,7 @@
 import { ClientDataSerializer, ClientItemsSerializer, ClientSerializer } from '@app/common/serializers/domain';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { Cache, Nested, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { CreateClientDto, CreateClientItemsDto, UpdateClientDto } from '@app/common/dto/domain';
+import { Cache, Nested, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -43,7 +43,6 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Mutation(() => ClientDataSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Clients, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
@@ -53,7 +52,6 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Mutation(() => ClientItemsSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Clients, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
@@ -132,7 +130,6 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Mutation(() => TotalSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Clients, 'flush')
   @SetScope(Scope.ManageDomainClients)
   @SetPolicy(Action.Update, Resource.DomainClients)
@@ -146,7 +143,6 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Mutation(() => ClientDataSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Clients, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @SetPolicy(Action.Update, Resource.DomainClients)

@@ -1,8 +1,8 @@
 import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { EmailDataSerializer, EmailItemsSerializer, EmailSerializer } from '@app/common/serializers/touch';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { CreateEmailDto, CreateEmailItemsDto, UpdateEmailDto } from '@app/common/dto/touch';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -42,7 +42,6 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   }
 
   @Mutation(() => EmailDataSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Emails, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @UseInterceptors(...WriteInterceptors)
@@ -52,7 +51,6 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   }
 
   @Mutation(() => EmailItemsSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Emails, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @UseInterceptors(...WriteInterceptors)
@@ -131,7 +129,6 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   }
 
   @Mutation(() => TotalSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Emails, 'flush')
   @SetScope(Scope.ManageTouchEmails)
   @SetPolicy(Action.Update, Resource.TouchEmails)
@@ -145,7 +142,6 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   }
 
   @Mutation(() => EmailDataSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Emails, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @SetPolicy(Action.Update, Resource.TouchEmails)

@@ -1,8 +1,8 @@
 import { SessionDataSerializer, SessionItemsSerializer, SessionSerializer } from '@app/common/serializers/identity';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateSessionDto, CreateSessionItemsDto, UpdateSessionDto } from '@app/common/dto/identity';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -42,7 +42,6 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Mutation(() => SessionDataSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Sessions, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @UseInterceptors(...WriteInterceptors)
@@ -52,7 +51,6 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Mutation(() => SessionItemsSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Sessions, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @UseInterceptors(...WriteInterceptors)
@@ -131,7 +129,6 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Mutation(() => TotalSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Sessions, 'flush')
   @SetScope(Scope.ManageIdentitySessions)
   @SetPolicy(Action.Update, Resource.IdentitySessions)
@@ -145,7 +142,6 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Mutation(() => SessionDataSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Sessions, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @SetPolicy(Action.Update, Resource.IdentitySessions)

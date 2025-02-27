@@ -1,8 +1,8 @@
 import { ConfigDataSerializer, ConfigItemsSerializer, ConfigSerializer } from '@app/common/serializers/context';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateConfigDto, CreateConfigItemsDto, UpdateConfigDto } from '@app/common/dto/context';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -42,7 +42,6 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Mutation(() => ConfigDataSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Configs, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @UseInterceptors(...WriteInterceptors)
@@ -52,7 +51,6 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Mutation(() => ConfigItemsSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Configs, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @UseInterceptors(...WriteInterceptors)
@@ -131,7 +129,6 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Mutation(() => TotalSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Configs, 'flush')
   @SetScope(Scope.ManageContextConfigs)
   @SetPolicy(Action.Update, Resource.ContextConfigs)
@@ -145,7 +142,6 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Mutation(() => ConfigDataSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Configs, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @SetPolicy(Action.Update, Resource.ContextConfigs)

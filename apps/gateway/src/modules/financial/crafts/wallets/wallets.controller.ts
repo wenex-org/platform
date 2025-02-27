@@ -16,9 +16,9 @@ import {
 import { WalletDataSerializer, WalletItemsSerializer, WalletSerializer } from '@app/common/serializers/financial';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateWalletDto, CreateWalletItemsDto, UpdateWalletDto } from '@app/common/dto/financial';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -60,7 +60,6 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
   }
 
   @Post()
-  @ShipStrategy('create')
   @Cache(Collection.Wallets, 'flush')
   @SetScope(Scope.WriteFinancialWallets)
   @UseInterceptors(...WriteInterceptors)
@@ -71,7 +70,6 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
   }
 
   @Post('bulk')
-  @ShipStrategy('create')
   @Cache(Collection.Wallets, 'flush')
   @SetScope(Scope.WriteFinancialWallets)
   @UseInterceptors(...WriteInterceptors)
@@ -160,7 +158,6 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
   }
 
   @Patch('bulk')
-  @ShipStrategy('update')
   @Cache(Collection.Wallets, 'flush')
   @SetScope(Scope.ManageFinancialWallets)
   @SetPolicy(Action.Update, Resource.FinancialWallets)
@@ -175,7 +172,6 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
   }
 
   @Patch(':id')
-  @ShipStrategy('update')
   @Cache(Collection.Wallets, 'flush')
   @SetScope(Scope.WriteFinancialWallets)
   @ApiResponse({ type: WalletDataSerializer })

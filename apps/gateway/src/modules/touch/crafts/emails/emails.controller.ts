@@ -16,9 +16,9 @@ import {
 import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { EmailDataSerializer, EmailItemsSerializer, EmailSerializer } from '@app/common/serializers/touch';
 import { CreateEmailDto, CreateEmailItemsDto, SendEmailDto, UpdateEmailDto } from '@app/common/dto/touch';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -50,7 +50,6 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   }
 
   @Post('send')
-  @ShipStrategy('create')
   @Cache(Collection.Emails, 'flush')
   @SetScope(Scope.SendTouchEmails)
   @UseInterceptors(...WriteInterceptors)
@@ -75,7 +74,6 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   }
 
   @Post()
-  @ShipStrategy('create')
   @Cache(Collection.Emails, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @UseInterceptors(...WriteInterceptors)
@@ -86,7 +84,6 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   }
 
   @Post('bulk')
-  @ShipStrategy('create')
   @Cache(Collection.Emails, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @UseInterceptors(...WriteInterceptors)
@@ -175,7 +172,6 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   }
 
   @Patch('bulk')
-  @ShipStrategy('update')
   @Cache(Collection.Emails, 'flush')
   @SetScope(Scope.ManageTouchEmails)
   @SetPolicy(Action.Update, Resource.TouchEmails)
@@ -190,7 +186,6 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   }
 
   @Patch(':id')
-  @ShipStrategy('update')
   @Cache(Collection.Emails, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @ApiResponse({ type: EmailDataSerializer })

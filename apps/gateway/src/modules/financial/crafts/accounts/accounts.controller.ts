@@ -16,9 +16,9 @@ import {
 import { AccountDataSerializer, AccountItemsSerializer, AccountSerializer } from '@app/common/serializers/financial';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateAccountDto, CreateAccountItemsDto, UpdateAccountDto } from '@app/common/dto/financial';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -60,7 +60,6 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Post()
-  @ShipStrategy('create')
   @Cache(Collection.Accounts, 'flush')
   @SetScope(Scope.WriteFinancialAccounts)
   @UseInterceptors(...WriteInterceptors)
@@ -71,7 +70,6 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Post('bulk')
-  @ShipStrategy('create')
   @Cache(Collection.Accounts, 'flush')
   @SetScope(Scope.WriteFinancialAccounts)
   @UseInterceptors(...WriteInterceptors)
@@ -160,7 +158,6 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Patch('bulk')
-  @ShipStrategy('update')
   @Cache(Collection.Accounts, 'flush')
   @SetScope(Scope.ManageFinancialAccounts)
   @SetPolicy(Action.Update, Resource.FinancialAccounts)
@@ -175,7 +172,6 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Patch(':id')
-  @ShipStrategy('update')
   @Cache(Collection.Accounts, 'flush')
   @SetScope(Scope.WriteFinancialAccounts)
   @ApiResponse({ type: AccountDataSerializer })

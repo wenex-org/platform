@@ -16,9 +16,9 @@ import {
 import { SagaStageDataSerializer, SagaStageItemsSerializer, SagaStageSerializer } from '@app/common/serializers/essential';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateSagaStageDto, CreateSagaStageItemsDto, UpdateSagaStageDto } from '@app/common/dto/essential';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -60,7 +60,6 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   }
 
   @Post()
-  @ShipStrategy('create')
   @Cache(Collection.SagaStages, 'flush')
   @SetScope(Scope.WriteEssentialSagaStages)
   @UseInterceptors(...WriteInterceptors)
@@ -71,7 +70,6 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   }
 
   @Post('bulk')
-  @ShipStrategy('create')
   @Cache(Collection.SagaStages, 'flush')
   @SetScope(Scope.WriteEssentialSagaStages)
   @UseInterceptors(...WriteInterceptors)
@@ -160,7 +158,6 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   }
 
   @Patch('bulk')
-  @ShipStrategy('update')
   @Cache(Collection.SagaStages, 'flush')
   @SetScope(Scope.ManageEssentialSagaStages)
   @SetPolicy(Action.Update, Resource.EssentialSagaStages)
@@ -175,7 +172,6 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   }
 
   @Patch(':id')
-  @ShipStrategy('update')
   @Cache(Collection.SagaStages, 'flush')
   @SetScope(Scope.WriteEssentialSagaStages)
   @ApiResponse({ type: SagaStageDataSerializer })

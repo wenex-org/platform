@@ -15,8 +15,8 @@ import {
 } from '@nestjs/common';
 import { ClientDataSerializer, ClientItemsSerializer, ClientSerializer } from '@app/common/serializers/domain';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { Cache, Nested, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { CreateClientDto, CreateClientItemsDto, UpdateClientDto } from '@app/common/dto/domain';
+import { Cache, Nested, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -61,7 +61,6 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   }
 
   @Post()
-  @ShipStrategy('create')
   @Cache(Collection.Clients, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
@@ -72,7 +71,6 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   }
 
   @Post('bulk')
-  @ShipStrategy('create')
   @Cache(Collection.Clients, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
@@ -161,7 +159,6 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   }
 
   @Patch('bulk')
-  @ShipStrategy('update')
   @Cache(Collection.Clients, 'flush')
   @SetScope(Scope.ManageDomainClients)
   @SetPolicy(Action.Update, Resource.DomainClients)
@@ -176,7 +173,6 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   }
 
   @Patch(':id')
-  @ShipStrategy('update')
   @Cache(Collection.Clients, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @ApiResponse({ type: ClientDataSerializer })

@@ -1,8 +1,8 @@
 import { SettingDataSerializer, SettingItemsSerializer, SettingSerializer } from '@app/common/serializers/context';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateSettingDto, CreateSettingItemsDto, UpdateSettingDto } from '@app/common/dto/context';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -42,7 +42,6 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   }
 
   @Mutation(() => SettingDataSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Settings, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @UseInterceptors(...WriteInterceptors)
@@ -52,7 +51,6 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   }
 
   @Mutation(() => SettingItemsSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Settings, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @UseInterceptors(...WriteInterceptors)
@@ -131,7 +129,6 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   }
 
   @Mutation(() => TotalSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Settings, 'flush')
   @SetScope(Scope.ManageContextSettings)
   @SetPolicy(Action.Update, Resource.ContextSettings)
@@ -145,7 +142,6 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   }
 
   @Mutation(() => SettingDataSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Settings, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @SetPolicy(Action.Update, Resource.ContextSettings)

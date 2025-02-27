@@ -16,9 +16,9 @@ import {
 import { ProfileDataSerializer, ProfileItemsSerializer, ProfileSerializer } from '@app/common/serializers/identity';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateProfileDto, CreateProfileItemsDto, UpdateProfileDto } from '@app/common/dto/identity';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -60,7 +60,6 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Post()
-  @ShipStrategy('create')
   @Cache(Collection.Profiles, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @UseInterceptors(...WriteInterceptors)
@@ -71,7 +70,6 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Post('bulk')
-  @ShipStrategy('create')
   @Cache(Collection.Profiles, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @UseInterceptors(...WriteInterceptors)
@@ -160,7 +158,6 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Patch('bulk')
-  @ShipStrategy('update')
   @Cache(Collection.Profiles, 'flush')
   @SetScope(Scope.ManageIdentityProfiles)
   @SetPolicy(Action.Update, Resource.IdentityProfiles)
@@ -175,7 +172,6 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Patch(':id')
-  @ShipStrategy('update')
   @Cache(Collection.Profiles, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @ApiResponse({ type: ProfileDataSerializer })

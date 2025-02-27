@@ -1,6 +1,6 @@
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { Cache, Nested, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { AppDataSerializer, AppItemsSerializer, AppSerializer } from '@app/common/serializers/domain';
+import { Cache, Nested, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { CreateAppDto, CreateAppItemsDto, UpdateAppDto } from '@app/common/dto/domain';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
@@ -43,7 +43,6 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Mutation(() => AppDataSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Apps, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @UseInterceptors(...WriteInterceptors)
@@ -53,7 +52,6 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Mutation(() => AppItemsSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Apps, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @UseInterceptors(...WriteInterceptors)
@@ -132,7 +130,6 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Mutation(() => TotalSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Apps, 'flush')
   @SetScope(Scope.ManageDomainApps)
   @SetPolicy(Action.Update, Resource.DomainApps)
@@ -146,7 +143,6 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Mutation(() => AppDataSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Apps, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @SetPolicy(Action.Update, Resource.DomainApps)

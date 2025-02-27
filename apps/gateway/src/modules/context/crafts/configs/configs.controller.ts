@@ -16,9 +16,9 @@ import {
 import { ConfigDataSerializer, ConfigItemsSerializer, ConfigSerializer } from '@app/common/serializers/context';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateConfigDto, CreateConfigItemsDto, UpdateConfigDto } from '@app/common/dto/context';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -60,7 +60,6 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Post()
-  @ShipStrategy('create')
   @Cache(Collection.Configs, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @UseInterceptors(...WriteInterceptors)
@@ -71,7 +70,6 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Post('bulk')
-  @ShipStrategy('create')
   @Cache(Collection.Configs, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @UseInterceptors(...WriteInterceptors)
@@ -160,7 +158,6 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Patch('bulk')
-  @ShipStrategy('update')
   @Cache(Collection.Configs, 'flush')
   @SetScope(Scope.ManageContextConfigs)
   @SetPolicy(Action.Update, Resource.ContextConfigs)
@@ -175,7 +172,6 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Patch(':id')
-  @ShipStrategy('update')
   @Cache(Collection.Configs, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @ApiResponse({ type: ConfigDataSerializer })

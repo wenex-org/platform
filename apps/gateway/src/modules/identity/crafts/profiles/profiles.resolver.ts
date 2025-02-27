@@ -1,8 +1,8 @@
 import { ProfileDataSerializer, ProfileItemsSerializer, ProfileSerializer } from '@app/common/serializers/identity';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateProfileDto, CreateProfileItemsDto, UpdateProfileDto } from '@app/common/dto/identity';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -42,7 +42,6 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   }
 
   @Mutation(() => ProfileDataSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Profiles, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @UseInterceptors(...WriteInterceptors)
@@ -52,7 +51,6 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   }
 
   @Mutation(() => ProfileItemsSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Profiles, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @UseInterceptors(...WriteInterceptors)
@@ -131,7 +129,6 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   }
 
   @Mutation(() => TotalSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Profiles, 'flush')
   @SetScope(Scope.ManageIdentityProfiles)
   @SetPolicy(Action.Update, Resource.IdentityProfiles)
@@ -145,7 +142,6 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   }
 
   @Mutation(() => ProfileDataSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Profiles, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @SetPolicy(Action.Update, Resource.IdentityProfiles)

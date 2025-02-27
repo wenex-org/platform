@@ -15,10 +15,10 @@ import {
 } from '@nestjs/common';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { GrantDataSerializer, GrantItemsSerializer, GrantSerializer } from '@app/common/serializers/auth';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { CreateGrantDto, CreateGrantItemsDto, UpdateGrantDto } from '@app/common/dto/auth';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -60,7 +60,6 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   }
 
   @Post()
-  @ShipStrategy('create')
   @Cache(Collection.Grants, 'flush')
   @SetScope(Scope.WriteAuthGrants)
   @UseInterceptors(...WriteInterceptors)
@@ -71,7 +70,6 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   }
 
   @Post('bulk')
-  @ShipStrategy('create')
   @Cache(Collection.Grants, 'flush')
   @SetScope(Scope.WriteAuthGrants)
   @UseInterceptors(...WriteInterceptors)
@@ -160,7 +158,6 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   }
 
   @Patch('bulk')
-  @ShipStrategy('update')
   @Cache(Collection.Grants, 'flush')
   @SetScope(Scope.ManageAuthGrants)
   @SetPolicy(Action.Update, Resource.AuthGrants)
@@ -175,7 +172,6 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   }
 
   @Patch(':id')
-  @ShipStrategy('update')
   @Cache(Collection.Grants, 'flush')
   @SetScope(Scope.WriteAuthGrants)
   @ApiResponse({ type: GrantDataSerializer })

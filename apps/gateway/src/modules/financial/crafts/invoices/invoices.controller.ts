@@ -22,9 +22,9 @@ import {
 } from '@app/common/serializers/financial';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateInvoiceDto, CreateInvoiceItemsDto, UpdateInvoiceDto } from '@app/common/dto/financial';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -81,7 +81,6 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   }
 
   @Post()
-  @ShipStrategy('create')
   @Cache(Collection.Invoices, 'flush')
   @SetScope(Scope.WriteFinancialInvoices)
   @UseInterceptors(...WriteInterceptors)
@@ -92,7 +91,6 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   }
 
   @Post('bulk')
-  @ShipStrategy('create')
   @Cache(Collection.Invoices, 'flush')
   @SetScope(Scope.WriteFinancialInvoices)
   @UseInterceptors(...WriteInterceptors)
@@ -181,7 +179,6 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   }
 
   @Patch('bulk')
-  @ShipStrategy('update')
   @Cache(Collection.Invoices, 'flush')
   @SetScope(Scope.ManageFinancialInvoices)
   @SetPolicy(Action.Update, Resource.FinancialInvoices)
@@ -196,7 +193,6 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   }
 
   @Patch(':id')
-  @ShipStrategy('update')
   @Cache(Collection.Invoices, 'flush')
   @SetScope(Scope.WriteFinancialInvoices)
   @ApiResponse({ type: InvoiceDataSerializer })

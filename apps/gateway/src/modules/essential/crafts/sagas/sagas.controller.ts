@@ -22,9 +22,9 @@ import {
 } from '@app/common/serializers/essential';
 import { AddSagaStageDto, CreateSagaDto, CreateSagaItemsDto, StartSagaDto, UpdateSagaDto } from '@app/common/dto/essential';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -56,7 +56,6 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Post('start')
-  @ShipStrategy('create')
   @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.StartEssentialSagas)
   @UseInterceptors(...WriteInterceptors)
@@ -67,7 +66,6 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Post('add')
-  @ShipStrategy('create')
   @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.AddEssentialSagas)
   @UseInterceptors(...WriteInterceptors)
@@ -116,7 +114,6 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Post()
-  @ShipStrategy('create')
   @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.WriteEssentialSagas)
   @UseInterceptors(...WriteInterceptors)
@@ -127,7 +124,6 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Post('bulk')
-  @ShipStrategy('create')
   @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.WriteEssentialSagas)
   @UseInterceptors(...WriteInterceptors)
@@ -216,7 +212,6 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Patch('bulk')
-  @ShipStrategy('update')
   @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.ManageEssentialSagas)
   @SetPolicy(Action.Update, Resource.EssentialSagas)
@@ -231,7 +226,6 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Patch(':id')
-  @ShipStrategy('update')
   @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.WriteEssentialSagas)
   @ApiResponse({ type: SagaDataSerializer })

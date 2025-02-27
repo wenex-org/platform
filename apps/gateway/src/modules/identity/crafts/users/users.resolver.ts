@@ -1,8 +1,8 @@
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { UserDataSerializer, UserItemsSerializer, UserSerializer } from '@app/common/serializers/identity';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { CreateUserDto, CreateUserItemsDto, UpdateUserDto } from '@app/common/dto/identity';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -42,7 +42,6 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Mutation(() => UserDataSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Users, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
@@ -52,7 +51,6 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Mutation(() => UserItemsSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Users, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
@@ -131,7 +129,6 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Mutation(() => TotalSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Users, 'flush')
   @SetScope(Scope.ManageIdentityUsers)
   @SetPolicy(Action.Update, Resource.IdentityUsers)
@@ -145,7 +142,6 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Mutation(() => UserDataSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Users, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @SetPolicy(Action.Update, Resource.IdentityUsers)

@@ -16,9 +16,9 @@ import {
 import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { CollectStatDto, CreateStatDto, CreateStatItemsDto, UpdateStatDto } from '@app/common/dto/special';
 import { StatDataSerializer, StatItemsSerializer, StatSerializer } from '@app/common/serializers/special';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { ResultSerializer, TotalSerializer } from '@app/common/core/serializers';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -50,7 +50,6 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Post('collect')
-  @ShipStrategy('create')
   @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.CollectSpecialStats)
   @UseInterceptors(...WriteInterceptors)
@@ -61,7 +60,6 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Post('stackup')
-  @ShipStrategy('create')
   @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.CollectSpecialStats)
   @UseInterceptors(...WriteInterceptors)
@@ -86,7 +84,6 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Post()
-  @ShipStrategy('create')
   @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @UseInterceptors(...WriteInterceptors)
@@ -97,7 +94,6 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Post('bulk')
-  @ShipStrategy('create')
   @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @UseInterceptors(...WriteInterceptors)
@@ -186,7 +182,6 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Patch('bulk')
-  @ShipStrategy('update')
   @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.ManageSpecialStats)
   @SetPolicy(Action.Update, Resource.SpecialStats)
@@ -201,7 +196,6 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Patch(':id')
-  @ShipStrategy('update')
   @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @ApiResponse({ type: StatDataSerializer })

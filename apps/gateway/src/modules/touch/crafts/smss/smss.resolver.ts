@@ -1,8 +1,8 @@
 import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { SmsDataSerializer, SmsItemsSerializer, SmsSerializer } from '@app/common/serializers/touch';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { CreateSmsDto, CreateSmsItemsDto, UpdateSmsDto } from '@app/common/dto/touch';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -42,7 +42,6 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   }
 
   @Mutation(() => SmsDataSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Smss, 'flush')
   @SetScope(Scope.WriteTouchSmss)
   @UseInterceptors(...WriteInterceptors)
@@ -52,7 +51,6 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   }
 
   @Mutation(() => SmsItemsSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Smss, 'flush')
   @SetScope(Scope.WriteTouchSmss)
   @UseInterceptors(...WriteInterceptors)
@@ -131,7 +129,6 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   }
 
   @Mutation(() => TotalSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Smss, 'flush')
   @SetScope(Scope.ManageTouchSmss)
   @SetPolicy(Action.Update, Resource.TouchSmss)
@@ -145,7 +142,6 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   }
 
   @Mutation(() => SmsDataSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Smss, 'flush')
   @SetScope(Scope.WriteTouchSmss)
   @SetPolicy(Action.Update, Resource.TouchSmss)

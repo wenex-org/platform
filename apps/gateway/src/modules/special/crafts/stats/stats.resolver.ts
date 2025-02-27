@@ -1,8 +1,8 @@
 import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { StatDataSerializer, StatItemsSerializer, StatSerializer } from '@app/common/serializers/special';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { CreateStatDto, CreateStatItemsDto, UpdateStatDto } from '@app/common/dto/special';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -42,7 +42,6 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   }
 
   @Mutation(() => StatDataSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @UseInterceptors(...WriteInterceptors)
@@ -52,7 +51,6 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   }
 
   @Mutation(() => StatItemsSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @UseInterceptors(...WriteInterceptors)
@@ -131,7 +129,6 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   }
 
   @Mutation(() => TotalSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.ManageSpecialStats)
   @SetPolicy(Action.Update, Resource.SpecialStats)
@@ -145,7 +142,6 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   }
 
   @Mutation(() => StatDataSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Stats, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @SetPolicy(Action.Update, Resource.SpecialStats)

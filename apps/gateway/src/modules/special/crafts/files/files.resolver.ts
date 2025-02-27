@@ -1,8 +1,8 @@
 import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { FileDataSerializer, FileItemsSerializer, FileSerializer } from '@app/common/serializers/special';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { CreateFileDto, CreateFileItemsDto, UpdateFileDto } from '@app/common/dto/special';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -42,7 +42,6 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   }
 
   @Mutation(() => FileDataSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Files, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @UseInterceptors(...WriteInterceptors)
@@ -52,7 +51,6 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   }
 
   @Mutation(() => FileItemsSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Files, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @UseInterceptors(...WriteInterceptors)
@@ -131,7 +129,6 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   }
 
   @Mutation(() => TotalSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Files, 'flush')
   @SetScope(Scope.ManageSpecialFiles)
   @SetPolicy(Action.Update, Resource.SpecialFiles)
@@ -145,7 +142,6 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   }
 
   @Mutation(() => FileDataSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Files, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @SetPolicy(Action.Update, Resource.SpecialFiles)

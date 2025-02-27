@@ -1,8 +1,8 @@
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { SagaDataSerializer, SagaItemsSerializer, SagaSerializer } from '@app/common/serializers/essential';
-import { Cache, RateLimit, SetPolicy, SetScope, ShipStrategy } from '@app/common/core/metadatas';
 import { CreateSagaDto, CreateSagaItemsDto, UpdateSagaDto } from '@app/common/dto/essential';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -42,7 +42,6 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   }
 
   @Mutation(() => SagaDataSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.WriteEssentialSagas)
   @UseInterceptors(...WriteInterceptors)
@@ -52,7 +51,6 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   }
 
   @Mutation(() => SagaItemsSerializer)
-  @ShipStrategy('create')
   @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.WriteEssentialSagas)
   @UseInterceptors(...WriteInterceptors)
@@ -131,7 +129,6 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   }
 
   @Mutation(() => TotalSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.ManageEssentialSagas)
   @SetPolicy(Action.Update, Resource.EssentialSagas)
@@ -145,7 +142,6 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   }
 
   @Mutation(() => SagaDataSerializer)
-  @ShipStrategy('update')
   @Cache(Collection.Sagas, 'flush')
   @SetScope(Scope.WriteEssentialSagas)
   @SetPolicy(Action.Update, Resource.EssentialSagas)
