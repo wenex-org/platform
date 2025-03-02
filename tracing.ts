@@ -22,9 +22,7 @@ export const initTracing = (modules: ('http' | 'grpc' | 'kafka')[]) => {
   const SpanProcessor = IS_PRODUCTION ? BatchSpanProcessor : SimpleSpanProcessor;
 
   const provider = new NodeTracerProvider({
-    resource: new Resource({
-      [ATTR_SERVICE_NAME]: process.env.OTLP_SERVICE_NAME,
-    }),
+    resource: new Resource({ [ATTR_SERVICE_NAME]: process.env.OTLP_SERVICE_NAME }),
     spanProcessors: IS_PRODUCTION
       ? [new SpanProcessor(new ZipkinExporter({ url: process.env.ZIPKIN_URL }))]
       : [new SpanProcessor(exporter)],
