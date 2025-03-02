@@ -6,7 +6,7 @@ COPY . .
 
 RUN apk update && apk add bash
 
-RUN npm install -g pnpm@10.4.1 && \
+RUN npm install -g pnpm@10.5.2 && \
   pnpm install --frozen-lockfile
 
 RUN npm run script:build
