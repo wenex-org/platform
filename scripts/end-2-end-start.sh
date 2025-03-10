@@ -16,6 +16,8 @@ done
 echo "Waiting for services to start..."
 sleep 90
 
+npm run script:kafka-connect:e2e
+
 # Start additional services
 additional_services=("watcher" "preserver" "observer" "dispatcher")
 for service in "${additional_services[@]}"; do
@@ -26,5 +28,4 @@ done
 
 echo "Waiting for workers to start..."
 sleep 60
-
-npm run script:kafka-connect:e2e
+echo "All services started successfully!"
