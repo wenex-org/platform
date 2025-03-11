@@ -6,7 +6,7 @@ declare -A JOBS
 npm run db:clean:e2e && npm run db:seed:e2e
 
 # Start services and capture PIDs
-services=("auth" "context" "domain" "essential" "financial" "identity" "special" "touch" "gateway")
+services=("auth" "context" "domain" "essential" "financial" "general" "identity" "special" "touch" "gateway")
 for service in "${services[@]}"; do
   npm run start:dev:e2e "$service" 2> "logs/$service.log" &
   JOBS[$service]=$!
@@ -14,7 +14,7 @@ for service in "${services[@]}"; do
 done
 
 echo "Waiting for services to start..."
-sleep 90
+wait
 
 npm run script:kafka-connect:e2e
 
@@ -27,5 +27,5 @@ for service in "${additional_services[@]}"; do
 done
 
 echo "Waiting for workers to start..."
-sleep 60
+wait
 echo "All services started successfully!"
