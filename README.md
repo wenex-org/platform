@@ -1,7 +1,10 @@
-# Platform
+# How To Run Wenex Platform
 
 ## clone project
-
+```sh
+git clone https://github.com/wenex-org/platform.git
+```
+Get platform submodules:
 ```sh
 npm run git:clone
 ```
@@ -24,23 +27,7 @@ Download and run the required Docker containers:
 docker-compose -f docker/docker-compose.yml up -d
 ```
 
-### 3. Run Microservices
-
-Start the microservices in development mode:
-
-```sh
-npm run start:dev gateway
-npm run start:dev auth
-npm run start:dev context
-npm run start:dev identity
-npm run start:dev touch
-npm run start:dev watcher
-npm run start:dev preserver
-npm run start:dev observer
-npm run start:dev dispatcher
-```
-
-### 4. Set Up Kafka Cluster
+### 3. Set Up Kafka Cluster
 
 Initialize the Kafka cluster:
 
@@ -48,7 +35,7 @@ Initialize the Kafka cluster:
 npm run script:kafka-connect
 ```
 
-### 5. Clean and Seed Database
+### 4. Clean and Seed Database
 
 Initialize EMQX and MinIO, then clean and seed the database:
 
@@ -56,6 +43,31 @@ Initialize EMQX and MinIO, then clean and seed the database:
 npm run db:clean && npm run db:seed
 npm run storage:init && npm run utility:init
 ```
+
+### 5. Run Microservices
+
+Start the microservices in development mode:
+
+```sh
+npm run start:dev auth
+npm run start:dev context
+npm run start:dev identity
+npm run start:dev domain
+npm run start:dev essential
+npm run start:dev financial
+npm run start:dev special
+npm run start:dev general
+npm run start:dev touch
+npm run start:dev gateway
+```
+
+```sh
+npm run start:dev watcher
+npm run start:dev preserver
+npm run start:dev observer
+npm run start:dev dispatcher
+```
+
 
 ## Notes
 
