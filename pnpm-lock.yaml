@@ -77,9 +77,6 @@ importers:
       '@opentelemetry/exporter-trace-otlp-http':
         specifier: ^0.57.2
         version: 0.57.2(@opentelemetry/api@1.9.0)
-      '@opentelemetry/exporter-zipkin':
-        specifier: ^1.30.1
-        version: 1.30.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation':
         specifier: ^0.57.2
         version: 0.57.2(@opentelemetry/api@1.9.0)
@@ -266,7 +263,7 @@ importers:
         version: 11.0.2(@types/node@22.10.7)
       '@nestjs/schematics':
         specifier: ^11.0.0
-        version: 11.0.0(chokidar@4.0.1)(typescript@5.7.3)
+        version: 11.0.0(chokidar@4.0.3)(typescript@5.7.3)
       '@nestjs/testing':
         specifier: ^11.0.4
         version: 11.0.4(@nestjs/common@11.0.4(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.4)(@nestjs/microservices@11.0.4)(@nestjs/platform-express@11.0.4)
@@ -8005,17 +8002,6 @@ snapshots:
     optionalDependencies:
       chokidar: 4.0.1
 
-  '@angular-devkit/core@19.0.1(chokidar@4.0.1)':
-    dependencies:
-      ajv: 8.17.1
-      ajv-formats: 3.0.1(ajv@8.17.1)
-      jsonc-parser: 3.3.1
-      picomatch: 4.0.2
-      rxjs: 7.8.1
-      source-map: 0.7.4
-    optionalDependencies:
-      chokidar: 4.0.1
-
   '@angular-devkit/core@19.0.1(chokidar@4.0.3)':
     dependencies:
       ajv: 8.17.1
@@ -8055,16 +8041,6 @@ snapshots:
       '@angular-devkit/core': 18.2.8(chokidar@4.0.1)
       jsonc-parser: 3.3.1
       magic-string: 0.30.11
-      ora: 5.4.1
-      rxjs: 7.8.1
-    transitivePeerDependencies:
-      - chokidar
-
-  '@angular-devkit/schematics@19.0.1(chokidar@4.0.1)':
-    dependencies:
-      '@angular-devkit/core': 19.0.1(chokidar@4.0.1)
-      jsonc-parser: 3.3.1
-      magic-string: 0.30.12
       ora: 5.4.1
       rxjs: 7.8.1
     transitivePeerDependencies:
@@ -10386,17 +10362,6 @@ snapshots:
       tslib: 2.8.1
     transitivePeerDependencies:
       - supports-color
-
-  '@nestjs/schematics@11.0.0(chokidar@4.0.1)(typescript@5.7.3)':
-    dependencies:
-      '@angular-devkit/core': 19.0.1(chokidar@4.0.1)
-      '@angular-devkit/schematics': 19.0.1(chokidar@4.0.1)
-      comment-json: 4.2.5
-      jsonc-parser: 3.3.1
-      pluralize: 8.0.0
-      typescript: 5.7.3
-    transitivePeerDependencies:
-      - chokidar
 
   '@nestjs/schematics@11.0.0(chokidar@4.0.3)(typescript@5.7.3)':
     dependencies:

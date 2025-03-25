@@ -12,7 +12,7 @@ import { Instrumentation } from '@opentelemetry/instrumentation';
 import { Resource } from '@opentelemetry/resources';
 import { NodeSDK } from '@opentelemetry/sdk-node';
 
-export const initTracing = (modules: ('http' | 'grpc' | 'kafka' | 'graphql')[]) => {
+export const init = (modules: ('http' | 'grpc' | 'kafka' | 'graphql')[]) => {
   const exporter = new OTLPTraceExporter({
     url: `http://${process.env.OTLP_HOST}:${process.env.OTLP_PORT}/v1/traces`,
   });

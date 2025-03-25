@@ -3,7 +3,7 @@ require('dotenv').config();
 
 if (process.env.NODE_ENV?.toLowerCase().startsWith('prod')) {
   require('elastic-apm-node').start();
-  require('tracing').initTracing(['http', 'grpc', 'graphql']);
+  require('tracing').init(['http', 'grpc', 'graphql']);
 }
 
 import { ETagInterceptor, XPoweredByInterceptor, XRequestIdInterceptor } from '@app/common/core/interceptors';
