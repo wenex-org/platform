@@ -1,11 +1,14 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 require('dotenv').config();
 
-import { initTracing } from 'tracing';
+if (process.env.NODE_ENV?.toLowerCase().startsWith('prod')) {
+  require('elastic-apm-node').start();
+  require('tracing').initTracing(['http', 'grpc', 'graphql']);
+}
+
 import { ETagInterceptor, XPoweredByInterceptor, XRequestIdInterceptor } from '@app/common/core/interceptors';
 import { NamingConventionReqInterceptor } from '@app/common/core/interceptors/n-convention';
 import { prototyping, setupSwagger } from '@app/common/core/utils';
-import { NODE_ENV } from '@app/common/core/envs';
 import { NestFactory } from '@nestjs/core';
 import { APP } from '@app/common/core';
 import helmet from 'helmet';
@@ -16,11 +19,6 @@ import { AppModule } from './app.module';
 
 const { GATEWAY } = APP;
 async function bootstrap() {
-  if (NODE_ENV().IS_PROD) {
-    require('elastic-apm-node').start();
-    initTracing(['http', 'grpc', 'kafka']);
-  }
-
   const app = await NestFactory.create(AppModule, { cors: true });
   app.enableShutdownHooks();
 
