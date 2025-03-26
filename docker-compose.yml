@@ -1,20 +1,23 @@
-x-env: &env
-  KAFKA_HOST: kafka
-  REDIS_HOST: redis
-  MINIO_HOST: minio
-  EMQX_BASE_URL: http://emqx:18083/api/v5
-  EMQX_EXHOOK_URL: http://platform-preserver:6030
-
+# docker build -t wenex/platform:latest .
 x-common: &common
-  build:
-    context: .
+  image: wenex/platform:latest
   env_file:
     - .env
   networks:
     - localnet
 
+x-env: &env
+  KAFKA_HOST: kafka
+  REDIS_HOST: redis
+  MINIO_HOST: minio
+  EMQX_BASE_URL: http://192.168.1.17:18083/api/v5 # HOST
+  EMQX_EXHOOK_URL: http://platform-preserver:6030
+
 services:
   gateway:
+    profiles:
+      - gateway
+      - platform
     container_name: platform-gateway
     ports:
       - 3010:3010 # Rest
@@ -24,6 +27,9 @@ services:
     <<: *common
 
   auth:
+    profiles:
+      - auth
+      - platform
     container_name: platform-auth
     ports:
       - 3020:3020 # Rest
@@ -34,6 +40,9 @@ services:
     <<: *common
 
   domain:
+    profiles:
+      - domain
+      - platform
     container_name: platform-domain
     ports:
       - 3030:3030 # Rest
@@ -44,12 +53,28 @@ services:
     <<: *common
 
   context:
+    profiles:
+      - context
+      - platform
     container_name: platform-context
     ports:
       - 3040:3040 # Rest
       - 5040:5040 # gRPC
     environment:
       SERVICE_NAME: context
+      <<: *env
+    <<: *common
+
+  essential:
+    profiles:
+      - essential
+      - platform
+    container_name: platform-essential
+    ports:
+      - 3050:3050 # Rest
+      - 5050:5050 # gRPC
+    environment:
+      SERVICE_NAME: essential
       <<: *env
     <<: *common
 
