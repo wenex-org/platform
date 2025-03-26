@@ -1,21 +1,23 @@
+x-env: &env
+  KAFKA_HOST: kafka
+  REDIS_HOST: redis
+  MINIO_HOST: minio
+
 x-common: &common
   env_file:
     - .env
-  environment:
-    KAFKA_HOST: kafka
-    REDIS_HOST: redis
-    MINIO_HOST: minio
   networks:
     - localnet
 
 services:
-  gateway:
+  auth:
     build:
-      args:
-        SERVICE_NAME: gateway
       context: .
     ports:
-      - 3010:3010 # Rest
+      - 3020:3020 # Rest
+    environment:
+      SERVICE_NAME: auth
+      <<: *env
     <<: *common
 
 networks:
