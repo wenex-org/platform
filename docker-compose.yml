@@ -8,6 +8,7 @@ x-common: &common
 
 x-env: &env
   KAFKA_HOST: kafka
+  KAFKA_PORT: 9093
   REDIS_HOST: redis
   MINIO_HOST: minio
   EMQX_BASE_URL: http://192.168.1.17:18083/api/v5 # HOST
@@ -85,7 +86,7 @@ services:
   db-clean:
     profiles:
       - db-clean
-    entrypoint: ["bash", "-c", "npm run db:clean"]
+    entrypoint: ['bash', '-c', 'npm run db:clean']
     environment:
       <<: *env
     <<: *common
@@ -93,7 +94,7 @@ services:
   db-seed:
     profiles:
       - db-seed
-    entrypoint: ["bash", "-c", "npm run db:seed"]
+    entrypoint: ['bash', '-c', 'npm run db:seed']
     environment:
       <<: *env
     <<: *common
@@ -101,23 +102,23 @@ services:
   storage-init:
     profiles:
       - storage-init
-    entrypoint: ["bash", "-c", "npm run storage:init"]
+    entrypoint: ['bash', '-c', 'npm run storage:init']
     environment:
       <<: *env
     <<: *common
-    
+
   utility-init:
     profiles:
       - utility-init
-    entrypoint: ["bash", "-c", "npm run utility:init"]
+    entrypoint: ['bash', '-c', 'npm run utility:init']
     environment:
       <<: *env
     <<: *common
-    
+
   kafka-connect:
     profiles:
       - kafka-connect
-    entrypoint: ["bash", "-c", "npm run script:kafka-connect"]
+    entrypoint: ['bash', '-c', 'npm run script:kafka-connect']
     environment:
       <<: *env
     <<: *common
