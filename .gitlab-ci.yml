@@ -15,7 +15,7 @@ build:
   stage: build
   image: $NODE_IMAGE
   before_script:
-    - apk add git bash
+    - apk add git curl bash
     - echo "Starting build..."
   script:
     - npm run git:clone
@@ -27,7 +27,7 @@ test:
   stage: test
   image: $NODE_IMAGE
   before_script:
-    - apk add git bash
+    - apk add git curl bash
     - echo "Starting tests..."
   script:
     - npm run git:clone

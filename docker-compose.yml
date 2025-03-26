@@ -73,8 +73,8 @@ services:
     profiles: [financial, platform, services]
     container_name: platform-financial
     ports:
-      - 3050:3050 # Rest
-      - 5050:5050 # gRPC
+      - 3060:3060 # Rest
+      - 5060:5060 # gRPC
     environment:
       SERVICE_NAME: financial
       <<: *env
@@ -84,8 +84,8 @@ services:
     profiles: [general, platform, services]
     container_name: platform-general
     ports:
-      - 3050:3050 # Rest
-      - 5050:5050 # gRPC
+      - 3070:3070 # Rest
+      - 5070:5070 # gRPC
     environment:
       SERVICE_NAME: general
       <<: *env
@@ -95,8 +95,8 @@ services:
     profiles: [identity, platform, services]
     container_name: platform-identity
     ports:
-      - 3050:3050 # Rest
-      - 5050:5050 # gRPC
+      - 3080:3080 # Rest
+      - 5080:5080 # gRPC
     environment:
       SERVICE_NAME: identity
       <<: *env
@@ -106,8 +106,8 @@ services:
     profiles: [special, platform, services]
     container_name: platform-special
     ports:
-      - 3050:3050 # Rest
-      - 5050:5050 # gRPC
+      - 3090:3090 # Rest
+      - 5090:5090 # gRPC
     environment:
       SERVICE_NAME: special
       <<: *env
@@ -117,8 +117,8 @@ services:
     profiles: [touch, platform, services]
     container_name: platform-touch
     ports:
-      - 3050:3050 # Rest
-      - 5050:5050 # gRPC
+      - 3100:3100 # Rest
+      - 5100:5100 # gRPC
     environment:
       SERVICE_NAME: touch
       <<: *env
@@ -210,6 +210,8 @@ services:
       - kafka-connect
     entrypoint: ['bash', '-c', 'npm run script:kafka-connect']
     environment:
+      CONNECT_PORT: 8083
+      CONNECT_HOST: connect
       <<: *env
     <<: *common
 

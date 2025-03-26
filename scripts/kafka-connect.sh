@@ -3,15 +3,17 @@ if [ -f .env ]; then
 fi
 
 MONGO_SOURCE="mongo-source"
+CONNECT_PORT=${CONNECT_PORT:-8082}
+CONNECT_HOST=${CONNECT_HOST:-localhost}
 
-MONGO_SOURCE_EXISTS=$(curl -s -o /dev/null -w "%{http_code}" localhost:8082/connectors/$MONGO_SOURCE)
+MONGO_SOURCE_EXISTS=$(curl -s -o /dev/null -w "%{http_code}" $CONNECT_HOST:$CONNECT_PORT/connectors/$MONGO_SOURCE)
 
 if [ $MONGO_SOURCE_EXISTS -eq 200 ]; then
-  curl -X DELETE localhost:8082/connectors/$MONGO_SOURCE
+  curl -X DELETE $CONNECT_HOST:$CONNECT_PORT/connectors/$MONGO_SOURCE
 fi
 
 MONGO_PREFIX=${1:-$MONGO_PREFIX}
-curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" localhost:8082/connectors/ -d "{
+curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" $CONNECT_HOST:$CONNECT_PORT/connectors/ -d "{
   \"name\": \"$MONGO_SOURCE\",
   \"config\": {
     \"connector.class\": \"io.debezium.connector.mongodb.MongoDbConnector\",
