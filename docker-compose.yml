@@ -2,21 +2,98 @@ x-env: &env
   KAFKA_HOST: kafka
   REDIS_HOST: redis
   MINIO_HOST: minio
+  EMQX_BASE_URL: http://emqx:18083/api/v5
+  EMQX_EXHOOK_URL: http://platform-preserver:6030
 
 x-common: &common
+  build:
+    context: .
   env_file:
     - .env
   networks:
     - localnet
 
 services:
+  gateway:
+    container_name: platform-gateway
+    ports:
+      - 3010:3010 # Rest
+    environment:
+      SERVICE_NAME: gateway
+      <<: *env
+    <<: *common
+
   auth:
-    build:
-      context: .
+    container_name: platform-auth
     ports:
       - 3020:3020 # Rest
+      - 5020:5020 # gRPC
     environment:
       SERVICE_NAME: auth
+      <<: *env
+    <<: *common
+
+  domain:
+    container_name: platform-domain
+    ports:
+      - 3030:3030 # Rest
+      - 5030:5030 # gRPC
+    environment:
+      SERVICE_NAME: domain
+      <<: *env
+    <<: *common
+
+  context:
+    container_name: platform-context
+    ports:
+      - 3040:3040 # Rest
+      - 5040:5040 # gRPC
+    environment:
+      SERVICE_NAME: context
+      <<: *env
+    <<: *common
+
+  # ---------
+  # Commands
+  # ---------
+
+  db-clean:
+    profiles:
+      - db-clean
+    entrypoint: ["bash", "-c", "npm run db:clean"]
+    environment:
+      <<: *env
+    <<: *common
+
+  db-seed:
+    profiles:
+      - db-seed
+    entrypoint: ["bash", "-c", "npm run db:seed"]
+    environment:
+      <<: *env
+    <<: *common
+
+  storage-init:
+    profiles:
+      - storage-init
+    entrypoint: ["bash", "-c", "npm run storage:init"]
+    environment:
+      <<: *env
+    <<: *common
+    
+  utility-init:
+    profiles:
+      - utility-init
+    entrypoint: ["bash", "-c", "npm run utility:init"]
+    environment:
+      <<: *env
+    <<: *common
+    
+  kafka-connect:
+    profiles:
+      - kafka-connect
+    entrypoint: ["bash", "-c", "npm run script:kafka-connect"]
+    environment:
       <<: *env
     <<: *common
 
