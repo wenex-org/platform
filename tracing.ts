@@ -13,7 +13,7 @@ import { Resource } from '@opentelemetry/resources';
 import { NodeSDK } from '@opentelemetry/sdk-node';
 
 export const init = (modules: ('http' | 'grpc' | 'kafka' | 'graphql')[]) => {
-  if (!process.env.OTLP_SERVICE_NAME) return console.error('OTLP_SERVICE_NAME is required.');
+  if (!process.env.OTLP_SERVICE_NAME) throw Error('OTLP_SERVICE_NAME is required.');
 
   const exporter = new OTLPTraceExporter({
     url: `http://${process.env.OTLP_HOST}:${process.env.OTLP_PORT}/v1/traces`,

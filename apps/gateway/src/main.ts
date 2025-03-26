@@ -3,7 +3,7 @@ require('dotenv').config();
 
 if (process.env.NODE_ENV?.toLowerCase().startsWith('prod')) {
   if (process.env.ELASTIC_APM_SERVICE_NAME) require('elastic-apm-node').start();
-  else console.error('in production ELASTIC_APM_SERVICE_NAME is required.');
+  else throw Error('in production mode ELASTIC_APM_SERVICE_NAME is required.');
   require('tracing').init(['http', 'grpc', 'graphql']);
 }
 
