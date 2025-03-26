@@ -16,9 +16,7 @@ x-env: &env
 
 services:
   gateway:
-    profiles:
-      - gateway
-      - platform
+    profiles: [gateway, platform, services]
     container_name: platform-gateway
     ports:
       - 3010:3010 # Rest
@@ -28,9 +26,7 @@ services:
     <<: *common
 
   auth:
-    profiles:
-      - auth
-      - platform
+    profiles: [auth, platform, services]
     container_name: platform-auth
     ports:
       - 3020:3020 # Rest
@@ -41,9 +37,7 @@ services:
     <<: *common
 
   domain:
-    profiles:
-      - domain
-      - platform
+    profiles: [domain, platform, services]
     container_name: platform-domain
     ports:
       - 3030:3030 # Rest
@@ -54,9 +48,7 @@ services:
     <<: *common
 
   context:
-    profiles:
-      - context
-      - platform
+    profiles: [context, platform, services]
     container_name: platform-context
     ports:
       - 3040:3040 # Rest
@@ -67,15 +59,113 @@ services:
     <<: *common
 
   essential:
-    profiles:
-      - essential
-      - platform
+    profiles: [essential, platform, services]
     container_name: platform-essential
     ports:
       - 3050:3050 # Rest
       - 5050:5050 # gRPC
     environment:
       SERVICE_NAME: essential
+      <<: *env
+    <<: *common
+
+  financial:
+    profiles: [financial, platform, services]
+    container_name: platform-financial
+    ports:
+      - 3050:3050 # Rest
+      - 5050:5050 # gRPC
+    environment:
+      SERVICE_NAME: financial
+      <<: *env
+    <<: *common
+
+  general:
+    profiles: [general, platform, services]
+    container_name: platform-general
+    ports:
+      - 3050:3050 # Rest
+      - 5050:5050 # gRPC
+    environment:
+      SERVICE_NAME: general
+      <<: *env
+    <<: *common
+
+  identity:
+    profiles: [identity, platform, services]
+    container_name: platform-identity
+    ports:
+      - 3050:3050 # Rest
+      - 5050:5050 # gRPC
+    environment:
+      SERVICE_NAME: identity
+      <<: *env
+    <<: *common
+
+  special:
+    profiles: [special, platform, services]
+    container_name: platform-special
+    ports:
+      - 3050:3050 # Rest
+      - 5050:5050 # gRPC
+    environment:
+      SERVICE_NAME: special
+      <<: *env
+    <<: *common
+
+  touch:
+    profiles: [touch, platform, services]
+    container_name: platform-touch
+    ports:
+      - 3050:3050 # Rest
+      - 5050:5050 # gRPC
+    environment:
+      SERVICE_NAME: touch
+      <<: *env
+    <<: *common
+
+  # ---------
+  # Workers
+  # ---------
+
+  watcher:
+    profiles: [watcher, platform, workers]
+    container_name: platform-watcher
+    ports:
+      - 4040:4040 # Rest
+    environment:
+      SERVICE_NAME: watcher
+      <<: *env
+    <<: *common
+
+  preserver:
+    profiles: [preserver, platform, workers]
+    container_name: platform-preserver
+    ports:
+      - 4030:4030 # Rest
+      - 6030:6030 # gRPC
+    environment:
+      SERVICE_NAME: preserver
+      <<: *env
+    <<: *common
+
+  observer:
+    profiles: [observer, platform, workers]
+    container_name: platform-observer
+    ports:
+      - 4020:4020 # Rest
+    environment:
+      SERVICE_NAME: observer
+      <<: *env
+    <<: *common
+
+  dispatcher:
+    profiles: [dispatcher, platform, workers]
+    container_name: platform-dispatcher
+    ports:
+      - 4010:4010 # Rest
+    environment:
+      SERVICE_NAME: dispatcher
       <<: *env
     <<: *common
 
