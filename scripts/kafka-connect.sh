@@ -3,6 +3,7 @@ if [ -f .env ]; then
 fi
 
 MONGO_SOURCE="mongo-source"
+
 CONNECT_PORT=${CONNECT_PORT:-8082}
 CONNECT_HOST=${CONNECT_HOST:-localhost}
 
