@@ -38,7 +38,7 @@ publish:
   stage: publish
   image: $DOCKER_IMAGE
   services:
-    - name: vhidvz/docker:28-dind
+    - name: docker:28-dind
       alias: docker # Docker-in-Docker required for image building
       command: ["--tls=false", "--dns=178.22.122.101", "--dns=185.51.200.1"]
   variables:
