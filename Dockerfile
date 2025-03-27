@@ -1,4 +1,4 @@
-FROM vhidvz/node:22-alpine
+FROM vhidvz/node:22-base
 WORKDIR /app
 
 COPY . .

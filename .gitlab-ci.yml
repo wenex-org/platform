@@ -4,7 +4,7 @@ stages:
   - publish
 
 variables:
-  NODE_IMAGE: "vhidvz/node:22-alpine" # Use Node.js 22 for build and test
+  NODE_IMAGE: "vhidvz/node:22-base" # Use Node.js 22 for build and test
   KANIKO_IMAGE: "gcr.io/kaniko-project/executor:v1.23.2-debug" # Kaniko debug image for publishing (includes sh)
 
 before_script:
