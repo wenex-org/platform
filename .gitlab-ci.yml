@@ -1,60 +1,49 @@
 stages:
-  # - build
-  # - test
+  - build
+  - test
   - publish
 
 variables:
-  NODE_IMAGE: "node:22-alpine" # Use Node.js 22 for build and test
-  DOCKER_IMAGE: "docker:28" # Docker image for publishing
+  NODE_IMAGE: "vhidvz/node:22-alpine" # Use Node.js 22 for build and test
   IMAGE_NAME: "$CI_REGISTRY_IMAGE/wenex/platform" # GitLab Container Registry path
+  KANIKO_IMAGE: "gcr.io/kaniko-project/executor:latest" # Kaniko image for publishing
 
 before_script:
   - echo "Starting GitLab CI/CD pipeline..."
 
-# build:
-#   stage: build
-#   image: $NODE_IMAGE
-#   before_script:
-#     - apk add git curl bash
-#     - echo "Starting build..."
-#   script:
-#     - npm run git:clone
-#     - npm install -g pnpm@10.5.2
-#     - pnpm install --frozen-lockfile
-#     - npm run script:build
+build:
+  stage: build
+  image: $NODE_IMAGE
+  before_script:
+    - echo "Starting build..."
+  script:
+    - npm run git:clone
+    - npm install -g pnpm@10.5.2
+    - pnpm install --frozen-lockfile
+    - npm run script:build
 
-# test:
-#   stage: test
-#   image: $NODE_IMAGE
-#   before_script:
-#     - apk add git curl bash
-#     - echo "Starting tests..."
-#   script:
-#     - npm run git:clone
-#     - npm install -g pnpm@10.5.2
-#     - pnpm install --frozen-lockfile
-#     - npm run test
+test:
+  stage: test
+  image: $NODE_IMAGE
+  before_script:
+    - echo "Starting tests..."
+  script:
+    - npm run git:clone
+    - npm install -g pnpm@10.5.2
+    - pnpm install --frozen-lockfile
+    - npm run test
+
 publish:
   stage: publish
-  image: $DOCKER_IMAGE
-  services:
-    - name: docker:28-dind
-      alias: docker # Docker-in-Docker required for image building
-      command: ["--tls=false", "--dns=178.22.122.101", "--dns=185.51.200.1"]
+  image: $KANIKO_IMAGE
   variables:
-    DOCKER_HOST: "tcp://docker:2375" # Docker-in-Docker hostname
-    DOCKER_TLS_CERTDIR: "" # Disable TLS
+    DOCKER_CONFIG: "/kaniko/.docker/" # Kaniko's default Docker config path
   before_script:
-    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
   script:
-    - docker build -t $IMAGE_NAME:$CI_COMMIT_REF_SLUG .
-    - docker push $IMAGE_NAME:$CI_COMMIT_REF_SLUG
-    - |
-      if echo "$CI_COMMIT_TAG" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
-        docker tag "$IMAGE_NAME:$CI_COMMIT_REF_SLUG" "$IMAGE_NAME:latest"
-        docker push "$IMAGE_NAME:latest"
-      fi
-  # rules:
-  #   - if: '$CI_COMMIT_TAG =~ /^[0-9]+\.[0-9]+\.[0-9]+$/'
-  #     when: on_success
-  #   - when: never # Prevent running on non-tagged commits
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $IMAGE_NAME:latest --destination $IMAGE_NAME:$CI_COMMIT_REF_SLUG
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^[0-9]+\.[0-9]+\.[0-9]+$/'
+      when: on_success
+    - when: never # Prevent running on non-tagged commits
