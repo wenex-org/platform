@@ -41,6 +41,9 @@ publish:
   services:
     - name: docker:28-dind
       alias: docker # Docker-in-Docker required for image building
+      command: ["--tls=false"] # Disable TLS
+  variables:
+    DOCKER_HOST: "tcp://docker:2375" # Docker-in-Docker hostname
   before_script:
     - echo -e "DOCKER_HOST is set to $DOCKER_HOST"
     - ping -c 1 docker || echo "Cannot ping docker service"
