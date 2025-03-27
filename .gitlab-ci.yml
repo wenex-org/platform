@@ -1,6 +1,6 @@
 stages:
-  # - build
-  # - test
+  - build
+  - test
   - publish
 
 variables:
@@ -11,27 +11,27 @@ variables:
 before_script:
   - echo "Starting GitLab CI/CD pipeline..."
 
-# build:
-#   stage: build
-#   image: $NODE_IMAGE
-#   before_script:
-#     - echo "Starting build..."
-#   script:
-#     - npm run git:clone
-#     - npm install -g pnpm@10.5.2
-#     - pnpm install --frozen-lockfile
-#     - npm run script:build
+build:
+  stage: build
+  image: $NODE_IMAGE
+  before_script:
+    - echo "Starting build..."
+  script:
+    - npm run git:clone
+    - npm install -g pnpm@10.5.2
+    - pnpm install --frozen-lockfile
+    - npm run script:build
 
-# test:
-#   stage: test
-#   image: $NODE_IMAGE
-#   before_script:
-#     - echo "Starting tests..."
-#   script:
-#     - npm run git:clone
-#     - npm install -g pnpm@10.5.2
-#     - pnpm install --frozen-lockfile
-#     - npm run test
+test:
+  stage: test
+  image: $NODE_IMAGE
+  before_script:
+    - echo "Starting tests..."
+  script:
+    - npm run git:clone
+    - npm install -g pnpm@10.5.2
+    - pnpm install --frozen-lockfile
+    - npm run test
 
 publish:
   stage: publish
@@ -41,7 +41,7 @@ publish:
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $IMAGE_NAME:latest --destination $IMAGE_NAME:$CI_COMMIT_REF_SLUG
-  # rules:
-  #   - if: '$CI_COMMIT_TAG =~ /^[0-9]+\.[0-9]+\.[0-9]+$/'
-  #     when: on_success
-  #   - when: never # Prevent running on non-tagged commits
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^[0-9]+\.[0-9]+\.[0-9]+$/'
+      when: on_success
+    - when: never # Prevent running on non-tagged commits
