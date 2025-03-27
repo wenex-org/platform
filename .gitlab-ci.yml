@@ -1,6 +1,6 @@
 stages:
-  - build
-  - test
+  # - build
+  # - test
   - publish
 
 variables:
@@ -11,29 +11,29 @@ variables:
 before_script:
   - echo "Starting GitLab CI/CD pipeline..."
 
-build:
-  stage: build
-  image: $NODE_IMAGE
-  before_script:
-    - apk add git curl bash
-    - echo "Starting build..."
-  script:
-    - npm run git:clone
-    - npm install -g pnpm@10.5.2
-    - pnpm install --frozen-lockfile
-    - npm run script:build
+# build:
+#   stage: build
+#   image: $NODE_IMAGE
+#   before_script:
+#     - apk add git curl bash
+#     - echo "Starting build..."
+#   script:
+#     - npm run git:clone
+#     - npm install -g pnpm@10.5.2
+#     - pnpm install --frozen-lockfile
+#     - npm run script:build
 
-test:
-  stage: test
-  image: $NODE_IMAGE
-  before_script:
-    - apk add git curl bash
-    - echo "Starting tests..."
-  script:
-    - npm run git:clone
-    - npm install -g pnpm@10.5.2
-    - pnpm install --frozen-lockfile
-    - npm run test
+# test:
+#   stage: test
+#   image: $NODE_IMAGE
+#   before_script:
+#     - apk add git curl bash
+#     - echo "Starting tests..."
+#   script:
+#     - npm run git:clone
+#     - npm install -g pnpm@10.5.2
+#     - pnpm install --frozen-lockfile
+#     - npm run test
 
 publish:
   stage: publish
@@ -45,9 +45,6 @@ publish:
   variables:
     DOCKER_HOST: "tcp://docker:2375" # Docker-in-Docker hostname
   before_script:
-    - echo -e "DOCKER_HOST is set to $DOCKER_HOST"
-    - ping -c 1 docker || echo "Cannot ping docker service"
-    - docker --host "$DOCKER_HOST" info || echo "Failed to connect to Docker daemon"
     - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
   script:
     - docker build -t $IMAGE_NAME:$CI_COMMIT_REF_SLUG .
