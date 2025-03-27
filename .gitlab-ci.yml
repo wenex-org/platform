@@ -41,7 +41,7 @@ publish:
   services:
     - name: docker:28-dind
       alias: docker # Docker-in-Docker required for image building
-      command: ["--tls=false"] # Disable TLS
+      command: ["--tls=false"]
   variables:
     DOCKER_HOST: "tcp://docker:2375" # Docker-in-Docker hostname
     DOCKER_TLS_CERTDIR: "" # Disable TLS
