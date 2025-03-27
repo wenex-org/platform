@@ -46,7 +46,9 @@ test:
 
 sonar:
   stage: sonar
-  image: sonarsource/sonar-scanner-cli:11
+  image:
+    name: sonarsource/sonar-scanner-cli:11
+    entrypoint: [""]
   needs:
     - job: build
       artifacts: true
