@@ -35,8 +35,7 @@ test:
 
 publish:
   stage: publish
-  image:
-    name: $KANIKO_IMAGE
+  image: $KANIKO_IMAGE
   before_script:
     - mkdir -p /kaniko/.docker
   script:
