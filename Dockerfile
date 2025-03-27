@@ -1,7 +1,4 @@
-FROM node:22-alpine AS base
-RUN apk update && apk add git curl bash
-
-FROM base
+FROM vhidvz/node:22-alpine
 WORKDIR /app
 
 COPY . .
