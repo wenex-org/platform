@@ -42,6 +42,7 @@ publish:
     - docker:dind # Docker-in-Docker required for image building
   variables:
     DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: "" # Disable TLS
   before_script:
     - echo -e "DOCKER_HOST is set to $DOCKER_HOST"
     - ping -c 1 docker || echo "Cannot ping docker service"
