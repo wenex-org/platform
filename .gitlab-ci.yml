@@ -54,6 +54,7 @@ sonar:
     GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
   before_script:
     - echo "Starting SonarQube analysis..."
+    - ls -la
   allow_failure: true
   cache:
     policy: pull-push
