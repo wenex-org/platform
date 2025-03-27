@@ -1,6 +1,7 @@
 stages:
   - build
   - test
+  - sonar
   - publish
 
 variables:
@@ -24,6 +25,7 @@ build:
 test:
   stage: test
   image: $NODE_IMAGE
+  needs: ["build"]
   before_script:
     - echo "Starting tests..."
   script:
@@ -32,9 +34,32 @@ test:
     - pnpm install --frozen-lockfile
     - npm run test
 
+sonar:
+  stage: sonar
+  image: sonarsource/sonar-scanner-cli:11
+  needs: ["build"]
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
+    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
+  before_script:
+    - echo "Starting SonarQube analysis..."
+  allow_failure: true
+  cache:
+    policy: pull-push
+    key: "sonar-cache-$CI_COMMIT_REF_SLUG"
+    paths:
+      - "${SONAR_USER_HOME}/cache"
+      - sonar-scanner/
+  script:
+    - sonar-scanner -Dsonar.host.url="${SONAR_HOST_URL}"
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
+    - if: $CI_COMMIT_BRANCH == 'develop'
+
 publish:
   stage: publish
   image: $KANIKO_IMAGE
+  needs: ["test"]
   before_script:
     - mkdir -p /kaniko/.docker
   variables:
