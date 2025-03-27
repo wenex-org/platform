@@ -4,7 +4,7 @@ stages:
   - publish
 
 variables:
-  NODE_IMAGE: "vhidvz/node:22-alpine" # Use Node.js 22 for build and test
+  NODE_IMAGE: "node:22-alpine" # Use Node.js 22 for build and test
   IMAGE_NAME: "$CI_REGISTRY_IMAGE/wenex/platform" # GitLab Container Registry path
   KANIKO_IMAGE: "gcr.io/kaniko-project/executor:latest" # Kaniko image for publishing
 
