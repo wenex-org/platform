@@ -35,7 +35,9 @@ test:
 
 publish:
   stage: publish
-  image: $KANIKO_IMAGE
+  image:
+    name: $KANIKO_IMAGE
+    entrypoint: [""] # Override the entrypoint to avoid the default Kaniko command
   variables:
     REGISTRY: "$CI_REGISTRY"
   before_script:
