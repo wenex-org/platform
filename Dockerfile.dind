@@ -1,0 +1,5 @@
+FROM docker:28-dind
+RUN echo '{"dns": ["178.22.122.101", "185.51.200.1"]}' > /etc/docker/daemon.json
+
+# docker build -f Dockerfile.base -t vhidvz/docker:28-dind .
+# docker push vhidvz/docker:28-dind
