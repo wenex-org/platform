@@ -39,7 +39,7 @@ publish:
   before_script:
     - mkdir -p /kaniko/.docker
   variables:
-    KANIKO_ARGS: "--registry-mirror=hub.hamdocker.ir"
+    KANIKO_ARGS: "--registry-mirror=docker.arvancloud.ir"
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $IMAGE_NAME:$CI_COMMIT_REF_SLUG $KANIKO_ARGS
