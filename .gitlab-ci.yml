@@ -34,11 +34,12 @@ build:
 test:
   stage: test
   image: $NODE_IMAGE
-  needs: ["build"]
+  needs:
+    - job: build
+      artifacts: true
   before_script:
     - echo "Starting tests..."
   script:
-    - npm run git:clone
     - npm install -g pnpm@10.5.2
     - pnpm install --frozen-lockfile
     - npm run test
@@ -63,7 +64,7 @@ sonar:
       - "${SONAR_USER_HOME}/cache"
       - sonar-scanner/
   script:
-    - sonar-scanner -Dsonar.host.url="${SONAR_HOST_URL}"
+    - sonar-scanner -Dsonar.sources=.,apps/services,apps/workers,docker,libs,protos -Dsonar.host.url="${SONAR_HOST_URL}"
   rules:
     - if: $CI_COMMIT_BRANCH == 'main'
     - if: $CI_COMMIT_BRANCH == 'develop'
