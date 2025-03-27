@@ -21,6 +21,15 @@ build:
     - npm install -g pnpm@10.5.2
     - pnpm install --frozen-lockfile
     - npm run script:build
+  artifacts:
+    paths:
+      - apps/services
+      - apps/workers
+      - docker
+      - libs
+      - protos
+    when: on_success
+    expire_in: 1 hrs 30 min
 
 test:
   stage: test
@@ -37,14 +46,13 @@ test:
 sonar:
   stage: sonar
   image: sonarsource/sonar-scanner-cli:11
-  needs: ["build"]
-  services:
-    - name: $NODE_IMAGE
+  needs:
+    - job: build
+      artifacts: true
   variables:
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
     GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
   before_script:
-    - npm run git:clone
     - echo "Starting SonarQube analysis..."
   allow_failure: true
   cache:
