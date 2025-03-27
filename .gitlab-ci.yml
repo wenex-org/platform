@@ -43,6 +43,9 @@ publish:
   variables:
     DOCKER_HOST: "tcp://docker:2375"
   before_script:
+    - echo -e "DOCKER_HOST is set to $DOCKER_HOST"
+    - ping -c 1 docker || echo "Cannot ping docker service"
+    - docker --host "$DOCKER_HOST" info || echo "Failed to connect to Docker daemon"
     - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
   script:
     - docker build -t $IMAGE_NAME:$CI_COMMIT_REF_SLUG .
