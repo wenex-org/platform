@@ -44,6 +44,7 @@ publish:
       command: ["--tls=false"] # Disable TLS
   variables:
     DOCKER_HOST: "tcp://docker:2375" # Docker-in-Docker hostname
+    DOCKER_TLS_CERTDIR: "" # Disable TLS
   before_script:
     - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
   script:
