@@ -65,7 +65,7 @@ sonar:
       - "${SONAR_USER_HOME}/cache"
       - sonar-scanner/
   script:
-    - sonar-scanner -Dsonar.sources=.,apps/services,apps/workers,docker,libs,protos -Dsonar.host.url="${SONAR_HOST_URL}"
+    - sonar-scanner -Dsonar.sources=. -Dsonar.host.url="${SONAR_HOST_URL}"
   rules:
     - if: $CI_COMMIT_BRANCH == 'main'
     - if: $CI_COMMIT_BRANCH == 'develop'
