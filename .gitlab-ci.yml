@@ -21,6 +21,7 @@ build:
     - npm install -g pnpm@10.5.2
     - pnpm install --frozen-lockfile
     - npm run script:build
+    - rm -rf .git .gitmodules
   artifacts:
     paths:
       - apps/services
@@ -28,6 +29,8 @@ build:
       - docker
       - libs
       - protos
+      - dist
+      - node_modules
     when: on_success
     expire_in: 1 hrs 30 min
 
@@ -40,15 +43,11 @@ test:
   before_script:
     - echo "Starting tests..."
   script:
-    - npm install -g pnpm@10.5.2
-    - pnpm install --frozen-lockfile
     - npm run test
 
 sonar:
   stage: sonar
-  image:
-    name: sonarsource/sonar-scanner-cli:11
-    entrypoint: [""]
+  image: sonarsource/sonar-scanner-cli:11
   needs:
     - job: build
       artifacts: true
