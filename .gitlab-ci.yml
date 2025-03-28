@@ -21,7 +21,6 @@ build:
     - npm install -g pnpm@10.5.2
     - pnpm install --frozen-lockfile
     - npm run script:build
-    - rm -rf .git .gitmodules
   artifacts:
     paths:
       - apps/services
@@ -41,6 +40,7 @@ test:
     - job: build
       artifacts: true
   before_script:
+    - npm run script:setup
     - echo "Starting tests..."
   script:
     - npm run test
