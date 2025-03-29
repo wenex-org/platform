@@ -67,7 +67,6 @@ sonar:
     - sonar-scanner -Dsonar.sources=. -Dsonar.host.url="${SONAR_HOST_URL}"
   rules:
     - if: $CI_COMMIT_BRANCH == 'main'
-    - if: $CI_COMMIT_BRANCH == 'develop'
 
 publish:
   stage: publish
@@ -82,5 +81,3 @@ publish:
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME $KANIKO_ARGS
   rules:
     - if: '$CI_COMMIT_TAG =~ /^[0-9]+\.[0-9]+\.[0-9]+$/'
-      when: on_success
-    - when: never # Prevent running on non-tagged commits
