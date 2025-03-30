@@ -1,6 +1,6 @@
-# docker build -t wenex/platform:latest .
+# docker build -t vhidvz/wenex-platform:latest .
 x-common: &common
-  image: wenex/platform:latest
+  image: vhidvz/wenex-platform:latest
   env_file:
     - .env
   networks:
