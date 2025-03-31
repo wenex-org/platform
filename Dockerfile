@@ -13,9 +13,7 @@ COPY . .
 
 RUN npm run git:clone && \
   npm install -g pnpm@10.5.2 && \
-  pnpm install --frozen-lockfile
-
-RUN npm run script:build && \
-  rm -rf ./apps ./libs ./protos ./docker
+  pnpm install --frozen-lockfile && \
+  npm run script:build
 
 CMD ["bash", "-c", "npm run script:start ${SERVICE_NAME:-gateway}"]
