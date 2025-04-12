@@ -75,7 +75,7 @@ publish:
   image: $KANIKO_IMAGE
   needs: ["test"]
   before_script:
-    - mkdir -p /kaniko/.docker
+    - rm .env && mkdir -p /kaniko/.docker
   variables:
     KANIKO_ARGS: "--registry-mirror=docker.arvancloud.ir"
   script:
