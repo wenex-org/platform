@@ -15,6 +15,7 @@ build:
   stage: build
   image: $NODE_IMAGE
   before_script:
+    - cp .env.example .env
     - echo "Starting build..."
   script:
     - npm run git:clone
@@ -23,6 +24,7 @@ build:
     - npm run script:build
   artifacts:
     paths:
+      - .env
       - apps/services
       - apps/workers
       - docker
