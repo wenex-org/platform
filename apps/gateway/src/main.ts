@@ -10,6 +10,7 @@ if (process.env.NODE_ENV?.toLowerCase().startsWith('prod')) {
 import { ETagInterceptor, XPoweredByInterceptor, XRequestIdInterceptor } from '@app/common/core/interceptors';
 import { NamingConventionReqInterceptor } from '@app/common/core/interceptors/n-convention';
 import { prototyping, setupSwagger } from '@app/common/core/utils';
+import { setupGracefulShutdown } from 'nestjs-graceful-shutdown';
 import { NestFactory } from '@nestjs/core';
 import { APP } from '@app/common/core';
 import helmet from 'helmet';
@@ -21,7 +22,7 @@ import { AppModule } from './app.module';
 const { GATEWAY } = APP;
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
-  app.enableShutdownHooks();
+  setupGracefulShutdown({ app });
 
   app.use(helmet({ contentSecurityPolicy: false }));
 
