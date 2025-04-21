@@ -1,7 +1,6 @@
 import { JWT_SECRET, NODE_ENV, REDIS_CONFIG, SENTRY_CONFIG } from '@app/common/core/envs';
 import { ComplexityPlugin, DateScalar } from '@app/common/core/plugins/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { GracefulShutdownModule } from 'nestjs-graceful-shutdown';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { BlacklistModule } from '@app/module/blacklist';
 import { DynamicModule, Module } from '@nestjs/common';
@@ -17,8 +16,6 @@ import * as modules from './modules';
 
 @Module({
   imports: [
-    GracefulShutdownModule.forRoot(),
-
     BlacklistModule.forRoot(),
     PrometheusModule.register(),
 
