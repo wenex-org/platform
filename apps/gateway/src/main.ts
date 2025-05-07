@@ -44,7 +44,7 @@ async function bootstrap() {
 
   setupSwagger(app);
 
-  await app.listen(GATEWAY.API_PORT);
+  await app.listen(GATEWAY.API_PORT, '0.0.0.0');
 
   const url = await app.getUrl();
   console.log(`Gateway Successfully Started On Port ${GATEWAY.API_PORT}`);
