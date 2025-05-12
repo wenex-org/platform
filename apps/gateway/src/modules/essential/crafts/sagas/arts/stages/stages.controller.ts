@@ -26,13 +26,14 @@ import { SagaStage, SagaStageDto } from '@app/common/interfaces/essential';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
 import { EssentialProvider } from '@app/common/providers/essential';
+import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
-import { Filter, Meta } from '@app/common/core/decorators';
 import { ValidationPipe } from '@app/common/core/pipes';
 import { getSseMessage } from '@app/common/core/utils';
 import { Metadata } from '@app/common/core/interfaces';
+import { Permission } from 'abacl';
 import { Response } from 'express';
 import { Observable } from 'rxjs';
 
@@ -96,13 +97,13 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   @ApiQuery({ type: FilterOneDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   @ApiResponse({ status: HttpStatus.OK, type: SagaStageSerializer })
-  Cursor(@Res() res: Response, @Meta() meta: Metadata, @Filter() filter: FilterOneDto<SagaStage>) {
+  Cursor(@Res() res: Response, @Meta() meta: Metadata, @Perm() perm: Permission, @Filter() filter: FilterOneDto<SagaStage>) {
     // Server Sent-Event Headers
     res.setHeader('Transfer-Encoding', 'chunked');
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'private, no-cache, no-store');
 
-    super.cursor(meta, filter).subscribe({
+    super.cursor(meta, perm, filter).subscribe({
       next: (data) => res.write(getSseMessage({ id: data.id, data })),
       error: (data) => res.end(getSseMessage({ event: 'error', data })),
       complete: () => res.end(getSseMessage({ type: 'close', event: 'end' })),

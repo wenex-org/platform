@@ -25,14 +25,15 @@ import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
 import { Config, ConfigDto } from '@app/common/interfaces/context';
+import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { ContextProvider } from '@app/common/providers/context';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
-import { Filter, Meta } from '@app/common/core/decorators';
 import { ValidationPipe } from '@app/common/core/pipes';
 import { getSseMessage } from '@app/common/core/utils';
 import { Metadata } from '@app/common/core/interfaces';
+import { Permission } from 'abacl';
 import { Response } from 'express';
 import { Observable } from 'rxjs';
 
@@ -96,13 +97,13 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   @ApiQuery({ type: FilterOneDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   @ApiResponse({ status: HttpStatus.OK, type: ConfigSerializer })
-  Cursor(@Res() res: Response, @Meta() meta: Metadata, @Filter() filter: FilterOneDto<Config>) {
+  Cursor(@Res() res: Response, @Meta() meta: Metadata, @Perm() perm: Permission, @Filter() filter: FilterOneDto<Config>) {
     // Server Sent-Event Headers
     res.setHeader('Transfer-Encoding', 'chunked');
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'private, no-cache, no-store');
 
-    super.cursor(meta, filter).subscribe({
+    super.cursor(meta, perm, filter).subscribe({
       next: (data) => res.write(getSseMessage({ id: data.id, data })),
       error: (data) => res.end(getSseMessage({ event: 'error', data })),
       complete: () => res.end(getSseMessage({ type: 'close', event: 'end' })),
