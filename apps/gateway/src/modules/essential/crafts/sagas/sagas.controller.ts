@@ -39,7 +39,7 @@ import { TotalSerializer } from '@app/common/core/serializers';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
-import { from, Observable } from 'rxjs';
+import { from, Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
@@ -157,11 +157,14 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'private, no-cache, no-store');
 
-    super.cursor(meta, perm, filter).subscribe({
-      next: (data) => res.write(getSseMessage({ id: data.id, data })),
-      error: (data) => res.end(getSseMessage({ event: 'error', data })),
-      complete: () => res.end(getSseMessage({ type: 'close', event: 'end' })),
-    });
+    super
+      .cursor(meta, filter)
+      .pipe(switchMap((value) => perm.filter(value)))
+      .subscribe({
+        next: (data) => res.write(getSseMessage({ id: data.id, data })),
+        error: (data) => res.end(getSseMessage({ event: 'error', data })),
+        complete: () => res.end(getSseMessage({ type: 'close', event: 'end' })),
+      });
   }
 
   @Get(':id')
