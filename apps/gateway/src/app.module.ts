@@ -22,8 +22,8 @@ import * as modules from './modules';
     RedisModule.forRoot(REDIS_CONFIG()),
     SentryModule.forRoot(SENTRY_CONFIG()),
 
+    HealthModule.forRoot(['disk', 'memory', 'redis']),
     JwtModule.register({ secret: JWT_SECRET(), global: true }),
-    HealthModule.forRoot(['disk', 'memory', 'redis', 'kafka']),
 
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,

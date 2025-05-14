@@ -25,16 +25,17 @@ import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
 import { Workflow, WorkflowDto } from '@app/common/interfaces/general';
+import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { GeneralProvider } from '@app/common/providers/general';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
-import { Filter, Meta } from '@app/common/core/decorators';
 import { ValidationPipe } from '@app/common/core/pipes';
 import { getSseMessage } from '@app/common/core/utils';
 import { Metadata } from '@app/common/core/interfaces';
+import { Observable, switchMap } from 'rxjs';
+import { Permission } from 'abacl';
 import { Response } from 'express';
-import { Observable } from 'rxjs';
 
 @ApiBearerAuth()
 @RateLimit('workflows')
@@ -96,17 +97,20 @@ export class WorkflowsController extends ControllerClass<Workflow, WorkflowDto> 
   @ApiQuery({ type: FilterOneDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   @ApiResponse({ status: HttpStatus.OK, type: WorkflowSerializer })
-  Cursor(@Res() res: Response, @Meta() meta: Metadata, @Filter() filter: FilterOneDto<Workflow>) {
+  Cursor(@Res() res: Response, @Meta() meta: Metadata, @Perm() perm: Permission, @Filter() filter: FilterOneDto<Workflow>) {
     // Server Sent-Event Headers
     res.setHeader('Transfer-Encoding', 'chunked');
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'private, no-cache, no-store');
 
-    super.cursor(meta, filter).subscribe({
-      next: (data) => res.write(getSseMessage({ id: data.id, data })),
-      error: (data) => res.end(getSseMessage({ event: 'error', data })),
-      complete: () => res.end(getSseMessage({ type: 'close', event: 'end' })),
-    });
+    super
+      .cursor(meta, filter)
+      .pipe(switchMap((value) => perm.filter(value)))
+      .subscribe({
+        next: (data) => res.write(getSseMessage({ id: data.id, data })),
+        error: (data) => res.end(getSseMessage({ event: 'error', data })),
+        complete: () => res.end(getSseMessage({ type: 'close', event: 'end' })),
+      });
   }
 
   @Get(':id')

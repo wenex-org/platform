@@ -6,12 +6,13 @@ import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadata
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { TransformerPipe, ValidationPipe } from '@app/common/core/pipes';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { deepCopy, mapToInstance } from '@app/common/core/utils';
 import { SpecialProvider } from '@app/common/providers/special';
 import { AllExceptionsFilter } from '@app/common/core/filters';
+import { lookup, Modeler } from 'naming-conventions-modeler';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { CreateFileDto } from '@app/common/dto/special';
-import { mapToInstance } from '@app/common/core/utils';
 import { Metadata } from '@app/common/core/interfaces';
 import { Meta } from '@app/common/core/decorators';
 import { from, Observable } from 'rxjs';
@@ -43,6 +44,8 @@ export class PrivateController {
     },
   })
   upload(@Meta() meta: Metadata, @UploadedFiles() items: CreateFileDto[]): Observable<FileItemsSerializer> {
+    items = deepCopy(Modeler.convert(Modeler.build(items, 'snake_case')));
+    items = lookup(items, { fieldname: 'field', originalname: 'original' });
     return from(this.provider.files.upload(items, { meta })).pipe(mapToInstance(FileSerializer, 'items'));
   }
 }

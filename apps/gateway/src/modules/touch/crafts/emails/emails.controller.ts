@@ -25,15 +25,16 @@ import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
 import { getSseMessage, mapToInstance } from '@app/common/core/utils';
+import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { Email, EmailDto } from '@app/common/interfaces/touch';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
 import { TouchProvider } from '@app/common/providers/touch';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
-import { Filter, Meta } from '@app/common/core/decorators';
 import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
-import { from, Observable } from 'rxjs';
+import { from, Observable, switchMap } from 'rxjs';
+import { Permission } from 'abacl';
 import { Response } from 'express';
 
 @ApiBearerAuth()
@@ -110,17 +111,20 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   @ApiQuery({ type: FilterOneDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   @ApiResponse({ status: HttpStatus.OK, type: EmailSerializer })
-  Cursor(@Res() res: Response, @Meta() meta: Metadata, @Filter() filter: FilterOneDto<Email>) {
+  Cursor(@Res() res: Response, @Meta() meta: Metadata, @Perm() perm: Permission, @Filter() filter: FilterOneDto<Email>) {
     // Server Sent-Event Headers
     res.setHeader('Transfer-Encoding', 'chunked');
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'private, no-cache, no-store');
 
-    super.cursor(meta, filter).subscribe({
-      next: (data) => res.write(getSseMessage({ id: data.id, data })),
-      error: (data) => res.end(getSseMessage({ event: 'error', data })),
-      complete: () => res.end(getSseMessage({ type: 'close', event: 'end' })),
-    });
+    super
+      .cursor(meta, filter)
+      .pipe(switchMap((value) => perm.filter(value)))
+      .subscribe({
+        next: (data) => res.write(getSseMessage({ id: data.id, data })),
+        error: (data) => res.end(getSseMessage({ event: 'error', data })),
+        complete: () => res.end(getSseMessage({ type: 'close', event: 'end' })),
+      });
   }
 
   @Get(':id')
