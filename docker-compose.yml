@@ -124,6 +124,17 @@ services:
       <<: *env
     <<: *common
 
+  content:
+    profiles: [content, platform, services]
+    container_name: platform-content
+    ports:
+      - 3110:3110 # Rest
+      - 5110:5110 # gRPC
+    environment:
+      SERVICE_NAME: content
+      <<: *env
+    <<: *common
+
   # ---------
   # Workers
   # ---------

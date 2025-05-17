@@ -3,7 +3,7 @@
 npm run build gateway
 
 # Build services
-services=("auth" "context" "domain" "essential" "financial" "general" "identity" "special" "touch")
+services=("auth" "content" "context" "domain" "essential" "financial" "general" "identity" "special" "touch")
 for service in "${services[@]}"; do
   npm run build "$service" &
 done

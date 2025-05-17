@@ -4,6 +4,7 @@ declare -A PROTOS
 
 # Protos
 AUTH=./protos/auth.proto
+CONTENT=./protos/content.proto
 CONTEXT=./protos/context.proto
 DOMAIN=./protos/domain.proto
 ESSENTIAL=./protos/essential.proto
@@ -20,6 +21,11 @@ PROTOS[AUTH,1]=./apps/services/auth/src/app.proto
 PROTOS[AUTH,2]=./apps/gateway/src/protobuf/auth.proto
 PROTOS[AUTH,3]=./apps/workers/preserver/src/protobuf/auth.proto
 PROTOS[AUTH,4]=./libs/common/src/providers/auth/protobuf/auth.proto
+
+# Content Proto
+PROTOS[CONTENT,1]=./apps/services/content/src/app.proto
+PROTOS[CONTENT,2]=./apps/gateway/src/protobuf/content.proto
+PROTOS[CONTENT,3]=./libs/common/src/providers/content/protobuf/content.proto
 
 # Context Proto
 PROTOS[CONTEXT,1]=./apps/services/context/src/app.proto
@@ -40,11 +46,12 @@ PROTOS[ESSENTIAL,3]=./apps/services/auth/src/protobuf/essential.proto
 PROTOS[ESSENTIAL,4]=./apps/services/touch/src/protobuf/essential.proto
 PROTOS[ESSENTIAL,5]=./apps/services/domain/src/protobuf/essential.proto
 PROTOS[ESSENTIAL,6]=./apps/services/context/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,7]=./apps/services/special/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,8]=./apps/services/general/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,9]=./apps/services/identity/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,A]=./apps/services/financial/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,B]=./libs/common/src/providers/essential/protobuf/essential.proto
+PROTOS[ESSENTIAL,7]=./apps/services/content/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,8]=./apps/services/special/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,9]=./apps/services/general/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,A]=./apps/services/identity/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,B]=./apps/services/financial/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,C]=./libs/common/src/providers/essential/protobuf/essential.proto
 
 # Financial Proto
 PROTOS[FINANCIAL,1]=./apps/services/financial/src/app.proto
@@ -80,6 +87,7 @@ PROTOS[PRESERVER,1]=./apps/workers/preserver/src/app.proto
 # Main Program
 for KEY in "${!PROTOS[@]}"; do
   if [[ $KEY == *"AUTH"* ]]; then ln -f $AUTH ${PROTOS[$KEY]}; fi
+  if [[ $KEY == *"CONTENT"* ]]; then ln -f $CONTENT ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"CONTEXT"* ]]; then ln -f $CONTEXT ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"DOMAIN"* ]]; then ln -f $DOMAIN ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"ESSENTIAL"* ]]; then ln -f $ESSENTIAL ${PROTOS[$KEY]}; fi
