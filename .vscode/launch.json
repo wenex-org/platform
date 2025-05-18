@@ -23,9 +23,9 @@
     {
       "type": "node",
       "request": "launch",
-      "runtimeExecutable": "bash",
+      "runtimeExecutable": "node",
       "name": "Jest Watch Current Test",
-      "program": "${workspaceFolder}/node_modules/.bin/jest",
+      "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
       "args": ["${relativeFile}", "--verbose", "-i", "--no-cache", "--watchAll", "--detectOpenHandles"],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
@@ -33,9 +33,9 @@
     {
       "type": "node",
       "request": "launch",
-      "runtimeExecutable": "bash",
+      "runtimeExecutable": "node",
       "name": "Jest Watch Current E2E Test",
-      "program": "${workspaceFolder}/node_modules/.bin/jest",
+      "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
       "args": [
         "${relativeFile}",
         "--verbose",
