@@ -1,4 +1,5 @@
 export { AuthModule } from './auth';
+export { ContentModule } from './content';
 export { ContextModule } from './context';
 export { DomainModule } from './domain';
 export { EssentialModule } from './essential';
