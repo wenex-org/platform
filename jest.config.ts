@@ -5,6 +5,9 @@ import type { Config } from 'jest';
 const { compilerOptions } = require('./tsconfig');
 
 const config: Config = {
+  maxWorkers: 2,
+  maxConcurrency: 4,
+
   moduleFileExtensions: ['js', 'json', 'ts'],
   rootDir: '.',
   testRegex: '.*\\.spec\\.ts$',
