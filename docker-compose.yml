@@ -135,6 +135,17 @@ services:
       <<: *env
     <<: *common
 
+  logistic:
+    profiles: [logistic, platform, services]
+    container_name: platform-logistic
+    ports:
+      - 3120:3120 # Rest
+      - 5120:5120 # gRPC
+    environment:
+      SERVICE_NAME: logistic
+      <<: *env
+    <<: *common
+
   # ---------
   # Workers
   # ---------

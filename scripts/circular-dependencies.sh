@@ -6,7 +6,6 @@ npm run dpdm:ts ./libs/command/src/main.ts -- --progress >> circular-dependencie
 
 # Services
 npm run dpdm:ts ./apps/services/auth/src/main.ts -- --progress >> circular-dependencies.txt
-npm run dpdm:ts ./apps/services/content/src/main.ts -- --progress >> circular-dependencies.txt
 npm run dpdm:ts ./apps/services/context/src/main.ts -- --progress >> circular-dependencies.txt
 npm run dpdm:ts ./apps/services/domain/src/main.ts -- --progress >> circular-dependencies.txt
 npm run dpdm:ts ./apps/services/essential/src/main.ts -- --progress >> circular-dependencies.txt
@@ -15,6 +14,8 @@ npm run dpdm:ts ./apps/services/general/src/main.ts -- --progress >> circular-de
 npm run dpdm:ts ./apps/services/identity/src/main.ts -- --progress >> circular-dependencies.txt
 npm run dpdm:ts ./apps/services/special/src/main.ts -- --progress >> circular-dependencies.txt
 npm run dpdm:ts ./apps/services/touch/src/main.ts -- --progress >> circular-dependencies.txt
+npm run dpdm:ts ./apps/services/content/src/main.ts -- --progress >> circular-dependencies.txt
+npm run dpdm:ts ./apps/services/logistic/src/main.ts -- --progress >> circular-dependencies.txt
 
 # Workers
 npm run dpdm:ts ./apps/workers/dispatcher/src/main.ts -- --progress >> circular-dependencies.txt
