@@ -46,8 +46,9 @@ PROTOS[ESSENTIAL,7]=./apps/services/content/src/protobuf/essential.proto
 PROTOS[ESSENTIAL,8]=./apps/services/special/src/protobuf/essential.proto
 PROTOS[ESSENTIAL,9]=./apps/services/general/src/protobuf/essential.proto
 PROTOS[ESSENTIAL,A]=./apps/services/identity/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,B]=./apps/services/financial/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,C]=./libs/common/src/providers/essential/protobuf/essential.proto
+PROTOS[ESSENTIAL,B]=./apps/services/logistic/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,C]=./apps/services/financial/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,D]=./libs/common/src/providers/essential/protobuf/essential.proto
 
 # Financial Proto
 PROTOS[FINANCIAL,1]=./apps/services/financial/src/app.proto
