@@ -1,8 +1,16 @@
+DB_PREFIX=$MONGO_PREFIX
+
 if [ -f .env ]; then
   export $(echo $(cat .env | sed 's/#.*//g'| xargs) | envsubst)
 fi
 
-MONGO_SOURCE="mongo-source"
+if [ -n "$DB_PREFIX" ]; then
+  MONGO_PREFIX="$DB_PREFIX"
+else
+  MONGO_PREFIX="$MONGO_PREFIX"
+fi
+
+MONGO_SOURCE="$MONGO_PREFIX-mongo-source"
 
 CONNECT_PORT=${CONNECT_PORT:-8082}
 CONNECT_HOST=${CONNECT_HOST:-localhost}

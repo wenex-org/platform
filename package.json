@@ -15,7 +15,7 @@
     "script:machine": "bash ./scripts/machine.sh",
     "script:start:e2e": "bash ./scripts/end-2-end-start.sh",
     "script:kafka-connect": "bash ./scripts/kafka-connect.sh",
-    "script:kafka-connect:e2e": "bash ./scripts/kafka-connect.sh e2e",
+    "script:kafka-connect:e2e": "MONGO_PREFIX=e2e bash ./scripts/kafka-connect.sh e2e",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
