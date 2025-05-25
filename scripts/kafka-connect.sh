@@ -1,4 +1,4 @@
-DB_PREFIX=$MONGO_PREFIX
+DB_PREFIX="$MONGO_PREFIX"
 
 if [ -f .env ]; then
   export $(echo $(cat .env | sed 's/#.*//g'| xargs) | envsubst)
