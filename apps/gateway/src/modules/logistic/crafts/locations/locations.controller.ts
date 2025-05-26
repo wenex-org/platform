@@ -13,9 +13,15 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
-import { LocationDataSerializer, LocationItemsSerializer, LocationSerializer } from '@app/common/serializers/logistic';
+import {
+  BoundaryAdministrativeDataSerializer,
+  BoundaryAdministrativeSerializer,
+  LocationDataSerializer,
+  LocationItemsSerializer,
+  LocationSerializer,
+} from '@app/common/serializers/logistic';
+import { CreateLocationDto, CreateLocationItemsDto, LatLngDto, UpdateLocationDto } from '@app/common/dto/logistic';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { CreateLocationDto, CreateLocationItemsDto, UpdateLocationDto } from '@app/common/dto/logistic';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
@@ -25,15 +31,15 @@ import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Location, LocationDto } from '@app/common/interfaces/logistic';
 import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { getSseMessage, mapToInstance } from '@app/common/core/utils';
 import { LogisticProvider } from '@app/common/providers/logistic';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { ValidationPipe } from '@app/common/core/pipes';
-import { getSseMessage } from '@app/common/core/utils';
 import { Metadata } from '@app/common/core/interfaces';
-import { Observable, switchMap } from 'rxjs';
+import { from, Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
@@ -49,6 +55,20 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
   constructor(readonly provider: LogisticProvider) {
     super(provider.locations, LocationSerializer);
   }
+
+  @Post('address-lookup')
+  @Cache(Collection.Locations, 'fill')
+  @SetScope(Scope.ResolveLogisticLocations)
+  @SetPolicy(Action.Resolve, Resource.LogisticLocations)
+  addressLookup(@Meta() meta: Metadata, @Body() data: LatLngDto): Observable<BoundaryAdministrativeDataSerializer> {
+    return from(this.provider.locations.addressLookup(data, { meta })).pipe(
+      mapToInstance(BoundaryAdministrativeSerializer, 'data'),
+    );
+  }
+
+  // ##############################
+  // Common Method's
+  // ##############################
 
   @Get('count')
   @Cache(Collection.Locations, 'fill')
