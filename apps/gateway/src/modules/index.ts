@@ -1,5 +1,4 @@
 export { AuthModule } from './auth';
-export { ContentModule } from './content';
 export { ContextModule } from './context';
 export { DomainModule } from './domain';
 export { EssentialModule } from './essential';
@@ -8,3 +7,5 @@ export { GeneralModule } from './general';
 export { IdentityModule } from './identity';
 export { SpecialModule } from './special';
 export { TouchModule } from './touch';
+export { ContentModule } from './content';
+export { LogisticModule } from './logistic';

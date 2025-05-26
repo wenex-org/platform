@@ -334,8 +334,8 @@ importers:
         specifier: ^3.6.4
         version: 3.6.4
       '@wenex/sdk':
-        specifier: ^1.0.52
-        version: 1.0.52
+        specifier: ^1.0.54
+        version: 1.0.54
       dpdm:
         specifier: ^3.14.0
         version: 3.14.0
@@ -3618,8 +3618,8 @@ packages:
   '@webassemblyjs/wast-printer@1.14.1':
     resolution: {integrity: sha512-kPSSXE6De1XOR820C90RIo2ogvZG+c3KiHzqUoO/F34Y2shGzesfqv7o57xrxovZJH/MetF5UjroJ/R/3isoiw==}
 
-  '@wenex/sdk@1.0.52':
-    resolution: {integrity: sha512-q+O7D0jbwlEToyUQtIyXdGrmGxD8LeSl5kkM9WQS4t6kglyNMvN8l+yuezgMjLoCEazrci04xs7EthXCpbsEkQ==}
+  '@wenex/sdk@1.0.54':
+    resolution: {integrity: sha512-oWZ+5Z+wb1t0TEri4a4zrw1pcHnkCmEuAxgpKZSOPEGzTBAlxHaTLXBbe820bZlXR1GfkMIkUsNMV+L/O1EMqQ==}
     engines: {node: '>=22.x.x <23', npm: ~10.9.2}
     os: ['!win32']
 
@@ -12648,7 +12648,7 @@ snapshots:
       '@webassemblyjs/ast': 1.14.1
       '@xtuc/long': 4.2.2
 
-  '@wenex/sdk@1.0.52':
+  '@wenex/sdk@1.0.54':
     dependencies:
       '@microsoft/fetch-event-source': 2.0.1
       axios: 1.7.9(debug@4.4.0)

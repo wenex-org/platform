@@ -3,12 +3,23 @@
 npm run build gateway
 
 # Build services
-services=("auth" "content" "context" "domain" "essential")
+services=("auth" "context" "domain" "essential")
 for service in "${services[@]}"; do
   npm run build "$service" &
 done
 
-services=("financial" "general" "identity" "special" "touch")
+# Wait for all background jobs to complete
+wait
+
+services=("financial" "general" "identity" "special")
+for service in "${services[@]}"; do
+  npm run build "$service" &
+done
+
+# Wait for all background jobs to complete
+wait
+
+services=("touch" "content" "logistic")
 for service in "${services[@]}"; do
   npm run build "$service" &
 done
