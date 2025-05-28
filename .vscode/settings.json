@@ -26,6 +26,7 @@
     "gitmodules",
     "isflash",
     "jaegertracing",
+    "jsonv2",
     "KAFKACONNECT",
     "kafkajs",
     "Kaniko",

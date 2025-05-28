@@ -96,17 +96,33 @@ describe('Logistic: LocationsController (e2e)', () => {
   });
 
   describe('Specific Tests', () => {
-    const [lat, lng] = [30.285875257153215, 57.06392780875093];
+    const [lat, lon] = [30.285875257153215, 57.06392780875093];
 
-    it('addressLookup', async () => {
-      const result = await service.addressLookup({ lat, lng });
-      expect(result).toStrictEqual({
+    const expected = {
+      place: {
+        name: expect.any(String),
+        lat: expect.any(Number),
+        lon: expect.any(Number),
+        type: expect.any(String),
+        category: expect.any(String),
+        bbox: [expect.any(Number), expect.any(Number), expect.any(Number), expect.any(Number)],
+      },
+      address: {
         city: expect.any(String),
         county: expect.any(String),
         district: expect.any(String),
-        province: expect.any(String),
-        suburb: expect.any(String),
-      });
+        country: expect.any(String),
+      },
+    };
+
+    it('addressLookup', async () => {
+      const result = await service.addressLookup({ lat, lon });
+      expect(result).toMatchObject({ ...expected.place, address: expected.address });
+    });
+
+    it('geocodeLookup', async () => {
+      const result = await service.geocodeLookup({ query: 'شهر کرمان' });
+      expect(result).toMatchObject([{ ...expected.place }]);
     });
   });
 });

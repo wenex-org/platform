@@ -14,13 +14,20 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import {
-  BoundaryAdministrativeDataSerializer,
-  BoundaryAdministrativeSerializer,
   LocationDataSerializer,
   LocationItemsSerializer,
   LocationSerializer,
+  NominatimPlaceDataSerializer,
+  NominatimPlaceItemsSerializer,
+  NominatimPlaceSerializer,
 } from '@app/common/serializers/logistic';
-import { CreateLocationDto, CreateLocationItemsDto, LatLngDto, UpdateLocationDto } from '@app/common/dto/logistic';
+import {
+  AddressLookupDto,
+  CreateLocationDto,
+  CreateLocationItemsDto,
+  GeocodeLookupDto,
+  UpdateLocationDto,
+} from '@app/common/dto/logistic';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
@@ -60,10 +67,16 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
   @Cache(Collection.Locations, 'fill')
   @SetScope(Scope.ResolveLogisticLocations)
   @SetPolicy(Action.Resolve, Resource.LogisticLocations)
-  addressLookup(@Meta() meta: Metadata, @Body() data: LatLngDto): Observable<BoundaryAdministrativeDataSerializer> {
-    return from(this.provider.locations.addressLookup(data, { meta })).pipe(
-      mapToInstance(BoundaryAdministrativeSerializer, 'data'),
-    );
+  addressLookup(@Meta() meta: Metadata, @Body() data: AddressLookupDto): Observable<NominatimPlaceDataSerializer> {
+    return from(this.provider.locations.addressLookup(data, { meta })).pipe(mapToInstance(NominatimPlaceSerializer, 'data'));
+  }
+
+  @Post('geocode-lookup')
+  @Cache(Collection.Locations, 'fill')
+  @SetScope(Scope.ResolveLogisticLocations)
+  @SetPolicy(Action.Resolve, Resource.LogisticLocations)
+  geocodeLookup(@Meta() meta: Metadata, @Body() data: GeocodeLookupDto): Observable<NominatimPlaceItemsSerializer> {
+    return from(this.provider.locations.geocodeLookup(data, { meta })).pipe(mapToInstance(NominatimPlaceSerializer, 'items'));
   }
 
   // ##############################

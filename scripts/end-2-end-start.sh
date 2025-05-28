@@ -3,7 +3,7 @@
 mkdir -p logs
 declare -A JOBS
 
-npm run db:clean:e2e && npm run db:seed:e2e
+npm run db:clean:e2e && npm run db:index:e2e && npm run db:seed:e2e
 
 # Start services and capture PIDs
 services=("auth" "context" "domain" "essential")
@@ -26,7 +26,7 @@ done
 echo "Waiting for services to start..."
 sleep 90
 
-services=("touch" "content" "gateway")
+services=("touch" "content" "logistic" "gateway")
 for service in "${services[@]}"; do
   npm run start:dev:e2e "$service" 2> "logs/$service.log" &
   JOBS[$service]=$!
