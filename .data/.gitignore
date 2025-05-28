@@ -1,10 +1,2 @@
 *
-
-!overpass
-
-!osm-data
-!osm-tiles
-
-!valhalla
-
 !.gitignore
