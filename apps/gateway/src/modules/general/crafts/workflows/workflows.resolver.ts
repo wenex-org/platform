@@ -8,7 +8,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Workflow, WorkflowDto } from '@app/common/interfaces/general';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
@@ -21,8 +21,10 @@ import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
+const COLL_PATH = COLLECTION('workflows', 'general');
+
 @Resolver(() => WorkflowSerializer)
-@RateLimit('workflows')
+@RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -33,7 +35,7 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   }
 
   @Query(() => TotalSerializer)
-  @Cache(Collection.Workflows, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadGeneralWorkflows)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.GeneralWorkflows)
@@ -42,7 +44,7 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   }
 
   @Mutation(() => WorkflowDataSerializer)
-  @Cache(Collection.Workflows, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralWorkflows)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.GeneralWorkflows)
@@ -51,7 +53,7 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   }
 
   @Mutation(() => WorkflowItemsSerializer)
-  @Cache(Collection.Workflows, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralWorkflows)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.GeneralWorkflows)
@@ -60,7 +62,7 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   }
 
   @Query(() => WorkflowItemsSerializer)
-  @Cache(Collection.Workflows, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadGeneralWorkflows)
   @SetPolicy(Action.Read, Resource.GeneralWorkflows)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -69,7 +71,7 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   }
 
   @Query(() => WorkflowDataSerializer)
-  @Cache(Collection.Workflows, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadGeneralWorkflows)
   @SetPolicy(Action.Read, Resource.GeneralWorkflows)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -84,7 +86,7 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   }
 
   @Mutation(() => WorkflowDataSerializer)
-  @Cache(Collection.Workflows, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralWorkflows)
   @SetPolicy(Action.Delete, Resource.GeneralWorkflows)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -99,7 +101,7 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   }
 
   @Mutation(() => WorkflowDataSerializer)
-  @Cache(Collection.Workflows, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralWorkflows)
   @SetPolicy(Action.Restore, Resource.GeneralWorkflows)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -114,7 +116,7 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   }
 
   @Mutation(() => WorkflowDataSerializer)
-  @Cache(Collection.Workflows, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralWorkflows)
   @SetPolicy(Action.Destroy, Resource.GeneralWorkflows)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -129,7 +131,7 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   }
 
   @Mutation(() => TotalSerializer)
-  @Cache(Collection.Workflows, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralWorkflows)
   @SetPolicy(Action.Update, Resource.GeneralWorkflows)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -142,7 +144,7 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   }
 
   @Mutation(() => WorkflowDataSerializer)
-  @Cache(Collection.Workflows, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralWorkflows)
   @SetPolicy(Action.Update, Resource.GeneralWorkflows)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

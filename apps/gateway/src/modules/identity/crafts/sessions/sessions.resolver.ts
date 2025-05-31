@@ -8,7 +8,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Session, SessionDto } from '@app/common/interfaces/identity';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
@@ -21,8 +21,10 @@ import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
+const COLL_PATH = COLLECTION('sessions', 'identity');
+
 @Resolver(() => SessionSerializer)
-@RateLimit('sessions')
+@RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -33,7 +35,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Query(() => TotalSerializer)
-  @Cache(Collection.Sessions, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadIdentitySessions)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.IdentitySessions)
@@ -42,7 +44,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Mutation(() => SessionDataSerializer)
-  @Cache(Collection.Sessions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentitySessions)
@@ -51,7 +53,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Mutation(() => SessionItemsSerializer)
-  @Cache(Collection.Sessions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentitySessions)
@@ -60,7 +62,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Query(() => SessionItemsSerializer)
-  @Cache(Collection.Sessions, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadIdentitySessions)
   @SetPolicy(Action.Read, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -69,7 +71,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Query(() => SessionDataSerializer)
-  @Cache(Collection.Sessions, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadIdentitySessions)
   @SetPolicy(Action.Read, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -84,7 +86,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Mutation(() => SessionDataSerializer)
-  @Cache(Collection.Sessions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @SetPolicy(Action.Delete, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -99,7 +101,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Mutation(() => SessionDataSerializer)
-  @Cache(Collection.Sessions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @SetPolicy(Action.Restore, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -114,7 +116,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Mutation(() => SessionDataSerializer)
-  @Cache(Collection.Sessions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageIdentitySessions)
   @SetPolicy(Action.Destroy, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -129,7 +131,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Mutation(() => TotalSerializer)
-  @Cache(Collection.Sessions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageIdentitySessions)
   @SetPolicy(Action.Update, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -142,7 +144,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Mutation(() => SessionDataSerializer)
-  @Cache(Collection.Sessions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @SetPolicy(Action.Update, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

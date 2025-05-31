@@ -23,7 +23,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { ContentProvider } from '@app/common/providers/content';
 import { AllExceptionsFilter } from '@app/common/core/filters';
@@ -37,11 +37,13 @@ import { Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('notes', 'content');
+
 @ApiBearerAuth()
-@RateLimit('notes')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Notes)
-@Controller(Collection.Notes)
+@ApiTags('content', 'notes')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -51,7 +53,7 @@ export class NotesController extends ControllerClass<Note, NoteDto> implements I
   }
 
   @Get('count')
-  @Cache(Collection.Notes, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadContentNotes)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ContentNotes)
@@ -61,7 +63,7 @@ export class NotesController extends ControllerClass<Note, NoteDto> implements I
   }
 
   @Post()
-  @Cache(Collection.Notes, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentNotes)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: NoteDataSerializer })
@@ -71,7 +73,7 @@ export class NotesController extends ControllerClass<Note, NoteDto> implements I
   }
 
   @Post('bulk')
-  @Cache(Collection.Notes, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentNotes)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: NoteItemsSerializer })
@@ -81,7 +83,7 @@ export class NotesController extends ControllerClass<Note, NoteDto> implements I
   }
 
   @Get()
-  @Cache(Collection.Notes, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadContentNotes)
   @SetPolicy(Action.Read, Resource.ContentNotes)
   @ApiResponse({ type: NoteItemsSerializer })
@@ -114,7 +116,7 @@ export class NotesController extends ControllerClass<Note, NoteDto> implements I
   }
 
   @Get(':id')
-  @Cache(Collection.Notes, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadContentNotes)
   @ApiResponse({ type: NoteDataSerializer })
   @SetPolicy(Action.Read, Resource.ContentNotes)
@@ -126,7 +128,7 @@ export class NotesController extends ControllerClass<Note, NoteDto> implements I
   }
 
   @Delete(':id')
-  @Cache(Collection.Notes, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentNotes)
   @ApiResponse({ type: NoteDataSerializer })
   @SetPolicy(Action.Delete, Resource.ContentNotes)
@@ -138,7 +140,7 @@ export class NotesController extends ControllerClass<Note, NoteDto> implements I
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Notes, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentNotes)
   @ApiResponse({ type: NoteDataSerializer })
   @SetPolicy(Action.Restore, Resource.ContentNotes)
@@ -150,7 +152,7 @@ export class NotesController extends ControllerClass<Note, NoteDto> implements I
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Notes, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentNotes)
   @ApiResponse({ type: NoteDataSerializer })
   @SetPolicy(Action.Destroy, Resource.ContentNotes)
@@ -162,7 +164,7 @@ export class NotesController extends ControllerClass<Note, NoteDto> implements I
   }
 
   @Patch('bulk')
-  @Cache(Collection.Notes, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentNotes)
   @SetPolicy(Action.Update, Resource.ContentNotes)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -176,7 +178,7 @@ export class NotesController extends ControllerClass<Note, NoteDto> implements I
   }
 
   @Patch(':id')
-  @Cache(Collection.Notes, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentNotes)
   @ApiResponse({ type: NoteDataSerializer })
   @SetPolicy(Action.Update, Resource.ContentNotes)

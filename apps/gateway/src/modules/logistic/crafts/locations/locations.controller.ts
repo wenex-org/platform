@@ -37,7 +37,7 @@ import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Location, LocationDto } from '@app/common/interfaces/logistic';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { getSseMessage, mapToInstance } from '@app/common/core/utils';
 import { LogisticProvider } from '@app/common/providers/logistic';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
@@ -50,12 +50,14 @@ import { from, Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('locations', 'logistic');
+
 @ApiBearerAuth()
-@RateLimit('locations')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Locations)
-@Controller(Collection.Locations)
 @UseFilters(AllExceptionsFilter)
+@ApiTags('logistic', 'locations')
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class LocationsController extends ControllerClass<Location, LocationDto> implements IController<Location, LocationDto> {
@@ -64,7 +66,7 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
   }
 
   @Post('address-lookup')
-  @Cache(Collection.Locations, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ResolveLogisticLocations)
   @SetPolicy(Action.Resolve, Resource.LogisticLocations)
   addressLookup(@Meta() meta: Metadata, @Body() data: AddressLookupDto): Observable<NominatimPlaceDataSerializer> {
@@ -72,7 +74,7 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
   }
 
   @Post('geocode-lookup')
-  @Cache(Collection.Locations, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ResolveLogisticLocations)
   @SetPolicy(Action.Resolve, Resource.LogisticLocations)
   geocodeLookup(@Meta() meta: Metadata, @Body() data: GeocodeLookupDto): Observable<NominatimPlaceItemsSerializer> {
@@ -84,7 +86,7 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
   // ##############################
 
   @Get('count')
-  @Cache(Collection.Locations, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadLogisticLocations)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.LogisticLocations)
@@ -94,7 +96,7 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
   }
 
   @Post()
-  @Cache(Collection.Locations, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticLocations)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: LocationDataSerializer })
@@ -104,7 +106,7 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
   }
 
   @Post('bulk')
-  @Cache(Collection.Locations, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticLocations)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: LocationItemsSerializer })
@@ -114,7 +116,7 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
   }
 
   @Get()
-  @Cache(Collection.Locations, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadLogisticLocations)
   @SetPolicy(Action.Read, Resource.LogisticLocations)
   @ApiResponse({ type: LocationItemsSerializer })
@@ -147,7 +149,7 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
   }
 
   @Get(':id')
-  @Cache(Collection.Locations, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadLogisticLocations)
   @ApiResponse({ type: LocationDataSerializer })
   @SetPolicy(Action.Read, Resource.LogisticLocations)
@@ -159,7 +161,7 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
   }
 
   @Delete(':id')
-  @Cache(Collection.Locations, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticLocations)
   @ApiResponse({ type: LocationDataSerializer })
   @SetPolicy(Action.Delete, Resource.LogisticLocations)
@@ -171,7 +173,7 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Locations, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticLocations)
   @ApiResponse({ type: LocationDataSerializer })
   @SetPolicy(Action.Restore, Resource.LogisticLocations)
@@ -183,7 +185,7 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Locations, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticLocations)
   @ApiResponse({ type: LocationDataSerializer })
   @SetPolicy(Action.Destroy, Resource.LogisticLocations)
@@ -195,7 +197,7 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
   }
 
   @Patch('bulk')
-  @Cache(Collection.Locations, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticLocations)
   @SetPolicy(Action.Update, Resource.LogisticLocations)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -209,7 +211,7 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
   }
 
   @Patch(':id')
-  @Cache(Collection.Locations, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticLocations)
   @ApiResponse({ type: LocationDataSerializer })
   @SetPolicy(Action.Update, Resource.LogisticLocations)

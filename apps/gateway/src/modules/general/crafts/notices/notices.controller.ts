@@ -23,7 +23,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Notice, NoticeDto } from '@app/common/interfaces/general';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { GeneralProvider } from '@app/common/providers/general';
@@ -37,11 +37,13 @@ import { Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('notices', 'general');
+
 @ApiBearerAuth()
-@RateLimit('notices')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Notices)
-@Controller(Collection.Notices)
+@ApiTags('general', 'notices')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -51,7 +53,7 @@ export class NoticesController extends ControllerClass<Notice, NoticeDto> implem
   }
 
   @Get('count')
-  @Cache(Collection.Notices, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadGeneralNotices)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.GeneralNotices)
@@ -61,7 +63,7 @@ export class NoticesController extends ControllerClass<Notice, NoticeDto> implem
   }
 
   @Post()
-  @Cache(Collection.Notices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralNotices)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: NoticeDataSerializer })
@@ -71,7 +73,7 @@ export class NoticesController extends ControllerClass<Notice, NoticeDto> implem
   }
 
   @Post('bulk')
-  @Cache(Collection.Notices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralNotices)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: NoticeItemsSerializer })
@@ -81,7 +83,7 @@ export class NoticesController extends ControllerClass<Notice, NoticeDto> implem
   }
 
   @Get()
-  @Cache(Collection.Notices, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadGeneralNotices)
   @SetPolicy(Action.Read, Resource.GeneralNotices)
   @ApiResponse({ type: NoticeItemsSerializer })
@@ -114,7 +116,7 @@ export class NoticesController extends ControllerClass<Notice, NoticeDto> implem
   }
 
   @Get(':id')
-  @Cache(Collection.Notices, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadGeneralNotices)
   @ApiResponse({ type: NoticeDataSerializer })
   @SetPolicy(Action.Read, Resource.GeneralNotices)
@@ -126,7 +128,7 @@ export class NoticesController extends ControllerClass<Notice, NoticeDto> implem
   }
 
   @Delete(':id')
-  @Cache(Collection.Notices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralNotices)
   @ApiResponse({ type: NoticeDataSerializer })
   @SetPolicy(Action.Delete, Resource.GeneralNotices)
@@ -138,7 +140,7 @@ export class NoticesController extends ControllerClass<Notice, NoticeDto> implem
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Notices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralNotices)
   @ApiResponse({ type: NoticeDataSerializer })
   @SetPolicy(Action.Restore, Resource.GeneralNotices)
@@ -150,7 +152,7 @@ export class NoticesController extends ControllerClass<Notice, NoticeDto> implem
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Notices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralNotices)
   @ApiResponse({ type: NoticeDataSerializer })
   @SetPolicy(Action.Destroy, Resource.GeneralNotices)
@@ -162,7 +164,7 @@ export class NoticesController extends ControllerClass<Notice, NoticeDto> implem
   }
 
   @Patch('bulk')
-  @Cache(Collection.Notices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralNotices)
   @SetPolicy(Action.Update, Resource.GeneralNotices)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -176,7 +178,7 @@ export class NoticesController extends ControllerClass<Notice, NoticeDto> implem
   }
 
   @Patch(':id')
-  @Cache(Collection.Notices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralNotices)
   @ApiResponse({ type: NoticeDataSerializer })
   @SetPolicy(Action.Update, Resource.GeneralNotices)

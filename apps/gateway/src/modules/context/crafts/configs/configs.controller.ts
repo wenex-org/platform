@@ -23,7 +23,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Config, ConfigDto } from '@app/common/interfaces/context';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { ContextProvider } from '@app/common/providers/context';
@@ -37,11 +37,13 @@ import { Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('configs', 'context');
+
 @ApiBearerAuth()
-@RateLimit('configs')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Configs)
-@Controller(Collection.Configs)
+@ApiTags('context', 'configs')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -51,7 +53,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Get('count')
-  @Cache(Collection.Configs, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadContextConfigs)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ContextConfigs)
@@ -61,7 +63,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Post()
-  @Cache(Collection.Configs, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: ConfigDataSerializer })
@@ -71,7 +73,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Post('bulk')
-  @Cache(Collection.Configs, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: ConfigItemsSerializer })
@@ -81,7 +83,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Get()
-  @Cache(Collection.Configs, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadContextConfigs)
   @SetPolicy(Action.Read, Resource.ContextConfigs)
   @ApiResponse({ type: ConfigItemsSerializer })
@@ -114,7 +116,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Get(':id')
-  @Cache(Collection.Configs, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadContextConfigs)
   @ApiResponse({ type: ConfigDataSerializer })
   @SetPolicy(Action.Read, Resource.ContextConfigs)
@@ -126,7 +128,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Delete(':id')
-  @Cache(Collection.Configs, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @ApiResponse({ type: ConfigDataSerializer })
   @SetPolicy(Action.Delete, Resource.ContextConfigs)
@@ -138,7 +140,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Configs, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @ApiResponse({ type: ConfigDataSerializer })
   @SetPolicy(Action.Restore, Resource.ContextConfigs)
@@ -150,7 +152,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Configs, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContextConfigs)
   @ApiResponse({ type: ConfigDataSerializer })
   @SetPolicy(Action.Destroy, Resource.ContextConfigs)
@@ -162,7 +164,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Patch('bulk')
-  @Cache(Collection.Configs, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContextConfigs)
   @SetPolicy(Action.Update, Resource.ContextConfigs)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -176,7 +178,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Patch(':id')
-  @Cache(Collection.Configs, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @ApiResponse({ type: ConfigDataSerializer })
   @SetPolicy(Action.Update, Resource.ContextConfigs)

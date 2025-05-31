@@ -8,7 +8,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
 import { ContentProvider } from '@app/common/providers/content';
@@ -21,8 +21,10 @@ import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
+const COLL_PATH = COLLECTION('posts', 'content');
+
 @Resolver(() => PostSerializer)
-@RateLimit('posts')
+@RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -33,7 +35,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   }
 
   @Query(() => TotalSerializer)
-  @Cache(Collection.Posts, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadContentPosts)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ContentPosts)
@@ -42,7 +44,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   }
 
   @Mutation(() => PostDataSerializer)
-  @Cache(Collection.Posts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentPosts)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContentPosts)
@@ -51,7 +53,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   }
 
   @Mutation(() => PostItemsSerializer)
-  @Cache(Collection.Posts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentPosts)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContentPosts)
@@ -60,7 +62,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   }
 
   @Query(() => PostItemsSerializer)
-  @Cache(Collection.Posts, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadContentPosts)
   @SetPolicy(Action.Read, Resource.ContentPosts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -69,7 +71,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   }
 
   @Query(() => PostDataSerializer)
-  @Cache(Collection.Posts, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadContentPosts)
   @SetPolicy(Action.Read, Resource.ContentPosts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -84,7 +86,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   }
 
   @Mutation(() => PostDataSerializer)
-  @Cache(Collection.Posts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentPosts)
   @SetPolicy(Action.Delete, Resource.ContentPosts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -99,7 +101,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   }
 
   @Mutation(() => PostDataSerializer)
-  @Cache(Collection.Posts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentPosts)
   @SetPolicy(Action.Restore, Resource.ContentPosts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -114,7 +116,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   }
 
   @Mutation(() => PostDataSerializer)
-  @Cache(Collection.Posts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentPosts)
   @SetPolicy(Action.Destroy, Resource.ContentPosts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -129,7 +131,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   }
 
   @Mutation(() => TotalSerializer)
-  @Cache(Collection.Posts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentPosts)
   @SetPolicy(Action.Update, Resource.ContentPosts)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -142,7 +144,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   }
 
   @Mutation(() => PostDataSerializer)
-  @Cache(Collection.Posts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentPosts)
   @SetPolicy(Action.Update, Resource.ContentPosts)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

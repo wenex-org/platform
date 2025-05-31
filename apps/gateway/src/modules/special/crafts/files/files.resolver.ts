@@ -8,7 +8,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
 import { SpecialProvider } from '@app/common/providers/special';
@@ -21,8 +21,10 @@ import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
+const COLL_PATH = COLLECTION('files', 'special');
+
 @Resolver(() => FileSerializer)
-@RateLimit('files')
+@RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -33,7 +35,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   }
 
   @Query(() => TotalSerializer)
-  @Cache(Collection.Files, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadSpecialFiles)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.SpecialFiles)
@@ -42,7 +44,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   }
 
   @Mutation(() => FileDataSerializer)
-  @Cache(Collection.Files, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialFiles)
@@ -51,7 +53,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   }
 
   @Mutation(() => FileItemsSerializer)
-  @Cache(Collection.Files, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialFiles)
@@ -60,7 +62,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   }
 
   @Query(() => FileItemsSerializer)
-  @Cache(Collection.Files, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadSpecialFiles)
   @SetPolicy(Action.Read, Resource.SpecialFiles)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -69,7 +71,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   }
 
   @Query(() => FileDataSerializer)
-  @Cache(Collection.Files, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadSpecialFiles)
   @SetPolicy(Action.Read, Resource.SpecialFiles)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -84,7 +86,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   }
 
   @Mutation(() => FileDataSerializer)
-  @Cache(Collection.Files, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @SetPolicy(Action.Delete, Resource.SpecialFiles)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -99,7 +101,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   }
 
   @Mutation(() => FileDataSerializer)
-  @Cache(Collection.Files, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @SetPolicy(Action.Restore, Resource.SpecialFiles)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -114,7 +116,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   }
 
   @Mutation(() => FileDataSerializer)
-  @Cache(Collection.Files, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageSpecialFiles)
   @SetPolicy(Action.Destroy, Resource.SpecialFiles)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -129,7 +131,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   }
 
   @Mutation(() => TotalSerializer)
-  @Cache(Collection.Files, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageSpecialFiles)
   @SetPolicy(Action.Update, Resource.SpecialFiles)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -142,7 +144,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   }
 
   @Mutation(() => FileDataSerializer)
-  @Cache(Collection.Files, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @SetPolicy(Action.Update, Resource.SpecialFiles)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

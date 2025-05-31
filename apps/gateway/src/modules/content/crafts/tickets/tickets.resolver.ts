@@ -8,7 +8,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Ticket, TicketDto } from '@app/common/interfaces/content';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
@@ -21,8 +21,10 @@ import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
+const COLL_PATH = COLLECTION('tickets', 'content');
+
 @Resolver(() => TicketSerializer)
-@RateLimit('tickets')
+@RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -33,7 +35,7 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   }
 
   @Query(() => TotalSerializer)
-  @Cache(Collection.Tickets, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadContentTickets)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ContentTickets)
@@ -42,7 +44,7 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   }
 
   @Mutation(() => TicketDataSerializer)
-  @Cache(Collection.Tickets, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentTickets)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContentTickets)
@@ -51,7 +53,7 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   }
 
   @Mutation(() => TicketItemsSerializer)
-  @Cache(Collection.Tickets, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentTickets)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContentTickets)
@@ -60,7 +62,7 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   }
 
   @Query(() => TicketItemsSerializer)
-  @Cache(Collection.Tickets, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadContentTickets)
   @SetPolicy(Action.Read, Resource.ContentTickets)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -69,7 +71,7 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   }
 
   @Query(() => TicketDataSerializer)
-  @Cache(Collection.Tickets, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadContentTickets)
   @SetPolicy(Action.Read, Resource.ContentTickets)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -84,7 +86,7 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   }
 
   @Mutation(() => TicketDataSerializer)
-  @Cache(Collection.Tickets, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentTickets)
   @SetPolicy(Action.Delete, Resource.ContentTickets)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -99,7 +101,7 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   }
 
   @Mutation(() => TicketDataSerializer)
-  @Cache(Collection.Tickets, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentTickets)
   @SetPolicy(Action.Restore, Resource.ContentTickets)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -114,7 +116,7 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   }
 
   @Mutation(() => TicketDataSerializer)
-  @Cache(Collection.Tickets, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentTickets)
   @SetPolicy(Action.Destroy, Resource.ContentTickets)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -129,7 +131,7 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   }
 
   @Mutation(() => TotalSerializer)
-  @Cache(Collection.Tickets, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentTickets)
   @SetPolicy(Action.Update, Resource.ContentTickets)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -142,7 +144,7 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   }
 
   @Mutation(() => TicketDataSerializer)
-  @Cache(Collection.Tickets, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentTickets)
   @SetPolicy(Action.Update, Resource.ContentTickets)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

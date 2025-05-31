@@ -23,7 +23,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Travel, TravelDto } from '@app/common/interfaces/logistic';
 import { LogisticProvider } from '@app/common/providers/logistic';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
@@ -37,11 +37,13 @@ import { Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('travels', 'logistic');
+
 @ApiBearerAuth()
-@RateLimit('travels')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Travels)
-@Controller(Collection.Travels)
+@ApiTags('logistic', 'travels')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -51,7 +53,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   }
 
   @Get('count')
-  @Cache(Collection.Travels, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadLogisticTravels)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.LogisticTravels)
@@ -61,7 +63,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   }
 
   @Post()
-  @Cache(Collection.Travels, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: TravelDataSerializer })
@@ -71,7 +73,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   }
 
   @Post('bulk')
-  @Cache(Collection.Travels, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: TravelItemsSerializer })
@@ -81,7 +83,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   }
 
   @Get()
-  @Cache(Collection.Travels, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadLogisticTravels)
   @SetPolicy(Action.Read, Resource.LogisticTravels)
   @ApiResponse({ type: TravelItemsSerializer })
@@ -114,7 +116,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   }
 
   @Get(':id')
-  @Cache(Collection.Travels, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadLogisticTravels)
   @ApiResponse({ type: TravelDataSerializer })
   @SetPolicy(Action.Read, Resource.LogisticTravels)
@@ -126,7 +128,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   }
 
   @Delete(':id')
-  @Cache(Collection.Travels, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @ApiResponse({ type: TravelDataSerializer })
   @SetPolicy(Action.Delete, Resource.LogisticTravels)
@@ -138,7 +140,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Travels, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @ApiResponse({ type: TravelDataSerializer })
   @SetPolicy(Action.Restore, Resource.LogisticTravels)
@@ -150,7 +152,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Travels, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticTravels)
   @ApiResponse({ type: TravelDataSerializer })
   @SetPolicy(Action.Destroy, Resource.LogisticTravels)
@@ -162,7 +164,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   }
 
   @Patch('bulk')
-  @Cache(Collection.Travels, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticTravels)
   @SetPolicy(Action.Update, Resource.LogisticTravels)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -176,7 +178,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   }
 
   @Patch(':id')
-  @Cache(Collection.Travels, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @ApiResponse({ type: TravelDataSerializer })
   @SetPolicy(Action.Update, Resource.LogisticTravels)

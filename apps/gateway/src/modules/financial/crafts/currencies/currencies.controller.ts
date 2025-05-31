@@ -24,7 +24,7 @@ import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Currency, CurrencyDto } from '@app/common/interfaces/financial';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { FinancialProvider } from '@app/common/providers/financial';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { AllExceptionsFilter } from '@app/common/core/filters';
@@ -37,12 +37,14 @@ import { Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('currencies', 'financial');
+
 @ApiBearerAuth()
-@RateLimit('currencies')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Currencies)
 @UseFilters(AllExceptionsFilter)
-@Controller(Collection.Currencies)
+@ApiTags('financial', 'currencies')
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class CurrenciesController extends ControllerClass<Currency, CurrencyDto> implements IController<Currency, CurrencyDto> {
@@ -51,7 +53,7 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
   }
 
   @Get('count')
-  @Cache(Collection.Currencies, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadFinancialCurrencies)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.FinancialCurrencies)
@@ -61,7 +63,7 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
   }
 
   @Post()
-  @Cache(Collection.Currencies, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialCurrencies)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: CurrencyDataSerializer })
@@ -71,7 +73,7 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
   }
 
   @Post('bulk')
-  @Cache(Collection.Currencies, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialCurrencies)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: CurrencyItemsSerializer })
@@ -81,7 +83,7 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
   }
 
   @Get()
-  @Cache(Collection.Currencies, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadFinancialCurrencies)
   @SetPolicy(Action.Read, Resource.FinancialCurrencies)
   @ApiResponse({ type: CurrencyItemsSerializer })
@@ -114,7 +116,7 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
   }
 
   @Get(':id')
-  @Cache(Collection.Currencies, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadFinancialCurrencies)
   @ApiResponse({ type: CurrencyDataSerializer })
   @SetPolicy(Action.Read, Resource.FinancialCurrencies)
@@ -126,7 +128,7 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
   }
 
   @Delete(':id')
-  @Cache(Collection.Currencies, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialCurrencies)
   @ApiResponse({ type: CurrencyDataSerializer })
   @SetPolicy(Action.Delete, Resource.FinancialCurrencies)
@@ -138,7 +140,7 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Currencies, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialCurrencies)
   @ApiResponse({ type: CurrencyDataSerializer })
   @SetPolicy(Action.Restore, Resource.FinancialCurrencies)
@@ -150,7 +152,7 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Currencies, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialCurrencies)
   @ApiResponse({ type: CurrencyDataSerializer })
   @SetPolicy(Action.Destroy, Resource.FinancialCurrencies)
@@ -162,7 +164,7 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
   }
 
   @Patch('bulk')
-  @Cache(Collection.Currencies, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialCurrencies)
   @SetPolicy(Action.Update, Resource.FinancialCurrencies)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -176,7 +178,7 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
   }
 
   @Patch(':id')
-  @Cache(Collection.Currencies, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialCurrencies)
   @ApiResponse({ type: CurrencyDataSerializer })
   @SetPolicy(Action.Update, Resource.FinancialCurrencies)

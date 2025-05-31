@@ -29,7 +29,7 @@ import { Transaction, TransactionDto } from '@app/common/interfaces/financial';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { getSseMessage, mapToInstance } from '@app/common/core/utils';
 import { FinancialProvider } from '@app/common/providers/financial';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
@@ -42,12 +42,14 @@ import { from, Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('transactions', 'financial');
+
 @ApiBearerAuth()
-@RateLimit('transactions')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
-@ApiTags(Collection.Transactions)
-@Controller(Collection.Transactions)
+@ApiTags('financial', 'transactions')
 @Nested<Transaction>('payees', 'payers')
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -60,7 +62,7 @@ export class TransactionsController
   }
 
   @Post('init')
-  @Cache(Collection.Transactions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.InitFinancialTransaction)
   @ApiResponse({ type: TransactionDataSerializer })
@@ -70,7 +72,7 @@ export class TransactionsController
   }
 
   @Get(':id/abort')
-  @Cache(Collection.Transactions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.AbortFinancialTransaction)
   @ApiResponse({ type: TransactionDataSerializer })
   @SetPolicy(Action.Abort, Resource.FinancialTransactions)
@@ -82,7 +84,7 @@ export class TransactionsController
   }
 
   @Get(':id/verify')
-  @Cache(Collection.Transactions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.VerifyFinancialTransaction)
   @ApiResponse({ type: TransactionDataSerializer })
   @SetPolicy(Action.Verify, Resource.FinancialTransactions)
@@ -98,7 +100,7 @@ export class TransactionsController
   // ##############################
 
   @Get('count')
-  @Cache(Collection.Transactions, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadFinancialTransactions)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.FinancialTransactions)
@@ -108,7 +110,7 @@ export class TransactionsController
   }
 
   @Post()
-  @Cache(Collection.Transactions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: TransactionDataSerializer })
@@ -118,7 +120,7 @@ export class TransactionsController
   }
 
   @Post('bulk')
-  @Cache(Collection.Transactions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: TransactionItemsSerializer })
@@ -128,7 +130,7 @@ export class TransactionsController
   }
 
   @Get()
-  @Cache(Collection.Transactions, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadFinancialTransactions)
   @SetPolicy(Action.Read, Resource.FinancialTransactions)
   @ApiResponse({ type: TransactionItemsSerializer })
@@ -161,7 +163,7 @@ export class TransactionsController
   }
 
   @Get(':id')
-  @Cache(Collection.Transactions, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadFinancialTransactions)
   @ApiResponse({ type: TransactionDataSerializer })
   @SetPolicy(Action.Read, Resource.FinancialTransactions)
@@ -173,7 +175,7 @@ export class TransactionsController
   }
 
   @Delete(':id')
-  @Cache(Collection.Transactions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @ApiResponse({ type: TransactionDataSerializer })
   @SetPolicy(Action.Delete, Resource.FinancialTransactions)
@@ -185,7 +187,7 @@ export class TransactionsController
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Transactions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @ApiResponse({ type: TransactionDataSerializer })
   @SetPolicy(Action.Restore, Resource.FinancialTransactions)
@@ -197,7 +199,7 @@ export class TransactionsController
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Transactions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialTransactions)
   @ApiResponse({ type: TransactionDataSerializer })
   @SetPolicy(Action.Destroy, Resource.FinancialTransactions)
@@ -209,7 +211,7 @@ export class TransactionsController
   }
 
   @Patch('bulk')
-  @Cache(Collection.Transactions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialTransactions)
   @SetPolicy(Action.Update, Resource.FinancialTransactions)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -223,7 +225,7 @@ export class TransactionsController
   }
 
   @Patch(':id')
-  @Cache(Collection.Transactions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @ApiResponse({ type: TransactionDataSerializer })
   @SetPolicy(Action.Update, Resource.FinancialTransactions)

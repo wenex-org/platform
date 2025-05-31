@@ -24,7 +24,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { getSseMessage, mapToInstance } from '@app/common/core/utils';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { SpecialProvider } from '@app/common/providers/special';
@@ -37,11 +37,13 @@ import { from, Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('stats', 'special');
+
 @ApiBearerAuth()
-@RateLimit('stats')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Stats)
-@Controller(Collection.Stats)
+@ApiTags('special', 'stats')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -51,7 +53,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Post('collect')
-  @Cache(Collection.Stats, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.CollectSpecialStats)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: StatItemsSerializer })
@@ -61,7 +63,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Post('stackup')
-  @Cache(Collection.Stats, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.CollectSpecialStats)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: ResultSerializer })
@@ -75,7 +77,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   // ##############################
 
   @Get('count')
-  @Cache(Collection.Stats, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadSpecialStats)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.SpecialStats)
@@ -85,7 +87,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Post()
-  @Cache(Collection.Stats, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: StatDataSerializer })
@@ -95,7 +97,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Post('bulk')
-  @Cache(Collection.Stats, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: StatItemsSerializer })
@@ -105,7 +107,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Get()
-  @Cache(Collection.Stats, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadSpecialStats)
   @SetPolicy(Action.Read, Resource.SpecialStats)
   @ApiResponse({ type: StatItemsSerializer })
@@ -138,7 +140,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Get(':id')
-  @Cache(Collection.Stats, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadSpecialStats)
   @ApiResponse({ type: StatDataSerializer })
   @SetPolicy(Action.Read, Resource.SpecialStats)
@@ -150,7 +152,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Delete(':id')
-  @Cache(Collection.Stats, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @ApiResponse({ type: StatDataSerializer })
   @SetPolicy(Action.Delete, Resource.SpecialStats)
@@ -162,7 +164,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Stats, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @ApiResponse({ type: StatDataSerializer })
   @SetPolicy(Action.Restore, Resource.SpecialStats)
@@ -174,7 +176,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Stats, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageSpecialStats)
   @ApiResponse({ type: StatDataSerializer })
   @SetPolicy(Action.Destroy, Resource.SpecialStats)
@@ -186,7 +188,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Patch('bulk')
-  @Cache(Collection.Stats, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageSpecialStats)
   @SetPolicy(Action.Update, Resource.SpecialStats)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -200,7 +202,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Patch(':id')
-  @Cache(Collection.Stats, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @ApiResponse({ type: StatDataSerializer })
   @SetPolicy(Action.Update, Resource.SpecialStats)

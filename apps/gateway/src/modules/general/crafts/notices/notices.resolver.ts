@@ -8,7 +8,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Notice, NoticeDto } from '@app/common/interfaces/general';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
@@ -21,8 +21,10 @@ import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
+const COLL_PATH = COLLECTION('notices', 'general');
+
 @Resolver(() => NoticeSerializer)
-@RateLimit('notices')
+@RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -33,7 +35,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   }
 
   @Query(() => TotalSerializer)
-  @Cache(Collection.Notices, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadGeneralNotices)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.GeneralNotices)
@@ -42,7 +44,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   }
 
   @Mutation(() => NoticeDataSerializer)
-  @Cache(Collection.Notices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralNotices)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.GeneralNotices)
@@ -51,7 +53,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   }
 
   @Mutation(() => NoticeItemsSerializer)
-  @Cache(Collection.Notices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralNotices)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.GeneralNotices)
@@ -60,7 +62,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   }
 
   @Query(() => NoticeItemsSerializer)
-  @Cache(Collection.Notices, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadGeneralNotices)
   @SetPolicy(Action.Read, Resource.GeneralNotices)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -69,7 +71,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   }
 
   @Query(() => NoticeDataSerializer)
-  @Cache(Collection.Notices, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadGeneralNotices)
   @SetPolicy(Action.Read, Resource.GeneralNotices)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -84,7 +86,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   }
 
   @Mutation(() => NoticeDataSerializer)
-  @Cache(Collection.Notices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralNotices)
   @SetPolicy(Action.Delete, Resource.GeneralNotices)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -99,7 +101,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   }
 
   @Mutation(() => NoticeDataSerializer)
-  @Cache(Collection.Notices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralNotices)
   @SetPolicy(Action.Restore, Resource.GeneralNotices)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -114,7 +116,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   }
 
   @Mutation(() => NoticeDataSerializer)
-  @Cache(Collection.Notices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralNotices)
   @SetPolicy(Action.Destroy, Resource.GeneralNotices)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -129,7 +131,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   }
 
   @Mutation(() => TotalSerializer)
-  @Cache(Collection.Notices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralNotices)
   @SetPolicy(Action.Update, Resource.GeneralNotices)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -142,7 +144,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   }
 
   @Mutation(() => NoticeDataSerializer)
-  @Cache(Collection.Notices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralNotices)
   @SetPolicy(Action.Update, Resource.GeneralNotices)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

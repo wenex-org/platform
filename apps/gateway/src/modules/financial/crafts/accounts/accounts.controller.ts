@@ -23,7 +23,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Account, AccountDto } from '@app/common/interfaces/financial';
 import { FinancialProvider } from '@app/common/providers/financial';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
@@ -37,12 +37,14 @@ import { Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('accounts', 'financial');
+
 @ApiBearerAuth()
-@RateLimit('accounts')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Accounts)
-@Controller(Collection.Accounts)
 @UseFilters(AllExceptionsFilter)
+@ApiTags('financial', 'accounts')
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class AccountsController extends ControllerClass<Account, AccountDto> implements IController<Account, AccountDto> {
@@ -51,7 +53,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Get('count')
-  @Cache(Collection.Accounts, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadFinancialAccounts)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.FinancialAccounts)
@@ -61,7 +63,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Post()
-  @Cache(Collection.Accounts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialAccounts)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: AccountDataSerializer })
@@ -71,7 +73,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Post('bulk')
-  @Cache(Collection.Accounts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialAccounts)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: AccountItemsSerializer })
@@ -81,7 +83,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Get()
-  @Cache(Collection.Accounts, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadFinancialAccounts)
   @SetPolicy(Action.Read, Resource.FinancialAccounts)
   @ApiResponse({ type: AccountItemsSerializer })
@@ -114,7 +116,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Get(':id')
-  @Cache(Collection.Accounts, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadFinancialAccounts)
   @ApiResponse({ type: AccountDataSerializer })
   @SetPolicy(Action.Read, Resource.FinancialAccounts)
@@ -126,7 +128,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Delete(':id')
-  @Cache(Collection.Accounts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialAccounts)
   @ApiResponse({ type: AccountDataSerializer })
   @SetPolicy(Action.Delete, Resource.FinancialAccounts)
@@ -138,7 +140,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Accounts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialAccounts)
   @ApiResponse({ type: AccountDataSerializer })
   @SetPolicy(Action.Restore, Resource.FinancialAccounts)
@@ -150,7 +152,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Accounts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialAccounts)
   @ApiResponse({ type: AccountDataSerializer })
   @SetPolicy(Action.Destroy, Resource.FinancialAccounts)
@@ -162,7 +164,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Patch('bulk')
-  @Cache(Collection.Accounts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialAccounts)
   @SetPolicy(Action.Update, Resource.FinancialAccounts)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -176,7 +178,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Patch(':id')
-  @Cache(Collection.Accounts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialAccounts)
   @ApiResponse({ type: AccountDataSerializer })
   @SetPolicy(Action.Update, Resource.FinancialAccounts)

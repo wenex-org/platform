@@ -23,7 +23,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Profile, ProfileDto } from '@app/common/interfaces/identity';
 import { IdentityProvider } from '@app/common/providers/identity';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
@@ -37,11 +37,13 @@ import { Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('profiles', 'identity');
+
 @ApiBearerAuth()
-@RateLimit('profiles')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Profiles)
-@Controller(Collection.Profiles)
+@ApiTags('identity', 'profiles')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -51,7 +53,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Get('count')
-  @Cache(Collection.Profiles, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadIdentityProfiles)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.IdentityProfiles)
@@ -61,7 +63,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Post()
-  @Cache(Collection.Profiles, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: ProfileDataSerializer })
@@ -71,7 +73,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Post('bulk')
-  @Cache(Collection.Profiles, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: ProfileItemsSerializer })
@@ -81,7 +83,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Get()
-  @Cache(Collection.Profiles, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadIdentityProfiles)
   @SetPolicy(Action.Read, Resource.IdentityProfiles)
   @ApiResponse({ type: ProfileItemsSerializer })
@@ -114,7 +116,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Get(':id')
-  @Cache(Collection.Profiles, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadIdentityProfiles)
   @ApiResponse({ type: ProfileDataSerializer })
   @SetPolicy(Action.Read, Resource.IdentityProfiles)
@@ -126,7 +128,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Delete(':id')
-  @Cache(Collection.Profiles, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @ApiResponse({ type: ProfileDataSerializer })
   @SetPolicy(Action.Delete, Resource.IdentityProfiles)
@@ -138,7 +140,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Profiles, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @ApiResponse({ type: ProfileDataSerializer })
   @SetPolicy(Action.Restore, Resource.IdentityProfiles)
@@ -150,7 +152,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Profiles, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageIdentityProfiles)
   @ApiResponse({ type: ProfileDataSerializer })
   @SetPolicy(Action.Destroy, Resource.IdentityProfiles)
@@ -162,7 +164,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Patch('bulk')
-  @Cache(Collection.Profiles, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageIdentityProfiles)
   @SetPolicy(Action.Update, Resource.IdentityProfiles)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -176,7 +178,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Patch(':id')
-  @Cache(Collection.Profiles, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @ApiResponse({ type: ProfileDataSerializer })
   @SetPolicy(Action.Update, Resource.IdentityProfiles)

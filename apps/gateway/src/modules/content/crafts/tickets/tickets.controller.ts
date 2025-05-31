@@ -23,7 +23,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Ticket, TicketDto } from '@app/common/interfaces/content';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { ContentProvider } from '@app/common/providers/content';
@@ -37,11 +37,13 @@ import { Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('tickets', 'content');
+
 @ApiBearerAuth()
-@RateLimit('tickets')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Tickets)
-@Controller(Collection.Tickets)
+@ApiTags('content', 'tickets')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -51,7 +53,7 @@ export class TicketsController extends ControllerClass<Ticket, TicketDto> implem
   }
 
   @Get('count')
-  @Cache(Collection.Tickets, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadContentTickets)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ContentTickets)
@@ -61,7 +63,7 @@ export class TicketsController extends ControllerClass<Ticket, TicketDto> implem
   }
 
   @Post()
-  @Cache(Collection.Tickets, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentTickets)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: TicketDataSerializer })
@@ -71,7 +73,7 @@ export class TicketsController extends ControllerClass<Ticket, TicketDto> implem
   }
 
   @Post('bulk')
-  @Cache(Collection.Tickets, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentTickets)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: TicketItemsSerializer })
@@ -81,7 +83,7 @@ export class TicketsController extends ControllerClass<Ticket, TicketDto> implem
   }
 
   @Get()
-  @Cache(Collection.Tickets, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadContentTickets)
   @SetPolicy(Action.Read, Resource.ContentTickets)
   @ApiResponse({ type: TicketItemsSerializer })
@@ -114,7 +116,7 @@ export class TicketsController extends ControllerClass<Ticket, TicketDto> implem
   }
 
   @Get(':id')
-  @Cache(Collection.Tickets, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadContentTickets)
   @ApiResponse({ type: TicketDataSerializer })
   @SetPolicy(Action.Read, Resource.ContentTickets)
@@ -126,7 +128,7 @@ export class TicketsController extends ControllerClass<Ticket, TicketDto> implem
   }
 
   @Delete(':id')
-  @Cache(Collection.Tickets, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentTickets)
   @ApiResponse({ type: TicketDataSerializer })
   @SetPolicy(Action.Delete, Resource.ContentTickets)
@@ -138,7 +140,7 @@ export class TicketsController extends ControllerClass<Ticket, TicketDto> implem
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Tickets, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentTickets)
   @ApiResponse({ type: TicketDataSerializer })
   @SetPolicy(Action.Restore, Resource.ContentTickets)
@@ -150,7 +152,7 @@ export class TicketsController extends ControllerClass<Ticket, TicketDto> implem
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Tickets, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentTickets)
   @ApiResponse({ type: TicketDataSerializer })
   @SetPolicy(Action.Destroy, Resource.ContentTickets)
@@ -162,7 +164,7 @@ export class TicketsController extends ControllerClass<Ticket, TicketDto> implem
   }
 
   @Patch('bulk')
-  @Cache(Collection.Tickets, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentTickets)
   @SetPolicy(Action.Update, Resource.ContentTickets)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -176,7 +178,7 @@ export class TicketsController extends ControllerClass<Ticket, TicketDto> implem
   }
 
   @Patch(':id')
-  @Cache(Collection.Tickets, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentTickets)
   @ApiResponse({ type: TicketDataSerializer })
   @SetPolicy(Action.Update, Resource.ContentTickets)
