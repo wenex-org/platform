@@ -23,7 +23,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { SpecialProvider } from '@app/common/providers/special';
 import { File, FileDto } from '@app/common/interfaces/special';
@@ -37,11 +37,13 @@ import { Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('files', 'special');
+
 @ApiBearerAuth()
-@RateLimit('files')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Files)
-@Controller(Collection.Files)
+@ApiTags('special', 'files')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -51,7 +53,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   }
 
   @Get('count')
-  @Cache(Collection.Files, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadSpecialFiles)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.SpecialFiles)
@@ -61,7 +63,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   }
 
   @Post()
-  @Cache(Collection.Files, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: FileDataSerializer })
@@ -71,7 +73,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   }
 
   @Post('bulk')
-  @Cache(Collection.Files, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: FileItemsSerializer })
@@ -81,7 +83,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   }
 
   @Get()
-  @Cache(Collection.Files, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadSpecialFiles)
   @SetPolicy(Action.Read, Resource.SpecialFiles)
   @ApiResponse({ type: FileItemsSerializer })
@@ -114,7 +116,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   }
 
   @Get(':id')
-  @Cache(Collection.Files, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadSpecialFiles)
   @ApiResponse({ type: FileDataSerializer })
   @SetPolicy(Action.Read, Resource.SpecialFiles)
@@ -126,7 +128,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   }
 
   @Delete(':id')
-  @Cache(Collection.Files, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @ApiResponse({ type: FileDataSerializer })
   @SetPolicy(Action.Delete, Resource.SpecialFiles)
@@ -138,7 +140,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Files, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @ApiResponse({ type: FileDataSerializer })
   @SetPolicy(Action.Restore, Resource.SpecialFiles)
@@ -150,7 +152,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Files, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageSpecialFiles)
   @ApiResponse({ type: FileDataSerializer })
   @SetPolicy(Action.Destroy, Resource.SpecialFiles)
@@ -162,7 +164,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   }
 
   @Patch('bulk')
-  @Cache(Collection.Files, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageSpecialFiles)
   @SetPolicy(Action.Update, Resource.SpecialFiles)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -176,7 +178,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   }
 
   @Patch(':id')
-  @Cache(Collection.Files, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @ApiResponse({ type: FileDataSerializer })
   @SetPolicy(Action.Update, Resource.SpecialFiles)

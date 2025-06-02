@@ -23,7 +23,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Artifact, ArtifactDto } from '@app/common/interfaces/general';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { GeneralProvider } from '@app/common/providers/general';
@@ -37,11 +37,13 @@ import { Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('artifacts', 'general');
+
 @ApiBearerAuth()
-@RateLimit('artifacts')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Artifacts)
-@Controller(Collection.Artifacts)
+@ApiTags('general', 'artifacts')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -51,7 +53,7 @@ export class ArtifactsController extends ControllerClass<Artifact, ArtifactDto> 
   }
 
   @Get('count')
-  @Cache(Collection.Artifacts, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadGeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.GeneralArtifacts)
@@ -61,7 +63,7 @@ export class ArtifactsController extends ControllerClass<Artifact, ArtifactDto> 
   }
 
   @Post()
-  @Cache(Collection.Artifacts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralArtifacts)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: ArtifactDataSerializer })
@@ -71,7 +73,7 @@ export class ArtifactsController extends ControllerClass<Artifact, ArtifactDto> 
   }
 
   @Post('bulk')
-  @Cache(Collection.Artifacts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralArtifacts)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: ArtifactItemsSerializer })
@@ -81,7 +83,7 @@ export class ArtifactsController extends ControllerClass<Artifact, ArtifactDto> 
   }
 
   @Get()
-  @Cache(Collection.Artifacts, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadGeneralArtifacts)
   @SetPolicy(Action.Read, Resource.GeneralArtifacts)
   @ApiResponse({ type: ArtifactItemsSerializer })
@@ -114,7 +116,7 @@ export class ArtifactsController extends ControllerClass<Artifact, ArtifactDto> 
   }
 
   @Get(':id')
-  @Cache(Collection.Artifacts, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadGeneralArtifacts)
   @ApiResponse({ type: ArtifactDataSerializer })
   @SetPolicy(Action.Read, Resource.GeneralArtifacts)
@@ -126,7 +128,7 @@ export class ArtifactsController extends ControllerClass<Artifact, ArtifactDto> 
   }
 
   @Delete(':id')
-  @Cache(Collection.Artifacts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralArtifacts)
   @ApiResponse({ type: ArtifactDataSerializer })
   @SetPolicy(Action.Delete, Resource.GeneralArtifacts)
@@ -138,7 +140,7 @@ export class ArtifactsController extends ControllerClass<Artifact, ArtifactDto> 
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Artifacts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralArtifacts)
   @ApiResponse({ type: ArtifactDataSerializer })
   @SetPolicy(Action.Restore, Resource.GeneralArtifacts)
@@ -150,7 +152,7 @@ export class ArtifactsController extends ControllerClass<Artifact, ArtifactDto> 
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Artifacts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralArtifacts)
   @ApiResponse({ type: ArtifactDataSerializer })
   @SetPolicy(Action.Destroy, Resource.GeneralArtifacts)
@@ -162,7 +164,7 @@ export class ArtifactsController extends ControllerClass<Artifact, ArtifactDto> 
   }
 
   @Patch('bulk')
-  @Cache(Collection.Artifacts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralArtifacts)
   @SetPolicy(Action.Update, Resource.GeneralArtifacts)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -176,7 +178,7 @@ export class ArtifactsController extends ControllerClass<Artifact, ArtifactDto> 
   }
 
   @Patch(':id')
-  @Cache(Collection.Artifacts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralArtifacts)
   @ApiResponse({ type: ArtifactDataSerializer })
   @SetPolicy(Action.Update, Resource.GeneralArtifacts)

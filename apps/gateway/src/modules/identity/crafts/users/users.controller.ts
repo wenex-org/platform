@@ -23,7 +23,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { IdentityProvider } from '@app/common/providers/identity';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { User, UserDto } from '@app/common/interfaces/identity';
@@ -37,11 +37,13 @@ import { Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('users', 'identity');
+
 @ApiBearerAuth()
-@RateLimit('users')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Users)
-@Controller(Collection.Users)
+@ApiTags('identity', 'users')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -51,7 +53,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements I
   }
 
   @Get('count')
-  @Cache(Collection.Users, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadIdentityUsers)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.IdentityUsers)
@@ -61,7 +63,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements I
   }
 
   @Post()
-  @Cache(Collection.Users, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: UserDataSerializer })
@@ -71,7 +73,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements I
   }
 
   @Post('bulk')
-  @Cache(Collection.Users, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: UserItemsSerializer })
@@ -81,7 +83,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements I
   }
 
   @Get()
-  @Cache(Collection.Users, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadIdentityUsers)
   @SetPolicy(Action.Read, Resource.IdentityUsers)
   @ApiResponse({ type: UserItemsSerializer })
@@ -114,7 +116,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements I
   }
 
   @Get(':id')
-  @Cache(Collection.Users, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadIdentityUsers)
   @ApiResponse({ type: UserDataSerializer })
   @SetPolicy(Action.Read, Resource.IdentityUsers)
@@ -126,7 +128,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements I
   }
 
   @Delete(':id')
-  @Cache(Collection.Users, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @ApiResponse({ type: UserDataSerializer })
   @SetPolicy(Action.Delete, Resource.IdentityUsers)
@@ -138,7 +140,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements I
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Users, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @ApiResponse({ type: UserDataSerializer })
   @SetPolicy(Action.Restore, Resource.IdentityUsers)
@@ -150,7 +152,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements I
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Users, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageIdentityUsers)
   @ApiResponse({ type: UserDataSerializer })
   @SetPolicy(Action.Destroy, Resource.IdentityUsers)
@@ -162,7 +164,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements I
   }
 
   @Patch('bulk')
-  @Cache(Collection.Users, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageIdentityUsers)
   @SetPolicy(Action.Update, Resource.IdentityUsers)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -176,7 +178,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements I
   }
 
   @Patch(':id')
-  @Cache(Collection.Users, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @ApiResponse({ type: UserDataSerializer })
   @SetPolicy(Action.Update, Resource.IdentityUsers)

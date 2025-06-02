@@ -32,11 +32,11 @@ describe('Logistic: LocationsController (e2e)', () => {
 
   describe('Common Tests', () => {
     beforeAll(async () => {
-      await app.get(MongoService).drop({ collection: ['locations'] });
+      await app.get(MongoService).reset({ collection: ['e2e-logistic/locations'] });
     });
 
     afterAll(async () => {
-      await app.get(MongoService).drop({ collection: ['locations'] });
+      await app.get(MongoService).reset({ collection: ['e2e-logistic/locations'] });
     });
 
     let location: Serializer<Location>;

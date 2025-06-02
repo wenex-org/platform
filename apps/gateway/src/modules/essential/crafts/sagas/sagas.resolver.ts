@@ -8,7 +8,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { EssentialProvider } from '@app/common/providers/essential';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
@@ -21,8 +21,10 @@ import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
+const COLL_PATH = COLLECTION('sagas', 'essential');
+
 @Resolver(() => SagaSerializer)
-@RateLimit('sagas')
+@RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -33,7 +35,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   }
 
   @Query(() => TotalSerializer)
-  @Cache(Collection.Sagas, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadEssentialSagas)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.EssentialSagas)
@@ -42,7 +44,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   }
 
   @Mutation(() => SagaDataSerializer)
-  @Cache(Collection.Sagas, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagas)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.EssentialSagas)
@@ -51,7 +53,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   }
 
   @Mutation(() => SagaItemsSerializer)
-  @Cache(Collection.Sagas, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagas)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.EssentialSagas)
@@ -60,7 +62,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   }
 
   @Query(() => SagaItemsSerializer)
-  @Cache(Collection.Sagas, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadEssentialSagas)
   @SetPolicy(Action.Read, Resource.EssentialSagas)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -69,7 +71,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   }
 
   @Query(() => SagaDataSerializer)
-  @Cache(Collection.Sagas, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadEssentialSagas)
   @SetPolicy(Action.Read, Resource.EssentialSagas)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -84,7 +86,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   }
 
   @Mutation(() => SagaDataSerializer)
-  @Cache(Collection.Sagas, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagas)
   @SetPolicy(Action.Delete, Resource.EssentialSagas)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -99,7 +101,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   }
 
   @Mutation(() => SagaDataSerializer)
-  @Cache(Collection.Sagas, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagas)
   @SetPolicy(Action.Restore, Resource.EssentialSagas)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -114,7 +116,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   }
 
   @Mutation(() => SagaDataSerializer)
-  @Cache(Collection.Sagas, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageEssentialSagas)
   @SetPolicy(Action.Destroy, Resource.EssentialSagas)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -129,7 +131,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   }
 
   @Mutation(() => TotalSerializer)
-  @Cache(Collection.Sagas, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageEssentialSagas)
   @SetPolicy(Action.Update, Resource.EssentialSagas)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -142,7 +144,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   }
 
   @Mutation(() => SagaDataSerializer)
-  @Cache(Collection.Sagas, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagas)
   @SetPolicy(Action.Update, Resource.EssentialSagas)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

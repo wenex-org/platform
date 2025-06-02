@@ -24,7 +24,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { LogisticProvider } from '@app/common/providers/logistic';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { AllExceptionsFilter } from '@app/common/core/filters';
@@ -37,11 +37,13 @@ import { Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('vehicles', 'logistic');
+
 @ApiBearerAuth()
-@RateLimit('vehicles')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Vehicles)
-@Controller(Collection.Vehicles)
+@ApiTags('logistic', 'vehicles')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -51,7 +53,7 @@ export class VehiclesController extends ControllerClass<IVehicle, VehicleDto> im
   }
 
   @Get('count')
-  @Cache(Collection.Vehicles, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadLogisticVehicles)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.LogisticVehicles)
@@ -61,7 +63,7 @@ export class VehiclesController extends ControllerClass<IVehicle, VehicleDto> im
   }
 
   @Post()
-  @Cache(Collection.Vehicles, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: VehicleDataSerializer })
@@ -71,7 +73,7 @@ export class VehiclesController extends ControllerClass<IVehicle, VehicleDto> im
   }
 
   @Post('bulk')
-  @Cache(Collection.Vehicles, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: VehicleItemsSerializer })
@@ -81,7 +83,7 @@ export class VehiclesController extends ControllerClass<IVehicle, VehicleDto> im
   }
 
   @Get()
-  @Cache(Collection.Vehicles, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadLogisticVehicles)
   @SetPolicy(Action.Read, Resource.LogisticVehicles)
   @ApiResponse({ type: VehicleItemsSerializer })
@@ -114,7 +116,7 @@ export class VehiclesController extends ControllerClass<IVehicle, VehicleDto> im
   }
 
   @Get(':id')
-  @Cache(Collection.Vehicles, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadLogisticVehicles)
   @ApiResponse({ type: VehicleDataSerializer })
   @SetPolicy(Action.Read, Resource.LogisticVehicles)
@@ -126,7 +128,7 @@ export class VehiclesController extends ControllerClass<IVehicle, VehicleDto> im
   }
 
   @Delete(':id')
-  @Cache(Collection.Vehicles, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
   @ApiResponse({ type: VehicleDataSerializer })
   @SetPolicy(Action.Delete, Resource.LogisticVehicles)
@@ -138,7 +140,7 @@ export class VehiclesController extends ControllerClass<IVehicle, VehicleDto> im
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Vehicles, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
   @ApiResponse({ type: VehicleDataSerializer })
   @SetPolicy(Action.Restore, Resource.LogisticVehicles)
@@ -150,7 +152,7 @@ export class VehiclesController extends ControllerClass<IVehicle, VehicleDto> im
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Vehicles, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticVehicles)
   @ApiResponse({ type: VehicleDataSerializer })
   @SetPolicy(Action.Destroy, Resource.LogisticVehicles)
@@ -162,7 +164,7 @@ export class VehiclesController extends ControllerClass<IVehicle, VehicleDto> im
   }
 
   @Patch('bulk')
-  @Cache(Collection.Vehicles, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticVehicles)
   @SetPolicy(Action.Update, Resource.LogisticVehicles)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -176,7 +178,7 @@ export class VehiclesController extends ControllerClass<IVehicle, VehicleDto> im
   }
 
   @Patch(':id')
-  @Cache(Collection.Vehicles, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
   @ApiResponse({ type: VehicleDataSerializer })
   @SetPolicy(Action.Update, Resource.LogisticVehicles)

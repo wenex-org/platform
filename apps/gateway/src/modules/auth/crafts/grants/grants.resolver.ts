@@ -8,7 +8,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
 import { AllExceptionsFilter } from '@app/common/core/filters';
@@ -21,8 +21,10 @@ import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
+const COLL_PATH = COLLECTION('grants', 'auth');
+
 @Resolver(() => GrantSerializer)
-@RateLimit('grants')
+@RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -33,7 +35,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Query(() => TotalSerializer)
-  @Cache(Collection.Grants, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadAuthGrants)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.AuthGrants)
@@ -42,7 +44,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Mutation(() => GrantDataSerializer)
-  @Cache(Collection.Grants, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteAuthGrants)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.AuthGrants)
@@ -51,7 +53,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Mutation(() => GrantItemsSerializer)
-  @Cache(Collection.Grants, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteAuthGrants)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.AuthGrants)
@@ -60,7 +62,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Query(() => GrantItemsSerializer)
-  @Cache(Collection.Grants, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadAuthGrants)
   @SetPolicy(Action.Read, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -69,7 +71,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Query(() => GrantDataSerializer)
-  @Cache(Collection.Grants, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadAuthGrants)
   @SetPolicy(Action.Read, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -84,7 +86,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Mutation(() => GrantDataSerializer)
-  @Cache(Collection.Grants, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteAuthGrants)
   @SetPolicy(Action.Delete, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -99,7 +101,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Mutation(() => GrantDataSerializer)
-  @Cache(Collection.Grants, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteAuthGrants)
   @SetPolicy(Action.Restore, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -114,7 +116,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Mutation(() => GrantDataSerializer)
-  @Cache(Collection.Grants, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageAuthGrants)
   @SetPolicy(Action.Destroy, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -129,7 +131,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Mutation(() => TotalSerializer)
-  @Cache(Collection.Grants, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageAuthGrants)
   @SetPolicy(Action.Update, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -142,7 +144,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Mutation(() => GrantDataSerializer)
-  @Cache(Collection.Grants, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteAuthGrants)
   @SetPolicy(Action.Update, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

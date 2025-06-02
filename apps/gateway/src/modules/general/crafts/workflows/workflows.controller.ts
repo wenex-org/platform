@@ -23,7 +23,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Workflow, WorkflowDto } from '@app/common/interfaces/general';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { GeneralProvider } from '@app/common/providers/general';
@@ -37,11 +37,13 @@ import { Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('workflows', 'general');
+
 @ApiBearerAuth()
-@RateLimit('workflows')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Workflows)
-@Controller(Collection.Workflows)
+@ApiTags('general', 'workflows')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -51,7 +53,7 @@ export class WorkflowsController extends ControllerClass<Workflow, WorkflowDto> 
   }
 
   @Get('count')
-  @Cache(Collection.Workflows, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadGeneralWorkflows)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.GeneralWorkflows)
@@ -61,7 +63,7 @@ export class WorkflowsController extends ControllerClass<Workflow, WorkflowDto> 
   }
 
   @Post()
-  @Cache(Collection.Workflows, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralWorkflows)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: WorkflowDataSerializer })
@@ -71,7 +73,7 @@ export class WorkflowsController extends ControllerClass<Workflow, WorkflowDto> 
   }
 
   @Post('bulk')
-  @Cache(Collection.Workflows, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralWorkflows)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: WorkflowItemsSerializer })
@@ -81,7 +83,7 @@ export class WorkflowsController extends ControllerClass<Workflow, WorkflowDto> 
   }
 
   @Get()
-  @Cache(Collection.Workflows, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadGeneralWorkflows)
   @SetPolicy(Action.Read, Resource.GeneralWorkflows)
   @ApiResponse({ type: WorkflowItemsSerializer })
@@ -114,7 +116,7 @@ export class WorkflowsController extends ControllerClass<Workflow, WorkflowDto> 
   }
 
   @Get(':id')
-  @Cache(Collection.Workflows, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadGeneralWorkflows)
   @ApiResponse({ type: WorkflowDataSerializer })
   @SetPolicy(Action.Read, Resource.GeneralWorkflows)
@@ -126,7 +128,7 @@ export class WorkflowsController extends ControllerClass<Workflow, WorkflowDto> 
   }
 
   @Delete(':id')
-  @Cache(Collection.Workflows, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralWorkflows)
   @ApiResponse({ type: WorkflowDataSerializer })
   @SetPolicy(Action.Delete, Resource.GeneralWorkflows)
@@ -138,7 +140,7 @@ export class WorkflowsController extends ControllerClass<Workflow, WorkflowDto> 
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Workflows, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralWorkflows)
   @ApiResponse({ type: WorkflowDataSerializer })
   @SetPolicy(Action.Restore, Resource.GeneralWorkflows)
@@ -150,7 +152,7 @@ export class WorkflowsController extends ControllerClass<Workflow, WorkflowDto> 
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Workflows, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralWorkflows)
   @ApiResponse({ type: WorkflowDataSerializer })
   @SetPolicy(Action.Destroy, Resource.GeneralWorkflows)
@@ -162,7 +164,7 @@ export class WorkflowsController extends ControllerClass<Workflow, WorkflowDto> 
   }
 
   @Patch('bulk')
-  @Cache(Collection.Workflows, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralWorkflows)
   @SetPolicy(Action.Update, Resource.GeneralWorkflows)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -176,7 +178,7 @@ export class WorkflowsController extends ControllerClass<Workflow, WorkflowDto> 
   }
 
   @Patch(':id')
-  @Cache(Collection.Workflows, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralWorkflows)
   @ApiResponse({ type: WorkflowDataSerializer })
   @SetPolicy(Action.Update, Resource.GeneralWorkflows)

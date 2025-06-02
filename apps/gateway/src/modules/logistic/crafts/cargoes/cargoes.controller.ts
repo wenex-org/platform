@@ -23,7 +23,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { LogisticProvider } from '@app/common/providers/logistic';
 import { Cargo, CargoDto } from '@app/common/interfaces/logistic';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
@@ -37,11 +37,13 @@ import { Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('cargoes', 'logistic');
+
 @ApiBearerAuth()
-@RateLimit('cargoes')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Cargoes)
-@Controller(Collection.Cargoes)
+@ApiTags('logistic', 'cargoes')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -51,7 +53,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   }
 
   @Get('count')
-  @Cache(Collection.Cargoes, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadLogisticCargoes)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.LogisticCargoes)
@@ -61,7 +63,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   }
 
   @Post()
-  @Cache(Collection.Cargoes, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: CargoDataSerializer })
@@ -71,7 +73,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   }
 
   @Post('bulk')
-  @Cache(Collection.Cargoes, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: CargoItemsSerializer })
@@ -81,7 +83,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   }
 
   @Get()
-  @Cache(Collection.Cargoes, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadLogisticCargoes)
   @SetPolicy(Action.Read, Resource.LogisticCargoes)
   @ApiResponse({ type: CargoItemsSerializer })
@@ -114,7 +116,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   }
 
   @Get(':id')
-  @Cache(Collection.Cargoes, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadLogisticCargoes)
   @ApiResponse({ type: CargoDataSerializer })
   @SetPolicy(Action.Read, Resource.LogisticCargoes)
@@ -126,7 +128,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   }
 
   @Delete(':id')
-  @Cache(Collection.Cargoes, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @ApiResponse({ type: CargoDataSerializer })
   @SetPolicy(Action.Delete, Resource.LogisticCargoes)
@@ -138,7 +140,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Cargoes, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @ApiResponse({ type: CargoDataSerializer })
   @SetPolicy(Action.Restore, Resource.LogisticCargoes)
@@ -150,7 +152,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Cargoes, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticCargoes)
   @ApiResponse({ type: CargoDataSerializer })
   @SetPolicy(Action.Destroy, Resource.LogisticCargoes)
@@ -162,7 +164,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   }
 
   @Patch('bulk')
-  @Cache(Collection.Cargoes, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticCargoes)
   @SetPolicy(Action.Update, Resource.LogisticCargoes)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -176,7 +178,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   }
 
   @Patch(':id')
-  @Cache(Collection.Cargoes, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @ApiResponse({ type: CargoDataSerializer })
   @SetPolicy(Action.Update, Resource.LogisticCargoes)

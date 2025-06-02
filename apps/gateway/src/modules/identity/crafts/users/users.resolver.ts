@@ -8,7 +8,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
 import { IdentityProvider } from '@app/common/providers/identity';
@@ -21,8 +21,10 @@ import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
+const COLL_PATH = COLLECTION('users', 'identity');
+
 @Resolver(() => UserSerializer)
-@RateLimit('users')
+@RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -33,7 +35,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Query(() => TotalSerializer)
-  @Cache(Collection.Users, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadIdentityUsers)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.IdentityUsers)
@@ -42,7 +44,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Mutation(() => UserDataSerializer)
-  @Cache(Collection.Users, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentityUsers)
@@ -51,7 +53,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Mutation(() => UserItemsSerializer)
-  @Cache(Collection.Users, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentityUsers)
@@ -60,7 +62,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Query(() => UserItemsSerializer)
-  @Cache(Collection.Users, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadIdentityUsers)
   @SetPolicy(Action.Read, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -69,7 +71,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Query(() => UserDataSerializer)
-  @Cache(Collection.Users, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadIdentityUsers)
   @SetPolicy(Action.Read, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -84,7 +86,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Mutation(() => UserDataSerializer)
-  @Cache(Collection.Users, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @SetPolicy(Action.Delete, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -99,7 +101,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Mutation(() => UserDataSerializer)
-  @Cache(Collection.Users, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @SetPolicy(Action.Restore, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -114,7 +116,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Mutation(() => UserDataSerializer)
-  @Cache(Collection.Users, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageIdentityUsers)
   @SetPolicy(Action.Destroy, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -129,7 +131,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Mutation(() => TotalSerializer)
-  @Cache(Collection.Users, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageIdentityUsers)
   @SetPolicy(Action.Update, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -142,7 +144,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Mutation(() => UserDataSerializer)
-  @Cache(Collection.Users, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @SetPolicy(Action.Update, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

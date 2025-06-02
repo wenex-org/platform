@@ -34,12 +34,12 @@ describe('Content: PostsController (e2e)', () => {
   describe('Common Tests', () => {
     beforeAll(async () => {
       await app.get(ElasticService).delete({ index: ['post'] });
-      await app.get(MongoService).drop({ collection: ['posts'] });
+      await app.get(MongoService).reset({ collection: ['e2e-content/posts'] });
     });
 
     afterAll(async () => {
       await app.get(ElasticService).delete({ index: ['post'] });
-      await app.get(MongoService).drop({ collection: ['posts'] });
+      await app.get(MongoService).reset({ collection: ['e2e-content/posts'] });
     });
 
     let post: Serializer<Post>;

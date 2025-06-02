@@ -8,7 +8,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Invoice, InvoiceDto } from '@app/common/interfaces/financial';
 import { FinancialProvider } from '@app/common/providers/financial';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
@@ -21,8 +21,10 @@ import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
+const COLL_PATH = COLLECTION('invoices', 'financial');
+
 @Resolver(() => InvoiceSerializer)
-@RateLimit('invoices')
+@RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -33,7 +35,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   }
 
   @Query(() => TotalSerializer)
-  @Cache(Collection.Invoices, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadFinancialInvoices)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.FinancialInvoices)
@@ -42,7 +44,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   }
 
   @Mutation(() => InvoiceDataSerializer)
-  @Cache(Collection.Invoices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialInvoices)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialInvoices)
@@ -51,7 +53,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   }
 
   @Mutation(() => InvoiceItemsSerializer)
-  @Cache(Collection.Invoices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialInvoices)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialInvoices)
@@ -60,7 +62,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   }
 
   @Query(() => InvoiceItemsSerializer)
-  @Cache(Collection.Invoices, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadFinancialInvoices)
   @SetPolicy(Action.Read, Resource.FinancialInvoices)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -69,7 +71,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   }
 
   @Query(() => InvoiceDataSerializer)
-  @Cache(Collection.Invoices, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadFinancialInvoices)
   @SetPolicy(Action.Read, Resource.FinancialInvoices)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -84,7 +86,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   }
 
   @Mutation(() => InvoiceDataSerializer)
-  @Cache(Collection.Invoices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialInvoices)
   @SetPolicy(Action.Delete, Resource.FinancialInvoices)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -99,7 +101,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   }
 
   @Mutation(() => InvoiceDataSerializer)
-  @Cache(Collection.Invoices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialInvoices)
   @SetPolicy(Action.Restore, Resource.FinancialInvoices)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -114,7 +116,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   }
 
   @Mutation(() => InvoiceDataSerializer)
-  @Cache(Collection.Invoices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialInvoices)
   @SetPolicy(Action.Destroy, Resource.FinancialInvoices)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -129,7 +131,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   }
 
   @Mutation(() => TotalSerializer)
-  @Cache(Collection.Invoices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialInvoices)
   @SetPolicy(Action.Update, Resource.FinancialInvoices)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -142,7 +144,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   }
 
   @Mutation(() => InvoiceDataSerializer)
-  @Cache(Collection.Invoices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialInvoices)
   @SetPolicy(Action.Update, Resource.FinancialInvoices)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

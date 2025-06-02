@@ -29,7 +29,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Invoice, InvoiceDto } from '@app/common/interfaces/financial';
 import { getSseMessage, mapToInstance } from '@app/common/core/utils';
 import { FinancialProvider } from '@app/common/providers/financial';
@@ -43,12 +43,14 @@ import { from, Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('invoices', 'financial');
+
 @ApiBearerAuth()
-@RateLimit('invoices')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Invoices)
-@Controller(Collection.Invoices)
 @UseFilters(AllExceptionsFilter)
+@ApiTags('financial', 'invoices')
 @Nested<Invoice>('payees', 'payers')
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -73,7 +75,7 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   // ##############################
 
   @Get('count')
-  @Cache(Collection.Invoices, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadFinancialInvoices)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.FinancialInvoices)
@@ -83,7 +85,7 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   }
 
   @Post()
-  @Cache(Collection.Invoices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialInvoices)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: InvoiceDataSerializer })
@@ -93,7 +95,7 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   }
 
   @Post('bulk')
-  @Cache(Collection.Invoices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialInvoices)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: InvoiceItemsSerializer })
@@ -103,7 +105,7 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   }
 
   @Get()
-  @Cache(Collection.Invoices, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadFinancialInvoices)
   @SetPolicy(Action.Read, Resource.FinancialInvoices)
   @ApiResponse({ type: InvoiceItemsSerializer })
@@ -136,7 +138,7 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   }
 
   @Get(':id')
-  @Cache(Collection.Invoices, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadFinancialInvoices)
   @ApiResponse({ type: InvoiceDataSerializer })
   @SetPolicy(Action.Read, Resource.FinancialInvoices)
@@ -148,7 +150,7 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   }
 
   @Delete(':id')
-  @Cache(Collection.Invoices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialInvoices)
   @ApiResponse({ type: InvoiceDataSerializer })
   @SetPolicy(Action.Delete, Resource.FinancialInvoices)
@@ -160,7 +162,7 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Invoices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialInvoices)
   @ApiResponse({ type: InvoiceDataSerializer })
   @SetPolicy(Action.Restore, Resource.FinancialInvoices)
@@ -172,7 +174,7 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Invoices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialInvoices)
   @ApiResponse({ type: InvoiceDataSerializer })
   @SetPolicy(Action.Destroy, Resource.FinancialInvoices)
@@ -184,7 +186,7 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   }
 
   @Patch('bulk')
-  @Cache(Collection.Invoices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialInvoices)
   @SetPolicy(Action.Update, Resource.FinancialInvoices)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -198,7 +200,7 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   }
 
   @Patch(':id')
-  @Cache(Collection.Invoices, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialInvoices)
   @ApiResponse({ type: InvoiceDataSerializer })
   @SetPolicy(Action.Update, Resource.FinancialInvoices)

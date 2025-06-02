@@ -8,7 +8,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Activity, ActivityDto } from '@app/common/interfaces/general';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
@@ -21,8 +21,10 @@ import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
+const COLL_PATH = COLLECTION('activities', 'general');
+
 @Resolver(() => ActivitySerializer)
-@RateLimit('activities')
+@RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -33,7 +35,7 @@ export class ActivitiesResolver extends ControllerClass<Activity, ActivityDto> i
   }
 
   @Query(() => TotalSerializer)
-  @Cache(Collection.Activities, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadGeneralActivities)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.GeneralActivities)
@@ -42,7 +44,7 @@ export class ActivitiesResolver extends ControllerClass<Activity, ActivityDto> i
   }
 
   @Mutation(() => ActivityDataSerializer)
-  @Cache(Collection.Activities, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralActivities)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.GeneralActivities)
@@ -51,7 +53,7 @@ export class ActivitiesResolver extends ControllerClass<Activity, ActivityDto> i
   }
 
   @Mutation(() => ActivityItemsSerializer)
-  @Cache(Collection.Activities, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralActivities)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.GeneralActivities)
@@ -60,7 +62,7 @@ export class ActivitiesResolver extends ControllerClass<Activity, ActivityDto> i
   }
 
   @Query(() => ActivityItemsSerializer)
-  @Cache(Collection.Activities, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadGeneralActivities)
   @SetPolicy(Action.Read, Resource.GeneralActivities)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -69,7 +71,7 @@ export class ActivitiesResolver extends ControllerClass<Activity, ActivityDto> i
   }
 
   @Query(() => ActivityDataSerializer)
-  @Cache(Collection.Activities, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadGeneralActivities)
   @SetPolicy(Action.Read, Resource.GeneralActivities)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -84,7 +86,7 @@ export class ActivitiesResolver extends ControllerClass<Activity, ActivityDto> i
   }
 
   @Mutation(() => ActivityDataSerializer)
-  @Cache(Collection.Activities, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralActivities)
   @SetPolicy(Action.Delete, Resource.GeneralActivities)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -99,7 +101,7 @@ export class ActivitiesResolver extends ControllerClass<Activity, ActivityDto> i
   }
 
   @Mutation(() => ActivityDataSerializer)
-  @Cache(Collection.Activities, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralActivities)
   @SetPolicy(Action.Restore, Resource.GeneralActivities)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -114,7 +116,7 @@ export class ActivitiesResolver extends ControllerClass<Activity, ActivityDto> i
   }
 
   @Mutation(() => ActivityDataSerializer)
-  @Cache(Collection.Activities, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralActivities)
   @SetPolicy(Action.Destroy, Resource.GeneralActivities)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -129,7 +131,7 @@ export class ActivitiesResolver extends ControllerClass<Activity, ActivityDto> i
   }
 
   @Mutation(() => TotalSerializer)
-  @Cache(Collection.Activities, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralActivities)
   @SetPolicy(Action.Update, Resource.GeneralActivities)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -142,7 +144,7 @@ export class ActivitiesResolver extends ControllerClass<Activity, ActivityDto> i
   }
 
   @Mutation(() => ActivityDataSerializer)
-  @Cache(Collection.Activities, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralActivities)
   @SetPolicy(Action.Update, Resource.GeneralActivities)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

@@ -23,7 +23,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { getSseMessage, mapToInstance } from '@app/common/core/utils';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { AllExceptionsFilter } from '@app/common/core/filters';
@@ -37,11 +37,13 @@ import { from, Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('smss', 'touch');
+
 @ApiBearerAuth()
-@RateLimit('smss')
-@ApiTags(Collection.Smss)
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
+@ApiTags('touch', 'smss')
 @UsePipes(ValidationPipe)
-@Controller(Collection.Smss)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -51,7 +53,7 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
   }
 
   @Post('send')
-  @Cache(Collection.Smss, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.SendTouchSmss)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: SmsDataSerializer })
@@ -65,7 +67,7 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
   // ##############################
 
   @Get('count')
-  @Cache(Collection.Smss, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadTouchSmss)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.TouchSmss)
@@ -75,7 +77,7 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
   }
 
   @Post()
-  @Cache(Collection.Smss, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchSmss)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: SmsDataSerializer })
@@ -85,7 +87,7 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
   }
 
   @Post('bulk')
-  @Cache(Collection.Smss, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchSmss)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: SmsItemsSerializer })
@@ -95,7 +97,7 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
   }
 
   @Get()
-  @Cache(Collection.Smss, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadTouchSmss)
   @SetPolicy(Action.Read, Resource.TouchSmss)
   @ApiResponse({ type: SmsItemsSerializer })
@@ -128,7 +130,7 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
   }
 
   @Get(':id')
-  @Cache(Collection.Smss, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadTouchSmss)
   @ApiResponse({ type: SmsDataSerializer })
   @SetPolicy(Action.Read, Resource.TouchSmss)
@@ -140,7 +142,7 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
   }
 
   @Delete(':id')
-  @Cache(Collection.Smss, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchSmss)
   @ApiResponse({ type: SmsDataSerializer })
   @SetPolicy(Action.Delete, Resource.TouchSmss)
@@ -152,7 +154,7 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Smss, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchSmss)
   @ApiResponse({ type: SmsDataSerializer })
   @SetPolicy(Action.Restore, Resource.TouchSmss)
@@ -164,7 +166,7 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Smss, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchSmss)
   @ApiResponse({ type: SmsDataSerializer })
   @SetPolicy(Action.Destroy, Resource.TouchSmss)
@@ -176,7 +178,7 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
   }
 
   @Patch('bulk')
-  @Cache(Collection.Smss, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchSmss)
   @SetPolicy(Action.Update, Resource.TouchSmss)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -190,7 +192,7 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
   }
 
   @Patch(':id')
-  @Cache(Collection.Smss, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchSmss)
   @ApiResponse({ type: SmsDataSerializer })
   @SetPolicy(Action.Update, Resource.TouchSmss)

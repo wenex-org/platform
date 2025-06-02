@@ -24,7 +24,7 @@ import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Post as IPost, PostDto } from '@app/common/interfaces/content';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { ContentProvider } from '@app/common/providers/content';
 import { AllExceptionsFilter } from '@app/common/core/filters';
@@ -37,11 +37,13 @@ import { Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('posts', 'content');
+
 @ApiBearerAuth()
-@RateLimit('posts')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Posts)
-@Controller(Collection.Posts)
+@ApiTags('content', 'posts')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -51,7 +53,7 @@ export class PostsController extends ControllerClass<IPost, PostDto> implements 
   }
 
   @Get('count')
-  @Cache(Collection.Posts, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadContentPosts)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ContentPosts)
@@ -61,7 +63,7 @@ export class PostsController extends ControllerClass<IPost, PostDto> implements 
   }
 
   @Post()
-  @Cache(Collection.Posts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentPosts)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: PostDataSerializer })
@@ -71,7 +73,7 @@ export class PostsController extends ControllerClass<IPost, PostDto> implements 
   }
 
   @Post('bulk')
-  @Cache(Collection.Posts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentPosts)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: PostItemsSerializer })
@@ -81,7 +83,7 @@ export class PostsController extends ControllerClass<IPost, PostDto> implements 
   }
 
   @Get()
-  @Cache(Collection.Posts, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadContentPosts)
   @SetPolicy(Action.Read, Resource.ContentPosts)
   @ApiResponse({ type: PostItemsSerializer })
@@ -114,7 +116,7 @@ export class PostsController extends ControllerClass<IPost, PostDto> implements 
   }
 
   @Get(':id')
-  @Cache(Collection.Posts, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadContentPosts)
   @ApiResponse({ type: PostDataSerializer })
   @SetPolicy(Action.Read, Resource.ContentPosts)
@@ -126,7 +128,7 @@ export class PostsController extends ControllerClass<IPost, PostDto> implements 
   }
 
   @Delete(':id')
-  @Cache(Collection.Posts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentPosts)
   @ApiResponse({ type: PostDataSerializer })
   @SetPolicy(Action.Delete, Resource.ContentPosts)
@@ -138,7 +140,7 @@ export class PostsController extends ControllerClass<IPost, PostDto> implements 
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Posts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentPosts)
   @ApiResponse({ type: PostDataSerializer })
   @SetPolicy(Action.Restore, Resource.ContentPosts)
@@ -150,7 +152,7 @@ export class PostsController extends ControllerClass<IPost, PostDto> implements 
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Posts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentPosts)
   @ApiResponse({ type: PostDataSerializer })
   @SetPolicy(Action.Destroy, Resource.ContentPosts)
@@ -162,7 +164,7 @@ export class PostsController extends ControllerClass<IPost, PostDto> implements 
   }
 
   @Patch('bulk')
-  @Cache(Collection.Posts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentPosts)
   @SetPolicy(Action.Update, Resource.ContentPosts)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -176,7 +178,7 @@ export class PostsController extends ControllerClass<IPost, PostDto> implements 
   }
 
   @Patch(':id')
-  @Cache(Collection.Posts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentPosts)
   @ApiResponse({ type: PostDataSerializer })
   @SetPolicy(Action.Update, Resource.ContentPosts)

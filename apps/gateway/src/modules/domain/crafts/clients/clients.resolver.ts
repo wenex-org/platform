@@ -8,7 +8,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
 import { Client, ClientDto } from '@app/common/interfaces/domain';
@@ -21,8 +21,10 @@ import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
+const COLL_PATH = COLLECTION('clients', 'domain');
+
 @Resolver(() => ClientSerializer)
-@RateLimit('clients')
+@RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @Nested<Client>('domains', 'services')
@@ -34,7 +36,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Query(() => TotalSerializer)
-  @Cache(Collection.Clients, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadDomainClients)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.DomainClients)
@@ -43,7 +45,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Mutation(() => ClientDataSerializer)
-  @Cache(Collection.Clients, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainClients)
@@ -52,7 +54,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Mutation(() => ClientItemsSerializer)
-  @Cache(Collection.Clients, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainClients)
@@ -61,7 +63,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Query(() => ClientItemsSerializer)
-  @Cache(Collection.Clients, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadDomainClients)
   @SetPolicy(Action.Read, Resource.DomainClients)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -70,7 +72,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Query(() => ClientDataSerializer)
-  @Cache(Collection.Clients, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadDomainClients)
   @SetPolicy(Action.Read, Resource.DomainClients)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -85,7 +87,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Mutation(() => ClientDataSerializer)
-  @Cache(Collection.Clients, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @SetPolicy(Action.Delete, Resource.DomainClients)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -100,7 +102,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Mutation(() => ClientDataSerializer)
-  @Cache(Collection.Clients, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @SetPolicy(Action.Restore, Resource.DomainClients)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -115,7 +117,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Mutation(() => ClientDataSerializer)
-  @Cache(Collection.Clients, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageDomainClients)
   @SetPolicy(Action.Destroy, Resource.DomainClients)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -130,7 +132,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Mutation(() => TotalSerializer)
-  @Cache(Collection.Clients, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageDomainClients)
   @SetPolicy(Action.Update, Resource.DomainClients)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -143,7 +145,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Mutation(() => ClientDataSerializer)
-  @Cache(Collection.Clients, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @SetPolicy(Action.Update, Resource.DomainClients)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

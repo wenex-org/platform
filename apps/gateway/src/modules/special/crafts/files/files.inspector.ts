@@ -4,7 +4,7 @@ import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { GatewayInterceptors } from '@app/common/core/interceptors';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { QueryFilterDto } from '@app/common/core/dto/mongo';
@@ -20,11 +20,13 @@ import sharp from 'sharp';
 
 import { FilesService } from './files.service';
 
+const COLL_PATH = COLLECTION('files', 'special');
+
 @ApiBearerAuth()
-@RateLimit('files')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Files)
-@Controller(Collection.Files)
+@ApiTags('special', 'files')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())

@@ -24,7 +24,7 @@ import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { SagaStage, SagaStageDto } from '@app/common/interfaces/essential';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { EssentialProvider } from '@app/common/providers/essential';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { AllExceptionsFilter } from '@app/common/core/filters';
@@ -37,12 +37,14 @@ import { Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('saga-stages', 'essential');
+
 @ApiBearerAuth()
-@RateLimit('saga-stages')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.SagaStages)
-@Controller(Collection.SagaStages)
 @UseFilters(AllExceptionsFilter)
+@ApiTags('essential', 'saga-stages')
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDto> implements IController<SagaStage, SagaStageDto> {
@@ -51,7 +53,7 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   }
 
   @Get('count')
-  @Cache(Collection.SagaStages, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadEssentialSagaStages)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.EssentialSagaStages)
@@ -61,7 +63,7 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   }
 
   @Post()
-  @Cache(Collection.SagaStages, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagaStages)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: SagaStageDataSerializer })
@@ -71,7 +73,7 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   }
 
   @Post('bulk')
-  @Cache(Collection.SagaStages, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagaStages)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: SagaStageItemsSerializer })
@@ -81,7 +83,7 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   }
 
   @Get()
-  @Cache(Collection.SagaStages, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadEssentialSagaStages)
   @SetPolicy(Action.Read, Resource.EssentialSagaStages)
   @ApiResponse({ type: SagaStageItemsSerializer })
@@ -114,7 +116,7 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   }
 
   @Get(':id')
-  @Cache(Collection.SagaStages, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadEssentialSagaStages)
   @ApiResponse({ type: SagaStageDataSerializer })
   @SetPolicy(Action.Read, Resource.EssentialSagaStages)
@@ -126,7 +128,7 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   }
 
   @Delete(':id')
-  @Cache(Collection.SagaStages, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagaStages)
   @ApiResponse({ type: SagaStageDataSerializer })
   @SetPolicy(Action.Delete, Resource.EssentialSagaStages)
@@ -138,7 +140,7 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   }
 
   @Put(':id/restore')
-  @Cache(Collection.SagaStages, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagaStages)
   @ApiResponse({ type: SagaStageDataSerializer })
   @SetPolicy(Action.Restore, Resource.EssentialSagaStages)
@@ -150,7 +152,7 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.SagaStages, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageEssentialSagaStages)
   @ApiResponse({ type: SagaStageDataSerializer })
   @SetPolicy(Action.Destroy, Resource.EssentialSagaStages)
@@ -162,7 +164,7 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   }
 
   @Patch('bulk')
-  @Cache(Collection.SagaStages, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageEssentialSagaStages)
   @SetPolicy(Action.Update, Resource.EssentialSagaStages)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -176,7 +178,7 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   }
 
   @Patch(':id')
-  @Cache(Collection.SagaStages, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagaStages)
   @ApiResponse({ type: SagaStageDataSerializer })
   @SetPolicy(Action.Update, Resource.EssentialSagaStages)

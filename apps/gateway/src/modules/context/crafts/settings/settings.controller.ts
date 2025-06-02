@@ -23,7 +23,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Setting, SettingDto } from '@app/common/interfaces/context';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { ContextProvider } from '@app/common/providers/context';
@@ -37,11 +37,13 @@ import { Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('settings', 'context');
+
 @ApiBearerAuth()
-@RateLimit('settings')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Settings)
-@Controller(Collection.Settings)
+@ApiTags('context', 'settings')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -51,7 +53,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Get('count')
-  @Cache(Collection.Settings, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadContextSettings)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ContextSettings)
@@ -61,7 +63,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Post()
-  @Cache(Collection.Settings, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: SettingDataSerializer })
@@ -71,7 +73,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Post('bulk')
-  @Cache(Collection.Settings, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: SettingItemsSerializer })
@@ -81,7 +83,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Get()
-  @Cache(Collection.Settings, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadContextSettings)
   @SetPolicy(Action.Read, Resource.ContextSettings)
   @ApiResponse({ type: SettingItemsSerializer })
@@ -114,7 +116,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Get(':id')
-  @Cache(Collection.Settings, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadContextSettings)
   @ApiResponse({ type: SettingDataSerializer })
   @SetPolicy(Action.Read, Resource.ContextSettings)
@@ -126,7 +128,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Delete(':id')
-  @Cache(Collection.Settings, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @ApiResponse({ type: SettingDataSerializer })
   @SetPolicy(Action.Delete, Resource.ContextSettings)
@@ -138,7 +140,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Settings, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @ApiResponse({ type: SettingDataSerializer })
   @SetPolicy(Action.Restore, Resource.ContextSettings)
@@ -150,7 +152,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Settings, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContextSettings)
   @ApiResponse({ type: SettingDataSerializer })
   @SetPolicy(Action.Destroy, Resource.ContextSettings)
@@ -162,7 +164,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Patch('bulk')
-  @Cache(Collection.Settings, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContextSettings)
   @SetPolicy(Action.Update, Resource.ContextSettings)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -176,7 +178,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Patch(':id')
-  @Cache(Collection.Settings, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @ApiResponse({ type: SettingDataSerializer })
   @SetPolicy(Action.Update, Resource.ContextSettings)
