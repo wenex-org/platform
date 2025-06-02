@@ -8,7 +8,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Vehicle, VehicleDto } from '@app/common/interfaces/logistic';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
@@ -21,8 +21,10 @@ import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
+const COLL_PATH = COLLECTION('vehicles', 'logistic');
+
 @Resolver(() => VehicleSerializer)
-@RateLimit('vehicles')
+@RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -33,7 +35,7 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   }
 
   @Query(() => TotalSerializer)
-  @Cache(Collection.Vehicles, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadLogisticVehicles)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.LogisticVehicles)
@@ -42,7 +44,7 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   }
 
   @Mutation(() => VehicleDataSerializer)
-  @Cache(Collection.Vehicles, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticVehicles)
@@ -51,7 +53,7 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   }
 
   @Mutation(() => VehicleItemsSerializer)
-  @Cache(Collection.Vehicles, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticVehicles)
@@ -60,7 +62,7 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   }
 
   @Query(() => VehicleItemsSerializer)
-  @Cache(Collection.Vehicles, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadLogisticVehicles)
   @SetPolicy(Action.Read, Resource.LogisticVehicles)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -69,7 +71,7 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   }
 
   @Query(() => VehicleDataSerializer)
-  @Cache(Collection.Vehicles, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadLogisticVehicles)
   @SetPolicy(Action.Read, Resource.LogisticVehicles)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -84,7 +86,7 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   }
 
   @Mutation(() => VehicleDataSerializer)
-  @Cache(Collection.Vehicles, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
   @SetPolicy(Action.Delete, Resource.LogisticVehicles)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -99,7 +101,7 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   }
 
   @Mutation(() => VehicleDataSerializer)
-  @Cache(Collection.Vehicles, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
   @SetPolicy(Action.Restore, Resource.LogisticVehicles)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -114,7 +116,7 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   }
 
   @Mutation(() => VehicleDataSerializer)
-  @Cache(Collection.Vehicles, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticVehicles)
   @SetPolicy(Action.Destroy, Resource.LogisticVehicles)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -129,7 +131,7 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   }
 
   @Mutation(() => TotalSerializer)
-  @Cache(Collection.Vehicles, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticVehicles)
   @SetPolicy(Action.Update, Resource.LogisticVehicles)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -142,7 +144,7 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   }
 
   @Mutation(() => VehicleDataSerializer)
-  @Cache(Collection.Vehicles, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
   @SetPolicy(Action.Update, Resource.LogisticVehicles)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

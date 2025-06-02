@@ -5,7 +5,7 @@ import { FileItemsSerializer, FileSerializer } from '@app/common/serializers/spe
 import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { TransformerPipe, ValidationPipe } from '@app/common/core/pipes';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { deepCopy, mapToInstance } from '@app/common/core/utils';
 import { SpecialProvider } from '@app/common/providers/special';
 import { AllExceptionsFilter } from '@app/common/core/filters';
@@ -17,10 +17,12 @@ import { Metadata } from '@app/common/core/interfaces';
 import { Meta } from '@app/common/core/decorators';
 import { from, Observable } from 'rxjs';
 
+const COLL_PATH = COLLECTION('files', 'special');
+
 @ApiBearerAuth()
-@RateLimit('files')
-@ApiTags(Collection.Files)
-@Controller(Collection.Files)
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
+@ApiTags('special', 'files')
 @UseFilters(AllExceptionsFilter)
 @UsePipes(TransformerPipe, ValidationPipe)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -29,8 +31,8 @@ export class PublicController {
   constructor(readonly provider: SpecialProvider) {}
 
   @Post('upload/public')
+  @Cache(COLL_PATH, 'flush')
   @ApiConsumes('multipart/form-data')
-  @Cache(Collection.Files, 'flush')
   @SetScope(Scope.UploadSpecialFiles)
   @ApiResponse({ type: FileItemsSerializer })
   @SetPolicy(Action.Upload, Resource.SpecialFiles)

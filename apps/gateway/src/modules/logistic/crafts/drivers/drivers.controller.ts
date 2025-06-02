@@ -24,7 +24,7 @@ import { Driver as IDriver, DriverDto } from '@app/common/interfaces/logistic';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { LogisticProvider } from '@app/common/providers/logistic';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { AllExceptionsFilter } from '@app/common/core/filters';
@@ -37,11 +37,13 @@ import { Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('drivers', 'logistic');
+
 @ApiBearerAuth()
-@RateLimit('drivers')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Drivers)
-@Controller(Collection.Drivers)
+@ApiTags('logistic', 'drivers')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -51,7 +53,7 @@ export class DriversController extends ControllerClass<IDriver, DriverDto> imple
   }
 
   @Get('count')
-  @Cache(Collection.Drivers, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadLogisticDrivers)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.LogisticDrivers)
@@ -61,7 +63,7 @@ export class DriversController extends ControllerClass<IDriver, DriverDto> imple
   }
 
   @Post()
-  @Cache(Collection.Drivers, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticDrivers)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: DriverDataSerializer })
@@ -71,7 +73,7 @@ export class DriversController extends ControllerClass<IDriver, DriverDto> imple
   }
 
   @Post('bulk')
-  @Cache(Collection.Drivers, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticDrivers)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: DriverItemsSerializer })
@@ -81,7 +83,7 @@ export class DriversController extends ControllerClass<IDriver, DriverDto> imple
   }
 
   @Get()
-  @Cache(Collection.Drivers, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadLogisticDrivers)
   @SetPolicy(Action.Read, Resource.LogisticDrivers)
   @ApiResponse({ type: DriverItemsSerializer })
@@ -114,7 +116,7 @@ export class DriversController extends ControllerClass<IDriver, DriverDto> imple
   }
 
   @Get(':id')
-  @Cache(Collection.Drivers, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadLogisticDrivers)
   @ApiResponse({ type: DriverDataSerializer })
   @SetPolicy(Action.Read, Resource.LogisticDrivers)
@@ -126,7 +128,7 @@ export class DriversController extends ControllerClass<IDriver, DriverDto> imple
   }
 
   @Delete(':id')
-  @Cache(Collection.Drivers, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticDrivers)
   @ApiResponse({ type: DriverDataSerializer })
   @SetPolicy(Action.Delete, Resource.LogisticDrivers)
@@ -138,7 +140,7 @@ export class DriversController extends ControllerClass<IDriver, DriverDto> imple
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Drivers, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticDrivers)
   @ApiResponse({ type: DriverDataSerializer })
   @SetPolicy(Action.Restore, Resource.LogisticDrivers)
@@ -150,7 +152,7 @@ export class DriversController extends ControllerClass<IDriver, DriverDto> imple
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Drivers, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticDrivers)
   @ApiResponse({ type: DriverDataSerializer })
   @SetPolicy(Action.Destroy, Resource.LogisticDrivers)
@@ -162,7 +164,7 @@ export class DriversController extends ControllerClass<IDriver, DriverDto> imple
   }
 
   @Patch('bulk')
-  @Cache(Collection.Drivers, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticDrivers)
   @SetPolicy(Action.Update, Resource.LogisticDrivers)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -176,7 +178,7 @@ export class DriversController extends ControllerClass<IDriver, DriverDto> imple
   }
 
   @Patch(':id')
-  @Cache(Collection.Drivers, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticDrivers)
   @ApiResponse({ type: DriverDataSerializer })
   @SetPolicy(Action.Update, Resource.LogisticDrivers)

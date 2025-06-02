@@ -8,7 +8,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
 import { SpecialProvider } from '@app/common/providers/special';
@@ -21,8 +21,10 @@ import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
+const COLL_PATH = COLLECTION('stats', 'special');
+
 @Resolver(() => StatSerializer)
-@RateLimit('stats')
+@RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -33,7 +35,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   }
 
   @Query(() => TotalSerializer)
-  @Cache(Collection.Stats, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadSpecialStats)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.SpecialStats)
@@ -42,7 +44,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   }
 
   @Mutation(() => StatDataSerializer)
-  @Cache(Collection.Stats, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialStats)
@@ -51,7 +53,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   }
 
   @Mutation(() => StatItemsSerializer)
-  @Cache(Collection.Stats, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialStats)
@@ -60,7 +62,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   }
 
   @Query(() => StatItemsSerializer)
-  @Cache(Collection.Stats, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadSpecialStats)
   @SetPolicy(Action.Read, Resource.SpecialStats)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -69,7 +71,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   }
 
   @Query(() => StatDataSerializer)
-  @Cache(Collection.Stats, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadSpecialStats)
   @SetPolicy(Action.Read, Resource.SpecialStats)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -84,7 +86,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   }
 
   @Mutation(() => StatDataSerializer)
-  @Cache(Collection.Stats, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @SetPolicy(Action.Delete, Resource.SpecialStats)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -99,7 +101,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   }
 
   @Mutation(() => StatDataSerializer)
-  @Cache(Collection.Stats, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @SetPolicy(Action.Restore, Resource.SpecialStats)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -114,7 +116,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   }
 
   @Mutation(() => StatDataSerializer)
-  @Cache(Collection.Stats, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageSpecialStats)
   @SetPolicy(Action.Destroy, Resource.SpecialStats)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -129,7 +131,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   }
 
   @Mutation(() => TotalSerializer)
-  @Cache(Collection.Stats, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageSpecialStats)
   @SetPolicy(Action.Update, Resource.SpecialStats)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -142,7 +144,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   }
 
   @Mutation(() => StatDataSerializer)
-  @Cache(Collection.Stats, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @SetPolicy(Action.Update, Resource.SpecialStats)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

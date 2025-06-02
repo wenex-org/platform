@@ -8,7 +8,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Config, ConfigDto } from '@app/common/interfaces/context';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
@@ -21,8 +21,10 @@ import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
+const COLL_PATH = COLLECTION('configs', 'context');
+
 @Resolver(() => ConfigSerializer)
-@RateLimit('configs')
+@RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -33,7 +35,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Query(() => TotalSerializer)
-  @Cache(Collection.Configs, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadContextConfigs)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ContextConfigs)
@@ -42,7 +44,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Mutation(() => ConfigDataSerializer)
-  @Cache(Collection.Configs, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContextConfigs)
@@ -51,7 +53,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Mutation(() => ConfigItemsSerializer)
-  @Cache(Collection.Configs, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContextConfigs)
@@ -60,7 +62,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Query(() => ConfigItemsSerializer)
-  @Cache(Collection.Configs, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadContextConfigs)
   @SetPolicy(Action.Read, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -69,7 +71,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Query(() => ConfigDataSerializer)
-  @Cache(Collection.Configs, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadContextConfigs)
   @SetPolicy(Action.Read, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -84,7 +86,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Mutation(() => ConfigDataSerializer)
-  @Cache(Collection.Configs, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @SetPolicy(Action.Delete, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -99,7 +101,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Mutation(() => ConfigDataSerializer)
-  @Cache(Collection.Configs, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @SetPolicy(Action.Restore, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -114,7 +116,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Mutation(() => ConfigDataSerializer)
-  @Cache(Collection.Configs, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContextConfigs)
   @SetPolicy(Action.Destroy, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -129,7 +131,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Mutation(() => TotalSerializer)
-  @Cache(Collection.Configs, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContextConfigs)
   @SetPolicy(Action.Update, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -142,7 +144,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Mutation(() => ConfigDataSerializer)
-  @Cache(Collection.Configs, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @SetPolicy(Action.Update, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

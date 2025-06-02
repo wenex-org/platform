@@ -23,7 +23,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
@@ -37,12 +37,14 @@ import { Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('apps', 'domain');
+
 @ApiBearerAuth()
-@RateLimit('apps')
-@ApiTags(Collection.Apps)
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
+@ApiTags('domain', 'apps')
 @Nested<App>('change_logs')
-@Controller(Collection.Apps)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -52,7 +54,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   }
 
   @Get('count')
-  @Cache(Collection.Apps, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadDomainApps)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.DomainApps)
@@ -62,7 +64,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   }
 
   @Post()
-  @Cache(Collection.Apps, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: AppDataSerializer })
@@ -72,7 +74,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   }
 
   @Post('bulk')
-  @Cache(Collection.Apps, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: AppItemsSerializer })
@@ -82,7 +84,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   }
 
   @Get()
-  @Cache(Collection.Apps, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadDomainApps)
   @SetPolicy(Action.Read, Resource.DomainApps)
   @ApiResponse({ type: AppItemsSerializer })
@@ -115,7 +117,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   }
 
   @Get(':id')
-  @Cache(Collection.Apps, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadDomainApps)
   @ApiResponse({ type: AppDataSerializer })
   @SetPolicy(Action.Read, Resource.DomainApps)
@@ -127,7 +129,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   }
 
   @Delete(':id')
-  @Cache(Collection.Apps, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @ApiResponse({ type: AppDataSerializer })
   @SetPolicy(Action.Delete, Resource.DomainApps)
@@ -139,7 +141,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Apps, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @ApiResponse({ type: AppDataSerializer })
   @SetPolicy(Action.Restore, Resource.DomainApps)
@@ -151,7 +153,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Apps, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageDomainApps)
   @ApiResponse({ type: AppDataSerializer })
   @SetPolicy(Action.Destroy, Resource.DomainApps)
@@ -163,7 +165,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   }
 
   @Patch('bulk')
-  @Cache(Collection.Apps, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageDomainApps)
   @SetPolicy(Action.Update, Resource.DomainApps)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -177,7 +179,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   }
 
   @Patch(':id')
-  @Cache(Collection.Apps, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @ApiResponse({ type: AppDataSerializer })
   @SetPolicy(Action.Update, Resource.DomainApps)

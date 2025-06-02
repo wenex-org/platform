@@ -24,7 +24,7 @@ import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { PusHistory, PusHistoryDto } from '@app/common/interfaces/touch';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
@@ -37,12 +37,14 @@ import { Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('push-histories', 'touch');
+
 @ApiBearerAuth()
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@RateLimit('push-histories')
 @UseFilters(AllExceptionsFilter)
-@ApiTags(Collection.PusHistories)
-@Controller(Collection.PusHistories)
+@ApiTags('touch', 'push-histories')
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class PusHistoriesController
@@ -54,7 +56,7 @@ export class PusHistoriesController
   }
 
   @Get('count')
-  @Cache(Collection.PusHistories, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadTouchPusHistories)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.TouchPusHistories)
@@ -64,7 +66,7 @@ export class PusHistoriesController
   }
 
   @Post()
-  @Cache(Collection.PusHistories, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPusHistories)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: PusHistoryDataSerializer })
@@ -74,7 +76,7 @@ export class PusHistoriesController
   }
 
   @Post('bulk')
-  @Cache(Collection.PusHistories, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPusHistories)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: PusHistoryItemsSerializer })
@@ -84,7 +86,7 @@ export class PusHistoriesController
   }
 
   @Get()
-  @Cache(Collection.PusHistories, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadTouchPusHistories)
   @SetPolicy(Action.Read, Resource.TouchPusHistories)
   @ApiResponse({ type: PusHistoryItemsSerializer })
@@ -117,7 +119,7 @@ export class PusHistoriesController
   }
 
   @Get(':id')
-  @Cache(Collection.PusHistories, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadTouchPusHistories)
   @ApiResponse({ type: PusHistoryDataSerializer })
   @SetPolicy(Action.Read, Resource.TouchPusHistories)
@@ -129,7 +131,7 @@ export class PusHistoriesController
   }
 
   @Delete(':id')
-  @Cache(Collection.PusHistories, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPusHistories)
   @ApiResponse({ type: PusHistoryDataSerializer })
   @SetPolicy(Action.Delete, Resource.TouchPusHistories)
@@ -141,7 +143,7 @@ export class PusHistoriesController
   }
 
   @Put(':id/restore')
-  @Cache(Collection.PusHistories, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPusHistories)
   @ApiResponse({ type: PusHistoryDataSerializer })
   @SetPolicy(Action.Restore, Resource.TouchPusHistories)
@@ -153,7 +155,7 @@ export class PusHistoriesController
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.PusHistories, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchPusHistories)
   @ApiResponse({ type: PusHistoryDataSerializer })
   @SetPolicy(Action.Destroy, Resource.TouchPusHistories)
@@ -165,7 +167,7 @@ export class PusHistoriesController
   }
 
   @Patch('bulk')
-  @Cache(Collection.PusHistories, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchPusHistories)
   @SetPolicy(Action.Update, Resource.TouchPusHistories)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -179,7 +181,7 @@ export class PusHistoriesController
   }
 
   @Patch(':id')
-  @Cache(Collection.PusHistories, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPusHistories)
   @ApiResponse({ type: PusHistoryDataSerializer })
   @SetPolicy(Action.Update, Resource.TouchPusHistories)

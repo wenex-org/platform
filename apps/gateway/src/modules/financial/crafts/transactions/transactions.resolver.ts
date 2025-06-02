@@ -9,7 +9,7 @@ import { Transaction, TransactionDto } from '@app/common/interfaces/financial';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { FinancialProvider } from '@app/common/providers/financial';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
@@ -21,8 +21,10 @@ import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
+const COLL_PATH = COLLECTION('transactions', 'financial');
+
 @Resolver(() => TransactionSerializer)
-@RateLimit('transactions')
+@RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -36,7 +38,7 @@ export class TransactionsResolver
   }
 
   @Query(() => TotalSerializer)
-  @Cache(Collection.Transactions, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadFinancialTransactions)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.FinancialTransactions)
@@ -45,7 +47,7 @@ export class TransactionsResolver
   }
 
   @Mutation(() => TransactionDataSerializer)
-  @Cache(Collection.Transactions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialTransactions)
@@ -54,7 +56,7 @@ export class TransactionsResolver
   }
 
   @Mutation(() => TransactionItemsSerializer)
-  @Cache(Collection.Transactions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialTransactions)
@@ -66,7 +68,7 @@ export class TransactionsResolver
   }
 
   @Query(() => TransactionItemsSerializer)
-  @Cache(Collection.Transactions, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadFinancialTransactions)
   @SetPolicy(Action.Read, Resource.FinancialTransactions)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -78,7 +80,7 @@ export class TransactionsResolver
   }
 
   @Query(() => TransactionDataSerializer)
-  @Cache(Collection.Transactions, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadFinancialTransactions)
   @SetPolicy(Action.Read, Resource.FinancialTransactions)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -93,7 +95,7 @@ export class TransactionsResolver
   }
 
   @Mutation(() => TransactionDataSerializer)
-  @Cache(Collection.Transactions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @SetPolicy(Action.Delete, Resource.FinancialTransactions)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -108,7 +110,7 @@ export class TransactionsResolver
   }
 
   @Mutation(() => TransactionDataSerializer)
-  @Cache(Collection.Transactions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @SetPolicy(Action.Restore, Resource.FinancialTransactions)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -123,7 +125,7 @@ export class TransactionsResolver
   }
 
   @Mutation(() => TransactionDataSerializer)
-  @Cache(Collection.Transactions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialTransactions)
   @SetPolicy(Action.Destroy, Resource.FinancialTransactions)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -138,7 +140,7 @@ export class TransactionsResolver
   }
 
   @Mutation(() => TotalSerializer)
-  @Cache(Collection.Transactions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialTransactions)
   @SetPolicy(Action.Update, Resource.FinancialTransactions)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -151,7 +153,7 @@ export class TransactionsResolver
   }
 
   @Mutation(() => TransactionDataSerializer)
-  @Cache(Collection.Transactions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @SetPolicy(Action.Update, Resource.FinancialTransactions)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

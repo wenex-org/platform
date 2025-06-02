@@ -23,7 +23,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Session, SessionDto } from '@app/common/interfaces/identity';
 import { IdentityProvider } from '@app/common/providers/identity';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
@@ -37,11 +37,13 @@ import { Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('sessions', 'identity');
+
 @ApiBearerAuth()
-@RateLimit('sessions')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Sessions)
-@Controller(Collection.Sessions)
+@ApiTags('identity', 'sessions')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -51,7 +53,7 @@ export class SessionsController extends ControllerClass<Session, SessionDto> imp
   }
 
   @Get('count')
-  @Cache(Collection.Sessions, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadIdentitySessions)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.IdentitySessions)
@@ -61,7 +63,7 @@ export class SessionsController extends ControllerClass<Session, SessionDto> imp
   }
 
   @Post()
-  @Cache(Collection.Sessions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: SessionDataSerializer })
@@ -71,7 +73,7 @@ export class SessionsController extends ControllerClass<Session, SessionDto> imp
   }
 
   @Post('bulk')
-  @Cache(Collection.Sessions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: SessionItemsSerializer })
@@ -81,7 +83,7 @@ export class SessionsController extends ControllerClass<Session, SessionDto> imp
   }
 
   @Get()
-  @Cache(Collection.Sessions, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadIdentitySessions)
   @SetPolicy(Action.Read, Resource.IdentitySessions)
   @ApiResponse({ type: SessionItemsSerializer })
@@ -114,7 +116,7 @@ export class SessionsController extends ControllerClass<Session, SessionDto> imp
   }
 
   @Get(':id')
-  @Cache(Collection.Sessions, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadIdentitySessions)
   @ApiResponse({ type: SessionDataSerializer })
   @SetPolicy(Action.Read, Resource.IdentitySessions)
@@ -126,7 +128,7 @@ export class SessionsController extends ControllerClass<Session, SessionDto> imp
   }
 
   @Delete(':id')
-  @Cache(Collection.Sessions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @ApiResponse({ type: SessionDataSerializer })
   @SetPolicy(Action.Delete, Resource.IdentitySessions)
@@ -138,7 +140,7 @@ export class SessionsController extends ControllerClass<Session, SessionDto> imp
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Sessions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @ApiResponse({ type: SessionDataSerializer })
   @SetPolicy(Action.Restore, Resource.IdentitySessions)
@@ -150,7 +152,7 @@ export class SessionsController extends ControllerClass<Session, SessionDto> imp
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Sessions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageIdentitySessions)
   @ApiResponse({ type: SessionDataSerializer })
   @SetPolicy(Action.Destroy, Resource.IdentitySessions)
@@ -162,7 +164,7 @@ export class SessionsController extends ControllerClass<Session, SessionDto> imp
   }
 
   @Patch('bulk')
-  @Cache(Collection.Sessions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageIdentitySessions)
   @SetPolicy(Action.Update, Resource.IdentitySessions)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -176,7 +178,7 @@ export class SessionsController extends ControllerClass<Session, SessionDto> imp
   }
 
   @Patch(':id')
-  @Cache(Collection.Sessions, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @ApiResponse({ type: SessionDataSerializer })
   @SetPolicy(Action.Update, Resource.IdentitySessions)

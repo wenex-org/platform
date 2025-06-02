@@ -8,7 +8,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Driver, DriverDto } from '@app/common/interfaces/logistic';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
@@ -21,8 +21,10 @@ import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
+const COLL_PATH = COLLECTION('drivers', 'logistic');
+
 @Resolver(() => DriverSerializer)
-@RateLimit('drivers')
+@RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -33,7 +35,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   }
 
   @Query(() => TotalSerializer)
-  @Cache(Collection.Drivers, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadLogisticDrivers)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.LogisticDrivers)
@@ -42,7 +44,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   }
 
   @Mutation(() => DriverDataSerializer)
-  @Cache(Collection.Drivers, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticDrivers)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticDrivers)
@@ -51,7 +53,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   }
 
   @Mutation(() => DriverItemsSerializer)
-  @Cache(Collection.Drivers, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticDrivers)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticDrivers)
@@ -60,7 +62,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   }
 
   @Query(() => DriverItemsSerializer)
-  @Cache(Collection.Drivers, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadLogisticDrivers)
   @SetPolicy(Action.Read, Resource.LogisticDrivers)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -69,7 +71,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   }
 
   @Query(() => DriverDataSerializer)
-  @Cache(Collection.Drivers, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadLogisticDrivers)
   @SetPolicy(Action.Read, Resource.LogisticDrivers)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -84,7 +86,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   }
 
   @Mutation(() => DriverDataSerializer)
-  @Cache(Collection.Drivers, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticDrivers)
   @SetPolicy(Action.Delete, Resource.LogisticDrivers)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -99,7 +101,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   }
 
   @Mutation(() => DriverDataSerializer)
-  @Cache(Collection.Drivers, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticDrivers)
   @SetPolicy(Action.Restore, Resource.LogisticDrivers)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -114,7 +116,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   }
 
   @Mutation(() => DriverDataSerializer)
-  @Cache(Collection.Drivers, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticDrivers)
   @SetPolicy(Action.Destroy, Resource.LogisticDrivers)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -129,7 +131,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   }
 
   @Mutation(() => TotalSerializer)
-  @Cache(Collection.Drivers, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticDrivers)
   @SetPolicy(Action.Update, Resource.LogisticDrivers)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -142,7 +144,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   }
 
   @Mutation(() => DriverDataSerializer)
-  @Cache(Collection.Drivers, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticDrivers)
   @SetPolicy(Action.Update, Resource.LogisticDrivers)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

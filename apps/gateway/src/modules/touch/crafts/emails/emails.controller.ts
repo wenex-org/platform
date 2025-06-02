@@ -23,7 +23,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { getSseMessage, mapToInstance } from '@app/common/core/utils';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { Email, EmailDto } from '@app/common/interfaces/touch';
@@ -37,11 +37,13 @@ import { from, Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('emails', 'touch');
+
 @ApiBearerAuth()
-@RateLimit('emails')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Emails)
-@Controller(Collection.Emails)
+@ApiTags('touch', 'emails')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -51,7 +53,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   }
 
   @Post('send')
-  @Cache(Collection.Emails, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.SendTouchEmails)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: EmailDataSerializer })
@@ -65,7 +67,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   // ##############################
 
   @Get('count')
-  @Cache(Collection.Emails, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadTouchEmails)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.TouchEmails)
@@ -75,7 +77,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   }
 
   @Post()
-  @Cache(Collection.Emails, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: EmailDataSerializer })
@@ -85,7 +87,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   }
 
   @Post('bulk')
-  @Cache(Collection.Emails, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: EmailItemsSerializer })
@@ -95,7 +97,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   }
 
   @Get()
-  @Cache(Collection.Emails, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadTouchEmails)
   @SetPolicy(Action.Read, Resource.TouchEmails)
   @ApiResponse({ type: EmailItemsSerializer })
@@ -128,7 +130,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   }
 
   @Get(':id')
-  @Cache(Collection.Emails, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadTouchEmails)
   @ApiResponse({ type: EmailDataSerializer })
   @SetPolicy(Action.Read, Resource.TouchEmails)
@@ -140,7 +142,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   }
 
   @Delete(':id')
-  @Cache(Collection.Emails, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @ApiResponse({ type: EmailDataSerializer })
   @SetPolicy(Action.Delete, Resource.TouchEmails)
@@ -152,7 +154,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Emails, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @ApiResponse({ type: EmailDataSerializer })
   @SetPolicy(Action.Restore, Resource.TouchEmails)
@@ -164,7 +166,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Emails, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchEmails)
   @ApiResponse({ type: EmailDataSerializer })
   @SetPolicy(Action.Destroy, Resource.TouchEmails)
@@ -176,7 +178,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   }
 
   @Patch('bulk')
-  @Cache(Collection.Emails, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchEmails)
   @SetPolicy(Action.Update, Resource.TouchEmails)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -190,7 +192,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   }
 
   @Patch(':id')
-  @Cache(Collection.Emails, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @ApiResponse({ type: EmailDataSerializer })
   @SetPolicy(Action.Update, Resource.TouchEmails)

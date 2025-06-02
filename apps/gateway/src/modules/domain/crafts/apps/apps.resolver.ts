@@ -8,7 +8,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
 import { AllExceptionsFilter } from '@app/common/core/filters';
@@ -21,10 +21,12 @@ import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
+const COLL_PATH = COLLECTION('apps', 'domain');
+
 @Resolver(() => AppSerializer)
-@RateLimit('apps')
-@Nested<App>('change_logs')
+@RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
+@Nested<App>('change_logs')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -34,7 +36,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Query(() => TotalSerializer)
-  @Cache(Collection.Apps, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadDomainApps)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.DomainApps)
@@ -43,7 +45,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Mutation(() => AppDataSerializer)
-  @Cache(Collection.Apps, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainApps)
@@ -52,7 +54,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Mutation(() => AppItemsSerializer)
-  @Cache(Collection.Apps, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainApps)
@@ -61,7 +63,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Query(() => AppItemsSerializer)
-  @Cache(Collection.Apps, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadDomainApps)
   @SetPolicy(Action.Read, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -70,7 +72,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Query(() => AppDataSerializer)
-  @Cache(Collection.Apps, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadDomainApps)
   @SetPolicy(Action.Read, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -85,7 +87,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Mutation(() => AppDataSerializer)
-  @Cache(Collection.Apps, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @SetPolicy(Action.Delete, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -100,7 +102,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Mutation(() => AppDataSerializer)
-  @Cache(Collection.Apps, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @SetPolicy(Action.Restore, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -115,7 +117,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Mutation(() => AppDataSerializer)
-  @Cache(Collection.Apps, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageDomainApps)
   @SetPolicy(Action.Destroy, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -130,7 +132,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Mutation(() => TotalSerializer)
-  @Cache(Collection.Apps, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageDomainApps)
   @SetPolicy(Action.Update, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -143,7 +145,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Mutation(() => AppDataSerializer)
-  @Cache(Collection.Apps, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @SetPolicy(Action.Update, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

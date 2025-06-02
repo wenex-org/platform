@@ -9,7 +9,7 @@ import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Currency, CurrencyDto } from '@app/common/interfaces/financial';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { FinancialProvider } from '@app/common/providers/financial';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
@@ -21,8 +21,10 @@ import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
+const COLL_PATH = COLLECTION('currencies', 'financial');
+
 @Resolver(() => CurrencySerializer)
-@RateLimit('currencies')
+@RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -33,7 +35,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   }
 
   @Query(() => TotalSerializer)
-  @Cache(Collection.Currencies, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadFinancialCurrencies)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.FinancialCurrencies)
@@ -42,7 +44,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   }
 
   @Mutation(() => CurrencyDataSerializer)
-  @Cache(Collection.Currencies, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialCurrencies)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialCurrencies)
@@ -51,7 +53,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   }
 
   @Mutation(() => CurrencyItemsSerializer)
-  @Cache(Collection.Currencies, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialCurrencies)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialCurrencies)
@@ -60,7 +62,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   }
 
   @Query(() => CurrencyItemsSerializer)
-  @Cache(Collection.Currencies, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadFinancialCurrencies)
   @SetPolicy(Action.Read, Resource.FinancialCurrencies)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -69,7 +71,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   }
 
   @Query(() => CurrencyDataSerializer)
-  @Cache(Collection.Currencies, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadFinancialCurrencies)
   @SetPolicy(Action.Read, Resource.FinancialCurrencies)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -84,7 +86,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   }
 
   @Mutation(() => CurrencyDataSerializer)
-  @Cache(Collection.Currencies, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialCurrencies)
   @SetPolicy(Action.Delete, Resource.FinancialCurrencies)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -99,7 +101,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   }
 
   @Mutation(() => CurrencyDataSerializer)
-  @Cache(Collection.Currencies, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialCurrencies)
   @SetPolicy(Action.Restore, Resource.FinancialCurrencies)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -114,7 +116,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   }
 
   @Mutation(() => CurrencyDataSerializer)
-  @Cache(Collection.Currencies, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialCurrencies)
   @SetPolicy(Action.Destroy, Resource.FinancialCurrencies)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -129,7 +131,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   }
 
   @Mutation(() => TotalSerializer)
-  @Cache(Collection.Currencies, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialCurrencies)
   @SetPolicy(Action.Update, Resource.FinancialCurrencies)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -142,7 +144,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   }
 
   @Mutation(() => CurrencyDataSerializer)
-  @Cache(Collection.Currencies, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialCurrencies)
   @SetPolicy(Action.Update, Resource.FinancialCurrencies)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

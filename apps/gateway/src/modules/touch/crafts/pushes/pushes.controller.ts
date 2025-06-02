@@ -29,7 +29,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { getSseMessage, mapToInstance } from '@app/common/core/utils';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { AllExceptionsFilter } from '@app/common/core/filters';
@@ -43,11 +43,13 @@ import { from, Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('pushes', 'touch');
+
 @ApiBearerAuth()
-@RateLimit('pushes')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Pushes)
-@Controller(Collection.Pushes)
+@ApiTags('touch', 'pushes')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -58,7 +60,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
 
   @Post('send')
   @SetScope(Scope.SendTouchPushes)
-  @Cache(Collection.Pushes, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Send, Resource.TouchPushes)
   @ApiResponse({ type: PusHistoryDataSerializer })
@@ -71,7 +73,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   // ##############################
 
   @Get('count')
-  @Cache(Collection.Pushes, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadTouchPushes)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.TouchPushes)
@@ -81,7 +83,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   }
 
   @Post()
-  @Cache(Collection.Pushes, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPushes)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: PushDataSerializer })
@@ -91,7 +93,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   }
 
   @Post('bulk')
-  @Cache(Collection.Pushes, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPushes)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: PushItemsSerializer })
@@ -101,7 +103,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   }
 
   @Get()
-  @Cache(Collection.Pushes, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadTouchPushes)
   @SetPolicy(Action.Read, Resource.TouchPushes)
   @ApiResponse({ type: PushItemsSerializer })
@@ -134,7 +136,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   }
 
   @Get(':id')
-  @Cache(Collection.Pushes, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadTouchPushes)
   @ApiResponse({ type: PushDataSerializer })
   @SetPolicy(Action.Read, Resource.TouchPushes)
@@ -146,7 +148,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   }
 
   @Delete(':id')
-  @Cache(Collection.Pushes, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPushes)
   @ApiResponse({ type: PushDataSerializer })
   @SetPolicy(Action.Delete, Resource.TouchPushes)
@@ -158,7 +160,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Pushes, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPushes)
   @ApiResponse({ type: PushDataSerializer })
   @SetPolicy(Action.Restore, Resource.TouchPushes)
@@ -170,7 +172,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Pushes, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchPushes)
   @ApiResponse({ type: PushDataSerializer })
   @SetPolicy(Action.Destroy, Resource.TouchPushes)
@@ -182,7 +184,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   }
 
   @Patch('bulk')
-  @Cache(Collection.Pushes, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchPushes)
   @SetPolicy(Action.Update, Resource.TouchPushes)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -196,7 +198,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   }
 
   @Patch(':id')
-  @Cache(Collection.Pushes, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPushes)
   @ApiResponse({ type: PushDataSerializer })
   @SetPolicy(Action.Update, Resource.TouchPushes)

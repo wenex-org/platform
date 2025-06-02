@@ -8,7 +8,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
 import { Email, EmailDto } from '@app/common/interfaces/touch';
@@ -21,8 +21,10 @@ import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
+const COLL_PATH = COLLECTION('emails', 'touch');
+
 @Resolver(() => EmailSerializer)
-@RateLimit('emails')
+@RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -33,7 +35,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   }
 
   @Query(() => TotalSerializer)
-  @Cache(Collection.Emails, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadTouchEmails)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.TouchEmails)
@@ -42,7 +44,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   }
 
   @Mutation(() => EmailDataSerializer)
-  @Cache(Collection.Emails, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchEmails)
@@ -51,7 +53,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   }
 
   @Mutation(() => EmailItemsSerializer)
-  @Cache(Collection.Emails, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchEmails)
@@ -60,7 +62,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   }
 
   @Query(() => EmailItemsSerializer)
-  @Cache(Collection.Emails, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadTouchEmails)
   @SetPolicy(Action.Read, Resource.TouchEmails)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -69,7 +71,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   }
 
   @Query(() => EmailDataSerializer)
-  @Cache(Collection.Emails, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadTouchEmails)
   @SetPolicy(Action.Read, Resource.TouchEmails)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -84,7 +86,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   }
 
   @Mutation(() => EmailDataSerializer)
-  @Cache(Collection.Emails, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @SetPolicy(Action.Delete, Resource.TouchEmails)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -99,7 +101,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   }
 
   @Mutation(() => EmailDataSerializer)
-  @Cache(Collection.Emails, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @SetPolicy(Action.Restore, Resource.TouchEmails)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -114,7 +116,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   }
 
   @Mutation(() => EmailDataSerializer)
-  @Cache(Collection.Emails, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchEmails)
   @SetPolicy(Action.Destroy, Resource.TouchEmails)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -129,7 +131,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   }
 
   @Mutation(() => TotalSerializer)
-  @Cache(Collection.Emails, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchEmails)
   @SetPolicy(Action.Update, Resource.TouchEmails)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -142,7 +144,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   }
 
   @Mutation(() => EmailDataSerializer)
-  @Cache(Collection.Emails, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @SetPolicy(Action.Update, Resource.TouchEmails)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

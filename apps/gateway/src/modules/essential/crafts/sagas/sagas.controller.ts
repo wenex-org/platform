@@ -29,7 +29,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { getSseMessage, mapToInstance } from '@app/common/core/utils';
 import { EssentialProvider } from '@app/common/providers/essential';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
@@ -43,11 +43,13 @@ import { from, Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('sagas', 'essential');
+
 @ApiBearerAuth()
-@RateLimit('sagas')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Sagas)
-@Controller(Collection.Sagas)
+@ApiTags('essential', 'sagas')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
@@ -57,7 +59,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Post('start')
-  @Cache(Collection.Sagas, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.StartEssentialSagas)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: SagaDataSerializer })
@@ -67,7 +69,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Post('add')
-  @Cache(Collection.Sagas, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.AddEssentialSagas)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: SagaDataSerializer })
@@ -77,7 +79,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Get(':id/abort')
-  @Cache(Collection.Sagas, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.AbortEssentialSagas)
   @ApiResponse({ type: SagaDataSerializer })
   @SetPolicy(Action.Abort, Resource.EssentialSagas)
@@ -89,7 +91,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Get(':id/commit')
-  @Cache(Collection.Sagas, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.CommitEssentialSagas)
   @ApiResponse({ type: SagaDataSerializer })
   @SetPolicy(Action.Commit, Resource.EssentialSagas)
@@ -105,7 +107,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   // ##############################
 
   @Get('count')
-  @Cache(Collection.Sagas, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadEssentialSagas)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.EssentialSagas)
@@ -115,7 +117,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Post()
-  @Cache(Collection.Sagas, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagas)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: SagaDataSerializer })
@@ -125,7 +127,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Post('bulk')
-  @Cache(Collection.Sagas, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagas)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: SagaItemsSerializer })
@@ -135,7 +137,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Get()
-  @Cache(Collection.Sagas, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadEssentialSagas)
   @SetPolicy(Action.Read, Resource.EssentialSagas)
   @ApiResponse({ type: SagaItemsSerializer })
@@ -168,7 +170,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Get(':id')
-  @Cache(Collection.Sagas, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadEssentialSagas)
   @ApiResponse({ type: SagaDataSerializer })
   @SetPolicy(Action.Read, Resource.EssentialSagas)
@@ -180,7 +182,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Delete(':id')
-  @Cache(Collection.Sagas, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagas)
   @ApiResponse({ type: SagaDataSerializer })
   @SetPolicy(Action.Delete, Resource.EssentialSagas)
@@ -192,7 +194,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Sagas, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagas)
   @ApiResponse({ type: SagaDataSerializer })
   @SetPolicy(Action.Restore, Resource.EssentialSagas)
@@ -204,7 +206,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Sagas, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageEssentialSagas)
   @ApiResponse({ type: SagaDataSerializer })
   @SetPolicy(Action.Destroy, Resource.EssentialSagas)
@@ -216,7 +218,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Patch('bulk')
-  @Cache(Collection.Sagas, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageEssentialSagas)
   @SetPolicy(Action.Update, Resource.EssentialSagas)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -230,7 +232,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Patch(':id')
-  @Cache(Collection.Sagas, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagas)
   @ApiResponse({ type: SagaDataSerializer })
   @SetPolicy(Action.Update, Resource.EssentialSagas)

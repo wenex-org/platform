@@ -23,7 +23,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Activity, ActivityDto } from '@app/common/interfaces/general';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { GeneralProvider } from '@app/common/providers/general';
@@ -37,12 +37,14 @@ import { Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
+const COLL_PATH = COLLECTION('activities', 'general');
+
 @ApiBearerAuth()
-@RateLimit('activities')
+@RateLimit(COLL_PATH)
+@Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags(Collection.Activities)
-@Controller(Collection.Activities)
 @UseFilters(AllExceptionsFilter)
+@ApiTags('general', 'activities')
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class ActivitiesController extends ControllerClass<Activity, ActivityDto> implements IController<Activity, ActivityDto> {
@@ -51,7 +53,7 @@ export class ActivitiesController extends ControllerClass<Activity, ActivityDto>
   }
 
   @Get('count')
-  @Cache(Collection.Activities, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadGeneralActivities)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.GeneralActivities)
@@ -61,7 +63,7 @@ export class ActivitiesController extends ControllerClass<Activity, ActivityDto>
   }
 
   @Post()
-  @Cache(Collection.Activities, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralActivities)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: ActivityDataSerializer })
@@ -71,7 +73,7 @@ export class ActivitiesController extends ControllerClass<Activity, ActivityDto>
   }
 
   @Post('bulk')
-  @Cache(Collection.Activities, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralActivities)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: ActivityItemsSerializer })
@@ -81,7 +83,7 @@ export class ActivitiesController extends ControllerClass<Activity, ActivityDto>
   }
 
   @Get()
-  @Cache(Collection.Activities, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadGeneralActivities)
   @SetPolicy(Action.Read, Resource.GeneralActivities)
   @ApiResponse({ type: ActivityItemsSerializer })
@@ -114,7 +116,7 @@ export class ActivitiesController extends ControllerClass<Activity, ActivityDto>
   }
 
   @Get(':id')
-  @Cache(Collection.Activities, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadGeneralActivities)
   @ApiResponse({ type: ActivityDataSerializer })
   @SetPolicy(Action.Read, Resource.GeneralActivities)
@@ -126,7 +128,7 @@ export class ActivitiesController extends ControllerClass<Activity, ActivityDto>
   }
 
   @Delete(':id')
-  @Cache(Collection.Activities, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralActivities)
   @ApiResponse({ type: ActivityDataSerializer })
   @SetPolicy(Action.Delete, Resource.GeneralActivities)
@@ -138,7 +140,7 @@ export class ActivitiesController extends ControllerClass<Activity, ActivityDto>
   }
 
   @Put(':id/restore')
-  @Cache(Collection.Activities, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralActivities)
   @ApiResponse({ type: ActivityDataSerializer })
   @SetPolicy(Action.Restore, Resource.GeneralActivities)
@@ -150,7 +152,7 @@ export class ActivitiesController extends ControllerClass<Activity, ActivityDto>
   }
 
   @Delete(':id/destroy')
-  @Cache(Collection.Activities, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralActivities)
   @ApiResponse({ type: ActivityDataSerializer })
   @SetPolicy(Action.Destroy, Resource.GeneralActivities)
@@ -162,7 +164,7 @@ export class ActivitiesController extends ControllerClass<Activity, ActivityDto>
   }
 
   @Patch('bulk')
-  @Cache(Collection.Activities, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralActivities)
   @SetPolicy(Action.Update, Resource.GeneralActivities)
   @ApiQuery({ type: QueryFilterDto, required: false })
@@ -176,7 +178,7 @@ export class ActivitiesController extends ControllerClass<Activity, ActivityDto>
   }
 
   @Patch(':id')
-  @Cache(Collection.Activities, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralActivities)
   @ApiResponse({ type: ActivityDataSerializer })
   @SetPolicy(Action.Update, Resource.GeneralActivities)

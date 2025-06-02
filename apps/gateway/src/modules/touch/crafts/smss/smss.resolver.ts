@@ -8,7 +8,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
 import { AllExceptionsFilter } from '@app/common/core/filters';
@@ -21,8 +21,10 @@ import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
+const COLL_PATH = COLLECTION('smss', 'touch');
+
 @Resolver(() => SmsSerializer)
-@RateLimit('smss')
+@RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -33,7 +35,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   }
 
   @Query(() => TotalSerializer)
-  @Cache(Collection.Smss, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadTouchSmss)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.TouchSmss)
@@ -42,7 +44,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   }
 
   @Mutation(() => SmsDataSerializer)
-  @Cache(Collection.Smss, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchSmss)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchSmss)
@@ -51,7 +53,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   }
 
   @Mutation(() => SmsItemsSerializer)
-  @Cache(Collection.Smss, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchSmss)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchSmss)
@@ -60,7 +62,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   }
 
   @Query(() => SmsItemsSerializer)
-  @Cache(Collection.Smss, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadTouchSmss)
   @SetPolicy(Action.Read, Resource.TouchSmss)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -69,7 +71,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   }
 
   @Query(() => SmsDataSerializer)
-  @Cache(Collection.Smss, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadTouchSmss)
   @SetPolicy(Action.Read, Resource.TouchSmss)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -84,7 +86,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   }
 
   @Mutation(() => SmsDataSerializer)
-  @Cache(Collection.Smss, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchSmss)
   @SetPolicy(Action.Delete, Resource.TouchSmss)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -99,7 +101,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   }
 
   @Mutation(() => SmsDataSerializer)
-  @Cache(Collection.Smss, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchSmss)
   @SetPolicy(Action.Restore, Resource.TouchSmss)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -114,7 +116,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   }
 
   @Mutation(() => SmsDataSerializer)
-  @Cache(Collection.Smss, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchSmss)
   @SetPolicy(Action.Destroy, Resource.TouchSmss)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -129,7 +131,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   }
 
   @Mutation(() => TotalSerializer)
-  @Cache(Collection.Smss, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchSmss)
   @SetPolicy(Action.Update, Resource.TouchSmss)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -142,7 +144,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   }
 
   @Mutation(() => SmsDataSerializer)
-  @Cache(Collection.Smss, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchSmss)
   @SetPolicy(Action.Update, Resource.TouchSmss)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

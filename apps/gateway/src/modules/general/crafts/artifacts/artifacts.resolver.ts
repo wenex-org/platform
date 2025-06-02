@@ -8,7 +8,7 @@ import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Artifact, ArtifactDto } from '@app/common/interfaces/general';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
@@ -21,8 +21,10 @@ import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
+const COLL_PATH = COLLECTION('artifacts', 'general');
+
 @Resolver(() => ArtifactSerializer)
-@RateLimit('artifacts')
+@RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -33,7 +35,7 @@ export class ArtifactsResolver extends ControllerClass<Artifact, ArtifactDto> im
   }
 
   @Query(() => TotalSerializer)
-  @Cache(Collection.Artifacts, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadGeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.GeneralArtifacts)
@@ -42,7 +44,7 @@ export class ArtifactsResolver extends ControllerClass<Artifact, ArtifactDto> im
   }
 
   @Mutation(() => ArtifactDataSerializer)
-  @Cache(Collection.Artifacts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralArtifacts)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.GeneralArtifacts)
@@ -51,7 +53,7 @@ export class ArtifactsResolver extends ControllerClass<Artifact, ArtifactDto> im
   }
 
   @Mutation(() => ArtifactItemsSerializer)
-  @Cache(Collection.Artifacts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralArtifacts)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.GeneralArtifacts)
@@ -60,7 +62,7 @@ export class ArtifactsResolver extends ControllerClass<Artifact, ArtifactDto> im
   }
 
   @Query(() => ArtifactItemsSerializer)
-  @Cache(Collection.Artifacts, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadGeneralArtifacts)
   @SetPolicy(Action.Read, Resource.GeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -69,7 +71,7 @@ export class ArtifactsResolver extends ControllerClass<Artifact, ArtifactDto> im
   }
 
   @Query(() => ArtifactDataSerializer)
-  @Cache(Collection.Artifacts, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadGeneralArtifacts)
   @SetPolicy(Action.Read, Resource.GeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -84,7 +86,7 @@ export class ArtifactsResolver extends ControllerClass<Artifact, ArtifactDto> im
   }
 
   @Mutation(() => ArtifactDataSerializer)
-  @Cache(Collection.Artifacts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralArtifacts)
   @SetPolicy(Action.Delete, Resource.GeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -99,7 +101,7 @@ export class ArtifactsResolver extends ControllerClass<Artifact, ArtifactDto> im
   }
 
   @Mutation(() => ArtifactDataSerializer)
-  @Cache(Collection.Artifacts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralArtifacts)
   @SetPolicy(Action.Restore, Resource.GeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -114,7 +116,7 @@ export class ArtifactsResolver extends ControllerClass<Artifact, ArtifactDto> im
   }
 
   @Mutation(() => ArtifactDataSerializer)
-  @Cache(Collection.Artifacts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralArtifacts)
   @SetPolicy(Action.Destroy, Resource.GeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -129,7 +131,7 @@ export class ArtifactsResolver extends ControllerClass<Artifact, ArtifactDto> im
   }
 
   @Mutation(() => TotalSerializer)
-  @Cache(Collection.Artifacts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralArtifacts)
   @SetPolicy(Action.Update, Resource.GeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -142,7 +144,7 @@ export class ArtifactsResolver extends ControllerClass<Artifact, ArtifactDto> im
   }
 
   @Mutation(() => ArtifactDataSerializer)
-  @Cache(Collection.Artifacts, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralArtifacts)
   @SetPolicy(Action.Update, Resource.GeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)

@@ -9,7 +9,7 @@ import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Location, LocationDto } from '@app/common/interfaces/logistic';
-import { Action, Collection, Resource, Scope } from '@app/common/core';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
 import { LogisticProvider } from '@app/common/providers/logistic';
@@ -21,8 +21,10 @@ import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
+const COLL_PATH = COLLECTION('locations', 'logistic');
+
 @Resolver(() => LocationSerializer)
-@RateLimit('locations')
+@RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
@@ -33,7 +35,7 @@ export class LocationsResolver extends ControllerClass<Location, LocationDto> im
   }
 
   @Query(() => TotalSerializer)
-  @Cache(Collection.Locations, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadLogisticLocations)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.LogisticLocations)
@@ -42,7 +44,7 @@ export class LocationsResolver extends ControllerClass<Location, LocationDto> im
   }
 
   @Mutation(() => LocationDataSerializer)
-  @Cache(Collection.Locations, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticLocations)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticLocations)
@@ -51,7 +53,7 @@ export class LocationsResolver extends ControllerClass<Location, LocationDto> im
   }
 
   @Mutation(() => LocationItemsSerializer)
-  @Cache(Collection.Locations, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticLocations)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticLocations)
@@ -60,7 +62,7 @@ export class LocationsResolver extends ControllerClass<Location, LocationDto> im
   }
 
   @Query(() => LocationItemsSerializer)
-  @Cache(Collection.Locations, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadLogisticLocations)
   @SetPolicy(Action.Read, Resource.LogisticLocations)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -69,7 +71,7 @@ export class LocationsResolver extends ControllerClass<Location, LocationDto> im
   }
 
   @Query(() => LocationDataSerializer)
-  @Cache(Collection.Locations, 'fill')
+  @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ReadLogisticLocations)
   @SetPolicy(Action.Read, Resource.LogisticLocations)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -84,7 +86,7 @@ export class LocationsResolver extends ControllerClass<Location, LocationDto> im
   }
 
   @Mutation(() => LocationDataSerializer)
-  @Cache(Collection.Locations, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticLocations)
   @SetPolicy(Action.Delete, Resource.LogisticLocations)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -99,7 +101,7 @@ export class LocationsResolver extends ControllerClass<Location, LocationDto> im
   }
 
   @Mutation(() => LocationDataSerializer)
-  @Cache(Collection.Locations, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticLocations)
   @SetPolicy(Action.Restore, Resource.LogisticLocations)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -114,7 +116,7 @@ export class LocationsResolver extends ControllerClass<Location, LocationDto> im
   }
 
   @Mutation(() => LocationDataSerializer)
-  @Cache(Collection.Locations, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticLocations)
   @SetPolicy(Action.Destroy, Resource.LogisticLocations)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
@@ -129,7 +131,7 @@ export class LocationsResolver extends ControllerClass<Location, LocationDto> im
   }
 
   @Mutation(() => TotalSerializer)
-  @Cache(Collection.Locations, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticLocations)
   @SetPolicy(Action.Update, Resource.LogisticLocations)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -142,7 +144,7 @@ export class LocationsResolver extends ControllerClass<Location, LocationDto> im
   }
 
   @Mutation(() => LocationDataSerializer)
-  @Cache(Collection.Locations, 'flush')
+  @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticLocations)
   @SetPolicy(Action.Update, Resource.LogisticLocations)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
