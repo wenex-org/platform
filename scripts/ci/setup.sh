@@ -10,6 +10,8 @@ if [[ "$CI_STAGE" != "staging" && "$CI_STAGE" != "production" ]]; then
   exit 1
 fi
 
+echo "CI_STAGE is set to '$CI_STAGE'. Proceeding with setup..."
+
 # Sonarqube
 bash ./scripts/ci/sonar.sh
 if [ $? == 0 ]; then echo -e "Sonarqube prepared successfully.\n"
