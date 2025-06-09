@@ -18,8 +18,8 @@ build:
     - cp .env.example .env
     - bash ./scripts/ci/setup.sh
   script:
-    - corepack enable
     - npm run git:clone
+    - npm install -g pnpm@10.5.2
     - pnpm install --frozen-lockfile
     - npm run script:build
   artifacts:
