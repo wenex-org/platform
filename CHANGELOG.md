@@ -11,6 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - conjoint services.
 
+## [1.1.1] - 2025-06-10
+
+### Changed
+
+- refactor: simplify MongoHelper initialization in multiple services @vhidvz
+- refactor: MongoHelper.init to improve model registration and population handling @vhidvz
+
 ## [1.1.0] - 2025-06-02
 
 ### Changed
@@ -24,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.1.0...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.1.1...HEAD
+[1.1.1]: https://github.com/wenex-org/platform/compare/1.1.0...1.1.1
 [1.1.0]: https://github.com/wenex-org/platform/compare/1.0.42...1.1.0
 [1.0.X]: https://github.com/wenex-org/platform/releases/tag/1.0.42
