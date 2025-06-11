@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - conjoint services.
 
+## [1.1.4] - 2025-06-11
+
+### Fixed
+
+- streamline grant deletion logic in GrantsService @vhidvz
+
 ## [1.1.3] - 2025-06-11
 
 ### Changed
@@ -43,8 +49,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.1.3...HEAD
-[1.1.3]: https://github.com/wenex-org/platform/compare/1.1.1...1.1.3
+[unreleased]: https://github.com/wenex-org/platform/compare/1.1.4...HEAD
+[1.1.4]: https://github.com/wenex-org/platform/compare/1.1.3...1.1.4
+[1.1.3]: https://github.com/wenex-org/platform/compare/1.1.2...1.1.3
 [1.1.2]: https://github.com/wenex-org/platform/compare/1.1.1...1.1.2
 [1.1.1]: https://github.com/wenex-org/platform/compare/1.1.0...1.1.1
 [1.1.0]: https://github.com/wenex-org/platform/compare/1.0.42...1.1.0
