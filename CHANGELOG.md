@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - conjoint services.
 
+## [1.1.3] - 2025-06-11
+
+### Changed
+
+- Add EVENT type to NoticeType enum @vhidvz
+
 ## [1.1.2] - 2025-06-10
 
 ### Changed
@@ -37,7 +43,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.1.2...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.1.3...HEAD
+[1.1.3]: https://github.com/wenex-org/platform/compare/1.1.1...1.1.3
 [1.1.2]: https://github.com/wenex-org/platform/compare/1.1.1...1.1.2
 [1.1.1]: https://github.com/wenex-org/platform/compare/1.1.0...1.1.1
 [1.1.0]: https://github.com/wenex-org/platform/compare/1.0.42...1.1.0
