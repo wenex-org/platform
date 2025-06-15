@@ -52,6 +52,7 @@
     "madge:report:ts": "madge --circular --warning --ts-config ./tsconfig.json --extensions ts --image circular-dependencies.png ./",
     "git": "bash ./scripts/git-submodule.sh",
     "git:clone": "git submodule update --init --recursive",
+    "git:remote:add": "bash ./scripts/git-remote-add.sh",
     "doc": "npx @compodoc/compodoc -p tsconfig.json -n \"Documentation\" -d ./docs -s"
   },
   "lint-staged": {

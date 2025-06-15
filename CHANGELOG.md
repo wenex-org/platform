@@ -11,6 +11,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - conjoint services.
 
+## [1.1.5] - 2025-06-11
+
+### Fixed
+
+- updateOwnership method to include uid in meta handling for improved user tracking @vhidvz
+
+## [1.1.4] - 2025-06-11
+
+### Fixed
+
+- streamline grant deletion logic in GrantsService @vhidvz
+
+## [1.1.3] - 2025-06-11
+
+### Changed
+
+- Add EVENT type to NoticeType enum @vhidvz
+
+## [1.1.2] - 2025-06-10
+
+### Changed
+
+- refactor: simplify MongoHelper initialization in multiple services @vhidvz
+- refactor: MongoHelper.init to improve model registration and population handling @vhidvz
+
+## [1.1.1] - 2025-06-10
+
+### Changed
+
+- CI @vhidvz
+
 ## [1.1.0] - 2025-06-02
 
 ### Changed
@@ -24,6 +55,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.1.0...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.1.5...HEAD
+[1.1.5]: https://github.com/wenex-org/platform/compare/1.1.4...1.1.5
+[1.1.4]: https://github.com/wenex-org/platform/compare/1.1.3...1.1.4
+[1.1.3]: https://github.com/wenex-org/platform/compare/1.1.2...1.1.3
+[1.1.2]: https://github.com/wenex-org/platform/compare/1.1.1...1.1.2
+[1.1.1]: https://github.com/wenex-org/platform/compare/1.1.0...1.1.1
 [1.1.0]: https://github.com/wenex-org/platform/compare/1.0.42...1.1.0
 [1.0.X]: https://github.com/wenex-org/platform/releases/tag/1.0.42
