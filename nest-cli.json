@@ -136,6 +136,15 @@
         "tsConfigPath": "apps/services/logistic/tsconfig.app.json"
       }
     },
+    "conjoint": {
+      "type": "application",
+      "root": "apps/services/conjoint",
+      "entryFile": "main",
+      "sourceRoot": "apps/services/conjoint/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/services/conjoint/tsconfig.app.json"
+      }
+    },
     "dispatcher": {
       "type": "application",
       "root": "apps/workers/dispatcher",

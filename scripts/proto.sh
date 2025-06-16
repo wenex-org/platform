@@ -14,6 +14,7 @@ SPECIAL=./protos/special.proto
 TOUCH=./protos/touch.proto
 CONTENT=./protos/content.proto
 LOGISTIC=./protos/logistic.proto
+CONJOINT=./protos/conjoint.proto
 
 PRESERVER=./protos/workers/preserver.proto
 
@@ -47,8 +48,9 @@ PROTOS[ESSENTIAL,8]=./apps/services/special/src/protobuf/essential.proto
 PROTOS[ESSENTIAL,9]=./apps/services/general/src/protobuf/essential.proto
 PROTOS[ESSENTIAL,A]=./apps/services/identity/src/protobuf/essential.proto
 PROTOS[ESSENTIAL,B]=./apps/services/logistic/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,C]=./apps/services/financial/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,D]=./libs/common/src/providers/essential/protobuf/essential.proto
+PROTOS[ESSENTIAL,C]=./apps/services/conjoint/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,D]=./apps/services/financial/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,E]=./libs/common/src/providers/essential/protobuf/essential.proto
 
 # Financial Proto
 PROTOS[FINANCIAL,1]=./apps/services/financial/src/app.proto
@@ -89,6 +91,11 @@ PROTOS[LOGISTIC,1]=./apps/services/logistic/src/app.proto
 PROTOS[LOGISTIC,2]=./apps/gateway/src/protobuf/logistic.proto
 PROTOS[LOGISTIC,3]=./libs/common/src/providers/logistic/protobuf/logistic.proto
 
+# Conjoint Proto
+PROTOS[CONJOINT,1]=./apps/services/conjoint/src/app.proto
+PROTOS[CONJOINT,2]=./apps/gateway/src/protobuf/conjoint.proto
+PROTOS[CONJOINT,3]=./libs/common/src/providers/conjoint/protobuf/conjoint.proto
+
 # Preserver Proto
 PROTOS[PRESERVER,1]=./apps/workers/preserver/src/app.proto
 
@@ -105,6 +112,7 @@ for KEY in "${!PROTOS[@]}"; do
   if [[ $KEY == *"TOUCH"* ]]; then ln -f $TOUCH ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"CONTENT"* ]]; then ln -f $CONTENT ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"LOGISTIC"* ]]; then ln -f $LOGISTIC ${PROTOS[$KEY]}; fi
+  if [[ $KEY == *"CONJOINT"* ]]; then ln -f $CONJOINT ${PROTOS[$KEY]}; fi
 
   if [[ $KEY == *"PRESERVER"* ]]; then ln -f $PRESERVER ${PROTOS[$KEY]}; fi
 done

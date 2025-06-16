@@ -26,7 +26,17 @@ done
 echo "Waiting for services to start..."
 sleep 90
 
-services=("touch" "content" "logistic" "gateway")
+services=("touch" "content" "logistic" "conjoint")
+for service in "${services[@]}"; do
+  npm run start:dev:e2e "$service" 2> "logs/$service.log" &
+  JOBS[$service]=$!
+  echo "Started $service with PID: ${JOBS[$service]}"
+done
+
+echo "Waiting for services to start..."
+sleep 90
+
+services=("gateway")
 for service in "${services[@]}"; do
   npm run start:dev:e2e "$service" 2> "logs/$service.log" &
   JOBS[$service]=$!
