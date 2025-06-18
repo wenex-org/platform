@@ -13,7 +13,13 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
-import { AccountDataSerializer, AccountItemsSerializer, AccountSerializer } from '@app/common/serializers/conjoint';
+import {
+  AccountDataSerializer,
+  AccountItemsSerializer,
+  AccountSerializer,
+  CredentialDataSerializer,
+  CredentialSerializer,
+} from '@app/common/serializers/conjoint';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateAccountDto, CreateAccountItemsDto, UpdateAccountDto } from '@app/common/dto/conjoint';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -24,6 +30,7 @@ import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
+import { getSseMessage, mapToInstance } from '@app/common/core/utils';
 import { Account, AccountDto } from '@app/common/interfaces/conjoint';
 import { ConjointProvider } from '@app/common/providers/conjoint';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
@@ -31,9 +38,8 @@ import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { ValidationPipe } from '@app/common/core/pipes';
-import { getSseMessage } from '@app/common/core/utils';
 import { Metadata } from '@app/common/core/interfaces';
-import { Observable, switchMap } from 'rxjs';
+import { from, Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
@@ -51,6 +57,18 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   constructor(readonly provider: ConjointProvider) {
     super(provider.accounts, AccountSerializer);
   }
+
+  @Post('cred')
+  @Cache(COLL_PATH, 'fill')
+  @SetScope(Scope.GenerateConjointAccounts)
+  @SetPolicy(Action.Generate, Resource.ConjointAccounts)
+  cred(@Meta() meta: Metadata): Observable<CredentialDataSerializer> {
+    return from(this.provider.accounts.cred({ meta })).pipe(mapToInstance(CredentialSerializer, 'data'));
+  }
+
+  // ##############################
+  // Common Method's
+  // ##############################
 
   @Get('count')
   @Cache(COLL_PATH, 'fill')
