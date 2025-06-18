@@ -16,6 +16,7 @@
     "clientinfo",
     "confluentinc",
     "coreutils",
+    "coturn",
     "Debezium",
     "dind",
     "dpdm",
