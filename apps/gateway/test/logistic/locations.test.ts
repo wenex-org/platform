@@ -6,11 +6,11 @@ import { EXPECT_CORE_SCHEMA, Login } from '@app/common/core/e2e';
 import { Serializer } from '@wenex/sdk/common/core/interfaces';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { LocationsService } from '@wenex/sdk';
+import { Logistic } from '@wenex/sdk';
 
 describe('Logistic: LocationsController (e2e)', () => {
   let app: INestApplication;
-  let service: LocationsService;
+  let service: Logistic.LocationsService;
 
   beforeAll(async () => {
     const platform = await Login.as('user');

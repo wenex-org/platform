@@ -7,11 +7,11 @@ import { Serializer } from '@wenex/sdk/common/core/interfaces';
 import { PostStatus } from '@wenex/sdk/common/enums/content';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { PostsService } from '@wenex/sdk';
+import { Content } from '@wenex/sdk';
 
 describe('Content: PostsController (e2e)', () => {
   let app: INestApplication;
-  let service: PostsService;
+  let service: Content.PostsService;
 
   beforeAll(async () => {
     const platform = await Login.as('user');

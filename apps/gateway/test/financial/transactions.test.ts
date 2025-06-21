@@ -2,12 +2,12 @@ import { Transaction, TransactionInitDto } from '@app/common/interfaces/financia
 import { PayType, TransactionReason } from '@app/common/enums/financial';
 import { Serializer } from '@wenex/sdk/common/core/interfaces';
 import { IRR_WALLET_ID } from '@app/common/utils/financial';
-import { TransactionsService } from '@wenex/sdk';
 import { Login } from '@app/common/core/e2e';
+import { Financial } from '@wenex/sdk';
 
 describe('TransactionController (e2e)', () => {
-  let service: TransactionsService;
   let transaction: Serializer<Transaction>;
+  let service: Financial.TransactionsService;
 
   beforeAll(async () => {
     const platform = await Login.as('user');
