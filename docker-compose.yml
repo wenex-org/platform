@@ -214,6 +214,14 @@ services:
       <<: *env
     <<: *common
 
+  db-index:
+    profiles:
+      - db-index
+    entrypoint: ['bash', '-c', 'npm run db:index']
+    environment:
+      <<: *env
+    <<: *common
+
   db-seed:
     profiles:
       - db-seed
