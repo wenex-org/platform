@@ -22,7 +22,7 @@ for service in "${services[@]}"; do
   if [ -z "$terminal" ]; then
     npm run start:dev:e2e "$service" 2> "logs/$service.log" &
   else
-    $terminal --tab --title="$service" -- $shell -c "npm run start:dev:e2e $service" &
+    $terminal --tab --title="$service" -- "$shell" -c "npm run start:dev:e2e $service" &
   fi
   sleep 30
 done
