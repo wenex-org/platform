@@ -146,6 +146,17 @@ services:
       <<: *env
     <<: *common
 
+  conjoint:
+    profiles: [conjoint, platform, services]
+    container_name: platform-conjoint
+    ports:
+      - 3130:3130 # Rest
+      - 5130:5130 # gRPC
+    environment:
+      SERVICE_NAME: conjoint
+      <<: *env
+    <<: *common
+
   # ---------
   # Workers
   # ---------

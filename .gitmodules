@@ -1,16 +1,15 @@
-[submodule "libs"]
-	path = libs
-	url = ../platform-libs.git
 [submodule "apps/services"]
 	path = apps/services
 	url = ../platform-services.git
-[submodule "protos"]
-	path = protos
-	url = ../platform-protos.git
 [submodule "apps/workers"]
 	path = apps/workers
 	url = ../platform-workers.git
 [submodule "docker"]
 	path = docker
 	url = ../platform-docker.git
-	
+[submodule "libs"]
+	path = libs
+	url = ../platform-libs.git
+[submodule "protos"]
+	path = protos
+	url = ../platform-protos.git

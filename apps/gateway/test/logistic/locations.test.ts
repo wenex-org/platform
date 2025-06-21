@@ -5,14 +5,12 @@ import { MONGO_CONFIG, MONGO_OPTIONS } from '@app/common/core/envs';
 import { EXPECT_CORE_SCHEMA, Login } from '@app/common/core/e2e';
 import { Serializer } from '@wenex/sdk/common/core/interfaces';
 import { Test, TestingModule } from '@nestjs/testing';
-import { prototyping } from '@app/common/core/utils';
 import { INestApplication } from '@nestjs/common';
-import { LocationsService } from '@wenex/sdk';
+import { Logistic } from '@wenex/sdk';
 
-prototyping('LOGISTIC');
 describe('Logistic: LocationsController (e2e)', () => {
   let app: INestApplication;
-  let service: LocationsService;
+  let service: Logistic.LocationsService;
 
   beforeAll(async () => {
     const platform = await Login.as('user');

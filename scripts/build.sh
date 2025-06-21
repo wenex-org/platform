@@ -19,7 +19,7 @@ done
 # Wait for all background jobs to complete
 wait
 
-services=("touch" "content" "logistic")
+services=("touch" "content" "logistic" "conjoint")
 for service in "${services[@]}"; do
   npm run build "$service" &
 done

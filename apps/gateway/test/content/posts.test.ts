@@ -6,14 +6,12 @@ import { EXPECT_CORE_SCHEMA, Login } from '@app/common/core/e2e';
 import { Serializer } from '@wenex/sdk/common/core/interfaces';
 import { PostStatus } from '@wenex/sdk/common/enums/content';
 import { Test, TestingModule } from '@nestjs/testing';
-import { prototyping } from '@app/common/core/utils';
 import { INestApplication } from '@nestjs/common';
-import { PostsService } from '@wenex/sdk';
+import { Content } from '@wenex/sdk';
 
-prototyping('CONTENT');
 describe('Content: PostsController (e2e)', () => {
   let app: INestApplication;
-  let service: PostsService;
+  let service: Content.PostsService;
 
   beforeAll(async () => {
     const platform = await Login.as('user');
