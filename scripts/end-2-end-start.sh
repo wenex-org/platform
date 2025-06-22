@@ -24,7 +24,8 @@ for service in "${services[@]}"; do
   else
     $terminal --tab --title="$service" -- "$shell" -c "npm run start:dev:e2e $service" &
   fi
-  sleep 30
+  sleep 15
 done
 
+sleep 30
 echo "All services started successfully!"
