@@ -16,13 +16,13 @@ npm run git checkout main
 pnpm install --frozen-lockfile
 ```
 
-Next Step:
+**Next Step**:
 
 - [Add Remote (Optional)](#add-remote-optional)
 - [Start Essential Utilities](#start-essential-utilities)
 - [DB Seeding and Initialization](#db-seeding-and-initialization)
 - [Start Up and Running using Docker](#start-up-and-running-using-docker)
-- [Start Up and Running for E2E Tests](#start-up-and-running-for-e-e-tests)
+- [Start Up and Running for E2E Tests](#start-up-and-running-for-e2e-tests)
 - [Manually Start Up and Running Wenex](#manually-start-up-and-running-wenex)
 
 ## Add Remote (Optional)
