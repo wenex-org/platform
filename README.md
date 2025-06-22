@@ -149,8 +149,8 @@ Start the workers using the previously `npm run script:start:e2e watcher observe
 Start each service you want using the following command
 
 ```sh
-npm run start:dev [services-name]
-# npm run start:debug [service-name]
+npm run start:dev <services-name>
+# npm run start:debug[2] <services-name>
 ```
 
 Configure `kafka-connect` with the following command
