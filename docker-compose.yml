@@ -3,158 +3,136 @@ x-common: &common
   image: wenex/platform:latest
   env_file:
     - .env
-  networks:
-    - localnet
-
-x-env: &env
-  KAFKA_HOST: kafka
-  KAFKA_PORT: 9093
-  REDIS_HOST: redis
-  MINIO_HOST: minio
-  EMQX_BASE_URL: http://192.168.1.17:18083/api/v5 # HOST
-  EMQX_EXHOOK_URL: http://platform-preserver:6030
+  network_mode: host
 
 services:
   gateway:
     profiles: [gateway, platform, services]
     container_name: platform-gateway
     ports:
-      - 3010:3010 # Rest
+      - 3010:3010 # REST
     environment:
       SERVICE_NAME: gateway
-      <<: *env
     <<: *common
 
   auth:
     profiles: [auth, platform, services]
     container_name: platform-auth
     ports:
-      - 3020:3020 # Rest
-      - 5020:5020 # gRPC
+      - 3020:3020 # REST
+      - 5020:5020 # GRPC
     environment:
       SERVICE_NAME: auth
-      <<: *env
     <<: *common
 
   domain:
     profiles: [domain, platform, services]
     container_name: platform-domain
     ports:
-      - 3030:3030 # Rest
-      - 5030:5030 # gRPC
+      - 3030:3030 # REST
+      - 5030:5030 # GRPC
     environment:
       SERVICE_NAME: domain
-      <<: *env
     <<: *common
 
   context:
     profiles: [context, platform, services]
     container_name: platform-context
     ports:
-      - 3040:3040 # Rest
-      - 5040:5040 # gRPC
+      - 3040:3040 # REST
+      - 5040:5040 # GRPC
     environment:
       SERVICE_NAME: context
-      <<: *env
     <<: *common
 
   essential:
     profiles: [essential, platform, services]
     container_name: platform-essential
     ports:
-      - 3050:3050 # Rest
-      - 5050:5050 # gRPC
+      - 3050:3050 # REST
+      - 5050:5050 # GRPC
     environment:
       SERVICE_NAME: essential
-      <<: *env
     <<: *common
 
   financial:
     profiles: [financial, platform, services]
     container_name: platform-financial
     ports:
-      - 3060:3060 # Rest
-      - 5060:5060 # gRPC
+      - 3060:3060 # REST
+      - 5060:5060 # GRPC
     environment:
       SERVICE_NAME: financial
-      <<: *env
     <<: *common
 
   general:
     profiles: [general, platform, services]
     container_name: platform-general
     ports:
-      - 3070:3070 # Rest
-      - 5070:5070 # gRPC
+      - 3070:3070 # REST
+      - 5070:5070 # GRPC
     environment:
       SERVICE_NAME: general
-      <<: *env
     <<: *common
 
   identity:
     profiles: [identity, platform, services]
     container_name: platform-identity
     ports:
-      - 3080:3080 # Rest
-      - 5080:5080 # gRPC
+      - 3080:3080 # REST
+      - 5080:5080 # GRPC
     environment:
       SERVICE_NAME: identity
-      <<: *env
     <<: *common
 
   special:
     profiles: [special, platform, services]
     container_name: platform-special
     ports:
-      - 3090:3090 # Rest
-      - 5090:5090 # gRPC
+      - 3090:3090 # REST
+      - 5090:5090 # GRPC
     environment:
       SERVICE_NAME: special
-      <<: *env
     <<: *common
 
   touch:
     profiles: [touch, platform, services]
     container_name: platform-touch
     ports:
-      - 3100:3100 # Rest
-      - 5100:5100 # gRPC
+      - 3100:3100 # REST
+      - 5100:5100 # GRPC
     environment:
       SERVICE_NAME: touch
-      <<: *env
     <<: *common
 
   content:
     profiles: [content, platform, services]
     container_name: platform-content
     ports:
-      - 3110:3110 # Rest
-      - 5110:5110 # gRPC
+      - 3110:3110 # REST
+      - 5110:5110 # GRPC
     environment:
       SERVICE_NAME: content
-      <<: *env
     <<: *common
 
   logistic:
     profiles: [logistic, platform, services]
     container_name: platform-logistic
     ports:
-      - 3120:3120 # Rest
-      - 5120:5120 # gRPC
+      - 3120:3120 # REST
+      - 5120:5120 # GRPC
     environment:
       SERVICE_NAME: logistic
-      <<: *env
     <<: *common
 
   conjoint:
     profiles: [conjoint, platform, services]
     container_name: platform-conjoint
     ports:
-      - 3130:3130 # Rest
-      - 5130:5130 # gRPC
+      - 3130:3130 # REST
+      - 5130:5130 # GRPC
     environment:
       SERVICE_NAME: conjoint
-      <<: *env
     <<: *common
 
   # ---------
@@ -165,41 +143,37 @@ services:
     profiles: [watcher, platform, workers]
     container_name: platform-watcher
     ports:
-      - 4040:4040 # Rest
+      - 4040:4040 # REST
     environment:
       SERVICE_NAME: watcher
-      <<: *env
     <<: *common
 
   preserver:
     profiles: [preserver, platform, workers]
     container_name: platform-preserver
     ports:
-      - 4030:4030 # Rest
-      - 6030:6030 # gRPC
+      - 4030:4030 # REST
+      - 6030:6030 # GRPC
     environment:
       SERVICE_NAME: preserver
-      <<: *env
     <<: *common
 
   observer:
     profiles: [observer, platform, workers]
     container_name: platform-observer
     ports:
-      - 4020:4020 # Rest
+      - 4020:4020 # REST
     environment:
       SERVICE_NAME: observer
-      <<: *env
     <<: *common
 
   dispatcher:
     profiles: [dispatcher, platform, workers]
     container_name: platform-dispatcher
     ports:
-      - 4010:4010 # Rest
+      - 4010:4010 # REST
     environment:
       SERVICE_NAME: dispatcher
-      <<: *env
     <<: *common
 
   # ---------
@@ -210,53 +184,34 @@ services:
     profiles:
       - db-clean
     entrypoint: ['bash', '-c', 'npm run db:clean']
-    environment:
-      <<: *env
     <<: *common
 
   db-index:
     profiles:
       - db-index
     entrypoint: ['bash', '-c', 'npm run db:index']
-    environment:
-      <<: *env
     <<: *common
 
   db-seed:
     profiles:
       - db-seed
     entrypoint: ['bash', '-c', 'npm run db:seed']
-    environment:
-      <<: *env
     <<: *common
 
   storage-init:
     profiles:
       - storage-init
     entrypoint: ['bash', '-c', 'npm run storage:init']
-    environment:
-      <<: *env
     <<: *common
 
   utility-init:
     profiles:
       - utility-init
     entrypoint: ['bash', '-c', 'npm run utility:init']
-    environment:
-      <<: *env
     <<: *common
 
   kafka-connect:
     profiles:
       - kafka-connect
     entrypoint: ['bash', '-c', 'npm run script:kafka-connect']
-    environment:
-      CONNECT_PORT: 8083
-      CONNECT_HOST: connect
-      <<: *env
     <<: *common
-
-networks:
-  localnet:
-    driver: bridge
-    name: wenex-network
