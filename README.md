@@ -58,7 +58,7 @@ docker-compose --profile db-seed up
 docker-compose --profile db-index up
 
 # Clean All Database
-# docker-compose --profile db-clean up
+#docker-compose --profile db-clean up
 
 # MinIO Initialization
 docker-compose --profile storage-init up
@@ -77,7 +77,7 @@ npm run db:seed:e2e
 npm run db:index:e2e
 
 # Clean All Database
-# npm run db:clean:e2e
+#npm run db:clean:e2e
 
 # MinIO Initialization
 npm run storage:init
@@ -96,7 +96,7 @@ npm run db:seed
 npm run db:index
 
 # Clean All Database
-# npm run db:clean
+#npm run db:clean
 
 # MinIO Initialization
 npm run storage:init
@@ -150,7 +150,7 @@ Start each service you want using the following command
 
 ```sh
 npm run start:dev <service-name>
-# npm run start:debug[2] <service-name>
+#npm run start:debug[2] <service-name>
 ```
 
 Configure `kafka-connect` with the following command
