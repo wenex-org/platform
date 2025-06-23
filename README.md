@@ -80,10 +80,10 @@ npm run db:index:e2e
 # npm run db:clean:e2e
 
 # MinIO Initialization
-npm run storage-init
+npm run storage:init
 
 # Set EMQX Configuration
-npm run utility-init
+npm run utility:init
 ```
 
 ### Manual Seeding
@@ -99,10 +99,10 @@ npm run db:index
 # npm run db:clean
 
 # MinIO Initialization
-npm run storage-init
+npm run storage:init
 
 # Set EMQX Configuration
-npm run utility-init
+npm run utility:init
 ```
 
 ## Start Up and Running using Docker
