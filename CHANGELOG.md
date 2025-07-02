@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.7] - 2025-07-02
+
+### Fixed
+
+- emqx retain message viewed not found @vhidvz
+- emqx service token expiration exceptions @vhidvz
+
 ## [1.1.6] - 2025-06-24
 
 ### Added
@@ -57,7 +64,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.1.6...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.1.7...HEAD
+[1.1.7]: https://github.com/wenex-org/platform/compare/1.1.6...1.1.7
 [1.1.6]: https://github.com/wenex-org/platform/compare/1.1.5...1.1.6
 [1.1.5]: https://github.com/wenex-org/platform/compare/1.1.4...1.1.5
 [1.1.4]: https://github.com/wenex-org/platform/compare/1.1.3...1.1.4
