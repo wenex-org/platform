@@ -181,6 +181,15 @@
         "tsConfigPath": "apps/workers/watcher/tsconfig.app.json"
       }
     },
+    "publisher": {
+      "type": "application",
+      "root": "apps/workers/publisher",
+      "entryFile": "main",
+      "sourceRoot": "apps/workers/publisher/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/workers/publisher/tsconfig.app.json"
+      }
+    },
     "command": {
       "type": "library",
       "root": "libs/command",
