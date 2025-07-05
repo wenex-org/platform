@@ -176,6 +176,15 @@ services:
       SERVICE_NAME: dispatcher
     <<: *common
 
+  publisher:
+    profiles: [publisher, platform, workers]
+    container_name: platform-publisher
+    ports:
+      - 4050:4050 # REST
+    environment:
+      SERVICE_NAME: publisher
+    <<: *common
+
   # ---------
   # Commands
   # ---------

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.8] - 2025-07-05
+
+### Added
+
+- publisher worker to publish data change log on emqx topics @vhidvz
+
 ## [1.1.7] - 2025-07-02
 
 ### Fixed
