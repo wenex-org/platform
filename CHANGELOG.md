@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.9] - 2025-07-06
+
+### Changed
+
+- preserver authorization [ID] and [SE] @vhidvz
+
 ## [1.1.8] - 2025-07-05
 
 ### Added
@@ -70,7 +76,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.1.8...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.1.9...HEAD
+[1.1.9]: https://github.com/wenex-org/platform/compare/1.1.8...1.1.9
 [1.1.8]: https://github.com/wenex-org/platform/compare/1.1.7...1.1.8
 [1.1.7]: https://github.com/wenex-org/platform/compare/1.1.6...1.1.7
 [1.1.6]: https://github.com/wenex-org/platform/compare/1.1.5...1.1.6
