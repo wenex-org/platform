@@ -1,6 +1,6 @@
-import { NoticeDataSerializer, NoticeItemsSerializer, NoticeSerializer } from '@app/common/serializers/general';
+import { EventDataSerializer, EventItemsSerializer, EventSerializer } from '@app/common/serializers/general';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { CreateNoticeDto, CreateNoticeItemsDto, UpdateNoticeDto } from '@app/common/dto/general';
+import { CreateEventDto, CreateEventItemsDto, UpdateEventDto } from '@app/common/dto/general';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
@@ -9,7 +9,7 @@ import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
-import { Notice, NoticeDto } from '@app/common/interfaces/general';
+import { Event, EventDto } from '@app/common/interfaces/general';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
 import { GeneralProvider } from '@app/common/providers/general';
@@ -21,140 +21,140 @@ import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { Observable } from 'rxjs';
 
-const COLL_PATH = COLLECTION('notices', 'general');
+const COLL_PATH = COLLECTION('events', 'general');
 
-@Resolver(() => NoticeSerializer)
+@Resolver(() => EventSerializer)
 @RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implements IController<Notice, NoticeDto> {
+export class EventsResolver extends ControllerClass<Event, EventDto> implements IController<Event, EventDto> {
   constructor(readonly provider: GeneralProvider) {
-    super(provider.notices, NoticeSerializer);
+    super(provider.events, EventSerializer);
   }
 
   @Query(() => TotalSerializer)
   @Cache(COLL_PATH, 'fill')
-  @SetScope(Scope.ReadGeneralNotices)
+  @SetScope(Scope.ReadGeneralEvents)
   @UseInterceptors(AuthorityInterceptor)
-  @SetPolicy(Action.Read, Resource.GeneralNotices)
-  countNotice(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  @SetPolicy(Action.Read, Resource.GeneralEvents)
+  countEvent(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
-  @Mutation(() => NoticeDataSerializer)
+  @Mutation(() => EventDataSerializer)
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteGeneralNotices)
+  @SetScope(Scope.WriteGeneralEvents)
   @UseInterceptors(...WriteInterceptors)
-  @SetPolicy(Action.Create, Resource.GeneralNotices)
-  createNotice(@Meta() meta: Metadata, @Args('data') data: CreateNoticeDto): Observable<NoticeDataSerializer> {
+  @SetPolicy(Action.Create, Resource.GeneralEvents)
+  createEvent(@Meta() meta: Metadata, @Args('data') data: CreateEventDto): Observable<EventDataSerializer> {
     return super.create(meta, data);
   }
 
-  @Mutation(() => NoticeItemsSerializer)
+  @Mutation(() => EventItemsSerializer)
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteGeneralNotices)
+  @SetScope(Scope.WriteGeneralEvents)
   @UseInterceptors(...WriteInterceptors)
-  @SetPolicy(Action.Create, Resource.GeneralNotices)
-  createNoticeBulk(@Meta() meta: Metadata, @Args('data') data: CreateNoticeItemsDto): Observable<NoticeItemsSerializer> {
+  @SetPolicy(Action.Create, Resource.GeneralEvents)
+  createEventBulk(@Meta() meta: Metadata, @Args('data') data: CreateEventItemsDto): Observable<EventItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
-  @Query(() => NoticeItemsSerializer)
+  @Query(() => EventItemsSerializer)
   @Cache(COLL_PATH, 'fill')
-  @SetScope(Scope.ReadGeneralNotices)
-  @SetPolicy(Action.Read, Resource.GeneralNotices)
+  @SetScope(Scope.ReadGeneralEvents)
+  @SetPolicy(Action.Read, Resource.GeneralEvents)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findNotice(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Notice>): Observable<NoticeItemsSerializer> {
+  findEvent(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Event>): Observable<EventItemsSerializer> {
     return super.find(meta, filter);
   }
 
-  @Query(() => NoticeDataSerializer)
+  @Query(() => EventDataSerializer)
   @Cache(COLL_PATH, 'fill')
-  @SetScope(Scope.ReadGeneralNotices)
-  @SetPolicy(Action.Read, Resource.GeneralNotices)
+  @SetScope(Scope.ReadGeneralEvents)
+  @SetPolicy(Action.Read, Resource.GeneralEvents)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findNoticeById(
+  findEventById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<Notice>,
+    @Filter() filter: FilterOneDto<Event>,
     @Args('ref', { nullable: true }) ref?: string,
-  ): Observable<NoticeDataSerializer> {
+  ): Observable<EventDataSerializer> {
     refineQueryGraphQL(filter, { id, ref });
     return super.findOne(meta, filter);
   }
 
-  @Mutation(() => NoticeDataSerializer)
+  @Mutation(() => EventDataSerializer)
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteGeneralNotices)
-  @SetPolicy(Action.Delete, Resource.GeneralNotices)
+  @SetScope(Scope.WriteGeneralEvents)
+  @SetPolicy(Action.Delete, Resource.GeneralEvents)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteNoticeById(
+  deleteEventById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<Notice>,
+    @Filter() filter: FilterDto<Event>,
     @Args('ref', { nullable: true }) ref?: string,
-  ): Observable<NoticeDataSerializer> {
+  ): Observable<EventDataSerializer> {
     refineQueryGraphQL(filter, { id, ref });
     return super.deleteOne(meta, filter);
   }
 
-  @Mutation(() => NoticeDataSerializer)
+  @Mutation(() => EventDataSerializer)
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteGeneralNotices)
-  @SetPolicy(Action.Restore, Resource.GeneralNotices)
+  @SetScope(Scope.WriteGeneralEvents)
+  @SetPolicy(Action.Restore, Resource.GeneralEvents)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreNoticeById(
+  restoreEventById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<Notice>,
+    @Filter() filter: FilterDto<Event>,
     @Args('ref', { nullable: true }) ref?: string,
-  ): Observable<NoticeDataSerializer> {
+  ): Observable<EventDataSerializer> {
     refineQueryGraphQL(filter, { id, ref });
     return super.restoreOne(meta, filter);
   }
 
-  @Mutation(() => NoticeDataSerializer)
+  @Mutation(() => EventDataSerializer)
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.ManageGeneralNotices)
-  @SetPolicy(Action.Destroy, Resource.GeneralNotices)
+  @SetScope(Scope.ManageGeneralEvents)
+  @SetPolicy(Action.Destroy, Resource.GeneralEvents)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyNoticeById(
+  destroyEventById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterDto<Notice>,
+    @Filter() filter: FilterDto<Event>,
     @Args('ref', { nullable: true }) ref?: string,
-  ): Observable<NoticeDataSerializer> {
+  ): Observable<EventDataSerializer> {
     refineQueryGraphQL(filter, { id, ref });
     return super.destroyOne(meta, filter);
   }
 
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.ManageGeneralNotices)
-  @SetPolicy(Action.Update, Resource.GeneralNotices)
+  @SetScope(Scope.ManageGeneralEvents)
+  @SetPolicy(Action.Update, Resource.GeneralEvents)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateNoticeBulk(
+  updateEventBulk(
     @Meta() meta: Metadata,
-    @Args('data') update: UpdateNoticeDto,
-    @Filter() @Args('filter') filter: QueryFilterDto<Notice>,
+    @Args('data') update: UpdateEventDto,
+    @Filter() @Args('filter') filter: QueryFilterDto<Event>,
   ): Observable<TotalSerializer> {
     return super.updateBulk(meta, filter, update);
   }
 
-  @Mutation(() => NoticeDataSerializer)
+  @Mutation(() => EventDataSerializer)
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteGeneralNotices)
-  @SetPolicy(Action.Update, Resource.GeneralNotices)
+  @SetScope(Scope.WriteGeneralEvents)
+  @SetPolicy(Action.Update, Resource.GeneralEvents)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateNoticeById(
+  updateEventById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<Notice>,
-    @Args('data') update: UpdateNoticeDto,
+    @Filter() filter: FilterOneDto<Event>,
+    @Args('data') update: UpdateEventDto,
     @Args('ref', { nullable: true }) ref?: string,
-  ): Observable<NoticeDataSerializer> {
+  ): Observable<EventDataSerializer> {
     refineQueryGraphQL(filter, { id, ref });
     return super.updateOne(meta, filter, update);
   }
