@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `events` module added to `general` micro @vhidvz
+- `visited` and `icon` props added to `touch/notices` @iranmanesh-dev
 
 ### Changed
 
