@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `x-can-with-id-policies` header to metadata keys @vhidvz
+- `visited` added to `touch/notices` schema @iranmanesh-dev
 
 ## [1.1.10] - 2025-07-07
 
