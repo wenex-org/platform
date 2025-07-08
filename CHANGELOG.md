@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `x-can-with-id-policies` header to metadata keys @vhidvz
+
 ## [1.1.10] - 2025-07-07
 
 ### Added
