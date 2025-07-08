@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- publish method in publisher worker to include database and collection in message payload @vhidvz
+
 ## [1.1.11] - 2025-07-08
 
 ### Added
