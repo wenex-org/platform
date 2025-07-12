@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.13] - 2025-07-12
+
+### Added
+
+- `message` added to `general/activities` @iranmanesh-dev
+- `state` and `title` added to `special/files` @iranmanesh-dev
+
 ## [1.1.12] - 2025-07-08
 
 ### Fixed
@@ -100,7 +107,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.1.12...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.1.13...HEAD
+[1.1.13]: https://github.com/wenex-org/platform/compare/1.1.12...1.1.13
 [1.1.12]: https://github.com/wenex-org/platform/compare/1.1.11...1.1.12
 [1.1.11]: https://github.com/wenex-org/platform/compare/1.1.10...1.1.11
 [1.1.10]: https://github.com/wenex-org/platform/compare/1.1.9...1.1.10
