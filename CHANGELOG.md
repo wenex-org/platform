@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.16] - 2025-07-13
+
+### Added
+
+- add `$text` operator support to `MONGO_OPERATION` for text search functionality @vhidvz
+
 ## [1.1.15] - 2025-07-13
 
 ### Fixed
@@ -120,7 +126,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.1.15...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.1.16...HEAD
+[1.1.16]: https://github.com/wenex-org/platform/compare/1.1.15...1.1.16
 [1.1.15]: https://github.com/wenex-org/platform/compare/1.1.14...1.1.15
 [1.1.14]: https://github.com/wenex-org/platform/compare/1.1.13...1.1.14
 [1.1.13]: https://github.com/wenex-org/platform/compare/1.1.12...1.1.13
