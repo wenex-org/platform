@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.15] - 2025-07-13
+
 ### Fixed
 
 - optional `icon` property to `CreateNoticeActionDto` @iranmanesh-dev
@@ -118,7 +120,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.1.14...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.1.15...HEAD
+[1.1.15]: https://github.com/wenex-org/platform/compare/1.1.14...1.1.15
 [1.1.14]: https://github.com/wenex-org/platform/compare/1.1.13...1.1.14
 [1.1.13]: https://github.com/wenex-org/platform/compare/1.1.12...1.1.13
 [1.1.12]: https://github.com/wenex-org/platform/compare/1.1.11...1.1.12
