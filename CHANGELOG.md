@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - optional `icon` property to `CreateNoticeActionDto` @iranmanesh-dev
+- correct spelling of `subtile` to `subtitle` in `touch/notices` @vhidvz
 
 ## [1.1.14] - 2025-07-12
 
