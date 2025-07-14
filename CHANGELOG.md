@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.18] - 2025-07-14
+
+### Added
+
+- implement push history `content` and history DTOs, schemas, and serializers @vhidvz
+
+### Changed
+
+- update payload structure in `publisher` method to include source details @vhidvz
+
 ## [1.1.17] - 2025-07-14
 
 ### Fixed
@@ -136,7 +146,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.1.17...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.1.18...HEAD
+[1.1.18]: https://github.com/wenex-org/platform/compare/1.1.17...1.1.18
 [1.1.17]: https://github.com/wenex-org/platform/compare/1.1.16...1.1.17
 [1.1.16]: https://github.com/wenex-org/platform/compare/1.1.15...1.1.16
 [1.1.15]: https://github.com/wenex-org/platform/compare/1.1.14...1.1.15
