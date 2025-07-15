@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.3] - 2025-07-15
+
+### Fixed
+
+- Swagger DTOs and Serializers name @vhidvz
+
 ## [1.2.2] - 2025-07-15
 
 ### Changed
@@ -75,7 +81,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.2...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.2.4...HEAD
+[1.2.3]: https://github.com/wenex-org/platform/compare/1.2.2...1.2.3
 [1.2.2]: https://github.com/wenex-org/platform/compare/1.2.1...1.2.2
 [1.2.1]: https://github.com/wenex-org/platform/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/wenex-org/platform/compare/1.1.20...1.2.0
