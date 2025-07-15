@@ -39,7 +39,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   @SetScope(Scope.ReadContextConfigs)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ContextConfigs)
-  countConfig(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countContextConfig(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   @SetScope(Scope.WriteContextConfigs)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContextConfigs)
-  createConfig(@Meta() meta: Metadata, @Args('data') data: CreateConfigDto): Observable<ConfigDataSerializer> {
+  createContextConfig(@Meta() meta: Metadata, @Args('data') data: CreateConfigDto): Observable<ConfigDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   @SetScope(Scope.WriteContextConfigs)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContextConfigs)
-  createConfigBulk(@Meta() meta: Metadata, @Args('data') data: CreateConfigItemsDto): Observable<ConfigItemsSerializer> {
+  createContextConfigBulk(@Meta() meta: Metadata, @Args('data') data: CreateConfigItemsDto): Observable<ConfigItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,10 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   @SetScope(Scope.ReadContextConfigs)
   @SetPolicy(Action.Read, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findConfig(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Config>): Observable<ConfigItemsSerializer> {
+  findContextConfig(
+    @Meta() meta: Metadata,
+    @Filter() @Args('filter') filter: FilterDto<Config>,
+  ): Observable<ConfigItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +78,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   @SetScope(Scope.ReadContextConfigs)
   @SetPolicy(Action.Read, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findConfigById(
+  findContextConfigById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Config>,
@@ -90,7 +93,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   @SetScope(Scope.WriteContextConfigs)
   @SetPolicy(Action.Delete, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteConfigById(
+  deleteContextConfigById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Config>,
@@ -105,7 +108,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   @SetScope(Scope.WriteContextConfigs)
   @SetPolicy(Action.Restore, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreConfigById(
+  restoreContextConfigById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Config>,
@@ -120,7 +123,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   @SetScope(Scope.ManageContextConfigs)
   @SetPolicy(Action.Destroy, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyConfigById(
+  destroyContextConfigById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Config>,
@@ -135,7 +138,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   @SetScope(Scope.ManageContextConfigs)
   @SetPolicy(Action.Update, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateConfigBulk(
+  updateContextConfigBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateConfigDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Config>,
@@ -148,7 +151,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   @SetScope(Scope.WriteContextConfigs)
   @SetPolicy(Action.Update, Resource.ContextConfigs)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateConfigById(
+  updateContextConfigById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Config>,

@@ -39,7 +39,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   @SetScope(Scope.ReadIdentityUsers)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.IdentityUsers)
-  countUser(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countIdentityUser(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentityUsers)
-  createUser(@Meta() meta: Metadata, @Args('data') data: CreateUserDto): Observable<UserDataSerializer> {
+  createIdentityUser(@Meta() meta: Metadata, @Args('data') data: CreateUserDto): Observable<UserDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentityUsers)
-  createUserBulk(@Meta() meta: Metadata, @Args('data') data: CreateUserItemsDto): Observable<UserItemsSerializer> {
+  createIdentityUserBulk(@Meta() meta: Metadata, @Args('data') data: CreateUserItemsDto): Observable<UserItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   @SetScope(Scope.ReadIdentityUsers)
   @SetPolicy(Action.Read, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findUser(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<User>): Observable<UserItemsSerializer> {
+  findIdentityUser(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<User>): Observable<UserItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +75,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   @SetScope(Scope.ReadIdentityUsers)
   @SetPolicy(Action.Read, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findUserById(
+  findIdentityUserById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<User>,
@@ -90,7 +90,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   @SetScope(Scope.WriteIdentityUsers)
   @SetPolicy(Action.Delete, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteUserById(
+  deleteIdentityUserById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<User>,
@@ -105,7 +105,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   @SetScope(Scope.WriteIdentityUsers)
   @SetPolicy(Action.Restore, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreUserById(
+  restoreIdentityUserById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<User>,
@@ -120,7 +120,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   @SetScope(Scope.ManageIdentityUsers)
   @SetPolicy(Action.Destroy, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyUserById(
+  destroyIdentityUserById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<User>,
@@ -135,7 +135,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   @SetScope(Scope.ManageIdentityUsers)
   @SetPolicy(Action.Update, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateUserBulk(
+  updateIdentityUserBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateUserDto,
     @Filter() @Args('filter') filter: QueryFilterDto<User>,
@@ -148,7 +148,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   @SetScope(Scope.WriteIdentityUsers)
   @SetPolicy(Action.Update, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateUserById(
+  updateIdentityUserById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<User>,

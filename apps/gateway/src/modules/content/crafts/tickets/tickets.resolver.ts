@@ -39,7 +39,7 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   @SetScope(Scope.ReadContentTickets)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ContentTickets)
-  countTicket(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countContentTicket(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   @SetScope(Scope.WriteContentTickets)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContentTickets)
-  createTicket(@Meta() meta: Metadata, @Args('data') data: CreateTicketDto): Observable<TicketDataSerializer> {
+  createContentTicket(@Meta() meta: Metadata, @Args('data') data: CreateTicketDto): Observable<TicketDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   @SetScope(Scope.WriteContentTickets)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContentTickets)
-  createTicketBulk(@Meta() meta: Metadata, @Args('data') data: CreateTicketItemsDto): Observable<TicketItemsSerializer> {
+  createContentTicketBulk(@Meta() meta: Metadata, @Args('data') data: CreateTicketItemsDto): Observable<TicketItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,10 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   @SetScope(Scope.ReadContentTickets)
   @SetPolicy(Action.Read, Resource.ContentTickets)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findTicket(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Ticket>): Observable<TicketItemsSerializer> {
+  findContentTicket(
+    @Meta() meta: Metadata,
+    @Filter() @Args('filter') filter: FilterDto<Ticket>,
+  ): Observable<TicketItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +78,7 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   @SetScope(Scope.ReadContentTickets)
   @SetPolicy(Action.Read, Resource.ContentTickets)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findTicketById(
+  findContentTicketById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Ticket>,
@@ -90,7 +93,7 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   @SetScope(Scope.WriteContentTickets)
   @SetPolicy(Action.Delete, Resource.ContentTickets)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteTicketById(
+  deleteContentTicketById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Ticket>,
@@ -105,7 +108,7 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   @SetScope(Scope.WriteContentTickets)
   @SetPolicy(Action.Restore, Resource.ContentTickets)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreTicketById(
+  restoreContentTicketById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Ticket>,
@@ -120,7 +123,7 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   @SetScope(Scope.ManageContentTickets)
   @SetPolicy(Action.Destroy, Resource.ContentTickets)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyTicketById(
+  destroyContentTicketById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Ticket>,
@@ -135,7 +138,7 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   @SetScope(Scope.ManageContentTickets)
   @SetPolicy(Action.Update, Resource.ContentTickets)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateTicketBulk(
+  updateContentTicketBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateTicketDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Ticket>,
@@ -148,7 +151,7 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   @SetScope(Scope.WriteContentTickets)
   @SetPolicy(Action.Update, Resource.ContentTickets)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateTicketById(
+  updateContentTicketById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Ticket>,

@@ -39,7 +39,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   @SetScope(Scope.ReadContentPosts)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ContentPosts)
-  countPost(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countContentPost(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   @SetScope(Scope.WriteContentPosts)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContentPosts)
-  createPost(@Meta() meta: Metadata, @Args('data') data: CreatePostDto): Observable<PostDataSerializer> {
+  createContentPost(@Meta() meta: Metadata, @Args('data') data: CreatePostDto): Observable<PostDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   @SetScope(Scope.WriteContentPosts)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContentPosts)
-  createPostBulk(@Meta() meta: Metadata, @Args('data') data: CreatePostItemsDto): Observable<PostItemsSerializer> {
+  createContentPostBulk(@Meta() meta: Metadata, @Args('data') data: CreatePostItemsDto): Observable<PostItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   @SetScope(Scope.ReadContentPosts)
   @SetPolicy(Action.Read, Resource.ContentPosts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findPost(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Post>): Observable<PostItemsSerializer> {
+  findContentPost(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Post>): Observable<PostItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +75,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   @SetScope(Scope.ReadContentPosts)
   @SetPolicy(Action.Read, Resource.ContentPosts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findPostById(
+  findContentPostById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Post>,
@@ -90,7 +90,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   @SetScope(Scope.WriteContentPosts)
   @SetPolicy(Action.Delete, Resource.ContentPosts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deletePostById(
+  deleteContentPostById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Post>,
@@ -105,7 +105,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   @SetScope(Scope.WriteContentPosts)
   @SetPolicy(Action.Restore, Resource.ContentPosts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restorePostById(
+  restoreContentPostById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Post>,
@@ -120,7 +120,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   @SetScope(Scope.ManageContentPosts)
   @SetPolicy(Action.Destroy, Resource.ContentPosts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyPostById(
+  destroyContentPostById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Post>,
@@ -135,7 +135,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   @SetScope(Scope.ManageContentPosts)
   @SetPolicy(Action.Update, Resource.ContentPosts)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updatePostBulk(
+  updateContentPostBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdatePostDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Post>,
@@ -148,7 +148,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   @SetScope(Scope.WriteContentPosts)
   @SetPolicy(Action.Update, Resource.ContentPosts)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updatePostById(
+  updateContentPostById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Post>,

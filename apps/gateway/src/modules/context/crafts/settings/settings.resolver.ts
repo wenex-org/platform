@@ -39,7 +39,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   @SetScope(Scope.ReadContextSettings)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ContextSettings)
-  countSetting(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countContextSetting(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   @SetScope(Scope.WriteContextSettings)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContextSettings)
-  createSetting(@Meta() meta: Metadata, @Args('data') data: CreateSettingDto): Observable<SettingDataSerializer> {
+  createContextSetting(@Meta() meta: Metadata, @Args('data') data: CreateSettingDto): Observable<SettingDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   @SetScope(Scope.WriteContextSettings)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContextSettings)
-  createSettingBulk(@Meta() meta: Metadata, @Args('data') data: CreateSettingItemsDto): Observable<SettingItemsSerializer> {
+  createContextSettingBulk(@Meta() meta: Metadata, @Args('data') data: CreateSettingItemsDto): Observable<SettingItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,10 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   @SetScope(Scope.ReadContextSettings)
   @SetPolicy(Action.Read, Resource.ContextSettings)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findSetting(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Setting>): Observable<SettingItemsSerializer> {
+  findContextSetting(
+    @Meta() meta: Metadata,
+    @Filter() @Args('filter') filter: FilterDto<Setting>,
+  ): Observable<SettingItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +78,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   @SetScope(Scope.ReadContextSettings)
   @SetPolicy(Action.Read, Resource.ContextSettings)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findSettingById(
+  findContextSettingById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Setting>,
@@ -90,7 +93,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   @SetScope(Scope.WriteContextSettings)
   @SetPolicy(Action.Delete, Resource.ContextSettings)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteSettingById(
+  deleteContextSettingById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Setting>,
@@ -105,7 +108,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   @SetScope(Scope.WriteContextSettings)
   @SetPolicy(Action.Restore, Resource.ContextSettings)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreSettingById(
+  restoreContextSettingById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Setting>,
@@ -120,7 +123,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   @SetScope(Scope.ManageContextSettings)
   @SetPolicy(Action.Destroy, Resource.ContextSettings)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroySettingById(
+  destroyContextSettingById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Setting>,
@@ -135,7 +138,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   @SetScope(Scope.ManageContextSettings)
   @SetPolicy(Action.Update, Resource.ContextSettings)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateSettingBulk(
+  updateContextSettingBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateSettingDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Setting>,
@@ -148,7 +151,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   @SetScope(Scope.WriteContextSettings)
   @SetPolicy(Action.Update, Resource.ContextSettings)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateSettingById(
+  updateContextSettingById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Setting>,

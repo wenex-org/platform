@@ -42,7 +42,7 @@ export class TransactionsResolver
   @SetScope(Scope.ReadFinancialTransactions)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.FinancialTransactions)
-  countTransaction(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countFinancialTransaction(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -51,7 +51,10 @@ export class TransactionsResolver
   @SetScope(Scope.WriteFinancialTransactions)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialTransactions)
-  createTransaction(@Meta() meta: Metadata, @Args('data') data: CreateTransactionDto): Observable<TransactionDataSerializer> {
+  createFinancialTransaction(
+    @Meta() meta: Metadata,
+    @Args('data') data: CreateTransactionDto,
+  ): Observable<TransactionDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -60,7 +63,7 @@ export class TransactionsResolver
   @SetScope(Scope.WriteFinancialTransactions)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialTransactions)
-  createTransactionBulk(
+  createFinancialTransactionBulk(
     @Meta() meta: Metadata,
     @Args('data') data: CreateTransactionItemsDto,
   ): Observable<TransactionItemsSerializer> {
@@ -72,7 +75,7 @@ export class TransactionsResolver
   @SetScope(Scope.ReadFinancialTransactions)
   @SetPolicy(Action.Read, Resource.FinancialTransactions)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findTransaction(
+  findFinancialTransaction(
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: FilterDto<Transaction>,
   ): Observable<TransactionItemsSerializer> {
@@ -84,7 +87,7 @@ export class TransactionsResolver
   @SetScope(Scope.ReadFinancialTransactions)
   @SetPolicy(Action.Read, Resource.FinancialTransactions)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findTransactionById(
+  findFinancialTransactionById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Transaction>,
@@ -99,7 +102,7 @@ export class TransactionsResolver
   @SetScope(Scope.WriteFinancialTransactions)
   @SetPolicy(Action.Delete, Resource.FinancialTransactions)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteTransactionById(
+  deleteFinancialTransactionById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Transaction>,
@@ -114,7 +117,7 @@ export class TransactionsResolver
   @SetScope(Scope.WriteFinancialTransactions)
   @SetPolicy(Action.Restore, Resource.FinancialTransactions)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreTransactionById(
+  restoreFinancialTransactionById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Transaction>,
@@ -129,7 +132,7 @@ export class TransactionsResolver
   @SetScope(Scope.ManageFinancialTransactions)
   @SetPolicy(Action.Destroy, Resource.FinancialTransactions)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyTransactionById(
+  destroyFinancialTransactionById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Transaction>,
@@ -144,7 +147,7 @@ export class TransactionsResolver
   @SetScope(Scope.ManageFinancialTransactions)
   @SetPolicy(Action.Update, Resource.FinancialTransactions)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateTransactionBulk(
+  updateFinancialTransactionBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateTransactionDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Transaction>,
@@ -157,7 +160,7 @@ export class TransactionsResolver
   @SetScope(Scope.WriteFinancialTransactions)
   @SetPolicy(Action.Update, Resource.FinancialTransactions)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateTransactionById(
+  updateFinancialTransactionById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Transaction>,

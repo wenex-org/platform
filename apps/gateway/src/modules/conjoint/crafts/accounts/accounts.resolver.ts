@@ -39,7 +39,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   @SetScope(Scope.ReadConjointAccounts)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ConjointAccounts)
-  countAccount(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countConjointAccount(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   @SetScope(Scope.WriteConjointAccounts)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ConjointAccounts)
-  createAccount(@Meta() meta: Metadata, @Args('data') data: CreateAccountDto): Observable<AccountDataSerializer> {
+  createConjointAccount(@Meta() meta: Metadata, @Args('data') data: CreateAccountDto): Observable<AccountDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   @SetScope(Scope.WriteConjointAccounts)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ConjointAccounts)
-  createAccountBulk(@Meta() meta: Metadata, @Args('data') data: CreateAccountItemsDto): Observable<AccountItemsSerializer> {
+  createConjointAccountBulk(@Meta() meta: Metadata, @Args('data') data: CreateAccountItemsDto): Observable<AccountItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,10 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   @SetScope(Scope.ReadConjointAccounts)
   @SetPolicy(Action.Read, Resource.ConjointAccounts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findAccount(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Account>): Observable<AccountItemsSerializer> {
+  findConjointAccount(
+    @Meta() meta: Metadata,
+    @Filter() @Args('filter') filter: FilterDto<Account>,
+  ): Observable<AccountItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +78,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   @SetScope(Scope.ReadConjointAccounts)
   @SetPolicy(Action.Read, Resource.ConjointAccounts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findAccountById(
+  findConjointAccountById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Account>,
@@ -90,7 +93,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   @SetScope(Scope.WriteConjointAccounts)
   @SetPolicy(Action.Delete, Resource.ConjointAccounts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteAccountById(
+  deleteConjointAccountById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Account>,
@@ -105,7 +108,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   @SetScope(Scope.WriteConjointAccounts)
   @SetPolicy(Action.Restore, Resource.ConjointAccounts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreAccountById(
+  restoreConjointAccountById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Account>,
@@ -120,7 +123,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   @SetScope(Scope.ManageConjointAccounts)
   @SetPolicy(Action.Destroy, Resource.ConjointAccounts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyAccountById(
+  destroyConjointAccountById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Account>,
@@ -135,7 +138,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   @SetScope(Scope.ManageConjointAccounts)
   @SetPolicy(Action.Update, Resource.ConjointAccounts)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateAccountBulk(
+  updateConjointAccountBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateAccountDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Account>,
@@ -148,7 +151,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   @SetScope(Scope.WriteConjointAccounts)
   @SetPolicy(Action.Update, Resource.ConjointAccounts)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateAccountById(
+  updateConjointAccountById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Account>,

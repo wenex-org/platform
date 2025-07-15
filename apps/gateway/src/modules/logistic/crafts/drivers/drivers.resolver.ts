@@ -39,7 +39,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   @SetScope(Scope.ReadLogisticDrivers)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.LogisticDrivers)
-  countDriver(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countLogisticDriver(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   @SetScope(Scope.WriteLogisticDrivers)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticDrivers)
-  createDriver(@Meta() meta: Metadata, @Args('data') data: CreateDriverDto): Observable<DriverDataSerializer> {
+  createLogisticDriver(@Meta() meta: Metadata, @Args('data') data: CreateDriverDto): Observable<DriverDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   @SetScope(Scope.WriteLogisticDrivers)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticDrivers)
-  createDriverBulk(@Meta() meta: Metadata, @Args('data') data: CreateDriverItemsDto): Observable<DriverItemsSerializer> {
+  createLogisticDriverBulk(@Meta() meta: Metadata, @Args('data') data: CreateDriverItemsDto): Observable<DriverItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,10 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   @SetScope(Scope.ReadLogisticDrivers)
   @SetPolicy(Action.Read, Resource.LogisticDrivers)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findDriver(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Driver>): Observable<DriverItemsSerializer> {
+  findLogisticDriver(
+    @Meta() meta: Metadata,
+    @Filter() @Args('filter') filter: FilterDto<Driver>,
+  ): Observable<DriverItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +78,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   @SetScope(Scope.ReadLogisticDrivers)
   @SetPolicy(Action.Read, Resource.LogisticDrivers)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findDriverById(
+  findLogisticDriverById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Driver>,
@@ -90,7 +93,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   @SetScope(Scope.WriteLogisticDrivers)
   @SetPolicy(Action.Delete, Resource.LogisticDrivers)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteDriverById(
+  deleteLogisticDriverById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Driver>,
@@ -105,7 +108,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   @SetScope(Scope.WriteLogisticDrivers)
   @SetPolicy(Action.Restore, Resource.LogisticDrivers)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreDriverById(
+  restoreLogisticDriverById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Driver>,
@@ -120,7 +123,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   @SetScope(Scope.ManageLogisticDrivers)
   @SetPolicy(Action.Destroy, Resource.LogisticDrivers)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyDriverById(
+  destroyLogisticDriverById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Driver>,
@@ -135,7 +138,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   @SetScope(Scope.ManageLogisticDrivers)
   @SetPolicy(Action.Update, Resource.LogisticDrivers)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateDriverBulk(
+  updateLogisticDriverBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateDriverDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Driver>,
@@ -148,7 +151,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   @SetScope(Scope.WriteLogisticDrivers)
   @SetPolicy(Action.Update, Resource.LogisticDrivers)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateDriverById(
+  updateLogisticDriverById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Driver>,

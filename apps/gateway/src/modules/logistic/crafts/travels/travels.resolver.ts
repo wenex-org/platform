@@ -39,7 +39,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   @SetScope(Scope.ReadLogisticTravels)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.LogisticTravels)
-  countTravel(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countLogisticTravel(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   @SetScope(Scope.WriteLogisticTravels)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticTravels)
-  createTravel(@Meta() meta: Metadata, @Args('data') data: CreateTravelDto): Observable<TravelDataSerializer> {
+  createLogisticTravel(@Meta() meta: Metadata, @Args('data') data: CreateTravelDto): Observable<TravelDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   @SetScope(Scope.WriteLogisticTravels)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticTravels)
-  createTravelBulk(@Meta() meta: Metadata, @Args('data') data: CreateTravelItemsDto): Observable<TravelItemsSerializer> {
+  createLogisticTravelBulk(@Meta() meta: Metadata, @Args('data') data: CreateTravelItemsDto): Observable<TravelItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,10 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   @SetScope(Scope.ReadLogisticTravels)
   @SetPolicy(Action.Read, Resource.LogisticTravels)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findTravel(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Travel>): Observable<TravelItemsSerializer> {
+  findLogisticTravel(
+    @Meta() meta: Metadata,
+    @Filter() @Args('filter') filter: FilterDto<Travel>,
+  ): Observable<TravelItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +78,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   @SetScope(Scope.ReadLogisticTravels)
   @SetPolicy(Action.Read, Resource.LogisticTravels)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findTravelById(
+  findLogisticTravelById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Travel>,
@@ -90,7 +93,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   @SetScope(Scope.WriteLogisticTravels)
   @SetPolicy(Action.Delete, Resource.LogisticTravels)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteTravelById(
+  deleteLogisticTravelById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Travel>,
@@ -105,7 +108,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   @SetScope(Scope.WriteLogisticTravels)
   @SetPolicy(Action.Restore, Resource.LogisticTravels)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreTravelById(
+  restoreLogisticTravelById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Travel>,
@@ -120,7 +123,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   @SetScope(Scope.ManageLogisticTravels)
   @SetPolicy(Action.Destroy, Resource.LogisticTravels)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyTravelById(
+  destroyLogisticTravelById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Travel>,
@@ -135,7 +138,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   @SetScope(Scope.ManageLogisticTravels)
   @SetPolicy(Action.Update, Resource.LogisticTravels)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateTravelBulk(
+  updateLogisticTravelBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateTravelDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Travel>,
@@ -148,7 +151,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   @SetScope(Scope.WriteLogisticTravels)
   @SetPolicy(Action.Update, Resource.LogisticTravels)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateTravelById(
+  updateLogisticTravelById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Travel>,

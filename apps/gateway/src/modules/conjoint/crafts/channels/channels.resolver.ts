@@ -39,7 +39,7 @@ export class ChannelsResolver extends ControllerClass<Channel, ChannelDto> imple
   @SetScope(Scope.ReadConjointChannels)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ConjointChannels)
-  countChannel(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countConjointChannel(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class ChannelsResolver extends ControllerClass<Channel, ChannelDto> imple
   @SetScope(Scope.WriteConjointChannels)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ConjointChannels)
-  createChannel(@Meta() meta: Metadata, @Args('data') data: CreateChannelDto): Observable<ChannelDataSerializer> {
+  createConjointChannel(@Meta() meta: Metadata, @Args('data') data: CreateChannelDto): Observable<ChannelDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class ChannelsResolver extends ControllerClass<Channel, ChannelDto> imple
   @SetScope(Scope.WriteConjointChannels)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ConjointChannels)
-  createChannelBulk(@Meta() meta: Metadata, @Args('data') data: CreateChannelItemsDto): Observable<ChannelItemsSerializer> {
+  createConjointChannelBulk(@Meta() meta: Metadata, @Args('data') data: CreateChannelItemsDto): Observable<ChannelItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,10 @@ export class ChannelsResolver extends ControllerClass<Channel, ChannelDto> imple
   @SetScope(Scope.ReadConjointChannels)
   @SetPolicy(Action.Read, Resource.ConjointChannels)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findChannel(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Channel>): Observable<ChannelItemsSerializer> {
+  findConjointChannel(
+    @Meta() meta: Metadata,
+    @Filter() @Args('filter') filter: FilterDto<Channel>,
+  ): Observable<ChannelItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +78,7 @@ export class ChannelsResolver extends ControllerClass<Channel, ChannelDto> imple
   @SetScope(Scope.ReadConjointChannels)
   @SetPolicy(Action.Read, Resource.ConjointChannels)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findChannelById(
+  findConjointChannelById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Channel>,
@@ -90,7 +93,7 @@ export class ChannelsResolver extends ControllerClass<Channel, ChannelDto> imple
   @SetScope(Scope.WriteConjointChannels)
   @SetPolicy(Action.Delete, Resource.ConjointChannels)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteChannelById(
+  deleteConjointChannelById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Channel>,
@@ -105,7 +108,7 @@ export class ChannelsResolver extends ControllerClass<Channel, ChannelDto> imple
   @SetScope(Scope.WriteConjointChannels)
   @SetPolicy(Action.Restore, Resource.ConjointChannels)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreChannelById(
+  restoreConjointChannelById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Channel>,
@@ -120,7 +123,7 @@ export class ChannelsResolver extends ControllerClass<Channel, ChannelDto> imple
   @SetScope(Scope.ManageConjointChannels)
   @SetPolicy(Action.Destroy, Resource.ConjointChannels)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyChannelById(
+  destroyConjointChannelById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Channel>,
@@ -135,7 +138,7 @@ export class ChannelsResolver extends ControllerClass<Channel, ChannelDto> imple
   @SetScope(Scope.ManageConjointChannels)
   @SetPolicy(Action.Update, Resource.ConjointChannels)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateChannelBulk(
+  updateConjointChannelBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateChannelDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Channel>,
@@ -148,7 +151,7 @@ export class ChannelsResolver extends ControllerClass<Channel, ChannelDto> imple
   @SetScope(Scope.WriteConjointChannels)
   @SetPolicy(Action.Update, Resource.ConjointChannels)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateChannelById(
+  updateConjointChannelById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Channel>,

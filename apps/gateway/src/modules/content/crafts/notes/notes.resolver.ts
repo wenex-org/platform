@@ -39,7 +39,7 @@ export class NotesResolver extends ControllerClass<Note, NoteDto> implements ICo
   @SetScope(Scope.ReadContentNotes)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ContentNotes)
-  countNote(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countContentNote(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class NotesResolver extends ControllerClass<Note, NoteDto> implements ICo
   @SetScope(Scope.WriteContentNotes)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContentNotes)
-  createNote(@Meta() meta: Metadata, @Args('data') data: CreateNoteDto): Observable<NoteDataSerializer> {
+  createContentNote(@Meta() meta: Metadata, @Args('data') data: CreateNoteDto): Observable<NoteDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class NotesResolver extends ControllerClass<Note, NoteDto> implements ICo
   @SetScope(Scope.WriteContentNotes)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContentNotes)
-  createNoteBulk(@Meta() meta: Metadata, @Args('data') data: CreateNoteItemsDto): Observable<NoteItemsSerializer> {
+  createContentNoteBulk(@Meta() meta: Metadata, @Args('data') data: CreateNoteItemsDto): Observable<NoteItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,7 @@ export class NotesResolver extends ControllerClass<Note, NoteDto> implements ICo
   @SetScope(Scope.ReadContentNotes)
   @SetPolicy(Action.Read, Resource.ContentNotes)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findNote(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Note>): Observable<NoteItemsSerializer> {
+  findContentNote(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Note>): Observable<NoteItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +75,7 @@ export class NotesResolver extends ControllerClass<Note, NoteDto> implements ICo
   @SetScope(Scope.ReadContentNotes)
   @SetPolicy(Action.Read, Resource.ContentNotes)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findNoteById(
+  findContentNoteById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Note>,
@@ -90,7 +90,7 @@ export class NotesResolver extends ControllerClass<Note, NoteDto> implements ICo
   @SetScope(Scope.WriteContentNotes)
   @SetPolicy(Action.Delete, Resource.ContentNotes)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteNoteById(
+  deleteContentNoteById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Note>,
@@ -105,7 +105,7 @@ export class NotesResolver extends ControllerClass<Note, NoteDto> implements ICo
   @SetScope(Scope.WriteContentNotes)
   @SetPolicy(Action.Restore, Resource.ContentNotes)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreNoteById(
+  restoreContentNoteById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Note>,
@@ -120,7 +120,7 @@ export class NotesResolver extends ControllerClass<Note, NoteDto> implements ICo
   @SetScope(Scope.ManageContentNotes)
   @SetPolicy(Action.Destroy, Resource.ContentNotes)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyNoteById(
+  destroyContentNoteById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Note>,
@@ -135,7 +135,7 @@ export class NotesResolver extends ControllerClass<Note, NoteDto> implements ICo
   @SetScope(Scope.ManageContentNotes)
   @SetPolicy(Action.Update, Resource.ContentNotes)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateNoteBulk(
+  updateContentNoteBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateNoteDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Note>,
@@ -148,7 +148,7 @@ export class NotesResolver extends ControllerClass<Note, NoteDto> implements ICo
   @SetScope(Scope.WriteContentNotes)
   @SetPolicy(Action.Update, Resource.ContentNotes)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateNoteById(
+  updateContentNoteById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Note>,

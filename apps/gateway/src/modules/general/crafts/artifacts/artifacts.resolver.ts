@@ -39,7 +39,7 @@ export class ArtifactsResolver extends ControllerClass<Artifact, ArtifactDto> im
   @SetScope(Scope.ReadGeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.GeneralArtifacts)
-  countArtifact(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countGeneralArtifact(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class ArtifactsResolver extends ControllerClass<Artifact, ArtifactDto> im
   @SetScope(Scope.WriteGeneralArtifacts)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.GeneralArtifacts)
-  createArtifact(@Meta() meta: Metadata, @Args('data') data: CreateArtifactDto): Observable<ArtifactDataSerializer> {
+  createGeneralArtifact(@Meta() meta: Metadata, @Args('data') data: CreateArtifactDto): Observable<ArtifactDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,10 @@ export class ArtifactsResolver extends ControllerClass<Artifact, ArtifactDto> im
   @SetScope(Scope.WriteGeneralArtifacts)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.GeneralArtifacts)
-  createArtifactBulk(@Meta() meta: Metadata, @Args('data') data: CreateArtifactItemsDto): Observable<ArtifactItemsSerializer> {
+  createGeneralArtifactBulk(
+    @Meta() meta: Metadata,
+    @Args('data') data: CreateArtifactItemsDto,
+  ): Observable<ArtifactItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +69,10 @@ export class ArtifactsResolver extends ControllerClass<Artifact, ArtifactDto> im
   @SetScope(Scope.ReadGeneralArtifacts)
   @SetPolicy(Action.Read, Resource.GeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findArtifact(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Artifact>): Observable<ArtifactItemsSerializer> {
+  findGeneralArtifact(
+    @Meta() meta: Metadata,
+    @Filter() @Args('filter') filter: FilterDto<Artifact>,
+  ): Observable<ArtifactItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +81,7 @@ export class ArtifactsResolver extends ControllerClass<Artifact, ArtifactDto> im
   @SetScope(Scope.ReadGeneralArtifacts)
   @SetPolicy(Action.Read, Resource.GeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findArtifactById(
+  findGeneralArtifactById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Artifact>,
@@ -90,7 +96,7 @@ export class ArtifactsResolver extends ControllerClass<Artifact, ArtifactDto> im
   @SetScope(Scope.WriteGeneralArtifacts)
   @SetPolicy(Action.Delete, Resource.GeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteArtifactById(
+  deleteGeneralArtifactById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Artifact>,
@@ -105,7 +111,7 @@ export class ArtifactsResolver extends ControllerClass<Artifact, ArtifactDto> im
   @SetScope(Scope.WriteGeneralArtifacts)
   @SetPolicy(Action.Restore, Resource.GeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreArtifactById(
+  restoreGeneralArtifactById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Artifact>,
@@ -120,7 +126,7 @@ export class ArtifactsResolver extends ControllerClass<Artifact, ArtifactDto> im
   @SetScope(Scope.ManageGeneralArtifacts)
   @SetPolicy(Action.Destroy, Resource.GeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyArtifactById(
+  destroyGeneralArtifactById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Artifact>,
@@ -135,7 +141,7 @@ export class ArtifactsResolver extends ControllerClass<Artifact, ArtifactDto> im
   @SetScope(Scope.ManageGeneralArtifacts)
   @SetPolicy(Action.Update, Resource.GeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateArtifactBulk(
+  updateGeneralArtifactBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateArtifactDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Artifact>,
@@ -148,7 +154,7 @@ export class ArtifactsResolver extends ControllerClass<Artifact, ArtifactDto> im
   @SetScope(Scope.WriteGeneralArtifacts)
   @SetPolicy(Action.Update, Resource.GeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateArtifactById(
+  updateGeneralArtifactById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Artifact>,

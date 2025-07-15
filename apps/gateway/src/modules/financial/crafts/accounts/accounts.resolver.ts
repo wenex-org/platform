@@ -39,7 +39,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   @SetScope(Scope.ReadFinancialAccounts)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.FinancialAccounts)
-  countAccount(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countFinancialAccount(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   @SetScope(Scope.WriteFinancialAccounts)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialAccounts)
-  createAccount(@Meta() meta: Metadata, @Args('data') data: CreateAccountDto): Observable<AccountDataSerializer> {
+  createFinancialAccount(@Meta() meta: Metadata, @Args('data') data: CreateAccountDto): Observable<AccountDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,10 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   @SetScope(Scope.WriteFinancialAccounts)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialAccounts)
-  createAccountBulk(@Meta() meta: Metadata, @Args('data') data: CreateAccountItemsDto): Observable<AccountItemsSerializer> {
+  createFinancialAccountBulk(
+    @Meta() meta: Metadata,
+    @Args('data') data: CreateAccountItemsDto,
+  ): Observable<AccountItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +69,10 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   @SetScope(Scope.ReadFinancialAccounts)
   @SetPolicy(Action.Read, Resource.FinancialAccounts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findAccount(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Account>): Observable<AccountItemsSerializer> {
+  findFinancialAccount(
+    @Meta() meta: Metadata,
+    @Filter() @Args('filter') filter: FilterDto<Account>,
+  ): Observable<AccountItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +81,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   @SetScope(Scope.ReadFinancialAccounts)
   @SetPolicy(Action.Read, Resource.FinancialAccounts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findAccountById(
+  findFinancialAccountById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Account>,
@@ -90,7 +96,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   @SetScope(Scope.WriteFinancialAccounts)
   @SetPolicy(Action.Delete, Resource.FinancialAccounts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteAccountById(
+  deleteFinancialAccountById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Account>,
@@ -105,7 +111,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   @SetScope(Scope.WriteFinancialAccounts)
   @SetPolicy(Action.Restore, Resource.FinancialAccounts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreAccountById(
+  restoreFinancialAccountById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Account>,
@@ -120,7 +126,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   @SetScope(Scope.ManageFinancialAccounts)
   @SetPolicy(Action.Destroy, Resource.FinancialAccounts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyAccountById(
+  destroyFinancialAccountById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Account>,
@@ -135,7 +141,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   @SetScope(Scope.ManageFinancialAccounts)
   @SetPolicy(Action.Update, Resource.FinancialAccounts)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateAccountBulk(
+  updateFinancialAccountBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateAccountDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Account>,
@@ -148,7 +154,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   @SetScope(Scope.WriteFinancialAccounts)
   @SetPolicy(Action.Update, Resource.FinancialAccounts)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateAccountById(
+  updateFinancialAccountById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Account>,

@@ -39,7 +39,7 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   @SetScope(Scope.ReadGeneralWorkflows)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.GeneralWorkflows)
-  countWorkflow(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countGeneralWorkflow(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   @SetScope(Scope.WriteGeneralWorkflows)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.GeneralWorkflows)
-  createWorkflow(@Meta() meta: Metadata, @Args('data') data: CreateWorkflowDto): Observable<WorkflowDataSerializer> {
+  createGeneralWorkflow(@Meta() meta: Metadata, @Args('data') data: CreateWorkflowDto): Observable<WorkflowDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,10 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   @SetScope(Scope.WriteGeneralWorkflows)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.GeneralWorkflows)
-  createWorkflowBulk(@Meta() meta: Metadata, @Args('data') data: CreateWorkflowItemsDto): Observable<WorkflowItemsSerializer> {
+  createGeneralWorkflowBulk(
+    @Meta() meta: Metadata,
+    @Args('data') data: CreateWorkflowItemsDto,
+  ): Observable<WorkflowItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +69,10 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   @SetScope(Scope.ReadGeneralWorkflows)
   @SetPolicy(Action.Read, Resource.GeneralWorkflows)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findWorkflow(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Workflow>): Observable<WorkflowItemsSerializer> {
+  findGeneralWorkflow(
+    @Meta() meta: Metadata,
+    @Filter() @Args('filter') filter: FilterDto<Workflow>,
+  ): Observable<WorkflowItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +81,7 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   @SetScope(Scope.ReadGeneralWorkflows)
   @SetPolicy(Action.Read, Resource.GeneralWorkflows)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findWorkflowById(
+  findGeneralWorkflowById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Workflow>,
@@ -90,7 +96,7 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   @SetScope(Scope.WriteGeneralWorkflows)
   @SetPolicy(Action.Delete, Resource.GeneralWorkflows)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteWorkflowById(
+  deleteGeneralWorkflowById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Workflow>,
@@ -105,7 +111,7 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   @SetScope(Scope.WriteGeneralWorkflows)
   @SetPolicy(Action.Restore, Resource.GeneralWorkflows)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreWorkflowById(
+  restoreGeneralWorkflowById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Workflow>,
@@ -120,7 +126,7 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   @SetScope(Scope.ManageGeneralWorkflows)
   @SetPolicy(Action.Destroy, Resource.GeneralWorkflows)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyWorkflowById(
+  destroyGeneralWorkflowById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Workflow>,
@@ -135,7 +141,7 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   @SetScope(Scope.ManageGeneralWorkflows)
   @SetPolicy(Action.Update, Resource.GeneralWorkflows)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateWorkflowBulk(
+  updateGeneralWorkflowBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateWorkflowDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Workflow>,
@@ -148,7 +154,7 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   @SetScope(Scope.WriteGeneralWorkflows)
   @SetPolicy(Action.Update, Resource.GeneralWorkflows)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateWorkflowById(
+  updateGeneralWorkflowById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Workflow>,

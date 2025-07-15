@@ -39,7 +39,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   @SetScope(Scope.ReadAuthGrants)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.AuthGrants)
-  countGrant(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countAuthGrant(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   @SetScope(Scope.WriteAuthGrants)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.AuthGrants)
-  createGrant(@Meta() meta: Metadata, @Args('data') data: CreateGrantDto): Observable<GrantDataSerializer> {
+  createAuthGrant(@Meta() meta: Metadata, @Args('data') data: CreateGrantDto): Observable<GrantDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   @SetScope(Scope.WriteAuthGrants)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.AuthGrants)
-  createGrantBulk(@Meta() meta: Metadata, @Args('data') data: CreateGrantItemsDto): Observable<GrantItemsSerializer> {
+  createAuthGrantBulk(@Meta() meta: Metadata, @Args('data') data: CreateGrantItemsDto): Observable<GrantItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   @SetScope(Scope.ReadAuthGrants)
   @SetPolicy(Action.Read, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findGrant(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Grant>): Observable<GrantItemsSerializer> {
+  findAuthGrant(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Grant>): Observable<GrantItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +75,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   @SetScope(Scope.ReadAuthGrants)
   @SetPolicy(Action.Read, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findGrantById(
+  findAuthGrantById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Grant>,
@@ -90,7 +90,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   @SetScope(Scope.WriteAuthGrants)
   @SetPolicy(Action.Delete, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteGrantById(
+  deleteAuthGrantById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Grant>,
@@ -105,7 +105,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   @SetScope(Scope.WriteAuthGrants)
   @SetPolicy(Action.Restore, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreGrantById(
+  restoreAuthGrantById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Grant>,
@@ -120,7 +120,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   @SetScope(Scope.ManageAuthGrants)
   @SetPolicy(Action.Destroy, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyGrantById(
+  destroyAuthGrantById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Grant>,
@@ -135,7 +135,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   @SetScope(Scope.ManageAuthGrants)
   @SetPolicy(Action.Update, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateGrantBulk(
+  updateAuthGrantBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateGrantDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Grant>,
@@ -148,7 +148,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   @SetScope(Scope.WriteAuthGrants)
   @SetPolicy(Action.Update, Resource.AuthGrants)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateGrantById(
+  updateAuthGrantById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Grant>,

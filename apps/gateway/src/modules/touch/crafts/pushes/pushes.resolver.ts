@@ -39,7 +39,7 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements IC
   @SetScope(Scope.ReadTouchPushes)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.TouchPushes)
-  countPush(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countTouchPush(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements IC
   @SetScope(Scope.WriteTouchPushes)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchPushes)
-  createPush(@Meta() meta: Metadata, @Args('data') data: CreatePushDto): Observable<PushDataSerializer> {
+  createTouchPush(@Meta() meta: Metadata, @Args('data') data: CreatePushDto): Observable<PushDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements IC
   @SetScope(Scope.WriteTouchPushes)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchPushes)
-  createPushBulk(@Meta() meta: Metadata, @Args('data') data: CreatePushItemsDto): Observable<PushItemsSerializer> {
+  createTouchPushBulk(@Meta() meta: Metadata, @Args('data') data: CreatePushItemsDto): Observable<PushItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,7 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements IC
   @SetScope(Scope.ReadTouchPushes)
   @SetPolicy(Action.Read, Resource.TouchPushes)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findPush(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Push>): Observable<PushItemsSerializer> {
+  findTouchPush(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Push>): Observable<PushItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +75,7 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements IC
   @SetScope(Scope.ReadTouchPushes)
   @SetPolicy(Action.Read, Resource.TouchPushes)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findPushById(
+  findTouchPushById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Push>,
@@ -90,7 +90,7 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements IC
   @SetScope(Scope.WriteTouchPushes)
   @SetPolicy(Action.Delete, Resource.TouchPushes)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deletePushById(
+  deleteTouchPushById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Push>,
@@ -105,7 +105,7 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements IC
   @SetScope(Scope.WriteTouchPushes)
   @SetPolicy(Action.Restore, Resource.TouchPushes)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restorePushById(
+  restoreTouchPushById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Push>,
@@ -120,7 +120,7 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements IC
   @SetScope(Scope.ManageTouchPushes)
   @SetPolicy(Action.Destroy, Resource.TouchPushes)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyPushById(
+  destroyTouchPushById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Push>,
@@ -135,7 +135,7 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements IC
   @SetScope(Scope.ManageTouchPushes)
   @SetPolicy(Action.Update, Resource.TouchPushes)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updatePushBulk(
+  updateTouchPushBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdatePushDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Push>,
@@ -148,7 +148,7 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements IC
   @SetScope(Scope.WriteTouchPushes)
   @SetPolicy(Action.Update, Resource.TouchPushes)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updatePushById(
+  updateTouchPushById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Push>,

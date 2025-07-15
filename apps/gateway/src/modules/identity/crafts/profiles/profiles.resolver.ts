@@ -39,7 +39,7 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   @SetScope(Scope.ReadIdentityProfiles)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.IdentityProfiles)
-  countProfile(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countIdentityProfile(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   @SetScope(Scope.WriteIdentityProfiles)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentityProfiles)
-  createProfile(@Meta() meta: Metadata, @Args('data') data: CreateProfileDto): Observable<ProfileDataSerializer> {
+  createIdentityProfile(@Meta() meta: Metadata, @Args('data') data: CreateProfileDto): Observable<ProfileDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   @SetScope(Scope.WriteIdentityProfiles)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentityProfiles)
-  createProfileBulk(@Meta() meta: Metadata, @Args('data') data: CreateProfileItemsDto): Observable<ProfileItemsSerializer> {
+  createIdentityProfileBulk(@Meta() meta: Metadata, @Args('data') data: CreateProfileItemsDto): Observable<ProfileItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,10 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   @SetScope(Scope.ReadIdentityProfiles)
   @SetPolicy(Action.Read, Resource.IdentityProfiles)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findProfile(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Profile>): Observable<ProfileItemsSerializer> {
+  findIdentityProfile(
+    @Meta() meta: Metadata,
+    @Filter() @Args('filter') filter: FilterDto<Profile>,
+  ): Observable<ProfileItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +78,7 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   @SetScope(Scope.ReadIdentityProfiles)
   @SetPolicy(Action.Read, Resource.IdentityProfiles)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findProfileById(
+  findIdentityProfileById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Profile>,
@@ -90,7 +93,7 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   @SetScope(Scope.WriteIdentityProfiles)
   @SetPolicy(Action.Delete, Resource.IdentityProfiles)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteProfileById(
+  deleteIdentityProfileById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Profile>,
@@ -105,7 +108,7 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   @SetScope(Scope.WriteIdentityProfiles)
   @SetPolicy(Action.Restore, Resource.IdentityProfiles)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreProfileById(
+  restoreIdentityProfileById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Profile>,
@@ -120,7 +123,7 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   @SetScope(Scope.ManageIdentityProfiles)
   @SetPolicy(Action.Destroy, Resource.IdentityProfiles)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyProfileById(
+  destroyIdentityProfileById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Profile>,
@@ -135,7 +138,7 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   @SetScope(Scope.ManageIdentityProfiles)
   @SetPolicy(Action.Update, Resource.IdentityProfiles)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateProfileBulk(
+  updateIdentityProfileBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateProfileDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Profile>,
@@ -148,7 +151,7 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   @SetScope(Scope.WriteIdentityProfiles)
   @SetPolicy(Action.Update, Resource.IdentityProfiles)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateProfileById(
+  updateIdentityProfileById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Profile>,

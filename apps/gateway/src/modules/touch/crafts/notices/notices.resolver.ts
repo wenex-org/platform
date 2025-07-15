@@ -39,7 +39,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   @SetScope(Scope.ReadTouchNotices)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.TouchNotices)
-  countNotice(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countTouchNotice(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   @SetScope(Scope.WriteTouchNotices)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchNotices)
-  createNotice(@Meta() meta: Metadata, @Args('data') data: CreateNoticeDto): Observable<NoticeDataSerializer> {
+  createTouchNotice(@Meta() meta: Metadata, @Args('data') data: CreateNoticeDto): Observable<NoticeDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   @SetScope(Scope.WriteTouchNotices)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchNotices)
-  createNoticeBulk(@Meta() meta: Metadata, @Args('data') data: CreateNoticeItemsDto): Observable<NoticeItemsSerializer> {
+  createTouchNoticeBulk(@Meta() meta: Metadata, @Args('data') data: CreateNoticeItemsDto): Observable<NoticeItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   @SetScope(Scope.ReadTouchNotices)
   @SetPolicy(Action.Read, Resource.TouchNotices)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findNotice(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Notice>): Observable<NoticeItemsSerializer> {
+  findTouchNotice(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Notice>): Observable<NoticeItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +75,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   @SetScope(Scope.ReadTouchNotices)
   @SetPolicy(Action.Read, Resource.TouchNotices)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findNoticeById(
+  findTouchNoticeById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Notice>,
@@ -90,7 +90,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   @SetScope(Scope.WriteTouchNotices)
   @SetPolicy(Action.Delete, Resource.TouchNotices)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteNoticeById(
+  deleteTouchNoticeById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Notice>,
@@ -105,7 +105,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   @SetScope(Scope.WriteTouchNotices)
   @SetPolicy(Action.Restore, Resource.TouchNotices)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreNoticeById(
+  restoreTouchNoticeById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Notice>,
@@ -120,7 +120,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   @SetScope(Scope.ManageTouchNotices)
   @SetPolicy(Action.Destroy, Resource.TouchNotices)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyNoticeById(
+  destroyTouchNoticeById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Notice>,
@@ -135,7 +135,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   @SetScope(Scope.ManageTouchNotices)
   @SetPolicy(Action.Update, Resource.TouchNotices)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateNoticeBulk(
+  updateTouchNoticeBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateNoticeDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Notice>,
@@ -148,7 +148,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   @SetScope(Scope.WriteTouchNotices)
   @SetPolicy(Action.Update, Resource.TouchNotices)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateNoticeById(
+  updateTouchNoticeById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Notice>,

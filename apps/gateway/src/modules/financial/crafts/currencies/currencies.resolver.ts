@@ -39,7 +39,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   @SetScope(Scope.ReadFinancialCurrencies)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.FinancialCurrencies)
-  countCurrency(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countFinancialCurrency(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   @SetScope(Scope.WriteFinancialCurrencies)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialCurrencies)
-  createCurrency(@Meta() meta: Metadata, @Args('data') data: CreateCurrencyDto): Observable<CurrencyDataSerializer> {
+  createFinancialCurrency(@Meta() meta: Metadata, @Args('data') data: CreateCurrencyDto): Observable<CurrencyDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,10 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   @SetScope(Scope.WriteFinancialCurrencies)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialCurrencies)
-  createCurrencyBulk(@Meta() meta: Metadata, @Args('data') data: CreateCurrencyItemsDto): Observable<CurrencyItemsSerializer> {
+  createFinancialCurrencyBulk(
+    @Meta() meta: Metadata,
+    @Args('data') data: CreateCurrencyItemsDto,
+  ): Observable<CurrencyItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +69,10 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   @SetScope(Scope.ReadFinancialCurrencies)
   @SetPolicy(Action.Read, Resource.FinancialCurrencies)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findCurrency(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Currency>): Observable<CurrencyItemsSerializer> {
+  findFinancialCurrency(
+    @Meta() meta: Metadata,
+    @Filter() @Args('filter') filter: FilterDto<Currency>,
+  ): Observable<CurrencyItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +81,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   @SetScope(Scope.ReadFinancialCurrencies)
   @SetPolicy(Action.Read, Resource.FinancialCurrencies)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findCurrencyById(
+  findFinancialCurrencyById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Currency>,
@@ -90,7 +96,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   @SetScope(Scope.WriteFinancialCurrencies)
   @SetPolicy(Action.Delete, Resource.FinancialCurrencies)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteCurrencyById(
+  deleteFinancialCurrencyById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Currency>,
@@ -105,7 +111,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   @SetScope(Scope.WriteFinancialCurrencies)
   @SetPolicy(Action.Restore, Resource.FinancialCurrencies)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreCurrencyById(
+  restoreFinancialCurrencyById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Currency>,
@@ -120,7 +126,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   @SetScope(Scope.ManageFinancialCurrencies)
   @SetPolicy(Action.Destroy, Resource.FinancialCurrencies)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyCurrencyById(
+  destroyFinancialCurrencyById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Currency>,
@@ -135,7 +141,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   @SetScope(Scope.ManageFinancialCurrencies)
   @SetPolicy(Action.Update, Resource.FinancialCurrencies)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateCurrencyBulk(
+  updateFinancialCurrencyBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateCurrencyDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Currency>,
@@ -148,7 +154,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   @SetScope(Scope.WriteFinancialCurrencies)
   @SetPolicy(Action.Update, Resource.FinancialCurrencies)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateCurrencyById(
+  updateFinancialCurrencyById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Currency>,

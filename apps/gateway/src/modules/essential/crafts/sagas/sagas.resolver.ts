@@ -39,7 +39,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   @SetScope(Scope.ReadEssentialSagas)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.EssentialSagas)
-  countSaga(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countEssentialSaga(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   @SetScope(Scope.WriteEssentialSagas)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.EssentialSagas)
-  createSaga(@Meta() meta: Metadata, @Args('data') data: CreateSagaDto): Observable<SagaDataSerializer> {
+  createEssentialSaga(@Meta() meta: Metadata, @Args('data') data: CreateSagaDto): Observable<SagaDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   @SetScope(Scope.WriteEssentialSagas)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.EssentialSagas)
-  createSagaBulk(@Meta() meta: Metadata, @Args('data') data: CreateSagaItemsDto): Observable<SagaItemsSerializer> {
+  createEssentialSagaBulk(@Meta() meta: Metadata, @Args('data') data: CreateSagaItemsDto): Observable<SagaItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   @SetScope(Scope.ReadEssentialSagas)
   @SetPolicy(Action.Read, Resource.EssentialSagas)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findSaga(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Saga>): Observable<SagaItemsSerializer> {
+  findEssentialSaga(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Saga>): Observable<SagaItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +75,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   @SetScope(Scope.ReadEssentialSagas)
   @SetPolicy(Action.Read, Resource.EssentialSagas)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findSagaById(
+  findEssentialSagaById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Saga>,
@@ -90,7 +90,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   @SetScope(Scope.WriteEssentialSagas)
   @SetPolicy(Action.Delete, Resource.EssentialSagas)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteSagaById(
+  deleteEssentialSagaById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Saga>,
@@ -105,7 +105,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   @SetScope(Scope.WriteEssentialSagas)
   @SetPolicy(Action.Restore, Resource.EssentialSagas)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreSagaById(
+  restoreEssentialSagaById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Saga>,
@@ -120,7 +120,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   @SetScope(Scope.ManageEssentialSagas)
   @SetPolicy(Action.Destroy, Resource.EssentialSagas)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroySagaById(
+  destroyEssentialSagaById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Saga>,
@@ -135,7 +135,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   @SetScope(Scope.ManageEssentialSagas)
   @SetPolicy(Action.Update, Resource.EssentialSagas)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateSagaBulk(
+  updateEssentialSagaBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateSagaDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Saga>,
@@ -148,7 +148,7 @@ export class SagasResolver extends ControllerClass<Saga, SagaDto> implements ICo
   @SetScope(Scope.WriteEssentialSagas)
   @SetPolicy(Action.Update, Resource.EssentialSagas)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateSagaById(
+  updateEssentialSagaById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Saga>,

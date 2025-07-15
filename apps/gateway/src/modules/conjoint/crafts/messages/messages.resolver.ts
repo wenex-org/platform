@@ -39,7 +39,7 @@ export class MessagesResolver extends ControllerClass<Message, MessageDto> imple
   @SetScope(Scope.ReadConjointMessages)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ConjointMessages)
-  countMessage(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countConjointMessage(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class MessagesResolver extends ControllerClass<Message, MessageDto> imple
   @SetScope(Scope.WriteConjointMessages)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ConjointMessages)
-  createMessage(@Meta() meta: Metadata, @Args('data') data: CreateMessageDto): Observable<MessageDataSerializer> {
+  createConjointMessage(@Meta() meta: Metadata, @Args('data') data: CreateMessageDto): Observable<MessageDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class MessagesResolver extends ControllerClass<Message, MessageDto> imple
   @SetScope(Scope.WriteConjointMessages)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ConjointMessages)
-  createMessageBulk(@Meta() meta: Metadata, @Args('data') data: CreateMessageItemsDto): Observable<MessageItemsSerializer> {
+  createConjointMessageBulk(@Meta() meta: Metadata, @Args('data') data: CreateMessageItemsDto): Observable<MessageItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,10 @@ export class MessagesResolver extends ControllerClass<Message, MessageDto> imple
   @SetScope(Scope.ReadConjointMessages)
   @SetPolicy(Action.Read, Resource.ConjointMessages)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findMessage(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Message>): Observable<MessageItemsSerializer> {
+  findConjointMessage(
+    @Meta() meta: Metadata,
+    @Filter() @Args('filter') filter: FilterDto<Message>,
+  ): Observable<MessageItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +78,7 @@ export class MessagesResolver extends ControllerClass<Message, MessageDto> imple
   @SetScope(Scope.ReadConjointMessages)
   @SetPolicy(Action.Read, Resource.ConjointMessages)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findMessageById(
+  findConjointMessageById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Message>,
@@ -90,7 +93,7 @@ export class MessagesResolver extends ControllerClass<Message, MessageDto> imple
   @SetScope(Scope.WriteConjointMessages)
   @SetPolicy(Action.Delete, Resource.ConjointMessages)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteMessageById(
+  deleteConjointMessageById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Message>,
@@ -105,7 +108,7 @@ export class MessagesResolver extends ControllerClass<Message, MessageDto> imple
   @SetScope(Scope.WriteConjointMessages)
   @SetPolicy(Action.Restore, Resource.ConjointMessages)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreMessageById(
+  restoreConjointMessageById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Message>,
@@ -120,7 +123,7 @@ export class MessagesResolver extends ControllerClass<Message, MessageDto> imple
   @SetScope(Scope.ManageConjointMessages)
   @SetPolicy(Action.Destroy, Resource.ConjointMessages)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyMessageById(
+  destroyConjointMessageById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Message>,
@@ -135,7 +138,7 @@ export class MessagesResolver extends ControllerClass<Message, MessageDto> imple
   @SetScope(Scope.ManageConjointMessages)
   @SetPolicy(Action.Update, Resource.ConjointMessages)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateMessageBulk(
+  updateConjointMessageBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateMessageDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Message>,
@@ -148,7 +151,7 @@ export class MessagesResolver extends ControllerClass<Message, MessageDto> imple
   @SetScope(Scope.WriteConjointMessages)
   @SetPolicy(Action.Update, Resource.ConjointMessages)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateMessageById(
+  updateConjointMessageById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Message>,

@@ -39,7 +39,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
   @SetScope(Scope.ReadFinancialWallets)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.FinancialWallets)
-  countWallet(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countFinancialWallet(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
   @SetScope(Scope.WriteFinancialWallets)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialWallets)
-  createWallet(@Meta() meta: Metadata, @Args('data') data: CreateWalletDto): Observable<WalletDataSerializer> {
+  createFinancialWallet(@Meta() meta: Metadata, @Args('data') data: CreateWalletDto): Observable<WalletDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
   @SetScope(Scope.WriteFinancialWallets)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialWallets)
-  createWalletBulk(@Meta() meta: Metadata, @Args('data') data: CreateWalletItemsDto): Observable<WalletItemsSerializer> {
+  createFinancialWalletBulk(@Meta() meta: Metadata, @Args('data') data: CreateWalletItemsDto): Observable<WalletItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,10 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
   @SetScope(Scope.ReadFinancialWallets)
   @SetPolicy(Action.Read, Resource.FinancialWallets)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findWallet(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Wallet>): Observable<WalletItemsSerializer> {
+  findFinancialWallet(
+    @Meta() meta: Metadata,
+    @Filter() @Args('filter') filter: FilterDto<Wallet>,
+  ): Observable<WalletItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +78,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
   @SetScope(Scope.ReadFinancialWallets)
   @SetPolicy(Action.Read, Resource.FinancialWallets)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findWalletById(
+  findFinancialWalletById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Wallet>,
@@ -90,7 +93,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
   @SetScope(Scope.WriteFinancialWallets)
   @SetPolicy(Action.Delete, Resource.FinancialWallets)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteWalletById(
+  deleteFinancialWalletById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Wallet>,
@@ -105,7 +108,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
   @SetScope(Scope.WriteFinancialWallets)
   @SetPolicy(Action.Restore, Resource.FinancialWallets)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreWalletById(
+  restoreFinancialWalletById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Wallet>,
@@ -120,7 +123,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
   @SetScope(Scope.ManageFinancialWallets)
   @SetPolicy(Action.Destroy, Resource.FinancialWallets)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyWalletById(
+  destroyFinancialWalletById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Wallet>,
@@ -135,7 +138,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
   @SetScope(Scope.ManageFinancialWallets)
   @SetPolicy(Action.Update, Resource.FinancialWallets)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateWalletBulk(
+  updateFinancialWalletBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateWalletDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Wallet>,
@@ -148,7 +151,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
   @SetScope(Scope.WriteFinancialWallets)
   @SetPolicy(Action.Update, Resource.FinancialWallets)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateWalletById(
+  updateFinancialWalletById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Wallet>,

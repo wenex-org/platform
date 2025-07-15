@@ -39,7 +39,7 @@ export class ActivitiesResolver extends ControllerClass<Activity, ActivityDto> i
   @SetScope(Scope.ReadGeneralActivities)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.GeneralActivities)
-  countActivity(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countGeneralActivity(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class ActivitiesResolver extends ControllerClass<Activity, ActivityDto> i
   @SetScope(Scope.WriteGeneralActivities)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.GeneralActivities)
-  createActivity(@Meta() meta: Metadata, @Args('data') data: CreateActivityDto): Observable<ActivityDataSerializer> {
+  createGeneralActivity(@Meta() meta: Metadata, @Args('data') data: CreateActivityDto): Observable<ActivityDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,10 @@ export class ActivitiesResolver extends ControllerClass<Activity, ActivityDto> i
   @SetScope(Scope.WriteGeneralActivities)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.GeneralActivities)
-  createActivityBulk(@Meta() meta: Metadata, @Args('data') data: CreateActivityItemsDto): Observable<ActivityItemsSerializer> {
+  createGeneralActivityBulk(
+    @Meta() meta: Metadata,
+    @Args('data') data: CreateActivityItemsDto,
+  ): Observable<ActivityItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +69,10 @@ export class ActivitiesResolver extends ControllerClass<Activity, ActivityDto> i
   @SetScope(Scope.ReadGeneralActivities)
   @SetPolicy(Action.Read, Resource.GeneralActivities)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findActivity(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Activity>): Observable<ActivityItemsSerializer> {
+  findGeneralActivity(
+    @Meta() meta: Metadata,
+    @Filter() @Args('filter') filter: FilterDto<Activity>,
+  ): Observable<ActivityItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +81,7 @@ export class ActivitiesResolver extends ControllerClass<Activity, ActivityDto> i
   @SetScope(Scope.ReadGeneralActivities)
   @SetPolicy(Action.Read, Resource.GeneralActivities)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findActivityById(
+  findGeneralActivityById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Activity>,
@@ -90,7 +96,7 @@ export class ActivitiesResolver extends ControllerClass<Activity, ActivityDto> i
   @SetScope(Scope.WriteGeneralActivities)
   @SetPolicy(Action.Delete, Resource.GeneralActivities)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteActivityById(
+  deleteGeneralActivityById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Activity>,
@@ -105,7 +111,7 @@ export class ActivitiesResolver extends ControllerClass<Activity, ActivityDto> i
   @SetScope(Scope.WriteGeneralActivities)
   @SetPolicy(Action.Restore, Resource.GeneralActivities)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreActivityById(
+  restoreGeneralActivityById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Activity>,
@@ -120,7 +126,7 @@ export class ActivitiesResolver extends ControllerClass<Activity, ActivityDto> i
   @SetScope(Scope.ManageGeneralActivities)
   @SetPolicy(Action.Destroy, Resource.GeneralActivities)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyActivityById(
+  destroyGeneralActivityById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Activity>,
@@ -135,7 +141,7 @@ export class ActivitiesResolver extends ControllerClass<Activity, ActivityDto> i
   @SetScope(Scope.ManageGeneralActivities)
   @SetPolicy(Action.Update, Resource.GeneralActivities)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateActivityBulk(
+  updateGeneralActivityBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateActivityDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Activity>,
@@ -148,7 +154,7 @@ export class ActivitiesResolver extends ControllerClass<Activity, ActivityDto> i
   @SetScope(Scope.WriteGeneralActivities)
   @SetPolicy(Action.Update, Resource.GeneralActivities)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateActivityById(
+  updateGeneralActivityById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Activity>,

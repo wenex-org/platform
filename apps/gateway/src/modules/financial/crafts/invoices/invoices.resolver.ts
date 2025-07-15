@@ -39,7 +39,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   @SetScope(Scope.ReadFinancialInvoices)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.FinancialInvoices)
-  countInvoice(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countFinancialInvoice(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   @SetScope(Scope.WriteFinancialInvoices)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialInvoices)
-  createInvoice(@Meta() meta: Metadata, @Args('data') data: CreateInvoiceDto): Observable<InvoiceDataSerializer> {
+  createFinancialInvoice(@Meta() meta: Metadata, @Args('data') data: CreateInvoiceDto): Observable<InvoiceDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,10 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   @SetScope(Scope.WriteFinancialInvoices)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.FinancialInvoices)
-  createInvoiceBulk(@Meta() meta: Metadata, @Args('data') data: CreateInvoiceItemsDto): Observable<InvoiceItemsSerializer> {
+  createFinancialInvoiceBulk(
+    @Meta() meta: Metadata,
+    @Args('data') data: CreateInvoiceItemsDto,
+  ): Observable<InvoiceItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +69,10 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   @SetScope(Scope.ReadFinancialInvoices)
   @SetPolicy(Action.Read, Resource.FinancialInvoices)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findInvoice(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Invoice>): Observable<InvoiceItemsSerializer> {
+  findFinancialInvoice(
+    @Meta() meta: Metadata,
+    @Filter() @Args('filter') filter: FilterDto<Invoice>,
+  ): Observable<InvoiceItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +81,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   @SetScope(Scope.ReadFinancialInvoices)
   @SetPolicy(Action.Read, Resource.FinancialInvoices)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findInvoiceById(
+  findFinancialInvoiceById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Invoice>,
@@ -90,7 +96,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   @SetScope(Scope.WriteFinancialInvoices)
   @SetPolicy(Action.Delete, Resource.FinancialInvoices)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteInvoiceById(
+  deleteFinancialInvoiceById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Invoice>,
@@ -105,7 +111,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   @SetScope(Scope.WriteFinancialInvoices)
   @SetPolicy(Action.Restore, Resource.FinancialInvoices)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreInvoiceById(
+  restoreFinancialInvoiceById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Invoice>,
@@ -120,7 +126,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   @SetScope(Scope.ManageFinancialInvoices)
   @SetPolicy(Action.Destroy, Resource.FinancialInvoices)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyInvoiceById(
+  destroyFinancialInvoiceById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Invoice>,
@@ -135,7 +141,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   @SetScope(Scope.ManageFinancialInvoices)
   @SetPolicy(Action.Update, Resource.FinancialInvoices)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateInvoiceBulk(
+  updateFinancialInvoiceBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateInvoiceDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Invoice>,
@@ -148,7 +154,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   @SetScope(Scope.WriteFinancialInvoices)
   @SetPolicy(Action.Update, Resource.FinancialInvoices)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateInvoiceById(
+  updateFinancialInvoiceById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Invoice>,

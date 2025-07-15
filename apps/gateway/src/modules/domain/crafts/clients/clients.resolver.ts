@@ -40,7 +40,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   @SetScope(Scope.ReadDomainClients)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.DomainClients)
-  countClient(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countDomainClient(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -49,7 +49,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainClients)
-  createClient(@Meta() meta: Metadata, @Args('data') data: CreateClientDto): Observable<ClientDataSerializer> {
+  createDomainClient(@Meta() meta: Metadata, @Args('data') data: CreateClientDto): Observable<ClientDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -58,7 +58,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainClients)
-  createClientBulk(@Meta() meta: Metadata, @Args('data') data: CreateClientItemsDto): Observable<ClientItemsSerializer> {
+  createDomainClientBulk(@Meta() meta: Metadata, @Args('data') data: CreateClientItemsDto): Observable<ClientItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -67,7 +67,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   @SetScope(Scope.ReadDomainClients)
   @SetPolicy(Action.Read, Resource.DomainClients)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findClient(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Client>): Observable<ClientItemsSerializer> {
+  findDomainClient(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Client>): Observable<ClientItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -76,7 +76,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   @SetScope(Scope.ReadDomainClients)
   @SetPolicy(Action.Read, Resource.DomainClients)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findClientById(
+  findDomainClientById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Client>,
@@ -91,7 +91,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   @SetScope(Scope.WriteDomainClients)
   @SetPolicy(Action.Delete, Resource.DomainClients)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteClientById(
+  deleteDomainClientById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Client>,
@@ -106,7 +106,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   @SetScope(Scope.WriteDomainClients)
   @SetPolicy(Action.Restore, Resource.DomainClients)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreClientById(
+  restoreDomainClientById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Client>,
@@ -121,7 +121,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   @SetScope(Scope.ManageDomainClients)
   @SetPolicy(Action.Destroy, Resource.DomainClients)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyClientById(
+  destroyDomainClientById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Client>,
@@ -136,7 +136,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   @SetScope(Scope.ManageDomainClients)
   @SetPolicy(Action.Update, Resource.DomainClients)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateClientBulk(
+  updateDomainClientBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateClientDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Client>,
@@ -149,7 +149,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   @SetScope(Scope.WriteDomainClients)
   @SetPolicy(Action.Update, Resource.DomainClients)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateClientById(
+  updateDomainClientById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Client>,

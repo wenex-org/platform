@@ -39,7 +39,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   @SetScope(Scope.ReadIdentitySessions)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.IdentitySessions)
-  countSession(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countIdentitySession(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   @SetScope(Scope.WriteIdentitySessions)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentitySessions)
-  createSession(@Meta() meta: Metadata, @Args('data') data: CreateSessionDto): Observable<SessionDataSerializer> {
+  createIdentitySession(@Meta() meta: Metadata, @Args('data') data: CreateSessionDto): Observable<SessionDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   @SetScope(Scope.WriteIdentitySessions)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.IdentitySessions)
-  createSessionBulk(@Meta() meta: Metadata, @Args('data') data: CreateSessionItemsDto): Observable<SessionItemsSerializer> {
+  createIdentitySessionBulk(@Meta() meta: Metadata, @Args('data') data: CreateSessionItemsDto): Observable<SessionItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,10 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   @SetScope(Scope.ReadIdentitySessions)
   @SetPolicy(Action.Read, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findSession(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Session>): Observable<SessionItemsSerializer> {
+  findIdentitySession(
+    @Meta() meta: Metadata,
+    @Filter() @Args('filter') filter: FilterDto<Session>,
+  ): Observable<SessionItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +78,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   @SetScope(Scope.ReadIdentitySessions)
   @SetPolicy(Action.Read, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findSessionById(
+  findIdentitySessionById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Session>,
@@ -90,7 +93,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   @SetScope(Scope.WriteIdentitySessions)
   @SetPolicy(Action.Delete, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteSessionById(
+  deleteIdentitySessionById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Session>,
@@ -105,7 +108,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   @SetScope(Scope.WriteIdentitySessions)
   @SetPolicy(Action.Restore, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreSessionById(
+  restoreIdentitySessionById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Session>,
@@ -120,7 +123,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   @SetScope(Scope.ManageIdentitySessions)
   @SetPolicy(Action.Destroy, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroySessionById(
+  destroyIdentitySessionById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Session>,
@@ -135,7 +138,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   @SetScope(Scope.ManageIdentitySessions)
   @SetPolicy(Action.Update, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateSessionBulk(
+  updateIdentitySessionBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateSessionDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Session>,
@@ -148,7 +151,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   @SetScope(Scope.WriteIdentitySessions)
   @SetPolicy(Action.Update, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateSessionById(
+  updateIdentitySessionById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Session>,

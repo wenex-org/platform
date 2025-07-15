@@ -39,7 +39,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   @SetScope(Scope.ReadSpecialFiles)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.SpecialFiles)
-  countFile(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countSpecialFile(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   @SetScope(Scope.WriteSpecialFiles)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialFiles)
-  createFile(@Meta() meta: Metadata, @Args('data') data: CreateFileDto): Observable<FileDataSerializer> {
+  createSpecialFile(@Meta() meta: Metadata, @Args('data') data: CreateFileDto): Observable<FileDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   @SetScope(Scope.WriteSpecialFiles)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialFiles)
-  createFileBulk(@Meta() meta: Metadata, @Args('data') data: CreateFileItemsDto): Observable<FileItemsSerializer> {
+  createSpecialFileBulk(@Meta() meta: Metadata, @Args('data') data: CreateFileItemsDto): Observable<FileItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   @SetScope(Scope.ReadSpecialFiles)
   @SetPolicy(Action.Read, Resource.SpecialFiles)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findFile(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<File>): Observable<FileItemsSerializer> {
+  findSpecialFile(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<File>): Observable<FileItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +75,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   @SetScope(Scope.ReadSpecialFiles)
   @SetPolicy(Action.Read, Resource.SpecialFiles)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findFileById(
+  findSpecialFileById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<File>,
@@ -90,7 +90,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   @SetScope(Scope.WriteSpecialFiles)
   @SetPolicy(Action.Delete, Resource.SpecialFiles)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteFileById(
+  deleteSpecialFileById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<File>,
@@ -105,7 +105,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   @SetScope(Scope.WriteSpecialFiles)
   @SetPolicy(Action.Restore, Resource.SpecialFiles)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreFileById(
+  restoreSpecialFileById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<File>,
@@ -120,7 +120,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   @SetScope(Scope.ManageSpecialFiles)
   @SetPolicy(Action.Destroy, Resource.SpecialFiles)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyFileById(
+  destroySpecialFileById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<File>,
@@ -135,7 +135,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   @SetScope(Scope.ManageSpecialFiles)
   @SetPolicy(Action.Update, Resource.SpecialFiles)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateFileBulk(
+  updateSpecialFileBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateFileDto,
     @Filter() @Args('filter') filter: QueryFilterDto<File>,
@@ -148,7 +148,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   @SetScope(Scope.WriteSpecialFiles)
   @SetPolicy(Action.Update, Resource.SpecialFiles)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateFileById(
+  updateSpecialFileById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<File>,

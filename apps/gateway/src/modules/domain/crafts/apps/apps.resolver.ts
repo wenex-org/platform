@@ -40,7 +40,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   @SetScope(Scope.ReadDomainApps)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.DomainApps)
-  countApp(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countDomainApp(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -49,7 +49,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   @SetScope(Scope.WriteDomainApps)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainApps)
-  createApp(@Meta() meta: Metadata, @Args('data') data: CreateAppDto): Observable<AppDataSerializer> {
+  createDomainApp(@Meta() meta: Metadata, @Args('data') data: CreateAppDto): Observable<AppDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -58,7 +58,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   @SetScope(Scope.WriteDomainApps)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainApps)
-  createAppBulk(@Meta() meta: Metadata, @Args('data') data: CreateAppItemsDto): Observable<AppItemsSerializer> {
+  createDomainAppBulk(@Meta() meta: Metadata, @Args('data') data: CreateAppItemsDto): Observable<AppItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -67,7 +67,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   @SetScope(Scope.ReadDomainApps)
   @SetPolicy(Action.Read, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findApp(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<App>): Observable<AppItemsSerializer> {
+  findDomainApp(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<App>): Observable<AppItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -76,7 +76,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   @SetScope(Scope.ReadDomainApps)
   @SetPolicy(Action.Read, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findAppById(
+  findDomainAppById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<App>,
@@ -91,7 +91,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   @SetScope(Scope.WriteDomainApps)
   @SetPolicy(Action.Delete, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteAppById(
+  deleteDomainAppById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<App>,
@@ -106,7 +106,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   @SetScope(Scope.WriteDomainApps)
   @SetPolicy(Action.Restore, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreAppById(
+  restoreDomainAppById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<App>,
@@ -121,7 +121,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   @SetScope(Scope.ManageDomainApps)
   @SetPolicy(Action.Destroy, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyAppById(
+  destroyDomainAppById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<App>,
@@ -136,7 +136,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   @SetScope(Scope.ManageDomainApps)
   @SetPolicy(Action.Update, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateAppBulk(
+  updateDomainAppBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateAppDto,
     @Filter() @Args('filter') filter: QueryFilterDto<App>,
@@ -149,7 +149,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   @SetScope(Scope.WriteDomainApps)
   @SetPolicy(Action.Update, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateAppById(
+  updateDomainAppById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<App>,

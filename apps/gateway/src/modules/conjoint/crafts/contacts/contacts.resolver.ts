@@ -39,7 +39,7 @@ export class ContactsResolver extends ControllerClass<Contact, ContactDto> imple
   @SetScope(Scope.ReadConjointContacts)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ConjointContacts)
-  countContact(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countConjointContact(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class ContactsResolver extends ControllerClass<Contact, ContactDto> imple
   @SetScope(Scope.WriteConjointContacts)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ConjointContacts)
-  createContact(@Meta() meta: Metadata, @Args('data') data: CreateContactDto): Observable<ContactDataSerializer> {
+  createConjointContact(@Meta() meta: Metadata, @Args('data') data: CreateContactDto): Observable<ContactDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class ContactsResolver extends ControllerClass<Contact, ContactDto> imple
   @SetScope(Scope.WriteConjointContacts)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ConjointContacts)
-  createContactBulk(@Meta() meta: Metadata, @Args('data') data: CreateContactItemsDto): Observable<ContactItemsSerializer> {
+  createConjointContactBulk(@Meta() meta: Metadata, @Args('data') data: CreateContactItemsDto): Observable<ContactItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,10 @@ export class ContactsResolver extends ControllerClass<Contact, ContactDto> imple
   @SetScope(Scope.ReadConjointContacts)
   @SetPolicy(Action.Read, Resource.ConjointContacts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findContact(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Contact>): Observable<ContactItemsSerializer> {
+  findConjointContact(
+    @Meta() meta: Metadata,
+    @Filter() @Args('filter') filter: FilterDto<Contact>,
+  ): Observable<ContactItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +78,7 @@ export class ContactsResolver extends ControllerClass<Contact, ContactDto> imple
   @SetScope(Scope.ReadConjointContacts)
   @SetPolicy(Action.Read, Resource.ConjointContacts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findContactById(
+  findConjointContactById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Contact>,
@@ -90,7 +93,7 @@ export class ContactsResolver extends ControllerClass<Contact, ContactDto> imple
   @SetScope(Scope.WriteConjointContacts)
   @SetPolicy(Action.Delete, Resource.ConjointContacts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteContactById(
+  deleteConjointContactById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Contact>,
@@ -105,7 +108,7 @@ export class ContactsResolver extends ControllerClass<Contact, ContactDto> imple
   @SetScope(Scope.WriteConjointContacts)
   @SetPolicy(Action.Restore, Resource.ConjointContacts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreContactById(
+  restoreConjointContactById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Contact>,
@@ -120,7 +123,7 @@ export class ContactsResolver extends ControllerClass<Contact, ContactDto> imple
   @SetScope(Scope.ManageConjointContacts)
   @SetPolicy(Action.Destroy, Resource.ConjointContacts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyContactById(
+  destroyConjointContactById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Contact>,
@@ -135,7 +138,7 @@ export class ContactsResolver extends ControllerClass<Contact, ContactDto> imple
   @SetScope(Scope.ManageConjointContacts)
   @SetPolicy(Action.Update, Resource.ConjointContacts)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateContactBulk(
+  updateConjointContactBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateContactDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Contact>,
@@ -148,7 +151,7 @@ export class ContactsResolver extends ControllerClass<Contact, ContactDto> imple
   @SetScope(Scope.WriteConjointContacts)
   @SetPolicy(Action.Update, Resource.ConjointContacts)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateContactById(
+  updateConjointContactById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Contact>,

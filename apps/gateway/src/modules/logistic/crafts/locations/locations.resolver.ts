@@ -39,7 +39,7 @@ export class LocationsResolver extends ControllerClass<Location, LocationDto> im
   @SetScope(Scope.ReadLogisticLocations)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.LogisticLocations)
-  countLocation(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countLogisticLocation(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class LocationsResolver extends ControllerClass<Location, LocationDto> im
   @SetScope(Scope.WriteLogisticLocations)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticLocations)
-  createLocation(@Meta() meta: Metadata, @Args('data') data: CreateLocationDto): Observable<LocationDataSerializer> {
+  createLogisticLocation(@Meta() meta: Metadata, @Args('data') data: CreateLocationDto): Observable<LocationDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,10 @@ export class LocationsResolver extends ControllerClass<Location, LocationDto> im
   @SetScope(Scope.WriteLogisticLocations)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticLocations)
-  createLocationBulk(@Meta() meta: Metadata, @Args('data') data: CreateLocationItemsDto): Observable<LocationItemsSerializer> {
+  createLogisticLocationBulk(
+    @Meta() meta: Metadata,
+    @Args('data') data: CreateLocationItemsDto,
+  ): Observable<LocationItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +69,10 @@ export class LocationsResolver extends ControllerClass<Location, LocationDto> im
   @SetScope(Scope.ReadLogisticLocations)
   @SetPolicy(Action.Read, Resource.LogisticLocations)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findLocation(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Location>): Observable<LocationItemsSerializer> {
+  findLogisticLocation(
+    @Meta() meta: Metadata,
+    @Filter() @Args('filter') filter: FilterDto<Location>,
+  ): Observable<LocationItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +81,7 @@ export class LocationsResolver extends ControllerClass<Location, LocationDto> im
   @SetScope(Scope.ReadLogisticLocations)
   @SetPolicy(Action.Read, Resource.LogisticLocations)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findLocationById(
+  findLogisticLocationById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Location>,
@@ -90,7 +96,7 @@ export class LocationsResolver extends ControllerClass<Location, LocationDto> im
   @SetScope(Scope.WriteLogisticLocations)
   @SetPolicy(Action.Delete, Resource.LogisticLocations)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteLocationById(
+  deleteLogisticLocationById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Location>,
@@ -105,7 +111,7 @@ export class LocationsResolver extends ControllerClass<Location, LocationDto> im
   @SetScope(Scope.WriteLogisticLocations)
   @SetPolicy(Action.Restore, Resource.LogisticLocations)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreLocationById(
+  restoreLogisticLocationById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Location>,
@@ -120,7 +126,7 @@ export class LocationsResolver extends ControllerClass<Location, LocationDto> im
   @SetScope(Scope.ManageLogisticLocations)
   @SetPolicy(Action.Destroy, Resource.LogisticLocations)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyLocationById(
+  destroyLogisticLocationById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Location>,
@@ -135,7 +141,7 @@ export class LocationsResolver extends ControllerClass<Location, LocationDto> im
   @SetScope(Scope.ManageLogisticLocations)
   @SetPolicy(Action.Update, Resource.LogisticLocations)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateLocationBulk(
+  updateLogisticLocationBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateLocationDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Location>,
@@ -148,7 +154,7 @@ export class LocationsResolver extends ControllerClass<Location, LocationDto> im
   @SetScope(Scope.WriteLogisticLocations)
   @SetPolicy(Action.Update, Resource.LogisticLocations)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateLocationById(
+  updateLogisticLocationById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Location>,

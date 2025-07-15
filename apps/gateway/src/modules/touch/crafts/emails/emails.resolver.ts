@@ -39,7 +39,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   @SetScope(Scope.ReadTouchEmails)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.TouchEmails)
-  countEmail(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countTouchEmail(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   @SetScope(Scope.WriteTouchEmails)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchEmails)
-  createEmail(@Meta() meta: Metadata, @Args('data') data: CreateEmailDto): Observable<EmailDataSerializer> {
+  createTouchEmail(@Meta() meta: Metadata, @Args('data') data: CreateEmailDto): Observable<EmailDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   @SetScope(Scope.WriteTouchEmails)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchEmails)
-  createEmailBulk(@Meta() meta: Metadata, @Args('data') data: CreateEmailItemsDto): Observable<EmailItemsSerializer> {
+  createTouchEmailBulk(@Meta() meta: Metadata, @Args('data') data: CreateEmailItemsDto): Observable<EmailItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   @SetScope(Scope.ReadTouchEmails)
   @SetPolicy(Action.Read, Resource.TouchEmails)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findEmail(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Email>): Observable<EmailItemsSerializer> {
+  findTouchEmail(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Email>): Observable<EmailItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +75,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   @SetScope(Scope.ReadTouchEmails)
   @SetPolicy(Action.Read, Resource.TouchEmails)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findEmailById(
+  findTouchEmailById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Email>,
@@ -90,7 +90,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   @SetScope(Scope.WriteTouchEmails)
   @SetPolicy(Action.Delete, Resource.TouchEmails)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteEmailById(
+  deleteTouchEmailById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Email>,
@@ -105,7 +105,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   @SetScope(Scope.WriteTouchEmails)
   @SetPolicy(Action.Restore, Resource.TouchEmails)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreEmailById(
+  restoreTouchEmailById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Email>,
@@ -120,7 +120,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   @SetScope(Scope.ManageTouchEmails)
   @SetPolicy(Action.Destroy, Resource.TouchEmails)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyEmailById(
+  destroyTouchEmailById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Email>,
@@ -135,7 +135,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   @SetScope(Scope.ManageTouchEmails)
   @SetPolicy(Action.Update, Resource.TouchEmails)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateEmailBulk(
+  updateTouchEmailBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateEmailDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Email>,
@@ -148,7 +148,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   @SetScope(Scope.WriteTouchEmails)
   @SetPolicy(Action.Update, Resource.TouchEmails)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateEmailById(
+  updateTouchEmailById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Email>,

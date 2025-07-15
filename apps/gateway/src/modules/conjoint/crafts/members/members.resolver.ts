@@ -39,7 +39,7 @@ export class MembersResolver extends ControllerClass<Member, MemberDto> implemen
   @SetScope(Scope.ReadConjointMembers)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.ConjointMembers)
-  countMember(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countConjointMember(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class MembersResolver extends ControllerClass<Member, MemberDto> implemen
   @SetScope(Scope.WriteConjointMembers)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ConjointMembers)
-  createMember(@Meta() meta: Metadata, @Args('data') data: CreateMemberDto): Observable<MemberDataSerializer> {
+  createConjointMember(@Meta() meta: Metadata, @Args('data') data: CreateMemberDto): Observable<MemberDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class MembersResolver extends ControllerClass<Member, MemberDto> implemen
   @SetScope(Scope.WriteConjointMembers)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ConjointMembers)
-  createMemberBulk(@Meta() meta: Metadata, @Args('data') data: CreateMemberItemsDto): Observable<MemberItemsSerializer> {
+  createConjointMemberBulk(@Meta() meta: Metadata, @Args('data') data: CreateMemberItemsDto): Observable<MemberItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,10 @@ export class MembersResolver extends ControllerClass<Member, MemberDto> implemen
   @SetScope(Scope.ReadConjointMembers)
   @SetPolicy(Action.Read, Resource.ConjointMembers)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findMember(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Member>): Observable<MemberItemsSerializer> {
+  findConjointMember(
+    @Meta() meta: Metadata,
+    @Filter() @Args('filter') filter: FilterDto<Member>,
+  ): Observable<MemberItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +78,7 @@ export class MembersResolver extends ControllerClass<Member, MemberDto> implemen
   @SetScope(Scope.ReadConjointMembers)
   @SetPolicy(Action.Read, Resource.ConjointMembers)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findMemberById(
+  findConjointMemberById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Member>,
@@ -90,7 +93,7 @@ export class MembersResolver extends ControllerClass<Member, MemberDto> implemen
   @SetScope(Scope.WriteConjointMembers)
   @SetPolicy(Action.Delete, Resource.ConjointMembers)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteMemberById(
+  deleteConjointMemberById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Member>,
@@ -105,7 +108,7 @@ export class MembersResolver extends ControllerClass<Member, MemberDto> implemen
   @SetScope(Scope.WriteConjointMembers)
   @SetPolicy(Action.Restore, Resource.ConjointMembers)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreMemberById(
+  restoreConjointMemberById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Member>,
@@ -120,7 +123,7 @@ export class MembersResolver extends ControllerClass<Member, MemberDto> implemen
   @SetScope(Scope.ManageConjointMembers)
   @SetPolicy(Action.Destroy, Resource.ConjointMembers)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyMemberById(
+  destroyConjointMemberById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Member>,
@@ -135,7 +138,7 @@ export class MembersResolver extends ControllerClass<Member, MemberDto> implemen
   @SetScope(Scope.ManageConjointMembers)
   @SetPolicy(Action.Update, Resource.ConjointMembers)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateMemberBulk(
+  updateConjointMemberBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateMemberDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Member>,
@@ -148,7 +151,7 @@ export class MembersResolver extends ControllerClass<Member, MemberDto> implemen
   @SetScope(Scope.WriteConjointMembers)
   @SetPolicy(Action.Update, Resource.ConjointMembers)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateMemberById(
+  updateConjointMemberById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Member>,

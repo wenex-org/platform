@@ -39,7 +39,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   @SetScope(Scope.ReadLogisticCargoes)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.LogisticCargoes)
-  countCargo(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countLogisticCargo(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   @SetScope(Scope.WriteLogisticCargoes)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticCargoes)
-  createCargo(@Meta() meta: Metadata, @Args('data') data: CreateCargoDto): Observable<CargoDataSerializer> {
+  createLogisticCargo(@Meta() meta: Metadata, @Args('data') data: CreateCargoDto): Observable<CargoDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   @SetScope(Scope.WriteLogisticCargoes)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticCargoes)
-  createCargoBulk(@Meta() meta: Metadata, @Args('data') data: CreateCargoItemsDto): Observable<CargoItemsSerializer> {
+  createLogisticCargoBulk(@Meta() meta: Metadata, @Args('data') data: CreateCargoItemsDto): Observable<CargoItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   @SetScope(Scope.ReadLogisticCargoes)
   @SetPolicy(Action.Read, Resource.LogisticCargoes)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findCargo(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Cargo>): Observable<CargoItemsSerializer> {
+  findLogisticCargo(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Cargo>): Observable<CargoItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +75,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   @SetScope(Scope.ReadLogisticCargoes)
   @SetPolicy(Action.Read, Resource.LogisticCargoes)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findCargoById(
+  findLogisticCargoById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Cargo>,
@@ -90,7 +90,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   @SetScope(Scope.WriteLogisticCargoes)
   @SetPolicy(Action.Delete, Resource.LogisticCargoes)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteCargoById(
+  deleteLogisticCargoById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Cargo>,
@@ -105,7 +105,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   @SetScope(Scope.WriteLogisticCargoes)
   @SetPolicy(Action.Restore, Resource.LogisticCargoes)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreCargoById(
+  restoreLogisticCargoById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Cargo>,
@@ -120,7 +120,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   @SetScope(Scope.ManageLogisticCargoes)
   @SetPolicy(Action.Destroy, Resource.LogisticCargoes)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyCargoById(
+  destroyLogisticCargoById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Cargo>,
@@ -135,7 +135,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   @SetScope(Scope.ManageLogisticCargoes)
   @SetPolicy(Action.Update, Resource.LogisticCargoes)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateCargoBulk(
+  updateLogisticCargoBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateCargoDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Cargo>,
@@ -148,7 +148,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   @SetScope(Scope.WriteLogisticCargoes)
   @SetPolicy(Action.Update, Resource.LogisticCargoes)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateCargoById(
+  updateLogisticCargoById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Cargo>,

@@ -39,7 +39,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   @SetScope(Scope.ReadTouchSmss)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.TouchSmss)
-  countSms(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countTouchSms(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   @SetScope(Scope.WriteTouchSmss)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchSmss)
-  createSms(@Meta() meta: Metadata, @Args('data') data: CreateSmsDto): Observable<SmsDataSerializer> {
+  createTouchSms(@Meta() meta: Metadata, @Args('data') data: CreateSmsDto): Observable<SmsDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   @SetScope(Scope.WriteTouchSmss)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchSmss)
-  createSmsBulk(@Meta() meta: Metadata, @Args('data') data: CreateSmsItemsDto): Observable<SmsItemsSerializer> {
+  createTouchSmsBulk(@Meta() meta: Metadata, @Args('data') data: CreateSmsItemsDto): Observable<SmsItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   @SetScope(Scope.ReadTouchSmss)
   @SetPolicy(Action.Read, Resource.TouchSmss)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findSms(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Sms>): Observable<SmsItemsSerializer> {
+  findTouchSms(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Sms>): Observable<SmsItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +75,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   @SetScope(Scope.ReadTouchSmss)
   @SetPolicy(Action.Read, Resource.TouchSmss)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findSmsById(
+  findTouchSmsById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Sms>,
@@ -90,7 +90,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   @SetScope(Scope.WriteTouchSmss)
   @SetPolicy(Action.Delete, Resource.TouchSmss)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteSmsById(
+  deleteTouchSmsById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Sms>,
@@ -105,7 +105,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   @SetScope(Scope.WriteTouchSmss)
   @SetPolicy(Action.Restore, Resource.TouchSmss)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreSmsById(
+  restoreTouchSmsById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Sms>,
@@ -120,7 +120,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   @SetScope(Scope.ManageTouchSmss)
   @SetPolicy(Action.Destroy, Resource.TouchSmss)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroySmsById(
+  destroyTouchSmsById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Sms>,
@@ -135,7 +135,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   @SetScope(Scope.ManageTouchSmss)
   @SetPolicy(Action.Update, Resource.TouchSmss)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateSmsBulk(
+  updateTouchSmsBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateSmsDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Sms>,
@@ -148,7 +148,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   @SetScope(Scope.WriteTouchSmss)
   @SetPolicy(Action.Update, Resource.TouchSmss)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateSmsById(
+  updateTouchSmsById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Sms>,

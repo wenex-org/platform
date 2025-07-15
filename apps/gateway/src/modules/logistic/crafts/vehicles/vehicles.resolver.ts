@@ -39,7 +39,7 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   @SetScope(Scope.ReadLogisticVehicles)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.LogisticVehicles)
-  countVehicle(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countLogisticVehicle(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   @SetScope(Scope.WriteLogisticVehicles)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticVehicles)
-  createVehicle(@Meta() meta: Metadata, @Args('data') data: CreateVehicleDto): Observable<VehicleDataSerializer> {
+  createLogisticVehicle(@Meta() meta: Metadata, @Args('data') data: CreateVehicleDto): Observable<VehicleDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   @SetScope(Scope.WriteLogisticVehicles)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.LogisticVehicles)
-  createVehicleBulk(@Meta() meta: Metadata, @Args('data') data: CreateVehicleItemsDto): Observable<VehicleItemsSerializer> {
+  createLogisticVehicleBulk(@Meta() meta: Metadata, @Args('data') data: CreateVehicleItemsDto): Observable<VehicleItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,10 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   @SetScope(Scope.ReadLogisticVehicles)
   @SetPolicy(Action.Read, Resource.LogisticVehicles)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findVehicle(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Vehicle>): Observable<VehicleItemsSerializer> {
+  findLogisticVehicle(
+    @Meta() meta: Metadata,
+    @Filter() @Args('filter') filter: FilterDto<Vehicle>,
+  ): Observable<VehicleItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +78,7 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   @SetScope(Scope.ReadLogisticVehicles)
   @SetPolicy(Action.Read, Resource.LogisticVehicles)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findVehicleById(
+  findLogisticVehicleById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Vehicle>,
@@ -90,7 +93,7 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   @SetScope(Scope.WriteLogisticVehicles)
   @SetPolicy(Action.Delete, Resource.LogisticVehicles)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteVehicleById(
+  deleteLogisticVehicleById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Vehicle>,
@@ -105,7 +108,7 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   @SetScope(Scope.WriteLogisticVehicles)
   @SetPolicy(Action.Restore, Resource.LogisticVehicles)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreVehicleById(
+  restoreLogisticVehicleById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Vehicle>,
@@ -120,7 +123,7 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   @SetScope(Scope.ManageLogisticVehicles)
   @SetPolicy(Action.Destroy, Resource.LogisticVehicles)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyVehicleById(
+  destroyLogisticVehicleById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Vehicle>,
@@ -135,7 +138,7 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   @SetScope(Scope.ManageLogisticVehicles)
   @SetPolicy(Action.Update, Resource.LogisticVehicles)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateVehicleBulk(
+  updateLogisticVehicleBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateVehicleDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Vehicle>,
@@ -148,7 +151,7 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   @SetScope(Scope.WriteLogisticVehicles)
   @SetPolicy(Action.Update, Resource.LogisticVehicles)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateVehicleById(
+  updateLogisticVehicleById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Vehicle>,

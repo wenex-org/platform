@@ -39,7 +39,7 @@ export class SagaStagesResolver extends ControllerClass<SagaStage, SagaStageDto>
   @SetScope(Scope.ReadEssentialSagaStages)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.EssentialSagaStages)
-  countSagaStage(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countEssentialSagaStage(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class SagaStagesResolver extends ControllerClass<SagaStage, SagaStageDto>
   @SetScope(Scope.WriteEssentialSagaStages)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.EssentialSagaStages)
-  createSagaStage(@Meta() meta: Metadata, @Args('data') data: CreateSagaStageDto): Observable<SagaStageDataSerializer> {
+  createEssentialSagaStage(@Meta() meta: Metadata, @Args('data') data: CreateSagaStageDto): Observable<SagaStageDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,10 @@ export class SagaStagesResolver extends ControllerClass<SagaStage, SagaStageDto>
   @SetScope(Scope.WriteEssentialSagaStages)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.EssentialSagaStages)
-  createSagaStageBulk(@Meta() meta: Metadata, @Args('data') data: CreateSagaStageItemsDto): Observable<SagaStageItemsSerializer> {
+  createEssentialSagaStageBulk(
+    @Meta() meta: Metadata,
+    @Args('data') data: CreateSagaStageItemsDto,
+  ): Observable<SagaStageItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +69,7 @@ export class SagaStagesResolver extends ControllerClass<SagaStage, SagaStageDto>
   @SetScope(Scope.ReadEssentialSagaStages)
   @SetPolicy(Action.Read, Resource.EssentialSagaStages)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findSagaStage(
+  findEssentialSagaStage(
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: FilterDto<SagaStage>,
   ): Observable<SagaStageItemsSerializer> {
@@ -78,7 +81,7 @@ export class SagaStagesResolver extends ControllerClass<SagaStage, SagaStageDto>
   @SetScope(Scope.ReadEssentialSagaStages)
   @SetPolicy(Action.Read, Resource.EssentialSagaStages)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findSagaStageById(
+  findEssentialSagaStageById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<SagaStage>,
@@ -93,7 +96,7 @@ export class SagaStagesResolver extends ControllerClass<SagaStage, SagaStageDto>
   @SetScope(Scope.WriteEssentialSagaStages)
   @SetPolicy(Action.Delete, Resource.EssentialSagaStages)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteSagaStageById(
+  deleteEssentialSagaStageById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<SagaStage>,
@@ -108,7 +111,7 @@ export class SagaStagesResolver extends ControllerClass<SagaStage, SagaStageDto>
   @SetScope(Scope.WriteEssentialSagaStages)
   @SetPolicy(Action.Restore, Resource.EssentialSagaStages)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreSagaStageById(
+  restoreEssentialSagaStageById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<SagaStage>,
@@ -123,7 +126,7 @@ export class SagaStagesResolver extends ControllerClass<SagaStage, SagaStageDto>
   @SetScope(Scope.ManageEssentialSagaStages)
   @SetPolicy(Action.Destroy, Resource.EssentialSagaStages)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroySagaStageById(
+  destroyEssentialSagaStageById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<SagaStage>,
@@ -138,7 +141,7 @@ export class SagaStagesResolver extends ControllerClass<SagaStage, SagaStageDto>
   @SetScope(Scope.ManageEssentialSagaStages)
   @SetPolicy(Action.Update, Resource.EssentialSagaStages)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateSagaStageBulk(
+  updateEssentialSagaStageBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateSagaStageDto,
     @Filter() @Args('filter') filter: QueryFilterDto<SagaStage>,
@@ -151,7 +154,7 @@ export class SagaStagesResolver extends ControllerClass<SagaStage, SagaStageDto>
   @SetScope(Scope.WriteEssentialSagaStages)
   @SetPolicy(Action.Update, Resource.EssentialSagaStages)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateSagaStageById(
+  updateEssentialSagaStageById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<SagaStage>,

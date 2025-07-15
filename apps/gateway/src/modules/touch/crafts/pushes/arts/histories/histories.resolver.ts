@@ -42,7 +42,7 @@ export class PusHistoriesResolver
   @SetScope(Scope.ReadTouchPusHistories)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.TouchPusHistories)
-  countPusHistory(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countTouchPusHistory(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -51,7 +51,7 @@ export class PusHistoriesResolver
   @SetScope(Scope.WriteTouchPusHistories)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchPusHistories)
-  createPusHistory(@Meta() meta: Metadata, @Args('data') data: CreatePusHistoryDto): Observable<PusHistoryDataSerializer> {
+  createTouchPusHistory(@Meta() meta: Metadata, @Args('data') data: CreatePusHistoryDto): Observable<PusHistoryDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -60,7 +60,7 @@ export class PusHistoriesResolver
   @SetScope(Scope.WriteTouchPusHistories)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchPusHistories)
-  createPusHistoryBulk(
+  createTouchPusHistoryBulk(
     @Meta() meta: Metadata,
     @Args('data') data: CreatePusHistoryItemsDto,
   ): Observable<PusHistoryItemsSerializer> {
@@ -72,7 +72,7 @@ export class PusHistoriesResolver
   @SetScope(Scope.ReadTouchPusHistories)
   @SetPolicy(Action.Read, Resource.TouchPusHistories)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findPusHistory(
+  findTouchPusHistory(
     @Meta() meta: Metadata,
     @Filter() @Args('filter') filter: FilterDto<PusHistory>,
   ): Observable<PusHistoryItemsSerializer> {
@@ -84,7 +84,7 @@ export class PusHistoriesResolver
   @SetScope(Scope.ReadTouchPusHistories)
   @SetPolicy(Action.Read, Resource.TouchPusHistories)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findPusHistoryById(
+  findTouchPusHistoryById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<PusHistory>,
@@ -99,7 +99,7 @@ export class PusHistoriesResolver
   @SetScope(Scope.WriteTouchPusHistories)
   @SetPolicy(Action.Delete, Resource.TouchPusHistories)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deletePusHistoryById(
+  deleteTouchPusHistoryById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<PusHistory>,
@@ -114,7 +114,7 @@ export class PusHistoriesResolver
   @SetScope(Scope.WriteTouchPusHistories)
   @SetPolicy(Action.Restore, Resource.TouchPusHistories)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restorePusHistoryById(
+  restoreTouchPusHistoryById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<PusHistory>,
@@ -129,7 +129,7 @@ export class PusHistoriesResolver
   @SetScope(Scope.ManageTouchPusHistories)
   @SetPolicy(Action.Destroy, Resource.TouchPusHistories)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyPusHistoryById(
+  destroyTouchPusHistoryById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<PusHistory>,
@@ -144,7 +144,7 @@ export class PusHistoriesResolver
   @SetScope(Scope.ManageTouchPusHistories)
   @SetPolicy(Action.Update, Resource.TouchPusHistories)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updatePusHistoryBulk(
+  updateTouchPusHistoryBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdatePusHistoryDto,
     @Filter() @Args('filter') filter: QueryFilterDto<PusHistory>,
@@ -157,7 +157,7 @@ export class PusHistoriesResolver
   @SetScope(Scope.WriteTouchPusHistories)
   @SetPolicy(Action.Update, Resource.TouchPusHistories)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updatePusHistoryById(
+  updateTouchPusHistoryById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<PusHistory>,

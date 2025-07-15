@@ -39,7 +39,7 @@ export class EventsResolver extends ControllerClass<Event, EventDto> implements 
   @SetScope(Scope.ReadGeneralEvents)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.GeneralEvents)
-  countEvent(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countGeneralEvent(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class EventsResolver extends ControllerClass<Event, EventDto> implements 
   @SetScope(Scope.WriteGeneralEvents)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.GeneralEvents)
-  createEvent(@Meta() meta: Metadata, @Args('data') data: CreateEventDto): Observable<EventDataSerializer> {
+  createGeneralEvent(@Meta() meta: Metadata, @Args('data') data: CreateEventDto): Observable<EventDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class EventsResolver extends ControllerClass<Event, EventDto> implements 
   @SetScope(Scope.WriteGeneralEvents)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.GeneralEvents)
-  createEventBulk(@Meta() meta: Metadata, @Args('data') data: CreateEventItemsDto): Observable<EventItemsSerializer> {
+  createGeneralEventBulk(@Meta() meta: Metadata, @Args('data') data: CreateEventItemsDto): Observable<EventItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,7 @@ export class EventsResolver extends ControllerClass<Event, EventDto> implements 
   @SetScope(Scope.ReadGeneralEvents)
   @SetPolicy(Action.Read, Resource.GeneralEvents)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findEvent(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Event>): Observable<EventItemsSerializer> {
+  findGeneralEvent(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Event>): Observable<EventItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +75,7 @@ export class EventsResolver extends ControllerClass<Event, EventDto> implements 
   @SetScope(Scope.ReadGeneralEvents)
   @SetPolicy(Action.Read, Resource.GeneralEvents)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findEventById(
+  findGeneralEventById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Event>,
@@ -90,7 +90,7 @@ export class EventsResolver extends ControllerClass<Event, EventDto> implements 
   @SetScope(Scope.WriteGeneralEvents)
   @SetPolicy(Action.Delete, Resource.GeneralEvents)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteEventById(
+  deleteGeneralEventById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Event>,
@@ -105,7 +105,7 @@ export class EventsResolver extends ControllerClass<Event, EventDto> implements 
   @SetScope(Scope.WriteGeneralEvents)
   @SetPolicy(Action.Restore, Resource.GeneralEvents)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreEventById(
+  restoreGeneralEventById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Event>,
@@ -120,7 +120,7 @@ export class EventsResolver extends ControllerClass<Event, EventDto> implements 
   @SetScope(Scope.ManageGeneralEvents)
   @SetPolicy(Action.Destroy, Resource.GeneralEvents)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyEventById(
+  destroyGeneralEventById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Event>,
@@ -135,7 +135,7 @@ export class EventsResolver extends ControllerClass<Event, EventDto> implements 
   @SetScope(Scope.ManageGeneralEvents)
   @SetPolicy(Action.Update, Resource.GeneralEvents)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateEventBulk(
+  updateGeneralEventBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateEventDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Event>,
@@ -148,7 +148,7 @@ export class EventsResolver extends ControllerClass<Event, EventDto> implements 
   @SetScope(Scope.WriteGeneralEvents)
   @SetPolicy(Action.Update, Resource.GeneralEvents)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateEventById(
+  updateGeneralEventById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Event>,

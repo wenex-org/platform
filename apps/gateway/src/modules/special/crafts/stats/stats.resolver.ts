@@ -39,7 +39,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   @SetScope(Scope.ReadSpecialStats)
   @UseInterceptors(AuthorityInterceptor)
   @SetPolicy(Action.Read, Resource.SpecialStats)
-  countStat(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+  countSpecialStat(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
   }
 
@@ -48,7 +48,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   @SetScope(Scope.WriteSpecialStats)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialStats)
-  createStat(@Meta() meta: Metadata, @Args('data') data: CreateStatDto): Observable<StatDataSerializer> {
+  createSpecialStat(@Meta() meta: Metadata, @Args('data') data: CreateStatDto): Observable<StatDataSerializer> {
     return super.create(meta, data);
   }
 
@@ -57,7 +57,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   @SetScope(Scope.WriteSpecialStats)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialStats)
-  createStatBulk(@Meta() meta: Metadata, @Args('data') data: CreateStatItemsDto): Observable<StatItemsSerializer> {
+  createSpecialStatBulk(@Meta() meta: Metadata, @Args('data') data: CreateStatItemsDto): Observable<StatItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
@@ -66,7 +66,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   @SetScope(Scope.ReadSpecialStats)
   @SetPolicy(Action.Read, Resource.SpecialStats)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findStat(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Stat>): Observable<StatItemsSerializer> {
+  findSpecialStat(@Meta() meta: Metadata, @Filter() @Args('filter') filter: FilterDto<Stat>): Observable<StatItemsSerializer> {
     return super.find(meta, filter);
   }
 
@@ -75,7 +75,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   @SetScope(Scope.ReadSpecialStats)
   @SetPolicy(Action.Read, Resource.SpecialStats)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  findStatById(
+  findSpecialStatById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Stat>,
@@ -90,7 +90,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   @SetScope(Scope.WriteSpecialStats)
   @SetPolicy(Action.Delete, Resource.SpecialStats)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  deleteStatById(
+  deleteSpecialStatById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Stat>,
@@ -105,7 +105,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   @SetScope(Scope.WriteSpecialStats)
   @SetPolicy(Action.Restore, Resource.SpecialStats)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  restoreStatById(
+  restoreSpecialStatById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Stat>,
@@ -120,7 +120,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   @SetScope(Scope.ManageSpecialStats)
   @SetPolicy(Action.Destroy, Resource.SpecialStats)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  destroyStatById(
+  destroySpecialStatById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterDto<Stat>,
@@ -135,7 +135,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   @SetScope(Scope.ManageSpecialStats)
   @SetPolicy(Action.Update, Resource.SpecialStats)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateStatBulk(
+  updateSpecialStatBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateStatDto,
     @Filter() @Args('filter') filter: QueryFilterDto<Stat>,
@@ -148,7 +148,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   @SetScope(Scope.WriteSpecialStats)
   @SetPolicy(Action.Update, Resource.SpecialStats)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
-  updateStatById(
+  updateSpecialStatById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Stat>,
