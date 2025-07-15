@@ -7,9 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.2] - 2025-07-15
+
 ### Changed
 
 - GraphQL DTOs name @vhidvz
+- GraphQL Serializers name @iranmanesh-dev
 
 ## [1.2.1] - 2025-07-15
 
@@ -72,7 +75,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.1...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.2.2...HEAD
+[1.2.2]: https://github.com/wenex-org/platform/compare/1.2.1...1.2.2
 [1.2.1]: https://github.com/wenex-org/platform/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/wenex-org/platform/compare/1.1.20...1.2.0
 [1.1.X]: https://github.com/wenex-org/platform/compare/1.0.42...1.1.20
