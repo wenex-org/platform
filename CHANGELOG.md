@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.5] - 2025-07-16
+
+### Changed
+
+- more control on constants using env with `INIT_` prefix @vhidvz
+
 ## [1.2.4] - 2025-07-16
 
 ### Changed
@@ -87,7 +93,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.4...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.2.5...HEAD
+[1.2.5]: https://github.com/wenex-org/platform/compare/1.2.4...1.2.5
 [1.2.4]: https://github.com/wenex-org/platform/compare/1.2.3...1.2.4
 [1.2.3]: https://github.com/wenex-org/platform/compare/1.2.2...1.2.3
 [1.2.2]: https://github.com/wenex-org/platform/compare/1.2.1...1.2.2
