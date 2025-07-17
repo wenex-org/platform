@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.9] - 2025-07-17
+
+### Added
+
+- `scope` validation support on emqx `preserver` @vhidvz
+
 ## [1.2.8] - 2025-07-17
 
 ### Changed
