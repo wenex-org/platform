@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- hot reload scope on refresh token @vhidvz
+- hot reload scope on refresh token with `[Scope.None]` @vhidvz
 
 ## [1.2.7] - 2025-07-17
 
