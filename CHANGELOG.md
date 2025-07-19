@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.11] - 2025-07-19
+
+### Changed
+
+- scoped action logic in `setOwnership` of `canSet` method @vhidvz
+
 ## [1.2.10] - 2025-07-19
 
 ### Fixed
@@ -127,7 +133,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.10...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.2.11...HEAD
+[1.2.11]: https://github.com/wenex-org/platform/compare/1.2.10...1.2.11
 [1.2.10]: https://github.com/wenex-org/platform/compare/1.2.9...1.2.10
 [1.2.9]: https://github.com/wenex-org/platform/compare/1.2.8...1.2.9
 [1.2.8]: https://github.com/wenex-org/platform/compare/1.2.7...1.2.8
