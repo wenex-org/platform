@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.10] - 2025-07-19
+
+### Fixed
+
+- correct order of `WriteInterceptors` @vhidvz
+
 ### Changed
 
 - removed session scoped grant on `x-can-with-id-policies` @vhidvz
@@ -121,7 +127,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.9...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.2.10...HEAD
+[1.2.10]: https://github.com/wenex-org/platform/compare/1.2.9...1.2.10
 [1.2.9]: https://github.com/wenex-org/platform/compare/1.2.8...1.2.9
 [1.2.8]: https://github.com/wenex-org/platform/compare/1.2.7...1.2.8
 [1.2.7]: https://github.com/wenex-org/platform/compare/1.2.6...1.2.7
