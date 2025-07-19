@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.12] - 2025-07-19
+
+### Changed
+
+- add default permission scope `own`, `share` on none scoped action in `checkQueryExploits` @vhidvz
+
 ## [1.2.11] - 2025-07-19
 
 ### Changed
