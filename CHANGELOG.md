@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - core schema description index changed to `text` @vhidvz
 
+### Fixed
+
+- logistic locations `properties` property dto transformer @vhidvz
+
 ## [1.2.13] - 2025-07-19
 
 ### Added
