@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.14] - 2025-07-22
+
 ### Added
 
 - logistic location schema validation added to `properties` @vhidvz
@@ -157,7 +159,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.12...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.2.14...HEAD
+[1.2.14]: https://github.com/wenex-org/platform/compare/1.2.13...1.2.14
+[1.2.13]: https://github.com/wenex-org/platform/compare/1.2.12...1.2.13
 [1.2.12]: https://github.com/wenex-org/platform/compare/1.2.11...1.2.12
 [1.2.11]: https://github.com/wenex-org/platform/compare/1.2.10...1.2.11
 [1.2.10]: https://github.com/wenex-org/platform/compare/1.2.9...1.2.10
