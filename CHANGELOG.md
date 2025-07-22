@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- logistic location schema validation added to `properties` @vhidvz
+
+### Changed
+
+- core schema description index changed to `text` @vhidvz
+
 ## [1.2.13] - 2025-07-19
 
 ### Added
