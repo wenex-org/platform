@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `name` and `title` as optional field to `logistic/locations` @vhidvz
+
 ## [1.2.14] - 2025-07-22
 
 ### Added
