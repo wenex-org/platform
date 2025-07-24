@@ -9,7 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- new service `career/businesses` libs added @vhidvz
 - `name` and `title` as optional field to `logistic/locations` @vhidvz
+- `message_time` and `message_size` added to `touch/email.smtp` @vhidvz
+
+### Fixed
+
+- GraphQL enum names to prefixed with service name @vhidvz
+
+### Changed
+
+- `identity` property moved to core schema as **optional mongo id string** @vhidvz
+
+#### --- [ Breaking Changes ] !!!
+
+- support population on a field with different models @vhidvz
+- name of `identity` property in `context/configs` changed to `eid` @vhidvz
+- name of `identity` property in `identity/profiles` changed to `national_code` @vhidvz
+- name of `identity` property in `touch/email.smtp` property changed to `message_id` @vhidvz
+- replaced `entity` mongo id property from `general/workflows` and replaced with `name` string @vhidvz
 
 ## [1.2.14] - 2025-07-22
 
