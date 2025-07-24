@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.15] - 2025-07-24
+
 ### Added
 
 - new service `career/businesses` libs added @vhidvz
@@ -181,7 +183,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.14...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.2.15...HEAD
+[1.2.15]: https://github.com/wenex-org/platform/compare/1.2.14...1.2.15
 [1.2.14]: https://github.com/wenex-org/platform/compare/1.2.13...1.2.14
 [1.2.13]: https://github.com/wenex-org/platform/compare/1.2.12...1.2.13
 [1.2.12]: https://github.com/wenex-org/platform/compare/1.2.11...1.2.12
