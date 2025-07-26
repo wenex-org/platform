@@ -145,6 +145,15 @@
         "tsConfigPath": "apps/services/conjoint/tsconfig.app.json"
       }
     },
+    "career": {
+      "type": "application",
+      "root": "apps/services/career",
+      "entryFile": "main",
+      "sourceRoot": "apps/services/career/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/services/career/tsconfig.app.json"
+      }
+    },
     "dispatcher": {
       "type": "application",
       "root": "apps/workers/dispatcher",

@@ -10,3 +10,4 @@ export { TouchModule } from './touch';
 export { ContentModule } from './content';
 export { LogisticModule } from './logistic';
 export { ConjointModule } from './conjoint';
+export { CareerModule } from './career';
