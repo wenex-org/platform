@@ -17,6 +17,7 @@ npm run dpdm:ts ./apps/services/touch/src/main.ts -- --progress >> circular-depe
 npm run dpdm:ts ./apps/services/content/src/main.ts -- --progress >> circular-dependencies.txt
 npm run dpdm:ts ./apps/services/logistic/src/main.ts -- --progress >> circular-dependencies.txt
 npm run dpdm:ts ./apps/services/conjoint/src/main.ts -- --progress >> circular-dependencies.txt
+npm run dpdm:ts ./apps/services/career/src/main.ts -- --progress >> circular-dependencies.txt
 
 # Workers
 npm run dpdm:ts ./apps/workers/dispatcher/src/main.ts -- --progress >> circular-dependencies.txt
