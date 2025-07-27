@@ -135,6 +135,16 @@ services:
       SERVICE_NAME: conjoint
     <<: *common
 
+  career:
+    profiles: [career, platform, services]
+    container_name: platform-career
+    ports:
+      - 3140:3140 # REST
+      - 5140:5140 # GRPC
+    environment:
+      SERVICE_NAME: career
+    <<: *common
+
   # ---------
   # Workers
   # ---------
