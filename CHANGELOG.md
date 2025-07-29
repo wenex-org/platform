@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `category` field added to `career/businesses` @iranmanesh-dev
+
+### Changed
+
+- resource limitation for `Elasticsearch` in `docker/docker-compose.elk.yml` @iranmanesh-dev
+
 ## [1.2.16] - 2025-07-27
 
 ### Added
