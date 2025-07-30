@@ -200,7 +200,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.16...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.2.17...HEAD
+[1.2.17]: https://github.com/wenex-org/platform/compare/1.2.16...1.2.17
 [1.2.16]: https://github.com/wenex-org/platform/compare/1.2.15...1.2.16
 [1.2.15]: https://github.com/wenex-org/platform/compare/1.2.14...1.2.15
 [1.2.14]: https://github.com/wenex-org/platform/compare/1.2.13...1.2.14
