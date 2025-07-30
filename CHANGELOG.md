@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - mongodb seeds commands refactored @vhidvz
+- `general/artifacts` and `context/settings` index @vhidvz
 
 ## [1.2.17] - 2025-07-30
 
