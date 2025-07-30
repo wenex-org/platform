@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- financial currencies model and schema @vhidvz
+
 ### Changed
 
 - mongodb seeds commands refactored @vhidvz
