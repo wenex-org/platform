@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- mongodb seeds commands refactored @vhidvz
+
 ## [1.2.17] - 2025-07-30
 
 ### Added
