@@ -13,12 +13,12 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
-import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { GatewayInterceptors, ResponseInterceptors, ValidationInterceptor, WriteInterceptors } from '@app/common/core/interceptors';
 import { GrantDataSerializer, GrantItemsSerializer, GrantSerializer } from '@app/common/serializers/auth';
+import { Cache, RateLimit, SetPolicy, SetScope, ValidationKey } from '@app/common/core/metadatas';
 import { CreateGrantDto, CreateGrantItemsDto, UpdateGrantDto } from '@app/common/dto/auth';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -64,20 +64,22 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
 
   @Post()
   @Cache(COLL_PATH, 'flush')
+  @ValidationKey('auth/grants')
   @SetScope(Scope.WriteAuthGrants)
-  @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: GrantDataSerializer })
   @SetPolicy(Action.Create, Resource.AuthGrants)
+  @UseInterceptors(...WriteInterceptors, ValidationInterceptor)
   override create(@Meta() meta: Metadata, @Body() data: CreateGrantDto): Observable<GrantDataSerializer> {
     return super.create(meta, data);
   }
 
   @Post('bulk')
   @Cache(COLL_PATH, 'flush')
+  @ValidationKey('auth/grants')
   @SetScope(Scope.WriteAuthGrants)
-  @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: GrantItemsSerializer })
   @SetPolicy(Action.Create, Resource.AuthGrants)
+  @UseInterceptors(...WriteInterceptors, ValidationInterceptor)
   override createBulk(@Meta() meta: Metadata, @Body() data: CreateGrantItemsDto): Observable<GrantItemsSerializer> {
     return super.createBulk(meta, data);
   }
@@ -165,10 +167,11 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
 
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
+  @ValidationKey('auth/grants')
   @SetScope(Scope.ManageAuthGrants)
   @SetPolicy(Action.Update, Resource.AuthGrants)
   @ApiQuery({ type: QueryFilterDto, required: false })
-  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors, ValidationInterceptor)
   override updateBulk(
     @Meta() meta: Metadata,
     @Filter() filter: QueryFilterDto<Grant>,
@@ -179,12 +182,13 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
 
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
+  @ValidationKey('auth/grants')
   @SetScope(Scope.WriteAuthGrants)
   @ApiResponse({ type: GrantDataSerializer })
   @SetPolicy(Action.Update, Resource.AuthGrants)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors, ValidationInterceptor)
   override updateOne(
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Grant>,

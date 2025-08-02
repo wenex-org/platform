@@ -1,8 +1,8 @@
-import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { GatewayInterceptors, ResponseInterceptors, ValidationInterceptor, WriteInterceptors } from '@app/common/core/interceptors';
 import { GrantDataSerializer, GrantItemsSerializer, GrantSerializer } from '@app/common/serializers/auth';
+import { Cache, RateLimit, SetPolicy, SetScope, ValidationKey } from '@app/common/core/metadatas';
 import { CreateGrantDto, CreateGrantItemsDto, UpdateGrantDto } from '@app/common/dto/auth';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -45,18 +45,20 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
 
   @Mutation(() => GrantDataSerializer)
   @Cache(COLL_PATH, 'flush')
+  @ValidationKey('auth/grants')
   @SetScope(Scope.WriteAuthGrants)
-  @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.AuthGrants)
+  @UseInterceptors(...WriteInterceptors, ValidationInterceptor)
   createAuthGrant(@Meta() meta: Metadata, @Args('data') data: CreateGrantDto): Observable<GrantDataSerializer> {
     return super.create(meta, data);
   }
 
   @Mutation(() => GrantItemsSerializer)
   @Cache(COLL_PATH, 'flush')
+  @ValidationKey('auth/grants')
   @SetScope(Scope.WriteAuthGrants)
-  @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.AuthGrants)
+  @UseInterceptors(...WriteInterceptors, ValidationInterceptor)
   createAuthGrantBulk(@Meta() meta: Metadata, @Args('data') data: CreateGrantItemsDto): Observable<GrantItemsSerializer> {
     return super.createBulk(meta, data);
   }
@@ -132,9 +134,10 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
 
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
+  @ValidationKey('auth/grants')
   @SetScope(Scope.ManageAuthGrants)
   @SetPolicy(Action.Update, Resource.AuthGrants)
-  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors, ValidationInterceptor)
   updateAuthGrantBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateGrantDto,
@@ -145,9 +148,10 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
 
   @Mutation(() => GrantDataSerializer)
   @Cache(COLL_PATH, 'flush')
+  @ValidationKey('auth/grants')
   @SetScope(Scope.WriteAuthGrants)
   @SetPolicy(Action.Update, Resource.AuthGrants)
-  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors, ValidationInterceptor)
   updateAuthGrantById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
