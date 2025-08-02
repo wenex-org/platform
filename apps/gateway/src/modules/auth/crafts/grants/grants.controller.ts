@@ -167,11 +167,10 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
 
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
-  @ValidationKey('auth/grants')
   @SetScope(Scope.ManageAuthGrants)
   @SetPolicy(Action.Update, Resource.AuthGrants)
   @ApiQuery({ type: QueryFilterDto, required: false })
-  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors, ValidationInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   override updateBulk(
     @Meta() meta: Metadata,
     @Filter() filter: QueryFilterDto<Grant>,
@@ -182,13 +181,12 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
 
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
-  @ValidationKey('auth/grants')
   @SetScope(Scope.WriteAuthGrants)
   @ApiResponse({ type: GrantDataSerializer })
   @SetPolicy(Action.Update, Resource.AuthGrants)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors, ValidationInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   override updateOne(
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Grant>,

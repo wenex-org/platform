@@ -134,10 +134,9 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
 
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
-  @ValidationKey('auth/grants')
   @SetScope(Scope.ManageAuthGrants)
   @SetPolicy(Action.Update, Resource.AuthGrants)
-  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors, ValidationInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateAuthGrantBulk(
     @Meta() meta: Metadata,
     @Args('data') update: UpdateGrantDto,
@@ -148,10 +147,9 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
 
   @Mutation(() => GrantDataSerializer)
   @Cache(COLL_PATH, 'flush')
-  @ValidationKey('auth/grants')
   @SetScope(Scope.WriteAuthGrants)
   @SetPolicy(Action.Update, Resource.AuthGrants)
-  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors, ValidationInterceptor)
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateAuthGrantById(
     @Args('id') id: string,
     @Meta() meta: Metadata,
