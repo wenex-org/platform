@@ -16,9 +16,9 @@ import {
 import { EmployeeDataSerializer, EmployeeItemsSerializer, EmployeeSerializer } from '@app/common/serializers/career';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateEmployeeDto, CreateEmployeeItemsDto, UpdateEmployeeDto } from '@app/common/dto/career';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -66,6 +66,7 @@ export class EmployeesController extends ControllerClass<Employee, EmployeeDto> 
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerEmployees)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('career/employees', 'create')
   @ApiResponse({ type: EmployeeDataSerializer })
   @SetPolicy(Action.Create, Resource.CareerEmployees)
   override create(@Meta() meta: Metadata, @Body() data: CreateEmployeeDto): Observable<EmployeeDataSerializer> {
@@ -76,6 +77,7 @@ export class EmployeesController extends ControllerClass<Employee, EmployeeDto> 
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerEmployees)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('career/employees', 'create')
   @ApiResponse({ type: EmployeeItemsSerializer })
   @SetPolicy(Action.Create, Resource.CareerEmployees)
   override createBulk(@Meta() meta: Metadata, @Body() data: CreateEmployeeItemsDto): Observable<EmployeeItemsSerializer> {
@@ -166,6 +168,7 @@ export class EmployeesController extends ControllerClass<Employee, EmployeeDto> 
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageCareerEmployees)
+  @Validation('career/employees', 'update')
   @SetPolicy(Action.Update, Resource.CareerEmployees)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -180,6 +183,7 @@ export class EmployeesController extends ControllerClass<Employee, EmployeeDto> 
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerEmployees)
+  @Validation('career/employees', 'update')
   @ApiResponse({ type: EmployeeDataSerializer })
   @SetPolicy(Action.Update, Resource.CareerEmployees)
   @ApiParam({ type: String, name: 'id', required: true })

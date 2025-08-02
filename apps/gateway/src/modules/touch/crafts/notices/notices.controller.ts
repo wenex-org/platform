@@ -16,9 +16,9 @@ import {
 import { NoticeDataSerializer, NoticeItemsSerializer, NoticeSerializer } from '@app/common/serializers/touch';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateNoticeDto, CreateNoticeItemsDto, UpdateNoticeDto } from '@app/common/dto/touch';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -65,6 +65,7 @@ export class NoticesController extends ControllerClass<Notice, NoticeDto> implem
   @Post()
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchNotices)
+  @Validation('touch/notices', 'create')
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: NoticeDataSerializer })
   @SetPolicy(Action.Create, Resource.TouchNotices)
@@ -75,6 +76,7 @@ export class NoticesController extends ControllerClass<Notice, NoticeDto> implem
   @Post('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchNotices)
+  @Validation('touch/notices', 'create')
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: NoticeItemsSerializer })
   @SetPolicy(Action.Create, Resource.TouchNotices)
@@ -166,6 +168,7 @@ export class NoticesController extends ControllerClass<Notice, NoticeDto> implem
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchNotices)
+  @Validation('touch/notices', 'update')
   @SetPolicy(Action.Update, Resource.TouchNotices)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -180,6 +183,7 @@ export class NoticesController extends ControllerClass<Notice, NoticeDto> implem
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchNotices)
+  @Validation('touch/notices', 'update')
   @ApiResponse({ type: NoticeDataSerializer })
   @SetPolicy(Action.Update, Resource.TouchNotices)
   @ApiParam({ type: String, name: 'id', required: true })

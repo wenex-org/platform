@@ -22,9 +22,9 @@ import {
 } from '@app/common/serializers/essential';
 import { AddSagaStageDto, CreateSagaDto, CreateSagaItemsDto, StartSagaDto, UpdateSagaDto } from '@app/common/dto/essential';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -120,6 +120,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagas)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('essential/sagas', 'create')
   @ApiResponse({ type: SagaDataSerializer })
   @SetPolicy(Action.Create, Resource.EssentialSagas)
   override create(@Meta() meta: Metadata, @Body() data: CreateSagaDto): Observable<SagaDataSerializer> {
@@ -130,6 +131,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagas)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('essential/sagas', 'create')
   @ApiResponse({ type: SagaItemsSerializer })
   @SetPolicy(Action.Create, Resource.EssentialSagas)
   override createBulk(@Meta() meta: Metadata, @Body() data: CreateSagaItemsDto): Observable<SagaItemsSerializer> {
@@ -220,6 +222,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageEssentialSagas)
+  @Validation('essential/sagas', 'update')
   @SetPolicy(Action.Update, Resource.EssentialSagas)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -234,6 +237,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagas)
+  @Validation('essential/sagas', 'update')
   @ApiResponse({ type: SagaDataSerializer })
   @SetPolicy(Action.Update, Resource.EssentialSagas)
   @ApiParam({ type: String, name: 'id', required: true })

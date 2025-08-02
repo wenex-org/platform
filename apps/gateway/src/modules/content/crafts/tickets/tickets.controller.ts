@@ -16,9 +16,9 @@ import {
 import { TicketDataSerializer, TicketItemsSerializer, TicketSerializer } from '@app/common/serializers/content';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateTicketDto, CreateTicketItemsDto, UpdateTicketDto } from '@app/common/dto/content';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -66,6 +66,7 @@ export class TicketsController extends ControllerClass<Ticket, TicketDto> implem
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentTickets)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('content/tickets', 'create')
   @ApiResponse({ type: TicketDataSerializer })
   @SetPolicy(Action.Create, Resource.ContentTickets)
   override create(@Meta() meta: Metadata, @Body() data: CreateTicketDto): Observable<TicketDataSerializer> {
@@ -76,6 +77,7 @@ export class TicketsController extends ControllerClass<Ticket, TicketDto> implem
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentTickets)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('content/tickets', 'create')
   @ApiResponse({ type: TicketItemsSerializer })
   @SetPolicy(Action.Create, Resource.ContentTickets)
   override createBulk(@Meta() meta: Metadata, @Body() data: CreateTicketItemsDto): Observable<TicketItemsSerializer> {
@@ -166,6 +168,7 @@ export class TicketsController extends ControllerClass<Ticket, TicketDto> implem
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentTickets)
+  @Validation('content/tickets', 'update')
   @SetPolicy(Action.Update, Resource.ContentTickets)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -180,6 +183,7 @@ export class TicketsController extends ControllerClass<Ticket, TicketDto> implem
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentTickets)
+  @Validation('content/tickets', 'update')
   @ApiResponse({ type: TicketDataSerializer })
   @SetPolicy(Action.Update, Resource.ContentTickets)
   @ApiParam({ type: String, name: 'id', required: true })

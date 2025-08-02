@@ -1,8 +1,8 @@
 import { ServiceDataSerializer, ServiceItemsSerializer, ServiceSerializer } from '@app/common/serializers/career';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateServiceDto, CreateServiceItemsDto, UpdateServiceDto } from '@app/common/dto/career';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -47,6 +47,7 @@ export class ServicesResolver extends ControllerClass<Service, ServiceDto> imple
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerServices)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('career/services', 'create')
   @SetPolicy(Action.Create, Resource.CareerServices)
   createCareerService(@Meta() meta: Metadata, @Args('data') data: CreateServiceDto): Observable<ServiceDataSerializer> {
     return super.create(meta, data);
@@ -56,6 +57,7 @@ export class ServicesResolver extends ControllerClass<Service, ServiceDto> imple
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerServices)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('career/services', 'create')
   @SetPolicy(Action.Create, Resource.CareerServices)
   createCareerServiceBulk(@Meta() meta: Metadata, @Args('data') data: CreateServiceItemsDto): Observable<ServiceItemsSerializer> {
     return super.createBulk(meta, data);
@@ -136,6 +138,7 @@ export class ServicesResolver extends ControllerClass<Service, ServiceDto> imple
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageCareerServices)
+  @Validation('career/services', 'update')
   @SetPolicy(Action.Update, Resource.CareerServices)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateCareerServiceBulk(
@@ -149,6 +152,7 @@ export class ServicesResolver extends ControllerClass<Service, ServiceDto> imple
   @Mutation(() => ServiceDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerServices)
+  @Validation('career/services', 'update')
   @SetPolicy(Action.Update, Resource.CareerServices)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateCareerServiceById(

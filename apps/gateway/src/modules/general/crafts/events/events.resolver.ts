@@ -1,8 +1,8 @@
 import { EventDataSerializer, EventItemsSerializer, EventSerializer } from '@app/common/serializers/general';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateEventDto, CreateEventItemsDto, UpdateEventDto } from '@app/common/dto/general';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -47,6 +47,7 @@ export class EventsResolver extends ControllerClass<Event, EventDto> implements 
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralEvents)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('general/events', 'create')
   @SetPolicy(Action.Create, Resource.GeneralEvents)
   createGeneralEvent(@Meta() meta: Metadata, @Args('data') data: CreateEventDto): Observable<EventDataSerializer> {
     return super.create(meta, data);
@@ -56,6 +57,7 @@ export class EventsResolver extends ControllerClass<Event, EventDto> implements 
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralEvents)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('general/events', 'create')
   @SetPolicy(Action.Create, Resource.GeneralEvents)
   createGeneralEventBulk(@Meta() meta: Metadata, @Args('data') data: CreateEventItemsDto): Observable<EventItemsSerializer> {
     return super.createBulk(meta, data);
@@ -133,6 +135,7 @@ export class EventsResolver extends ControllerClass<Event, EventDto> implements 
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralEvents)
+  @Validation('general/events', 'update')
   @SetPolicy(Action.Update, Resource.GeneralEvents)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateGeneralEventBulk(
@@ -146,6 +149,7 @@ export class EventsResolver extends ControllerClass<Event, EventDto> implements 
   @Mutation(() => EventDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralEvents)
+  @Validation('general/events', 'update')
   @SetPolicy(Action.Update, Resource.GeneralEvents)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateGeneralEventById(

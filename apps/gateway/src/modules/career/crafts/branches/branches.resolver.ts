@@ -1,8 +1,8 @@
 import { BranchDataSerializer, BranchItemsSerializer, BranchSerializer } from '@app/common/serializers/career';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateBranchDto, CreateBranchItemsDto, UpdateBranchDto } from '@app/common/dto/career';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -47,6 +47,7 @@ export class BranchesResolver extends ControllerClass<Branch, BranchDto> impleme
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerBranches)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('career/branches', 'create')
   @SetPolicy(Action.Create, Resource.CareerBranches)
   createCareerBranch(@Meta() meta: Metadata, @Args('data') data: CreateBranchDto): Observable<BranchDataSerializer> {
     return super.create(meta, data);
@@ -56,6 +57,7 @@ export class BranchesResolver extends ControllerClass<Branch, BranchDto> impleme
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerBranches)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('career/branches', 'create')
   @SetPolicy(Action.Create, Resource.CareerBranches)
   createCareerBranchBulk(@Meta() meta: Metadata, @Args('data') data: CreateBranchItemsDto): Observable<BranchItemsSerializer> {
     return super.createBulk(meta, data);
@@ -133,6 +135,7 @@ export class BranchesResolver extends ControllerClass<Branch, BranchDto> impleme
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageCareerBranches)
+  @Validation('career/branches', 'update')
   @SetPolicy(Action.Update, Resource.CareerBranches)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateCareerBranchBulk(
@@ -146,6 +149,7 @@ export class BranchesResolver extends ControllerClass<Branch, BranchDto> impleme
   @Mutation(() => BranchDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerBranches)
+  @Validation('career/branches', 'update')
   @SetPolicy(Action.Update, Resource.CareerBranches)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateCareerBranchById(

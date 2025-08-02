@@ -16,9 +16,9 @@ import {
 import { ArtifactDataSerializer, ArtifactItemsSerializer, ArtifactSerializer } from '@app/common/serializers/general';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateArtifactDto, CreateArtifactItemsDto, UpdateArtifactDto } from '@app/common/dto/general';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -66,6 +66,7 @@ export class ArtifactsController extends ControllerClass<Artifact, ArtifactDto> 
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralArtifacts)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('general/artifacts', 'create')
   @ApiResponse({ type: ArtifactDataSerializer })
   @SetPolicy(Action.Create, Resource.GeneralArtifacts)
   override create(@Meta() meta: Metadata, @Body() data: CreateArtifactDto): Observable<ArtifactDataSerializer> {
@@ -76,6 +77,7 @@ export class ArtifactsController extends ControllerClass<Artifact, ArtifactDto> 
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralArtifacts)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('general/artifacts', 'create')
   @ApiResponse({ type: ArtifactItemsSerializer })
   @SetPolicy(Action.Create, Resource.GeneralArtifacts)
   override createBulk(@Meta() meta: Metadata, @Body() data: CreateArtifactItemsDto): Observable<ArtifactItemsSerializer> {
@@ -166,6 +168,7 @@ export class ArtifactsController extends ControllerClass<Artifact, ArtifactDto> 
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralArtifacts)
+  @Validation('general/artifacts', 'update')
   @SetPolicy(Action.Update, Resource.GeneralArtifacts)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -180,6 +183,7 @@ export class ArtifactsController extends ControllerClass<Artifact, ArtifactDto> 
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralArtifacts)
+  @Validation('general/artifacts', 'update')
   @ApiResponse({ type: ArtifactDataSerializer })
   @SetPolicy(Action.Update, Resource.GeneralArtifacts)
   @ApiParam({ type: String, name: 'id', required: true })

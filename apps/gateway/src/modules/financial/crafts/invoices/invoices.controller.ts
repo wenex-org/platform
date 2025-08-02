@@ -21,8 +21,8 @@ import {
   TransactionSerializer,
 } from '@app/common/serializers/financial';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Cache, Nested, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateInvoiceDto, CreateInvoiceItemsDto, UpdateInvoiceDto } from '@app/common/dto/financial';
-import { Cache, Nested, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -86,8 +86,9 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
 
   @Post()
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteFinancialInvoices)
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteFinancialInvoices)
+  @Validation('financial/invoices', 'create')
   @ApiResponse({ type: InvoiceDataSerializer })
   @SetPolicy(Action.Create, Resource.FinancialInvoices)
   override create(@Meta() meta: Metadata, @Body() data: CreateInvoiceDto): Observable<InvoiceDataSerializer> {
@@ -96,8 +97,9 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
 
   @Post('bulk')
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteFinancialInvoices)
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteFinancialInvoices)
+  @Validation('financial/invoices', 'create')
   @ApiResponse({ type: InvoiceItemsSerializer })
   @SetPolicy(Action.Create, Resource.FinancialInvoices)
   override createBulk(@Meta() meta: Metadata, @Body() data: CreateInvoiceItemsDto): Observable<InvoiceItemsSerializer> {
@@ -188,6 +190,7 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialInvoices)
+  @Validation('financial/invoices', 'update')
   @SetPolicy(Action.Update, Resource.FinancialInvoices)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -202,6 +205,7 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialInvoices)
+  @Validation('financial/invoices', 'update')
   @ApiResponse({ type: InvoiceDataSerializer })
   @SetPolicy(Action.Update, Resource.FinancialInvoices)
   @ApiParam({ type: String, name: 'id', required: true })

@@ -16,9 +16,9 @@ import {
 import { SagaStageDataSerializer, SagaStageItemsSerializer, SagaStageSerializer } from '@app/common/serializers/essential';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateSagaStageDto, CreateSagaStageItemsDto, UpdateSagaStageDto } from '@app/common/dto/essential';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -64,8 +64,9 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
 
   @Post()
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteEssentialSagaStages)
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteEssentialSagaStages)
+  @Validation('essential/saga-stages', 'create')
   @ApiResponse({ type: SagaStageDataSerializer })
   @SetPolicy(Action.Create, Resource.EssentialSagaStages)
   override create(@Meta() meta: Metadata, @Body() data: CreateSagaStageDto): Observable<SagaStageDataSerializer> {
@@ -74,8 +75,9 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
 
   @Post('bulk')
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteEssentialSagaStages)
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteEssentialSagaStages)
+  @Validation('essential/saga-stages', 'create')
   @ApiResponse({ type: SagaStageItemsSerializer })
   @SetPolicy(Action.Create, Resource.EssentialSagaStages)
   override createBulk(@Meta() meta: Metadata, @Body() data: CreateSagaStageItemsDto): Observable<SagaStageItemsSerializer> {
@@ -166,6 +168,7 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageEssentialSagaStages)
+  @Validation('essential/saga-stages', 'update')
   @SetPolicy(Action.Update, Resource.EssentialSagaStages)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -180,6 +183,7 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagaStages)
+  @Validation('essential/saga-stages', 'update')
   @ApiResponse({ type: SagaStageDataSerializer })
   @SetPolicy(Action.Update, Resource.EssentialSagaStages)
   @ApiParam({ type: String, name: 'id', required: true })

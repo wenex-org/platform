@@ -16,9 +16,9 @@ import {
 import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { SmsDataSerializer, SmsItemsSerializer, SmsSerializer } from '@app/common/serializers/touch';
 import { CreateSmsDto, CreateSmsItemsDto, SendSmsDto, UpdateSmsDto } from '@app/common/dto/touch';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -79,6 +79,7 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
   @Post()
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchSmss)
+  @Validation('touch/smss', 'create')
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: SmsDataSerializer })
   @SetPolicy(Action.Create, Resource.TouchSmss)
@@ -89,6 +90,7 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
   @Post('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchSmss)
+  @Validation('touch/smss', 'create')
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: SmsItemsSerializer })
   @SetPolicy(Action.Create, Resource.TouchSmss)
@@ -180,6 +182,7 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchSmss)
+  @Validation('touch/smss', 'update')
   @SetPolicy(Action.Update, Resource.TouchSmss)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -194,6 +197,7 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchSmss)
+  @Validation('touch/smss', 'update')
   @ApiResponse({ type: SmsDataSerializer })
   @SetPolicy(Action.Update, Resource.TouchSmss)
   @ApiParam({ type: String, name: 'id', required: true })

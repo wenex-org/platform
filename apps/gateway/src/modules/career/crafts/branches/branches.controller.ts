@@ -16,9 +16,9 @@ import {
 import { BranchDataSerializer, BranchItemsSerializer, BranchSerializer } from '@app/common/serializers/career';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateBranchDto, CreateBranchItemsDto, UpdateBranchDto } from '@app/common/dto/career';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -66,6 +66,7 @@ export class BranchesController extends ControllerClass<Branch, BranchDto> imple
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerBranches)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('career/branches', 'create')
   @ApiResponse({ type: BranchDataSerializer })
   @SetPolicy(Action.Create, Resource.CareerBranches)
   override create(@Meta() meta: Metadata, @Body() data: CreateBranchDto): Observable<BranchDataSerializer> {
@@ -76,6 +77,7 @@ export class BranchesController extends ControllerClass<Branch, BranchDto> imple
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerBranches)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('career/branches', 'create')
   @ApiResponse({ type: BranchItemsSerializer })
   @SetPolicy(Action.Create, Resource.CareerBranches)
   override createBulk(@Meta() meta: Metadata, @Body() data: CreateBranchItemsDto): Observable<BranchItemsSerializer> {
@@ -166,6 +168,7 @@ export class BranchesController extends ControllerClass<Branch, BranchDto> imple
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageCareerBranches)
+  @Validation('career/branches', 'update')
   @SetPolicy(Action.Update, Resource.CareerBranches)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -180,6 +183,7 @@ export class BranchesController extends ControllerClass<Branch, BranchDto> imple
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerBranches)
+  @Validation('career/branches', 'update')
   @ApiResponse({ type: BranchDataSerializer })
   @SetPolicy(Action.Update, Resource.CareerBranches)
   @ApiParam({ type: String, name: 'id', required: true })

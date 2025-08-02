@@ -16,9 +16,9 @@ import {
 import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { CollectStatDto, CreateStatDto, CreateStatItemsDto, UpdateStatDto } from '@app/common/dto/special';
 import { StatDataSerializer, StatItemsSerializer, StatSerializer } from '@app/common/serializers/special';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { ResultSerializer, TotalSerializer } from '@app/common/core/serializers';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -89,6 +89,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   @Post()
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialStats)
+  @Validation('special/stats', 'create')
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: StatDataSerializer })
   @SetPolicy(Action.Create, Resource.SpecialStats)
@@ -99,6 +100,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   @Post('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialStats)
+  @Validation('special/stats', 'create')
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: StatItemsSerializer })
   @SetPolicy(Action.Create, Resource.SpecialStats)
@@ -190,6 +192,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageSpecialStats)
+  @Validation('special/stats', 'update')
   @SetPolicy(Action.Update, Resource.SpecialStats)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -204,6 +207,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialStats)
+  @Validation('special/stats', 'update')
   @ApiResponse({ type: StatDataSerializer })
   @SetPolicy(Action.Update, Resource.SpecialStats)
   @ApiParam({ type: String, name: 'id', required: true })

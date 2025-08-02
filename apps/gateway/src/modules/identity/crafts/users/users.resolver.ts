@@ -1,8 +1,8 @@
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { UserDataSerializer, UserItemsSerializer, UserSerializer } from '@app/common/serializers/identity';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateUserDto, CreateUserItemsDto, UpdateUserDto } from '@app/common/dto/identity';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -47,6 +47,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('identity/users', 'create')
   @SetPolicy(Action.Create, Resource.IdentityUsers)
   createIdentityUser(@Meta() meta: Metadata, @Args('data') data: CreateUserDto): Observable<UserDataSerializer> {
     return super.create(meta, data);
@@ -56,6 +57,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('identity/users', 'create')
   @SetPolicy(Action.Create, Resource.IdentityUsers)
   createIdentityUserBulk(@Meta() meta: Metadata, @Args('data') data: CreateUserItemsDto): Observable<UserItemsSerializer> {
     return super.createBulk(meta, data);
@@ -133,6 +135,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageIdentityUsers)
+  @Validation('identity/users', 'update')
   @SetPolicy(Action.Update, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateIdentityUserBulk(
@@ -146,6 +149,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   @Mutation(() => UserDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
+  @Validation('identity/users', 'update')
   @SetPolicy(Action.Update, Resource.IdentityUsers)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateIdentityUserById(

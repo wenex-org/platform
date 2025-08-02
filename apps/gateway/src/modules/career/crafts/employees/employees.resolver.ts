@@ -1,8 +1,8 @@
 import { EmployeeDataSerializer, EmployeeItemsSerializer, EmployeeSerializer } from '@app/common/serializers/career';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateEmployeeDto, CreateEmployeeItemsDto, UpdateEmployeeDto } from '@app/common/dto/career';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -47,6 +47,7 @@ export class EmployeesResolver extends ControllerClass<Employee, EmployeeDto> im
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerEmployees)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('career/employees', 'create')
   @SetPolicy(Action.Create, Resource.CareerEmployees)
   createCareerEmployee(@Meta() meta: Metadata, @Args('data') data: CreateEmployeeDto): Observable<EmployeeDataSerializer> {
     return super.create(meta, data);
@@ -56,6 +57,7 @@ export class EmployeesResolver extends ControllerClass<Employee, EmployeeDto> im
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerEmployees)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('career/employees', 'create')
   @SetPolicy(Action.Create, Resource.CareerEmployees)
   createCareerEmployeeBulk(
     @Meta() meta: Metadata,
@@ -139,6 +141,7 @@ export class EmployeesResolver extends ControllerClass<Employee, EmployeeDto> im
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageCareerEmployees)
+  @Validation('career/employees', 'update')
   @SetPolicy(Action.Update, Resource.CareerEmployees)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateCareerEmployeeBulk(
@@ -152,6 +155,7 @@ export class EmployeesResolver extends ControllerClass<Employee, EmployeeDto> im
   @Mutation(() => EmployeeDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerEmployees)
+  @Validation('career/employees', 'update')
   @SetPolicy(Action.Update, Resource.CareerEmployees)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateCareerEmployeeById(

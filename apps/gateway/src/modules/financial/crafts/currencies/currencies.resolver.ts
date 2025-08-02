@@ -1,8 +1,8 @@
 import { CurrencyDataSerializer, CurrencyItemsSerializer, CurrencySerializer } from '@app/common/serializers/financial';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateCurrencyDto, CreateCurrencyItemsDto, UpdateCurrencyDto } from '@app/common/dto/financial';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -45,8 +45,9 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
 
   @Mutation(() => CurrencyDataSerializer)
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteFinancialCurrencies)
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteFinancialCurrencies)
+  @Validation('financial/currencies', 'create')
   @SetPolicy(Action.Create, Resource.FinancialCurrencies)
   createFinancialCurrency(@Meta() meta: Metadata, @Args('data') data: CreateCurrencyDto): Observable<CurrencyDataSerializer> {
     return super.create(meta, data);
@@ -54,8 +55,9 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
 
   @Mutation(() => CurrencyItemsSerializer)
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteFinancialCurrencies)
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteFinancialCurrencies)
+  @Validation('financial/currencies', 'create')
   @SetPolicy(Action.Create, Resource.FinancialCurrencies)
   createFinancialCurrencyBulk(
     @Meta() meta: Metadata,
@@ -139,6 +141,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialCurrencies)
+  @Validation('financial/currencies', 'update')
   @SetPolicy(Action.Update, Resource.FinancialCurrencies)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateFinancialCurrencyBulk(
@@ -152,6 +155,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   @Mutation(() => CurrencyDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialCurrencies)
+  @Validation('financial/currencies', 'update')
   @SetPolicy(Action.Update, Resource.FinancialCurrencies)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateFinancialCurrencyById(

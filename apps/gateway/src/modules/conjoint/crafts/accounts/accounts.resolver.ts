@@ -1,8 +1,8 @@
 import { AccountDataSerializer, AccountItemsSerializer, AccountSerializer } from '@app/common/serializers/conjoint';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateAccountDto, CreateAccountItemsDto, UpdateAccountDto } from '@app/common/dto/conjoint';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -47,6 +47,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointAccounts)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('conjoint/accounts', 'create')
   @SetPolicy(Action.Create, Resource.ConjointAccounts)
   createConjointAccount(@Meta() meta: Metadata, @Args('data') data: CreateAccountDto): Observable<AccountDataSerializer> {
     return super.create(meta, data);
@@ -56,6 +57,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointAccounts)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('conjoint/accounts', 'create')
   @SetPolicy(Action.Create, Resource.ConjointAccounts)
   createConjointAccountBulk(@Meta() meta: Metadata, @Args('data') data: CreateAccountItemsDto): Observable<AccountItemsSerializer> {
     return super.createBulk(meta, data);
@@ -136,6 +138,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageConjointAccounts)
+  @Validation('conjoint/accounts', 'update')
   @SetPolicy(Action.Update, Resource.ConjointAccounts)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateConjointAccountBulk(
@@ -149,6 +152,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   @Mutation(() => AccountDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointAccounts)
+  @Validation('conjoint/accounts', 'update')
   @SetPolicy(Action.Update, Resource.ConjointAccounts)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateConjointAccountById(

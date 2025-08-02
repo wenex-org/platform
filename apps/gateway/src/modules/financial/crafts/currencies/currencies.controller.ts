@@ -16,9 +16,9 @@ import {
 import { CurrencyDataSerializer, CurrencyItemsSerializer, CurrencySerializer } from '@app/common/serializers/financial';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateCurrencyDto, CreateCurrencyItemsDto, UpdateCurrencyDto } from '@app/common/dto/financial';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -64,8 +64,9 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
 
   @Post()
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteFinancialCurrencies)
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteFinancialCurrencies)
+  @Validation('financial/currencies', 'create')
   @ApiResponse({ type: CurrencyDataSerializer })
   @SetPolicy(Action.Create, Resource.FinancialCurrencies)
   override create(@Meta() meta: Metadata, @Body() data: CreateCurrencyDto): Observable<CurrencyDataSerializer> {
@@ -74,8 +75,9 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
 
   @Post('bulk')
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteFinancialCurrencies)
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteFinancialCurrencies)
+  @Validation('financial/currencies', 'create')
   @ApiResponse({ type: CurrencyItemsSerializer })
   @SetPolicy(Action.Create, Resource.FinancialCurrencies)
   override createBulk(@Meta() meta: Metadata, @Body() data: CreateCurrencyItemsDto): Observable<CurrencyItemsSerializer> {
@@ -166,6 +168,7 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialCurrencies)
+  @Validation('financial/currencies', 'update')
   @SetPolicy(Action.Update, Resource.FinancialCurrencies)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -180,6 +183,7 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialCurrencies)
+  @Validation('financial/currencies', 'update')
   @ApiResponse({ type: CurrencyDataSerializer })
   @SetPolicy(Action.Update, Resource.FinancialCurrencies)
   @ApiParam({ type: String, name: 'id', required: true })

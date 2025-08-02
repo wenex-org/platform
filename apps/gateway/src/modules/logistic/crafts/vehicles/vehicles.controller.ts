@@ -16,9 +16,9 @@ import {
 import { VehicleDataSerializer, VehicleItemsSerializer, VehicleSerializer } from '@app/common/serializers/logistic';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateVehicleDto, CreateVehicleItemsDto, UpdateVehicleDto } from '@app/common/dto/logistic';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Vehicle as IVehicle, VehicleDto } from '@app/common/interfaces/logistic';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -66,6 +66,7 @@ export class VehiclesController extends ControllerClass<IVehicle, VehicleDto> im
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('logistic/vehicles', 'create')
   @ApiResponse({ type: VehicleDataSerializer })
   @SetPolicy(Action.Create, Resource.LogisticVehicles)
   override create(@Meta() meta: Metadata, @Body() data: CreateVehicleDto): Observable<VehicleDataSerializer> {
@@ -76,6 +77,7 @@ export class VehiclesController extends ControllerClass<IVehicle, VehicleDto> im
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('logistic/vehicles', 'create')
   @ApiResponse({ type: VehicleItemsSerializer })
   @SetPolicy(Action.Create, Resource.LogisticVehicles)
   override createBulk(@Meta() meta: Metadata, @Body() data: CreateVehicleItemsDto): Observable<VehicleItemsSerializer> {
@@ -166,6 +168,7 @@ export class VehiclesController extends ControllerClass<IVehicle, VehicleDto> im
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticVehicles)
+  @Validation('logistic/vehicles', 'update')
   @SetPolicy(Action.Update, Resource.LogisticVehicles)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -180,6 +183,7 @@ export class VehiclesController extends ControllerClass<IVehicle, VehicleDto> im
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
+  @Validation('logistic/vehicles', 'update')
   @ApiResponse({ type: VehicleDataSerializer })
   @SetPolicy(Action.Update, Resource.LogisticVehicles)
   @ApiParam({ type: String, name: 'id', required: true })

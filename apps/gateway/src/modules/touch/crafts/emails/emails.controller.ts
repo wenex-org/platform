@@ -16,9 +16,9 @@ import {
 import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { EmailDataSerializer, EmailItemsSerializer, EmailSerializer } from '@app/common/serializers/touch';
 import { CreateEmailDto, CreateEmailItemsDto, SendEmailDto, UpdateEmailDto } from '@app/common/dto/touch';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -79,6 +79,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   @Post()
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchEmails)
+  @Validation('touch/emails', 'create')
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: EmailDataSerializer })
   @SetPolicy(Action.Create, Resource.TouchEmails)
@@ -89,6 +90,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   @Post('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchEmails)
+  @Validation('touch/emails', 'create')
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: EmailItemsSerializer })
   @SetPolicy(Action.Create, Resource.TouchEmails)
@@ -180,6 +182,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchEmails)
+  @Validation('touch/emails', 'update')
   @SetPolicy(Action.Update, Resource.TouchEmails)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -194,6 +197,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchEmails)
+  @Validation('touch/emails', 'update')
   @ApiResponse({ type: EmailDataSerializer })
   @SetPolicy(Action.Update, Resource.TouchEmails)
   @ApiParam({ type: String, name: 'id', required: true })

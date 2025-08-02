@@ -1,8 +1,8 @@
 import { TravelDataSerializer, TravelItemsSerializer, TravelSerializer } from '@app/common/serializers/logistic';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateTravelDto, CreateTravelItemsDto, UpdateTravelDto } from '@app/common/dto/logistic';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -47,6 +47,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('logistic/travels', 'create')
   @SetPolicy(Action.Create, Resource.LogisticTravels)
   createLogisticTravel(@Meta() meta: Metadata, @Args('data') data: CreateTravelDto): Observable<TravelDataSerializer> {
     return super.create(meta, data);
@@ -56,6 +57,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('logistic/travels', 'create')
   @SetPolicy(Action.Create, Resource.LogisticTravels)
   createLogisticTravelBulk(@Meta() meta: Metadata, @Args('data') data: CreateTravelItemsDto): Observable<TravelItemsSerializer> {
     return super.createBulk(meta, data);
@@ -136,6 +138,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticTravels)
+  @Validation('logistic/travels', 'update')
   @SetPolicy(Action.Update, Resource.LogisticTravels)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateLogisticTravelBulk(
@@ -149,6 +152,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   @Mutation(() => TravelDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
+  @Validation('logistic/travels', 'update')
   @SetPolicy(Action.Update, Resource.LogisticTravels)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateLogisticTravelById(

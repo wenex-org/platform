@@ -1,8 +1,8 @@
 import { InvoiceDataSerializer, InvoiceItemsSerializer, InvoiceSerializer } from '@app/common/serializers/financial';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateInvoiceDto, CreateInvoiceItemsDto, UpdateInvoiceDto } from '@app/common/dto/financial';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -45,8 +45,9 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
 
   @Mutation(() => InvoiceDataSerializer)
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteFinancialInvoices)
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteFinancialInvoices)
+  @Validation('financial/invoices', 'create')
   @SetPolicy(Action.Create, Resource.FinancialInvoices)
   createFinancialInvoice(@Meta() meta: Metadata, @Args('data') data: CreateInvoiceDto): Observable<InvoiceDataSerializer> {
     return super.create(meta, data);
@@ -54,8 +55,9 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
 
   @Mutation(() => InvoiceItemsSerializer)
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteFinancialInvoices)
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteFinancialInvoices)
+  @Validation('financial/invoices', 'create')
   @SetPolicy(Action.Create, Resource.FinancialInvoices)
   createFinancialInvoiceBulk(
     @Meta() meta: Metadata,
@@ -139,6 +141,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialInvoices)
+  @Validation('financial/invoices', 'update')
   @SetPolicy(Action.Update, Resource.FinancialInvoices)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateFinancialInvoiceBulk(
@@ -152,6 +155,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   @Mutation(() => InvoiceDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialInvoices)
+  @Validation('financial/invoices', 'update')
   @SetPolicy(Action.Update, Resource.FinancialInvoices)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateFinancialInvoiceById(

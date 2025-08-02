@@ -1,8 +1,8 @@
 import { NoticeDataSerializer, NoticeItemsSerializer, NoticeSerializer } from '@app/common/serializers/touch';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateNoticeDto, CreateNoticeItemsDto, UpdateNoticeDto } from '@app/common/dto/touch';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -46,6 +46,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   @Mutation(() => NoticeDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchNotices)
+  @Validation('touch/notices', 'create')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchNotices)
   createTouchNotice(@Meta() meta: Metadata, @Args('data') data: CreateNoticeDto): Observable<NoticeDataSerializer> {
@@ -55,6 +56,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   @Mutation(() => NoticeItemsSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchNotices)
+  @Validation('touch/notices', 'create')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchNotices)
   createTouchNoticeBulk(@Meta() meta: Metadata, @Args('data') data: CreateNoticeItemsDto): Observable<NoticeItemsSerializer> {
@@ -133,6 +135,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchNotices)
+  @Validation('touch/notices', 'update')
   @SetPolicy(Action.Update, Resource.TouchNotices)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateTouchNoticeBulk(
@@ -146,6 +149,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   @Mutation(() => NoticeDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchNotices)
+  @Validation('touch/notices', 'update')
   @SetPolicy(Action.Update, Resource.TouchNotices)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateTouchNoticeById(

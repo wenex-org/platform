@@ -16,9 +16,9 @@ import {
 import { MessageDataSerializer, MessageItemsSerializer, MessageSerializer } from '@app/common/serializers/conjoint';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateMessageDto, CreateMessageItemsDto, UpdateMessageDto } from '@app/common/dto/conjoint';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -66,6 +66,7 @@ export class MessagesController extends ControllerClass<Message, MessageDto> imp
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMessages)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('conjoint/messages', 'create')
   @ApiResponse({ type: MessageDataSerializer })
   @SetPolicy(Action.Create, Resource.ConjointMessages)
   override create(@Meta() meta: Metadata, @Body() data: CreateMessageDto): Observable<MessageDataSerializer> {
@@ -76,6 +77,7 @@ export class MessagesController extends ControllerClass<Message, MessageDto> imp
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMessages)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('conjoint/messages', 'create')
   @ApiResponse({ type: MessageItemsSerializer })
   @SetPolicy(Action.Create, Resource.ConjointMessages)
   override createBulk(@Meta() meta: Metadata, @Body() data: CreateMessageItemsDto): Observable<MessageItemsSerializer> {
@@ -166,6 +168,7 @@ export class MessagesController extends ControllerClass<Message, MessageDto> imp
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageConjointMessages)
+  @Validation('conjoint/messages', 'update')
   @SetPolicy(Action.Update, Resource.ConjointMessages)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -180,6 +183,7 @@ export class MessagesController extends ControllerClass<Message, MessageDto> imp
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMessages)
+  @Validation('conjoint/messages', 'update')
   @ApiResponse({ type: MessageDataSerializer })
   @SetPolicy(Action.Update, Resource.ConjointMessages)
   @ApiParam({ type: String, name: 'id', required: true })

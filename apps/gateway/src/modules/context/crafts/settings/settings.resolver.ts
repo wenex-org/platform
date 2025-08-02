@@ -1,8 +1,8 @@
 import { SettingDataSerializer, SettingItemsSerializer, SettingSerializer } from '@app/common/serializers/context';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateSettingDto, CreateSettingItemsDto, UpdateSettingDto } from '@app/common/dto/context';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -47,6 +47,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('context/settings', 'create')
   @SetPolicy(Action.Create, Resource.ContextSettings)
   createContextSetting(@Meta() meta: Metadata, @Args('data') data: CreateSettingDto): Observable<SettingDataSerializer> {
     return super.create(meta, data);
@@ -56,6 +57,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('context/settings', 'create')
   @SetPolicy(Action.Create, Resource.ContextSettings)
   createContextSettingBulk(@Meta() meta: Metadata, @Args('data') data: CreateSettingItemsDto): Observable<SettingItemsSerializer> {
     return super.createBulk(meta, data);
@@ -136,6 +138,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContextSettings)
+  @Validation('context/settings', 'update')
   @SetPolicy(Action.Update, Resource.ContextSettings)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateContextSettingBulk(
@@ -149,6 +152,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   @Mutation(() => SettingDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextSettings)
+  @Validation('context/settings', 'update')
   @SetPolicy(Action.Update, Resource.ContextSettings)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateContextSettingById(

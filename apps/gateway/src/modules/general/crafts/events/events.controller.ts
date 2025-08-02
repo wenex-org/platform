@@ -15,10 +15,10 @@ import {
 } from '@nestjs/common';
 import { EventDataSerializer, EventItemsSerializer, EventSerializer } from '@app/common/serializers/general';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateEventDto, CreateEventItemsDto, UpdateEventDto } from '@app/common/dto/general';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -66,6 +66,7 @@ export class EventsController extends ControllerClass<Event, EventDto> implement
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralEvents)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('general/events', 'create')
   @ApiResponse({ type: EventDataSerializer })
   @SetPolicy(Action.Create, Resource.GeneralEvents)
   override create(@Meta() meta: Metadata, @Body() data: CreateEventDto): Observable<EventDataSerializer> {
@@ -76,6 +77,7 @@ export class EventsController extends ControllerClass<Event, EventDto> implement
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralEvents)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('general/events', 'create')
   @ApiResponse({ type: EventItemsSerializer })
   @SetPolicy(Action.Create, Resource.GeneralEvents)
   override createBulk(@Meta() meta: Metadata, @Body() data: CreateEventItemsDto): Observable<EventItemsSerializer> {
@@ -166,6 +168,7 @@ export class EventsController extends ControllerClass<Event, EventDto> implement
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralEvents)
+  @Validation('general/events', 'update')
   @SetPolicy(Action.Update, Resource.GeneralEvents)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -180,6 +183,7 @@ export class EventsController extends ControllerClass<Event, EventDto> implement
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralEvents)
+  @Validation('general/events', 'update')
   @ApiResponse({ type: EventDataSerializer })
   @SetPolicy(Action.Update, Resource.GeneralEvents)
   @ApiParam({ type: String, name: 'id', required: true })

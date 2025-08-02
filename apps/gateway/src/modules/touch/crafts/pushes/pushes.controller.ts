@@ -22,9 +22,9 @@ import {
 } from '@app/common/serializers/touch';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreatePushDto, CreatePushItemsDto, SendPusHistoryDto, UpdatePushDto } from '@app/common/dto/touch';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -85,6 +85,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   @Post()
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPushes)
+  @Validation('touch/pushes', 'create')
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: PushDataSerializer })
   @SetPolicy(Action.Create, Resource.TouchPushes)
@@ -95,6 +96,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   @Post('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPushes)
+  @Validation('touch/pushes', 'create')
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: PushItemsSerializer })
   @SetPolicy(Action.Create, Resource.TouchPushes)
@@ -186,6 +188,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchPushes)
+  @Validation('touch/pushes', 'update')
   @SetPolicy(Action.Update, Resource.TouchPushes)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -200,6 +203,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPushes)
+  @Validation('touch/pushes', 'update')
   @ApiResponse({ type: PushDataSerializer })
   @SetPolicy(Action.Update, Resource.TouchPushes)
   @ApiParam({ type: String, name: 'id', required: true })

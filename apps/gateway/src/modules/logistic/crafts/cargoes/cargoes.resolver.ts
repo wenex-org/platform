@@ -1,8 +1,8 @@
 import { CargoDataSerializer, CargoItemsSerializer, CargoSerializer } from '@app/common/serializers/logistic';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateCargoDto, CreateCargoItemsDto, UpdateCargoDto } from '@app/common/dto/logistic';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -47,6 +47,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('logistic/cargoes', 'create')
   @SetPolicy(Action.Create, Resource.LogisticCargoes)
   createLogisticCargo(@Meta() meta: Metadata, @Args('data') data: CreateCargoDto): Observable<CargoDataSerializer> {
     return super.create(meta, data);
@@ -56,6 +57,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('logistic/cargoes', 'create')
   @SetPolicy(Action.Create, Resource.LogisticCargoes)
   createLogisticCargoBulk(@Meta() meta: Metadata, @Args('data') data: CreateCargoItemsDto): Observable<CargoItemsSerializer> {
     return super.createBulk(meta, data);
@@ -133,6 +135,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticCargoes)
+  @Validation('logistic/cargoes', 'update')
   @SetPolicy(Action.Update, Resource.LogisticCargoes)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateLogisticCargoBulk(
@@ -146,6 +149,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   @Mutation(() => CargoDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
+  @Validation('logistic/cargoes', 'update')
   @SetPolicy(Action.Update, Resource.LogisticCargoes)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateLogisticCargoById(

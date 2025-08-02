@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.19] - 2025-08-02
+
+### Added
+
+- schema validation base on client config with `ValidationInterceptor` and `@Validation` decorator @vhidvz
+
 ## [1.2.18] - 2025-07-30
 
 ### Fixed
@@ -211,7 +217,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.18...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.2.19...HEAD
+[1.2.19]: https://github.com/wenex-org/platform/compare/1.2.18...1.2.19
 [1.2.18]: https://github.com/wenex-org/platform/compare/1.2.17...1.2.18
 [1.2.17]: https://github.com/wenex-org/platform/compare/1.2.16...1.2.17
 [1.2.16]: https://github.com/wenex-org/platform/compare/1.2.15...1.2.16

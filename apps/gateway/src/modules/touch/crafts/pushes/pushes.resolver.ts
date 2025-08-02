@@ -1,8 +1,8 @@
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { PushDataSerializer, PushItemsSerializer, PushSerializer } from '@app/common/serializers/touch';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreatePushDto, CreatePushItemsDto, UpdatePushDto } from '@app/common/dto/touch';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -46,6 +46,7 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements IC
   @Mutation(() => PushDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPushes)
+  @Validation('touch/pushes', 'create')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchPushes)
   createTouchPush(@Meta() meta: Metadata, @Args('data') data: CreatePushDto): Observable<PushDataSerializer> {
@@ -55,6 +56,7 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements IC
   @Mutation(() => PushItemsSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPushes)
+  @Validation('touch/pushes', 'create')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchPushes)
   createTouchPushBulk(@Meta() meta: Metadata, @Args('data') data: CreatePushItemsDto): Observable<PushItemsSerializer> {
@@ -133,6 +135,7 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements IC
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchPushes)
+  @Validation('touch/pushes', 'update')
   @SetPolicy(Action.Update, Resource.TouchPushes)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateTouchPushBulk(
@@ -146,6 +149,7 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements IC
   @Mutation(() => PushDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPushes)
+  @Validation('touch/pushes', 'update')
   @SetPolicy(Action.Update, Resource.TouchPushes)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateTouchPushById(

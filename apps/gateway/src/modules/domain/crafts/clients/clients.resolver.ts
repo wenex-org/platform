@@ -1,7 +1,7 @@
 import { ClientDataSerializer, ClientItemsSerializer, ClientSerializer } from '@app/common/serializers/domain';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Cache, Nested, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateClientDto, CreateClientItemsDto, UpdateClientDto } from '@app/common/dto/domain';
-import { Cache, Nested, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -48,6 +48,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('domain/clients', 'create')
   @SetPolicy(Action.Create, Resource.DomainClients)
   createDomainClient(@Meta() meta: Metadata, @Args('data') data: CreateClientDto): Observable<ClientDataSerializer> {
     return super.create(meta, data);
@@ -57,6 +58,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('domain/clients', 'create')
   @SetPolicy(Action.Create, Resource.DomainClients)
   createDomainClientBulk(@Meta() meta: Metadata, @Args('data') data: CreateClientItemsDto): Observable<ClientItemsSerializer> {
     return super.createBulk(meta, data);
@@ -134,6 +136,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageDomainClients)
+  @Validation('domain/clients', 'update')
   @SetPolicy(Action.Update, Resource.DomainClients)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateDomainClientBulk(
@@ -147,6 +150,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   @Mutation(() => ClientDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainClients)
+  @Validation('domain/clients', 'update')
   @SetPolicy(Action.Update, Resource.DomainClients)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateDomainClientById(

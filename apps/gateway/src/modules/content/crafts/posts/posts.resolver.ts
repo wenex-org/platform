@@ -1,8 +1,8 @@
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { PostDataSerializer, PostItemsSerializer, PostSerializer } from '@app/common/serializers/content';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreatePostDto, CreatePostItemsDto, UpdatePostDto } from '@app/common/dto/content';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -46,6 +46,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   @Mutation(() => PostDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentPosts)
+  @Validation('content/posts', 'create')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContentPosts)
   createContentPost(@Meta() meta: Metadata, @Args('data') data: CreatePostDto): Observable<PostDataSerializer> {
@@ -55,6 +56,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   @Mutation(() => PostItemsSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentPosts)
+  @Validation('content/posts', 'create')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContentPosts)
   createContentPostBulk(@Meta() meta: Metadata, @Args('data') data: CreatePostItemsDto): Observable<PostItemsSerializer> {
@@ -133,6 +135,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentPosts)
+  @Validation('content/posts', 'update')
   @SetPolicy(Action.Update, Resource.ContentPosts)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateContentPostBulk(
@@ -146,6 +149,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   @Mutation(() => PostDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentPosts)
+  @Validation('content/posts', 'update')
   @SetPolicy(Action.Update, Resource.ContentPosts)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateContentPostById(

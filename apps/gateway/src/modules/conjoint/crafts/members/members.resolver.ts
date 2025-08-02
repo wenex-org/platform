@@ -1,8 +1,8 @@
 import { MemberDataSerializer, MemberItemsSerializer, MemberSerializer } from '@app/common/serializers/conjoint';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateMemberDto, CreateMemberItemsDto, UpdateMemberDto } from '@app/common/dto/conjoint';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -47,6 +47,7 @@ export class MembersResolver extends ControllerClass<Member, MemberDto> implemen
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMembers)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('conjoint/members', 'create')
   @SetPolicy(Action.Create, Resource.ConjointMembers)
   createConjointMember(@Meta() meta: Metadata, @Args('data') data: CreateMemberDto): Observable<MemberDataSerializer> {
     return super.create(meta, data);
@@ -56,6 +57,7 @@ export class MembersResolver extends ControllerClass<Member, MemberDto> implemen
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMembers)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('conjoint/members', 'create')
   @SetPolicy(Action.Create, Resource.ConjointMembers)
   createConjointMemberBulk(@Meta() meta: Metadata, @Args('data') data: CreateMemberItemsDto): Observable<MemberItemsSerializer> {
     return super.createBulk(meta, data);
@@ -136,6 +138,7 @@ export class MembersResolver extends ControllerClass<Member, MemberDto> implemen
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageConjointMembers)
+  @Validation('conjoint/members', 'update')
   @SetPolicy(Action.Update, Resource.ConjointMembers)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateConjointMemberBulk(
@@ -149,6 +152,7 @@ export class MembersResolver extends ControllerClass<Member, MemberDto> implemen
   @Mutation(() => MemberDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMembers)
+  @Validation('conjoint/members', 'update')
   @SetPolicy(Action.Update, Resource.ConjointMembers)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateConjointMemberById(

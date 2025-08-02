@@ -21,7 +21,7 @@ import {
 } from '@app/common/dto/financial';
 import { TransactionDataSerializer, TransactionItemsSerializer, TransactionSerializer } from '@app/common/serializers/financial';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { Cache, Nested, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
+import { Cache, Nested, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -111,8 +111,9 @@ export class TransactionsController
 
   @Post()
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteFinancialTransactions)
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteFinancialTransactions)
+  @Validation('financial/transactions', 'create')
   @ApiResponse({ type: TransactionDataSerializer })
   @SetPolicy(Action.Create, Resource.FinancialTransactions)
   override create(@Meta() meta: Metadata, @Body() data: CreateTransactionDto): Observable<TransactionDataSerializer> {
@@ -121,8 +122,9 @@ export class TransactionsController
 
   @Post('bulk')
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteFinancialTransactions)
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteFinancialTransactions)
+  @Validation('financial/transactions', 'create')
   @ApiResponse({ type: TransactionItemsSerializer })
   @SetPolicy(Action.Create, Resource.FinancialTransactions)
   override createBulk(@Meta() meta: Metadata, @Body() data: CreateTransactionItemsDto): Observable<TransactionItemsSerializer> {
@@ -213,6 +215,7 @@ export class TransactionsController
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialTransactions)
+  @Validation('financial/transactions', 'update')
   @SetPolicy(Action.Update, Resource.FinancialTransactions)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -227,6 +230,7 @@ export class TransactionsController
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
+  @Validation('financial/transactions', 'update')
   @ApiResponse({ type: TransactionDataSerializer })
   @SetPolicy(Action.Update, Resource.FinancialTransactions)
   @ApiParam({ type: String, name: 'id', required: true })

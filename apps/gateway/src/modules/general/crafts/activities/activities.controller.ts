@@ -16,9 +16,9 @@ import {
 import { ActivityDataSerializer, ActivityItemsSerializer, ActivitySerializer } from '@app/common/serializers/general';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateActivityDto, CreateActivityItemsDto, UpdateActivityDto } from '@app/common/dto/general';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -64,8 +64,9 @@ export class ActivitiesController extends ControllerClass<Activity, ActivityDto>
 
   @Post()
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteGeneralActivities)
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteGeneralActivities)
+  @Validation('general/activities', 'create')
   @ApiResponse({ type: ActivityDataSerializer })
   @SetPolicy(Action.Create, Resource.GeneralActivities)
   override create(@Meta() meta: Metadata, @Body() data: CreateActivityDto): Observable<ActivityDataSerializer> {
@@ -74,8 +75,9 @@ export class ActivitiesController extends ControllerClass<Activity, ActivityDto>
 
   @Post('bulk')
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteGeneralActivities)
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteGeneralActivities)
+  @Validation('general/activities', 'create')
   @ApiResponse({ type: ActivityItemsSerializer })
   @SetPolicy(Action.Create, Resource.GeneralActivities)
   override createBulk(@Meta() meta: Metadata, @Body() data: CreateActivityItemsDto): Observable<ActivityItemsSerializer> {
@@ -166,6 +168,7 @@ export class ActivitiesController extends ControllerClass<Activity, ActivityDto>
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralActivities)
+  @Validation('general/activities', 'update')
   @SetPolicy(Action.Update, Resource.GeneralActivities)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -180,6 +183,7 @@ export class ActivitiesController extends ControllerClass<Activity, ActivityDto>
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralActivities)
+  @Validation('general/activities', 'update')
   @ApiResponse({ type: ActivityDataSerializer })
   @SetPolicy(Action.Update, Resource.GeneralActivities)
   @ApiParam({ type: String, name: 'id', required: true })

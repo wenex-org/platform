@@ -1,8 +1,8 @@
 import { ArtifactDataSerializer, ArtifactItemsSerializer, ArtifactSerializer } from '@app/common/serializers/general';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateArtifactDto, CreateArtifactItemsDto, UpdateArtifactDto } from '@app/common/dto/general';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -47,6 +47,7 @@ export class ArtifactsResolver extends ControllerClass<Artifact, ArtifactDto> im
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralArtifacts)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('general/artifacts', 'create')
   @SetPolicy(Action.Create, Resource.GeneralArtifacts)
   createGeneralArtifact(@Meta() meta: Metadata, @Args('data') data: CreateArtifactDto): Observable<ArtifactDataSerializer> {
     return super.create(meta, data);
@@ -56,6 +57,7 @@ export class ArtifactsResolver extends ControllerClass<Artifact, ArtifactDto> im
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralArtifacts)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('general/artifacts', 'create')
   @SetPolicy(Action.Create, Resource.GeneralArtifacts)
   createGeneralArtifactBulk(
     @Meta() meta: Metadata,
@@ -124,6 +126,7 @@ export class ArtifactsResolver extends ControllerClass<Artifact, ArtifactDto> im
   @Mutation(() => ArtifactDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralArtifacts)
+  @Validation('general/artifacts', 'update')
   @SetPolicy(Action.Destroy, Resource.GeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   destroyGeneralArtifactById(
@@ -139,6 +142,7 @@ export class ArtifactsResolver extends ControllerClass<Artifact, ArtifactDto> im
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralArtifacts)
+  @Validation('general/artifacts', 'update')
   @SetPolicy(Action.Update, Resource.GeneralArtifacts)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateGeneralArtifactBulk(

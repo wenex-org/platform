@@ -1,8 +1,8 @@
 import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { StatDataSerializer, StatItemsSerializer, StatSerializer } from '@app/common/serializers/special';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateStatDto, CreateStatItemsDto, UpdateStatDto } from '@app/common/dto/special';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -46,6 +46,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   @Mutation(() => StatDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialStats)
+  @Validation('special/stats', 'create')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialStats)
   createSpecialStat(@Meta() meta: Metadata, @Args('data') data: CreateStatDto): Observable<StatDataSerializer> {
@@ -55,6 +56,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   @Mutation(() => StatItemsSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialStats)
+  @Validation('special/stats', 'create')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialStats)
   createSpecialStatBulk(@Meta() meta: Metadata, @Args('data') data: CreateStatItemsDto): Observable<StatItemsSerializer> {
@@ -133,6 +135,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageSpecialStats)
+  @Validation('special/stats', 'update')
   @SetPolicy(Action.Update, Resource.SpecialStats)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateSpecialStatBulk(
@@ -146,6 +149,7 @@ export class StatsResolver extends ControllerClass<Stat, StatDto> implements ICo
   @Mutation(() => StatDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialStats)
+  @Validation('special/stats', 'update')
   @SetPolicy(Action.Update, Resource.SpecialStats)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateSpecialStatById(

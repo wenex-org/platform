@@ -1,8 +1,8 @@
 import { ProfileDataSerializer, ProfileItemsSerializer, ProfileSerializer } from '@app/common/serializers/identity';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateProfileDto, CreateProfileItemsDto, UpdateProfileDto } from '@app/common/dto/identity';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -47,6 +47,7 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('identity/profiles', 'create')
   @SetPolicy(Action.Create, Resource.IdentityProfiles)
   createIdentityProfile(@Meta() meta: Metadata, @Args('data') data: CreateProfileDto): Observable<ProfileDataSerializer> {
     return super.create(meta, data);
@@ -56,6 +57,7 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('identity/profiles', 'create')
   @SetPolicy(Action.Create, Resource.IdentityProfiles)
   createIdentityProfileBulk(@Meta() meta: Metadata, @Args('data') data: CreateProfileItemsDto): Observable<ProfileItemsSerializer> {
     return super.createBulk(meta, data);
@@ -136,6 +138,7 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageIdentityProfiles)
+  @Validation('identity/profiles', 'update')
   @SetPolicy(Action.Update, Resource.IdentityProfiles)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateIdentityProfileBulk(
@@ -149,6 +152,7 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   @Mutation(() => ProfileDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
+  @Validation('identity/profiles', 'update')
   @SetPolicy(Action.Update, Resource.IdentityProfiles)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateIdentityProfileById(

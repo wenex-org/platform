@@ -16,9 +16,9 @@ import {
 import { CargoDataSerializer, CargoItemsSerializer, CargoSerializer } from '@app/common/serializers/logistic';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateCargoDto, CreateCargoItemsDto, UpdateCargoDto } from '@app/common/dto/logistic';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -66,6 +66,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('logistic/cargoes', 'create')
   @ApiResponse({ type: CargoDataSerializer })
   @SetPolicy(Action.Create, Resource.LogisticCargoes)
   override create(@Meta() meta: Metadata, @Body() data: CreateCargoDto): Observable<CargoDataSerializer> {
@@ -76,6 +77,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('logistic/cargoes', 'create')
   @ApiResponse({ type: CargoItemsSerializer })
   @SetPolicy(Action.Create, Resource.LogisticCargoes)
   override createBulk(@Meta() meta: Metadata, @Body() data: CreateCargoItemsDto): Observable<CargoItemsSerializer> {
@@ -166,6 +168,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticCargoes)
+  @Validation('logistic/cargoes', 'update')
   @SetPolicy(Action.Update, Resource.LogisticCargoes)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -180,6 +183,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
+  @Validation('logistic/cargoes', 'update')
   @ApiResponse({ type: CargoDataSerializer })
   @SetPolicy(Action.Update, Resource.LogisticCargoes)
   @ApiParam({ type: String, name: 'id', required: true })

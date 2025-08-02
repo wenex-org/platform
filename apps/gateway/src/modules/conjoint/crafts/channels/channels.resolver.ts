@@ -1,8 +1,8 @@
 import { ChannelDataSerializer, ChannelItemsSerializer, ChannelSerializer } from '@app/common/serializers/conjoint';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateChannelDto, CreateChannelItemsDto, UpdateChannelDto } from '@app/common/dto/conjoint';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -47,6 +47,7 @@ export class ChannelsResolver extends ControllerClass<Channel, ChannelDto> imple
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointChannels)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('conjoint/channels', 'create')
   @SetPolicy(Action.Create, Resource.ConjointChannels)
   createConjointChannel(@Meta() meta: Metadata, @Args('data') data: CreateChannelDto): Observable<ChannelDataSerializer> {
     return super.create(meta, data);
@@ -56,6 +57,7 @@ export class ChannelsResolver extends ControllerClass<Channel, ChannelDto> imple
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointChannels)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('conjoint/channels', 'create')
   @SetPolicy(Action.Create, Resource.ConjointChannels)
   createConjointChannelBulk(@Meta() meta: Metadata, @Args('data') data: CreateChannelItemsDto): Observable<ChannelItemsSerializer> {
     return super.createBulk(meta, data);
@@ -136,6 +138,7 @@ export class ChannelsResolver extends ControllerClass<Channel, ChannelDto> imple
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageConjointChannels)
+  @Validation('conjoint/channels', 'update')
   @SetPolicy(Action.Update, Resource.ConjointChannels)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateConjointChannelBulk(
@@ -149,6 +152,7 @@ export class ChannelsResolver extends ControllerClass<Channel, ChannelDto> imple
   @Mutation(() => ChannelDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointChannels)
+  @Validation('conjoint/channels', 'update')
   @SetPolicy(Action.Update, Resource.ConjointChannels)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateConjointChannelById(

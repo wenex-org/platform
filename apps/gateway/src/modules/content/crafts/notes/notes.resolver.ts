@@ -1,8 +1,8 @@
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { NoteDataSerializer, NoteItemsSerializer, NoteSerializer } from '@app/common/serializers/content';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateNoteDto, CreateNoteItemsDto, UpdateNoteDto } from '@app/common/dto/content';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -46,6 +46,7 @@ export class NotesResolver extends ControllerClass<Note, NoteDto> implements ICo
   @Mutation(() => NoteDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentNotes)
+  @Validation('content/notes', 'create')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContentNotes)
   createContentNote(@Meta() meta: Metadata, @Args('data') data: CreateNoteDto): Observable<NoteDataSerializer> {
@@ -55,6 +56,7 @@ export class NotesResolver extends ControllerClass<Note, NoteDto> implements ICo
   @Mutation(() => NoteItemsSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentNotes)
+  @Validation('content/notes', 'create')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.ContentNotes)
   createContentNoteBulk(@Meta() meta: Metadata, @Args('data') data: CreateNoteItemsDto): Observable<NoteItemsSerializer> {
@@ -133,6 +135,7 @@ export class NotesResolver extends ControllerClass<Note, NoteDto> implements ICo
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentNotes)
+  @Validation('content/notes', 'update')
   @SetPolicy(Action.Update, Resource.ContentNotes)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateContentNoteBulk(
@@ -146,6 +149,7 @@ export class NotesResolver extends ControllerClass<Note, NoteDto> implements ICo
   @Mutation(() => NoteDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentNotes)
+  @Validation('content/notes', 'update')
   @SetPolicy(Action.Update, Resource.ContentNotes)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateContentNoteById(

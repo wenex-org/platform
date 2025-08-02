@@ -15,10 +15,10 @@ import {
 } from '@nestjs/common';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { NoteDataSerializer, NoteItemsSerializer, NoteSerializer } from '@app/common/serializers/content';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateNoteDto, CreateNoteItemsDto, UpdateNoteDto } from '@app/common/dto/content';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -65,6 +65,7 @@ export class NotesController extends ControllerClass<Note, NoteDto> implements I
   @Post()
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentNotes)
+  @Validation('content/notes', 'create')
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: NoteDataSerializer })
   @SetPolicy(Action.Create, Resource.ContentNotes)
@@ -75,6 +76,7 @@ export class NotesController extends ControllerClass<Note, NoteDto> implements I
   @Post('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentNotes)
+  @Validation('content/notes', 'create')
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: NoteItemsSerializer })
   @SetPolicy(Action.Create, Resource.ContentNotes)
@@ -166,6 +168,7 @@ export class NotesController extends ControllerClass<Note, NoteDto> implements I
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentNotes)
+  @Validation('content/notes', 'update')
   @SetPolicy(Action.Update, Resource.ContentNotes)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -180,6 +183,7 @@ export class NotesController extends ControllerClass<Note, NoteDto> implements I
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentNotes)
+  @Validation('content/notes', 'update')
   @ApiResponse({ type: NoteDataSerializer })
   @SetPolicy(Action.Update, Resource.ContentNotes)
   @ApiParam({ type: String, name: 'id', required: true })

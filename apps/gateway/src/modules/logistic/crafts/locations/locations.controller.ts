@@ -29,9 +29,9 @@ import {
   UpdateLocationDto,
 } from '@app/common/dto/logistic';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -97,8 +97,9 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
 
   @Post()
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteLogisticLocations)
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteLogisticLocations)
+  @Validation('logistic/locations', 'create')
   @ApiResponse({ type: LocationDataSerializer })
   @SetPolicy(Action.Create, Resource.LogisticLocations)
   override create(@Meta() meta: Metadata, @Body() data: CreateLocationDto): Observable<LocationDataSerializer> {
@@ -107,8 +108,9 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
 
   @Post('bulk')
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteLogisticLocations)
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteLogisticLocations)
+  @Validation('logistic/locations', 'create')
   @ApiResponse({ type: LocationItemsSerializer })
   @SetPolicy(Action.Create, Resource.LogisticLocations)
   override createBulk(@Meta() meta: Metadata, @Body() data: CreateLocationItemsDto): Observable<LocationItemsSerializer> {
@@ -199,8 +201,9 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticLocations)
-  @SetPolicy(Action.Update, Resource.LogisticLocations)
+  @Validation('logistic/locations', 'update')
   @ApiQuery({ type: QueryFilterDto, required: false })
+  @SetPolicy(Action.Update, Resource.LogisticLocations)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   override updateBulk(
     @Meta() meta: Metadata,
@@ -213,6 +216,7 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticLocations)
+  @Validation('logistic/locations', 'update')
   @ApiResponse({ type: LocationDataSerializer })
   @SetPolicy(Action.Update, Resource.LogisticLocations)
   @ApiParam({ type: String, name: 'id', required: true })

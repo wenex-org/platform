@@ -1,8 +1,8 @@
 import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { SmsDataSerializer, SmsItemsSerializer, SmsSerializer } from '@app/common/serializers/touch';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateSmsDto, CreateSmsItemsDto, UpdateSmsDto } from '@app/common/dto/touch';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -46,6 +46,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   @Mutation(() => SmsDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchSmss)
+  @Validation('touch/smss', 'create')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchSmss)
   createTouchSms(@Meta() meta: Metadata, @Args('data') data: CreateSmsDto): Observable<SmsDataSerializer> {
@@ -55,6 +56,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   @Mutation(() => SmsItemsSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchSmss)
+  @Validation('touch/smss', 'create')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.TouchSmss)
   createTouchSmsBulk(@Meta() meta: Metadata, @Args('data') data: CreateSmsItemsDto): Observable<SmsItemsSerializer> {
@@ -133,6 +135,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchSmss)
+  @Validation('touch/smss', 'update')
   @SetPolicy(Action.Update, Resource.TouchSmss)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateTouchSmsBulk(
@@ -146,6 +149,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   @Mutation(() => SmsDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchSmss)
+  @Validation('touch/smss', 'update')
   @SetPolicy(Action.Update, Resource.TouchSmss)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateTouchSmsById(

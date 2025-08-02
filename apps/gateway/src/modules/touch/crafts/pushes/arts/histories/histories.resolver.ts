@@ -1,8 +1,8 @@
 import { PusHistoryDataSerializer, PusHistoryItemsSerializer, PusHistorySerializer } from '@app/common/serializers/touch';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreatePusHistoryDto, CreatePusHistoryItemsDto, UpdatePusHistoryDto } from '@app/common/dto/touch';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -48,8 +48,9 @@ export class PusHistoriesResolver
 
   @Mutation(() => PusHistoryDataSerializer)
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteTouchPusHistories)
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteTouchPusHistories)
+  @Validation('touch/push-histories', 'create')
   @SetPolicy(Action.Create, Resource.TouchPusHistories)
   createTouchPusHistory(@Meta() meta: Metadata, @Args('data') data: CreatePusHistoryDto): Observable<PusHistoryDataSerializer> {
     return super.create(meta, data);
@@ -57,8 +58,9 @@ export class PusHistoriesResolver
 
   @Mutation(() => PusHistoryItemsSerializer)
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteTouchPusHistories)
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteTouchPusHistories)
+  @Validation('touch/push-histories', 'create')
   @SetPolicy(Action.Create, Resource.TouchPusHistories)
   createTouchPusHistoryBulk(
     @Meta() meta: Metadata,
@@ -142,6 +144,7 @@ export class PusHistoriesResolver
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchPusHistories)
+  @Validation('touch/push-histories', 'update')
   @SetPolicy(Action.Update, Resource.TouchPusHistories)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateTouchPusHistoryBulk(
@@ -155,6 +158,7 @@ export class PusHistoriesResolver
   @Mutation(() => PusHistoryDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPusHistories)
+  @Validation('touch/push-histories', 'update')
   @SetPolicy(Action.Update, Resource.TouchPusHistories)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateTouchPusHistoryById(

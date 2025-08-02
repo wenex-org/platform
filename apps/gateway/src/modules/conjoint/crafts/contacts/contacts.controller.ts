@@ -16,9 +16,9 @@ import {
 import { ContactDataSerializer, ContactItemsSerializer, ContactSerializer } from '@app/common/serializers/conjoint';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateContactDto, CreateContactItemsDto, UpdateContactDto } from '@app/common/dto/conjoint';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -66,6 +66,7 @@ export class ContactsController extends ControllerClass<Contact, ContactDto> imp
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointContacts)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('conjoint/contacts', 'create')
   @ApiResponse({ type: ContactDataSerializer })
   @SetPolicy(Action.Create, Resource.ConjointContacts)
   override create(@Meta() meta: Metadata, @Body() data: CreateContactDto): Observable<ContactDataSerializer> {
@@ -76,6 +77,7 @@ export class ContactsController extends ControllerClass<Contact, ContactDto> imp
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointContacts)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('conjoint/contacts', 'create')
   @ApiResponse({ type: ContactItemsSerializer })
   @SetPolicy(Action.Create, Resource.ConjointContacts)
   override createBulk(@Meta() meta: Metadata, @Body() data: CreateContactItemsDto): Observable<ContactItemsSerializer> {
@@ -166,6 +168,7 @@ export class ContactsController extends ControllerClass<Contact, ContactDto> imp
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageConjointContacts)
+  @Validation('conjoint/contacts', 'update')
   @SetPolicy(Action.Update, Resource.ConjointContacts)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -180,6 +183,7 @@ export class ContactsController extends ControllerClass<Contact, ContactDto> imp
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointContacts)
+  @Validation('conjoint/contacts', 'update')
   @ApiResponse({ type: ContactDataSerializer })
   @SetPolicy(Action.Update, Resource.ConjointContacts)
   @ApiParam({ type: String, name: 'id', required: true })

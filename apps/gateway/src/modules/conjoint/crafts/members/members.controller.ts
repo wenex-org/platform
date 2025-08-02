@@ -16,9 +16,9 @@ import {
 import { MemberDataSerializer, MemberItemsSerializer, MemberSerializer } from '@app/common/serializers/conjoint';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateMemberDto, CreateMemberItemsDto, UpdateMemberDto } from '@app/common/dto/conjoint';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -66,6 +66,7 @@ export class MembersController extends ControllerClass<Member, MemberDto> implem
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMembers)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('conjoint/members', 'create')
   @ApiResponse({ type: MemberDataSerializer })
   @SetPolicy(Action.Create, Resource.ConjointMembers)
   override create(@Meta() meta: Metadata, @Body() data: CreateMemberDto): Observable<MemberDataSerializer> {
@@ -76,6 +77,7 @@ export class MembersController extends ControllerClass<Member, MemberDto> implem
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMembers)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('conjoint/members', 'create')
   @ApiResponse({ type: MemberItemsSerializer })
   @SetPolicy(Action.Create, Resource.ConjointMembers)
   override createBulk(@Meta() meta: Metadata, @Body() data: CreateMemberItemsDto): Observable<MemberItemsSerializer> {
@@ -166,6 +168,7 @@ export class MembersController extends ControllerClass<Member, MemberDto> implem
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageConjointMembers)
+  @Validation('conjoint/members', 'update')
   @SetPolicy(Action.Update, Resource.ConjointMembers)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -180,6 +183,7 @@ export class MembersController extends ControllerClass<Member, MemberDto> implem
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMembers)
+  @Validation('conjoint/members', 'update')
   @ApiResponse({ type: MemberDataSerializer })
   @SetPolicy(Action.Update, Resource.ConjointMembers)
   @ApiParam({ type: String, name: 'id', required: true })

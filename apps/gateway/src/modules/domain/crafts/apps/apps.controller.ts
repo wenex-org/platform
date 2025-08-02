@@ -14,8 +14,8 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Cache, Nested, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { AppDataSerializer, AppItemsSerializer, AppSerializer } from '@app/common/serializers/domain';
-import { Cache, Nested, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateAppDto, CreateAppItemsDto, UpdateAppDto } from '@app/common/dto/domain';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
@@ -66,6 +66,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   @Post()
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainApps)
+  @Validation('domain/apps', 'create')
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: AppDataSerializer })
   @SetPolicy(Action.Create, Resource.DomainApps)
@@ -76,6 +77,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   @Post('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainApps)
+  @Validation('domain/apps', 'create')
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: AppItemsSerializer })
   @SetPolicy(Action.Create, Resource.DomainApps)
@@ -167,6 +169,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageDomainApps)
+  @Validation('domain/apps', 'update')
   @SetPolicy(Action.Update, Resource.DomainApps)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -181,6 +184,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainApps)
+  @Validation('domain/apps', 'update')
   @ApiResponse({ type: AppDataSerializer })
   @SetPolicy(Action.Update, Resource.DomainApps)
   @ApiParam({ type: String, name: 'id', required: true })

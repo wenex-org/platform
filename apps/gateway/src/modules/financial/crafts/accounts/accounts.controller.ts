@@ -16,9 +16,9 @@ import {
 import { AccountDataSerializer, AccountItemsSerializer, AccountSerializer } from '@app/common/serializers/financial';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateAccountDto, CreateAccountItemsDto, UpdateAccountDto } from '@app/common/dto/financial';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -64,8 +64,9 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
 
   @Post()
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteFinancialAccounts)
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteFinancialAccounts)
+  @Validation('financial/accounts', 'create')
   @ApiResponse({ type: AccountDataSerializer })
   @SetPolicy(Action.Create, Resource.FinancialAccounts)
   override create(@Meta() meta: Metadata, @Body() data: CreateAccountDto): Observable<AccountDataSerializer> {
@@ -74,8 +75,9 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
 
   @Post('bulk')
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteFinancialAccounts)
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteFinancialAccounts)
+  @Validation('financial/accounts', 'create')
   @ApiResponse({ type: AccountItemsSerializer })
   @SetPolicy(Action.Create, Resource.FinancialAccounts)
   override createBulk(@Meta() meta: Metadata, @Body() data: CreateAccountItemsDto): Observable<AccountItemsSerializer> {
@@ -166,6 +168,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialAccounts)
+  @Validation('financial/accounts', 'update')
   @SetPolicy(Action.Update, Resource.FinancialAccounts)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -180,6 +183,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialAccounts)
+  @Validation('financial/accounts', 'update')
   @ApiResponse({ type: AccountDataSerializer })
   @SetPolicy(Action.Update, Resource.FinancialAccounts)
   @ApiParam({ type: String, name: 'id', required: true })

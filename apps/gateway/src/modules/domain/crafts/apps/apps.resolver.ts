@@ -1,6 +1,6 @@
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Cache, Nested, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { AppDataSerializer, AppItemsSerializer, AppSerializer } from '@app/common/serializers/domain';
-import { Cache, Nested, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { CreateAppDto, CreateAppItemsDto, UpdateAppDto } from '@app/common/dto/domain';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
@@ -47,6 +47,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   @Mutation(() => AppDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainApps)
+  @Validation('domain/apps', 'create')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainApps)
   createDomainApp(@Meta() meta: Metadata, @Args('data') data: CreateAppDto): Observable<AppDataSerializer> {
@@ -56,6 +57,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   @Mutation(() => AppItemsSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainApps)
+  @Validation('domain/apps', 'create')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.DomainApps)
   createDomainAppBulk(@Meta() meta: Metadata, @Args('data') data: CreateAppItemsDto): Observable<AppItemsSerializer> {
@@ -134,6 +136,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageDomainApps)
+  @Validation('domain/apps', 'update')
   @SetPolicy(Action.Update, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateDomainAppBulk(
@@ -147,6 +150,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   @Mutation(() => AppDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainApps)
+  @Validation('domain/apps', 'update')
   @SetPolicy(Action.Update, Resource.DomainApps)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateDomainAppById(

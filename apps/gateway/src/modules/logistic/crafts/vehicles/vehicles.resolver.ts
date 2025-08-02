@@ -1,8 +1,8 @@
 import { VehicleDataSerializer, VehicleItemsSerializer, VehicleSerializer } from '@app/common/serializers/logistic';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateVehicleDto, CreateVehicleItemsDto, UpdateVehicleDto } from '@app/common/dto/logistic';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -47,6 +47,7 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('logistic/vehicles', 'create')
   @SetPolicy(Action.Create, Resource.LogisticVehicles)
   createLogisticVehicle(@Meta() meta: Metadata, @Args('data') data: CreateVehicleDto): Observable<VehicleDataSerializer> {
     return super.create(meta, data);
@@ -56,6 +57,7 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('logistic/vehicles', 'create')
   @SetPolicy(Action.Create, Resource.LogisticVehicles)
   createLogisticVehicleBulk(@Meta() meta: Metadata, @Args('data') data: CreateVehicleItemsDto): Observable<VehicleItemsSerializer> {
     return super.createBulk(meta, data);
@@ -136,6 +138,7 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticVehicles)
+  @Validation('logistic/vehicles', 'update')
   @SetPolicy(Action.Update, Resource.LogisticVehicles)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateLogisticVehicleBulk(
@@ -149,6 +152,7 @@ export class VehiclesResolver extends ControllerClass<Vehicle, VehicleDto> imple
   @Mutation(() => VehicleDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
+  @Validation('logistic/vehicles', 'update')
   @SetPolicy(Action.Update, Resource.LogisticVehicles)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateLogisticVehicleById(

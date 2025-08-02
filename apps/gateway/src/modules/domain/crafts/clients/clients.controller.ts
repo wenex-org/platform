@@ -15,8 +15,8 @@ import {
 } from '@nestjs/common';
 import { ClientDataSerializer, ClientItemsSerializer, ClientSerializer } from '@app/common/serializers/domain';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Cache, Nested, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateClientDto, CreateClientItemsDto, UpdateClientDto } from '@app/common/dto/domain';
-import { Cache, Nested, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -67,6 +67,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('domain/clients', 'create')
   @ApiResponse({ type: ClientDataSerializer })
   @SetPolicy(Action.Create, Resource.DomainClients)
   override create(@Meta() meta: Metadata, @Body() data: CreateClientDto): Observable<ClientDataSerializer> {
@@ -77,6 +78,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('domain/clients', 'create')
   @ApiResponse({ type: ClientItemsSerializer })
   @SetPolicy(Action.Create, Resource.DomainClients)
   override createBulk(@Meta() meta: Metadata, @Body() data: CreateClientItemsDto): Observable<ClientItemsSerializer> {
@@ -167,6 +169,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageDomainClients)
+  @Validation('domain/clients', 'update')
   @SetPolicy(Action.Update, Resource.DomainClients)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -181,6 +184,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainClients)
+  @Validation('domain/clients', 'update')
   @ApiResponse({ type: ClientDataSerializer })
   @SetPolicy(Action.Update, Resource.DomainClients)
   @ApiParam({ type: String, name: 'id', required: true })

@@ -1,8 +1,8 @@
 import { SessionDataSerializer, SessionItemsSerializer, SessionSerializer } from '@app/common/serializers/identity';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateSessionDto, CreateSessionItemsDto, UpdateSessionDto } from '@app/common/dto/identity';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -47,6 +47,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('identity/sessions', 'create')
   @SetPolicy(Action.Create, Resource.IdentitySessions)
   createIdentitySession(@Meta() meta: Metadata, @Args('data') data: CreateSessionDto): Observable<SessionDataSerializer> {
     return super.create(meta, data);
@@ -56,6 +57,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('identity/sessions', 'create')
   @SetPolicy(Action.Create, Resource.IdentitySessions)
   createIdentitySessionBulk(@Meta() meta: Metadata, @Args('data') data: CreateSessionItemsDto): Observable<SessionItemsSerializer> {
     return super.createBulk(meta, data);
@@ -136,6 +138,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageIdentitySessions)
+  @Validation('identity/sessions', 'update')
   @SetPolicy(Action.Update, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateIdentitySessionBulk(
@@ -149,6 +152,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   @Mutation(() => SessionDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
+  @Validation('identity/sessions', 'update')
   @SetPolicy(Action.Update, Resource.IdentitySessions)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateIdentitySessionById(

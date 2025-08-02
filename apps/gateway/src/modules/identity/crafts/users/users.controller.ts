@@ -15,10 +15,10 @@ import {
 } from '@nestjs/common';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { UserDataSerializer, UserItemsSerializer, UserSerializer } from '@app/common/serializers/identity';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateUserDto, CreateUserItemsDto, UpdateUserDto } from '@app/common/dto/identity';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -66,6 +66,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements I
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('identity/users', 'create')
   @ApiResponse({ type: UserDataSerializer })
   @SetPolicy(Action.Create, Resource.IdentityUsers)
   override create(@Meta() meta: Metadata, @Body() data: CreateUserDto): Observable<UserDataSerializer> {
@@ -76,6 +77,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements I
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('identity/users', 'create')
   @ApiResponse({ type: UserItemsSerializer })
   @SetPolicy(Action.Create, Resource.IdentityUsers)
   override createBulk(@Meta() meta: Metadata, @Body() data: CreateUserItemsDto): Observable<UserItemsSerializer> {
@@ -166,6 +168,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements I
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageIdentityUsers)
+  @Validation('identity/users', 'update')
   @SetPolicy(Action.Update, Resource.IdentityUsers)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -180,6 +183,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements I
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
+  @Validation('identity/users', 'update')
   @ApiResponse({ type: UserDataSerializer })
   @SetPolicy(Action.Update, Resource.IdentityUsers)
   @ApiParam({ type: String, name: 'id', required: true })

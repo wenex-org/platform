@@ -15,10 +15,10 @@ import {
 } from '@nestjs/common';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { PostDataSerializer, PostItemsSerializer, PostSerializer } from '@app/common/serializers/content';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreatePostDto, CreatePostItemsDto, UpdatePostDto } from '@app/common/dto/content';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -65,6 +65,7 @@ export class PostsController extends ControllerClass<IPost, PostDto> implements 
   @Post()
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentPosts)
+  @Validation('content/posts', 'create')
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: PostDataSerializer })
   @SetPolicy(Action.Create, Resource.ContentPosts)
@@ -75,6 +76,7 @@ export class PostsController extends ControllerClass<IPost, PostDto> implements 
   @Post('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentPosts)
+  @Validation('content/posts', 'create')
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: PostItemsSerializer })
   @SetPolicy(Action.Create, Resource.ContentPosts)
@@ -166,6 +168,7 @@ export class PostsController extends ControllerClass<IPost, PostDto> implements 
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentPosts)
+  @Validation('content/posts', 'update')
   @SetPolicy(Action.Update, Resource.ContentPosts)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -180,6 +183,7 @@ export class PostsController extends ControllerClass<IPost, PostDto> implements 
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentPosts)
+  @Validation('content/posts', 'update')
   @ApiResponse({ type: PostDataSerializer })
   @SetPolicy(Action.Update, Resource.ContentPosts)
   @ApiParam({ type: String, name: 'id', required: true })

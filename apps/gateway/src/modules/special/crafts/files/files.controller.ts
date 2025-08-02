@@ -15,10 +15,10 @@ import {
 } from '@nestjs/common';
 import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { FileDataSerializer, FileItemsSerializer, FileSerializer } from '@app/common/serializers/special';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateFileDto, CreateFileItemsDto, UpdateFileDto } from '@app/common/dto/special';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -65,6 +65,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   @Post()
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
+  @Validation('special/files', 'create')
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: FileDataSerializer })
   @SetPolicy(Action.Create, Resource.SpecialFiles)
@@ -75,6 +76,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   @Post('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
+  @Validation('special/files', 'create')
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: FileItemsSerializer })
   @SetPolicy(Action.Create, Resource.SpecialFiles)
@@ -166,6 +168,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   @Patch('bulk')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageSpecialFiles)
+  @Validation('special/files', 'update')
   @SetPolicy(Action.Update, Resource.SpecialFiles)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
@@ -180,6 +183,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   @Patch(':id')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
+  @Validation('special/files', 'update')
   @ApiResponse({ type: FileDataSerializer })
   @SetPolicy(Action.Update, Resource.SpecialFiles)
   @ApiParam({ type: String, name: 'id', required: true })

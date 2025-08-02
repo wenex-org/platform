@@ -1,8 +1,8 @@
 import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { FileDataSerializer, FileItemsSerializer, FileSerializer } from '@app/common/serializers/special';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateFileDto, CreateFileItemsDto, UpdateFileDto } from '@app/common/dto/special';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -46,6 +46,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   @Mutation(() => FileDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
+  @Validation('special/files', 'create')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialFiles)
   createSpecialFile(@Meta() meta: Metadata, @Args('data') data: CreateFileDto): Observable<FileDataSerializer> {
@@ -55,6 +56,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   @Mutation(() => FileItemsSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
+  @Validation('special/files', 'create')
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Create, Resource.SpecialFiles)
   createSpecialFileBulk(@Meta() meta: Metadata, @Args('data') data: CreateFileItemsDto): Observable<FileItemsSerializer> {
@@ -133,6 +135,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageSpecialFiles)
+  @Validation('special/files', 'update')
   @SetPolicy(Action.Update, Resource.SpecialFiles)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateSpecialFileBulk(
@@ -146,6 +149,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   @Mutation(() => FileDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
+  @Validation('special/files', 'update')
   @SetPolicy(Action.Update, Resource.SpecialFiles)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateSpecialFileById(

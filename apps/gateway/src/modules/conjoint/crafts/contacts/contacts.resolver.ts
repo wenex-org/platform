@@ -1,8 +1,8 @@
 import { ContactDataSerializer, ContactItemsSerializer, ContactSerializer } from '@app/common/serializers/conjoint';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateContactDto, CreateContactItemsDto, UpdateContactDto } from '@app/common/dto/conjoint';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -47,6 +47,7 @@ export class ContactsResolver extends ControllerClass<Contact, ContactDto> imple
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointContacts)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('conjoint/contacts', 'create')
   @SetPolicy(Action.Create, Resource.ConjointContacts)
   createConjointContact(@Meta() meta: Metadata, @Args('data') data: CreateContactDto): Observable<ContactDataSerializer> {
     return super.create(meta, data);
@@ -56,6 +57,7 @@ export class ContactsResolver extends ControllerClass<Contact, ContactDto> imple
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointContacts)
   @UseInterceptors(...WriteInterceptors)
+  @Validation('conjoint/contacts', 'create')
   @SetPolicy(Action.Create, Resource.ConjointContacts)
   createConjointContactBulk(@Meta() meta: Metadata, @Args('data') data: CreateContactItemsDto): Observable<ContactItemsSerializer> {
     return super.createBulk(meta, data);
@@ -136,6 +138,7 @@ export class ContactsResolver extends ControllerClass<Contact, ContactDto> imple
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageConjointContacts)
+  @Validation('conjoint/contacts', 'update')
   @SetPolicy(Action.Update, Resource.ConjointContacts)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateConjointContactBulk(
@@ -149,6 +152,7 @@ export class ContactsResolver extends ControllerClass<Contact, ContactDto> imple
   @Mutation(() => ContactDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointContacts)
+  @Validation('conjoint/contacts', 'update')
   @SetPolicy(Action.Update, Resource.ConjointContacts)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateConjointContactById(

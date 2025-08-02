@@ -1,8 +1,8 @@
 import { TransactionDataSerializer, TransactionItemsSerializer, TransactionSerializer } from '@app/common/serializers/financial';
 import { CreateTransactionDto, CreateTransactionItemsDto, UpdateTransactionDto } from '@app/common/dto/financial';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Transaction, TransactionDto } from '@app/common/interfaces/financial';
@@ -48,8 +48,9 @@ export class TransactionsResolver
 
   @Mutation(() => TransactionDataSerializer)
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteFinancialTransactions)
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteFinancialTransactions)
+  @Validation('financial/transactions', 'create')
   @SetPolicy(Action.Create, Resource.FinancialTransactions)
   createFinancialTransaction(
     @Meta() meta: Metadata,
@@ -60,8 +61,9 @@ export class TransactionsResolver
 
   @Mutation(() => TransactionItemsSerializer)
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteFinancialTransactions)
   @UseInterceptors(...WriteInterceptors)
+  @SetScope(Scope.WriteFinancialTransactions)
+  @Validation('financial/transactions', 'create')
   @SetPolicy(Action.Create, Resource.FinancialTransactions)
   createFinancialTransactionBulk(
     @Meta() meta: Metadata,
@@ -145,6 +147,7 @@ export class TransactionsResolver
   @Mutation(() => TotalSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialTransactions)
+  @Validation('financial/transactions', 'update')
   @SetPolicy(Action.Update, Resource.FinancialTransactions)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateFinancialTransactionBulk(
@@ -158,6 +161,7 @@ export class TransactionsResolver
   @Mutation(() => TransactionDataSerializer)
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
+  @Validation('financial/transactions', 'update')
   @SetPolicy(Action.Update, Resource.FinancialTransactions)
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   updateFinancialTransactionById(
