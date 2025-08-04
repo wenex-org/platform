@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- set `x-saga...`, `x-can...`, `x-zone`, `x-at` metadata header to response header @vhidvz
 - authorization model: special subject based on token identity to use for grants specification @vhidvz
 
 ## [1.2.20] - 2025-08-02
