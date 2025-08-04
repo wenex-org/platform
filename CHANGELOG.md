@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - command issues @vhidvz
 - session `onAfterChange` condition issue @vhidvz
 - businesses `categories` field in `career` proto @iranmanesh-dev
+- file size validation changed from `isPositive` to `isNumber` @vhidvz
 
 ### Changed
 
