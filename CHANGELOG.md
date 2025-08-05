@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- automatically registers models based base on map population definition @vhidvz
 - set `x-saga...`, `x-can...`, `x-zone`, `x-at` metadata header to response header @vhidvz
 - authorization model: special subject based on token identity to use for grants specification @vhidvz
 
