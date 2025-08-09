@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - updated `BusinessType` enum @vhidvz
+- improved `dispatcher.transfer` method in failure scenario @vhidvz
 
 ## [1.2.21] - 2025-08-06
 
