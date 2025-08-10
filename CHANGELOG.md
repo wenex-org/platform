@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.22] - 2025-08-10
+
 ### Changed
 
 - updated `BusinessType` enum @vhidvz
@@ -249,7 +251,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.21...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.2.22...HEAD
+[1.2.22]: https://github.com/wenex-org/platform/compare/1.2.21...1.2.22
 [1.2.21]: https://github.com/wenex-org/platform/compare/1.2.20...1.2.21
 [1.2.20]: https://github.com/wenex-org/platform/compare/1.2.19...1.2.20
 [1.2.19]: https://github.com/wenex-org/platform/compare/1.2.18...1.2.19
