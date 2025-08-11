@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `code` field to `career/branches` proto @iranmanesh-dev
 
+### Changed
+
+- `general/events.organizer` field renamed to `general/events.organizers` @vhidvz
+
 ## [1.2.22] - 2025-08-10
 
 ### Changed
