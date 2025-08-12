@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- improved management of grants during channel creation and update events @fdaei
+- Grant management during channel creation, deletion, and restoration @fdaei
 
 ## [1.2.22] - 2025-08-10
 
