@@ -133,7 +133,7 @@ Open one of the `kgx` or `gnome-terminal` terminal and run the following command
 
 ```sh
 # Specify the services in order that you want to start
-npm run script:start:e2e auth domain context gateway ...
+npm run script:start:e2e auth domain context essential identity special gateway ...
 ```
 
 Before running the workers and after running services you should config the `kafka-connect` using the following command
@@ -142,7 +142,7 @@ Before running the workers and after running services you should config the `kaf
 npm run script:kafka-connect:e2e
 ```
 
-Start the workers using the previously `npm run script:start:e2e watcher observer ...` npm script command
+Start the workers using the previously `npm run script:start:e2e watcher observer preserver dispatcher logger ...` npm script command
 
 ## Manually Start Up and Running Wenex
 

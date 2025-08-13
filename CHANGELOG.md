@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `code` field to `career/branches` proto @iranmanesh-dev
+- audit log interceptor, decorator, module and worker @vhidvz
+- request scope and policy to metadata keys and interceptor @vhidvz
 
 ### Changed
 

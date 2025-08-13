@@ -45,7 +45,7 @@ done
 wait
 
 # Build workers
-workers=("dispatcher" "publisher")
+workers=("dispatcher" "publisher" "logger")
 for worker in "${workers[@]}"; do
   npm run build "$worker" &
 done
