@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `code` field to `career/branches` proto @iranmanesh-dev
+- `code` field to `career/branches` @iranmanesh-dev
+- `profile` field to `career/employees` @iranmanesh-dev
 
 ### Changed
 
