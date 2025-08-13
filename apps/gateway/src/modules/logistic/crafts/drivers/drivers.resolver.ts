@@ -1,7 +1,7 @@
 import { DriverDataSerializer, DriverItemsSerializer, DriverSerializer } from '@app/common/serializers/logistic';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateDriverDto, CreateDriverItemsDto, UpdateDriverDto } from '@app/common/dto/logistic';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -44,6 +44,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   }
 
   @Mutation(() => DriverDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticDrivers)
   @UseInterceptors(...WriteInterceptors)
@@ -54,6 +55,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   }
 
   @Mutation(() => DriverItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticDrivers)
   @UseInterceptors(...WriteInterceptors)
@@ -91,6 +93,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   }
 
   @Mutation(() => DriverDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticDrivers)
   @SetPolicy(Action.Delete, Resource.LogisticDrivers)
@@ -106,6 +109,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   }
 
   @Mutation(() => DriverDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticDrivers)
   @SetPolicy(Action.Restore, Resource.LogisticDrivers)
@@ -121,6 +125,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   }
 
   @Mutation(() => DriverDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticDrivers)
   @SetPolicy(Action.Destroy, Resource.LogisticDrivers)
@@ -136,6 +141,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticDrivers)
   @Validation('logistic/drivers', 'update')
@@ -150,6 +156,7 @@ export class DriversResolver extends ControllerClass<Driver, DriverDto> implemen
   }
 
   @Mutation(() => DriverDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticDrivers)
   @Validation('logistic/drivers', 'update')

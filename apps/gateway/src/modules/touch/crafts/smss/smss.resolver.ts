@@ -1,6 +1,6 @@
 import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { SmsDataSerializer, SmsItemsSerializer, SmsSerializer } from '@app/common/serializers/touch';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateSmsDto, CreateSmsItemsDto, UpdateSmsDto } from '@app/common/dto/touch';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
@@ -44,6 +44,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   }
 
   @Mutation(() => SmsDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchSmss)
   @Validation('touch/smss', 'create')
@@ -54,6 +55,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   }
 
   @Mutation(() => SmsItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchSmss)
   @Validation('touch/smss', 'create')
@@ -88,6 +90,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   }
 
   @Mutation(() => SmsDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchSmss)
   @SetPolicy(Action.Delete, Resource.TouchSmss)
@@ -103,6 +106,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   }
 
   @Mutation(() => SmsDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchSmss)
   @SetPolicy(Action.Restore, Resource.TouchSmss)
@@ -118,6 +122,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   }
 
   @Mutation(() => SmsDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchSmss)
   @SetPolicy(Action.Destroy, Resource.TouchSmss)
@@ -133,6 +138,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchSmss)
   @Validation('touch/smss', 'update')
@@ -147,6 +153,7 @@ export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IContr
   }
 
   @Mutation(() => SmsDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchSmss)
   @Validation('touch/smss', 'update')

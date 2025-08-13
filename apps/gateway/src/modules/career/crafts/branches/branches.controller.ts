@@ -15,8 +15,8 @@ import {
 } from '@nestjs/common';
 import { BranchDataSerializer, BranchItemsSerializer, BranchSerializer } from '@app/common/serializers/career';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateBranchDto, CreateBranchItemsDto, UpdateBranchDto } from '@app/common/dto/career';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -63,6 +63,7 @@ export class BranchesController extends ControllerClass<Branch, BranchDto> imple
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerBranches)
   @UseInterceptors(...WriteInterceptors)
@@ -74,6 +75,7 @@ export class BranchesController extends ControllerClass<Branch, BranchDto> imple
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerBranches)
   @UseInterceptors(...WriteInterceptors)
@@ -130,6 +132,7 @@ export class BranchesController extends ControllerClass<Branch, BranchDto> imple
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerBranches)
   @ApiResponse({ type: BranchDataSerializer })
@@ -142,6 +145,7 @@ export class BranchesController extends ControllerClass<Branch, BranchDto> imple
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerBranches)
   @ApiResponse({ type: BranchDataSerializer })
@@ -154,6 +158,7 @@ export class BranchesController extends ControllerClass<Branch, BranchDto> imple
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageCareerBranches)
   @ApiResponse({ type: BranchDataSerializer })
@@ -166,6 +171,7 @@ export class BranchesController extends ControllerClass<Branch, BranchDto> imple
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageCareerBranches)
   @Validation('career/branches', 'update')
@@ -181,6 +187,7 @@ export class BranchesController extends ControllerClass<Branch, BranchDto> imple
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerBranches)
   @Validation('career/branches', 'update')

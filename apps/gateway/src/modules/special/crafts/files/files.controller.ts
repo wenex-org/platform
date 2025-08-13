@@ -15,7 +15,7 @@ import {
 } from '@nestjs/common';
 import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { FileDataSerializer, FileItemsSerializer, FileSerializer } from '@app/common/serializers/special';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateFileDto, CreateFileItemsDto, UpdateFileDto } from '@app/common/dto/special';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
@@ -63,6 +63,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @Validation('special/files', 'create')
@@ -74,6 +75,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @Validation('special/files', 'create')
@@ -130,6 +132,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @ApiResponse({ type: FileDataSerializer })
@@ -142,6 +145,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @ApiResponse({ type: FileDataSerializer })
@@ -154,6 +158,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageSpecialFiles)
   @ApiResponse({ type: FileDataSerializer })
@@ -166,6 +171,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageSpecialFiles)
   @Validation('special/files', 'update')
@@ -181,6 +187,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @Validation('special/files', 'update')

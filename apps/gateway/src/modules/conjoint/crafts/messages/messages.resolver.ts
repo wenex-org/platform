@@ -1,7 +1,7 @@
 import { MessageDataSerializer, MessageItemsSerializer, MessageSerializer } from '@app/common/serializers/conjoint';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateMessageDto, CreateMessageItemsDto, UpdateMessageDto } from '@app/common/dto/conjoint';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -44,6 +44,7 @@ export class MessagesResolver extends ControllerClass<Message, MessageDto> imple
   }
 
   @Mutation(() => MessageDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMessages)
   @UseInterceptors(...WriteInterceptors)
@@ -54,6 +55,7 @@ export class MessagesResolver extends ControllerClass<Message, MessageDto> imple
   }
 
   @Mutation(() => MessageItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMessages)
   @UseInterceptors(...WriteInterceptors)
@@ -91,6 +93,7 @@ export class MessagesResolver extends ControllerClass<Message, MessageDto> imple
   }
 
   @Mutation(() => MessageDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMessages)
   @SetPolicy(Action.Delete, Resource.ConjointMessages)
@@ -106,6 +109,7 @@ export class MessagesResolver extends ControllerClass<Message, MessageDto> imple
   }
 
   @Mutation(() => MessageDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMessages)
   @SetPolicy(Action.Restore, Resource.ConjointMessages)
@@ -121,6 +125,7 @@ export class MessagesResolver extends ControllerClass<Message, MessageDto> imple
   }
 
   @Mutation(() => MessageDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageConjointMessages)
   @SetPolicy(Action.Destroy, Resource.ConjointMessages)
@@ -136,6 +141,7 @@ export class MessagesResolver extends ControllerClass<Message, MessageDto> imple
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageConjointMessages)
   @Validation('conjoint/messages', 'update')
@@ -150,6 +156,7 @@ export class MessagesResolver extends ControllerClass<Message, MessageDto> imple
   }
 
   @Mutation(() => MessageDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMessages)
   @Validation('conjoint/messages', 'update')

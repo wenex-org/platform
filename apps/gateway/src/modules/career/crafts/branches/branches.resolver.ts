@@ -1,7 +1,7 @@
 import { BranchDataSerializer, BranchItemsSerializer, BranchSerializer } from '@app/common/serializers/career';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateBranchDto, CreateBranchItemsDto, UpdateBranchDto } from '@app/common/dto/career';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -44,6 +44,7 @@ export class BranchesResolver extends ControllerClass<Branch, BranchDto> impleme
   }
 
   @Mutation(() => BranchDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerBranches)
   @UseInterceptors(...WriteInterceptors)
@@ -54,6 +55,7 @@ export class BranchesResolver extends ControllerClass<Branch, BranchDto> impleme
   }
 
   @Mutation(() => BranchItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerBranches)
   @UseInterceptors(...WriteInterceptors)
@@ -88,6 +90,7 @@ export class BranchesResolver extends ControllerClass<Branch, BranchDto> impleme
   }
 
   @Mutation(() => BranchDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerBranches)
   @SetPolicy(Action.Delete, Resource.CareerBranches)
@@ -103,6 +106,7 @@ export class BranchesResolver extends ControllerClass<Branch, BranchDto> impleme
   }
 
   @Mutation(() => BranchDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerBranches)
   @SetPolicy(Action.Restore, Resource.CareerBranches)
@@ -118,6 +122,7 @@ export class BranchesResolver extends ControllerClass<Branch, BranchDto> impleme
   }
 
   @Mutation(() => BranchDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageCareerBranches)
   @SetPolicy(Action.Destroy, Resource.CareerBranches)
@@ -133,6 +138,7 @@ export class BranchesResolver extends ControllerClass<Branch, BranchDto> impleme
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageCareerBranches)
   @Validation('career/branches', 'update')
@@ -147,6 +153,7 @@ export class BranchesResolver extends ControllerClass<Branch, BranchDto> impleme
   }
 
   @Mutation(() => BranchDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerBranches)
   @Validation('career/branches', 'update')

@@ -1,7 +1,7 @@
 import { BusinessDataSerializer, BusinessItemsSerializer, BusinessSerializer } from '@app/common/serializers/career';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateBusinessDto, CreateBusinessItemsDto, UpdateBusinessDto } from '@app/common/dto/career';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -12,9 +12,9 @@ import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Business, BusinessDto } from '@app/common/interfaces/career';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
-import { CareerProvider } from '@app/common/providers/career';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
+import { CareerProvider } from '@app/common/providers/career';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { Filter, Meta } from '@app/common/core/decorators';
 import { ValidationPipe } from '@app/common/core/pipes';
@@ -44,6 +44,7 @@ export class BusinessesResolver extends ControllerClass<Business, BusinessDto> i
   }
 
   @Mutation(() => BusinessDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerBusinesses)
   @UseInterceptors(...WriteInterceptors)
@@ -54,6 +55,7 @@ export class BusinessesResolver extends ControllerClass<Business, BusinessDto> i
   }
 
   @Mutation(() => BusinessItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerBusinesses)
   @UseInterceptors(...WriteInterceptors)
@@ -94,6 +96,7 @@ export class BusinessesResolver extends ControllerClass<Business, BusinessDto> i
   }
 
   @Mutation(() => BusinessDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerBusinesses)
   @SetPolicy(Action.Delete, Resource.CareerBusinesses)
@@ -109,6 +112,7 @@ export class BusinessesResolver extends ControllerClass<Business, BusinessDto> i
   }
 
   @Mutation(() => BusinessDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerBusinesses)
   @SetPolicy(Action.Restore, Resource.CareerBusinesses)
@@ -124,6 +128,7 @@ export class BusinessesResolver extends ControllerClass<Business, BusinessDto> i
   }
 
   @Mutation(() => BusinessDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageCareerBusinesses)
   @SetPolicy(Action.Destroy, Resource.CareerBusinesses)
@@ -139,6 +144,7 @@ export class BusinessesResolver extends ControllerClass<Business, BusinessDto> i
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageCareerBusinesses)
   @Validation('career/businesses', 'update')
@@ -153,6 +159,7 @@ export class BusinessesResolver extends ControllerClass<Business, BusinessDto> i
   }
 
   @Mutation(() => BusinessDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerBusinesses)
   @Validation('career/businesses', 'update')

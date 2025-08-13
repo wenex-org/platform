@@ -16,7 +16,7 @@ import {
 import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { CollectStatDto, CreateStatDto, CreateStatItemsDto, UpdateStatDto } from '@app/common/dto/special';
 import { StatDataSerializer, StatItemsSerializer, StatSerializer } from '@app/common/serializers/special';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { ResultSerializer, TotalSerializer } from '@app/common/core/serializers';
@@ -53,6 +53,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Post('collect')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.CollectSpecialStats)
   @UseInterceptors(...WriteInterceptors)
@@ -63,6 +64,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Post('stackup')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.CollectSpecialStats)
   @UseInterceptors(...WriteInterceptors)
@@ -87,6 +89,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @Validation('special/stats', 'create')
@@ -98,6 +101,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @Validation('special/stats', 'create')
@@ -154,6 +158,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @ApiResponse({ type: StatDataSerializer })
@@ -166,6 +171,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @ApiResponse({ type: StatDataSerializer })
@@ -178,6 +184,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageSpecialStats)
   @ApiResponse({ type: StatDataSerializer })
@@ -190,6 +197,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageSpecialStats)
   @Validation('special/stats', 'update')
@@ -205,6 +213,7 @@ export class StatsController extends ControllerClass<Stat, StatDto> implements I
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialStats)
   @Validation('special/stats', 'update')

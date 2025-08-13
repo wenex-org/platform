@@ -1,7 +1,7 @@
 import { TransactionDataSerializer, TransactionItemsSerializer, TransactionSerializer } from '@app/common/serializers/financial';
 import { CreateTransactionDto, CreateTransactionItemsDto, UpdateTransactionDto } from '@app/common/dto/financial';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -47,6 +47,7 @@ export class TransactionsResolver
   }
 
   @Mutation(() => TransactionDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteFinancialTransactions)
@@ -60,6 +61,7 @@ export class TransactionsResolver
   }
 
   @Mutation(() => TransactionItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteFinancialTransactions)
@@ -100,6 +102,7 @@ export class TransactionsResolver
   }
 
   @Mutation(() => TransactionDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @SetPolicy(Action.Delete, Resource.FinancialTransactions)
@@ -115,6 +118,7 @@ export class TransactionsResolver
   }
 
   @Mutation(() => TransactionDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @SetPolicy(Action.Restore, Resource.FinancialTransactions)
@@ -130,6 +134,7 @@ export class TransactionsResolver
   }
 
   @Mutation(() => TransactionDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialTransactions)
   @SetPolicy(Action.Destroy, Resource.FinancialTransactions)
@@ -145,6 +150,7 @@ export class TransactionsResolver
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialTransactions)
   @Validation('financial/transactions', 'update')
@@ -159,6 +165,7 @@ export class TransactionsResolver
   }
 
   @Mutation(() => TransactionDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @Validation('financial/transactions', 'update')

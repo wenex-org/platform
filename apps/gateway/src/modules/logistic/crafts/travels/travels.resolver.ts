@@ -1,7 +1,7 @@
 import { TravelDataSerializer, TravelItemsSerializer, TravelSerializer } from '@app/common/serializers/logistic';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateTravelDto, CreateTravelItemsDto, UpdateTravelDto } from '@app/common/dto/logistic';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -44,6 +44,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   }
 
   @Mutation(() => TravelDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @UseInterceptors(...WriteInterceptors)
@@ -54,6 +55,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   }
 
   @Mutation(() => TravelItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @UseInterceptors(...WriteInterceptors)
@@ -91,6 +93,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   }
 
   @Mutation(() => TravelDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @SetPolicy(Action.Delete, Resource.LogisticTravels)
@@ -106,6 +109,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   }
 
   @Mutation(() => TravelDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @SetPolicy(Action.Restore, Resource.LogisticTravels)
@@ -121,6 +125,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   }
 
   @Mutation(() => TravelDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticTravels)
   @SetPolicy(Action.Destroy, Resource.LogisticTravels)
@@ -136,6 +141,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticTravels)
   @Validation('logistic/travels', 'update')
@@ -150,6 +156,7 @@ export class TravelsResolver extends ControllerClass<Travel, TravelDto> implemen
   }
 
   @Mutation(() => TravelDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @Validation('logistic/travels', 'update')

@@ -1,7 +1,7 @@
 import { EmployeeDataSerializer, EmployeeItemsSerializer, EmployeeSerializer } from '@app/common/serializers/career';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateEmployeeDto, CreateEmployeeItemsDto, UpdateEmployeeDto } from '@app/common/dto/career';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -44,6 +44,7 @@ export class EmployeesResolver extends ControllerClass<Employee, EmployeeDto> im
   }
 
   @Mutation(() => EmployeeDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerEmployees)
   @UseInterceptors(...WriteInterceptors)
@@ -54,6 +55,7 @@ export class EmployeesResolver extends ControllerClass<Employee, EmployeeDto> im
   }
 
   @Mutation(() => EmployeeItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerEmployees)
   @UseInterceptors(...WriteInterceptors)
@@ -94,6 +96,7 @@ export class EmployeesResolver extends ControllerClass<Employee, EmployeeDto> im
   }
 
   @Mutation(() => EmployeeDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerEmployees)
   @SetPolicy(Action.Delete, Resource.CareerEmployees)
@@ -109,6 +112,7 @@ export class EmployeesResolver extends ControllerClass<Employee, EmployeeDto> im
   }
 
   @Mutation(() => EmployeeDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerEmployees)
   @SetPolicy(Action.Restore, Resource.CareerEmployees)
@@ -124,6 +128,7 @@ export class EmployeesResolver extends ControllerClass<Employee, EmployeeDto> im
   }
 
   @Mutation(() => EmployeeDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageCareerEmployees)
   @SetPolicy(Action.Destroy, Resource.CareerEmployees)
@@ -139,6 +144,7 @@ export class EmployeesResolver extends ControllerClass<Employee, EmployeeDto> im
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageCareerEmployees)
   @Validation('career/employees', 'update')
@@ -153,6 +159,7 @@ export class EmployeesResolver extends ControllerClass<Employee, EmployeeDto> im
   }
 
   @Mutation(() => EmployeeDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerEmployees)
   @Validation('career/employees', 'update')

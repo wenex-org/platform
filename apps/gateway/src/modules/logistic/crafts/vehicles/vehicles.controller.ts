@@ -15,8 +15,8 @@ import {
 } from '@nestjs/common';
 import { VehicleDataSerializer, VehicleItemsSerializer, VehicleSerializer } from '@app/common/serializers/logistic';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateVehicleDto, CreateVehicleItemsDto, UpdateVehicleDto } from '@app/common/dto/logistic';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Vehicle as IVehicle, VehicleDto } from '@app/common/interfaces/logistic';
@@ -63,6 +63,7 @@ export class VehiclesController extends ControllerClass<IVehicle, VehicleDto> im
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
   @UseInterceptors(...WriteInterceptors)
@@ -74,6 +75,7 @@ export class VehiclesController extends ControllerClass<IVehicle, VehicleDto> im
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
   @UseInterceptors(...WriteInterceptors)
@@ -130,6 +132,7 @@ export class VehiclesController extends ControllerClass<IVehicle, VehicleDto> im
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
   @ApiResponse({ type: VehicleDataSerializer })
@@ -142,6 +145,7 @@ export class VehiclesController extends ControllerClass<IVehicle, VehicleDto> im
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
   @ApiResponse({ type: VehicleDataSerializer })
@@ -154,6 +158,7 @@ export class VehiclesController extends ControllerClass<IVehicle, VehicleDto> im
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticVehicles)
   @ApiResponse({ type: VehicleDataSerializer })
@@ -166,6 +171,7 @@ export class VehiclesController extends ControllerClass<IVehicle, VehicleDto> im
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticVehicles)
   @Validation('logistic/vehicles', 'update')
@@ -181,6 +187,7 @@ export class VehiclesController extends ControllerClass<IVehicle, VehicleDto> im
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticVehicles)
   @Validation('logistic/vehicles', 'update')

@@ -16,7 +16,7 @@ import {
 import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { EmailDataSerializer, EmailItemsSerializer, EmailSerializer } from '@app/common/serializers/touch';
 import { CreateEmailDto, CreateEmailItemsDto, SendEmailDto, UpdateEmailDto } from '@app/common/dto/touch';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -53,6 +53,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   }
 
   @Post('send')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.SendTouchEmails)
   @UseInterceptors(...WriteInterceptors)
@@ -77,6 +78,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @Validation('touch/emails', 'create')
@@ -88,6 +90,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @Validation('touch/emails', 'create')
@@ -144,6 +147,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @ApiResponse({ type: EmailDataSerializer })
@@ -156,6 +160,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @ApiResponse({ type: EmailDataSerializer })
@@ -168,6 +173,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchEmails)
   @ApiResponse({ type: EmailDataSerializer })
@@ -180,6 +186,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchEmails)
   @Validation('touch/emails', 'update')
@@ -195,6 +202,7 @@ export class EmailsController extends ControllerClass<Email, EmailDto> implement
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @Validation('touch/emails', 'update')

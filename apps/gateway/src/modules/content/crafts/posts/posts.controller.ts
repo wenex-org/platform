@@ -15,7 +15,7 @@ import {
 } from '@nestjs/common';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { PostDataSerializer, PostItemsSerializer, PostSerializer } from '@app/common/serializers/content';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreatePostDto, CreatePostItemsDto, UpdatePostDto } from '@app/common/dto/content';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
@@ -63,6 +63,7 @@ export class PostsController extends ControllerClass<IPost, PostDto> implements 
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentPosts)
   @Validation('content/posts', 'create')
@@ -74,6 +75,7 @@ export class PostsController extends ControllerClass<IPost, PostDto> implements 
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentPosts)
   @Validation('content/posts', 'create')
@@ -130,6 +132,7 @@ export class PostsController extends ControllerClass<IPost, PostDto> implements 
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentPosts)
   @ApiResponse({ type: PostDataSerializer })
@@ -142,6 +145,7 @@ export class PostsController extends ControllerClass<IPost, PostDto> implements 
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentPosts)
   @ApiResponse({ type: PostDataSerializer })
@@ -154,6 +158,7 @@ export class PostsController extends ControllerClass<IPost, PostDto> implements 
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentPosts)
   @ApiResponse({ type: PostDataSerializer })
@@ -166,6 +171,7 @@ export class PostsController extends ControllerClass<IPost, PostDto> implements 
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentPosts)
   @Validation('content/posts', 'update')
@@ -181,6 +187,7 @@ export class PostsController extends ControllerClass<IPost, PostDto> implements 
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentPosts)
   @Validation('content/posts', 'update')

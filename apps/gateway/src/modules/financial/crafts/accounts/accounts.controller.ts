@@ -16,7 +16,7 @@ import {
 import { AccountDataSerializer, AccountItemsSerializer, AccountSerializer } from '@app/common/serializers/financial';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateAccountDto, CreateAccountItemsDto, UpdateAccountDto } from '@app/common/dto/financial';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -63,6 +63,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteFinancialAccounts)
@@ -74,6 +75,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteFinancialAccounts)
@@ -130,6 +132,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialAccounts)
   @ApiResponse({ type: AccountDataSerializer })
@@ -142,6 +145,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialAccounts)
   @ApiResponse({ type: AccountDataSerializer })
@@ -154,6 +158,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialAccounts)
   @ApiResponse({ type: AccountDataSerializer })
@@ -166,6 +171,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialAccounts)
   @Validation('financial/accounts', 'update')
@@ -181,6 +187,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialAccounts)
   @Validation('financial/accounts', 'update')

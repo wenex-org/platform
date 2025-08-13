@@ -1,7 +1,7 @@
 import { CargoDataSerializer, CargoItemsSerializer, CargoSerializer } from '@app/common/serializers/logistic';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateCargoDto, CreateCargoItemsDto, UpdateCargoDto } from '@app/common/dto/logistic';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -44,6 +44,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   }
 
   @Mutation(() => CargoDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @UseInterceptors(...WriteInterceptors)
@@ -54,6 +55,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   }
 
   @Mutation(() => CargoItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @UseInterceptors(...WriteInterceptors)
@@ -88,6 +90,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   }
 
   @Mutation(() => CargoDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @SetPolicy(Action.Delete, Resource.LogisticCargoes)
@@ -103,6 +106,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   }
 
   @Mutation(() => CargoDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @SetPolicy(Action.Restore, Resource.LogisticCargoes)
@@ -118,6 +122,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   }
 
   @Mutation(() => CargoDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticCargoes)
   @SetPolicy(Action.Destroy, Resource.LogisticCargoes)
@@ -133,6 +138,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticCargoes)
   @Validation('logistic/cargoes', 'update')
@@ -147,6 +153,7 @@ export class CargoesResolver extends ControllerClass<Cargo, CargoDto> implements
   }
 
   @Mutation(() => CargoDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @Validation('logistic/cargoes', 'update')

@@ -1,6 +1,6 @@
 import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { FileDataSerializer, FileItemsSerializer, FileSerializer } from '@app/common/serializers/special';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateFileDto, CreateFileItemsDto, UpdateFileDto } from '@app/common/dto/special';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
@@ -44,6 +44,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   }
 
   @Mutation(() => FileDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @Validation('special/files', 'create')
@@ -54,6 +55,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   }
 
   @Mutation(() => FileItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @Validation('special/files', 'create')
@@ -88,6 +90,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   }
 
   @Mutation(() => FileDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @SetPolicy(Action.Delete, Resource.SpecialFiles)
@@ -103,6 +106,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   }
 
   @Mutation(() => FileDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @SetPolicy(Action.Restore, Resource.SpecialFiles)
@@ -118,6 +122,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   }
 
   @Mutation(() => FileDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageSpecialFiles)
   @SetPolicy(Action.Destroy, Resource.SpecialFiles)
@@ -133,6 +138,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageSpecialFiles)
   @Validation('special/files', 'update')
@@ -147,6 +153,7 @@ export class FilesResolver extends ControllerClass<File, FileDto> implements ICo
   }
 
   @Mutation(() => FileDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteSpecialFiles)
   @Validation('special/files', 'update')

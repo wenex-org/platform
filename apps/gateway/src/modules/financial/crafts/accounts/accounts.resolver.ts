@@ -1,7 +1,7 @@
 import { AccountDataSerializer, AccountItemsSerializer, AccountSerializer } from '@app/common/serializers/financial';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateAccountDto, CreateAccountItemsDto, UpdateAccountDto } from '@app/common/dto/financial';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -44,6 +44,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   }
 
   @Mutation(() => AccountDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteFinancialAccounts)
@@ -54,6 +55,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   }
 
   @Mutation(() => AccountItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteFinancialAccounts)
@@ -94,6 +96,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   }
 
   @Mutation(() => AccountDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialAccounts)
   @SetPolicy(Action.Delete, Resource.FinancialAccounts)
@@ -109,6 +112,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   }
 
   @Mutation(() => AccountDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialAccounts)
   @SetPolicy(Action.Restore, Resource.FinancialAccounts)
@@ -124,6 +128,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   }
 
   @Mutation(() => AccountDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialAccounts)
   @SetPolicy(Action.Destroy, Resource.FinancialAccounts)
@@ -139,6 +144,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialAccounts)
   @Validation('financial/accounts', 'update')
@@ -153,6 +159,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   }
 
   @Mutation(() => AccountDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialAccounts)
   @Validation('financial/accounts', 'update')

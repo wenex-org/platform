@@ -1,7 +1,7 @@
 import { TicketDataSerializer, TicketItemsSerializer, TicketSerializer } from '@app/common/serializers/content';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateTicketDto, CreateTicketItemsDto, UpdateTicketDto } from '@app/common/dto/content';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -44,6 +44,7 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   }
 
   @Mutation(() => TicketDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentTickets)
   @UseInterceptors(...WriteInterceptors)
@@ -54,6 +55,7 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   }
 
   @Mutation(() => TicketItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentTickets)
   @UseInterceptors(...WriteInterceptors)
@@ -91,6 +93,7 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   }
 
   @Mutation(() => TicketDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentTickets)
   @SetPolicy(Action.Delete, Resource.ContentTickets)
@@ -106,6 +109,7 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   }
 
   @Mutation(() => TicketDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentTickets)
   @SetPolicy(Action.Restore, Resource.ContentTickets)
@@ -121,6 +125,7 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   }
 
   @Mutation(() => TicketDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentTickets)
   @SetPolicy(Action.Destroy, Resource.ContentTickets)
@@ -136,6 +141,7 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentTickets)
   @Validation('content/tickets', 'update')
@@ -150,6 +156,7 @@ export class TicketsResolver extends ControllerClass<Ticket, TicketDto> implemen
   }
 
   @Mutation(() => TicketDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentTickets)
   @Validation('content/tickets', 'update')

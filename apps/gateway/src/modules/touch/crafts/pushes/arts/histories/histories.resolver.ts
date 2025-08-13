@@ -1,7 +1,7 @@
 import { PusHistoryDataSerializer, PusHistoryItemsSerializer, PusHistorySerializer } from '@app/common/serializers/touch';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreatePusHistoryDto, CreatePusHistoryItemsDto, UpdatePusHistoryDto } from '@app/common/dto/touch';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -47,6 +47,7 @@ export class PusHistoriesResolver
   }
 
   @Mutation(() => PusHistoryDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteTouchPusHistories)
@@ -57,6 +58,7 @@ export class PusHistoriesResolver
   }
 
   @Mutation(() => PusHistoryItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteTouchPusHistories)
@@ -97,6 +99,7 @@ export class PusHistoriesResolver
   }
 
   @Mutation(() => PusHistoryDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPusHistories)
   @SetPolicy(Action.Delete, Resource.TouchPusHistories)
@@ -112,6 +115,7 @@ export class PusHistoriesResolver
   }
 
   @Mutation(() => PusHistoryDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPusHistories)
   @SetPolicy(Action.Restore, Resource.TouchPusHistories)
@@ -127,6 +131,7 @@ export class PusHistoriesResolver
   }
 
   @Mutation(() => PusHistoryDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchPusHistories)
   @SetPolicy(Action.Destroy, Resource.TouchPusHistories)
@@ -142,6 +147,7 @@ export class PusHistoriesResolver
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchPusHistories)
   @Validation('touch/push-histories', 'update')
@@ -156,6 +162,7 @@ export class PusHistoriesResolver
   }
 
   @Mutation(() => PusHistoryDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPusHistories)
   @Validation('touch/push-histories', 'update')

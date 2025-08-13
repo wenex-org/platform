@@ -1,7 +1,7 @@
 import { InvoiceDataSerializer, InvoiceItemsSerializer, InvoiceSerializer } from '@app/common/serializers/financial';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateInvoiceDto, CreateInvoiceItemsDto, UpdateInvoiceDto } from '@app/common/dto/financial';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -44,6 +44,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   }
 
   @Mutation(() => InvoiceDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteFinancialInvoices)
@@ -54,6 +55,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   }
 
   @Mutation(() => InvoiceItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteFinancialInvoices)
@@ -94,6 +96,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   }
 
   @Mutation(() => InvoiceDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialInvoices)
   @SetPolicy(Action.Delete, Resource.FinancialInvoices)
@@ -109,6 +112,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   }
 
   @Mutation(() => InvoiceDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialInvoices)
   @SetPolicy(Action.Restore, Resource.FinancialInvoices)
@@ -124,6 +128,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   }
 
   @Mutation(() => InvoiceDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialInvoices)
   @SetPolicy(Action.Destroy, Resource.FinancialInvoices)
@@ -139,6 +144,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialInvoices)
   @Validation('financial/invoices', 'update')
@@ -153,6 +159,7 @@ export class InvoicesResolver extends ControllerClass<Invoice, InvoiceDto> imple
   }
 
   @Mutation(() => InvoiceDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialInvoices)
   @Validation('financial/invoices', 'update')

@@ -1,7 +1,7 @@
 import { WorkflowDataSerializer, WorkflowItemsSerializer, WorkflowSerializer } from '@app/common/serializers/general';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateWorkflowDto, CreateWorkflowItemsDto, UpdateWorkflowDto } from '@app/common/dto/general';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -44,6 +44,7 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   }
 
   @Mutation(() => WorkflowDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralWorkflows)
   @UseInterceptors(...WriteInterceptors)
@@ -54,6 +55,7 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   }
 
   @Mutation(() => WorkflowItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralWorkflows)
   @UseInterceptors(...WriteInterceptors)
@@ -94,6 +96,7 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   }
 
   @Mutation(() => WorkflowDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralWorkflows)
   @SetPolicy(Action.Delete, Resource.GeneralWorkflows)
@@ -109,6 +112,7 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   }
 
   @Mutation(() => WorkflowDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralWorkflows)
   @SetPolicy(Action.Restore, Resource.GeneralWorkflows)
@@ -124,6 +128,7 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   }
 
   @Mutation(() => WorkflowDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralWorkflows)
   @SetPolicy(Action.Destroy, Resource.GeneralWorkflows)
@@ -139,6 +144,7 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralWorkflows)
   @Validation('general/workflows', 'update')
@@ -153,6 +159,7 @@ export class WorkflowsResolver extends ControllerClass<Workflow, WorkflowDto> im
   }
 
   @Mutation(() => WorkflowDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralWorkflows)
   @Validation('general/workflows', 'update')

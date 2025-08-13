@@ -1,6 +1,6 @@
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { PushDataSerializer, PushItemsSerializer, PushSerializer } from '@app/common/serializers/touch';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreatePushDto, CreatePushItemsDto, UpdatePushDto } from '@app/common/dto/touch';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
@@ -44,6 +44,7 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements IC
   }
 
   @Mutation(() => PushDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPushes)
   @Validation('touch/pushes', 'create')
@@ -54,6 +55,7 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements IC
   }
 
   @Mutation(() => PushItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPushes)
   @Validation('touch/pushes', 'create')
@@ -88,6 +90,7 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements IC
   }
 
   @Mutation(() => PushDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPushes)
   @SetPolicy(Action.Delete, Resource.TouchPushes)
@@ -103,6 +106,7 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements IC
   }
 
   @Mutation(() => PushDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPushes)
   @SetPolicy(Action.Restore, Resource.TouchPushes)
@@ -118,6 +122,7 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements IC
   }
 
   @Mutation(() => PushDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchPushes)
   @SetPolicy(Action.Destroy, Resource.TouchPushes)
@@ -133,6 +138,7 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements IC
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchPushes)
   @Validation('touch/pushes', 'update')
@@ -147,6 +153,7 @@ export class PushesResolver extends ControllerClass<Push, PushDto> implements IC
   }
 
   @Mutation(() => PushDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPushes)
   @Validation('touch/pushes', 'update')

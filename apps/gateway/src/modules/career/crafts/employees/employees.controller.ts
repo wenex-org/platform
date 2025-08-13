@@ -16,7 +16,7 @@ import {
 import { EmployeeDataSerializer, EmployeeItemsSerializer, EmployeeSerializer } from '@app/common/serializers/career';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateEmployeeDto, CreateEmployeeItemsDto, UpdateEmployeeDto } from '@app/common/dto/career';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -63,6 +63,7 @@ export class EmployeesController extends ControllerClass<Employee, EmployeeDto> 
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerEmployees)
   @UseInterceptors(...WriteInterceptors)
@@ -74,6 +75,7 @@ export class EmployeesController extends ControllerClass<Employee, EmployeeDto> 
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerEmployees)
   @UseInterceptors(...WriteInterceptors)
@@ -130,6 +132,7 @@ export class EmployeesController extends ControllerClass<Employee, EmployeeDto> 
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerEmployees)
   @ApiResponse({ type: EmployeeDataSerializer })
@@ -142,6 +145,7 @@ export class EmployeesController extends ControllerClass<Employee, EmployeeDto> 
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerEmployees)
   @ApiResponse({ type: EmployeeDataSerializer })
@@ -154,6 +158,7 @@ export class EmployeesController extends ControllerClass<Employee, EmployeeDto> 
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageCareerEmployees)
   @ApiResponse({ type: EmployeeDataSerializer })
@@ -166,6 +171,7 @@ export class EmployeesController extends ControllerClass<Employee, EmployeeDto> 
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageCareerEmployees)
   @Validation('career/employees', 'update')
@@ -181,6 +187,7 @@ export class EmployeesController extends ControllerClass<Employee, EmployeeDto> 
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerEmployees)
   @Validation('career/employees', 'update')

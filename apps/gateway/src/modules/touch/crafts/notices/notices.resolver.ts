@@ -1,7 +1,7 @@
 import { NoticeDataSerializer, NoticeItemsSerializer, NoticeSerializer } from '@app/common/serializers/touch';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateNoticeDto, CreateNoticeItemsDto, UpdateNoticeDto } from '@app/common/dto/touch';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -44,6 +44,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   }
 
   @Mutation(() => NoticeDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchNotices)
   @Validation('touch/notices', 'create')
@@ -54,6 +55,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   }
 
   @Mutation(() => NoticeItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchNotices)
   @Validation('touch/notices', 'create')
@@ -88,6 +90,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   }
 
   @Mutation(() => NoticeDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchNotices)
   @SetPolicy(Action.Delete, Resource.TouchNotices)
@@ -103,6 +106,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   }
 
   @Mutation(() => NoticeDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchNotices)
   @SetPolicy(Action.Restore, Resource.TouchNotices)
@@ -118,6 +122,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   }
 
   @Mutation(() => NoticeDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchNotices)
   @SetPolicy(Action.Destroy, Resource.TouchNotices)
@@ -133,6 +138,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchNotices)
   @Validation('touch/notices', 'update')
@@ -147,6 +153,7 @@ export class NoticesResolver extends ControllerClass<Notice, NoticeDto> implemen
   }
 
   @Mutation(() => NoticeDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchNotices)
   @Validation('touch/notices', 'update')

@@ -1,7 +1,7 @@
 import { ChannelDataSerializer, ChannelItemsSerializer, ChannelSerializer } from '@app/common/serializers/conjoint';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateChannelDto, CreateChannelItemsDto, UpdateChannelDto } from '@app/common/dto/conjoint';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -44,6 +44,7 @@ export class ChannelsResolver extends ControllerClass<Channel, ChannelDto> imple
   }
 
   @Mutation(() => ChannelDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointChannels)
   @UseInterceptors(...WriteInterceptors)
@@ -54,6 +55,7 @@ export class ChannelsResolver extends ControllerClass<Channel, ChannelDto> imple
   }
 
   @Mutation(() => ChannelItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointChannels)
   @UseInterceptors(...WriteInterceptors)
@@ -91,6 +93,7 @@ export class ChannelsResolver extends ControllerClass<Channel, ChannelDto> imple
   }
 
   @Mutation(() => ChannelDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointChannels)
   @SetPolicy(Action.Delete, Resource.ConjointChannels)
@@ -106,6 +109,7 @@ export class ChannelsResolver extends ControllerClass<Channel, ChannelDto> imple
   }
 
   @Mutation(() => ChannelDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointChannels)
   @SetPolicy(Action.Restore, Resource.ConjointChannels)
@@ -121,6 +125,7 @@ export class ChannelsResolver extends ControllerClass<Channel, ChannelDto> imple
   }
 
   @Mutation(() => ChannelDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageConjointChannels)
   @SetPolicy(Action.Destroy, Resource.ConjointChannels)
@@ -136,6 +141,7 @@ export class ChannelsResolver extends ControllerClass<Channel, ChannelDto> imple
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageConjointChannels)
   @Validation('conjoint/channels', 'update')
@@ -150,6 +156,7 @@ export class ChannelsResolver extends ControllerClass<Channel, ChannelDto> imple
   }
 
   @Mutation(() => ChannelDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointChannels)
   @Validation('conjoint/channels', 'update')

@@ -1,7 +1,7 @@
 import { CurrencyDataSerializer, CurrencyItemsSerializer, CurrencySerializer } from '@app/common/serializers/financial';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateCurrencyDto, CreateCurrencyItemsDto, UpdateCurrencyDto } from '@app/common/dto/financial';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -44,6 +44,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   }
 
   @Mutation(() => CurrencyDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteFinancialCurrencies)
@@ -54,6 +55,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   }
 
   @Mutation(() => CurrencyItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteFinancialCurrencies)
@@ -94,6 +96,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   }
 
   @Mutation(() => CurrencyDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialCurrencies)
   @SetPolicy(Action.Delete, Resource.FinancialCurrencies)
@@ -109,6 +112,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   }
 
   @Mutation(() => CurrencyDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialCurrencies)
   @SetPolicy(Action.Restore, Resource.FinancialCurrencies)
@@ -124,6 +128,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   }
 
   @Mutation(() => CurrencyDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialCurrencies)
   @SetPolicy(Action.Destroy, Resource.FinancialCurrencies)
@@ -139,6 +144,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialCurrencies)
   @Validation('financial/currencies', 'update')
@@ -153,6 +159,7 @@ export class CurrenciesResolver extends ControllerClass<Currency, CurrencyDto> i
   }
 
   @Mutation(() => CurrencyDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialCurrencies)
   @Validation('financial/currencies', 'update')

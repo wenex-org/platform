@@ -17,8 +17,8 @@ import { ConfigDataSerializer, ConfigItemsSerializer, ConfigSerializer } from '@
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateConfigDto, CreateConfigItemsDto, UpdateConfigDto } from '@app/common/dto/context';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
@@ -63,6 +63,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @UseInterceptors(...WriteInterceptors)
@@ -73,6 +74,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @UseInterceptors(...WriteInterceptors)
@@ -128,6 +130,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @ApiResponse({ type: ConfigDataSerializer })
@@ -140,6 +143,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @ApiResponse({ type: ConfigDataSerializer })
@@ -152,6 +156,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContextConfigs)
   @ApiResponse({ type: ConfigDataSerializer })
@@ -164,6 +169,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContextConfigs)
   @SetPolicy(Action.Update, Resource.ContextConfigs)
@@ -178,6 +184,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @ApiResponse({ type: ConfigDataSerializer })

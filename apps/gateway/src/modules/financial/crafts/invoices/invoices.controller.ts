@@ -20,8 +20,8 @@ import {
   TransactionDataSerializer,
   TransactionSerializer,
 } from '@app/common/serializers/financial';
+import { Audit, Cache, Nested, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { Cache, Nested, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateInvoiceDto, CreateInvoiceItemsDto, UpdateInvoiceDto } from '@app/common/dto/financial';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
@@ -60,6 +60,7 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   }
 
   @Get(':id/payment')
+  @Audit('GATEWAY')
   @SetScope(Scope.PaymentFinancialInvoices)
   @ApiResponse({ type: TransactionDataSerializer })
   @SetPolicy(Action.Payment, Resource.FinancialInvoices)
@@ -85,6 +86,7 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteFinancialInvoices)
@@ -96,6 +98,7 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteFinancialInvoices)
@@ -152,6 +155,7 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialInvoices)
   @ApiResponse({ type: InvoiceDataSerializer })
@@ -164,6 +168,7 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialInvoices)
   @ApiResponse({ type: InvoiceDataSerializer })
@@ -176,6 +181,7 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialInvoices)
   @ApiResponse({ type: InvoiceDataSerializer })
@@ -188,6 +194,7 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialInvoices)
   @Validation('financial/invoices', 'update')
@@ -203,6 +210,7 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialInvoices)
   @Validation('financial/invoices', 'update')

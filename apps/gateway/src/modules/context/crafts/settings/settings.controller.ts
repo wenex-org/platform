@@ -15,8 +15,8 @@ import {
 } from '@nestjs/common';
 import { SettingDataSerializer, SettingItemsSerializer, SettingSerializer } from '@app/common/serializers/context';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateSettingDto, CreateSettingItemsDto, UpdateSettingDto } from '@app/common/dto/context';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -63,6 +63,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @UseInterceptors(...WriteInterceptors)
@@ -74,6 +75,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @UseInterceptors(...WriteInterceptors)
@@ -130,6 +132,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @ApiResponse({ type: SettingDataSerializer })
@@ -142,6 +145,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @ApiResponse({ type: SettingDataSerializer })
@@ -154,6 +158,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContextSettings)
   @ApiResponse({ type: SettingDataSerializer })
@@ -166,6 +171,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContextSettings)
   @Validation('context/settings', 'update')
@@ -181,6 +187,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @Validation('context/settings', 'update')

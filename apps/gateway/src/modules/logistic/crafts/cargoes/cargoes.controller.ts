@@ -15,8 +15,8 @@ import {
 } from '@nestjs/common';
 import { CargoDataSerializer, CargoItemsSerializer, CargoSerializer } from '@app/common/serializers/logistic';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateCargoDto, CreateCargoItemsDto, UpdateCargoDto } from '@app/common/dto/logistic';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -63,6 +63,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @UseInterceptors(...WriteInterceptors)
@@ -74,6 +75,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @UseInterceptors(...WriteInterceptors)
@@ -130,6 +132,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @ApiResponse({ type: CargoDataSerializer })
@@ -142,6 +145,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @ApiResponse({ type: CargoDataSerializer })
@@ -154,6 +158,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticCargoes)
   @ApiResponse({ type: CargoDataSerializer })
@@ -166,6 +171,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticCargoes)
   @Validation('logistic/cargoes', 'update')
@@ -181,6 +187,7 @@ export class CargoesController extends ControllerClass<Cargo, CargoDto> implemen
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticCargoes)
   @Validation('logistic/cargoes', 'update')

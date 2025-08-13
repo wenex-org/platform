@@ -1,5 +1,5 @@
+import { Audit, Cache, Nested, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { Cache, Nested, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { AppDataSerializer, AppItemsSerializer, AppSerializer } from '@app/common/serializers/domain';
 import { CreateAppDto, CreateAppItemsDto, UpdateAppDto } from '@app/common/dto/domain';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
@@ -45,6 +45,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Mutation(() => AppDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @Validation('domain/apps', 'create')
@@ -55,6 +56,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Mutation(() => AppItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @Validation('domain/apps', 'create')
@@ -89,6 +91,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Mutation(() => AppDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @SetPolicy(Action.Delete, Resource.DomainApps)
@@ -104,6 +107,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Mutation(() => AppDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @SetPolicy(Action.Restore, Resource.DomainApps)
@@ -119,6 +123,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Mutation(() => AppDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageDomainApps)
   @SetPolicy(Action.Destroy, Resource.DomainApps)
@@ -134,6 +139,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageDomainApps)
   @Validation('domain/apps', 'update')
@@ -148,6 +154,7 @@ export class AppsResolver extends ControllerClass<App, AppDto> implements IContr
   }
 
   @Mutation(() => AppDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @Validation('domain/apps', 'update')

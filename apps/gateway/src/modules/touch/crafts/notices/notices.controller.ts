@@ -15,8 +15,8 @@ import {
 } from '@nestjs/common';
 import { NoticeDataSerializer, NoticeItemsSerializer, NoticeSerializer } from '@app/common/serializers/touch';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateNoticeDto, CreateNoticeItemsDto, UpdateNoticeDto } from '@app/common/dto/touch';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -63,6 +63,7 @@ export class NoticesController extends ControllerClass<Notice, NoticeDto> implem
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchNotices)
   @Validation('touch/notices', 'create')
@@ -74,6 +75,7 @@ export class NoticesController extends ControllerClass<Notice, NoticeDto> implem
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchNotices)
   @Validation('touch/notices', 'create')
@@ -130,6 +132,7 @@ export class NoticesController extends ControllerClass<Notice, NoticeDto> implem
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchNotices)
   @ApiResponse({ type: NoticeDataSerializer })
@@ -142,6 +145,7 @@ export class NoticesController extends ControllerClass<Notice, NoticeDto> implem
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchNotices)
   @ApiResponse({ type: NoticeDataSerializer })
@@ -154,6 +158,7 @@ export class NoticesController extends ControllerClass<Notice, NoticeDto> implem
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchNotices)
   @ApiResponse({ type: NoticeDataSerializer })
@@ -166,6 +171,7 @@ export class NoticesController extends ControllerClass<Notice, NoticeDto> implem
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchNotices)
   @Validation('touch/notices', 'update')
@@ -181,6 +187,7 @@ export class NoticesController extends ControllerClass<Notice, NoticeDto> implem
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchNotices)
   @Validation('touch/notices', 'update')

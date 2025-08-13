@@ -14,8 +14,8 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { ClientDataSerializer, ClientItemsSerializer, ClientSerializer } from '@app/common/serializers/domain';
+import { Audit, Cache, Nested, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { Cache, Nested, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateClientDto, CreateClientItemsDto, UpdateClientDto } from '@app/common/dto/domain';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
@@ -64,6 +64,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
@@ -75,6 +76,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
@@ -131,6 +133,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @ApiResponse({ type: ClientDataSerializer })
@@ -143,6 +146,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @ApiResponse({ type: ClientDataSerializer })
@@ -155,6 +159,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageDomainClients)
   @ApiResponse({ type: ClientDataSerializer })
@@ -167,6 +172,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageDomainClients)
   @Validation('domain/clients', 'update')
@@ -182,6 +188,7 @@ export class ClientsController extends ControllerClass<Client, ClientDto> implem
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @Validation('domain/clients', 'update')

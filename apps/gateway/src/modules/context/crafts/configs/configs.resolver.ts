@@ -1,8 +1,8 @@
 import { ConfigDataSerializer, ConfigItemsSerializer, ConfigSerializer } from '@app/common/serializers/context';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateConfigDto, CreateConfigItemsDto, UpdateConfigDto } from '@app/common/dto/context';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
-import { Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
@@ -44,6 +44,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Mutation(() => ConfigDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @UseInterceptors(...WriteInterceptors)
@@ -53,6 +54,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Mutation(() => ConfigItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @UseInterceptors(...WriteInterceptors)
@@ -89,6 +91,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Mutation(() => ConfigDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @SetPolicy(Action.Delete, Resource.ContextConfigs)
@@ -104,6 +107,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Mutation(() => ConfigDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @SetPolicy(Action.Restore, Resource.ContextConfigs)
@@ -119,6 +123,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Mutation(() => ConfigDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContextConfigs)
   @SetPolicy(Action.Destroy, Resource.ContextConfigs)
@@ -134,6 +139,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContextConfigs)
   @SetPolicy(Action.Update, Resource.ContextConfigs)
@@ -147,6 +153,7 @@ export class ConfigsResolver extends ControllerClass<Config, ConfigDto> implemen
   }
 
   @Mutation(() => ConfigDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextConfigs)
   @SetPolicy(Action.Update, Resource.ContextConfigs)

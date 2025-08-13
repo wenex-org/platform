@@ -13,8 +13,8 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import { Audit, Cache, Nested, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { Cache, Nested, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { AppDataSerializer, AppItemsSerializer, AppSerializer } from '@app/common/serializers/domain';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateAppDto, CreateAppItemsDto, UpdateAppDto } from '@app/common/dto/domain';
@@ -64,6 +64,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @Validation('domain/apps', 'create')
@@ -75,6 +76,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @Validation('domain/apps', 'create')
@@ -131,6 +133,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @ApiResponse({ type: AppDataSerializer })
@@ -143,6 +146,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @ApiResponse({ type: AppDataSerializer })
@@ -155,6 +159,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageDomainApps)
   @ApiResponse({ type: AppDataSerializer })
@@ -167,6 +172,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageDomainApps)
   @Validation('domain/apps', 'update')
@@ -182,6 +188,7 @@ export class AppsController extends ControllerClass<App, AppDto> implements ICon
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainApps)
   @Validation('domain/apps', 'update')

@@ -1,7 +1,7 @@
 import { AccountDataSerializer, AccountItemsSerializer, AccountSerializer } from '@app/common/serializers/conjoint';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateAccountDto, CreateAccountItemsDto, UpdateAccountDto } from '@app/common/dto/conjoint';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -44,6 +44,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   }
 
   @Mutation(() => AccountDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointAccounts)
   @UseInterceptors(...WriteInterceptors)
@@ -54,6 +55,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   }
 
   @Mutation(() => AccountItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointAccounts)
   @UseInterceptors(...WriteInterceptors)
@@ -91,6 +93,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   }
 
   @Mutation(() => AccountDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointAccounts)
   @SetPolicy(Action.Delete, Resource.ConjointAccounts)
@@ -106,6 +109,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   }
 
   @Mutation(() => AccountDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointAccounts)
   @SetPolicy(Action.Restore, Resource.ConjointAccounts)
@@ -121,6 +125,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   }
 
   @Mutation(() => AccountDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageConjointAccounts)
   @SetPolicy(Action.Destroy, Resource.ConjointAccounts)
@@ -136,6 +141,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageConjointAccounts)
   @Validation('conjoint/accounts', 'update')
@@ -150,6 +156,7 @@ export class AccountsResolver extends ControllerClass<Account, AccountDto> imple
   }
 
   @Mutation(() => AccountDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointAccounts)
   @Validation('conjoint/accounts', 'update')

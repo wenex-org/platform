@@ -1,7 +1,7 @@
 import { ProfileDataSerializer, ProfileItemsSerializer, ProfileSerializer } from '@app/common/serializers/identity';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateProfileDto, CreateProfileItemsDto, UpdateProfileDto } from '@app/common/dto/identity';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -44,6 +44,7 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   }
 
   @Mutation(() => ProfileDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @UseInterceptors(...WriteInterceptors)
@@ -54,6 +55,7 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   }
 
   @Mutation(() => ProfileItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @UseInterceptors(...WriteInterceptors)
@@ -91,6 +93,7 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   }
 
   @Mutation(() => ProfileDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @SetPolicy(Action.Delete, Resource.IdentityProfiles)
@@ -106,6 +109,7 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   }
 
   @Mutation(() => ProfileDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @SetPolicy(Action.Restore, Resource.IdentityProfiles)
@@ -121,6 +125,7 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   }
 
   @Mutation(() => ProfileDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageIdentityProfiles)
   @SetPolicy(Action.Destroy, Resource.IdentityProfiles)
@@ -136,6 +141,7 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageIdentityProfiles)
   @Validation('identity/profiles', 'update')
@@ -150,6 +156,7 @@ export class ProfilesResolver extends ControllerClass<Profile, ProfileDto> imple
   }
 
   @Mutation(() => ProfileDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @Validation('identity/profiles', 'update')

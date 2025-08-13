@@ -29,7 +29,7 @@ import {
   UpdateLocationDto,
 } from '@app/common/dto/logistic';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -66,6 +66,7 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
   }
 
   @Post('address-lookup')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ResolveLogisticLocations)
   @SetPolicy(Action.Resolve, Resource.LogisticLocations)
@@ -74,6 +75,7 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
   }
 
   @Post('geocode-lookup')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.ResolveLogisticLocations)
   @SetPolicy(Action.Resolve, Resource.LogisticLocations)
@@ -96,6 +98,7 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteLogisticLocations)
@@ -107,6 +110,7 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteLogisticLocations)
@@ -163,6 +167,7 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticLocations)
   @ApiResponse({ type: LocationDataSerializer })
@@ -175,6 +180,7 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticLocations)
   @ApiResponse({ type: LocationDataSerializer })
@@ -187,6 +193,7 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticLocations)
   @ApiResponse({ type: LocationDataSerializer })
@@ -199,6 +206,7 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticLocations)
   @Validation('logistic/locations', 'update')
@@ -214,6 +222,7 @@ export class LocationsController extends ControllerClass<Location, LocationDto> 
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticLocations)
   @Validation('logistic/locations', 'update')

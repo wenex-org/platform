@@ -1,7 +1,7 @@
 import { SessionDataSerializer, SessionItemsSerializer, SessionSerializer } from '@app/common/serializers/identity';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateSessionDto, CreateSessionItemsDto, UpdateSessionDto } from '@app/common/dto/identity';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -44,6 +44,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Mutation(() => SessionDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @UseInterceptors(...WriteInterceptors)
@@ -54,6 +55,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Mutation(() => SessionItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @UseInterceptors(...WriteInterceptors)
@@ -91,6 +93,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Mutation(() => SessionDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @SetPolicy(Action.Delete, Resource.IdentitySessions)
@@ -106,6 +109,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Mutation(() => SessionDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @SetPolicy(Action.Restore, Resource.IdentitySessions)
@@ -121,6 +125,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Mutation(() => SessionDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageIdentitySessions)
   @SetPolicy(Action.Destroy, Resource.IdentitySessions)
@@ -136,6 +141,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageIdentitySessions)
   @Validation('identity/sessions', 'update')
@@ -150,6 +156,7 @@ export class SessionsResolver extends ControllerClass<Session, SessionDto> imple
   }
 
   @Mutation(() => SessionDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentitySessions)
   @Validation('identity/sessions', 'update')

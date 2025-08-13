@@ -22,7 +22,7 @@ import {
 } from '@app/common/serializers/touch';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreatePushDto, CreatePushItemsDto, SendPusHistoryDto, UpdatePushDto } from '@app/common/dto/touch';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -59,8 +59,9 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   }
 
   @Post('send')
-  @SetScope(Scope.SendTouchPushes)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
+  @SetScope(Scope.SendTouchPushes)
   @UseInterceptors(...WriteInterceptors)
   @SetPolicy(Action.Send, Resource.TouchPushes)
   @ApiResponse({ type: PusHistoryDataSerializer })
@@ -83,6 +84,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPushes)
   @Validation('touch/pushes', 'create')
@@ -94,6 +96,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPushes)
   @Validation('touch/pushes', 'create')
@@ -119,8 +122,8 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   @SetScope(Scope.ReadTouchPushes)
   @SetPolicy(Action.Read, Resource.TouchPushes)
   @ApiQuery({ type: FilterOneDto, required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   @ApiResponse({ status: HttpStatus.OK, type: PushSerializer })
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
   Cursor(@Res() res: Response, @Meta() meta: Metadata, @Perm() perm: Permission, @Filter() filter: FilterOneDto<Push>) {
     // Server Sent-Event Headers
     res.setHeader('Transfer-Encoding', 'chunked');
@@ -150,6 +153,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPushes)
   @ApiResponse({ type: PushDataSerializer })
@@ -162,6 +166,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPushes)
   @ApiResponse({ type: PushDataSerializer })
@@ -174,6 +179,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchPushes)
   @ApiResponse({ type: PushDataSerializer })
@@ -186,6 +192,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchPushes)
   @Validation('touch/pushes', 'update')
@@ -201,6 +208,7 @@ export class PushesController extends ControllerClass<Push, PushDto> implements 
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchPushes)
   @Validation('touch/pushes', 'update')

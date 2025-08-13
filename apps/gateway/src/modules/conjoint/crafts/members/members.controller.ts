@@ -15,8 +15,8 @@ import {
 } from '@nestjs/common';
 import { MemberDataSerializer, MemberItemsSerializer, MemberSerializer } from '@app/common/serializers/conjoint';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateMemberDto, CreateMemberItemsDto, UpdateMemberDto } from '@app/common/dto/conjoint';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -63,6 +63,7 @@ export class MembersController extends ControllerClass<Member, MemberDto> implem
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMembers)
   @UseInterceptors(...WriteInterceptors)
@@ -74,6 +75,7 @@ export class MembersController extends ControllerClass<Member, MemberDto> implem
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMembers)
   @UseInterceptors(...WriteInterceptors)
@@ -130,6 +132,7 @@ export class MembersController extends ControllerClass<Member, MemberDto> implem
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMembers)
   @ApiResponse({ type: MemberDataSerializer })
@@ -142,6 +145,7 @@ export class MembersController extends ControllerClass<Member, MemberDto> implem
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMembers)
   @ApiResponse({ type: MemberDataSerializer })
@@ -154,6 +158,7 @@ export class MembersController extends ControllerClass<Member, MemberDto> implem
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageConjointMembers)
   @ApiResponse({ type: MemberDataSerializer })
@@ -166,6 +171,7 @@ export class MembersController extends ControllerClass<Member, MemberDto> implem
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageConjointMembers)
   @Validation('conjoint/members', 'update')
@@ -181,6 +187,7 @@ export class MembersController extends ControllerClass<Member, MemberDto> implem
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMembers)
   @Validation('conjoint/members', 'update')

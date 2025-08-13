@@ -15,8 +15,8 @@ import {
 } from '@nestjs/common';
 import { TravelDataSerializer, TravelItemsSerializer, TravelSerializer } from '@app/common/serializers/logistic';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateTravelDto, CreateTravelItemsDto, UpdateTravelDto } from '@app/common/dto/logistic';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -63,6 +63,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @UseInterceptors(...WriteInterceptors)
@@ -74,6 +75,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @UseInterceptors(...WriteInterceptors)
@@ -130,6 +132,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @ApiResponse({ type: TravelDataSerializer })
@@ -142,6 +145,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @ApiResponse({ type: TravelDataSerializer })
@@ -154,6 +158,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticTravels)
   @ApiResponse({ type: TravelDataSerializer })
@@ -166,6 +171,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageLogisticTravels)
   @Validation('logistic/travels', 'update')
@@ -181,6 +187,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteLogisticTravels)
   @Validation('logistic/travels', 'update')

@@ -1,7 +1,7 @@
 import { ServiceDataSerializer, ServiceItemsSerializer, ServiceSerializer } from '@app/common/serializers/career';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateServiceDto, CreateServiceItemsDto, UpdateServiceDto } from '@app/common/dto/career';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -44,6 +44,7 @@ export class ServicesResolver extends ControllerClass<Service, ServiceDto> imple
   }
 
   @Mutation(() => ServiceDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerServices)
   @UseInterceptors(...WriteInterceptors)
@@ -54,6 +55,7 @@ export class ServicesResolver extends ControllerClass<Service, ServiceDto> imple
   }
 
   @Mutation(() => ServiceItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerServices)
   @UseInterceptors(...WriteInterceptors)
@@ -91,6 +93,7 @@ export class ServicesResolver extends ControllerClass<Service, ServiceDto> imple
   }
 
   @Mutation(() => ServiceDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerServices)
   @SetPolicy(Action.Delete, Resource.CareerServices)
@@ -106,6 +109,7 @@ export class ServicesResolver extends ControllerClass<Service, ServiceDto> imple
   }
 
   @Mutation(() => ServiceDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerServices)
   @SetPolicy(Action.Restore, Resource.CareerServices)
@@ -121,6 +125,7 @@ export class ServicesResolver extends ControllerClass<Service, ServiceDto> imple
   }
 
   @Mutation(() => ServiceDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageCareerServices)
   @SetPolicy(Action.Destroy, Resource.CareerServices)
@@ -136,6 +141,7 @@ export class ServicesResolver extends ControllerClass<Service, ServiceDto> imple
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageCareerServices)
   @Validation('career/services', 'update')
@@ -150,6 +156,7 @@ export class ServicesResolver extends ControllerClass<Service, ServiceDto> imple
   }
 
   @Mutation(() => ServiceDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerServices)
   @Validation('career/services', 'update')

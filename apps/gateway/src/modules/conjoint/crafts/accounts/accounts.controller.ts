@@ -21,8 +21,8 @@ import {
   CredentialSerializer,
 } from '@app/common/serializers/conjoint';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateAccountDto, CreateAccountItemsDto, UpdateAccountDto } from '@app/common/dto/conjoint';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -81,6 +81,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointAccounts)
   @UseInterceptors(...WriteInterceptors)
@@ -92,6 +93,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointAccounts)
   @UseInterceptors(...WriteInterceptors)
@@ -148,6 +150,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointAccounts)
   @ApiResponse({ type: AccountDataSerializer })
@@ -160,6 +163,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointAccounts)
   @ApiResponse({ type: AccountDataSerializer })
@@ -172,6 +176,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageConjointAccounts)
   @ApiResponse({ type: AccountDataSerializer })
@@ -184,6 +189,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageConjointAccounts)
   @Validation('conjoint/accounts', 'update')
@@ -199,6 +205,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointAccounts)
   @Validation('conjoint/accounts', 'update')

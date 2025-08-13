@@ -14,9 +14,9 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { SmsDataSerializer, SmsItemsSerializer, SmsSerializer } from '@app/common/serializers/touch';
 import { CreateSmsDto, CreateSmsItemsDto, SendSmsDto, UpdateSmsDto } from '@app/common/dto/touch';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -53,6 +53,7 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
   }
 
   @Post('send')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.SendTouchSmss)
   @UseInterceptors(...WriteInterceptors)
@@ -77,6 +78,7 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchSmss)
   @Validation('touch/smss', 'create')
@@ -88,6 +90,7 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchSmss)
   @Validation('touch/smss', 'create')
@@ -144,6 +147,7 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchSmss)
   @ApiResponse({ type: SmsDataSerializer })
@@ -156,6 +160,7 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchSmss)
   @ApiResponse({ type: SmsDataSerializer })
@@ -168,6 +173,7 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchSmss)
   @ApiResponse({ type: SmsDataSerializer })
@@ -180,6 +186,7 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchSmss)
   @Validation('touch/smss', 'update')
@@ -195,6 +202,7 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchSmss)
   @Validation('touch/smss', 'update')
