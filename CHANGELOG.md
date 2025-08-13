@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Grant management during channel creation, deletion, and restoration @fdaei
+- refactor: enhance authorization checks in `onClientAuthorize` method @vhidvz
 - `general/events.organizer` field renamed to `general/events.organizers` @vhidvz
 
 ## [1.2.22] - 2025-08-10
