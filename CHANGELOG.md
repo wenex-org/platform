@@ -15,9 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- streamline `collectStat` function and enhance `doc` handling @vhidvz
 - Grant management during channel creation, deletion, and restoration @fdaei
 - refactor: enhance authorization checks in `onClientAuthorize` method @vhidvz
 - `general/events.organizer` field renamed to `general/events.organizers` @vhidvz
+- replace `withSession` with `withSagaSession` in service methods for consistency @vhidvz
 
 ### Fixed
 
