@@ -1,6 +1,6 @@
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { UserDataSerializer, UserItemsSerializer, UserSerializer } from '@app/common/serializers/identity';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateUserDto, CreateUserItemsDto, UpdateUserDto } from '@app/common/dto/identity';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
@@ -44,6 +44,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Mutation(() => UserDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
@@ -54,6 +55,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Mutation(() => UserItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
@@ -88,6 +90,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Mutation(() => UserDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @SetPolicy(Action.Delete, Resource.IdentityUsers)
@@ -103,6 +106,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Mutation(() => UserDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @SetPolicy(Action.Restore, Resource.IdentityUsers)
@@ -118,6 +122,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Mutation(() => UserDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageIdentityUsers)
   @SetPolicy(Action.Destroy, Resource.IdentityUsers)
@@ -133,6 +138,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageIdentityUsers)
   @Validation('identity/users', 'update')
@@ -147,6 +153,7 @@ export class UsersResolver extends ControllerClass<User, UserDto> implements ICo
   }
 
   @Mutation(() => UserDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @Validation('identity/users', 'update')

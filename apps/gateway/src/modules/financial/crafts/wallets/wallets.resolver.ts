@@ -1,7 +1,7 @@
 import { WalletDataSerializer, WalletItemsSerializer, WalletSerializer } from '@app/common/serializers/financial';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateWalletDto, CreateWalletItemsDto, UpdateWalletDto } from '@app/common/dto/financial';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -44,6 +44,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
   }
 
   @Mutation(() => WalletDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialWallets)
   @UseInterceptors(...WriteInterceptors)
@@ -54,6 +55,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
   }
 
   @Mutation(() => WalletItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialWallets)
   @UseInterceptors(...WriteInterceptors)
@@ -91,6 +93,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
   }
 
   @Mutation(() => WalletDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialWallets)
   @SetPolicy(Action.Delete, Resource.FinancialWallets)
@@ -106,6 +109,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
   }
 
   @Mutation(() => WalletDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialWallets)
   @SetPolicy(Action.Restore, Resource.FinancialWallets)
@@ -121,6 +125,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
   }
 
   @Mutation(() => WalletDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialWallets)
   @SetPolicy(Action.Destroy, Resource.FinancialWallets)
@@ -136,6 +141,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialWallets)
   @Validation('financial/wallets', 'update')
@@ -150,6 +156,7 @@ export class WalletsResolver extends ControllerClass<Wallet, WalletDto> implemen
   }
 
   @Mutation(() => WalletDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialWallets)
   @Validation('financial/wallets', 'update')

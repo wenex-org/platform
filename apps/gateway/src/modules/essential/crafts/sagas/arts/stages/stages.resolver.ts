@@ -1,7 +1,7 @@
 import { SagaStageDataSerializer, SagaStageItemsSerializer, SagaStageSerializer } from '@app/common/serializers/essential';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateSagaStageDto, CreateSagaStageItemsDto, UpdateSagaStageDto } from '@app/common/dto/essential';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -44,6 +44,7 @@ export class SagaStagesResolver extends ControllerClass<SagaStage, SagaStageDto>
   }
 
   @Mutation(() => SagaStageDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteEssentialSagaStages)
@@ -54,6 +55,7 @@ export class SagaStagesResolver extends ControllerClass<SagaStage, SagaStageDto>
   }
 
   @Mutation(() => SagaStageItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteEssentialSagaStages)
@@ -94,6 +96,7 @@ export class SagaStagesResolver extends ControllerClass<SagaStage, SagaStageDto>
   }
 
   @Mutation(() => SagaStageDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagaStages)
   @SetPolicy(Action.Delete, Resource.EssentialSagaStages)
@@ -109,6 +112,7 @@ export class SagaStagesResolver extends ControllerClass<SagaStage, SagaStageDto>
   }
 
   @Mutation(() => SagaStageDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagaStages)
   @SetPolicy(Action.Restore, Resource.EssentialSagaStages)
@@ -124,6 +128,7 @@ export class SagaStagesResolver extends ControllerClass<SagaStage, SagaStageDto>
   }
 
   @Mutation(() => SagaStageDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageEssentialSagaStages)
   @SetPolicy(Action.Destroy, Resource.EssentialSagaStages)
@@ -139,6 +144,7 @@ export class SagaStagesResolver extends ControllerClass<SagaStage, SagaStageDto>
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageEssentialSagaStages)
   @Validation('essential/saga-stages', 'update')
@@ -153,6 +159,7 @@ export class SagaStagesResolver extends ControllerClass<SagaStage, SagaStageDto>
   }
 
   @Mutation(() => SagaStageDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagaStages)
   @Validation('essential/saga-stages', 'update')

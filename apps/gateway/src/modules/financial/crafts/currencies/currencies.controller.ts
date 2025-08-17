@@ -16,7 +16,7 @@ import {
 import { CurrencyDataSerializer, CurrencyItemsSerializer, CurrencySerializer } from '@app/common/serializers/financial';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateCurrencyDto, CreateCurrencyItemsDto, UpdateCurrencyDto } from '@app/common/dto/financial';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -63,6 +63,7 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteFinancialCurrencies)
@@ -74,6 +75,7 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteFinancialCurrencies)
@@ -130,6 +132,7 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialCurrencies)
   @ApiResponse({ type: CurrencyDataSerializer })
@@ -142,6 +145,7 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialCurrencies)
   @ApiResponse({ type: CurrencyDataSerializer })
@@ -154,6 +158,7 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialCurrencies)
   @ApiResponse({ type: CurrencyDataSerializer })
@@ -166,6 +171,7 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialCurrencies)
   @Validation('financial/currencies', 'update')
@@ -181,6 +187,7 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialCurrencies)
   @Validation('financial/currencies', 'update')

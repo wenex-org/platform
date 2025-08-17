@@ -15,8 +15,8 @@ import {
 } from '@nestjs/common';
 import { ServiceDataSerializer, ServiceItemsSerializer, ServiceSerializer } from '@app/common/serializers/career';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateServiceDto, CreateServiceItemsDto, UpdateServiceDto } from '@app/common/dto/career';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -63,6 +63,7 @@ export class ServicesController extends ControllerClass<Service, ServiceDto> imp
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerServices)
   @UseInterceptors(...WriteInterceptors)
@@ -74,6 +75,7 @@ export class ServicesController extends ControllerClass<Service, ServiceDto> imp
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerServices)
   @UseInterceptors(...WriteInterceptors)
@@ -130,6 +132,7 @@ export class ServicesController extends ControllerClass<Service, ServiceDto> imp
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerServices)
   @ApiResponse({ type: ServiceDataSerializer })
@@ -142,6 +145,7 @@ export class ServicesController extends ControllerClass<Service, ServiceDto> imp
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerServices)
   @ApiResponse({ type: ServiceDataSerializer })
@@ -154,6 +158,7 @@ export class ServicesController extends ControllerClass<Service, ServiceDto> imp
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageCareerServices)
   @ApiResponse({ type: ServiceDataSerializer })
@@ -166,6 +171,7 @@ export class ServicesController extends ControllerClass<Service, ServiceDto> imp
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageCareerServices)
   @Validation('career/services', 'update')
@@ -181,6 +187,7 @@ export class ServicesController extends ControllerClass<Service, ServiceDto> imp
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerServices)
   @Validation('career/services', 'update')

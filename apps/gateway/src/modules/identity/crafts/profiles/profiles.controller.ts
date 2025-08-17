@@ -15,8 +15,8 @@ import {
 } from '@nestjs/common';
 import { ProfileDataSerializer, ProfileItemsSerializer, ProfileSerializer } from '@app/common/serializers/identity';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateProfileDto, CreateProfileItemsDto, UpdateProfileDto } from '@app/common/dto/identity';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -63,6 +63,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @UseInterceptors(...WriteInterceptors)
@@ -74,6 +75,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @UseInterceptors(...WriteInterceptors)
@@ -130,6 +132,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @ApiResponse({ type: ProfileDataSerializer })
@@ -142,6 +145,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @ApiResponse({ type: ProfileDataSerializer })
@@ -154,6 +158,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageIdentityProfiles)
   @ApiResponse({ type: ProfileDataSerializer })
@@ -166,6 +171,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageIdentityProfiles)
   @Validation('identity/profiles', 'update')
@@ -181,6 +187,7 @@ export class ProfilesController extends ControllerClass<Profile, ProfileDto> imp
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityProfiles)
   @Validation('identity/profiles', 'update')

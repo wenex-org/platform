@@ -199,6 +199,15 @@
         "tsConfigPath": "apps/workers/publisher/tsconfig.app.json"
       }
     },
+    "logger": {
+      "type": "application",
+      "root": "apps/workers/logger",
+      "entryFile": "main",
+      "sourceRoot": "apps/workers/logger/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/workers/logger/tsconfig.app.json"
+      }
+    },
     "command": {
       "type": "library",
       "root": "libs/command",

@@ -15,7 +15,7 @@ import {
 } from '@nestjs/common';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { UserDataSerializer, UserItemsSerializer, UserSerializer } from '@app/common/serializers/identity';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateUserDto, CreateUserItemsDto, UpdateUserDto } from '@app/common/dto/identity';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
@@ -63,6 +63,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements I
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
@@ -74,6 +75,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements I
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @UseInterceptors(...WriteInterceptors)
@@ -130,6 +132,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements I
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @ApiResponse({ type: UserDataSerializer })
@@ -142,6 +145,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements I
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @ApiResponse({ type: UserDataSerializer })
@@ -154,6 +158,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements I
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageIdentityUsers)
   @ApiResponse({ type: UserDataSerializer })
@@ -166,6 +171,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements I
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageIdentityUsers)
   @Validation('identity/users', 'update')
@@ -181,6 +187,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements I
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteIdentityUsers)
   @Validation('identity/users', 'update')

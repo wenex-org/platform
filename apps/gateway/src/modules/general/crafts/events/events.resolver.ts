@@ -1,6 +1,6 @@
-import { EventDataSerializer, EventItemsSerializer, EventSerializer } from '@app/common/serializers/general';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { EventDataSerializer, EventItemsSerializer, EventSerializer } from '@app/common/serializers/general';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateEventDto, CreateEventItemsDto, UpdateEventDto } from '@app/common/dto/general';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
@@ -9,9 +9,9 @@ import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
-import { Event, EventDto } from '@app/common/interfaces/general';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
+import { Event, EventDto } from '@app/common/interfaces/general';
 import { GeneralProvider } from '@app/common/providers/general';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
@@ -44,6 +44,7 @@ export class EventsResolver extends ControllerClass<Event, EventDto> implements 
   }
 
   @Mutation(() => EventDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralEvents)
   @UseInterceptors(...WriteInterceptors)
@@ -54,6 +55,7 @@ export class EventsResolver extends ControllerClass<Event, EventDto> implements 
   }
 
   @Mutation(() => EventItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralEvents)
   @UseInterceptors(...WriteInterceptors)
@@ -88,6 +90,7 @@ export class EventsResolver extends ControllerClass<Event, EventDto> implements 
   }
 
   @Mutation(() => EventDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralEvents)
   @SetPolicy(Action.Delete, Resource.GeneralEvents)
@@ -103,6 +106,7 @@ export class EventsResolver extends ControllerClass<Event, EventDto> implements 
   }
 
   @Mutation(() => EventDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralEvents)
   @SetPolicy(Action.Restore, Resource.GeneralEvents)
@@ -118,6 +122,7 @@ export class EventsResolver extends ControllerClass<Event, EventDto> implements 
   }
 
   @Mutation(() => EventDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralEvents)
   @SetPolicy(Action.Destroy, Resource.GeneralEvents)
@@ -133,6 +138,7 @@ export class EventsResolver extends ControllerClass<Event, EventDto> implements 
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralEvents)
   @Validation('general/events', 'update')
@@ -147,6 +153,7 @@ export class EventsResolver extends ControllerClass<Event, EventDto> implements 
   }
 
   @Mutation(() => EventDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralEvents)
   @Validation('general/events', 'update')

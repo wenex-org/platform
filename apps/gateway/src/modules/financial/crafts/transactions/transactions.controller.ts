@@ -20,8 +20,8 @@ import {
   UpdateTransactionDto,
 } from '@app/common/dto/financial';
 import { TransactionDataSerializer, TransactionItemsSerializer, TransactionSerializer } from '@app/common/serializers/financial';
+import { Audit, Cache, Nested, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { Cache, Nested, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -62,6 +62,7 @@ export class TransactionsController
   }
 
   @Post('init')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.InitFinancialTransaction)
@@ -72,6 +73,7 @@ export class TransactionsController
   }
 
   @Get(':id/abort')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.AbortFinancialTransaction)
   @ApiResponse({ type: TransactionDataSerializer })
@@ -84,6 +86,7 @@ export class TransactionsController
   }
 
   @Get(':id/verify')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.VerifyFinancialTransaction)
   @ApiResponse({ type: TransactionDataSerializer })
@@ -110,6 +113,7 @@ export class TransactionsController
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteFinancialTransactions)
@@ -121,6 +125,7 @@ export class TransactionsController
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteFinancialTransactions)
@@ -177,6 +182,7 @@ export class TransactionsController
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @ApiResponse({ type: TransactionDataSerializer })
@@ -189,6 +195,7 @@ export class TransactionsController
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @ApiResponse({ type: TransactionDataSerializer })
@@ -201,6 +208,7 @@ export class TransactionsController
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialTransactions)
   @ApiResponse({ type: TransactionDataSerializer })
@@ -213,6 +221,7 @@ export class TransactionsController
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialTransactions)
   @Validation('financial/transactions', 'update')
@@ -228,6 +237,7 @@ export class TransactionsController
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialTransactions)
   @Validation('financial/transactions', 'update')

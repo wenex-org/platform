@@ -16,7 +16,7 @@ import {
 import { BusinessDataSerializer, BusinessItemsSerializer, BusinessSerializer } from '@app/common/serializers/career';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateBusinessDto, CreateBusinessItemsDto, UpdateBusinessDto } from '@app/common/dto/career';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -63,6 +63,7 @@ export class BusinessesController extends ControllerClass<Business, BusinessDto>
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerBusinesses)
   @UseInterceptors(...WriteInterceptors)
@@ -74,6 +75,7 @@ export class BusinessesController extends ControllerClass<Business, BusinessDto>
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerBusinesses)
   @UseInterceptors(...WriteInterceptors)
@@ -130,6 +132,7 @@ export class BusinessesController extends ControllerClass<Business, BusinessDto>
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerBusinesses)
   @ApiResponse({ type: BusinessDataSerializer })
@@ -142,6 +145,7 @@ export class BusinessesController extends ControllerClass<Business, BusinessDto>
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerBusinesses)
   @ApiResponse({ type: BusinessDataSerializer })
@@ -154,6 +158,7 @@ export class BusinessesController extends ControllerClass<Business, BusinessDto>
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageCareerBusinesses)
   @ApiResponse({ type: BusinessDataSerializer })
@@ -166,6 +171,7 @@ export class BusinessesController extends ControllerClass<Business, BusinessDto>
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageCareerBusinesses)
   @Validation('career/businesses', 'update')
@@ -181,6 +187,7 @@ export class BusinessesController extends ControllerClass<Business, BusinessDto>
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteCareerBusinesses)
   @Validation('career/businesses', 'update')

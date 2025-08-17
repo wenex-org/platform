@@ -15,7 +15,7 @@ import {
 } from '@nestjs/common';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { GrantDataSerializer, GrantItemsSerializer, GrantSerializer } from '@app/common/serializers/auth';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateGrantDto, CreateGrantItemsDto, UpdateGrantDto } from '@app/common/dto/auth';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
@@ -63,6 +63,7 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteAuthGrants)
   @Validation('auth/grants', 'create')
@@ -74,6 +75,7 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteAuthGrants)
   @Validation('auth/grants', 'create')
@@ -130,6 +132,7 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteAuthGrants)
   @ApiResponse({ type: GrantDataSerializer })
@@ -142,6 +145,7 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteAuthGrants)
   @ApiResponse({ type: GrantDataSerializer })
@@ -154,6 +158,7 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageAuthGrants)
   @ApiResponse({ type: GrantDataSerializer })
@@ -166,6 +171,7 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageAuthGrants)
   @Validation('auth/grants', 'update')
@@ -181,6 +187,7 @@ export class GrantsController extends ControllerClass<Grant, GrantDto> implement
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteAuthGrants)
   @Validation('auth/grants', 'update')

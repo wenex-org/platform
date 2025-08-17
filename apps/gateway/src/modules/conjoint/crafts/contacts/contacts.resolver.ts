@@ -1,7 +1,7 @@
 import { ContactDataSerializer, ContactItemsSerializer, ContactSerializer } from '@app/common/serializers/conjoint';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateContactDto, CreateContactItemsDto, UpdateContactDto } from '@app/common/dto/conjoint';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -44,6 +44,7 @@ export class ContactsResolver extends ControllerClass<Contact, ContactDto> imple
   }
 
   @Mutation(() => ContactDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointContacts)
   @UseInterceptors(...WriteInterceptors)
@@ -54,6 +55,7 @@ export class ContactsResolver extends ControllerClass<Contact, ContactDto> imple
   }
 
   @Mutation(() => ContactItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointContacts)
   @UseInterceptors(...WriteInterceptors)
@@ -91,6 +93,7 @@ export class ContactsResolver extends ControllerClass<Contact, ContactDto> imple
   }
 
   @Mutation(() => ContactDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointContacts)
   @SetPolicy(Action.Delete, Resource.ConjointContacts)
@@ -106,6 +109,7 @@ export class ContactsResolver extends ControllerClass<Contact, ContactDto> imple
   }
 
   @Mutation(() => ContactDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointContacts)
   @SetPolicy(Action.Restore, Resource.ConjointContacts)
@@ -121,6 +125,7 @@ export class ContactsResolver extends ControllerClass<Contact, ContactDto> imple
   }
 
   @Mutation(() => ContactDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageConjointContacts)
   @SetPolicy(Action.Destroy, Resource.ConjointContacts)
@@ -136,6 +141,7 @@ export class ContactsResolver extends ControllerClass<Contact, ContactDto> imple
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageConjointContacts)
   @Validation('conjoint/contacts', 'update')
@@ -150,6 +156,7 @@ export class ContactsResolver extends ControllerClass<Contact, ContactDto> imple
   }
 
   @Mutation(() => ContactDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointContacts)
   @Validation('conjoint/contacts', 'update')

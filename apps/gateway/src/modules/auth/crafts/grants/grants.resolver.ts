@@ -1,6 +1,6 @@
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { GrantDataSerializer, GrantItemsSerializer, GrantSerializer } from '@app/common/serializers/auth';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateGrantDto, CreateGrantItemsDto, UpdateGrantDto } from '@app/common/dto/auth';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
@@ -44,6 +44,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Mutation(() => GrantDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteAuthGrants)
   @Validation('auth/grants', 'create')
@@ -54,6 +55,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Mutation(() => GrantItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteAuthGrants)
   @Validation('auth/grants', 'create')
@@ -88,6 +90,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Mutation(() => GrantDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteAuthGrants)
   @SetPolicy(Action.Delete, Resource.AuthGrants)
@@ -103,6 +106,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Mutation(() => GrantDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteAuthGrants)
   @SetPolicy(Action.Restore, Resource.AuthGrants)
@@ -118,6 +122,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Mutation(() => GrantDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageAuthGrants)
   @SetPolicy(Action.Destroy, Resource.AuthGrants)
@@ -133,6 +138,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageAuthGrants)
   @Validation('auth/grants', 'update')
@@ -147,6 +153,7 @@ export class GrantsResolver extends ControllerClass<Grant, GrantDto> implements 
   }
 
   @Mutation(() => GrantDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteAuthGrants)
   @Validation('auth/grants', 'update')

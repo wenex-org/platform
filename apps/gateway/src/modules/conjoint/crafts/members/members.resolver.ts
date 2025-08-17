@@ -1,7 +1,7 @@
 import { MemberDataSerializer, MemberItemsSerializer, MemberSerializer } from '@app/common/serializers/conjoint';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateMemberDto, CreateMemberItemsDto, UpdateMemberDto } from '@app/common/dto/conjoint';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -44,6 +44,7 @@ export class MembersResolver extends ControllerClass<Member, MemberDto> implemen
   }
 
   @Mutation(() => MemberDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMembers)
   @UseInterceptors(...WriteInterceptors)
@@ -54,6 +55,7 @@ export class MembersResolver extends ControllerClass<Member, MemberDto> implemen
   }
 
   @Mutation(() => MemberItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMembers)
   @UseInterceptors(...WriteInterceptors)
@@ -91,6 +93,7 @@ export class MembersResolver extends ControllerClass<Member, MemberDto> implemen
   }
 
   @Mutation(() => MemberDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMembers)
   @SetPolicy(Action.Delete, Resource.ConjointMembers)
@@ -106,6 +109,7 @@ export class MembersResolver extends ControllerClass<Member, MemberDto> implemen
   }
 
   @Mutation(() => MemberDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMembers)
   @SetPolicy(Action.Restore, Resource.ConjointMembers)
@@ -121,6 +125,7 @@ export class MembersResolver extends ControllerClass<Member, MemberDto> implemen
   }
 
   @Mutation(() => MemberDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageConjointMembers)
   @SetPolicy(Action.Destroy, Resource.ConjointMembers)
@@ -136,6 +141,7 @@ export class MembersResolver extends ControllerClass<Member, MemberDto> implemen
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageConjointMembers)
   @Validation('conjoint/members', 'update')
@@ -150,6 +156,7 @@ export class MembersResolver extends ControllerClass<Member, MemberDto> implemen
   }
 
   @Mutation(() => MemberDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMembers)
   @Validation('conjoint/members', 'update')

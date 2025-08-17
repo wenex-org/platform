@@ -1,6 +1,6 @@
 import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { EmailDataSerializer, EmailItemsSerializer, EmailSerializer } from '@app/common/serializers/touch';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateEmailDto, CreateEmailItemsDto, UpdateEmailDto } from '@app/common/dto/touch';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
@@ -44,6 +44,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   }
 
   @Mutation(() => EmailDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @Validation('touch/emails', 'create')
@@ -54,6 +55,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   }
 
   @Mutation(() => EmailItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @Validation('touch/emails', 'create')
@@ -88,6 +90,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   }
 
   @Mutation(() => EmailDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @SetPolicy(Action.Delete, Resource.TouchEmails)
@@ -103,6 +106,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   }
 
   @Mutation(() => EmailDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @SetPolicy(Action.Restore, Resource.TouchEmails)
@@ -118,6 +122,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   }
 
   @Mutation(() => EmailDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchEmails)
   @SetPolicy(Action.Destroy, Resource.TouchEmails)
@@ -133,6 +138,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageTouchEmails)
   @Validation('touch/emails', 'update')
@@ -147,6 +153,7 @@ export class EmailsResolver extends ControllerClass<Email, EmailDto> implements 
   }
 
   @Mutation(() => EmailDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteTouchEmails)
   @Validation('touch/emails', 'update')

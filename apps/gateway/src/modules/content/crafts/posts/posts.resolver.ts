@@ -1,6 +1,6 @@
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { PostDataSerializer, PostItemsSerializer, PostSerializer } from '@app/common/serializers/content';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreatePostDto, CreatePostItemsDto, UpdatePostDto } from '@app/common/dto/content';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
@@ -44,6 +44,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   }
 
   @Mutation(() => PostDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentPosts)
   @Validation('content/posts', 'create')
@@ -54,6 +55,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   }
 
   @Mutation(() => PostItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentPosts)
   @Validation('content/posts', 'create')
@@ -88,6 +90,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   }
 
   @Mutation(() => PostDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentPosts)
   @SetPolicy(Action.Delete, Resource.ContentPosts)
@@ -103,6 +106,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   }
 
   @Mutation(() => PostDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentPosts)
   @SetPolicy(Action.Restore, Resource.ContentPosts)
@@ -118,6 +122,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   }
 
   @Mutation(() => PostDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentPosts)
   @SetPolicy(Action.Destroy, Resource.ContentPosts)
@@ -133,6 +138,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentPosts)
   @Validation('content/posts', 'update')
@@ -147,6 +153,7 @@ export class PostsResolver extends ControllerClass<Post, PostDto> implements ICo
   }
 
   @Mutation(() => PostDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentPosts)
   @Validation('content/posts', 'update')

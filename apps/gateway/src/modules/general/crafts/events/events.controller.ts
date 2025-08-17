@@ -13,9 +13,9 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
-import { EventDataSerializer, EventItemsSerializer, EventSerializer } from '@app/common/serializers/general';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { EventDataSerializer, EventItemsSerializer, EventSerializer } from '@app/common/serializers/general';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateEventDto, CreateEventItemsDto, UpdateEventDto } from '@app/common/dto/general';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
@@ -63,6 +63,7 @@ export class EventsController extends ControllerClass<Event, EventDto> implement
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralEvents)
   @UseInterceptors(...WriteInterceptors)
@@ -74,6 +75,7 @@ export class EventsController extends ControllerClass<Event, EventDto> implement
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralEvents)
   @UseInterceptors(...WriteInterceptors)
@@ -130,6 +132,7 @@ export class EventsController extends ControllerClass<Event, EventDto> implement
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralEvents)
   @ApiResponse({ type: EventDataSerializer })
@@ -142,6 +145,7 @@ export class EventsController extends ControllerClass<Event, EventDto> implement
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralEvents)
   @ApiResponse({ type: EventDataSerializer })
@@ -154,6 +158,7 @@ export class EventsController extends ControllerClass<Event, EventDto> implement
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralEvents)
   @ApiResponse({ type: EventDataSerializer })
@@ -166,6 +171,7 @@ export class EventsController extends ControllerClass<Event, EventDto> implement
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageGeneralEvents)
   @Validation('general/events', 'update')
@@ -181,6 +187,7 @@ export class EventsController extends ControllerClass<Event, EventDto> implement
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteGeneralEvents)
   @Validation('general/events', 'update')

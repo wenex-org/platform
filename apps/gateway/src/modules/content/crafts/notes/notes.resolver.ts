@@ -1,6 +1,6 @@
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { NoteDataSerializer, NoteItemsSerializer, NoteSerializer } from '@app/common/serializers/content';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateNoteDto, CreateNoteItemsDto, UpdateNoteDto } from '@app/common/dto/content';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
@@ -44,6 +44,7 @@ export class NotesResolver extends ControllerClass<Note, NoteDto> implements ICo
   }
 
   @Mutation(() => NoteDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentNotes)
   @Validation('content/notes', 'create')
@@ -54,6 +55,7 @@ export class NotesResolver extends ControllerClass<Note, NoteDto> implements ICo
   }
 
   @Mutation(() => NoteItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentNotes)
   @Validation('content/notes', 'create')
@@ -88,6 +90,7 @@ export class NotesResolver extends ControllerClass<Note, NoteDto> implements ICo
   }
 
   @Mutation(() => NoteDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentNotes)
   @SetPolicy(Action.Delete, Resource.ContentNotes)
@@ -103,6 +106,7 @@ export class NotesResolver extends ControllerClass<Note, NoteDto> implements ICo
   }
 
   @Mutation(() => NoteDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentNotes)
   @SetPolicy(Action.Restore, Resource.ContentNotes)
@@ -118,6 +122,7 @@ export class NotesResolver extends ControllerClass<Note, NoteDto> implements ICo
   }
 
   @Mutation(() => NoteDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentNotes)
   @SetPolicy(Action.Destroy, Resource.ContentNotes)
@@ -133,6 +138,7 @@ export class NotesResolver extends ControllerClass<Note, NoteDto> implements ICo
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentNotes)
   @Validation('content/notes', 'update')
@@ -147,6 +153,7 @@ export class NotesResolver extends ControllerClass<Note, NoteDto> implements ICo
   }
 
   @Mutation(() => NoteDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentNotes)
   @Validation('content/notes', 'update')

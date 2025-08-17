@@ -1,6 +1,6 @@
 import { ClientDataSerializer, ClientItemsSerializer, ClientSerializer } from '@app/common/serializers/domain';
+import { Audit, Cache, Nested, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { Cache, Nested, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateClientDto, CreateClientItemsDto, UpdateClientDto } from '@app/common/dto/domain';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
@@ -45,6 +45,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Mutation(() => ClientDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
@@ -55,6 +56,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Mutation(() => ClientItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @UseInterceptors(...WriteInterceptors)
@@ -89,6 +91,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Mutation(() => ClientDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @SetPolicy(Action.Delete, Resource.DomainClients)
@@ -104,6 +107,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Mutation(() => ClientDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @SetPolicy(Action.Restore, Resource.DomainClients)
@@ -119,6 +123,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Mutation(() => ClientDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageDomainClients)
   @SetPolicy(Action.Destroy, Resource.DomainClients)
@@ -134,6 +139,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageDomainClients)
   @Validation('domain/clients', 'update')
@@ -148,6 +154,7 @@ export class ClientsResolver extends ControllerClass<Client, ClientDto> implemen
   }
 
   @Mutation(() => ClientDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteDomainClients)
   @Validation('domain/clients', 'update')

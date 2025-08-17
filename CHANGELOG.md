@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- audit log interceptor, decorator, module and worker @vhidvz
+- request scope and policy to metadata keys and interceptor @vhidvz
+
+### Changed
+
+- streamline `collectStat` function and enhance `doc` handling @vhidvz
+- refactor: enhance authorization checks in `onClientAuthorize` method @vhidvz
+- replace `withSession` with `withSagaSession` in service methods for consistency @vhidvz
+
+### Fixed
+
+- throwing rpc exceptions on `AllExceptionsFilter` @vhidvz
+
 ## [1.2.23] - 2025-08-14
 
 ### Added

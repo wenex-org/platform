@@ -1,7 +1,7 @@
 import { SettingDataSerializer, SettingItemsSerializer, SettingSerializer } from '@app/common/serializers/context';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateSettingDto, CreateSettingItemsDto, UpdateSettingDto } from '@app/common/dto/context';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -44,6 +44,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   }
 
   @Mutation(() => SettingDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @UseInterceptors(...WriteInterceptors)
@@ -54,6 +55,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   }
 
   @Mutation(() => SettingItemsSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @UseInterceptors(...WriteInterceptors)
@@ -91,6 +93,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   }
 
   @Mutation(() => SettingDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @SetPolicy(Action.Delete, Resource.ContextSettings)
@@ -106,6 +109,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   }
 
   @Mutation(() => SettingDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @SetPolicy(Action.Restore, Resource.ContextSettings)
@@ -121,6 +125,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   }
 
   @Mutation(() => SettingDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContextSettings)
   @SetPolicy(Action.Destroy, Resource.ContextSettings)
@@ -136,6 +141,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   }
 
   @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContextSettings)
   @Validation('context/settings', 'update')
@@ -150,6 +156,7 @@ export class SettingsResolver extends ControllerClass<Setting, SettingDto> imple
   }
 
   @Mutation(() => SettingDataSerializer)
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContextSettings)
   @Validation('context/settings', 'update')

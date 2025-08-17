@@ -22,7 +22,7 @@ import {
 } from '@app/common/serializers/essential';
 import { AddSagaStageDto, CreateSagaDto, CreateSagaItemsDto, StartSagaDto, UpdateSagaDto } from '@app/common/dto/essential';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -59,6 +59,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Post('start')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.StartEssentialSagas)
   @UseInterceptors(...WriteInterceptors)
@@ -69,6 +70,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Post('add')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.AddEssentialSagas)
   @UseInterceptors(...WriteInterceptors)
@@ -79,6 +81,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Get(':id/abort')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.AbortEssentialSagas)
   @ApiResponse({ type: SagaDataSerializer })
@@ -91,6 +94,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Get(':id/commit')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.CommitEssentialSagas)
   @ApiResponse({ type: SagaDataSerializer })
@@ -117,6 +121,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagas)
   @UseInterceptors(...WriteInterceptors)
@@ -128,6 +133,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagas)
   @UseInterceptors(...WriteInterceptors)
@@ -184,6 +190,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagas)
   @ApiResponse({ type: SagaDataSerializer })
@@ -196,6 +203,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagas)
   @ApiResponse({ type: SagaDataSerializer })
@@ -208,6 +216,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageEssentialSagas)
   @ApiResponse({ type: SagaDataSerializer })
@@ -220,6 +229,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageEssentialSagas)
   @Validation('essential/sagas', 'update')
@@ -235,6 +245,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagas)
   @Validation('essential/sagas', 'update')

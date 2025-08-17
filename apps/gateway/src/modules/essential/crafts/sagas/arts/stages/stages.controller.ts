@@ -16,7 +16,7 @@ import {
 import { SagaStageDataSerializer, SagaStageItemsSerializer, SagaStageSerializer } from '@app/common/serializers/essential';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateSagaStageDto, CreateSagaStageItemsDto, UpdateSagaStageDto } from '@app/common/dto/essential';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -63,6 +63,7 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteEssentialSagaStages)
@@ -74,6 +75,7 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @UseInterceptors(...WriteInterceptors)
   @SetScope(Scope.WriteEssentialSagaStages)
@@ -130,6 +132,7 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagaStages)
   @ApiResponse({ type: SagaStageDataSerializer })
@@ -142,6 +145,7 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagaStages)
   @ApiResponse({ type: SagaStageDataSerializer })
@@ -154,6 +158,7 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageEssentialSagaStages)
   @ApiResponse({ type: SagaStageDataSerializer })
@@ -166,6 +171,7 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageEssentialSagaStages)
   @Validation('essential/saga-stages', 'update')
@@ -181,6 +187,7 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteEssentialSagaStages)
   @Validation('essential/saga-stages', 'update')

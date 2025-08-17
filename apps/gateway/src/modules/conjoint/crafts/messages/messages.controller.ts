@@ -15,8 +15,8 @@ import {
 } from '@nestjs/common';
 import { MessageDataSerializer, MessageItemsSerializer, MessageSerializer } from '@app/common/serializers/conjoint';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateMessageDto, CreateMessageItemsDto, UpdateMessageDto } from '@app/common/dto/conjoint';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -63,6 +63,7 @@ export class MessagesController extends ControllerClass<Message, MessageDto> imp
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMessages)
   @UseInterceptors(...WriteInterceptors)
@@ -74,6 +75,7 @@ export class MessagesController extends ControllerClass<Message, MessageDto> imp
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMessages)
   @UseInterceptors(...WriteInterceptors)
@@ -130,6 +132,7 @@ export class MessagesController extends ControllerClass<Message, MessageDto> imp
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMessages)
   @ApiResponse({ type: MessageDataSerializer })
@@ -142,6 +145,7 @@ export class MessagesController extends ControllerClass<Message, MessageDto> imp
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMessages)
   @ApiResponse({ type: MessageDataSerializer })
@@ -154,6 +158,7 @@ export class MessagesController extends ControllerClass<Message, MessageDto> imp
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageConjointMessages)
   @ApiResponse({ type: MessageDataSerializer })
@@ -166,6 +171,7 @@ export class MessagesController extends ControllerClass<Message, MessageDto> imp
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageConjointMessages)
   @Validation('conjoint/messages', 'update')
@@ -181,6 +187,7 @@ export class MessagesController extends ControllerClass<Message, MessageDto> imp
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteConjointMessages)
   @Validation('conjoint/messages', 'update')

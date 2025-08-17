@@ -27,5 +27,5 @@ for service in "${services[@]}"; do
   sleep 15
 done
 
-sleep 30
+sleep 45
 echo "All services started successfully!"

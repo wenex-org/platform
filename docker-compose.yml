@@ -195,6 +195,15 @@ services:
       SERVICE_NAME: publisher
     <<: *common
 
+  logger:
+    profiles: [logger, platform, workers]
+    container_name: platform-logger
+    ports:
+      - 4060:4060 # REST
+    environment:
+      SERVICE_NAME: logger
+    <<: *common
+
   # ---------
   # Commands
   # ---------

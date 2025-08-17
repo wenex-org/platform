@@ -15,7 +15,7 @@ import {
 } from '@nestjs/common';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { NoteDataSerializer, NoteItemsSerializer, NoteSerializer } from '@app/common/serializers/content';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateNoteDto, CreateNoteItemsDto, UpdateNoteDto } from '@app/common/dto/content';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
@@ -63,6 +63,7 @@ export class NotesController extends ControllerClass<Note, NoteDto> implements I
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentNotes)
   @Validation('content/notes', 'create')
@@ -74,6 +75,7 @@ export class NotesController extends ControllerClass<Note, NoteDto> implements I
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentNotes)
   @Validation('content/notes', 'create')
@@ -130,6 +132,7 @@ export class NotesController extends ControllerClass<Note, NoteDto> implements I
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentNotes)
   @ApiResponse({ type: NoteDataSerializer })
@@ -142,6 +145,7 @@ export class NotesController extends ControllerClass<Note, NoteDto> implements I
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentNotes)
   @ApiResponse({ type: NoteDataSerializer })
@@ -154,6 +158,7 @@ export class NotesController extends ControllerClass<Note, NoteDto> implements I
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentNotes)
   @ApiResponse({ type: NoteDataSerializer })
@@ -166,6 +171,7 @@ export class NotesController extends ControllerClass<Note, NoteDto> implements I
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentNotes)
   @Validation('content/notes', 'update')
@@ -181,6 +187,7 @@ export class NotesController extends ControllerClass<Note, NoteDto> implements I
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentNotes)
   @Validation('content/notes', 'update')

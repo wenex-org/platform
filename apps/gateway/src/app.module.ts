@@ -6,6 +6,7 @@ import { BlacklistModule } from '@app/module/blacklist';
 import { DynamicModule, Module } from '@nestjs/common';
 import { SentryModule } from '@ntegral/nestjs-sentry';
 import { HealthModule } from '@app/module/health';
+import { LoggerModule } from '@app/module/logger';
 import { GraphQLModule } from '@nestjs/graphql';
 import { RedisModule } from '@app/module/redis';
 import GraphQLJSON from 'graphql-type-json';
@@ -16,6 +17,7 @@ import * as modules from './modules';
 
 @Module({
   imports: [
+    LoggerModule.forRoot(),
     BlacklistModule.forRoot(),
     PrometheusModule.register(),
 

@@ -15,8 +15,8 @@ import {
 } from '@nestjs/common';
 import { WalletDataSerializer, WalletItemsSerializer, WalletSerializer } from '@app/common/serializers/financial';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateWalletDto, CreateWalletItemsDto, UpdateWalletDto } from '@app/common/dto/financial';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -63,6 +63,7 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialWallets)
   @UseInterceptors(...WriteInterceptors)
@@ -74,6 +75,7 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialWallets)
   @UseInterceptors(...WriteInterceptors)
@@ -130,6 +132,7 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialWallets)
   @ApiResponse({ type: WalletDataSerializer })
@@ -142,6 +145,7 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialWallets)
   @ApiResponse({ type: WalletDataSerializer })
@@ -154,6 +158,7 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialWallets)
   @ApiResponse({ type: WalletDataSerializer })
@@ -166,6 +171,7 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageFinancialWallets)
   @Validation('financial/wallets', 'update')
@@ -181,6 +187,7 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteFinancialWallets)
   @Validation('financial/wallets', 'update')

@@ -15,8 +15,8 @@ import {
 } from '@nestjs/common';
 import { TicketDataSerializer, TicketItemsSerializer, TicketSerializer } from '@app/common/serializers/content';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateTicketDto, CreateTicketItemsDto, UpdateTicketDto } from '@app/common/dto/content';
-import { Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -63,6 +63,7 @@ export class TicketsController extends ControllerClass<Ticket, TicketDto> implem
   }
 
   @Post()
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentTickets)
   @UseInterceptors(...WriteInterceptors)
@@ -74,6 +75,7 @@ export class TicketsController extends ControllerClass<Ticket, TicketDto> implem
   }
 
   @Post('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentTickets)
   @UseInterceptors(...WriteInterceptors)
@@ -130,6 +132,7 @@ export class TicketsController extends ControllerClass<Ticket, TicketDto> implem
   }
 
   @Delete(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentTickets)
   @ApiResponse({ type: TicketDataSerializer })
@@ -142,6 +145,7 @@ export class TicketsController extends ControllerClass<Ticket, TicketDto> implem
   }
 
   @Put(':id/restore')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentTickets)
   @ApiResponse({ type: TicketDataSerializer })
@@ -154,6 +158,7 @@ export class TicketsController extends ControllerClass<Ticket, TicketDto> implem
   }
 
   @Delete(':id/destroy')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentTickets)
   @ApiResponse({ type: TicketDataSerializer })
@@ -166,6 +171,7 @@ export class TicketsController extends ControllerClass<Ticket, TicketDto> implem
   }
 
   @Patch('bulk')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.ManageContentTickets)
   @Validation('content/tickets', 'update')
@@ -181,6 +187,7 @@ export class TicketsController extends ControllerClass<Ticket, TicketDto> implem
   }
 
   @Patch(':id')
+  @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.WriteContentTickets)
   @Validation('content/tickets', 'update')
