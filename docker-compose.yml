@@ -204,6 +204,15 @@ services:
       SERVICE_NAME: logger
     <<: *common
 
+  cleaner:
+    profiles: [cleaner, platform, workers]
+    container_name: platform-cleaner
+    ports:
+      - 4070:4070 # REST
+    environment:
+      SERVICE_NAME: cleaner
+    <<: *common
+
   # ---------
   # Commands
   # ---------

@@ -22,7 +22,7 @@ done
 # Wait for all background jobs to complete
 wait
 
-services=("touch" "content" "logistic")
+services=("touch" "content" "logistic" "conjoint")
 for service in "${services[@]}"; do
   npm run build "$service" &
 done
@@ -30,7 +30,7 @@ done
 # Wait for all background jobs to complete
 wait
 
-services=("conjoint" "career")
+services=("career")
 for service in "${services[@]}"; do
   npm run build "$service" &
 done
@@ -42,7 +42,7 @@ wait
 # Build workers
 ######################
 
-workers=("watcher" "preserver" "observer")
+workers=("watcher" "preserver" "observer" "dispatcher")
 for worker in "${workers[@]}"; do
   npm run build "$worker" &
 done
@@ -50,7 +50,7 @@ done
 # Wait for all background jobs to complete
 wait
 
-workers=("dispatcher" "publisher" "logger")
+workers=("publisher" "logger" "cleaner")
 for worker in "${workers[@]}"; do
   npm run build "$worker" &
 done
