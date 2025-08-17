@@ -244,19 +244,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - publisher worker to publish data change log on emqx topics @vhidvz
 - conjoint services @vhidvz
 
-### Fixed
-
-- update import statements to include `toString` utility in `content` DTOs @vhidvz
-- `blacklist` field from `optional` to `repeated` in `touch/pushes` @vhidvz
-- optional `icon` property to `CreateNoticeActionDto` @iranmanesh-dev
-- correct spelling of `subtile` to `subtitle` in `touch/notices` @vhidvz
-- missing semicolon in `Activity` `message` @vhidvz
-- publish method in publisher worker to include database and collection in message payload @vhidvz
-- emqx retain message viewed not found @vhidvz
-- emqx service token expiration exceptions @vhidvz
-- updateOwnership method to include uid in meta handling for improved user tracking @vhidvz
-- streamline grant deletion logic in GrantsService @vhidvz
-
 ### Changed
 
 - send push match query @vhidvz
@@ -271,6 +258,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI @vhidvz
 - update DB_NAME function to use default prefix and adjust related tests @vhidvz
 - change collection type in CqrsSourceDto and CqrsSource interface @vhidvz
+
+### Fixed
+
+- update import statements to include `toString` utility in `content` DTOs @vhidvz
+- `blacklist` field from `optional` to `repeated` in `touch/pushes` @vhidvz
+- optional `icon` property to `CreateNoticeActionDto` @iranmanesh-dev
+- correct spelling of `subtile` to `subtitle` in `touch/notices` @vhidvz
+- missing semicolon in `Activity` `message` @vhidvz
+- publish method in publisher worker to include database and collection in message payload @vhidvz
+- emqx retain message viewed not found @vhidvz
+- emqx service token expiration exceptions @vhidvz
+- updateOwnership method to include uid in meta handling for improved user tracking @vhidvz
+- streamline grant deletion logic in GrantsService @vhidvz
 
 ## [1.0.X] - 2024-01-01
 
