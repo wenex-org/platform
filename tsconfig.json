@@ -28,7 +28,9 @@
       "@financial": ["apps/services/financial/src"],
       "@financial/*": ["apps/services/financial/src/*"],
       "@special": ["apps/services/special/src"],
-      "@special/*": ["apps/services/special/src/*"]
+      "@special/*": ["apps/services/special/src/*"],
+      "@logger": ["apps/workers/logger/src"],
+      "@logger/*": ["apps/workers/logger/src/*"]
     }
   }
 }
