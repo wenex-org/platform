@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.24] - 2025-08-18
+
 ### Added
 
 - audit log interceptor, decorator, module and worker @vhidvz
@@ -280,7 +282,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.23...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.2.24...HEAD
+[1.2.24]: https://github.com/wenex-org/platform/compare/1.2.23...1.2.24
 [1.2.23]: https://github.com/wenex-org/platform/compare/1.2.22...1.2.23
 [1.2.22]: https://github.com/wenex-org/platform/compare/1.2.21...1.2.22
 [1.2.21]: https://github.com/wenex-org/platform/compare/1.2.20...1.2.21
