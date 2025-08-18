@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - audit log interceptor, decorator, module and worker @vhidvz
 - request scope and policy to metadata keys and interceptor @vhidvz
+- `cleaner` worker to purge data from `logger/audits` and `essential/saga.stages` @vhidvz
 
 ### Changed
 
