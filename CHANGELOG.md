@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- the `profile` field of `career/employees` was made optional @vhidvz
 - streamline `collectStat` function and enhance `doc` handling @vhidvz
 - refactor: enhance authorization checks in `onClientAuthorize` method @vhidvz
 - replace `withSession` with `withSagaSession` in service methods for consistency @vhidvz
