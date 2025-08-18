@@ -208,6 +208,15 @@
         "tsConfigPath": "apps/workers/logger/tsconfig.app.json"
       }
     },
+    "cleaner": {
+      "type": "application",
+      "root": "apps/workers/cleaner",
+      "entryFile": "main",
+      "sourceRoot": "apps/workers/cleaner/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/workers/cleaner/tsconfig.app.json"
+      }
+    },
     "command": {
       "type": "library",
       "root": "libs/command",

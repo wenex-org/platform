@@ -26,6 +26,7 @@ npm run dpdm:ts ./apps/workers/preserver/src/main.ts -- --progress >> circular-d
 npm run dpdm:ts ./apps/workers/publisher/src/main.ts -- --progress >> circular-dependencies.txt
 npm run dpdm:ts ./apps/workers/watcher/src/main.ts -- --progress >> circular-dependencies.txt
 npm run dpdm:ts ./apps/workers/logger/src/main.ts -- --progress >> circular-dependencies.txt
+npm run dpdm:ts ./apps/workers/cleaner/src/main.ts -- --progress >> circular-dependencies.txt
 
 # Madge
 npm run madge:report:ts
