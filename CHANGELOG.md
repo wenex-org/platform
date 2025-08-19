@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.25] - 2025-08-19
+
+### Fixed
+
+- token needs in auth model to update user details for logger interceptor @vhidvz
+
 ## [1.2.24] - 2025-08-18
 
 ### Added
@@ -282,7 +288,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.24...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.2.25...HEAD
+[1.2.25]: https://github.com/wenex-org/platform/compare/1.2.24...1.2.25
 [1.2.24]: https://github.com/wenex-org/platform/compare/1.2.23...1.2.24
 [1.2.23]: https://github.com/wenex-org/platform/compare/1.2.22...1.2.23
 [1.2.22]: https://github.com/wenex-org/platform/compare/1.2.21...1.2.22
