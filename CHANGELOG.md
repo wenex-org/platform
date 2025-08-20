@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `organizers` field population to `career/employees` in `general/events` map @iranmanesh-dev
+
+### Changed
+
+- fixed proto definition of `organizers` and `attendees` fields to be repeated @iranmanesh-dev
+
 ## [1.2.25] - 2025-08-19
 
 ### Fixed
