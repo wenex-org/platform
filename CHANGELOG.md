@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `attendees` field population to `identity/profiles` in `general/events` map @vhidvz
 - `organizers` field population to `career/employees` in `general/events` map @iranmanesh-dev
 
 ### Changed
