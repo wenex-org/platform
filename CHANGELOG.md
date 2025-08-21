@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - fixed proto definition of `organizers` and `attendees` fields to be repeated @iranmanesh-dev
 
+### Fixed
+
+- proto `req.filter.populate` type definition for `essential/sagas` file @vhidvz
+
 ## [1.2.25] - 2025-08-19
 
 ### Fixed
