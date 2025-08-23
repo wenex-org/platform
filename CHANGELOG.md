@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.26] - 2025-08-23
+
 ### Added
 
 - `attendees` field population to `identity/profiles` in `general/events` map @vhidvz
@@ -301,7 +303,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.25...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.2.26...HEAD
+[1.2.26]: https://github.com/wenex-org/platform/compare/1.2.25...1.2.26
 [1.2.25]: https://github.com/wenex-org/platform/compare/1.2.24...1.2.25
 [1.2.24]: https://github.com/wenex-org/platform/compare/1.2.23...1.2.24
 [1.2.23]: https://github.com/wenex-org/platform/compare/1.2.22...1.2.23
