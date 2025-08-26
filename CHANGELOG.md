@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.2.26] - 2025-08-23
 
+### Changed
+
+- remove text index from schema  @fdaei
+
 ### Added
 
 - `attendees` field population to `identity/profiles` in `general/events` map @vhidvz
