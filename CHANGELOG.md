@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `range` location field to `career/employees` @vhidvz
+- `range` location field added to `career/employees` @vhidvz
 
 ## [1.2.26] - 2025-08-23
 
