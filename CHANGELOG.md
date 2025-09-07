@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - refactor: enhance hooks to return values from before and after methods @vhidvz
 - refactor(profiles): add restore onBeforeBulkUpdate method in `identity/profiles` @vhidvz
 
+### Fixed
+
+- update workflow schema to allow mixed types for tokens @vhidvz
+
 ## [1.2.27] - 2025-08-28
 
 ### Added
