@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- indexed `general/workflows.data` schema @vhidvz
 - refactor: update `SENSITIVE_PHRASES` to include `/api[_-]key$/` regex @vhidvz
 - refactor: improve error handling in `fixInput` function @vhidvz
 - refactor: enhance authorization logic in checkQueryExploits function @vhidvz
