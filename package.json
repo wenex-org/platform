@@ -63,7 +63,8 @@
   },
   "dependencies": {
     "@apollo/server": "^4.11.3",
-    "@aws-sdk/client-s3": "^3.732.0",
+    "@aws-sdk/client-s3": "^3.883.0",
+    "@aws-sdk/s3-request-presigner": "^3.883.0",
     "@bull-board/api": "^6.7.1",
     "@bull-board/express": "^6.7.1",
     "@bull-board/nestjs": "^6.7.1",

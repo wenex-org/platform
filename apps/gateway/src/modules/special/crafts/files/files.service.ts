@@ -27,4 +27,15 @@ export class FilesService {
       return { data: await this.privateService.getObject(file), file };
     } else throw new Error('unknown bucket');
   }
+
+  async getUrl(query: Query<File>, options: ServiceOptions = {}) {
+    const file = await this.provider.files.findOne({ query }, options);
+    assertion(file?.id && isAvailable(file), 'File not found', HttpStatus.NOT_FOUND);
+
+    if (file.bucket === PUBLIC_STORAGE.bucket) {
+      return { data: await this.publicService.getShareLink(file), file };
+    } else if (file.bucket === PRIVATE_STORAGE.bucket) {
+      return { data: await this.privateService.getShareLink(file), file };
+    } else throw new Error('unknown bucket');
+  }
 }

@@ -75,4 +75,17 @@ export class FilesInspector {
       } else sdkStreamMixin(data.Body).pipe(res);
     }
   }
+
+  @Get('url/:id')
+  @SetScope(Scope.DownloadSpecialFiles)
+  @UseInterceptors(AuthorityInterceptor)
+  @SetPolicy(Action.Download, Resource.SpecialFiles)
+  @ApiParam({ type: String, name: 'id', required: true })
+  @ApiQuery({ type: String, name: 'ref', required: false })
+  @ApiResponse({ status: HttpStatus.OK })
+  async getUrl(@Req() req: Request, @Res() res: Response, @Meta() meta: Metadata, @Filter() filter: QueryFilterDto) {
+    const { data } = await this.service.getUrl(filter.query, { meta });
+
+    res.status(HttpStatus.OK).json({ url: data });
+  }
 }
