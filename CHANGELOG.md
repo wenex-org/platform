@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - update workflow schema to allow mixed types for tokens @vhidvz
 - escape special characters in topic replacement for authorization checks @vhidvz
+- fix career service serializer number type @winkcor
 
 ## [1.2.27] - 2025-08-28
 
