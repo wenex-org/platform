@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - refactor: enhance authorization logic in checkQueryExploits function @vhidvz
 - refactor: enhance hooks to return values from before and after methods @vhidvz
 - refactor(profiles): add restore onBeforeBulkUpdate method in `identity/profiles` @vhidvz
+- make 'name' field optional in channel DTOs, interfaces, schemas, and serializers @vhidvz
 
 ### Fixed
 
