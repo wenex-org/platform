@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- feat: add `Stashes` module and integrate with `dispatcher` service @vhidvz
+- feat: add `dispatcher.stashes` module and integrate with `cleaner` service @vhidvz
+
 ### Changed
 
 - indexed `general/workflows.data` schema @vhidvz

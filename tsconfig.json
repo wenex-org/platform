@@ -30,7 +30,9 @@
       "@special": ["apps/services/special/src"],
       "@special/*": ["apps/services/special/src/*"],
       "@logger": ["apps/workers/logger/src"],
-      "@logger/*": ["apps/workers/logger/src/*"]
+      "@logger/*": ["apps/workers/logger/src/*"],
+      "@dispatcher": ["apps/workers/dispatcher/src"],
+      "@dispatcher/*": ["apps/workers/dispatcher/src/*"]
     }
   }
 }
