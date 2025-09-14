@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - feat: add `Stashes` module and integrate with `dispatcher` service @vhidvz
 - feat: add `dispatcher.stashes` module and integrate with `cleaner` service @vhidvz
+- feat: add `ProjectionInterceptor` and related utilities for handling projections @vhidvz
 
 ### Changed
 

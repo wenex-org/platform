@@ -215,6 +215,9 @@ importers:
       luxon:
         specifier: ^3.5.0
         version: 3.5.0
+      mingo:
+        specifier: ^6.6.1
+        version: 6.6.1
       mongodb:
         specifier: ^6.12.0
         version: 6.12.0
@@ -6380,6 +6383,9 @@ packages:
   mimic-function@5.0.1:
     resolution: {integrity: sha512-VP79XUPxV2CigYP3jWwAUFSku2aKqBH7uTAapFWCBqutsbmDo96KY5o8uh6U+/YSIn5OxJnXp73beVkpqMIGhA==}
     engines: {node: '>=18'}
+
+  mingo@6.6.1:
+    resolution: {integrity: sha512-KC6b1ODYoSdYu5fBm+SzQb7fa4ARmGwfa3Cf9F7U+2mnfD4Zhf89qQgO1cPTtaJ68w3ntIT5dVujgF52HvN7+g==}
 
   minimalistic-assert@1.0.1:
     resolution: {integrity: sha512-UtJcAD4yEaGtjPezWuO9wC4nwUnVH/8/Im3yEHQP4b67cXlD/Qr9hdITCU1xDbSEXg2XKNaP8jsReV7vQd00/A==}
@@ -16093,6 +16099,8 @@ snapshots:
   mimic-fn@4.0.0: {}
 
   mimic-function@5.0.1: {}
+
+  mingo@6.6.1: {}
 
   minimalistic-assert@1.0.1: {}
 
