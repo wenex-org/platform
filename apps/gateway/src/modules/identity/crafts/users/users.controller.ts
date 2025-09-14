@@ -16,13 +16,13 @@ import {
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { UserDataSerializer, UserItemsSerializer, UserSerializer } from '@app/common/serializers/identity';
 import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { AuthorityInterceptor, ProjectionInterceptor } from '@app/common/core/interceptors/mongo';
 import { CreateUserDto, CreateUserItemsDto, UpdateUserDto } from '@app/common/dto/identity';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
-import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { IdentityProvider } from '@app/common/providers/identity';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
@@ -139,7 +139,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements I
   @SetPolicy(Action.Delete, Resource.IdentityUsers)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override deleteOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<User>): Observable<UserDataSerializer> {
     return super.deleteOne(meta, filter);
   }
@@ -152,7 +152,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements I
   @SetPolicy(Action.Restore, Resource.IdentityUsers)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override restoreOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<User>): Observable<UserDataSerializer> {
     return super.restoreOne(meta, filter);
   }
@@ -195,7 +195,7 @@ export class UsersController extends ControllerClass<User, UserDto> implements I
   @SetPolicy(Action.Update, Resource.IdentityUsers)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...WriteInterceptors)
   override updateOne(
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<User>,

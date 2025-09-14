@@ -17,13 +17,13 @@ import { DriverDataSerializer, DriverItemsSerializer, DriverSerializer } from '@
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateDriverDto, CreateDriverItemsDto, UpdateDriverDto } from '@app/common/dto/logistic';
+import { AuthorityInterceptor, ProjectionInterceptor } from '@app/common/core/interceptors/mongo';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Driver as IDriver, DriverDto } from '@app/common/interfaces/logistic';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
-import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { LogisticProvider } from '@app/common/providers/logistic';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
@@ -139,7 +139,7 @@ export class DriversController extends ControllerClass<IDriver, DriverDto> imple
   @SetPolicy(Action.Delete, Resource.LogisticDrivers)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override deleteOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<IDriver>): Observable<DriverDataSerializer> {
     return super.deleteOne(meta, filter);
   }
@@ -152,7 +152,7 @@ export class DriversController extends ControllerClass<IDriver, DriverDto> imple
   @SetPolicy(Action.Restore, Resource.LogisticDrivers)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override restoreOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<IDriver>): Observable<DriverDataSerializer> {
     return super.restoreOne(meta, filter);
   }
@@ -195,7 +195,7 @@ export class DriversController extends ControllerClass<IDriver, DriverDto> imple
   @SetPolicy(Action.Update, Resource.LogisticDrivers)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...WriteInterceptors)
   override updateOne(
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<IDriver>,

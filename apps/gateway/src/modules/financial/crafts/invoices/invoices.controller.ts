@@ -23,12 +23,12 @@ import {
 import { Audit, Cache, Nested, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateInvoiceDto, CreateInvoiceItemsDto, UpdateInvoiceDto } from '@app/common/dto/financial';
+import { AuthorityInterceptor, ProjectionInterceptor } from '@app/common/core/interceptors/mongo';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
-import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Invoice, InvoiceDto } from '@app/common/interfaces/financial';
 import { getSseMessage, mapToInstance } from '@app/common/core/utils';
@@ -162,7 +162,7 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   @SetPolicy(Action.Delete, Resource.FinancialInvoices)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override deleteOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Invoice>): Observable<InvoiceDataSerializer> {
     return super.deleteOne(meta, filter);
   }
@@ -175,7 +175,7 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   @SetPolicy(Action.Restore, Resource.FinancialInvoices)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override restoreOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Invoice>): Observable<InvoiceDataSerializer> {
     return super.restoreOne(meta, filter);
   }
@@ -218,7 +218,7 @@ export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> imp
   @SetPolicy(Action.Update, Resource.FinancialInvoices)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...WriteInterceptors)
   override updateOne(
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Invoice>,

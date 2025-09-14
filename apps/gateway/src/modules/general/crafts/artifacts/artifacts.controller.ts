@@ -17,12 +17,12 @@ import { ArtifactDataSerializer, ArtifactItemsSerializer, ArtifactSerializer } f
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreateArtifactDto, CreateArtifactItemsDto, UpdateArtifactDto } from '@app/common/dto/general';
 import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { AuthorityInterceptor, ProjectionInterceptor } from '@app/common/core/interceptors/mongo';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
-import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Artifact, ArtifactDto } from '@app/common/interfaces/general';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
@@ -139,7 +139,7 @@ export class ArtifactsController extends ControllerClass<Artifact, ArtifactDto> 
   @SetPolicy(Action.Delete, Resource.GeneralArtifacts)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override deleteOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Artifact>): Observable<ArtifactDataSerializer> {
     return super.deleteOne(meta, filter);
   }
@@ -152,7 +152,7 @@ export class ArtifactsController extends ControllerClass<Artifact, ArtifactDto> 
   @SetPolicy(Action.Restore, Resource.GeneralArtifacts)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override restoreOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Artifact>): Observable<ArtifactDataSerializer> {
     return super.restoreOne(meta, filter);
   }
@@ -195,7 +195,7 @@ export class ArtifactsController extends ControllerClass<Artifact, ArtifactDto> 
   @SetPolicy(Action.Update, Resource.GeneralArtifacts)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...WriteInterceptors)
   override updateOne(
     @Meta() meta: Metadata,
     @Filter() filter: FilterOneDto<Artifact>,
