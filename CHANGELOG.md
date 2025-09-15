@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- feat: add users group watcher worker module @vhidvz
+
 ## [1.2.28] - 2025-09-15
 
 ### Added

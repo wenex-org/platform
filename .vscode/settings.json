@@ -70,6 +70,7 @@
     "Responsed",
     "Retriable",
     "ROLLBACKED",
+    "sadd",
     "setex",
     "Smss",
     "SOLANA",
