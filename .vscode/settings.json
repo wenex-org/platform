@@ -73,6 +73,7 @@
     "sadd",
     "scard",
     "setex",
+    "sismember",
     "Smss",
     "SOLANA",
     "sonarqube",
