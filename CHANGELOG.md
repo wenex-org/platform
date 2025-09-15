@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.28] - 2025-09-15
+
 ### Added
 
 - feat: add `Stashes` module and integrate with `dispatcher` service @vhidvz
@@ -336,7 +338,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.27...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.2.28...HEAD
+[1.2.28]: https://github.com/wenex-org/platform/compare/1.2.27...1.2.28
 [1.2.27]: https://github.com/wenex-org/platform/compare/1.2.26...1.2.27
 [1.2.26]: https://github.com/wenex-org/platform/compare/1.2.25...1.2.26
 [1.2.25]: https://github.com/wenex-org/platform/compare/1.2.24...1.2.25
