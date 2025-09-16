@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - feat: enhance ownership handling using `user.groups` property @vhidvz
 - feat: enhance authority exploits handling using `user.groups` property @vhidvz
 
+### Fixed
+
+- fix: bullmq dashboards by updating bullmq versions @vhidvz
+
 ## [1.2.28] - 2025-09-15
 
 ### Added
