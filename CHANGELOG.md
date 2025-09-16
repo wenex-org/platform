@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- fix: bullmq dashboards by updating bullmq versions @vhidvz
+- fix: bullmq dashboards by updating bullmq packages version @vhidvz
 
 ## [1.2.28] - 2025-09-15
 
