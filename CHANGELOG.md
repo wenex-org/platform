@@ -7,10 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.29] - 2025-09-16
+
 ### Added
 
 - feat: add users group watcher worker module @vhidvz
-- add property share to `x-file-data on upload files @winkcor
+- add property share to `x-file-data` on upload files @winkcor
 - feat: enhance ownership handling using `user.groups` property @vhidvz
 - feat: enhance authority exploits handling using `user.groups` property @vhidvz
 
@@ -349,7 +351,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.28...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.2.29...HEAD
+[1.2.29]: https://github.com/wenex-org/platform/compare/1.2.28...1.2.29
 [1.2.28]: https://github.com/wenex-org/platform/compare/1.2.27...1.2.28
 [1.2.27]: https://github.com/wenex-org/platform/compare/1.2.26...1.2.27
 [1.2.26]: https://github.com/wenex-org/platform/compare/1.2.25...1.2.26
