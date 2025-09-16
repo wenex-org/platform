@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - feat: add users group watcher worker module @vhidvz
+- add property share to `x-file-data on upload files @winkcor
 - feat: enhance ownership handling using `user.groups` property @vhidvz
 - feat: enhance authority exploits handling using `user.groups` property @vhidvz
 
