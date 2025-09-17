@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - dispatcher disable job delay changed to `DISPATCHER_BULLMQ_LAST_ATTEMPT_PLUS_ONE` @vhidvz
 
+### Fixed
+
+- fix: some circular dependencies and authority query group bug fixed @vhidvz
+
 ## [1.2.29] - 2025-09-16
 
 ### Added
