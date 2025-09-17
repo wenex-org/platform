@@ -358,7 +358,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - updateOwnership method to include uid in meta handling for improved user tracking @vhidvz
 - streamline grant deletion logic in GrantsService @vhidvz
 
-## [1.0.X] - 2020-01-01
+## [1.0.X] - 2021-01-01
 
 ### Added
 
