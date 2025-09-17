@@ -7,6 +7,62 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- dispatcher disable job delay changed to `DISPATCHER_BULLMQ_LAST_ATTEMPT_PLUS_ONE` @vhidvz
+
+### Fixed
+
+- fix: some circular dependencies and authority query group bug fixed @vhidvz
+
+## [1.2.29] - 2025-09-16
+
+### Added
+
+- feat: add users group watcher worker module @vhidvz
+- add property share to `x-file-data` on upload files @winkcor
+- feat: enhance ownership handling using `user.groups` property @vhidvz
+- feat: enhance authority exploits handling using `user.groups` property @vhidvz
+
+### Fixed
+
+- fix: bullmq dashboards by updating bullmq packages version @vhidvz
+
+## [1.2.28] - 2025-09-15
+
+### Added
+
+- feat: add `Stashes` module and integrate with `dispatcher` service @vhidvz
+- feat: add `dispatcher.stashes` module and integrate with `cleaner` service @vhidvz
+- feat: add `ProjectionInterceptor` and related utilities for handling projections @vhidvz
+
+### Changed
+
+- indexed `general/workflows.data` schema @vhidvz
+- removed on channel creation logic in `conjoint/channel` services @vhidvz
+- refactor: update `SENSITIVE_PHRASES` to include `/api[_-]key$/` regex @vhidvz
+- refactor: improve error handling in `fixInput` function @vhidvz
+- refactor: enhance authorization logic in checkQueryExploits function @vhidvz
+- refactor: enhance hooks to return values from before and after methods @vhidvz
+- refactor(profiles): add restore onBeforeBulkUpdate method in `identity/profiles` @vhidvz
+- make 'name' field optional in channel DTOs, interfaces, schemas, and serializers @vhidvz
+- removed `projection` and `population` params from `findOneAndUpdate` and `findOneAndDelete` methods @vhidvz
+
+### Fixed
+
+- update workflow schema to allow mixed types for tokens @vhidvz
+- escape special characters in topic replacement for authorization checks @vhidvz
+- fix career service serializer number type @winkcor
+
+## [1.2.27] - 2025-08-28
+
+### Added
+
+- `range` location field added to `career/employees` @vhidvz
+- new metadata key `x-file-data` to include file data in requests @iranmanesh-dev
+- new interceptor for handling header data for `special/files` upload @vhidvz
+- new `Unicode` utility functions for text transformation @iranmanesh-dev
+
 ## [1.2.26] - 2025-08-23
 
 ### Added
@@ -303,7 +359,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.26...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.2.29...HEAD
+[1.2.29]: https://github.com/wenex-org/platform/compare/1.2.28...1.2.29
+[1.2.28]: https://github.com/wenex-org/platform/compare/1.2.27...1.2.28
+[1.2.27]: https://github.com/wenex-org/platform/compare/1.2.26...1.2.27
 [1.2.26]: https://github.com/wenex-org/platform/compare/1.2.25...1.2.26
 [1.2.25]: https://github.com/wenex-org/platform/compare/1.2.24...1.2.25
 [1.2.24]: https://github.com/wenex-org/platform/compare/1.2.23...1.2.24
