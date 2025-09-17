@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- added optional `state` field with default value pending to `financial/invoices` @iranmanesh-dev
+
 ### Changed
 
 - dispatcher disable job delay changed to `DISPATCHER_BULLMQ_LAST_ATTEMPT_PLUS_ONE` @vhidvz
