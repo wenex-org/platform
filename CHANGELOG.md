@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- fix: type issue in `essential/sagas` @vhidvz
 - fix: some circular dependencies and authority query group bug fixed @vhidvz
 
 ## [1.2.29] - 2025-09-16
