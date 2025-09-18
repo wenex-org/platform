@@ -1,7 +1,7 @@
 DB_PREFIX="$MONGO_PREFIX"
 
 if [ -f .env ]; then
-  export $(echo $(cat .env | sed 's/#.*//g'| xargs) | envsubst)
+  export $(cat .env | sed 's/#.*//g' | grep -v '^$' | xargs)
 fi
 
 if [ -n "$DB_PREFIX" ]; then

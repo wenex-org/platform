@@ -7,9 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.31] - 2025-09-18
+
 ### Added
 
 - remove client from store if client is not meet preconditions in `dispatcher` worker @vhidvz
+
+### Fixed
+
+- fix: `script:kafka-connection` script to loading `.env` environments variables @vhidvz
 
 ## [1.2.30] - 2025-09-18
 
@@ -371,7 +377,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.30...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.2.31...HEAD
+[1.2.31]: https://github.com/wenex-org/platform/compare/1.2.30...1.2.31
 [1.2.30]: https://github.com/wenex-org/platform/compare/1.2.29...1.2.30
 [1.2.29]: https://github.com/wenex-org/platform/compare/1.2.28...1.2.29
 [1.2.28]: https://github.com/wenex-org/platform/compare/1.2.27...1.2.28
