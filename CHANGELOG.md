@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.30] - 2025-09-18
+
 ### Added
 
 - added optional `state` field with default value pending to `financial/invoices` @iranmanesh-dev
@@ -365,7 +367,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.29...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.2.30...HEAD
+[1.2.30]: https://github.com/wenex-org/platform/compare/1.2.29...1.2.30
 [1.2.29]: https://github.com/wenex-org/platform/compare/1.2.28...1.2.29
 [1.2.28]: https://github.com/wenex-org/platform/compare/1.2.27...1.2.28
 [1.2.27]: https://github.com/wenex-org/platform/compare/1.2.26...1.2.27
