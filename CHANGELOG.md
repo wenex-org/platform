@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- remove client from store if client is not meet preconditions in `dispatcher` worker @vhidvz
+
 ## [1.2.30] - 2025-09-18
 
 ### Added
