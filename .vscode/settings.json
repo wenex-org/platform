@@ -74,6 +74,7 @@
     "scard",
     "setex",
     "sismember",
+    "smembers",
     "Smss",
     "SOLANA",
     "sonarqube",
