@@ -24,6 +24,7 @@ PROTOS[AUTH,1]=./apps/services/auth/src/app.proto
 PROTOS[AUTH,2]=./apps/gateway/src/protobuf/auth.proto
 PROTOS[AUTH,3]=./apps/workers/preserver/src/protobuf/auth.proto
 PROTOS[AUTH,4]=./libs/common/src/providers/auth/protobuf/auth.proto
+PROTOS[AUTH,5]=./apps/services/domain/src/protobuf/auth.proto
 
 # Context Proto
 PROTOS[CONTEXT,1]=./apps/services/context/src/app.proto
