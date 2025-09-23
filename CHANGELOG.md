@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.33] - 2025-09-23
+
+### Changed
+
+- authority `exclude-soft-delete-query` condition changed @vhidvz
+
 ## [1.2.32] - 2025-09-19
 
 ### Fixed
@@ -383,7 +389,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.32...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.2.33...HEAD
+[1.2.32]: https://github.com/wenex-org/platform/compare/1.2.32...1.2.33
 [1.2.32]: https://github.com/wenex-org/platform/compare/1.2.31...1.2.32
 [1.2.31]: https://github.com/wenex-org/platform/compare/1.2.30...1.2.31
 [1.2.30]: https://github.com/wenex-org/platform/compare/1.2.29...1.2.30
