@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- add `check` rpc method to `AuthsService` @vhidvz
+
 ## [1.2.35] - 2025-09-24
 
 ### Changed
@@ -406,7 +410,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.35...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.2.36...HEAD
+[1.2.36]: https://github.com/wenex-org/platform/compare/1.2.35...1.2.36
 [1.2.35]: https://github.com/wenex-org/platform/compare/1.2.34...1.2.35
 [1.2.34]: https://github.com/wenex-org/platform/compare/1.2.33...1.2.34
 [1.2.33]: https://github.com/wenex-org/platform/compare/1.2.32...1.2.33

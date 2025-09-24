@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { AuthenticationSerializer, AuthorizationSerializer } from '@app/common/serializers/auth';
-import { AuthenticationDto, AuthorizationDto } from '@app/common/dto/auth';
+import { AuthCheckDto, AuthenticationDto, AuthorizationDto } from '@app/common/dto/auth';
 import { JwtTokenSerializer } from '@app/common/core/serializers/auth';
 import { GatewayInterceptors } from '@app/common/core/interceptors';
 import { IsPublic, RateLimit } from '@app/common/core/metadatas';
@@ -25,6 +25,15 @@ import { from, map, Observable } from 'rxjs';
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class AuthsController {
   constructor(readonly provider: AuthProvider) {}
+
+  @Get('check')
+  @ApiBearerAuth()
+  check(@Meta() meta: Metadata, @Body() data: AuthCheckDto): Observable<ResultSerializer> {
+    return from(this.provider.auths.check(data, { meta })).pipe(
+      map((val) => ({ result: val })),
+      mapToInstance(ResultSerializer),
+    );
+  }
 
   // ##############################
   //  Authentication Method's
