@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- update `script:kafka-connect` to include some collection not all @vhidvz
+
 ## [1.2.34] - 2025-09-24
 
 ### Added
