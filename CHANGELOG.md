@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- update consumer options to have more stability in consumers @vhidvz
+- update consumer/client options to have more stability in consumers @vhidvz
 
 ## [1.2.33] - 2025-09-23
 
