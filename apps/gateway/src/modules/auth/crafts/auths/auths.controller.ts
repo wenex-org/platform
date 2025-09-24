@@ -26,7 +26,7 @@ import { from, map, Observable } from 'rxjs';
 export class AuthsController {
   constructor(readonly provider: AuthProvider) {}
 
-  @Get('check')
+  @Post('check')
   @ApiBearerAuth()
   check(@Meta() meta: Metadata, @Body() data: AuthCheckDto): Observable<ResultSerializer> {
     return from(this.provider.auths.check(data, { meta })).pipe(
