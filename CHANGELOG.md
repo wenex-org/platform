@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- update nestjs version from `11.0.4` to `11.0.21` @vhidvz
 - update `script:kafka-connect` to include some collection not all @vhidvz
 
 ## [1.2.34] - 2025-09-24
