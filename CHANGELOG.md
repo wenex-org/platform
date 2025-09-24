@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.35] - 2025-09-24
+
 ### Changed
 
 - update nestjs version from `11.0.4` to `11.0.21` @vhidvz
@@ -404,7 +406,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.34...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.2.35...HEAD
+[1.2.35]: https://github.com/wenex-org/platform/compare/1.2.34...1.2.35
 [1.2.34]: https://github.com/wenex-org/platform/compare/1.2.33...1.2.34
 [1.2.33]: https://github.com/wenex-org/platform/compare/1.2.32...1.2.33
 [1.2.32]: https://github.com/wenex-org/platform/compare/1.2.31...1.2.32
