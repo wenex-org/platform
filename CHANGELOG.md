@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.40] - 2025-09-25
+
+### Changed
+
+- update log level of kafkajs to `INFO` @vhidvz
+
 ## [1.2.39] - 2025-09-25
 
 ### Fixed
@@ -434,7 +440,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.39...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.2.40...HEAD
+[1.2.40]: https://github.com/wenex-org/platform/compare/1.2.39...1.2.40
 [1.2.39]: https://github.com/wenex-org/platform/compare/1.2.38...1.2.39
 [1.2.38]: https://github.com/wenex-org/platform/compare/1.2.37...1.2.38
 [1.2.37]: https://github.com/wenex-org/platform/compare/1.2.36...1.2.37
