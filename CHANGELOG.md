@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - add `check` rpc method to `AuthsService` @vhidvz
 
+### Changed
+
+- update `KAFKA_CLIENT` and `CONSUMER_CONFIG` to have more stability in consumers @vhidvz
+
 ## [1.2.35] - 2025-09-24
 
 ### Changed
