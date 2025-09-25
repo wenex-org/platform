@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.37] - 2025-09-25
+
+### Changed
+
+- improve concurrency in stats model and observer worker @vhidvz
+
 ## [1.2.36] - 2025-09-25
 
 ### Added
