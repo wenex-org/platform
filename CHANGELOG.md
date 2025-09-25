@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.39] - 2025-09-25
+
+### Fixed
+
+- `SIGTERM` signal handling in `start.js` script to ensure proper shutdown of child processes @vhidvz
+
 ## [1.2.38] - 2025-09-25
 
 ### Changed
@@ -428,7 +434,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.38...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.2.39...HEAD
+[1.2.39]: https://github.com/wenex-org/platform/compare/1.2.38...1.2.39
 [1.2.38]: https://github.com/wenex-org/platform/compare/1.2.37...1.2.38
 [1.2.37]: https://github.com/wenex-org/platform/compare/1.2.36...1.2.37
 [1.2.36]: https://github.com/wenex-org/platform/compare/1.2.35...1.2.36
