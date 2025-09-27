@@ -2,6 +2,7 @@ import { JWT_SECRET, NODE_ENV, REDIS_CONFIG, SENTRY_CONFIG } from '@app/common/c
 import { ComplexityPlugin, DateScalar } from '@app/common/core/plugins/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
+import { AuthProvider } from '@app/common/providers/auth';
 import { BlacklistModule } from '@app/module/blacklist';
 import { DynamicModule, Module } from '@nestjs/common';
 import { SentryModule } from '@ntegral/nestjs-sentry';
@@ -24,8 +25,8 @@ import * as modules from './modules';
     RedisModule.forRoot(REDIS_CONFIG()),
     SentryModule.forRoot(SENTRY_CONFIG()),
 
-    HealthModule.forRoot(['disk', 'memory', 'redis']),
     JwtModule.register({ secret: JWT_SECRET(), global: true }),
+    HealthModule.forRoot(['redis', 'kafka', { type: 'grpc', options: [AuthProvider] }]),
 
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
