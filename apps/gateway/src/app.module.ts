@@ -26,7 +26,7 @@ import * as modules from './modules';
     SentryModule.forRoot(SENTRY_CONFIG()),
 
     JwtModule.register({ secret: JWT_SECRET(), global: true }),
-    HealthModule.forRoot(['redis', 'kafka', { type: 'grpc', options: [AuthProvider] }]),
+    HealthModule.forRoot(['redis', 'kafka', { type: 'grpc', service: 'gateway', options: [AuthProvider] }]),
 
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
