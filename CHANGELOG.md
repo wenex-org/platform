@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.46] - 2025-09-28
+
+### Changed
+
+- health check refinement for kafka consumers @vhidvz
+
 ## [1.2.45] - 2025-09-28
 
 ### Changed
@@ -471,7 +477,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.44...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.2.46...HEAD
+[1.2.46]: https://github.com/wenex-org/platform/compare/1.2.45...1.2.46
+[1.2.45]: https://github.com/wenex-org/platform/compare/1.2.44...1.2.45
 [1.2.44]: https://github.com/wenex-org/platform/compare/1.2.43...1.2.44
 [1.2.43]: https://github.com/wenex-org/platform/compare/1.2.42...1.2.43
 [1.2.42]: https://github.com/wenex-org/platform/compare/1.2.41...1.2.42
