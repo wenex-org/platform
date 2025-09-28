@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.43] - 2025-09-28
+
+### Changed
+
+- make logger kafka producer only mode @vhidvz
+
 ## [1.2.42] - 2025-09-28
 
 ### Fixed
@@ -453,7 +459,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.42...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.2.43...HEAD
+[1.2.43]: https://github.com/wenex-org/platform/compare/1.2.42...1.2.43
 [1.2.42]: https://github.com/wenex-org/platform/compare/1.2.41...1.2.42
 [1.2.41]: https://github.com/wenex-org/platform/compare/1.2.40...1.2.41
 [1.2.40]: https://github.com/wenex-org/platform/compare/1.2.39...1.2.40
