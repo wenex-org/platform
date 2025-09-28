@@ -2,7 +2,6 @@ import { JWT_SECRET, NODE_ENV, REDIS_CONFIG, SENTRY_CONFIG } from '@app/common/c
 import { ComplexityPlugin, DateScalar } from '@app/common/core/plugins/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
-import { AuthProvider } from '@app/common/providers/auth';
 import { BlacklistModule } from '@app/module/blacklist';
 import { DynamicModule, Module } from '@nestjs/common';
 import { SentryModule } from '@ntegral/nestjs-sentry';
@@ -14,7 +13,7 @@ import GraphQLJSON from 'graphql-type-json';
 import { JwtModule } from '@nestjs/jwt';
 import { join } from 'path';
 
-import * as modules from './modules';
+import { MODULES, HEALTH_CHECK_OPTIONS } from './modules';
 
 @Module({
   imports: [
@@ -26,7 +25,7 @@ import * as modules from './modules';
     SentryModule.forRoot(SENTRY_CONFIG()),
 
     JwtModule.register({ secret: JWT_SECRET(), global: true }),
-    HealthModule.forRoot(['redis', 'kafka', { type: 'grpc', service: 'gateway', options: [AuthProvider] }]),
+    HealthModule.forRoot(['redis', 'kafka', ...HEALTH_CHECK_OPTIONS]),
 
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
@@ -41,7 +40,7 @@ import * as modules from './modules';
       }),
     }),
 
-    ...(Object.values(modules) as unknown as DynamicModule[]),
+    ...(Object.values(MODULES) as unknown as DynamicModule[]),
   ],
   providers: [DateScalar, ComplexityPlugin],
 })
