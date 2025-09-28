@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- update all microservices health check @vhidvz
+
 ## [1.2.40] - 2025-09-25
 
 ### Changed
