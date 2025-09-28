@@ -27,12 +27,13 @@ const { GATEWAY } = APP;
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
   app.enableShutdownHooks();
+  setupSwagger(app);
 
   app.use(helmet({ contentSecurityPolicy: false }));
 
   const express = app.getHttpAdapter().getInstance();
-  express.set('etag', false);
   express.set('query parser', qs.parse);
+  express.set('etag', false);
 
   app.useGlobalInterceptors(
     new XRequestIdInterceptor(),
@@ -41,8 +42,6 @@ async function bootstrap() {
     new NoApiResponseInterceptor(),
     new NamingConventionReqInterceptor(),
   );
-
-  setupSwagger(app);
 
   await app.listen(GATEWAY.API_PORT, '0.0.0.0');
 
