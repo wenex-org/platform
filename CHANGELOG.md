@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.41] - 2025-09-28
+
 ### Changed
 
 - update all microservices health check @vhidvz
@@ -445,7 +447,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.40...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.2.41...HEAD
+[1.2.41]: https://github.com/wenex-org/platform/compare/1.2.40...1.2.41
 [1.2.40]: https://github.com/wenex-org/platform/compare/1.2.39...1.2.40
 [1.2.39]: https://github.com/wenex-org/platform/compare/1.2.38...1.2.39
 [1.2.38]: https://github.com/wenex-org/platform/compare/1.2.37...1.2.38
