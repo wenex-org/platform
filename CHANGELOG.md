@@ -7,333 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.2.49] - 2025-09-29
-
-### Changed
-
-- some improvements in kafka health check @vhidvz
-
-## [1.2.48] - 2025-09-28
-
-### Changed
-
-- some improvements in kafka health check @vhidvz
-
-## [1.2.47] - 2025-09-28
-
-### Fixed
-
-- health check for kafka server issue @vhidvz
-
-## [1.2.46] - 2025-09-28
-
-### Changed
-
-- health check refinement for kafka consumers @vhidvz
-
-## [1.2.45] - 2025-09-28
-
-### Changed
-
-- add `producerOnlyMode` to kafka producers @vhidvz
-
-## [1.2.44] - 2025-09-28
-
-### Changed
-
-- refine health check in all microservices @vhidvz
-
-## [1.2.43] - 2025-09-28
-
-### Changed
-
-- make logger kafka producer only mode @vhidvz
-
-## [1.2.42] - 2025-09-28
-
-### Fixed
-
-- fix: emqx unique client id issue @vhidvz
-
-## [1.2.41] - 2025-09-28
-
-### Changed
-
-- update all microservices health check @vhidvz
-
-## [1.2.40] - 2025-09-25
-
-### Changed
-
-- update log level of kafkajs to `INFO` @vhidvz
-
-## [1.2.39] - 2025-09-25
-
-### Fixed
-
-- `SIGTERM` signal handling in `start.js` script to ensure proper shutdown of child processes @vhidvz
-
-## [1.2.38] - 2025-09-25
-
-### Changed
-
-- update `KAFKA_CLIENT` and `CONSUMER_CONFIG` to have more stability in consumers @vhidvz
-
-## [1.2.37] - 2025-09-25
-
-### Changed
-
-- improve concurrency in stats model and observer worker @vhidvz
-
-## [1.2.36] - 2025-09-25
-
-### Added
-
-- remove OTP_SECRET validation from AuthCheckDto @fdaei
-- add `check` rpc method to `AuthsService` @vhidvz
-
-### Changed
-
-- update `KAFKA_CLIENT` and `CONSUMER_CONFIG` to have more stability in consumers @vhidvz
-
-## [1.2.35] - 2025-09-24
-
-### Changed
-
-- update nestjs version from `11.0.4` to `11.0.21` @vhidvz
-- update `script:kafka-connect` to include some collection not all @vhidvz
-
-## [1.2.34] - 2025-09-24
-
-### Added
-
-- add `OnModuleInit` to `AuditLogger` for test connectivity @vhidvz
-
-### Changed
-
-- update consumer/client options to have more stability in consumers @vhidvz
-
-## [1.2.33] - 2025-09-23
-
-### Changed
-
-- authority `exclude-soft-delete-query` condition changed @vhidvz
-
-## [1.2.32] - 2025-09-19
-
-### Fixed
-
-- fix: stat issue on mongo transaction error @vhidvz
-
-## [1.2.31] - 2025-09-18
-
-### Added
-
-- remove client from store if client is not meet preconditions in `dispatcher` worker @vhidvz
-
-### Fixed
-
-- fix: `script:kafka-connection` script to loading `.env` environments variables @vhidvz
-
-## [1.2.30] - 2025-09-18
-
-### Added
-
-- added optional `state` field with default value pending to `financial/invoices` @iranmanesh-dev
-
-### Changed
-
-- refactor: dispatcher main job removed, simplified @vhidvz
-- dispatcher disable job delay changed to `DISPATCHER_BULLMQ_LAST_ATTEMPT_PLUS_ONE` @vhidvz
-
-### Fixed
-
-- fix: type issue in `essential/sagas` @vhidvz
-- fix: some circular dependencies and authority query group bug fixed @vhidvz
-
-## [1.2.29] - 2025-09-16
-
-### Added
-
-- feat: add users group watcher worker module @vhidvz
-- add property share to `x-file-data` on upload files @winkcor
-- feat: enhance ownership handling using `user.groups` property @vhidvz
-- feat: enhance authority exploits handling using `user.groups` property @vhidvz
-
-### Fixed
-
-- fix: bullmq dashboards by updating bullmq packages version @vhidvz
-
-## [1.2.28] - 2025-09-15
-
-### Added
-
-- feat: add `Stashes` module and integrate with `dispatcher` service @vhidvz
-- feat: add `dispatcher.stashes` module and integrate with `cleaner` service @vhidvz
-- feat: add `ProjectionInterceptor` and related utilities for handling projections @vhidvz
-
-### Changed
-
-- indexed `general/workflows.data` schema @vhidvz
-- removed on channel creation logic in `conjoint/channel` services @vhidvz
-- refactor: update `SENSITIVE_PHRASES` to include `/api[_-]key$/` regex @vhidvz
-- refactor: improve error handling in `fixInput` function @vhidvz
-- refactor: enhance authorization logic in checkQueryExploits function @vhidvz
-- refactor: enhance hooks to return values from before and after methods @vhidvz
-- refactor(profiles): add restore onBeforeBulkUpdate method in `identity/profiles` @vhidvz
-- make 'name' field optional in channel DTOs, interfaces, schemas, and serializers @vhidvz
-- removed `projection` and `population` params from `findOneAndUpdate` and `findOneAndDelete` methods @vhidvz
-
-### Fixed
-
-- update workflow schema to allow mixed types for tokens @vhidvz
-- escape special characters in topic replacement for authorization checks @vhidvz
-- fix career service serializer number type @winkcor
-
-## [1.2.27] - 2025-08-28
-
-### Added
-
-- `range` location field added to `career/employees` @vhidvz
-- new metadata key `x-file-data` to include file data in requests @iranmanesh-dev
-- new interceptor for handling header data for `special/files` upload @vhidvz
-- new `Unicode` utility functions for text transformation @iranmanesh-dev
-
-## [1.2.26] - 2025-08-23
-
-### Added
-
-- `attendees` field population to `identity/profiles` in `general/events` map @vhidvz
-- `organizers` field population to `career/employees` in `general/events` map @iranmanesh-dev
-
-### Changed
-
-- fixed proto definition of `organizers` and `attendees` fields to be repeated @iranmanesh-dev
-
-### Fixed
-
-- proto `req.filter.populate` type definition for `essential/sagas` file @vhidvz
-
-## [1.2.25] - 2025-08-19
-
-### Fixed
-
-- token needs in auth model to update user details for logger interceptor @vhidvz
-
-## [1.2.24] - 2025-08-18
-
-### Added
-
-- audit log interceptor, decorator, module and worker @vhidvz
-- request scope and policy to metadata keys and interceptor @vhidvz
-- `cleaner` worker to purge data from `logger/audits` and `essential/saga.stages` @vhidvz
-
-### Changed
-
-- the `profile` field of `career/employees` was made optional @vhidvz
-- streamline `collectStat` function and enhance `doc` handling @vhidvz
-- refactor: enhance authorization checks in `onClientAuthorize` method @vhidvz
-- replace `withSession` with `withSagaSession` in service methods for consistency @vhidvz
-
-### Fixed
-
-- throwing rpc exceptions on `AllExceptionsFilter` @vhidvz
-
-## [1.2.23] - 2025-08-14
-
-### Added
-
-- `code` field to `career/branches` @iranmanesh-dev
-- `profile` field to `career/employees` @iranmanesh-dev
-
-### Changed
-
-- Grant management during channel creation, deletion, and restoration @fdaei
-- `general/events.organizer` field renamed to `general/events.organizers` @vhidvz
-
-## [1.2.22] - 2025-08-10
-
-### Changed
-
-- updated `BusinessType` enum @vhidvz
-- improved `dispatcher.transfer` method in failure scenario @vhidvz
-
-## [1.2.21] - 2025-08-06
-
-### Fixed
-
-- command issues @vhidvz
-- session `onAfterChange` condition issue @vhidvz
-- config model validation schema for CQRS value @vhidvz
-- businesses `categories` field in `career` proto @iranmanesh-dev
-- file size validation changed from `isPositive` to `isNumber` @vhidvz
-
-### Changed
-
-- automatically registers models based base on map population definition @vhidvz
-- set `x-saga...`, `x-can...`, `x-zone`, `x-at` metadata header to response header @vhidvz
-- authorization model: special subject based on token identity to use for grants specification @vhidvz
-
-## [1.2.20] - 2025-08-02
-
-### Added
-
-- optional field `status` added to `context/configs` interface @vhidvz
-- optional field `status` added to `context/settings` interface @vhidvz
-
-### Fixed
-
-- `financial/wallets` schema @vhidvz
-
-## [1.2.19] - 2025-08-02
-
-### Added
-
-- schema validation base on client config with `ValidationInterceptor` and `@Validation` decorator @vhidvz
-
-## [1.2.18] - 2025-07-30
-
-### Fixed
-
-- financial currencies model and schema @vhidvz
-
-### Changed
-
-- mongodb seeds commands refactored @vhidvz
-- `general/artifacts` and `context/settings` index @vhidvz
-
-## [1.2.17] - 2025-07-30
-
-### Added
-
-- `categories` field added to `career/businesses` @iranmanesh-dev
-
-### Changed
-
-- `category` field name of `career/services` changed to `categories` @iranmanesh-dev
-- resource limitation for `Elasticsearch` in `docker/docker-compose.elk.yml` @iranmanesh-dev
-
-## [1.2.16] - 2025-07-27
-
-### Added
-
-- `career` micro and services @vhidvz
-
-## [1.2.15] - 2025-07-24
-
-### Added
-
-- new service `career/businesses` libs added @vhidvz
-- `name` and `title` as optional field to `logistic/locations` @vhidvz
-- `message_time` and `message_size` added to `touch/email.smtp` @vhidvz
-
-### Fixed
-
-- GraphQL enum names to prefixed with service name @vhidvz
-
-### Changed
-
-- `identity` property moved to core schema as **optional mongo id string** @vhidvz
+## [1.2.X] - 2025-09-29
 
 #### --- [ Breaking Changes ] !!!
 
@@ -343,107 +17,127 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - name of `identity` property in `touch/email.smtp` property changed to `message_id` @vhidvz
 - replaced `entity` mongo id property from `general/workflows` and replaced with `name` string @vhidvz
 
-## [1.2.14] - 2025-07-22
-
 ### Added
 
+- remove OTP_SECRET validation from AuthCheckDto @fdaei
+- add `check` rpc method to `AuthsService` @vhidvz
+- add `OnModuleInit` to `AuditLogger` for test connectivity @vhidvz
+- remove client from store if client is not meet preconditions in `dispatcher` worker @vhidvz
+- added optional `state` field with default value pending to `financial/invoices` @iranmanesh-dev
+- feat: add users group watcher worker module @vhidvz
+- add property share to `x-file-data` on upload files @winkcor
+- feat: enhance ownership handling using `user.groups` property @vhidvz
+- feat: enhance authority exploits handling using `user.groups` property @vhidvz
+- feat: add `Stashes` module and integrate with `dispatcher` service @vhidvz
+- feat: add `dispatcher.stashes` module and integrate with `cleaner` service @vhidvz
+- feat: add `ProjectionInterceptor` and related utilities for handling projections @vhidvz
+- `range` location field added to `career/employees` @vhidvz
+- new metadata key `x-file-data` to include file data in requests @iranmanesh-dev
+- new interceptor for handling header data for `special/files` upload @vhidvz
+- new `Unicode` utility functions for text transformation @iranmanesh-dev
+- `attendees` field population to `identity/profiles` in `general/events` map @vhidvz
+- `organizers` field population to `career/employees` in `general/events` map @iranmanesh-dev
+- audit log interceptor, decorator, module and worker @vhidvz
+- request scope and policy to metadata keys and interceptor @vhidvz
+- `cleaner` worker to purge data from `logger/audits` and `essential/saga.stages` @vhidvz
+- `code` field to `career/branches` @iranmanesh-dev
+- `profile` field to `career/employees` @iranmanesh-dev
+- optional field `status` added to `context/configs` interface @vhidvz
+- optional field `status` added to `context/settings` interface @vhidvz
+- schema validation base on client config with `ValidationInterceptor` and `@Validation` decorator @vhidvz
+- `categories` field added to `career/businesses` @iranmanesh-dev
+- `career` micro and services @vhidvz
+- new service `career/businesses` libs added @vhidvz
+- `name` and `title` as optional field to `logistic/locations` @vhidvz
+- `message_time` and `message_size` added to `touch/email.smtp` @vhidvz
 - logistic location schema validation added to `properties` @vhidvz
-
-### Changed
-
-- core schema description index changed to `text` @vhidvz
-
-### Fixed
-
-- logistic locations `properties` property dto transformer @vhidvz
-
-## [1.2.13] - 2025-07-19
-
-### Added
-
 - new metadata key `x-exclude-soft-delete-query` to ignore `assignSoftDeleteQuery` functionality @vhidvz
-
-## [1.2.12] - 2025-07-19
-
-### Changed
-
-- add default permission scope `own`, `share` on none scoped action in `checkQueryExploits` @vhidvz
-
-## [1.2.11] - 2025-07-19
-
-### Changed
-
-- scoped action logic in `setOwnership` of `canSet` method @vhidvz
-
-## [1.2.10] - 2025-07-19
-
-### Fixed
-
-- correct order of `WriteInterceptors` @vhidvz
-
-### Changed
-
-- removed session scoped grant on `x-can-with-id-policies` @vhidvz
-
-## [1.2.9] - 2025-07-17
-
-### Added
-
 - `scope` validation support on emqx `preserver` @vhidvz
 
-## [1.2.8] - 2025-07-17
-
 ### Changed
 
+- some improvements in kafka health check @vhidvz
+- health check refinement for kafka consumers @vhidvz
+- add `producerOnlyMode` to kafka producers @vhidvz
+- refine health check in all microservices @vhidvz
+- make logger kafka producer only mode @vhidvz
+- update all microservices health check @vhidvz
+- update log level of kafkajs to `INFO` @vhidvz
+- update `KAFKA_CLIENT` and `CONSUMER_CONFIG` to have more stability in consumers @vhidvz
+- improve concurrency in stats model and observer worker @vhidvz
+- update `KAFKA_CLIENT` and `CONSUMER_CONFIG` to have more stability in consumers @vhidvz
+- update nestjs version from `11.0.4` to `11.0.21` @vhidvz
+- update `script:kafka-connect` to include some collection not all @vhidvz
+- update consumer/client options to have more stability in consumers @vhidvz
+- authority `exclude-soft-delete-query` condition changed @vhidvz
+- refactor: dispatcher main job removed, simplified @vhidvz
+- dispatcher disable job delay changed to `DISPATCHER_BULLMQ_LAST_ATTEMPT_PLUS_ONE` @vhidvz
+- indexed `general/workflows.data` schema @vhidvz
+- removed on channel creation logic in `conjoint/channel` services @vhidvz
+- refactor: update `SENSITIVE_PHRASES` to include `/api[_-]key$/` regex @vhidvz
+- refactor: improve error handling in `fixInput` function @vhidvz
+- refactor: enhance authorization logic in checkQueryExploits function @vhidvz
+- refactor: enhance hooks to return values from before and after methods @vhidvz
+- refactor(profiles): add restore onBeforeBulkUpdate method in `identity/profiles` @vhidvz
+- make 'name' field optional in channel DTOs, interfaces, schemas, and serializers @vhidvz
+- removed `projection` and `population` params from `findOneAndUpdate` and `findOneAndDelete` methods @vhidvz
+- fixed proto definition of `organizers` and `attendees` fields to be repeated @iranmanesh-dev
+- the `profile` field of `career/employees` was made optional @vhidvz
+- streamline `collectStat` function and enhance `doc` handling @vhidvz
+- refactor: enhance authorization checks in `onClientAuthorize` method @vhidvz
+- replace `withSession` with `withSagaSession` in service methods for consistency @vhidvz
+- Grant management during channel creation, deletion, and restoration @fdaei
+- `general/events.organizer` field renamed to `general/events.organizers` @vhidvz
+- updated `BusinessType` enum @vhidvz
+- improved `dispatcher.transfer` method in failure scenario @vhidvz
+- automatically registers models based base on map population definition @vhidvz
+- set `x-saga...`, `x-can...`, `x-zone`, `x-at` metadata header to response header @vhidvz
+- authorization model: special subject based on token identity to use for grants specification @vhidvz
+- mongodb seeds commands refactored @vhidvz
+- `general/artifacts` and `context/settings` index @vhidvz
+- `category` field name of `career/services` changed to `categories` @iranmanesh-dev
+- resource limitation for `Elasticsearch` in `docker/docker-compose.elk.yml` @iranmanesh-dev
+- `identity` property moved to core schema as **optional mongo id string** @vhidvz
+- core schema description index changed to `text` @vhidvz
+- add default permission scope `own`, `share` on none scoped action in `checkQueryExploits` @vhidvz
+- scoped action logic in `setOwnership` of `canSet` method @vhidvz
+- removed session scoped grant on `x-can-with-id-policies` @vhidvz
 - hot reload scope on refresh token with `[Scope.None]` @vhidvz
-
-## [1.2.7] - 2025-07-17
-
-### Fixed
-
-- modelPlugin pre save issue @vhidvz
-
-## [1.2.6] - 2025-07-17
-
-### Fixed
-
-- domain service provider mongoose enum validation check @vhidvz
-
-## [1.2.5] - 2025-07-16
-
-### Changed
-
 - more control on constants using env with `INIT_` prefix @vhidvz
-
-## [1.2.4] - 2025-07-16
-
-### Changed
-
 - refine limitation core constants @vhidvz
-
-## [1.2.3] - 2025-07-15
-
-### Fixed
-
-- Swagger DTOs and Serializers name @vhidvz
-
-## [1.2.2] - 2025-07-15
-
-### Changed
-
 - GraphQL DTOs name @vhidvz
 - GraphQL Serializers name @iranmanesh-dev
 
-## [1.2.1] - 2025-07-15
-
 ### Fixed
 
+- health check for kafka server issue @vhidvz
+- fix: emqx unique client id issue @vhidvz
+- `SIGTERM` signal handling in `start.js` script to ensure proper shutdown of child processes @vhidvz
+- fix: stat issue on mongo transaction error @vhidvz
+- fix: `script:kafka-connection` script to loading `.env` environments variables @vhidvz
+- fix: type issue in `essential/sagas` @vhidvz
+- fix: some circular dependencies and authority query group bug fixed @vhidvz
+- fix: bullmq dashboards by updating bullmq packages version @vhidvz
+- update workflow schema to allow mixed types for tokens @vhidvz
+- escape special characters in topic replacement for authorization checks @vhidvz
+- fix career service serializer number type @winkcor
+- proto `req.filter.populate` type definition for `essential/sagas` file @vhidvz
+- token needs in auth model to update user details for logger interceptor @vhidvz
+- throwing rpc exceptions on `AllExceptionsFilter` @vhidvz
+- command issues @vhidvz
+- session `onAfterChange` condition issue @vhidvz
+- config model validation schema for CQRS value @vhidvz
+- businesses `categories` field in `career` proto @iranmanesh-dev
+- file size validation changed from `isPositive` to `isNumber` @vhidvz
+- `financial/wallets` schema @vhidvz
+- financial currencies model and schema @vhidvz
+- GraphQL enum names to prefixed with service name @vhidvz
+- logistic locations `properties` property dto transformer @vhidvz
+- correct order of `WriteInterceptors` @vhidvz
+- modelPlugin pre save issue @vhidvz
+- domain service provider mongoose enum validation check @vhidvz
+- Swagger DTOs and Serializers name @vhidvz
 - GraphQL `account` overlap between service `financial` and `conjoint` @vhidvz
-
-## [1.2.0] - 2025-07-15
-
-### Fixed
-
 - GraphQL function overlap between service modules with the same name @vhidvz
 
 ## [1.1.X] - 2025-07-15
@@ -496,55 +190,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - initial release 🎉​🎊​.
 
 [unreleased]: https://github.com/wenex-org/platform/compare/1.2.49...HEAD
-[1.2.49]: https://github.com/wenex-org/platform/compare/1.2.48...1.2.49
-[1.2.48]: https://github.com/wenex-org/platform/compare/1.2.47...1.2.48
-[1.2.47]: https://github.com/wenex-org/platform/compare/1.2.46...1.2.47
-[1.2.46]: https://github.com/wenex-org/platform/compare/1.2.45...1.2.46
-[1.2.45]: https://github.com/wenex-org/platform/compare/1.2.44...1.2.45
-[1.2.44]: https://github.com/wenex-org/platform/compare/1.2.43...1.2.44
-[1.2.43]: https://github.com/wenex-org/platform/compare/1.2.42...1.2.43
-[1.2.42]: https://github.com/wenex-org/platform/compare/1.2.41...1.2.42
-[1.2.41]: https://github.com/wenex-org/platform/compare/1.2.40...1.2.41
-[1.2.40]: https://github.com/wenex-org/platform/compare/1.2.39...1.2.40
-[1.2.39]: https://github.com/wenex-org/platform/compare/1.2.38...1.2.39
-[1.2.38]: https://github.com/wenex-org/platform/compare/1.2.37...1.2.38
-[1.2.37]: https://github.com/wenex-org/platform/compare/1.2.36...1.2.37
-[1.2.36]: https://github.com/wenex-org/platform/compare/1.2.35...1.2.36
-[1.2.35]: https://github.com/wenex-org/platform/compare/1.2.34...1.2.35
-[1.2.34]: https://github.com/wenex-org/platform/compare/1.2.33...1.2.34
-[1.2.33]: https://github.com/wenex-org/platform/compare/1.2.32...1.2.33
-[1.2.32]: https://github.com/wenex-org/platform/compare/1.2.31...1.2.32
-[1.2.31]: https://github.com/wenex-org/platform/compare/1.2.30...1.2.31
-[1.2.30]: https://github.com/wenex-org/platform/compare/1.2.29...1.2.30
-[1.2.29]: https://github.com/wenex-org/platform/compare/1.2.28...1.2.29
-[1.2.28]: https://github.com/wenex-org/platform/compare/1.2.27...1.2.28
-[1.2.27]: https://github.com/wenex-org/platform/compare/1.2.26...1.2.27
-[1.2.26]: https://github.com/wenex-org/platform/compare/1.2.25...1.2.26
-[1.2.25]: https://github.com/wenex-org/platform/compare/1.2.24...1.2.25
-[1.2.24]: https://github.com/wenex-org/platform/compare/1.2.23...1.2.24
-[1.2.23]: https://github.com/wenex-org/platform/compare/1.2.22...1.2.23
-[1.2.22]: https://github.com/wenex-org/platform/compare/1.2.21...1.2.22
-[1.2.21]: https://github.com/wenex-org/platform/compare/1.2.20...1.2.21
-[1.2.20]: https://github.com/wenex-org/platform/compare/1.2.19...1.2.20
-[1.2.19]: https://github.com/wenex-org/platform/compare/1.2.18...1.2.19
-[1.2.18]: https://github.com/wenex-org/platform/compare/1.2.17...1.2.18
-[1.2.17]: https://github.com/wenex-org/platform/compare/1.2.16...1.2.17
-[1.2.16]: https://github.com/wenex-org/platform/compare/1.2.15...1.2.16
-[1.2.15]: https://github.com/wenex-org/platform/compare/1.2.14...1.2.15
-[1.2.14]: https://github.com/wenex-org/platform/compare/1.2.13...1.2.14
-[1.2.13]: https://github.com/wenex-org/platform/compare/1.2.12...1.2.13
-[1.2.12]: https://github.com/wenex-org/platform/compare/1.2.11...1.2.12
-[1.2.11]: https://github.com/wenex-org/platform/compare/1.2.10...1.2.11
-[1.2.10]: https://github.com/wenex-org/platform/compare/1.2.9...1.2.10
-[1.2.9]: https://github.com/wenex-org/platform/compare/1.2.8...1.2.9
-[1.2.8]: https://github.com/wenex-org/platform/compare/1.2.7...1.2.8
-[1.2.7]: https://github.com/wenex-org/platform/compare/1.2.6...1.2.7
-[1.2.6]: https://github.com/wenex-org/platform/compare/1.2.5...1.2.6
-[1.2.5]: https://github.com/wenex-org/platform/compare/1.2.4...1.2.5
-[1.2.4]: https://github.com/wenex-org/platform/compare/1.2.3...1.2.4
-[1.2.3]: https://github.com/wenex-org/platform/compare/1.2.2...1.2.3
-[1.2.2]: https://github.com/wenex-org/platform/compare/1.2.1...1.2.2
-[1.2.1]: https://github.com/wenex-org/platform/compare/1.2.0...1.2.1
-[1.2.0]: https://github.com/wenex-org/platform/compare/1.1.20...1.2.0
+[1.2.X]: https://github.com/wenex-org/platform/compare/1.1.20...1.2.49
 [1.1.X]: https://github.com/wenex-org/platform/compare/1.0.42...1.1.20
 [1.0.X]: https://github.com/wenex-org/platform/releases/tag/1.0.42
