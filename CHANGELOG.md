@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2025-09-30
+
+### Changed
+
+- some implement in `saga` module @vhidvz
+- refactor and optimize `essential` service @vhidvz
+- refactor and some improvements `observer` worker @vhidvz
+
 ## [1.2.X] - 2025-09-29
 
 #### --- [ Breaking Changes ] !!!
@@ -189,7 +197,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.49...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.3.0...HEAD
+[1.3.0]: https://github.com/wenex-org/platform/compare/1.2.49...1.3.0
 [1.2.X]: https://github.com/wenex-org/platform/compare/1.1.20...1.2.49
 [1.1.X]: https://github.com/wenex-org/platform/compare/1.0.42...1.1.20
 [1.0.X]: https://github.com/wenex-org/platform/releases/tag/1.0.42
