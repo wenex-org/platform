@@ -25,6 +25,9 @@ MONGO_PREFIX=${1:-$MONGO_PREFIX}
 curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" $CONNECT_HOST:$CONNECT_PORT/connectors/ -d "{
   \"name\": \"$MONGO_SOURCE\",
   \"config\": {
+    \"producer.acks\": \"all\",
+    \"producer.enable.idempotence\": \"true\",
+    \"producer.max.in.flight.requests.per.connection\": \"1\",
     \"connector.class\": \"io.debezium.connector.mongodb.MongoDbConnector\",
     \"mongodb.connection.string\": \"mongodb://$MONGO_USER:$MONGO_PASS@$MONGO_HOST/?$MONGO_QUERY\",
     \"topic.prefix\": \"mongo\",
