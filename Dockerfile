@@ -16,4 +16,4 @@ RUN npm run git:clone && \
   pnpm install --frozen-lockfile && \
   npm run script:build
 
-CMD ["bash", "-c", "npm run script:start ${SERVICE_NAME:-gateway}"]
+CMD ["node", "--stack-size=4096", "scripts/start.js"]

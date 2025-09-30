@@ -13,7 +13,7 @@ import GraphQLJSON from 'graphql-type-json';
 import { JwtModule } from '@nestjs/jwt';
 import { join } from 'path';
 
-import * as modules from './modules';
+import { MODULES, HEALTH_CHECK_OPTIONS } from './modules';
 
 @Module({
   imports: [
@@ -24,8 +24,8 @@ import * as modules from './modules';
     RedisModule.forRoot(REDIS_CONFIG()),
     SentryModule.forRoot(SENTRY_CONFIG()),
 
-    HealthModule.forRoot(['disk', 'memory', 'redis']),
     JwtModule.register({ secret: JWT_SECRET(), global: true }),
+    HealthModule.forRoot(['redis', 'kafka', ...HEALTH_CHECK_OPTIONS]),
 
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
@@ -40,7 +40,7 @@ import * as modules from './modules';
       }),
     }),
 
-    ...(Object.values(modules) as unknown as DynamicModule[]),
+    ...(Object.values(MODULES) as unknown as DynamicModule[]),
   ],
   providers: [DateScalar, ComplexityPlugin],
 })
