@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.2] - 2025-09-30
+
+### Changed
+
+- set `autoCommit` to false for `essential.saga` service @vhidvz
+
 ## [1.3.1] - 2025-09-30
 
 ### Changed
@@ -203,7 +209,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.3.1...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.3.2...HEAD
+[1.3.2]: https://github.com/wenex-org/platform/compare/1.3.1...1.3.2
 [1.3.1]: https://github.com/wenex-org/platform/compare/1.3.0...1.3.1
 [1.3.0]: https://github.com/wenex-org/platform/compare/1.2.49...1.3.0
 [1.2.X]: https://github.com/wenex-org/platform/compare/1.1.20...1.2.49
