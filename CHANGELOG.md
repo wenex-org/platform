@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- update redis health check @vhidvz
+
 ### Fixed
 
 - fix paymentValue function to give correct amount for init transaction @winkcor
