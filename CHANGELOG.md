@@ -7,9 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.7] - 2025-10-05
+
 ### Changed
 
 - update redis health check @vhidvz
+- remove kafka health check from `essential` @vhidvz
+- remove `special` micro from gateway health check @vhidvz
+- remove `retryWrites` and `retryReads` from mongodb config options @vhidvz
+- remove `maxInFlightRequests` and `idempotent` options from kafka connection @vhidvz
 
 ### Fixed
 
@@ -241,7 +247,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.3.6...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.3.7...HEAD
+[1.3.7]: https://github.com/wenex-org/platform/compare/1.3.6...1.3.7
 [1.3.6]: https://github.com/wenex-org/platform/compare/1.3.5...1.3.6
 [1.3.5]: https://github.com/wenex-org/platform/compare/1.3.4...1.3.5
 [1.3.4]: https://github.com/wenex-org/platform/compare/1.3.3...1.3.4
