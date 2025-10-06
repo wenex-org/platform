@@ -7,11 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.8] - 2025-10-06
+
 ### Changed
 
 - enable trust proxy for real client IP @fdaei
-
-## [1.3.8] - 2025-10-06
 
 ### Fixed
 
