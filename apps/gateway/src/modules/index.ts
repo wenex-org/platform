@@ -9,7 +9,7 @@ import { FinancialProvider } from '@app/common/providers/financial';
 import { GeneralProvider } from '@app/common/providers/general';
 import { IdentityProvider } from '@app/common/providers/identity';
 import { LogisticProvider } from '@app/common/providers/logistic';
-// import { SpecialProvider } from '@app/common/providers/special';
+import { SpecialProvider } from '@app/common/providers/special';
 import { TouchProvider } from '@app/common/providers/touch';
 import { HealthCheckOptions } from '@app/module/health';
 
@@ -43,7 +43,7 @@ export const HEALTH_CHECK_OPTIONS: HealthCheckOptions = [
       GeneralProvider,
       IdentityProvider,
       LogisticProvider,
-      // SpecialProvider,
+      SpecialProvider,
       TouchProvider,
     ],
   },
