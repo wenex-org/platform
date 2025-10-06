@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.12] - 2025-10-06
+
+### Changed
+
+- refactor: `essential.sagas` exception handling improvements @vhidvz
+
 ## [1.3.11] - 2025-10-06
 
 ### Changed
@@ -279,7 +285,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.3.11...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.3.12...HEAD
+[1.3.12]: https://github.com/wenex-org/platform/compare/1.3.11...1.3.12
 [1.3.11]: https://github.com/wenex-org/platform/compare/1.3.10...1.3.11
 [1.3.10]: https://github.com/wenex-org/platform/compare/1.3.9...1.3.10
 [1.3.9]: https://github.com/wenex-org/platform/compare/1.3.8...1.3.9
