@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.8] - 2025-10-06
+
 ### Fixed
 
 - essential scale issues @vhidvz
@@ -251,7 +253,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.3.7...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.3.8...HEAD
+[1.3.8]: https://github.com/wenex-org/platform/compare/1.3.7...1.3.8
 [1.3.7]: https://github.com/wenex-org/platform/compare/1.3.6...1.3.7
 [1.3.6]: https://github.com/wenex-org/platform/compare/1.3.5...1.3.6
 [1.3.5]: https://github.com/wenex-org/platform/compare/1.3.4...1.3.5
