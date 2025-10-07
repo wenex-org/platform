@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.14] - 2025-10-07
+
+### Fixed
+
+- population `policies` issue base on `subjects` @vhidvz
+
 ## [1.3.13] - 2025-10-07
 
 ### Changed
@@ -292,7 +298,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.3.13...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.3.14...HEAD
+[1.3.14]: https://github.com/wenex-org/platform/compare/1.3.13...1.3.14
 [1.3.13]: https://github.com/wenex-org/platform/compare/1.3.12...1.3.13
 [1.3.12]: https://github.com/wenex-org/platform/compare/1.3.11...1.3.12
 [1.3.11]: https://github.com/wenex-org/platform/compare/1.3.10...1.3.11
