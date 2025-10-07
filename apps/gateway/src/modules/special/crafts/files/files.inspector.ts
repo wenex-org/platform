@@ -59,8 +59,8 @@ export class FilesInspector {
     } else {
       res.status(HttpStatus.OK).set({
         'Content-Type': file.content_type,
-        'Cache-Control': 'private, no-cache, no-store',
         'Content-Disposition': `attachment; filename="${file.original}"`,
+        'Cache-Control': 'private, max-age=86400, stale-while-revalidate=86400',
       });
     }
 
