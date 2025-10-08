@@ -1,8 +1,8 @@
 import { Controller, Get, HttpStatus, Query, Req, Res, UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { ParseResizePipe, ParseRotatePipe, Resize, Rotate } from '@app/common/core/pipes/sharp';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { IsPublic, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
-import { RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { GatewayInterceptors } from '@app/common/core/interceptors';
@@ -10,6 +10,7 @@ import { AllExceptionsFilter } from '@app/common/core/filters';
 import { QueryFilterDto } from '@app/common/core/dto/mongo';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { Filter, Meta } from '@app/common/core/decorators';
+import { refineQuery } from '@app/common/core/utils/mongo';
 import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
 import { sdkStreamMixin } from '@smithy/util-stream';
@@ -22,7 +23,6 @@ import { FilesService } from './files.service';
 
 const COLL_PATH = COLLECTION('files', 'special');
 
-@ApiBearerAuth()
 @RateLimit(COLL_PATH)
 @Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
@@ -33,6 +33,7 @@ const COLL_PATH = COLLECTION('files', 'special');
 export class FilesInspector {
   constructor(readonly service: FilesService) {}
 
+  @ApiBearerAuth()
   @Get('download/:id')
   @SetScope(Scope.DownloadSpecialFiles)
   @UseInterceptors(AuthorityInterceptor)
@@ -49,6 +50,47 @@ export class FilesInspector {
     @Query('resize', ParseResizePipe) resize?: Resize,
   ) {
     const { data, file } = await this.service.download(filter.query, { meta });
+    const ETag = resize || rotate ? Hash.md5(file.etag + toString({ rotate, resize })) : file.etag;
+    if (file.acl?.toLocaleLowerCase().includes('public')) {
+      res.status(HttpStatus.OK).set({
+        ETag,
+        'Content-Type': file.content_type,
+        'Content-Disposition': `attachment; filename="${file.original}"`,
+      });
+    } else {
+      res.status(HttpStatus.OK).set({
+        'Content-Type': file.content_type,
+        'Content-Disposition': `attachment; filename="${file.original}"`,
+        'Cache-Control': 'private, max-age=86400, stale-while-revalidate=86400',
+      });
+    }
+
+    if (req.header('if-none-match') === ETag) {
+      res.status(HttpStatus.NOT_MODIFIED).end();
+    } else {
+      if (file.content_type?.startsWith('image') && (resize || rotate)) {
+        let sh: sharp.Sharp = sharp();
+        if (resize) sh = sh.resize({ ...resize });
+        if (rotate) sh = sh.rotate(rotate.angle, { background: rotate.background });
+        sdkStreamMixin(data.Body).pipe(sh).pipe(res);
+      } else sdkStreamMixin(data.Body).pipe(res);
+    }
+  }
+
+  @IsPublic()
+  @Get(':id/download')
+  @ApiParam({ type: String, name: 'id', required: true })
+  @ApiQuery({ type: String, name: 'ref', required: false })
+  @ApiResponse({ status: HttpStatus.OK, description: 'multipart/form-data' })
+  async shareLink(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Meta() meta: Metadata,
+    @Query('rotate', ParseRotatePipe) rotate?: Rotate,
+    @Query('resize', ParseResizePipe) resize?: Resize,
+  ) {
+    const query = refineQuery(req, { query: {} });
+    const { data, file } = await this.service.download(query, { meta, validate: true });
     const ETag = resize || rotate ? Hash.md5(file.etag + toString({ rotate, resize })) : file.etag;
     if (file.acl?.toLocaleLowerCase().includes('public')) {
       res.status(HttpStatus.OK).set({
