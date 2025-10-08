@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `profit` and `discount` to `financial/invoices` in `invoice.items` @vhidvz
+
 ## [1.3.16] - 2025-10-08
 
 ### Added
