@@ -7,6 +7,121 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.15] - 2025-10-07
+
+### Fixed
+
+- download file using `token` in url query string @vhidvz
+
+## [1.3.14] - 2025-10-07
+
+### Fixed
+
+- population `policies` issue base on `subjects` @vhidvz
+
+## [1.3.13] - 2025-10-07
+
+### Changed
+
+- update mongodb options @vhidvz
+- add `KafkaContext.heartbeat` to stat model @vhidvz
+
+## [1.3.12] - 2025-10-06
+
+### Changed
+
+- refactor: `essential.sagas` exception handling improvements @vhidvz
+
+## [1.3.11] - 2025-10-06
+
+### Changed
+
+- update mongodb options @vhidvz
+
+## [1.3.10] - 2025-10-06
+
+### Fixed
+
+- `loadBalanced is only a valid option in the URI` issue @vhidvz
+
+## [1.3.9] - 2025-10-06
+
+### Changed
+
+- add `MONGO_LOAD_BALANCED` env @vhidvz
+
+### Fixed
+
+- `saga session expired` issue @vhidvz
+
+## [1.3.8] - 2025-10-06
+
+### Changed
+
+- enable trust proxy for real client IP @fdaei
+
+### Fixed
+
+- essential scale issues @vhidvz
+
+## [1.3.7] - 2025-10-05
+
+### Changed
+
+- update redis health check @vhidvz
+- remove kafka health check from `essential` @vhidvz
+- remove `special` micro from gateway health check @vhidvz
+- remove `retryWrites` and `retryReads` from mongodb config options @vhidvz
+- remove `maxInFlightRequests` and `idempotent` options from kafka connection @vhidvz
+
+### Fixed
+
+- fix paymentValue function to give correct amount for init transaction @winkcor
+
+## [1.3.6] - 2025-10-01
+
+### Added
+
+- added more log to `essential.sagas` service @vhidvz
+
+## [1.3.5] - 2025-10-01
+
+### Fixed
+
+- refactor: essential saga service @vhidvz
+
+## [1.3.4] - 2025-10-01
+
+### Fixed
+
+- health check redis connection stick issue @vhidvz
+
+## [1.3.3] - 2025-09-30
+
+### Changed
+
+- health check improvements and kafka retry.retries changed to max safe int @vhidvz
+
+## [1.3.2] - 2025-09-30
+
+### Changed
+
+- set `autoCommit` to false for `essential.saga` service @vhidvz
+
+## [1.3.1] - 2025-09-30
+
+### Changed
+
+- some improvements for stability in kafka options @vhidvz
+
+## [1.3.0] - 2025-09-30
+
+### Changed
+
+- some implement in `saga` module @vhidvz
+- refactor and optimize `essential` service @vhidvz
+- refactor and some improvements `observer` worker @vhidvz
+
 ## [1.2.X] - 2025-09-29
 
 #### --- [ Breaking Changes ] !!!
@@ -189,7 +304,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.2.49...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.3.15...HEAD
+[1.3.15]: https://github.com/wenex-org/platform/compare/1.3.14...1.3.15
+[1.3.14]: https://github.com/wenex-org/platform/compare/1.3.13...1.3.14
+[1.3.13]: https://github.com/wenex-org/platform/compare/1.3.12...1.3.13
+[1.3.12]: https://github.com/wenex-org/platform/compare/1.3.11...1.3.12
+[1.3.11]: https://github.com/wenex-org/platform/compare/1.3.10...1.3.11
+[1.3.10]: https://github.com/wenex-org/platform/compare/1.3.9...1.3.10
+[1.3.9]: https://github.com/wenex-org/platform/compare/1.3.8...1.3.9
+[1.3.8]: https://github.com/wenex-org/platform/compare/1.3.7...1.3.8
+[1.3.7]: https://github.com/wenex-org/platform/compare/1.3.6...1.3.7
+[1.3.6]: https://github.com/wenex-org/platform/compare/1.3.5...1.3.6
+[1.3.5]: https://github.com/wenex-org/platform/compare/1.3.4...1.3.5
+[1.3.4]: https://github.com/wenex-org/platform/compare/1.3.3...1.3.4
+[1.3.3]: https://github.com/wenex-org/platform/compare/1.3.2...1.3.3
+[1.3.2]: https://github.com/wenex-org/platform/compare/1.3.1...1.3.2
+[1.3.1]: https://github.com/wenex-org/platform/compare/1.3.0...1.3.1
+[1.3.0]: https://github.com/wenex-org/platform/compare/1.2.49...1.3.0
 [1.2.X]: https://github.com/wenex-org/platform/compare/1.1.20...1.2.49
 [1.1.X]: https://github.com/wenex-org/platform/compare/1.0.42...1.1.20
 [1.0.X]: https://github.com/wenex-org/platform/releases/tag/1.0.42

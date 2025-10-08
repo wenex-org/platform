@@ -33,6 +33,7 @@ async function bootstrap() {
 
   const express = app.getHttpAdapter().getInstance();
   express.set('query parser', qs.parse);
+  express.set('trust proxy', true);
   express.set('etag', false);
 
   app.useGlobalInterceptors(

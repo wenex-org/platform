@@ -52,6 +52,10 @@
     "git": "bash ./scripts/git-submodule.sh",
     "git:clone": "git submodule update --init --recursive",
     "git:remote:add": "bash ./scripts/git-remote-add.sh",
+    "pm2:start": "pm2 start ecosystem.config.js",
+    "pm2:restart": "pm2 restart ecosystem.config.js",
+    "pm2:stop": "pm2 stop ecosystem.config.js",
+    "pm2:delete": "pm2 delete ecosystem.config.js",
     "doc": "npx @compodoc/compodoc -p tsconfig.json -n \"Documentation\" -d ./docs -s"
   },
   "lint-staged": {
@@ -188,6 +192,7 @@
     "jest": "^29.7.0",
     "lint-staged": "^15.4.1",
     "madge": "^8.0.0",
+    "pm2": "^6.0.13",
     "prettier": "^3.4.2",
     "source-map-support": "^0.5.21",
     "supertest": "^7.0.0",
