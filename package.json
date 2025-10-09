@@ -182,7 +182,7 @@
     "@types/semver": "^7.5.8",
     "@types/supertest": "^6.0.2",
     "@types/web-push": "^3.6.4",
-    "@wenex/sdk": "^1.1.35",
+    "@wenex/sdk": "^1.1.48",
     "dpdm": "^3.14.0",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
