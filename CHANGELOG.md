@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- validate domain before create it @fdaei
+- create grants for new domaim @fdaei
+
 ## [1.3.15] - 2025-10-07
 
 ### Fixed
