@@ -13,17 +13,24 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import {
+  FileDataSerializer,
+  FileItemsSerializer,
+  FileSerializer,
+  ShareLinkDataSerializer,
+  ShareLinkSerializer,
+} from '@app/common/serializers/special';
 import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
-import { FileDataSerializer, FileItemsSerializer, FileSerializer } from '@app/common/serializers/special';
+import { CreateFileDto, CreateFileItemsDto, ShareLinkDto, UpdateFileDto } from '@app/common/dto/special';
 import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { AuthorityInterceptor, ProjectionInterceptor } from '@app/common/core/interceptors/mongo';
-import { CreateFileDto, CreateFileItemsDto, UpdateFileDto } from '@app/common/dto/special';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
+import { getSseMessage, mapToInstance } from '@app/common/core/utils';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
 import { SpecialProvider } from '@app/common/providers/special';
 import { File, FileDto } from '@app/common/interfaces/special';
@@ -31,9 +38,8 @@ import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { ValidationPipe } from '@app/common/core/pipes';
-import { getSseMessage } from '@app/common/core/utils';
 import { Metadata } from '@app/common/core/interfaces';
-import { Observable, switchMap } from 'rxjs';
+import { from, Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
@@ -51,6 +57,26 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   constructor(readonly provider: SpecialProvider) {
     super(provider.files, FileSerializer);
   }
+
+  @Post(':id/share')
+  @Audit('GATEWAY')
+  @SetScope(Scope.ShareSpecialFiles)
+  @SetPolicy(Action.Share, Resource.SpecialFiles)
+  @ApiResponse({ type: ShareLinkDataSerializer })
+  @ApiParam({ type: String, name: 'id', required: true })
+  @ApiQuery({ type: String, name: 'ref', required: false })
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  share(
+    @Meta() meta: Metadata,
+    @Body() data: ShareLinkDto,
+    @Filter() filter: FilterOneDto<File>,
+  ): Observable<ShareLinkDataSerializer> {
+    return from(this.provider.files.share(data, filter, { meta })).pipe(mapToInstance(ShareLinkSerializer, 'data'));
+  }
+
+  // ##############################
+  // Common Method's
+  // ##############################
 
   @Get('count')
   @Cache(COLL_PATH, 'fill')

@@ -10,7 +10,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - validate domain before create it @fdaei
-- create grants for new domaim @fdaei
+- create grants for new domain @fdaei
+
+## [1.3.18] - 2025-10-08
+
+### Fixed
+
+- fix: add `profit` and `discount` in `financial/invoices` and `invoice.items` in protobuf @vhidvz
+
+## [1.3.17] - 2025-10-08
+
+### Added
+
+- `profit` and `discount` to `financial/invoices` in `invoice.items` @vhidvz
+
+## [1.3.16] - 2025-10-08
+
+### Added
+
+- feat: add file sharing @vhidvz
 
 ## [1.3.15] - 2025-10-07
 
@@ -309,7 +327,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.3.15...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.3.18...HEAD
+[1.3.18]: https://github.com/wenex-org/platform/compare/1.3.17...1.3.18
+[1.3.17]: https://github.com/wenex-org/platform/compare/1.3.16...1.3.17
+[1.3.16]: https://github.com/wenex-org/platform/compare/1.3.15...1.3.16
 [1.3.15]: https://github.com/wenex-org/platform/compare/1.3.14...1.3.15
 [1.3.14]: https://github.com/wenex-org/platform/compare/1.3.13...1.3.14
 [1.3.13]: https://github.com/wenex-org/platform/compare/1.3.12...1.3.13
