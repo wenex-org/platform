@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.19] - 2025-10-10
+
 ### Changed
 
 - create grants for new domain @fdaei
@@ -329,7 +331,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.3.18...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.3.19...HEAD
+[1.3.19]: https://github.com/wenex-org/platform/compare/1.3.18...1.3.19
 [1.3.18]: https://github.com/wenex-org/platform/compare/1.3.17...1.3.18
 [1.3.17]: https://github.com/wenex-org/platform/compare/1.3.16...1.3.17
 [1.3.16]: https://github.com/wenex-org/platform/compare/1.3.15...1.3.16
