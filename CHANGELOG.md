@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - create grants for new domain @fdaei
 - validate domain before create it @fdaei
 - capture full response of webpush in `props` @vhidvz
+- refactor: client domain logic for root grant of each domain in domain worker watcher @vhidvz
 
 ## [1.3.18] - 2025-10-08
 
