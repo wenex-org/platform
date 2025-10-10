@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.20] - 2025-10-10
+
+### Changed
+
+- refactor: model value in client domain of watcher worker @vhidvz
+
 ## [1.3.19] - 2025-10-10
 
 ### Changed
@@ -331,7 +337,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.3.19...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.3.20...HEAD
+[1.3.20]: https://github.com/wenex-org/platform/compare/1.3.19...1.3.20
 [1.3.19]: https://github.com/wenex-org/platform/compare/1.3.18...1.3.19
 [1.3.18]: https://github.com/wenex-org/platform/compare/1.3.17...1.3.18
 [1.3.17]: https://github.com/wenex-org/platform/compare/1.3.16...1.3.17
