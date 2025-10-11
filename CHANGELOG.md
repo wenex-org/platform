@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- update kafka connect script to capture `emails`, `pushes` and `smss` from touch db @vhidvz
+
 ## [1.3.20] - 2025-10-10
 
 ### Changed
