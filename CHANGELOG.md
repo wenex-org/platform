@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.21] - 2025-10-11
+
 ### Changed
 
 - update kafka connect script to capture `emails`, `pushes` and `smss` from touch db @vhidvz
@@ -341,7 +343,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.3.20...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.3.21...HEAD
+[1.3.21]: https://github.com/wenex-org/platform/compare/1.3.20...1.3.21
 [1.3.20]: https://github.com/wenex-org/platform/compare/1.3.19...1.3.20
 [1.3.19]: https://github.com/wenex-org/platform/compare/1.3.18...1.3.19
 [1.3.18]: https://github.com/wenex-org/platform/compare/1.3.17...1.3.18
