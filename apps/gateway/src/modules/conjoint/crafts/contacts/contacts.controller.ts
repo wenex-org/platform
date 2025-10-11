@@ -106,7 +106,7 @@ export class ContactsController extends ControllerClass<Contact, ContactDto> imp
   Cursor(@Res() res: Response, @Meta() meta: Metadata, @Perm() perm: Permission, @Filter() filter: FilterOneDto<Contact>) {
     // Server Sent-Event Headers
     res.setHeader('Transfer-Encoding', 'chunked');
-    res.setHeader('Conjoint-Type', 'text/event-stream');
+    res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'private, no-cache, no-store');
 
     super

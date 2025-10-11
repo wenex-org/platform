@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- fix cursor response type header @winkcor
+
 ## [1.3.21] - 2025-10-11
 
 ### Changed
