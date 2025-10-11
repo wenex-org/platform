@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.23] - 2025-10-11
+
+### Fixed
+
+- fix: `bool_result` undefined issue in `preserver` worker @vhidvz
+
 ## [1.3.22] - 2025-10-11
 
 ### Fixed
@@ -349,7 +355,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.3.22...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.3.23...HEAD
+[1.3.23]: https://github.com/wenex-org/platform/compare/1.3.22...1.3.23
 [1.3.22]: https://github.com/wenex-org/platform/compare/1.3.21...1.3.22
 [1.3.21]: https://github.com/wenex-org/platform/compare/1.3.20...1.3.21
 [1.3.20]: https://github.com/wenex-org/platform/compare/1.3.19...1.3.20
