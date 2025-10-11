@@ -124,7 +124,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   Cursor(@Res() res: Response, @Meta() meta: Metadata, @Perm() perm: Permission, @Filter() filter: FilterOneDto<Account>) {
     // Server Sent-Event Headers
     res.setHeader('Transfer-Encoding', 'chunked');
-    res.setHeader('Conjoint-Type', 'text/event-stream');
+    res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'private, no-cache, no-store');
 
     super
