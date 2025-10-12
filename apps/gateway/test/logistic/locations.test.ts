@@ -103,6 +103,7 @@ describe('Logistic: LocationsController (e2e)', () => {
         lon: expect.any(Number),
         type: expect.any(String),
         category: expect.any(String),
+        display_name: expect.any(String),
         bbox: [expect.any(Number), expect.any(Number), expect.any(Number), expect.any(Number)],
       },
       address: {

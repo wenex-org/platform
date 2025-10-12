@@ -7,9 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.24] - 2025-10-12
+
 ### Added
 
 - add `Brotli` helper in core @vhidvz
+- add `display_name` field to `Place` type of `logistic.locations` @vhidvz
 
 ## [1.3.23] - 2025-10-11
 
@@ -359,7 +362,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.3.23...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.3.24...HEAD
+[1.3.24]: https://github.com/wenex-org/platform/compare/1.3.23...1.3.24
 [1.3.23]: https://github.com/wenex-org/platform/compare/1.3.22...1.3.23
 [1.3.22]: https://github.com/wenex-org/platform/compare/1.3.21...1.3.22
 [1.3.21]: https://github.com/wenex-org/platform/compare/1.3.20...1.3.21
