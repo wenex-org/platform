@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- add `Brotli` helper in core @vhidvz
+
 ## [1.3.23] - 2025-10-11
 
 ### Fixed
