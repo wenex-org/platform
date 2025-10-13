@@ -14,11 +14,10 @@ import {
   XRequestIdInterceptor,
 } from '@app/common/core/interceptors';
 import { NamingConventionReqInterceptor } from '@app/common/core/interceptors/n-convention';
-import { prototyping, setupSwagger } from '@app/common/core/utils';
+import { prototyping, queryParser, setupSwagger } from '@app/common/core/utils';
 import { NestFactory } from '@nestjs/core';
 import { APP } from '@app/common/core';
 import helmet from 'helmet';
-import qs from 'qs';
 
 prototyping('GATEWAY');
 import { AppModule } from './app.module';
@@ -26,13 +25,12 @@ import { AppModule } from './app.module';
 const { GATEWAY } = APP;
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
+  app.use(helmet({ contentSecurityPolicy: false }));
   app.enableShutdownHooks();
+  app.use(queryParser);
   setupSwagger(app);
 
-  app.use(helmet({ contentSecurityPolicy: false }));
-
   const express = app.getHttpAdapter().getInstance();
-  express.set('query parser', qs.parse);
   express.set('trust proxy', true);
   express.set('etag', false);
 
