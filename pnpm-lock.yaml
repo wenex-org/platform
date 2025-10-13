@@ -152,6 +152,9 @@ importers:
       base-x:
         specifier: ^5.0.0
         version: 5.0.0
+      brotli-wasm:
+        specifier: ^3.0.1
+        version: 3.0.1
       bullmq:
         specifier: ^5.58.4
         version: 5.58.5
@@ -161,9 +164,6 @@ importers:
       class-validator:
         specifier: ^0.14.1
         version: 0.14.1
-      compress-brotli:
-        specifier: ^1.3.13
-        version: 1.3.13
       cron-parser:
         specifier: ^5.0.0
         version: 5.0.0
@@ -305,7 +305,7 @@ importers:
         version: 11.0.2(@types/node@22.10.7)
       '@nestjs/schematics':
         specifier: ^11.0.0
-        version: 11.0.0(chokidar@4.0.1)(typescript@5.7.3)
+        version: 11.0.0(chokidar@4.0.3)(typescript@5.7.3)
       '@nestjs/testing':
         specifier: ^11.0.21
         version: 11.0.21(@nestjs/common@11.0.21(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.21)(@nestjs/microservices@11.0.21)(@nestjs/platform-express@11.0.21)
@@ -3451,9 +3451,6 @@ packages:
   '@types/jest@29.5.14':
     resolution: {integrity: sha512-ZN+4sdnLUbo8EVvVc2ao0GFW6oVrQRPn4K2lglySj7APvSrgzxHiNNK99us4WDMi57xxA2yggblIAMNhXOotLQ==}
 
-  '@types/json-buffer@3.0.2':
-    resolution: {integrity: sha512-JdDf/nA+fafue3dkRhEYyUx8j7dCXr3LT2DQadS6sfyg4+tUQlsSYwwpxYTml0sLEnzP1cVamcFTkUaMIzkbCQ==}
-
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
@@ -4146,6 +4143,10 @@ packages:
   breadth-filter@2.0.0:
     resolution: {integrity: sha512-thQShDXnFWSk2oVBixRCyrWsFoV5tfOpWKHmxwafHQDNxCfDBk539utpvytNjmlFrTMqz41poLwJvA1MW3z0MQ==}
 
+  brotli-wasm@3.0.1:
+    resolution: {integrity: sha512-U3K72/JAi3jITpdhZBqzSUq+DUY697tLxOuFXB+FpAE/Ug+5C3VZrv4uA674EUZHxNAuQ9wETXNqQkxZD6oL4A==}
+    engines: {node: '>=v18.0.0'}
+
   browser-or-node@2.1.1:
     resolution: {integrity: sha512-8CVjaLJGuSKMVTxJ2DpBl5XnlNDiT4cQFeuCJJrvJmts9YrTZDizTX7PjC2s6W4x+MBGZeEY6dGMrF04/6Hgqg==}
 
@@ -4436,10 +4437,6 @@ packages:
 
   component-emitter@1.3.1:
     resolution: {integrity: sha512-T0+barUSQRTUQASh8bx02dl+DhF54GtIDY13Y3m9oWTklKbb3Wv974meRpeZ3lp1JpLVECWWNHC4vaG2XHXouQ==}
-
-  compress-brotli@1.3.13:
-    resolution: {integrity: sha512-JglkVZRcnIeqLB9dfe0XbjEmhKgUKBUyA9ViphTjTH0lK6JG2LlpBCn9TAe5b7PlEfU23xuYXcTCDgxzmpPUPA==}
-    engines: {node: '>= 12'}
 
   concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
@@ -8743,17 +8740,6 @@ snapshots:
     optionalDependencies:
       chokidar: 4.0.1
 
-  '@angular-devkit/core@19.0.1(chokidar@4.0.1)':
-    dependencies:
-      ajv: 8.17.1
-      ajv-formats: 3.0.1(ajv@8.17.1)
-      jsonc-parser: 3.3.1
-      picomatch: 4.0.2
-      rxjs: 7.8.1
-      source-map: 0.7.4
-    optionalDependencies:
-      chokidar: 4.0.1
-
   '@angular-devkit/core@19.0.1(chokidar@4.0.3)':
     dependencies:
       ajv: 8.17.1
@@ -8793,16 +8779,6 @@ snapshots:
       '@angular-devkit/core': 18.2.8(chokidar@4.0.1)
       jsonc-parser: 3.3.1
       magic-string: 0.30.11
-      ora: 5.4.1
-      rxjs: 7.8.1
-    transitivePeerDependencies:
-      - chokidar
-
-  '@angular-devkit/schematics@19.0.1(chokidar@4.0.1)':
-    dependencies:
-      '@angular-devkit/core': 19.0.1(chokidar@4.0.1)
-      jsonc-parser: 3.3.1
-      magic-string: 0.30.12
       ora: 5.4.1
       rxjs: 7.8.1
     transitivePeerDependencies:
@@ -11163,17 +11139,6 @@ snapshots:
       '@nestjs/core': 11.0.21(@nestjs/common@11.0.21(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/microservices@11.0.21)(@nestjs/platform-express@11.0.21)(reflect-metadata@0.2.2)(rxjs@7.8.1)
       cron: 4.3.0
 
-  '@nestjs/schematics@11.0.0(chokidar@4.0.1)(typescript@5.7.3)':
-    dependencies:
-      '@angular-devkit/core': 19.0.1(chokidar@4.0.1)
-      '@angular-devkit/schematics': 19.0.1(chokidar@4.0.1)
-      comment-json: 4.2.5
-      jsonc-parser: 3.3.1
-      pluralize: 8.0.0
-      typescript: 5.7.3
-    transitivePeerDependencies:
-      - chokidar
-
   '@nestjs/schematics@11.0.0(chokidar@4.0.3)(typescript@5.7.3)':
     dependencies:
       '@angular-devkit/core': 19.0.1(chokidar@4.0.3)
@@ -12794,7 +12759,7 @@ snapshots:
 
   '@tokenizer/inflate@0.2.7':
     dependencies:
-      debug: 4.4.0
+      debug: 4.4.3
       fflate: 0.8.2
       token-types: 6.1.1
     transitivePeerDependencies:
@@ -12968,8 +12933,6 @@ snapshots:
     dependencies:
       expect: 29.7.0
       pretty-format: 29.7.0
-
-  '@types/json-buffer@3.0.2': {}
 
   '@types/json-schema@7.0.15': {}
 
@@ -13161,7 +13124,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/typescript-estree': 8.21.0(typescript@5.7.3)
       '@typescript-eslint/utils': 8.21.0(eslint@9.18.0)(typescript@5.7.3)
-      debug: 4.4.0
+      debug: 4.4.3
       eslint: 9.18.0
       ts-api-utils: 2.0.0(typescript@5.7.3)
       typescript: 5.7.3
@@ -13191,7 +13154,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.21.0
       '@typescript-eslint/visitor-keys': 8.21.0
-      debug: 4.4.0
+      debug: 4.4.3
       fast-glob: 3.3.2
       is-glob: 4.0.3
       minimatch: 9.0.5
@@ -13831,7 +13794,7 @@ snapshots:
     dependencies:
       bytes: 3.1.2
       content-type: 1.0.5
-      debug: 4.4.0
+      debug: 4.4.3
       http-errors: 2.0.0
       iconv-lite: 0.6.3
       on-finished: 2.4.1
@@ -13878,6 +13841,8 @@ snapshots:
   breadth-filter@2.0.0:
     dependencies:
       object.entries: 1.1.8
+
+  brotli-wasm@3.0.1: {}
 
   browser-or-node@2.1.1: {}
 
@@ -14179,11 +14144,6 @@ snapshots:
   commondir@1.0.1: {}
 
   component-emitter@1.3.1: {}
-
-  compress-brotli@1.3.13:
-    dependencies:
-      '@types/json-buffer': 3.0.2
-      json-buffer: 3.0.1
 
   concat-map@0.0.1: {}
 
@@ -15236,7 +15196,7 @@ snapshots:
 
   finalhandler@2.1.0:
     dependencies:
-      debug: 4.4.0
+      debug: 4.4.3
       encodeurl: 2.0.0
       escape-html: 1.0.3
       on-finished: 2.4.1
@@ -17786,7 +17746,7 @@ snapshots:
 
   router@2.2.0:
     dependencies:
-      debug: 4.4.0
+      debug: 4.4.3
       depd: 2.0.0
       is-promise: 4.0.0
       parseurl: 1.3.3
@@ -17879,7 +17839,7 @@ snapshots:
 
   send@1.1.0:
     dependencies:
-      debug: 4.4.0
+      debug: 4.4.3
       destroy: 1.2.0
       encodeurl: 2.0.0
       escape-html: 1.0.3
@@ -17896,7 +17856,7 @@ snapshots:
 
   send@1.2.0:
     dependencies:
-      debug: 4.4.0
+      debug: 4.4.3
       encodeurl: 2.0.0
       escape-html: 1.0.3
       etag: 1.8.1

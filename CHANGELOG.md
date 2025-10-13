@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- replaced `Brotli` helper dependencies package with `brotli-wasm` @vhidvz
+
 ## [1.3.24] - 2025-10-12
 
 ### Added
