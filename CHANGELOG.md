@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.26] - 2025-10-14
+
+### Changed
+
+- make `NominatimPlaceAddress.city` optional @vhidvz
+
 ## [1.3.25] - 2025-10-14
 
 ### Changed
@@ -369,7 +375,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.3.25...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.3.26...HEAD
+[1.3.26]: https://github.com/wenex-org/platform/compare/1.3.25...1.3.26
 [1.3.25]: https://github.com/wenex-org/platform/compare/1.3.24...1.3.25
 [1.3.24]: https://github.com/wenex-org/platform/compare/1.3.23...1.3.24
 [1.3.23]: https://github.com/wenex-org/platform/compare/1.3.22...1.3.23
