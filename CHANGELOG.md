@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- style: health check improvements @vhidvz
+
 ## [1.3.26] - 2025-10-14
 
 ### Changed
