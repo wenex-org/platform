@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.29] - 2025-10-18
+
+### Fixed
+
+- revert: cross origin issue @vhidvz
+
 ## [1.3.28] - 2025-10-18
 
 ### Fixed
@@ -388,7 +394,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.3.28...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.3.29...HEAD
+[1.3.29]: https://github.com/wenex-org/platform/compare/1.3.28...1.3.29
 [1.3.28]: https://github.com/wenex-org/platform/compare/1.3.27...1.3.28
 [1.3.27]: https://github.com/wenex-org/platform/compare/1.3.26...1.3.27
 [1.3.26]: https://github.com/wenex-org/platform/compare/1.3.25...1.3.26
