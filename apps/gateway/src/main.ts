@@ -25,16 +25,9 @@ import { AppModule } from './app.module';
 const { GATEWAY } = APP;
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
-  app.use(
-    helmet({
-      contentSecurityPolicy: false,
-      crossOriginOpenerPolicy: { policy: 'same-origin' },
-      crossOriginResourcePolicy: { policy: 'cross-origin' },
-    }),
-  );
+  app.use(helmet({ contentSecurityPolicy: false }));
   app.enableShutdownHooks();
   app.use(queryParser);
-  app.enableCors();
 
   setupSwagger(app);
 
