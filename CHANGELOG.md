@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- feat: mcp integration first try @vhidvz
+
 ## [1.3.29] - 2025-10-18
 
 ### Fixed
