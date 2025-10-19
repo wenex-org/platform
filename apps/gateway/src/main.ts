@@ -15,6 +15,7 @@ import {
 } from '@app/common/core/interceptors';
 import { NamingConventionReqInterceptor } from '@app/common/core/interceptors/n-convention';
 import { prototyping, queryParser, setupSwagger } from '@app/common/core/utils';
+import { ServerMCP } from '@app/common/core/mcp';
 import { NestFactory } from '@nestjs/core';
 import { APP } from '@app/common/core';
 import helmet from 'helmet';
@@ -28,12 +29,14 @@ async function bootstrap() {
   app.use(helmet({ contentSecurityPolicy: false }));
   app.enableShutdownHooks();
   app.use(queryParser);
-
-  setupSwagger(app);
+  app.enableCors();
 
   const express = app.getHttpAdapter().getInstance();
   express.set('trust proxy', true);
   express.set('etag', false);
+
+  const mcp = ServerMCP.create();
+  mcp.setup(express);
 
   app.useGlobalInterceptors(
     new XRequestIdInterceptor(),
@@ -43,6 +46,7 @@ async function bootstrap() {
     new NamingConventionReqInterceptor(),
   );
 
+  setupSwagger(app);
   await app.listen(GATEWAY.API_PORT, '0.0.0.0');
 
   const url = await app.getUrl();
@@ -52,5 +56,6 @@ async function bootstrap() {
   console.log(`Health check is running on: ${url}/status`);
   console.log(`OpenApi Spec is running on: ${url}/api-json`);
   console.log(`GraphQL playground is running on: ${url}/graphql`);
+  console.log(`MCP streamable HTTP transport is running on: ${url}/mcp`);
 }
 void bootstrap();

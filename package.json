@@ -56,6 +56,7 @@
     "pm2:restart": "pm2 restart ecosystem.config.js",
     "pm2:stop": "pm2 stop ecosystem.config.js",
     "pm2:delete": "pm2 delete ecosystem.config.js",
+    "mcp:inspector": "npx @modelcontextprotocol/inspector",
     "doc": "npx @compodoc/compodoc -p tsconfig.json -n \"Documentation\" -d ./docs -s"
   },
   "lint-staged": {
@@ -73,6 +74,7 @@
     "@elastic/elasticsearch": "^8.18.2",
     "@grpc/grpc-js": "^1.12.5",
     "@grpc/proto-loader": "^0.7.13",
+    "@modelcontextprotocol/sdk": "^1.20.1",
     "@nestjs/apollo": "^13.0.2",
     "@nestjs/axios": "^4.0.0",
     "@nestjs/bullmq": "^11.0.3",
@@ -160,11 +162,13 @@
     "semver": "^7.6.3",
     "sharp": "^0.33.5",
     "typeorm": "^0.3.25",
-    "web-push": "^3.6.7"
+    "web-push": "^3.6.7",
+    "zod": "3"
   },
   "devDependencies": {
     "@compodoc/compodoc": "^1.1.26",
     "@eslint/js": "^9.18.0",
+    "@modelcontextprotocol/inspector": "^0.17.1",
     "@nestjs/cli": "^11.0.2",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.21",
@@ -184,7 +188,7 @@
     "@types/semver": "^7.5.8",
     "@types/supertest": "^6.0.2",
     "@types/web-push": "^3.6.4",
-    "@wenex/sdk": "^1.1.48",
+    "@wenex/sdk": "^1.2.2",
     "dpdm": "^3.14.0",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
