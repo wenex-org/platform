@@ -29,8 +29,8 @@ async function bootstrap() {
   app.use(
     helmet({
       contentSecurityPolicy: false,
-      crossOriginResourcePolicy: { policy: 'cross-origin' },
       crossOriginOpenerPolicy: { policy: 'same-origin' },
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
     }),
   );
   app.enableShutdownHooks();
