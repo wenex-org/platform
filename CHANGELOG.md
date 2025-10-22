@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- improve: cant sent meesage when channel is not applicable
+
 ## [1.3.30] - 2025-10-20
 
 ### Added
