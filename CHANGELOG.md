@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- improve: cant sent meesage when channel is not applicable
+- improve: cant sent meesage when channel is not applicable @fdaei
 
 ## [1.3.30] - 2025-10-20
 
