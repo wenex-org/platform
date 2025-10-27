@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Add `nullable=True` to Core serializer for props @fdaei
+
 ## [1.3.31] - 2025-10-25
 
 ### Added
