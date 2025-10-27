@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.32] - 2025-10-27
+
 ### Fixed
 
 - Add `nullable=True` to Core serializer for props @fdaei
@@ -415,7 +417,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.3.31...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.3.32...HEAD
+[1.3.32]: https://github.com/wenex-org/platform/compare/1.3.31...1.3.32
 [1.3.31]: https://github.com/wenex-org/platform/compare/1.3.30...1.3.31
 [1.3.30]: https://github.com/wenex-org/platform/compare/1.3.29...1.3.30
 [1.3.29]: https://github.com/wenex-org/platform/compare/1.3.28...1.3.29
