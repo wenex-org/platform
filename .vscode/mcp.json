@@ -1,0 +1,19 @@
+{
+  "servers": {
+    "platform": {
+      "url": "http://127.0.0.1:3010/mcp",
+      "type": "http",
+      "headers": {
+        "Authorization": "Bearer ${input:platform_mcp_pat}"
+      }
+    }
+  },
+  "inputs": [
+    {
+      "type": "promptString",
+      "id": "platform_mcp_pat",
+      "description": " Personal Access Token",
+      "password": true
+    }
+  ]
+}

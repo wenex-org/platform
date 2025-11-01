@@ -16,6 +16,7 @@ export function mcpRegistration() {
       }
 
       const headers = getHeaders({ requestInfo });
+      console.log('Headers received:', headers);
       const authorizationValue = headers.authorization ?? headers.Authorization;
       const authorization = typeof authorizationValue === 'string' ? authorizationValue : undefined;
 
@@ -45,7 +46,7 @@ export function mcpRegistration() {
         content: [
           {
             type: 'text',
-            text: `هدر Authorization دریافت شد.\nQuery:\n${query}`,
+            text: `\nQuery:\n${query}`,
           },
         ],
       };
