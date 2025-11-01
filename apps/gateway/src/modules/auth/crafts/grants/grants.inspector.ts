@@ -1,33 +1,51 @@
-import { ServerMCP } from '@app/common/core/mcp';
-import { QUERY_DECS } from '@app/common/core/mcp/descs.mcp';
-import { toString } from '@app/common/core/utils';
+import { getHeaders, ServerMCP } from '@app/common/core/mcp';
+import { z } from 'zod';
 
-export async function mcpRegistration() {
+export function mcpRegistration() {
   const mcp = ServerMCP.create();
-  const { ResourceTemplate } = await import('@modelcontextprotocol/sdk/server/mcp.js');
 
-  mcp.server.registerResource(
-    'countAuthGrant',
-    new ResourceTemplate('auth://grants/count{?query}', {
-      list: () => ({
-        resources: [],
-      }),
-    }),
+  mcp.server.tool(
+    'excuterOfMongoDbGrantTable',
+    'Provide the Mongo query after sending the Authorization header.',
     {
-      title: 'Application Config',
-      description: `Application configuration data query="${QUERY_DECS}"`,
+      query: z.string().min(1, 'query must not be empty').optional(),
     },
-    (uri, extra) => {
-      console.log('uri', uri, 'extra', extra);
-      const queryParam = uri.searchParams.get('query');
-      console.log(queryParam);
+    ({ query }, { signal, requestInfo }) => {
+      if (signal.aborted) {
+        throw new Error('tools/call was cancelled');
+      }
+
+      const headers = getHeaders({ requestInfo });
+      const authorizationValue = headers.authorization ?? headers.Authorization;
+      const authorization = typeof authorizationValue === 'string' ? authorizationValue : undefined;
+
+      if (!authorization) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: 'هدر Authorization یافت نشد. لطفاً درخواست MCP را با هدر Authorization (مثلاً "Authorization: Bearer <token>") ارسال کنید.',
+            },
+          ],
+        };
+      }
+
+      if (!query) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: 'توکن در هدر تأیید شد. لطفاً کوئری Mongo را در فیلد query ارسال کنید.',
+            },
+          ],
+        };
+      }
 
       return {
-        contents: [
+        content: [
           {
-            uri: uri.href,
-            text: toString({}),
-            mimeType: 'application/json',
+            type: 'text',
+            text: `هدر Authorization دریافت شد.\nQuery:\n${query}`,
           },
         ],
       };
