@@ -74,6 +74,7 @@
     "ROLLBACKED",
     "sadd",
     "scard",
+    "SearcHit",
     "setex",
     "sismember",
     "smembers",
