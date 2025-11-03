@@ -54,7 +54,7 @@ export class MessagesController extends ControllerClass<Message, MessageDto> imp
     super(provider.messages, MessageSerializer);
   }
 
-  @Post()
+  @Post('search')
   @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.SearchConjointMessages)
   @ApiResponse({ type: SearchDataSerializer })
