@@ -18,22 +18,24 @@ import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@a
 import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateMessageDto, CreateMessageItemsDto, UpdateMessageDto } from '@app/common/dto/conjoint';
 import { AuthorityInterceptor, ProjectionInterceptor } from '@app/common/core/interceptors/mongo';
+import { SearchDataSerializer, SearchSerializer } from '@app/common/core/serializers/elastic';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
+import { getSseMessage, mapToInstance } from '@app/common/core/utils';
 import { Message, MessageDto } from '@app/common/interfaces/conjoint';
 import { ConjointProvider } from '@app/common/providers/conjoint';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
+import { SearchRequestDto } from '@app/common/core/dto/elastic';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { ValidationPipe } from '@app/common/core/pipes';
-import { getSseMessage } from '@app/common/core/utils';
 import { Metadata } from '@app/common/core/interfaces';
-import { Observable, switchMap } from 'rxjs';
+import { from, Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
@@ -51,6 +53,25 @@ export class MessagesController extends ControllerClass<Message, MessageDto> imp
   constructor(readonly provider: ConjointProvider) {
     super(provider.messages, MessageSerializer);
   }
+
+  @Post()
+  @Cache(COLL_PATH, 'fill')
+  @SetScope(Scope.SearchConjointMessages)
+  @ApiResponse({ type: SearchDataSerializer })
+  @ApiQuery({ type: FilterDto, required: false })
+  @SetPolicy(Action.Search, Resource.ConjointMessages)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  search(
+    @Meta() meta: Metadata,
+    @Body() request: SearchRequestDto,
+    @Filter() filter: FilterDto<Message>,
+  ): Observable<SearchDataSerializer<Message>> {
+    return from(this.provider.messages.search(filter, request, { meta })).pipe(mapToInstance(SearchSerializer, 'data'));
+  }
+
+  // ##############################
+  // Common Method's
+  // ##############################
 
   @Get('count')
   @Cache(COLL_PATH, 'fill')
