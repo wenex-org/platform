@@ -56,6 +56,7 @@ export class FilesInspector {
         ETag,
         'Content-Type': file.content_type,
         'Content-Disposition': `attachment; filename="${file.original}"`,
+        'Cache-Control': 'public, max-age=86400, stale-while-revalidate=86400',
       });
     } else {
       res.status(HttpStatus.OK).set({
@@ -97,6 +98,7 @@ export class FilesInspector {
         ETag,
         'Content-Type': file.content_type,
         'Content-Disposition': `attachment; filename="${file.original}"`,
+        'Cache-Control': 'public, max-age=86400, stale-while-revalidate=86400',
       });
     } else {
       res.status(HttpStatus.OK).set({

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- add cache control public to public files @winkcor
+
 ## [1.3.32] - 2025-10-27
 
 ### Fixed
