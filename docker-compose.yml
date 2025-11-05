@@ -13,6 +13,8 @@ services:
       - 3010:3010 # REST
     environment:
       SERVICE_NAME: gateway
+      OTLP_SERVICE_NAME: gateway
+      ELASTIC_APM_SERVICE_NAME: gateway
     <<: *common
 
   auth:
@@ -23,6 +25,7 @@ services:
       - 5020:5020 # GRPC
     environment:
       SERVICE_NAME: auth
+      OTLP_SERVICE_NAME: auth
     <<: *common
 
   domain:
@@ -33,6 +36,7 @@ services:
       - 5030:5030 # GRPC
     environment:
       SERVICE_NAME: domain
+      OTLP_SERVICE_NAME: domain
     <<: *common
 
   context:
@@ -43,6 +47,7 @@ services:
       - 5040:5040 # GRPC
     environment:
       SERVICE_NAME: context
+      OTLP_SERVICE_NAME: context
     <<: *common
 
   essential:
@@ -53,6 +58,7 @@ services:
       - 5050:5050 # GRPC
     environment:
       SERVICE_NAME: essential
+      OTLP_SERVICE_NAME: essential
     <<: *common
 
   financial:
@@ -63,6 +69,7 @@ services:
       - 5060:5060 # GRPC
     environment:
       SERVICE_NAME: financial
+      OTLP_SERVICE_NAME: financial
     <<: *common
 
   general:
@@ -73,6 +80,7 @@ services:
       - 5070:5070 # GRPC
     environment:
       SERVICE_NAME: general
+      OTLP_SERVICE_NAME: general
     <<: *common
 
   identity:
@@ -83,6 +91,7 @@ services:
       - 5080:5080 # GRPC
     environment:
       SERVICE_NAME: identity
+      OTLP_SERVICE_NAME: identity
     <<: *common
 
   special:
@@ -93,6 +102,7 @@ services:
       - 5090:5090 # GRPC
     environment:
       SERVICE_NAME: special
+      OTLP_SERVICE_NAME: special
     <<: *common
 
   touch:
@@ -103,6 +113,7 @@ services:
       - 5100:5100 # GRPC
     environment:
       SERVICE_NAME: touch
+      OTLP_SERVICE_NAME: touch
     <<: *common
 
   content:
@@ -113,6 +124,7 @@ services:
       - 5110:5110 # GRPC
     environment:
       SERVICE_NAME: content
+      OTLP_SERVICE_NAME: content
     <<: *common
 
   logistic:
@@ -123,6 +135,7 @@ services:
       - 5120:5120 # GRPC
     environment:
       SERVICE_NAME: logistic
+      OTLP_SERVICE_NAME: logistic
     <<: *common
 
   conjoint:
@@ -133,6 +146,7 @@ services:
       - 5130:5130 # GRPC
     environment:
       SERVICE_NAME: conjoint
+      OTLP_SERVICE_NAME: conjoint
     <<: *common
 
   career:
@@ -143,6 +157,7 @@ services:
       - 5140:5140 # GRPC
     environment:
       SERVICE_NAME: career
+      OTLP_SERVICE_NAME: career
     <<: *common
 
   # ---------
@@ -156,6 +171,7 @@ services:
       - 4040:4040 # REST
     environment:
       SERVICE_NAME: watcher
+      OTLP_SERVICE_NAME: watcher
     <<: *common
 
   preserver:
@@ -166,6 +182,7 @@ services:
       - 6030:6030 # GRPC
     environment:
       SERVICE_NAME: preserver
+      OTLP_SERVICE_NAME: preserver
     <<: *common
 
   observer:
@@ -175,6 +192,7 @@ services:
       - 4020:4020 # REST
     environment:
       SERVICE_NAME: observer
+      OTLP_SERVICE_NAME: observer
     <<: *common
 
   dispatcher:
@@ -184,6 +202,7 @@ services:
       - 4010:4010 # REST
     environment:
       SERVICE_NAME: dispatcher
+      OTLP_SERVICE_NAME: dispatcher
     <<: *common
 
   publisher:
@@ -193,6 +212,7 @@ services:
       - 4050:4050 # REST
     environment:
       SERVICE_NAME: publisher
+      OTLP_SERVICE_NAME: publisher
     <<: *common
 
   logger:
@@ -202,6 +222,7 @@ services:
       - 4060:4060 # REST
     environment:
       SERVICE_NAME: logger
+      OTLP_SERVICE_NAME: logger
     <<: *common
 
   cleaner:
@@ -211,6 +232,7 @@ services:
       - 4070:4070 # REST
     environment:
       SERVICE_NAME: cleaner
+      OTLP_SERVICE_NAME: cleaner
     <<: *common
 
   # ---------
@@ -220,35 +242,35 @@ services:
   db-clean:
     profiles:
       - db-clean
-    entrypoint: ['bash', '-c', 'npm run db:clean']
+    entrypoint: ["bash", "-c", "npm run db:clean"]
     <<: *common
 
   db-index:
     profiles:
       - db-index
-    entrypoint: ['bash', '-c', 'npm run db:index']
+    entrypoint: ["bash", "-c", "npm run db:index"]
     <<: *common
 
   db-seed:
     profiles:
       - db-seed
-    entrypoint: ['bash', '-c', 'npm run db:seed']
+    entrypoint: ["bash", "-c", "npm run db:seed"]
     <<: *common
 
   storage-init:
     profiles:
       - storage-init
-    entrypoint: ['bash', '-c', 'npm run storage:init']
+    entrypoint: ["bash", "-c", "npm run storage:init"]
     <<: *common
 
   utility-init:
     profiles:
       - utility-init
-    entrypoint: ['bash', '-c', 'npm run utility:init']
+    entrypoint: ["bash", "-c", "npm run utility:init"]
     <<: *common
 
   kafka-connect:
     profiles:
       - kafka-connect
-    entrypoint: ['bash', '-c', 'npm run script:kafka-connect']
+    entrypoint: ["bash", "-c", "npm run script:kafka-connect"]
     <<: *common
