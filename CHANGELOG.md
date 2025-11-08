@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- add fuzzy search by elasticsearch to `conjoint.messages` @vhidvz
+- add `sta` and `suggest` subfields for elasticsearch indices @vhidvz
+
 ### Fixed
 
 - add cache control public to public files @winkcor
