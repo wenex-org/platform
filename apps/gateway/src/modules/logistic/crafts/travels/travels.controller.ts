@@ -106,7 +106,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   Cursor(@Res() res: Response, @Meta() meta: Metadata, @Perm() perm: Permission, @Filter() filter: FilterOneDto<Travel>) {
     // Server Sent-Event Headers
     res.setHeader('Transfer-Encoding', 'chunked');
-    res.setHeader('Logistic-Type', 'text/event-stream');
+    res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'private, no-cache, no-store');
 
     super

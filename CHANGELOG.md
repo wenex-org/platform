@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.34] - 2025-11-08
+
+### Fixed
+
+- fix content type in header @fdaei
+
 ## [1.3.33] - 2025-11-08
 
 ### Added
@@ -428,7 +434,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.3.33...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.3.34...HEAD
+[1.3.34]: https://github.com/wenex-org/platform/compare/1.3.33...1.3.34
 [1.3.33]: https://github.com/wenex-org/platform/compare/1.3.32...1.3.33
 [1.3.32]: https://github.com/wenex-org/platform/compare/1.3.31...1.3.32
 [1.3.31]: https://github.com/wenex-org/platform/compare/1.3.30...1.3.31
