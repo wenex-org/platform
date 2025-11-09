@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Check `onBeforeCreate`; if a user already exists on another client, just update instead.
+
 ## [1.3.35] - 2025-11-08
 
 - fix: `whole` scope on `preserver` @vhidvz
