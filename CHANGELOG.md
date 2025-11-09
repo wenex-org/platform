@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
-- update population of mongo runner `findOneAndUpdate` `findOneAndDelete` @vhidvz
+- update population of mongo runner in `findOneAndUpdate` and `findOneAndDelete` @vhidvz
 
 ## [1.3.35] - 2025-11-08
 
