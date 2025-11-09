@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.36] - 2025-11-09
+
 ### Updated
 
 - update population of mongo runner in `findOneAndUpdate` and `findOneAndDelete` @vhidvz
@@ -442,7 +444,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.3.35...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.3.36...HEAD
+[1.3.36]: https://github.com/wenex-org/platform/compare/1.3.35...1.3.36
 [1.3.35]: https://github.com/wenex-org/platform/compare/1.3.34...1.3.35
 [1.3.34]: https://github.com/wenex-org/platform/compare/1.3.33...1.3.34
 [1.3.33]: https://github.com/wenex-org/platform/compare/1.3.32...1.3.33
