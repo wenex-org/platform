@@ -7,17 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-<<<<<<< HEAD
 ### Fixed
 
 - Check `onBeforeCreate`; if a user already exists on another client, just update instead.
-=======
+
+## [1.3.37] - 2025-11-10
+
+### Fixed
+
+- inactive user creation issue for new client @fdaei
+
 ## [1.3.36] - 2025-11-09
 
 ### Updated
 
 - update population of mongo runner in `findOneAndUpdate` and `findOneAndDelete` @vhidvz
->>>>>>> 7cfe5b7ae684032ac896ac5bb00f8d34660fa193
 
 ## [1.3.35] - 2025-11-08
 
@@ -450,7 +454,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.3.36...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.3.37...HEAD
+[1.3.37]: https://github.com/wenex-org/platform/compare/1.3.36...1.3.37
 [1.3.36]: https://github.com/wenex-org/platform/compare/1.3.35...1.3.36
 [1.3.35]: https://github.com/wenex-org/platform/compare/1.3.34...1.3.35
 [1.3.34]: https://github.com/wenex-org/platform/compare/1.3.33...1.3.34
