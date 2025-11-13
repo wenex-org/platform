@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Check `onBeforeCreate`; if a user already exists on another client, just update instead.
+- Check `onBeforeCreate`; if a user already exists on another client, just update `clients` instead @fdaei
 
 ## [1.3.37] - 2025-11-10
 
