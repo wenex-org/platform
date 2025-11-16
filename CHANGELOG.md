@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.39] - 2025-11-16
+
+### Changed
+
+- removed: unused code from `user` schema @vhidvz
+
 ## [1.3.38] - 2025-11-16
 
 ### Changed
@@ -461,7 +467,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.3.38...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.3.39...HEAD
+[1.3.39]: https://github.com/wenex-org/platform/compare/1.3.38...1.3.39
 [1.3.38]: https://github.com/wenex-org/platform/compare/1.3.37...1.3.38
 [1.3.37]: https://github.com/wenex-org/platform/compare/1.3.36...1.3.37
 [1.3.36]: https://github.com/wenex-org/platform/compare/1.3.35...1.3.36
