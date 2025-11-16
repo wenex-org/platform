@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.38] - 2025-11-16
+
 ### Changed
 
 - set default value for `identity/users.secret` with random 40 hex chars @vhidvz
@@ -459,7 +461,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.3.37...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.3.38...HEAD
+[1.3.38]: https://github.com/wenex-org/platform/compare/1.3.37...1.3.38
 [1.3.37]: https://github.com/wenex-org/platform/compare/1.3.36...1.3.37
 [1.3.36]: https://github.com/wenex-org/platform/compare/1.3.35...1.3.36
 [1.3.35]: https://github.com/wenex-org/platform/compare/1.3.34...1.3.35
