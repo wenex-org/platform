@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- change the user dto condition in the `username` field must not be an email or phone number @vhidvz
+
 ### Fixed
 
 - Check `onBeforeCreate`; if a user already exists on another client, just update `clients` instead @fdaei
