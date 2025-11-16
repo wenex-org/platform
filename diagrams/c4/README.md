@@ -1,7 +1,7 @@
 # C4 Model
 
 1. [Context Diagram](#context-diagram)
-1. [Container Diagram](#container-diagram)
+2. [Container Diagram](#container-diagram)
 
 ## Context Diagram
 
