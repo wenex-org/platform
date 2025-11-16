@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- set default value for `identity/users.secret` with random 40 hex chars @vhidvz
 - change the user dto condition in the `username` field must not be an email or phone number @vhidvz
 
 ### Fixed
