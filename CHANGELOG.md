@@ -7,9 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.39] - 2025-11-16
+
+### Changed
+
+- removed: unused code from `user` schema @vhidvz
+
+## [1.3.38] - 2025-11-16
+
+### Changed
+
+- set default value for `identity/users.secret` with random 40 hex chars @vhidvz
+- change the user dto condition in the `username` field must not be an email or phone number @vhidvz
+
 ### Fixed
 
-- Check `onBeforeCreate`; if a user already exists on another client, just update instead.
+- Check `onBeforeCreate`; if a user already exists on another client, just update `clients` instead @fdaei
 
 ## [1.3.37] - 2025-11-10
 
@@ -454,7 +467,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.3.37...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.3.39...HEAD
+[1.3.39]: https://github.com/wenex-org/platform/compare/1.3.38...1.3.39
+[1.3.38]: https://github.com/wenex-org/platform/compare/1.3.37...1.3.38
 [1.3.37]: https://github.com/wenex-org/platform/compare/1.3.36...1.3.37
 [1.3.36]: https://github.com/wenex-org/platform/compare/1.3.35...1.3.36
 [1.3.35]: https://github.com/wenex-org/platform/compare/1.3.34...1.3.35
