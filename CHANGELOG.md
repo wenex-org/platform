@@ -11,283 +11,78 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - add `stocks`, `stores`, `products` and `customers` modules to `career` service @vhidvz
 
-## [1.3.39] - 2025-11-16
-
-### Changed
-
-- removed: unused code from `user` schema @vhidvz
-
-## [1.3.38] - 2025-11-16
-
-### Changed
-
-- set default value for `identity/users.secret` with random 40 hex chars @vhidvz
-- change the user dto condition in the `username` field must not be an email or phone number @vhidvz
-
-### Fixed
-
-- Check `onBeforeCreate`; if a user already exists on another client, just update `clients` instead @fdaei
-
-## [1.3.37] - 2025-11-10
-
-### Fixed
-
-- inactive user creation issue for new client @fdaei
-
-## [1.3.36] - 2025-11-09
-
-### Updated
-
-- update population of mongo runner in `findOneAndUpdate` and `findOneAndDelete` @vhidvz
-
-## [1.3.35] - 2025-11-08
-
-- fix: `whole` scope on `preserver` @vhidvz
-
-## [1.3.34] - 2025-11-08
-
-### Fixed
-
-- fix content type in header @fdaei
-
-## [1.3.33] - 2025-11-08
+## [1.3.X] - 2025-11-16
 
 ### Added
 
 - add fuzzy search by elasticsearch to `conjoint.messages` @vhidvz
 - add `sta` and `suggest` subfields for elasticsearch indices @vhidvz
-
-### Fixed
-
-- add cache control public to public files @winkcor
-
-## [1.3.32] - 2025-10-27
-
-### Fixed
-
-- Add `nullable=True` to Core serializer for props @fdaei
-
-## [1.3.31] - 2025-10-25
-
-### Added
-
 - add x-lang header in metadata @fdaei
 - improve: cant sent message when channel is not applicable @fdaei
-
-## [1.3.30] - 2025-10-20
-
-### Added
-
 - feat: mcp integration first try @vhidvz
-
-### Fixed
-
-- add cross origin for resources headers `crossOriginResourcePolicy` @winkcor
-
-## [1.3.29] - 2025-10-18
-
-### Fixed
-
-- revert: cross origin issue @vhidvz
-
-## [1.3.28] - 2025-10-18
-
-### Fixed
-
-- cross origin issue @vhidvz
-
-## [1.3.27] - 2025-10-15
-
-### Changed
-
-- style: health check improvements @vhidvz
-- transform `value` to lowercase in `identity/users.email` @vhidvz
-
-## [1.3.26] - 2025-10-14
-
-### Changed
-
-- make `NominatimPlaceAddress.city` optional @vhidvz
-
-## [1.3.25] - 2025-10-14
-
-### Changed
-
-- support brotli compression on query string @vhidvz
-- replaced `Brotli` helper dependencies package with `brotli-wasm` @vhidvz
-
-## [1.3.24] - 2025-10-12
-
-### Added
-
 - add `Brotli` helper in core @vhidvz
 - add `display_name` field to `Place` type of `logistic.locations` @vhidvz
-
-## [1.3.23] - 2025-10-11
-
-### Fixed
-
-- fix: `bool_result` undefined issue in `preserver` worker @vhidvz
-
-## [1.3.22] - 2025-10-11
-
-### Fixed
-
-- fix cursor response header `Content-Type` @winkcor
-
-## [1.3.21] - 2025-10-11
+- `profit` and `discount` to `financial/invoices` in `invoice.items` @vhidvz
+- feat: add file sharing @vhidvz
+- added more log to `essential.sagas` service @vhidvz
 
 ### Changed
 
+- removed: unused code from `user` schema @vhidvz
+- set default value for `identity/users.secret` with random 40 hex chars @vhidvz
+- change the user dto condition in the `username` field must not be an email or phone number @vhidvz
+- update population of mongo runner in `findOneAndUpdate` and `findOneAndDelete` @vhidvz
+- style: health check improvements @vhidvz
+- transform `value` to lowercase in `identity/users.email` @vhidvz
+- make `NominatimPlaceAddress.city` optional @vhidvz
+- support brotli compression on query string @vhidvz
+- replaced `Brotli` helper dependencies package with `brotli-wasm` @vhidvz
 - update kafka connect script to capture `emails`, `pushes` and `smss` from touch db @vhidvz
-
-## [1.3.20] - 2025-10-10
-
-### Changed
-
 - refactor: model value in client domain of watcher worker @vhidvz
-
-## [1.3.19] - 2025-10-10
-
-### Changed
-
 - create grants for new domain @fdaei
 - validate domain before create it @fdaei
 - capture full response of webpush in `props` @vhidvz
 - refactor: client domain logic for root grant of each in domain watcher worker @vhidvz
-
-## [1.3.18] - 2025-10-08
-
-### Fixed
-
-- fix: add `profit` and `discount` in `financial/invoices` and `invoice.items` in protobuf @vhidvz
-
-## [1.3.17] - 2025-10-08
-
-### Added
-
-- `profit` and `discount` to `financial/invoices` in `invoice.items` @vhidvz
-
-## [1.3.16] - 2025-10-08
-
-### Added
-
-- feat: add file sharing @vhidvz
-
-## [1.3.15] - 2025-10-07
-
-### Fixed
-
-- download file using `token` in url query string @vhidvz
-
-## [1.3.14] - 2025-10-07
-
-### Fixed
-
-- population `policies` issue base on `subjects` @vhidvz
-
-## [1.3.13] - 2025-10-07
-
-### Changed
-
 - update mongodb options @vhidvz
 - add `KafkaContext.heartbeat` to stat model @vhidvz
-
-## [1.3.12] - 2025-10-06
-
-### Changed
-
-- refactor: `essential.sagas` exception handling improvements @vhidvz
-
-## [1.3.11] - 2025-10-06
-
-### Changed
-
 - update mongodb options @vhidvz
-
-## [1.3.10] - 2025-10-06
-
-### Fixed
-
-- `loadBalanced is only a valid option in the URI` issue @vhidvz
-
-## [1.3.9] - 2025-10-06
-
-### Changed
-
+- refactor: `essential.sagas` exception handling improvements @vhidvz
 - add `MONGO_LOAD_BALANCED` env @vhidvz
-
-### Fixed
-
-- `saga session expired` issue @vhidvz
-
-## [1.3.8] - 2025-10-06
-
-### Changed
-
 - enable trust proxy for real client IP @fdaei
-
-### Fixed
-
-- essential scale issues @vhidvz
-
-## [1.3.7] - 2025-10-05
-
-### Changed
-
 - update redis health check @vhidvz
 - remove kafka health check from `essential` @vhidvz
 - remove `special` micro from gateway health check @vhidvz
 - remove `retryWrites` and `retryReads` from mongodb config options @vhidvz
 - remove `maxInFlightRequests` and `idempotent` options from kafka connection @vhidvz
-
-### Fixed
-
-- fix paymentValue function to give correct amount for init transaction @winkcor
-
-## [1.3.6] - 2025-10-01
-
-### Added
-
-- added more log to `essential.sagas` service @vhidvz
-
-## [1.3.5] - 2025-10-01
-
-### Fixed
-
-- refactor: essential saga service @vhidvz
-
-## [1.3.4] - 2025-10-01
-
-### Fixed
-
-- health check redis connection stick issue @vhidvz
-
-## [1.3.3] - 2025-09-30
-
-### Changed
-
 - health check improvements and kafka retry.retries changed to max safe int @vhidvz
-
-## [1.3.2] - 2025-09-30
-
-### Changed
-
 - set `autoCommit` to false for `essential.saga` service @vhidvz
-
-## [1.3.1] - 2025-09-30
-
-### Changed
-
 - some improvements for stability in kafka options @vhidvz
-
-## [1.3.0] - 2025-09-30
-
-### Changed
-
 - some implement in `saga` module @vhidvz
 - refactor and optimize `essential` service @vhidvz
 - refactor and some improvements `observer` worker @vhidvz
+
+### Fixed
+
+- Check `onBeforeCreate`; if a user already exists on another client, just update `clients` instead @fdaei
+- inactive user creation issue for new client @fdaei
+- fix: `whole` scope on `preserver` @vhidvz
+- fix content type in header @fdaei
+- add cache control public to public files @winkcor
+- Add `nullable=True` to Core serializer for props @fdaei
+- add cross origin for resources headers `crossOriginResourcePolicy` @winkcor
+- revert: cross origin issue @vhidvz
+- cross origin issue @vhidvz
+- fix: `bool_result` undefined issue in `preserver` worker @vhidvz
+- fix cursor response header `Content-Type` @winkcor
+- fix: add `profit` and `discount` in `financial/invoices` and `invoice.items` in protobuf @vhidvz
+- download file using `token` in url query string @vhidvz
+- population `policies` issue base on `subjects` @vhidvz
+- `loadBalanced is only a valid option in the URI` issue @vhidvz
+- `saga session expired` issue @vhidvz
+- essential scale issues @vhidvz
+- fix paymentValue function to give correct amount for init transaction @winkcor
+- refactor: essential saga service @vhidvz
+- health check redis connection stick issue @vhidvz
 
 ## [1.2.X] - 2025-09-29
 
@@ -472,46 +267,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - initial release 🎉​🎊​.
 
 [unreleased]: https://github.com/wenex-org/platform/compare/1.3.39...HEAD
-[1.3.39]: https://github.com/wenex-org/platform/compare/1.3.38...1.3.39
-[1.3.38]: https://github.com/wenex-org/platform/compare/1.3.37...1.3.38
-[1.3.37]: https://github.com/wenex-org/platform/compare/1.3.36...1.3.37
-[1.3.36]: https://github.com/wenex-org/platform/compare/1.3.35...1.3.36
-[1.3.35]: https://github.com/wenex-org/platform/compare/1.3.34...1.3.35
-[1.3.34]: https://github.com/wenex-org/platform/compare/1.3.33...1.3.34
-[1.3.33]: https://github.com/wenex-org/platform/compare/1.3.32...1.3.33
-[1.3.32]: https://github.com/wenex-org/platform/compare/1.3.31...1.3.32
-[1.3.31]: https://github.com/wenex-org/platform/compare/1.3.30...1.3.31
-[1.3.30]: https://github.com/wenex-org/platform/compare/1.3.29...1.3.30
-[1.3.29]: https://github.com/wenex-org/platform/compare/1.3.28...1.3.29
-[1.3.28]: https://github.com/wenex-org/platform/compare/1.3.27...1.3.28
-[1.3.27]: https://github.com/wenex-org/platform/compare/1.3.26...1.3.27
-[1.3.26]: https://github.com/wenex-org/platform/compare/1.3.25...1.3.26
-[1.3.25]: https://github.com/wenex-org/platform/compare/1.3.24...1.3.25
-[1.3.24]: https://github.com/wenex-org/platform/compare/1.3.23...1.3.24
-[1.3.23]: https://github.com/wenex-org/platform/compare/1.3.22...1.3.23
-[1.3.22]: https://github.com/wenex-org/platform/compare/1.3.21...1.3.22
-[1.3.21]: https://github.com/wenex-org/platform/compare/1.3.20...1.3.21
-[1.3.20]: https://github.com/wenex-org/platform/compare/1.3.19...1.3.20
-[1.3.19]: https://github.com/wenex-org/platform/compare/1.3.18...1.3.19
-[1.3.18]: https://github.com/wenex-org/platform/compare/1.3.17...1.3.18
-[1.3.17]: https://github.com/wenex-org/platform/compare/1.3.16...1.3.17
-[1.3.16]: https://github.com/wenex-org/platform/compare/1.3.15...1.3.16
-[1.3.15]: https://github.com/wenex-org/platform/compare/1.3.14...1.3.15
-[1.3.14]: https://github.com/wenex-org/platform/compare/1.3.13...1.3.14
-[1.3.13]: https://github.com/wenex-org/platform/compare/1.3.12...1.3.13
-[1.3.12]: https://github.com/wenex-org/platform/compare/1.3.11...1.3.12
-[1.3.11]: https://github.com/wenex-org/platform/compare/1.3.10...1.3.11
-[1.3.10]: https://github.com/wenex-org/platform/compare/1.3.9...1.3.10
-[1.3.9]: https://github.com/wenex-org/platform/compare/1.3.8...1.3.9
-[1.3.8]: https://github.com/wenex-org/platform/compare/1.3.7...1.3.8
-[1.3.7]: https://github.com/wenex-org/platform/compare/1.3.6...1.3.7
-[1.3.6]: https://github.com/wenex-org/platform/compare/1.3.5...1.3.6
-[1.3.5]: https://github.com/wenex-org/platform/compare/1.3.4...1.3.5
-[1.3.4]: https://github.com/wenex-org/platform/compare/1.3.3...1.3.4
-[1.3.3]: https://github.com/wenex-org/platform/compare/1.3.2...1.3.3
-[1.3.2]: https://github.com/wenex-org/platform/compare/1.3.1...1.3.2
-[1.3.1]: https://github.com/wenex-org/platform/compare/1.3.0...1.3.1
-[1.3.0]: https://github.com/wenex-org/platform/compare/1.2.49...1.3.0
+[1.3.X]: https://github.com/wenex-org/platform/compare/1.2.49...1.3.39
 [1.2.X]: https://github.com/wenex-org/platform/compare/1.1.20...1.2.49
 [1.1.X]: https://github.com/wenex-org/platform/compare/1.0.42...1.1.20
 [1.0.X]: https://github.com/wenex-org/platform/releases/tag/1.0.42
