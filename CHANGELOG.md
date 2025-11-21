@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- add `stocks`, `stores`, `products` and `customers` modules to `career` service @vhidvz
+
 ## [1.3.39] - 2025-11-16
 
 ### Changed
