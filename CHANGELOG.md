@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2025-11-21
+
 ### Added
 
 - add `stocks`, `stores`, `products` and `customers` modules to `career` service @vhidvz
@@ -266,7 +268,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.3.39...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.4.0...HEAD
+[1.4.0]: https://github.com/wenex-org/platform/compare/1.3.39...1.4.0
 [1.3.X]: https://github.com/wenex-org/platform/compare/1.2.49...1.3.39
 [1.2.X]: https://github.com/wenex-org/platform/compare/1.1.20...1.2.49
 [1.1.X]: https://github.com/wenex-org/platform/compare/1.0.42...1.1.20
