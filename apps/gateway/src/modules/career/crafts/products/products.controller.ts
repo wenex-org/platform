@@ -18,22 +18,24 @@ import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@a
 import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateProductDto, CreateProductItemsDto, UpdateProductDto } from '@app/common/dto/career';
 import { AuthorityInterceptor, ProjectionInterceptor } from '@app/common/core/interceptors/mongo';
+import { SearchDataSerializer, SearchSerializer } from '@app/common/core/serializers/elastic';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
+import { getSseMessage, mapToInstance } from '@app/common/core/utils';
 import { Product, ProductDto } from '@app/common/interfaces/career';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
+import { SearchRequestDto } from '@app/common/core/dto/elastic';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
 import { CareerProvider } from '@app/common/providers/career';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { ValidationPipe } from '@app/common/core/pipes';
-import { getSseMessage } from '@app/common/core/utils';
 import { Metadata } from '@app/common/core/interfaces';
-import { Observable, switchMap } from 'rxjs';
+import { from, Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
@@ -51,6 +53,25 @@ export class ProductsController extends ControllerClass<Product, ProductDto> imp
   constructor(readonly provider: CareerProvider) {
     super(provider.products, ProductSerializer);
   }
+
+  @Post('search')
+  @Cache(COLL_PATH, 'fill')
+  @SetScope(Scope.SearchCareerProducts)
+  @ApiResponse({ type: SearchDataSerializer })
+  @ApiQuery({ type: FilterDto, required: false })
+  @SetPolicy(Action.Search, Resource.CareerProducts)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  search(
+    @Meta() meta: Metadata,
+    @Body() request: SearchRequestDto,
+    @Filter() filter: FilterDto<Product>,
+  ): Observable<SearchDataSerializer<Product>> {
+    return from(this.provider.products.search(filter, request, { meta })).pipe(mapToInstance(SearchSerializer, 'data'));
+  }
+
+  // ##############################
+  // Common Method's
+  // ##############################
 
   @Get('count')
   @Cache(COLL_PATH, 'fill')
