@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- financial transaction some improvements @vhidvz
+
 ### Fixed
 
 - fix Store Dto in fork enum @m-hadi-arefi
