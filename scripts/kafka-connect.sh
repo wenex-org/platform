@@ -29,6 +29,6 @@ curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" 
     \"mongodb.connection.string\": \"mongodb://$MONGO_USER:$MONGO_PASS@$MONGO_HOST/?$MONGO_QUERY\",
     \"topic.prefix\": \"mongo\",
     \"capture.mode\": \"change_streams_update_full_with_pre_image\",
-    \"collection.include.list\": \"$MONGO_PREFIX-auth.*,$MONGO_PREFIX-career.*,$MONGO_PREFIX-conjoint.*,$MONGO_PREFIX-content.*,$MONGO_PREFIX-context.*,$MONGO_PREFIX-domain.*,$MONGO_PREFIX-essential[.]sagas,$MONGO_PREFIX-financial.*,$MONGO_PREFIX-general.*,$MONGO_PREFIX-identity.*,$MONGO_PREFIX-logistic.*,$MONGO_PREFIX-special[.]files,$MONGO_PREFIX-touch[.]emails,$MONGO_PREFIX-touch[.]notices,$MONGO_PREFIX-touch[.]pushes,$MONGO_PREFIX-touch[.]smss\"
+    \"collection.include.list\": \"$MONGO_PREFIX-auth.*,$MONGO_PREFIX-career.*,$MONGO_PREFIX-conjoint.*,$MONGO_PREFIX-content.*,$MONGO_PREFIX-context.*,$MONGO_PREFIX-domain.*,$MONGO_PREFIX-essential[.]sagas,$MONGO_PREFIX-financial.*,$MONGO_PREFIX-general.*,$MONGO_PREFIX-identity.*,$MONGO_PREFIX-logistic.*,$MONGO_PREFIX-special[.]files,$MONGO_PREFIX-touch.*\"
   }
 }"
