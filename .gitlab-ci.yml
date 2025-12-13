@@ -7,7 +7,6 @@ stages:
 variables:
   NODE_IMAGE: "wenex/node:22-base" # Use Node.js 22 for build and test
   KANIKO_IMAGE: "gcr.io/kaniko-project/executor:v1.23.2-debug" # Kaniko debug image for publishing (includes sh)
-  GIT_SUBMODULE_STRATEGY: recursive
 
 before_script:
   - echo "Starting GitLab CI/CD pipeline..."
