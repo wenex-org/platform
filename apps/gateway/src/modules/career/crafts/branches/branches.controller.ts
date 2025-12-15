@@ -106,7 +106,7 @@ export class BranchesController extends ControllerClass<Branch, BranchDto> imple
   Cursor(@Res() res: Response, @Meta() meta: Metadata, @Perm() perm: Permission, @Filter() filter: FilterOneDto<Branch>) {
     // Server Sent-Event Headers
     res.setHeader('Transfer-Encoding', 'chunked');
-    res.setHeader('Career-Type', 'text/event-stream');
+    res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'private, no-cache, no-store');
 
     super

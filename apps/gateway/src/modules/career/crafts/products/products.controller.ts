@@ -13,50 +13,71 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
-import { ServiceDataSerializer, ServiceItemsSerializer, ServiceSerializer } from '@app/common/serializers/career';
+import { ProductDataSerializer, ProductItemsSerializer, ProductSerializer } from '@app/common/serializers/career';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
-import { CreateServiceDto, CreateServiceItemsDto, UpdateServiceDto } from '@app/common/dto/career';
+import { CreateProductDto, CreateProductItemsDto, UpdateProductDto } from '@app/common/dto/career';
 import { AuthorityInterceptor, ProjectionInterceptor } from '@app/common/core/interceptors/mongo';
+import { SearchDataSerializer, SearchSerializer } from '@app/common/core/serializers/elastic';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
-import { Service, ServiceDto } from '@app/common/interfaces/career';
+import { getSseMessage, mapToInstance } from '@app/common/core/utils';
+import { Product, ProductDto } from '@app/common/interfaces/career';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
+import { SearchRequestDto } from '@app/common/core/dto/elastic';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
 import { CareerProvider } from '@app/common/providers/career';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { ValidationPipe } from '@app/common/core/pipes';
-import { getSseMessage } from '@app/common/core/utils';
 import { Metadata } from '@app/common/core/interfaces';
-import { Observable, switchMap } from 'rxjs';
+import { from, Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
-const COLL_PATH = COLLECTION('services', 'career');
+const COLL_PATH = COLLECTION('products', 'career');
 
 @ApiBearerAuth()
 @RateLimit(COLL_PATH)
 @Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
-@ApiTags('career', 'services')
+@ApiTags('career', 'products')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
-export class ServicesController extends ControllerClass<Service, ServiceDto> implements IController<Service, ServiceDto> {
+export class ProductsController extends ControllerClass<Product, ProductDto> implements IController<Product, ProductDto> {
   constructor(readonly provider: CareerProvider) {
-    super(provider.services, ServiceSerializer);
+    super(provider.products, ProductSerializer);
   }
+
+  @Post('search')
+  @Cache(COLL_PATH, 'fill')
+  @SetScope(Scope.SearchCareerProducts)
+  @ApiResponse({ type: SearchDataSerializer })
+  @ApiQuery({ type: FilterDto, required: false })
+  @SetPolicy(Action.Search, Resource.CareerProducts)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  search(
+    @Meta() meta: Metadata,
+    @Body() request: SearchRequestDto,
+    @Filter() filter: FilterDto<Product>,
+  ): Observable<SearchDataSerializer<Product>> {
+    return from(this.provider.products.search(filter, request, { meta })).pipe(mapToInstance(SearchSerializer, 'data'));
+  }
+
+  // ##############################
+  // Common Method's
+  // ##############################
 
   @Get('count')
   @Cache(COLL_PATH, 'fill')
-  @SetScope(Scope.ReadCareerServices)
+  @SetScope(Scope.ReadCareerProducts)
   @UseInterceptors(AuthorityInterceptor)
-  @SetPolicy(Action.Read, Resource.CareerServices)
+  @SetPolicy(Action.Read, Resource.CareerProducts)
   @ApiQuery({ type: QueryFilterDto, required: false })
   override count(@Meta() meta: Metadata, @Filter() filter: QueryFilterDto): Observable<TotalSerializer> {
     return super.count(meta, filter);
@@ -65,49 +86,49 @@ export class ServicesController extends ControllerClass<Service, ServiceDto> imp
   @Post()
   @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteCareerServices)
+  @SetScope(Scope.WriteCareerProducts)
   @UseInterceptors(...WriteInterceptors)
-  @Validation('career/services', 'create')
-  @ApiResponse({ type: ServiceDataSerializer })
-  @SetPolicy(Action.Create, Resource.CareerServices)
-  override create(@Meta() meta: Metadata, @Body() data: CreateServiceDto): Observable<ServiceDataSerializer> {
+  @Validation('career/products', 'create')
+  @ApiResponse({ type: ProductDataSerializer })
+  @SetPolicy(Action.Create, Resource.CareerProducts)
+  override create(@Meta() meta: Metadata, @Body() data: CreateProductDto): Observable<ProductDataSerializer> {
     return super.create(meta, data);
   }
 
   @Post('bulk')
   @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteCareerServices)
+  @SetScope(Scope.WriteCareerProducts)
   @UseInterceptors(...WriteInterceptors)
-  @Validation('career/services', 'create')
-  @ApiResponse({ type: ServiceItemsSerializer })
-  @SetPolicy(Action.Create, Resource.CareerServices)
-  override createBulk(@Meta() meta: Metadata, @Body() data: CreateServiceItemsDto): Observable<ServiceItemsSerializer> {
+  @Validation('career/products', 'create')
+  @ApiResponse({ type: ProductItemsSerializer })
+  @SetPolicy(Action.Create, Resource.CareerProducts)
+  override createBulk(@Meta() meta: Metadata, @Body() data: CreateProductItemsDto): Observable<ProductItemsSerializer> {
     return super.createBulk(meta, data);
   }
 
   @Get()
   @Cache(COLL_PATH, 'fill')
-  @SetScope(Scope.ReadCareerServices)
-  @SetPolicy(Action.Read, Resource.CareerServices)
-  @ApiResponse({ type: ServiceItemsSerializer })
+  @SetScope(Scope.ReadCareerProducts)
+  @SetPolicy(Action.Read, Resource.CareerProducts)
+  @ApiResponse({ type: ProductItemsSerializer })
   @ApiQuery({ type: FilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  override find(@Meta() meta: Metadata, @Filter() filter: FilterDto<Service>): Observable<ServiceItemsSerializer> {
+  override find(@Meta() meta: Metadata, @Filter() filter: FilterDto<Product>): Observable<ProductItemsSerializer> {
     return super.find(meta, filter);
   }
 
   @Get('cursor')
-  @SetScope(Scope.ReadCareerServices)
-  @SetPolicy(Action.Read, Resource.CareerServices)
+  @SetScope(Scope.ReadCareerProducts)
+  @SetPolicy(Action.Read, Resource.CareerProducts)
   @ApiQuery({ type: FilterOneDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  @ApiResponse({ status: HttpStatus.OK, type: ServiceSerializer })
-  Cursor(@Res() res: Response, @Meta() meta: Metadata, @Perm() perm: Permission, @Filter() filter: FilterOneDto<Service>) {
+  @ApiResponse({ status: HttpStatus.OK, type: ProductSerializer })
+  Cursor(@Res() res: Response, @Meta() meta: Metadata, @Perm() perm: Permission, @Filter() filter: FilterOneDto<Product>) {
     // Server Sent-Event Headers
     res.setHeader('Transfer-Encoding', 'chunked');
     res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Cache-Control', 'private, no-cache, no-store');
+    res.setHeader('Cache-Control', 'private, no-cache, no-product');
 
     super
       .cursor(meta, filter)
@@ -121,67 +142,67 @@ export class ServicesController extends ControllerClass<Service, ServiceDto> imp
 
   @Get(':id')
   @Cache(COLL_PATH, 'fill')
-  @SetScope(Scope.ReadCareerServices)
-  @ApiResponse({ type: ServiceDataSerializer })
-  @SetPolicy(Action.Read, Resource.CareerServices)
+  @SetScope(Scope.ReadCareerProducts)
+  @ApiResponse({ type: ProductDataSerializer })
+  @SetPolicy(Action.Read, Resource.CareerProducts)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  override findOne(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<Service>): Observable<ServiceDataSerializer> {
+  override findOne(@Meta() meta: Metadata, @Filter() filter: FilterOneDto<Product>): Observable<ProductDataSerializer> {
     return super.findOne(meta, filter);
   }
 
   @Delete(':id')
   @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteCareerServices)
-  @ApiResponse({ type: ServiceDataSerializer })
-  @SetPolicy(Action.Delete, Resource.CareerServices)
+  @SetScope(Scope.WriteCareerProducts)
+  @ApiResponse({ type: ProductDataSerializer })
+  @SetPolicy(Action.Delete, Resource.CareerProducts)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
-  override deleteOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Service>): Observable<ServiceDataSerializer> {
+  override deleteOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Product>): Observable<ProductDataSerializer> {
     return super.deleteOne(meta, filter);
   }
 
   @Put(':id/restore')
   @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteCareerServices)
-  @ApiResponse({ type: ServiceDataSerializer })
-  @SetPolicy(Action.Restore, Resource.CareerServices)
+  @SetScope(Scope.WriteCareerProducts)
+  @ApiResponse({ type: ProductDataSerializer })
+  @SetPolicy(Action.Restore, Resource.CareerProducts)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
-  override restoreOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Service>): Observable<ServiceDataSerializer> {
+  override restoreOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Product>): Observable<ProductDataSerializer> {
     return super.restoreOne(meta, filter);
   }
 
   @Delete(':id/destroy')
   @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.ManageCareerServices)
-  @ApiResponse({ type: ServiceDataSerializer })
-  @SetPolicy(Action.Destroy, Resource.CareerServices)
+  @SetScope(Scope.ManageCareerProducts)
+  @ApiResponse({ type: ProductDataSerializer })
+  @SetPolicy(Action.Destroy, Resource.CareerProducts)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
-  override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Service>): Observable<ServiceDataSerializer> {
+  override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Product>): Observable<ProductDataSerializer> {
     return super.destroyOne(meta, filter);
   }
 
   @Patch('bulk')
   @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.ManageCareerServices)
-  @Validation('career/services', 'update')
-  @SetPolicy(Action.Update, Resource.CareerServices)
+  @SetScope(Scope.ManageCareerProducts)
+  @Validation('career/products', 'update')
+  @SetPolicy(Action.Update, Resource.CareerProducts)
   @ApiQuery({ type: QueryFilterDto, required: false })
   @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
   override updateBulk(
     @Meta() meta: Metadata,
-    @Filter() filter: QueryFilterDto<Service>,
-    @Body() update: UpdateServiceDto,
+    @Filter() filter: QueryFilterDto<Product>,
+    @Body() update: UpdateProductDto,
   ): Observable<TotalSerializer> {
     return super.updateBulk(meta, filter, update);
   }
@@ -189,18 +210,18 @@ export class ServicesController extends ControllerClass<Service, ServiceDto> imp
   @Patch(':id')
   @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.WriteCareerServices)
-  @Validation('career/services', 'update')
-  @ApiResponse({ type: ServiceDataSerializer })
-  @SetPolicy(Action.Update, Resource.CareerServices)
+  @SetScope(Scope.WriteCareerProducts)
+  @Validation('career/products', 'update')
+  @ApiResponse({ type: ProductDataSerializer })
+  @SetPolicy(Action.Update, Resource.CareerProducts)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
   @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...WriteInterceptors)
   override updateOne(
     @Meta() meta: Metadata,
-    @Filter() filter: FilterOneDto<Service>,
-    @Body() update: UpdateServiceDto,
-  ): Observable<ServiceDataSerializer> {
+    @Filter() filter: FilterOneDto<Product>,
+    @Body() update: UpdateProductDto,
+  ): Observable<ProductDataSerializer> {
     return super.updateOne(meta, filter, update);
   }
 }
