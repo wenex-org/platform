@@ -7,11 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- add `auth/apts` service @vhidvz
+
+### Fixed
+
+- perform: `jobId` in dispatcher @vhidvz
+
 ## [1.4.2] - 2025-12-17
 
 ### Fixed
 
-- fix schema type  special in mongo @fdaei
+- fix schema type special in mongo @fdaei
 
 ## [1.4.1] - 2025-12-01
 
