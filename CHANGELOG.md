@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - fix update wallet dto @vhidvz
+- remote `scopes` and `subjects` from index in `apt.schema.ts` @yonus-a
 
 ## [1.4.3] - 2025-12-23
 
