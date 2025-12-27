@@ -7,6 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.5] - 2025-12-27
+
+### Fixed
+
+- fix: `apt` dto validation @vhidvz
+
+## [1.4.4] - 2025-12-24
+
+### Fixed
+
+- fix update wallet dto @vhidvz
+- some improvements in `financial` and bug fix in dto's @vhidvz
+- remote `scopes` and `subjects` from index in `apt.schema.ts` @yonus-a
+
+## [1.4.3] - 2025-12-23
+
+### Added
+
+- add `auth/apts` service @vhidvz
+
+### Fixed
+
+- perform: `jobId` in dispatcher @vhidvz
+
+## [1.4.2] - 2025-12-17
+
+### Fixed
+
+- fix schema type special in mongo @fdaei
+
 ## [1.4.1] - 2025-12-01
 
 ### Changed
@@ -278,7 +308,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.4.2...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.4.5...HEAD
+[1.4.5]: https://github.com/wenex-org/platform/compare/1.4.4...1.4.5
+[1.4.4]: https://github.com/wenex-org/platform/compare/1.4.3...1.4.4
+[1.4.3]: https://github.com/wenex-org/platform/compare/1.4.2...1.4.3
 [1.4.2]: https://github.com/wenex-org/platform/compare/1.4.1...1.4.2
 [1.4.1]: https://github.com/wenex-org/platform/compare/1.4.0...1.4.1
 [1.4.0]: https://github.com/wenex-org/platform/compare/1.3.39...1.4.0
