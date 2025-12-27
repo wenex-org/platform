@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.6] - 2025-12-27
+
+### Fixed
+
+- fix: remove check is not empty in `apts.service.ts` for `score` and `subject` @yonus-a
+
 ### Changed
 
 - update `@wenex/sdk` version @vhidvz
@@ -312,7 +318,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.4.5...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.4.6...HEAD
+[1.4.6]: https://github.com/wenex-org/platform/compare/1.4.5...1.4.6
 [1.4.5]: https://github.com/wenex-org/platform/compare/1.4.4...1.4.5
 [1.4.4]: https://github.com/wenex-org/platform/compare/1.4.3...1.4.4
 [1.4.3]: https://github.com/wenex-org/platform/compare/1.4.2...1.4.3
