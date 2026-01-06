@@ -1,17 +1,20 @@
+import { InvoiceType, PayType, TransactionReason } from '@app/common/enums/financial';
 import { Transaction, TransactionInitDto } from '@app/common/interfaces/financial';
-import { PayType, TransactionReason } from '@app/common/enums/financial';
 import { Serializer } from '@wenex/sdk/common/core/interfaces';
 import { IRR_WALLET_ID } from '@app/common/utils/financial';
+import { State } from '@app/common/core/enums';
 import { Login } from '@app/common/core/e2e';
 import { Financial } from '@wenex/sdk';
 
 describe('TransactionController (e2e)', () => {
   let transaction: Serializer<Transaction>;
   let service: Financial.TransactionsService;
+  let invoices: Financial.InvoicesService;
 
   beforeAll(async () => {
     const platform = await Login.as('user');
     service = platform.financial.transactions;
+    invoices = platform.financial.invoices;
   });
 
   test('normal transactions scenario', async () => {
@@ -37,5 +40,21 @@ describe('TransactionController (e2e)', () => {
     transaction = await service.init(payload);
     transaction = await service.verify(transaction.id!);
     expect(transaction.verified_at).toBeDefined();
+
+    // invoice payment
+    const invoicePayload = {
+      type: InvoiceType.TRANSACTION,
+      title: 'test',
+      amount: 123,
+      payees: [{ type: PayType.AMOUNT, amount: 123, wallet: IRR_WALLET_ID }],
+      payers: [{ type: PayType.AMOUNT, amount: 123, wallet: IRR_WALLET_ID }],
+      items: [{ title: 'Line item', price: 123, quantity: 1, profit: 10, discount: 5, measurement: 'unit' }],
+      state: State.PENDING,
+      profit: 10,
+      discount: 5,
+    };
+
+    const createdInvoice = await invoices.create(invoicePayload);
+    expect(createdInvoice.id).toBeDefined();
   });
 });
