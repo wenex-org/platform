@@ -1,10 +1,10 @@
-import { InvoiceType, PayType, TransactionReason } from '@app/common/enums/financial';
 import { Transaction, TransactionInitDto } from '@app/common/interfaces/financial';
+import { InvoiceType, PayType, TransactionReason } from '@app/common/enums/financial';
 import { Serializer } from '@wenex/sdk/common/core/interfaces';
 import { IRR_WALLET_ID } from '@app/common/utils/financial';
-import { State } from '@app/common/core/enums';
 import { Login } from '@app/common/core/e2e';
 import { Financial } from '@wenex/sdk';
+import { State } from '@app/common/core/enums';
 
 describe('TransactionController (e2e)', () => {
   let transaction: Serializer<Transaction>;
