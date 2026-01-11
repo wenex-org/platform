@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - add stat for discount and profit @fdaei
 
+### Changed
+
+- update `UpdateCoreDto` schema @vhidvz
+
 ## [1.4.7] - 2026-01-01
 
 ### Added
