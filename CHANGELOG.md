@@ -10,10 +10,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - add stat for discount and profit @fdaei
+- support apt over mqtt emqx `preserver` micro @vhidvz
 
 ### Changed
 
 - update `UpdateCoreDto` schema @vhidvz
+- distinct session for each apt token @vhidvz
+- update auth services to support apt token @vhidvz
+
+### Fixed
+
+- fix `WalletSerializer` @vhidvz
 
 ## [1.4.7] - 2026-01-01
 
