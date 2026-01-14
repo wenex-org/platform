@@ -1,4 +1,5 @@
 import { ServerMCP } from '@app/common/core/mcp';
+import { z } from 'zod';
 
 export function mcpRegistration() {
   const mcp = ServerMCP.create();
@@ -10,6 +11,9 @@ export function mcpRegistration() {
     {
       title: 'Application Config',
       description: 'Application configuration data',
+      _meta: {
+        filter: z.object({}).describe('Json mongodb query'),
+      },
     },
     (uri, extra) => {
       console.log('uri', uri, 'extra', extra);
