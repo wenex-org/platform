@@ -13,10 +13,15 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
-import { TravelDataSerializer, TravelItemsSerializer, TravelSerializer } from '@app/common/serializers/logistic';
+import {
+  AdvancedRouteSerializer,
+  TravelDataSerializer,
+  TravelItemsSerializer,
+  TravelSerializer,
+} from '@app/common/serializers/logistic';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
-import { CreateTravelDto, CreateTravelItemsDto, UpdateTravelDto } from '@app/common/dto/logistic';
+import { AdvancedRouteRequestDto, CreateTravelDto, CreateTravelItemsDto, UpdateTravelDto } from '@app/common/dto/logistic';
 import { AuthorityInterceptor, ProjectionInterceptor } from '@app/common/core/interceptors/mongo';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
@@ -31,9 +36,9 @@ import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { ValidationPipe } from '@app/common/core/pipes';
-import { getSseMessage } from '@app/common/core/utils';
+import { getSseMessage, mapToInstance } from '@app/common/core/utils';
 import { Metadata } from '@app/common/core/interfaces';
-import { Observable, switchMap } from 'rxjs';
+import { from, Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
@@ -50,6 +55,19 @@ const COLL_PATH = COLLECTION('travels', 'logistic');
 export class TravelsController extends ControllerClass<Travel, TravelDto> implements IController<Travel, TravelDto> {
   constructor(readonly provider: LogisticProvider) {
     super(provider.travels, TravelSerializer);
+  }
+
+  @Post('routing')
+  @Audit('GATEWAY')
+  @Cache(COLL_PATH, 'fill')
+  @SetScope(Scope.RoutingLogisticTravels)
+  @SetPolicy(Action.Resolve, Resource.LogisticTravels)
+  routing(
+    @Meta() meta: Metadata,
+    @Body() data: AdvancedRouteRequestDto,
+    @Filter() filter: FilterDto<Travel>,
+  ): Observable<AdvancedRouteSerializer> {
+    return from(this.provider.travels.routing(data, meta, filter)).pipe(mapToInstance(AdvancedRouteRequestDto, 'data'));
   }
 
   @Get('count')
