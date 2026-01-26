@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.9] - 2026-01-26
+
+### Fixed
+
+- fix `UpdateCoreDto` @vhidvz
+
 ## [1.4.8] - 2026-01-24
 
 ### Added
@@ -345,7 +351,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.4.8...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.4.9...HEAD
+[1.4.9]: https://github.com/wenex-org/platform/compare/1.4.8...1.4.9
 [1.4.8]: https://github.com/wenex-org/platform/compare/1.4.7...1.4.8
 [1.4.7]: https://github.com/wenex-org/platform/compare/1.4.6...1.4.7
 [1.4.6]: https://github.com/wenex-org/platform/compare/1.4.5...1.4.6
