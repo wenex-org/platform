@@ -62,13 +62,13 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   @Cache(COLL_PATH, 'fill')
   @SetScope(Scope.RoutingLogisticTravels)
   @SetPolicy(Action.Resolve, Resource.LogisticTravels)
-  routing(
-    @Meta() meta: Metadata,
-    @Body() data: AdvancedRouteRequestDto,
-    @Filter() filter: FilterDto<Travel>,
-  ): Observable<AdvancedRouteSerializer> {
-    return from(this.provider.travels.routing(data, meta, filter)).pipe(mapToInstance(AdvancedRouteRequestDto, 'data'));
+  routing(@Meta() meta: Metadata, @Body() data: AdvancedRouteRequestDto): Observable<AdvancedRouteSerializer> {
+    return from(this.provider.travels.routing(data, meta)).pipe(mapToInstance(AdvancedRouteRequestDto, 'data'));
   }
+
+  // ##############################
+  // Common Method's
+  // ##############################
 
   @Get('count')
   @Cache(COLL_PATH, 'fill')
