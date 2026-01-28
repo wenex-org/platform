@@ -1,65 +1,29 @@
-import { getHeaders, ServerMCP } from '@app/common/core/mcp';
-import { GrantDto } from '@app/common/interfaces/auth';
-import { Action, Resource } from '@app/common/core';
+import { ServerMCP } from '@app/common/core/mcp';
 import { z } from 'zod';
 
 export function mcpRegistration() {
   const mcp = ServerMCP.create();
-  mcp.server.registerTool(
-    'add_grant',
+
+  // count
+  mcp.server.registerResource(
+    'countAuthGrant',
+    'auth://grants/count',
     {
-      title: 'Add Grant',
-      description: 'Create a new grant with subject, action and object',
-      inputSchema: {
-        subject: z.string().nonempty().email(),
-        action: z.nativeEnum(Action),
-        object: z.nativeEnum(Resource),
+      title: 'Application Config',
+      description: 'Application configuration data',
+      _meta: {
+        filter: z.object({}).describe('Json mongodb query'),
       },
-      // outputSchema: {
-      //   id: z.string().nonempty(),
-      // },
     },
-    async ({ subject, action, object }, { signal, requestInfo }) => {
-      if (signal.aborted) {
-        throw new Error('tools/call was cancelled');
-      }
-
-      const headers = getHeaders({ requestInfo } as any);
-      const authorizationValue = headers.authorization ?? headers.Authorization;
-      const authorization = typeof authorizationValue === 'string' ? authorizationValue : undefined;
-
-      if (!authorization) {
-        return {
-          content: [
-            {
-              type: 'text',
-              text: 'authorization not found',
-            },
-          ],
-        };
-      }
-
-      const data: GrantDto = {
-        subject,
-        action,
-        object,
-      };
-
-      console.log('Trying to create grant...');
-      const grant = await mcp.platform.auth.grants.create(data, {
-        headers,
-        brotli: false,
-      });
-      console.log('Grant created:', grant);
-
+    (uri, extra) => {
+      console.log('uri', uri, 'extra', extra);
       return {
-        content: [
+        contents: [
           {
-            type: 'text',
-            text: JSON.stringify(grant),
+            uri: uri.href,
+            text: 'App configuration here',
           },
         ],
-        structuredContent: grant as any,
       };
     },
   );
