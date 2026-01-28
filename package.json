@@ -66,6 +66,8 @@
     ]
   },
   "dependencies": {
+    "@anthropic-ai/claude-code": "^2.1.19",
+    "@anthropic-ai/sdk": "^0.71.2",
     "@apollo/server": "^4.11.3",
     "@aws-sdk/client-s3": "^3.732.0",
     "@bull-board/api": "^6.12.7",
@@ -150,6 +152,7 @@
     "nestjs-minio-client": "^2.2.0",
     "node-emoji": "^2.2.0",
     "nodemailer": "^6.9.16",
+    "ollama": "^0.6.3",
     "opentelemetry-instrumentation-kafkajs": "^0.41.0",
     "otpauth": "^9.3.6",
     "pg": "^8.16.3",
