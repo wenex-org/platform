@@ -2,7 +2,6 @@
 schema.gql
 
 # compiled output
-/docs
 /dist
 /node_modules
 /build
