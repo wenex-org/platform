@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- add `travels/routing` with valhalla service @m-hadi-arefi
+
 ## [1.4.11] - 2026-01-26
 
 ### Changed
