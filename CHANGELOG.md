@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - remove unused temp code @vhidvz
 
+### Added
+
+- add `travels/routing` with valhalla service @m-hadi-arefi
+
 ## [1.4.10] - 2026-01-26
 
 ### Fixed
