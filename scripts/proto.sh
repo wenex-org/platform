@@ -16,6 +16,7 @@ CONTENT=./protos/content.proto
 LOGISTIC=./protos/logistic.proto
 CONJOINT=./protos/conjoint.proto
 CAREER=./protos/career.proto
+THING=./protos/thing.proto
 
 PRESERVER=./protos/workers/preserver.proto
 
@@ -42,17 +43,18 @@ PROTOS[ESSENTIAL,1]=./apps/services/essential/src/app.proto
 PROTOS[ESSENTIAL,2]=./apps/gateway/src/protobuf/essential.proto
 PROTOS[ESSENTIAL,3]=./apps/services/auth/src/protobuf/essential.proto
 PROTOS[ESSENTIAL,4]=./apps/services/touch/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,5]=./apps/services/domain/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,6]=./apps/services/career/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,7]=./apps/services/context/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,8]=./apps/services/content/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,9]=./apps/services/special/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,A]=./apps/services/general/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,B]=./apps/services/identity/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,C]=./apps/services/logistic/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,D]=./apps/services/conjoint/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,E]=./apps/services/financial/src/protobuf/essential.proto
-PROTOS[ESSENTIAL,F]=./libs/common/src/providers/essential/protobuf/essential.proto
+PROTOS[ESSENTIAL,5]=./apps/services/thing/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,6]=./apps/services/domain/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,7]=./apps/services/career/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,8]=./apps/services/context/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,9]=./apps/services/content/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,A]=./apps/services/special/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,B]=./apps/services/general/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,C]=./apps/services/identity/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,D]=./apps/services/logistic/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,E]=./apps/services/conjoint/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,F]=./apps/services/financial/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,G]=./libs/common/src/providers/essential/protobuf/essential.proto
 
 # Financial Proto
 PROTOS[FINANCIAL,1]=./apps/services/financial/src/app.proto
@@ -103,6 +105,11 @@ PROTOS[CAREER,1]=./apps/services/career/src/app.proto
 PROTOS[CAREER,2]=./apps/gateway/src/protobuf/career.proto
 PROTOS[CAREER,3]=./libs/common/src/providers/career/protobuf/career.proto
 
+# Thing Proto
+PROTOS[THING,1]=./apps/services/thing/src/app.proto
+PROTOS[THING,2]=./apps/gateway/src/protobuf/thing.proto
+PROTOS[THING,3]=./libs/common/src/providers/thing/protobuf/thing.proto
+
 # Preserver Proto
 PROTOS[PRESERVER,1]=./apps/workers/preserver/src/app.proto
 
@@ -121,6 +128,7 @@ for KEY in "${!PROTOS[@]}"; do
   if [[ $KEY == *"LOGISTIC"* ]]; then ln -f $LOGISTIC ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"CONJOINT"* ]]; then ln -f $CONJOINT ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"CAREER"* ]]; then ln -f $CAREER ${PROTOS[$KEY]}; fi
+  if [[ $KEY == *"THING"* ]]; then ln -f $THING ${PROTOS[$KEY]}; fi
 
   if [[ $KEY == *"PRESERVER"* ]]; then ln -f $PRESERVER ${PROTOS[$KEY]}; fi
 done
