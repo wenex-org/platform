@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- add elastic `search` to `content.posts` @vhidvz
 - add `special.stats` and `thing.metrics` cleaner @vhidvz
 - add `thing` microservice @vhidvz
 - add `travels/routing` with valhalla service @m-hadi-arefi

@@ -17,6 +17,7 @@ import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@a
 import { PostDataSerializer, PostItemsSerializer, PostSerializer } from '@app/common/serializers/content';
 import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { AuthorityInterceptor, ProjectionInterceptor } from '@app/common/core/interceptors/mongo';
+import { SearchDataSerializer, SearchSerializer } from '@app/common/core/serializers/elastic';
 import { CreatePostDto, CreatePostItemsDto, UpdatePostDto } from '@app/common/dto/content';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
@@ -25,15 +26,16 @@ import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { Post as IPost, PostDto } from '@app/common/interfaces/content';
 import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
+import { getSseMessage, mapToInstance } from '@app/common/core/utils';
 import { Filter, Meta, Perm } from '@app/common/core/decorators';
+import { SearchRequestDto } from '@app/common/core/dto/elastic';
 import { ContentProvider } from '@app/common/providers/content';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { ValidationPipe } from '@app/common/core/pipes';
-import { getSseMessage } from '@app/common/core/utils';
 import { Metadata } from '@app/common/core/interfaces';
-import { Observable, switchMap } from 'rxjs';
+import { from, Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
@@ -51,6 +53,25 @@ export class PostsController extends ControllerClass<IPost, PostDto> implements 
   constructor(readonly provider: ContentProvider) {
     super(provider.posts, PostSerializer);
   }
+
+  @Post('search')
+  @Cache(COLL_PATH, 'fill')
+  @SetScope(Scope.SearchContentPosts)
+  @ApiResponse({ type: SearchDataSerializer })
+  @ApiQuery({ type: FilterDto, required: false })
+  @SetPolicy(Action.Search, Resource.ContentPosts)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  search(
+    @Meta() meta: Metadata,
+    @Body() request: SearchRequestDto,
+    @Filter() filter: FilterDto<IPost>,
+  ): Observable<SearchDataSerializer<IPost>> {
+    return from(this.provider.posts.search(filter, request, { meta })).pipe(mapToInstance(SearchSerializer, 'data'));
+  }
+
+  // ##############################
+  // Common Method's
+  // ##############################
 
   @Get('count')
   @Cache(COLL_PATH, 'fill')
