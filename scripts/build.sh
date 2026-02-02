@@ -30,7 +30,7 @@ done
 # Wait for all background jobs to complete
 wait
 
-services=("career")
+services=("career" "thing")
 for service in "${services[@]}"; do
   npm run build "$service" &
 done

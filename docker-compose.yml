@@ -160,6 +160,17 @@ services:
       OTLP_SERVICE_NAME: career
     <<: *common
 
+  thing:
+    profiles: [thing, platform, services]
+    container_name: platform-thing
+    ports:
+      - 3150:3150 # REST
+      - 5150:5150 # GRPC
+    environment:
+      SERVICE_NAME: thing
+      OTLP_SERVICE_NAME: thing
+    <<: *common
+
   # ---------
   # Workers
   # ---------
@@ -242,35 +253,35 @@ services:
   db-clean:
     profiles:
       - db-clean
-    entrypoint: ["bash", "-c", "npm run db:clean"]
+    entrypoint: ['bash', '-c', 'npm run db:clean']
     <<: *common
 
   db-index:
     profiles:
       - db-index
-    entrypoint: ["bash", "-c", "npm run db:index"]
+    entrypoint: ['bash', '-c', 'npm run db:index']
     <<: *common
 
   db-seed:
     profiles:
       - db-seed
-    entrypoint: ["bash", "-c", "npm run db:seed"]
+    entrypoint: ['bash', '-c', 'npm run db:seed']
     <<: *common
 
   storage-init:
     profiles:
       - storage-init
-    entrypoint: ["bash", "-c", "npm run storage:init"]
+    entrypoint: ['bash', '-c', 'npm run storage:init']
     <<: *common
 
   utility-init:
     profiles:
       - utility-init
-    entrypoint: ["bash", "-c", "npm run utility:init"]
+    entrypoint: ['bash', '-c', 'npm run utility:init']
     <<: *common
 
   kafka-connect:
     profiles:
       - kafka-connect
-    entrypoint: ["bash", "-c", "npm run script:kafka-connect"]
+    entrypoint: ['bash', '-c', 'npm run script:kafka-connect']
     <<: *common

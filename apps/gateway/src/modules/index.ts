@@ -1,3 +1,5 @@
+import { HealthCheckOptions } from '@app/module/health';
+
 import { AuthProvider } from '@app/common/providers/auth';
 import { CareerProvider } from '@app/common/providers/career';
 import { ConjointProvider } from '@app/common/providers/conjoint';
@@ -11,7 +13,7 @@ import { IdentityProvider } from '@app/common/providers/identity';
 import { LogisticProvider } from '@app/common/providers/logistic';
 import { SpecialProvider } from '@app/common/providers/special';
 import { TouchProvider } from '@app/common/providers/touch';
-import { HealthCheckOptions } from '@app/module/health';
+import { ThingProvider } from '@app/common/providers/thing';
 
 import { AuthModule } from './auth';
 import { ContextModule } from './context';
@@ -26,6 +28,7 @@ import { ContentModule } from './content';
 import { LogisticModule } from './logistic';
 import { ConjointModule } from './conjoint';
 import { CareerModule } from './career';
+import { ThingModule } from './thing';
 
 export const HEALTH_CHECK_OPTIONS: HealthCheckOptions = [
   {
@@ -45,6 +48,7 @@ export const HEALTH_CHECK_OPTIONS: HealthCheckOptions = [
       LogisticProvider,
       SpecialProvider,
       TouchProvider,
+      ThingProvider,
     ],
   },
 ] as const;
@@ -63,4 +67,5 @@ export const MODULES = [
   LogisticModule,
   ConjointModule,
   CareerModule,
+  ThingModule,
 ] as const;
