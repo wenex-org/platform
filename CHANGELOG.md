@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-02-02
+
 ### Added
 
 - add elastic `search` to `content.posts` @vhidvz
@@ -14,107 +16,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - add `thing` microservice @vhidvz
 - add `travels/routing` with valhalla service @m-hadi-arefi
 - add `x-stat-type` and `x-stat-additional-props` metadata @vhidvz
+- add `auth/apts` service @vhidvz
 
-## [1.4.11] - 2026-01-26
-
-### Changed
-
-- remove unused temp code @vhidvz
-
-## [1.4.10] - 2026-01-26
-
-### Fixed
-
-- fix stat collector unknown issue @vhidvz
-
-## [1.4.9] - 2026-01-26
-
-### Fixed
-
-- fix `UpdateCoreDto` @vhidvz
-
-## [1.4.8] - 2026-01-24
+## [1.4.X] - 2026-01-26
 
 ### Added
 
 - add stat for discount and profit @fdaei
 - support apt over mqtt emqx `preserver` micro @vhidvz
+- support for mongodb query `$geoIntersects` and `$centerSphere` @vhidvz
+- add `stocks`, `stores`, `products` and `customers` modules to `career` service @vhidvz
 
 ### Changed
 
+- remove unused temp code @vhidvz
 - update `UpdateCoreDto` schema @vhidvz
 - distinct session for each apt token @vhidvz
 - update auth services to support apt token @vhidvz
-
-### Fixed
-
-- fix `WalletSerializer` @vhidvz
-
-## [1.4.7] - 2026-01-01
-
-### Added
-
-- support for mongodb query `$geoIntersects` and `$centerSphere` @vhidvz
-
-### Fixed
-
-- improve error message in `financial` model @fdaei
-
-## [1.4.6] - 2025-12-27
-
-### Fixed
-
-- fix: remove check is not empty in `apts.service.ts` for `score` and `subject` @yonus-a
-
-### Changed
-
 - update `@wenex/sdk` version @vhidvz
-
-## [1.4.5] - 2025-12-27
-
-### Fixed
-
-- fix: `apt` dto validation @vhidvz
-
-## [1.4.4] - 2025-12-24
-
-### Fixed
-
-- fix update wallet dto @vhidvz
-- some improvements in `financial` and bug fix in dto's @vhidvz
-- remote `scopes` and `subjects` from index in `apt.schema.ts` @yonus-a
-
-## [1.4.3] - 2025-12-23
-
-### Added
-
-- add `auth/apts` service @vhidvz
-
-### Fixed
-
-- perform: `jobId` in dispatcher @vhidvz
-
-## [1.4.2] - 2025-12-17
-
-### Fixed
-
-- fix schema type special in mongo @fdaei
-
-## [1.4.1] - 2025-12-01
-
-### Changed
-
 - financial transaction some improvements @vhidvz
 
 ### Fixed
 
+- fix stat collector unknown issue @vhidvz
+- fix `UpdateCoreDto` @vhidvz
+- fix `WalletSerializer` @vhidvz
+- improve error message in `financial` model @fdaei
+- fix: remove check is not empty in `apts.service.ts` for `score` and `subject` @yonus-a
+- fix: `apt` dto validation @vhidvz
+- fix update wallet dto @vhidvz
+- some improvements in `financial` and bug fix in dto's @vhidvz
+- remote `scopes` and `subjects` from index in `apt.schema.ts` @yonus-a
+- perform: `jobId` in dispatcher @vhidvz
+- fix schema type special in mongo @fdaei
 - fix Store Dto in fork enum @m-hadi-arefi
-
-## [1.4.0] - 2025-11-21
-
-### Added
-
-- add `stocks`, `stores`, `products` and `customers` modules to `career` service @vhidvz
 
 ## [1.3.X] - 2025-11-16
 
@@ -371,19 +306,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.4.11...HEAD
-[1.4.11]: https://github.com/wenex-org/platform/compare/1.4.10...1.4.11
-[1.4.10]: https://github.com/wenex-org/platform/compare/1.4.9...1.4.10
-[1.4.9]: https://github.com/wenex-org/platform/compare/1.4.8...1.4.9
-[1.4.8]: https://github.com/wenex-org/platform/compare/1.4.7...1.4.8
-[1.4.7]: https://github.com/wenex-org/platform/compare/1.4.6...1.4.7
-[1.4.6]: https://github.com/wenex-org/platform/compare/1.4.5...1.4.6
-[1.4.5]: https://github.com/wenex-org/platform/compare/1.4.4...1.4.5
-[1.4.4]: https://github.com/wenex-org/platform/compare/1.4.3...1.4.4
-[1.4.3]: https://github.com/wenex-org/platform/compare/1.4.2...1.4.3
-[1.4.2]: https://github.com/wenex-org/platform/compare/1.4.1...1.4.2
-[1.4.1]: https://github.com/wenex-org/platform/compare/1.4.0...1.4.1
-[1.4.0]: https://github.com/wenex-org/platform/compare/1.3.39...1.4.0
+[unreleased]: https://github.com/wenex-org/platform/compare/1.5.0...HEAD
+[1.5.0]: https://github.com/wenex-org/platform/compare/1.4.11...1.5.0
+[1.4.X]: https://github.com/wenex-org/platform/compare/1.3.39...1.4.11
 [1.3.X]: https://github.com/wenex-org/platform/compare/1.2.49...1.3.39
 [1.2.X]: https://github.com/wenex-org/platform/compare/1.1.20...1.2.49
 [1.1.X]: https://github.com/wenex-org/platform/compare/1.0.42...1.1.20
