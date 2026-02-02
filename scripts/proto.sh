@@ -76,9 +76,10 @@ PROTOS[IDENTITY,4]=./libs/common/src/providers/identity/protobuf/identity.proto
 PROTOS[SPECIAL,1]=./apps/services/special/src/app.proto
 PROTOS[SPECIAL,2]=./apps/gateway/src/protobuf/special.proto
 PROTOS[SPECIAL,3]=./apps/services/touch/src/protobuf/special.proto
-PROTOS[SPECIAL,4]=./apps/services/logistic/src/protobuf/special.proto
-PROTOS[SPECIAL,5]=./apps/services/financial/src/protobuf/special.proto
-PROTOS[SPECIAL,6]=./libs/common/src/providers/special/protobuf/special.proto
+PROTOS[SPECIAL,4]=./apps/services/thing/src/protobuf/special.proto
+PROTOS[SPECIAL,5]=./apps/services/logistic/src/protobuf/special.proto
+PROTOS[SPECIAL,6]=./apps/services/financial/src/protobuf/special.proto
+PROTOS[SPECIAL,7]=./libs/common/src/providers/special/protobuf/special.proto
 
 # Touch Proto
 PROTOS[TOUCH,1]=./apps/services/touch/src/app.proto

@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - add `special.stats` and `thing.metrics` cleaner @vhidvz
 - add `thing` microservice @vhidvz
 - add `travels/routing` with valhalla service @m-hadi-arefi
+- add `x-stat-type` and `x-stat-additional-props` metadata @vhidvz
 
 ## [1.4.11] - 2026-01-26
 
