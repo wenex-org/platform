@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- add `general/comments` module @fdaei
+
 ## [1.5.0] - 2026-02-02
 
 ### Added
