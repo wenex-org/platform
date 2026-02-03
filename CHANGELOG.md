@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - add stat for discount and profit @fdaei
 
+## Changed
+
+- add validation for check wallets are exist and currencies are not conflict with each other in `invoices.service.ts` for `payment` method @yonus-a
+
 ## [1.4.7] - 2026-01-01
 
 ### Added
