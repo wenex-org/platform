@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.1] - 2026-02-04
+
 ### Added
 
 - add `general/comments` module @fdaei
@@ -310,7 +312,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.5.0...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.5.1...HEAD
+[1.5.1]: https://github.com/wenex-org/platform/compare/1.5.0...1.5.1
 [1.5.0]: https://github.com/wenex-org/platform/compare/1.4.11...1.5.0
 [1.4.X]: https://github.com/wenex-org/platform/compare/1.3.39...1.4.11
 [1.3.X]: https://github.com/wenex-org/platform/compare/1.2.49...1.3.39
