@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.2] - 2026-02-04
+
+### Changed
+
+- indexed `general/comments.type` @vhidvz
+
 ## [1.5.1] - 2026-02-04
 
 ### Added
@@ -312,7 +318,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.5.1...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.5.2...HEAD
+[1.5.2]: https://github.com/wenex-org/platform/compare/1.5.1...1.5.2
 [1.5.1]: https://github.com/wenex-org/platform/compare/1.5.0...1.5.1
 [1.5.0]: https://github.com/wenex-org/platform/compare/1.4.11...1.5.0
 [1.4.X]: https://github.com/wenex-org/platform/compare/1.3.39...1.4.11
