@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Add
+
+- add: documentation in `docs` directory @vhidvz
+- add: `mcp-client` test script using `ollama` @vhidvz
+
 ## [1.5.2] - 2026-02-04
 
 ### Changed
