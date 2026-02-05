@@ -36,5 +36,5 @@
       "@dispatcher/*": ["apps/workers/dispatcher/src/*"]
     }
   },
-  "exclude": ["node_modules", "**/node_modules/**", "dist", "**/dist/**", "docs", "**/docs/**"]
+  "exclude": ["node_modules", "**/node_modules/**", "dist", "**/dist/**", "docs", "**/docs/**", ".data"]
 }
