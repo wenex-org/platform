@@ -168,7 +168,8 @@ export class ClientMCP {
             });
 
             // Parse result content
-            toolContent = (result.content as any[]).map((c) => (c.type === 'text' ? c.text : '')).join('\n');
+            const resultContent = result.content as { type: 'text'; text: string }[];
+            toolContent = resultContent.map((c) => (c.type === 'text' ? c.text : '')).join('\n');
 
             console.log(`📄 Tool Output: ${toolContent.substring(0, 50)}...`);
             toolContent += `\n\nStructured Content:\n${toString(result.structuredContent)}`;
