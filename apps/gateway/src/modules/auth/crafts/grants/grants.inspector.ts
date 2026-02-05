@@ -1,6 +1,8 @@
+import { serializeException, toJSON } from '@app/common/core/utils';
 import { getHeaders, ServerMCP } from '@app/common/core/mcp';
 import { fixOut } from '@app/common/core/utils/mongo';
 import { Action, Resource } from '@app/common/core';
+import { AxiosError } from 'axios';
 import { z } from 'zod';
 
 export function mcpRegistration() {
@@ -17,8 +19,6 @@ export function mcpRegistration() {
       },
     },
     async (data, { signal, requestInfo }) => {
-      const log = mcp.log.extend('create_auth_grant');
-
       if (signal.aborted) throw new Error('tools/call was cancelled');
 
       const headers = getHeaders({ requestInfo });
@@ -26,13 +26,24 @@ export function mcpRegistration() {
         return { content: [{ type: 'text', text: 'authorization token not found' }] };
       }
 
-      log('Trying to create grant...');
-      const grant = await mcp.platform.auth.grants.create(data, { headers });
-      log('Grant created with result: %o', grant);
-
-      return {
-        content: [{ type: 'resource', mimeType: 'application/json', resource: fixOut(grant) }],
-      };
+      try {
+        mcp.log('create_auth_grant')('Trying to create grant...');
+        const grant = await mcp.platform.auth.grants.create(data, { headers });
+        mcp.log('create_auth_grant')('Grant created with result: %o', grant);
+        return {
+          structuredContent: fixOut(grant),
+          content: [{ type: 'text', text: 'Grant created successfully' }],
+        };
+      } catch (error) {
+        const { response } = error as AxiosError;
+        const structuredContent = toJSON(serializeException(response));
+        mcp.log('create_auth_grant')('Grant failed with error: %o', structuredContent);
+        return {
+          isError: true,
+          structuredContent: structuredContent,
+          content: [{ type: 'text', text: 'look at the structured content' }],
+        };
+      }
     },
   );
 }

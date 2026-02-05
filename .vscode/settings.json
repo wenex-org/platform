@@ -57,6 +57,7 @@
     "nofile",
     "nominatim",
     "ntegral",
+    "ollama",
     "onsessioninitialized",
     "openstreetmap",
     "openzipkin",
