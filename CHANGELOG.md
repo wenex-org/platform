@@ -7,10 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.3] - 2026-02-09
+
 ### Add
 
 - add: documentation in `docs` directory @vhidvz
 - add: `mcp-client` test script using `ollama` @vhidvz
+
+### Changed
+
+- add `shares` to the `payment` method of `financial/invoice` @vhidvz
 
 ## [1.5.2] - 2026-02-04
 
@@ -323,7 +329,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.5.2...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.5.3...HEAD
+[1.5.3]: https://github.com/wenex-org/platform/compare/1.5.2...1.5.3
 [1.5.2]: https://github.com/wenex-org/platform/compare/1.5.1...1.5.2
 [1.5.1]: https://github.com/wenex-org/platform/compare/1.5.0...1.5.1
 [1.5.0]: https://github.com/wenex-org/platform/compare/1.4.11...1.5.0
