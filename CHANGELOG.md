@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- fix: transfer issue with `double` and `float` in protos for `financial` @vhidvz
+
 ## [1.5.4] - 2026-02-11
 
 ### Fixed
