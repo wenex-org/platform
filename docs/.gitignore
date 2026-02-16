@@ -4,3 +4,9 @@
 
 !schemas/
 !schemas/**
+
+!services/
+!services/**
+
+!workers/
+!workers/**
