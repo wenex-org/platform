@@ -7,6 +7,9 @@
 [submodule "docker"]
 	path = docker
 	url = ../platform-docker.git
+[submodule "docs"]
+	path = docs
+	url = ../platform-docs.git
 [submodule "libs"]
 	path = libs
 	url = ../platform-libs.git
