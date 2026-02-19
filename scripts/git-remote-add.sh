@@ -56,7 +56,7 @@ else
 fi
 
 # Navigate to the docs directory of the project
-cd "../../docs"
+cd "../docs"
 git remote add "$STAGE" "git@gitlab.$DOMAIN:wenex/platform-docs.git"
 if [ $? -ne 0 ]; then
   echo "Error: Failed to add remote repository for platform-docs."
