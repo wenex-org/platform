@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.6] - 2026-02-19
+
+### Fixed
+
+- fix: `CacheInterceptor` issue on `flush` @vhidvz
+
 ## [1.5.5] - 2026-02-17
 
 ### Fixed
@@ -341,7 +347,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.5.5...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.5.6...HEAD
+[1.5.6]: https://github.com/wenex-org/platform/compare/1.5.5...1.5.6
 [1.5.5]: https://github.com/wenex-org/platform/compare/1.5.4...1.5.5
 [1.5.4]: https://github.com/wenex-org/platform/compare/1.5.3...1.5.4
 [1.5.3]: https://github.com/wenex-org/platform/compare/1.5.2...1.5.3
