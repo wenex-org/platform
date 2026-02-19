@@ -55,6 +55,16 @@ else
   echo "Remote repository for platform-docker added successfully."
 fi
 
+# Navigate to the docs directory of the project
+cd "../../docs"
+git remote add "$STAGE" "git@gitlab.$DOMAIN:wenex/platform-docs.git"
+if [ $? -ne 0 ]; then
+  echo "Error: Failed to add remote repository for platform-docs."
+else
+  git push "$STAGE" main
+  echo "Remote repository for platform-docs added successfully."
+fi
+
 # Navigate to the libs directory of the project
 cd "../libs"
 git remote add "$STAGE" "git@gitlab.$DOMAIN:wenex/platform-libs.git"
