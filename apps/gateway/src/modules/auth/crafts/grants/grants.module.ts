@@ -9,7 +9,7 @@ import { GrantsController } from './grants.controller';
   providers: [GrantsResolver],
 })
 export class GrantsModule implements OnModuleInit {
-  onModuleInit() {
-    return mcpRegistration();
+  async onModuleInit() {
+    await mcpRegistration();
   }
 }

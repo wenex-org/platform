@@ -11,6 +11,7 @@ import { Ollama, type Tool as OllamaTool, type Message } from 'ollama';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { toString } from '@app/common/core/utils';
 import addFormats from 'ajv-formats';
+import * as readline from 'readline';
 import Ajv from 'ajv';
 
 const OLLAMA_HOST = 'http://localhost:11434';
@@ -19,6 +20,7 @@ const ollama = new Ollama({ host: OLLAMA_HOST });
 export class ClientMCP {
   // Core MCP Components
   private mcp: Client;
+  private messages: Message[] = [];
   private transport?: StreamableHTTPClientTransport;
 
   // Tool Management
@@ -54,7 +56,7 @@ export class ClientMCP {
       requestInit: {
         headers: {
           // TODO: Logic preserved as requested (hardcoded token used instead of argument)
-          Authorization: `apt-6cvaRsHhB8nYZCwgEnVputGUfLl`,
+          Authorization: `apt-Ycw5FZ6l9k8lvk3hoDJDZUjTIh9`,
           'Content-Type': 'application/json',
         },
         keepalive: true,
@@ -125,18 +127,18 @@ export class ClientMCP {
    * 5. Returns final response from LLM.
    */
   async processQuery(query: string, modelName: string = 'llama3.1:8b') {
-    const messages: Message[] = [{ role: 'user', content: query }];
+    this.messages.push({ role: 'user', content: query });
 
     console.log('🤖 Sending query to Ollama...');
 
     // --- Step 1: Initial LLM Request ---
     const firstResponse = await ollama.chat({
       model: modelName,
-      messages: messages,
+      messages: this.messages,
       tools: this.availableTools,
     });
 
-    messages.push(firstResponse.message);
+    this.messages.push(firstResponse.message);
 
     // --- Step 2: Handle Tool Calls (if any) ---
     if (firstResponse.message.tool_calls && firstResponse.message.tool_calls.length > 0) {
@@ -180,7 +182,7 @@ export class ClientMCP {
         }
 
         // Append tool result to history
-        messages.push({
+        this.messages.push({
           role: 'tool',
           content: toolContent,
         });
@@ -190,7 +192,7 @@ export class ClientMCP {
       console.log('🤖 Generating final response...');
       const finalResponse = await ollama.chat({
         model: modelName,
-        messages: messages,
+        messages: this.messages,
         tools: this.availableTools,
       });
 
@@ -200,6 +202,31 @@ export class ClientMCP {
     // If no tools were called, return original response
     return firstResponse.message.content;
   }
+
+  async chatLoop(modelName: string = 'qwen2.5:32b') {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+
+    console.log('\nMCP Client Started!!');
+    console.log("Type your queries or 'quit' to exit.");
+
+    while (true) {
+      const message = await new Promise<string>((resolve) => {
+        rl.question('\nQuery: ', resolve);
+      });
+
+      if (message.toLowerCase() === 'quit') {
+        break;
+      }
+
+      const response = await this.processQuery(message, modelName);
+      console.log('\n' + response);
+    }
+
+    rl.close();
+  }
 }
 
 // --- Main Execution ---
@@ -208,13 +235,7 @@ export class ClientMCP {
 
   try {
     await client.connect('http://127.0.0.1:3010/mcp');
-
-    const response = await client.processQuery(
-      'create a grant with subject fortest@wenex.org and action any and object all',
-      'qwen2.5:32b',
-    );
-
-    console.log('\n💬 Final Answer:\n', response);
+    await client.chatLoop('qwen2.5:32b'); // Start interactive loop with your model
   } catch (err) {
     console.error('Main Error:', err);
   }

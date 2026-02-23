@@ -4,14 +4,19 @@ import { fixOut } from '@app/common/core/utils/mongo';
 import { Action, Resource } from '@app/common/core';
 import { AxiosError } from 'axios';
 import { z } from 'zod';
+import { loadMarkdownFile } from 'tool-description-loader';
 
-export function mcpRegistration() {
+export async function mcpRegistration() {
   const mcp = ServerMCP.create();
+  const coreDocs = await loadMarkdownFile('schemas/core.md');
+
+  console.log(`{{{core docs}}}: ${coreDocs}`);
+
   mcp.server.registerTool(
     'create_auth_grant',
     {
       title: 'Add a new Grant',
-      description: 'Create a new grant with subject, action and object',
+      description: coreDocs,
       inputSchema: {
         subject: z.string().nonempty().email(),
         action: z.nativeEnum(Action),
