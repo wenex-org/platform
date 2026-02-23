@@ -1,0 +1,12 @@
+*
+!README.md
+!.gitignore
+
+!schemas/
+!schemas/**
+
+!services/
+!services/**
+
+!workers/
+!workers/**
