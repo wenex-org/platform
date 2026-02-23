@@ -15,7 +15,7 @@ import {
 } from '@nestjs/common';
 import { ProductDataSerializer, ProductItemsSerializer, ProductSerializer } from '@app/common/serializers/career';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { Audit, Cache, Nested, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateProductDto, CreateProductItemsDto, UpdateProductDto } from '@app/common/dto/career';
 import { AuthorityInterceptor, ProjectionInterceptor } from '@app/common/core/interceptors/mongo';
 import { SearchDataSerializer, SearchSerializer } from '@app/common/core/serializers/elastic';
@@ -45,6 +45,7 @@ const COLL_PATH = COLLECTION('products', 'career');
 @RateLimit(COLL_PATH)
 @Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
+@Nested<Product>('features')
 @ApiTags('career', 'products')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
