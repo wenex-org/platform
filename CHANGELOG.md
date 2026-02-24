@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Add
+
+- refactor `mcpRegistration` to register core documentation resource @alihajqani
+
 ## [1.5.6] - 2026-02-19
 
 ### Fixed

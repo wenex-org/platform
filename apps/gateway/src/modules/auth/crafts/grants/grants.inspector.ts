@@ -8,19 +8,39 @@ import { loadMarkdownFile } from 'tool-description-loader';
 
 export async function mcpRegistration() {
   const mcp = ServerMCP.create();
-  const coreDocs = await loadMarkdownFile('schemas/core.md');
 
-  console.log(`{{{core docs}}}: ${coreDocs}`);
+  mcp.server.registerResource(
+    'core-docs',
+    'resource://docs/schemas/core',
+    {
+      mimeType: 'text/markdown',
+      description: 'Wenex Core Interface Documentation & Access Rules',
+    },
+    async (uri) => {
+      const coreDocs = await loadMarkdownFile('schemas/core.md');
+      return {
+        contents: [
+          {
+            uri: uri.href,
+            mimeType: 'text/markdown',
+            text: coreDocs,
+          },
+        ],
+      };
+    },
+  );
 
   mcp.server.registerTool(
     'create_auth_grant',
     {
       title: 'Add a new Grant',
-      description: coreDocs,
+      description: `Creates a new authorization grant. 
+                    IMPORTANT: Before using this tool, you MUST understand the Wenex Access Model. 
+                    If you haven't read it yet, READ the resource at: 'resource://docs/schemas/core' to avoid permission errors.`,
       inputSchema: {
-        subject: z.string().nonempty().email(),
-        action: z.nativeEnum(Action),
-        object: z.nativeEnum(Resource),
+        subject: z.string().nonempty().email().describe('User email receiving the grant'),
+        action: z.nativeEnum(Action).describe('Permission action (e.g., read:share)'),
+        object: z.nativeEnum(Resource).describe('Target resource type'),
       },
     },
     async (data, { signal, requestInfo }) => {
@@ -51,4 +71,5 @@ export async function mcpRegistration() {
       }
     },
   );
+  await Promise.resolve();
 }
