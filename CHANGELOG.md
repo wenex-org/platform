@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.8] - 2025-02-24
+
+### Changed
+
+- revert: commit `faddbebced749cb89f1849e9bcdf71cd06c6e0ec` @vhidvz
+
 ## [1.5.7] - 2025-02-21
 
 ### Fixed
@@ -353,7 +359,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.5.7...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.5.8...HEAD
+[1.5.8]: https://github.com/wenex-org/platform/compare/1.5.7...1.5.8
 [1.5.7]: https://github.com/wenex-org/platform/compare/1.5.6...1.5.7
 [1.5.6]: https://github.com/wenex-org/platform/compare/1.5.5...1.5.6
 [1.5.5]: https://github.com/wenex-org/platform/compare/1.5.4...1.5.5
