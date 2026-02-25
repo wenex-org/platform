@@ -2,6 +2,7 @@
 schema.gql
 
 # compiled output
+/wnx
 /dist
 /node_modules
 /build

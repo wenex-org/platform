@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.9] - 2025-02-25
+
+### Changed
+
+- copy build directory from `dist` to `wnx` for start script @vhidvz
+
 ## [1.5.8] - 2025-02-24
 
 ### Changed
@@ -359,7 +365,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.5.8...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.5.9...HEAD
+[1.5.9]: https://github.com/wenex-org/platform/compare/1.5.8...1.5.9
 [1.5.8]: https://github.com/wenex-org/platform/compare/1.5.7...1.5.8
 [1.5.7]: https://github.com/wenex-org/platform/compare/1.5.6...1.5.7
 [1.5.6]: https://github.com/wenex-org/platform/compare/1.5.5...1.5.6

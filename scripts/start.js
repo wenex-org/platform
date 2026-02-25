@@ -45,7 +45,7 @@ function runNodeProcess(filePath) {
 
 // Main logic
 if (SERVICE_NAME === 'gateway') {
-  const gatewayPath = path.join(__dirname, '../dist/apps/gateway/main.js');
+  const gatewayPath = path.join(__dirname, '../wnx/apps/gateway/main.js');
   if (fs.existsSync(gatewayPath)) {
     runNodeProcess(gatewayPath);
   } else {
@@ -53,8 +53,8 @@ if (SERVICE_NAME === 'gateway') {
     process.exit(1);
   }
 } else {
-  const servicePath = path.join(__dirname, `../dist/apps/services/${SERVICE_NAME}/main.js`);
-  const workerPath = path.join(__dirname, `../dist/apps/workers/${SERVICE_NAME}/main.js`);
+  const servicePath = path.join(__dirname, `../wnx/apps/services/${SERVICE_NAME}/main.js`);
+  const workerPath = path.join(__dirname, `../wnx/apps/workers/${SERVICE_NAME}/main.js`);
 
   if (fs.existsSync(servicePath)) {
     runNodeProcess(servicePath);

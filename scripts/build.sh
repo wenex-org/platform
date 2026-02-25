@@ -56,4 +56,4 @@ for worker in "${workers[@]}"; do
 done
 
 # Wait for all background jobs to complete
-wait
+wait && cp -a dist wnx

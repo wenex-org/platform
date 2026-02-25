@@ -2,6 +2,7 @@
 .data
 .vscode
 
+./wnx
 ./dist
 ./docs
 

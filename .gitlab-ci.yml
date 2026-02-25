@@ -30,7 +30,7 @@ build:
       - docker
       - libs
       - protos
-      - dist
+      - wnx
       - node_modules
       - sonar-project.properties
     when: on_success
