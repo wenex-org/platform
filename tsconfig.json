@@ -19,6 +19,7 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
+    "strictPropertyInitialization": false,
     "paths": {
       "@app/command": ["libs/command/src"],
       "@app/command/*": ["libs/command/src/*"],
