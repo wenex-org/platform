@@ -23,7 +23,7 @@ import { Observable } from 'rxjs';
 
 const COLL_PATH = COLLECTION('clients', 'domain');
 
-@Resolver(() => ClientSerializer)
+@Resolver()
 @RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)

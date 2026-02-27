@@ -23,7 +23,7 @@ import { Observable } from 'rxjs';
 
 const COLL_PATH = COLLECTION('products', 'career');
 
-@Resolver(() => ProductSerializer)
+@Resolver()
 @RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @Nested<Product>('features')

@@ -23,7 +23,7 @@ import { Observable } from 'rxjs';
 
 const COLL_PATH = COLLECTION('apts', 'auth');
 
-@Resolver(() => AptSerializer)
+@Resolver()
 @RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)

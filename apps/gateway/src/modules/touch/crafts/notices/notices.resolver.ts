@@ -23,7 +23,7 @@ import { Observable } from 'rxjs';
 
 const COLL_PATH = COLLECTION('notices', 'touch');
 
-@Resolver(() => NoticeSerializer)
+@Resolver()
 @RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)

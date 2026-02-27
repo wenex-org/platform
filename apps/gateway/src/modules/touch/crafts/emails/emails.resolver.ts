@@ -23,7 +23,7 @@ import { Observable } from 'rxjs';
 
 const COLL_PATH = COLLECTION('emails', 'touch');
 
-@Resolver(() => EmailSerializer)
+@Resolver()
 @RateLimit(COLL_PATH)
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)

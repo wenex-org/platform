@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- remove unnecessary code from resolvers @vhidvz 
+
 ## [1.5.9] - 2025-02-25
 
 ### Changed
