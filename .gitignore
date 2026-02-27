@@ -6,6 +6,7 @@ schema.gql
 /dist
 /node_modules
 /build
+/documentation
 
 # Logs
 logs

@@ -59,7 +59,7 @@
     "mcp:inspector": "npx @modelcontextprotocol/inspector",
     "mcp:client": "node -r tsconfig-paths/register -r ts-node/register mcp-client.ts",
     "mcp:client:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register mcp-client.ts",
-    "doc": "npx @compodoc/compodoc -p tsconfig.json -n \"Documentation\" -d ./docs -s"
+    "doc": "npx @compodoc/compodoc -p tsconfig.json -n \"Documentation\" -d ./documentation -s"
   },
   "lint-staged": {
     "*.ts": [
