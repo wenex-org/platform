@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Add
 
 - refactor `mcpRegistration` to register core documentation resource @alihajqani
+- improve date handling in `apt.inspector` @alihajqani
+- add `MCP_CLIENT_TEST_TOKEN` to `.env.example` @alihajqani
+- read `Authorization` in `mcp-client` from `.env` @alihajqani
 
 ### Changed
 
