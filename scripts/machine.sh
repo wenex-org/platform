@@ -4,7 +4,7 @@
 ENV_FILE=".env"
 
 # Section to check
-SECTION="# ----------------------------------------\n# AUTOMATICALLY GENERATED (DO NOT MODIFY)\n# ----------------------------------------"
+SECTION="# --------------------------------------------\n# AUTOMATICALLY GENERATED (DO NOT MODIFY)\n# --------------------------------------------"
 
 # Generate a random MACHINE_ID value
 RANDOM_ID=$(head -c 15 /dev/urandom | base32)
