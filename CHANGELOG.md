@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Add
 
+- add: use cookie to get authorization token for authentication @winkcor
 - refactor `mcpRegistration` to register core documentation resource @alihajqani
 - improve date handling in `apt.inspector` @alihajqani
 - add `MCP_CLIENT_APT_TOKEN` to `.env.example` @alihajqani
@@ -17,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- remove unnecessary code from resolvers @vhidvz 
+- remove unnecessary code from resolvers @vhidvz
 
 ## [1.5.9] - 2025-02-25
 
