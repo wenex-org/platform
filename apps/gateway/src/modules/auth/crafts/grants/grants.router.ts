@@ -2,8 +2,8 @@ import { getHeaders, loadMarkdownFile, ServerMCP } from '@app/common/core/mcp';
 import { serializeException, toJSON } from '@app/common/core/utils';
 import { fixOut } from '@app/common/core/utils/mongo';
 import { Action, Resource } from '@app/common/core';
+import { isMongoId } from 'class-validator';
 import { AxiosError } from 'axios';
-import { Types } from 'mongoose';
 import { z } from 'zod';
 
 export function mcpRegistration() {
@@ -51,7 +51,7 @@ export function mcpRegistration() {
         owner: z
           .string()
           .optional()
-          .refine((val) => !val || Types.ObjectId.isValid(val), { message: 'Invalid MongoId' })
+          .refine((val) => isMongoId(val), { message: 'Invalid MongoId' })
           .describe('User ID who owns the record'),
       },
     },

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
-
 /**
  * Configuration
  *
@@ -7,8 +6,10 @@
  * Using: ollama run qwen2.5:32b
  * Remote: ssh -L 11434:localhost:11434 wenex@gpu.wenex.org
  */
-
 require('dotenv').config();
+
+const MCP_CLIENT_APT_TOKEN = process.env.MCP_CLIENT_APT_TOKEN;
+if (!MCP_CLIENT_APT_TOKEN) throw new Error('MCP_CLIENT_APT_TOKEN is required!');
 
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 import { Ollama, type Tool as OllamaTool, type Message } from 'ollama';
@@ -20,9 +21,6 @@ import Ajv from 'ajv';
 
 const OLLAMA_HOST = 'http://localhost:11434';
 const ollama = new Ollama({ host: OLLAMA_HOST });
-
-const MCP_CLIENT_AUTH_TOKEN = process.env.MCP_CLIENT_TEST_TOKEN;
-if (!MCP_CLIENT_AUTH_TOKEN) throw new Error('MCP_CLIENT_TEST_TOKEN is required!');
 
 export class ClientMCP {
   // Core MCP Components
@@ -62,7 +60,7 @@ export class ClientMCP {
     this.transport = new StreamableHTTPClientTransport(url, {
       requestInit: {
         headers: {
-          Authorization: MCP_CLIENT_AUTH_TOKEN!,
+          Authorization: MCP_CLIENT_APT_TOKEN!,
           'Content-Type': 'application/json',
         },
         keepalive: true,

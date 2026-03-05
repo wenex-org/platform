@@ -5,5 +5,6 @@
 ./wnx
 ./dist
 ./docs
+./documentation
 
 ./node_modules
