@@ -1,7 +1,7 @@
 import { Module, OnModuleInit } from '@nestjs/common';
 
+import { mcpRegistration } from './grants.router';
 import { GrantsResolver } from './grants.resolver';
-import { mcpRegistration } from './grants.inspector';
 import { GrantsController } from './grants.controller';
 
 @Module({
