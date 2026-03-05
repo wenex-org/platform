@@ -1,8 +1,8 @@
 import { Module, OnModuleInit } from '@nestjs/common';
 
 import { AptsResolver } from './apts.resolver';
+import { mcpRegistration } from './apts.router';
 import { AptsController } from './apts.controller';
-import { mcpRegistration } from '../apts/apts.inspector';
 
 @Module({
   controllers: [AptsController],
