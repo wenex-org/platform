@@ -3,6 +3,7 @@ import { serializeException, toJSON } from '@app/common/core/utils';
 import { fixOut } from '@app/common/core/utils/mongo';
 import { Action, Resource } from '@app/common/core';
 import { AxiosError } from 'axios';
+import { Types } from 'mongoose';
 import { z } from 'zod';
 
 export function mcpRegistration() {
@@ -40,6 +41,18 @@ export function mcpRegistration() {
         subject: z.string().nonempty().email().describe('User email receiving the grant'),
         action: z.nativeEnum(Action).describe('Permission action (e.g., read:share)'),
         object: z.nativeEnum(Resource).describe('Target resource type'),
+
+        ref: z
+          .string()
+          .optional()
+          .transform((val) => val?.trim()).describe(`Optional external reference or business key used
+                                                    for integration with external systems, legacy databases,
+                                                    or internal cross-linking between Wenex entities/services.`),
+        owner: z
+          .string()
+          .optional()
+          .refine((val) => !val || Types.ObjectId.isValid(val), { message: 'Invalid MongoId' })
+          .describe('User ID who owns the record'),
       },
     },
     async (data, { signal, requestInfo }) => {

@@ -73,9 +73,11 @@ export class ClientMCP {
     this.transport.onerror = (err) => console.error('❌ Transport error:', err);
     this.transport.onclose = () => console.log('🔌 Transport closed');
 
-    // 3. Connect and Fetch Tools
+    // 3. Connect and Fetch Tools and Resources
     await this.mcp.connect(this.transport);
     const toolsResult = await this.mcp.listTools();
+    const resourcesResult = await this.mcp.listResources();
+    const availableResourcesUris = resourcesResult.resources.map((r) => r.uri).join(', ');
 
     // Reset local tool storage
     this.availableTools = [];
@@ -97,10 +99,34 @@ export class ClientMCP {
       this.toolSchemas[tool.name] = tool.inputSchema;
     });
 
+    // Inject Client-side Resource Reader Tool
+    this.availableTools.push({
+      type: 'function',
+      function: {
+        name: 'read_mcp_resource',
+        description: `Read the content of an MCP server resource. Available resource: ${availableResourcesUris}`,
+        parameters: {
+          type: 'object',
+          properties: {
+            uri: { type: 'string', description: 'The URI of the resource to read' },
+          },
+          required: ['uri'],
+        },
+      },
+    });
+
+    // Store schema for internal AJV validation (Fixed typos here)
+    this.toolSchemas['read_mcp_resource'] = {
+      type: 'object',
+      properties: { uri: { type: 'string' } },
+      required: ['uri'],
+    };
+
     console.log(
       '✅ Connected to MCP server. Available Tools:',
       this.availableTools.map((t) => t.function.name),
     );
+    console.log('✅ Connected to MCP server. Available Resources:', availableResourcesUris);
   }
 
   /**
@@ -166,24 +192,37 @@ export class ClientMCP {
           toolContent = `Client-Side Validation Error: The arguments provided are invalid. ${validation.errors}. Please fix the arguments and try again.`;
         } else {
           // Case B: Validation Passed -> Execute Tool
-          console.log('🔒 Injecting auth token for execution...');
-          console.log(`▶ Executing ${toolName}...`);
-
           try {
-            const result = await this.mcp.callTool({
-              name: toolName,
-              arguments: toolArgs,
-            });
+            if (toolName === 'read_mcp_resource') {
+              console.log(`📖 Reading resource: ${toolArgs.uri}...`);
 
-            // Parse result content
-            const resultContent = result.content as { type: 'text'; text: string }[];
-            toolContent = resultContent.map((c) => (c.type === 'text' ? c.text : '')).join('\n');
+              const resourceResult = await this.mcp.readResource({ uri: toolArgs.uri });
 
-            console.log(`📄 Tool Output: ${toolContent.substring(0, 50)}...`);
-            toolContent += `\n\nStructured Content:\n${toString(result.structuredContent)}`;
+              toolContent = resourceResult.contents.map((c: any) => c.text || JSON.stringify(c)).join('\n\n');
+
+              console.log(`📄 Resource Read: ${toolContent.substring(0, 50)}...`);
+            } else {
+              // Execute standard Server Tool
+              console.log('🔒 Injecting auth token for execution...');
+              console.log(`▶ Executing ${toolName}...`);
+
+              const result = await this.mcp.callTool({
+                name: toolName,
+                arguments: toolArgs,
+              });
+
+              // Parse result content
+              const resultContent = result.content as { type: 'text'; text: string }[];
+              toolContent = resultContent.map((c) => (c.type === 'text' ? c.text : '')).join('\n');
+
+              console.log(`📄 Tool Output: ${toolContent.substring(0, 50)}...`);
+              if (result.structuredContent) {
+                toolContent += `\n\nStructured Content:\n${toString(result.structuredContent)}`;
+              }
+            }
           } catch (error: any) {
-            console.error(`❌ Tool execution failed: ${error.message}`);
-            toolContent = `Error executing tool: ${error.message}`;
+            console.error(`❌ Execution failed for ${toolName}: ${error.message}`);
+            toolContent = `Error executing ${toolName}: ${error.message}`;
           }
         }
 
