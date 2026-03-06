@@ -115,10 +115,10 @@ export class ClientMCP {
     });
 
     // Inject Client-side Resource Reader Tool
-    this.availableTools['read_mcp_resource'] = {
+    this.availableTools['read_documentations'] = {
       type: 'function',
       function: {
-        name: 'read_mcp_resource',
+        name: 'read_documentations',
         description: `Read the content of an MCP server resource. Available resource: ${availableResourcesUris}`,
         parameters: {
           type: 'object',
@@ -129,7 +129,7 @@ export class ClientMCP {
     };
 
     // Store schema for internal AJV validation
-    this.validators['read_mcp_resource'] = {
+    this.validators['read_documentations'] = {
       schema: { type: 'object', properties: { uri: { type: 'string' } }, required: ['uri'] },
     };
 
@@ -195,7 +195,7 @@ export class ClientMCP {
     let round = 0;
     while (response.message.tool_calls?.length && round < this.config.maxToolRounds) {
       round++;
-      console.log(`🛠 Round ${round}: ${response.message.tool_calls.length} tool call(s)`);
+      console.log(`🛠 Round ${round}: ${response.message.tool_calls.map((t) => t.function.name).join(', ')} tool call(s)`);
 
       // === PARALLEL TOOL EXECUTION ===
       const toolPromises = response.message.tool_calls.map(async (toolCall): Promise<Message> => {
@@ -214,7 +214,7 @@ export class ClientMCP {
           });
         } else {
           try {
-            if (toolName === 'read_mcp_resource') {
+            if (toolName === 'read_documentations') {
               const result = await this.mcp.readResource({ uri: toolArgs.uri });
               content = result.contents.map((c: any) => c.text || toString(c)).join('\n\n');
             } else {
@@ -261,10 +261,9 @@ export class ClientMCP {
     return response.message.content || '';
   }
 
-  async disconnect(): Promise<void> {
-    await this.transport?.close();
-    await this.mcp?.close?.();
+  disconnect() {
     console.log('👋 MCP client disconnected');
+    process.exit(0);
   }
 
   /**
@@ -291,7 +290,7 @@ export class ClientMCP {
       }
     } finally {
       rl.close();
-      await this.disconnect();
+      this.disconnect();
     }
   }
 }
@@ -314,6 +313,6 @@ export class ClientMCP {
     await client.chatLoop();
   } catch (err) {
     console.error('💥 Fatal error:', err);
-    await client.disconnect();
+    client.disconnect();
   }
 })().catch(console.error);
