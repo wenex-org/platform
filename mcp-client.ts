@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
+require('dotenv').config();
+
 /**
  * Configuration
  *
@@ -6,11 +8,6 @@
  * Using: ollama run qwen2.5:32b
  * Remote: ssh -L 11434:localhost:11434 wenex@gpu.wenex.org
  */
-require('dotenv').config();
-
-const MCP_CLIENT_APT_TOKEN = process.env.MCP_CLIENT_APT_TOKEN;
-if (!MCP_CLIENT_APT_TOKEN) throw new Error('MCP_CLIENT_APT_TOKEN is required!');
-
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 import { Ollama, type Tool as OllamaTool, type Message } from 'ollama';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
@@ -19,48 +16,67 @@ import * as readline from 'node:readline';
 import addFormats from 'ajv-formats';
 import Ajv from 'ajv';
 
-const OLLAMA_HOST = 'http://localhost:11434';
-const ollama = new Ollama({ host: OLLAMA_HOST });
+interface ClientMCPConfig {
+  mcpServerUrl: string;
+  ollamaHost?: string;
+  defaultModel?: string;
+  maxToolRounds?: number;
+  maxHistoryMessages?: number;
+}
+
+const DEFAULT_CONFIG: Required<ClientMCPConfig> = {
+  maxToolRounds: 10,
+  maxHistoryMessages: 50,
+  defaultModel: 'qwen2.5:32b',
+  ollamaHost: 'http://localhost:11434',
+  mcpServerUrl: 'http://127.0.0.1:3010/mcp',
+};
 
 export class ClientMCP {
   // Core MCP Components
   private mcp: Client;
+  private ollama: Ollama;
   private messages: Message[] = [];
+
+  // Config
+  private config: Required<ClientMCPConfig>;
   private transport?: StreamableHTTPClientTransport;
 
   // Tool Management
-  private availableTools: OllamaTool[] = [];
-  private toolSchemas: Record<string, any> = {};
+  private availableTools: Record<string, OllamaTool> = {};
 
   // Validation
-  private ajv: Ajv;
+  private ajv: Ajv = new Ajv({ strict: false, allErrors: true });
+  private validators: Record<string, { schema: any; validator?: any }> = {};
 
-  constructor() {
+  constructor(config: Partial<ClientMCPConfig> = {}) {
+    this.config = { ...DEFAULT_CONFIG, ...config };
+
     this.mcp = new Client({
       name: 'ollama-mcp-client',
-      version: '1.0.0',
+      version: '2.0.0',
     });
 
+    this.ollama = new Ollama({ host: this.config.ollamaHost });
+
     // Initialize AJV with loose strict mode for flexibility
-    this.ajv = new Ajv({ strict: false });
     addFormats(this.ajv);
   }
 
   /**
-   * Establishes connection to the MCP Server via SSE transport.
-   * Loads and parses available tools for Ollama compatibility.
+   * Connect to MCP server and load tools/resources
    */
-  async connect(serverUrl: string): Promise<void> {
-    // 1. Cleanup existing transport if any
+  async connect(serverUrl: string = this.config.mcpServerUrl): Promise<void> {
+    // Cleanup existing transport if any
     if (this.transport) await this.transport.close();
 
     const url = new URL(serverUrl);
 
-    // 2. Initialize Transport with headers
+    // Initialize Transport with headers
     this.transport = new StreamableHTTPClientTransport(url, {
       requestInit: {
         headers: {
-          Authorization: MCP_CLIENT_APT_TOKEN!,
+          Authorization: process.env.MCP_CLIENT_APT_TOKEN!,
           'Content-Type': 'application/json',
         },
         keepalive: true,
@@ -71,215 +87,232 @@ export class ClientMCP {
     this.transport.onerror = (err) => console.error('❌ Transport error:', err);
     this.transport.onclose = () => console.log('🔌 Transport closed');
 
-    // 3. Connect and Fetch Tools and Resources
+    // Connect and Fetch Tools and Resources
     await this.mcp.connect(this.transport);
-    const toolsResult = await this.mcp.listTools();
-    const resourcesResult = await this.mcp.listResources();
+
+    const [toolsResult, resourcesResult] = await Promise.all([this.mcp.listTools(), this.mcp.listResources()]);
+
     const availableResourcesUris = resourcesResult.resources.map((r) => r.uri).join(', ');
 
     // Reset local tool storage
-    this.availableTools = [];
-    this.toolSchemas = {};
+    this.availableTools = {};
+    this.validators = {};
 
-    // 4. Map MCP Tools to Ollama Format & Store Schemas
+    // Map MCP Tools to Ollama Format
     toolsResult.tools.forEach((tool) => {
       // Map for Ollama
-      this.availableTools.push({
+      this.availableTools[tool.name] = {
         type: 'function',
         function: {
           name: tool.name,
           description: tool.description,
           parameters: tool.inputSchema as any,
         },
-      });
+      };
 
       // Store schema for internal validation
-      this.toolSchemas[tool.name] = tool.inputSchema;
+      this.validators[tool.name] = { schema: tool.inputSchema };
     });
 
     // Inject Client-side Resource Reader Tool
-    this.availableTools.push({
+    this.availableTools['read_documentations'] = {
       type: 'function',
       function: {
-        name: 'read_mcp_resource',
+        name: 'read_documentations',
         description: `Read the content of an MCP server resource. Available resource: ${availableResourcesUris}`,
         parameters: {
           type: 'object',
-          properties: {
-            uri: { type: 'string', description: 'The URI of the resource to read' },
-          },
           required: ['uri'],
+          properties: { uri: { type: 'string', description: 'The URI of the resource to read' } },
         },
       },
-    });
-
-    // Store schema for internal AJV validation
-    this.toolSchemas['read_mcp_resource'] = {
-      type: 'object',
-      properties: { uri: { type: 'string' } },
-      required: ['uri'],
     };
 
+    // Store schema for internal AJV validation
+    this.validators['read_documentations'] = {
+      schema: { type: 'object', properties: { uri: { type: 'string' } }, required: ['uri'] },
+    };
+
+    console.log('✅ Connected to MCP server');
+    console.log('   Resources :', availableResourcesUris || 'none');
     console.log(
-      '✅ Connected to MCP server. Available Tools:',
-      this.availableTools.map((t) => t.function.name),
+      '   Tools     :',
+      Object.values(this.availableTools)
+        .map((t) => t.function.name)
+        .join(', '),
     );
-    console.log('✅ Connected to MCP server. Available Resources:', availableResourcesUris);
+  }
+
+  private getValidator(toolName: string) {
+    if (!this.validators[toolName]?.validator) {
+      const { schema } = this.validators[toolName];
+      if (!schema) throw new Error(`No schema for tool: ${toolName}`);
+      return (this.validators[toolName].validator = this.ajv.compile(schema));
+    } else return this.validators[toolName].validator;
   }
 
   /**
    * Validates tool arguments against the stored JSON Schema using AJV.
    */
-  private validateArgs(toolName: string, args: any): { valid: boolean; errors?: string } {
-    const schema = this.toolSchemas[toolName];
-    if (!schema) {
-      return { valid: false, errors: `Schema not found for tool ${toolName}` };
+  private validateArgs(toolName: string, args: any): { valid: boolean; error?: string } {
+    try {
+      const validate = this.getValidator(toolName);
+      const valid = validate(args);
+      if (!valid) {
+        const errors = validate.errors?.map((e) => `${e.instancePath || 'root'} ${e.message}`).join('; ');
+        return { valid: false, error: errors };
+      } else return { valid: true };
+    } catch (err: any) {
+      return { valid: false, error: err.message };
     }
+  }
 
-    const validate = this.ajv.compile(schema);
-    const valid = validate(args);
-
-    if (!valid) {
-      const errorText = validate.errors?.map((e) => `Parameter '${e.instancePath}' ${e.message}`).join(', ');
-      return { valid: false, errors: errorText };
+  private trimHistory() {
+    if (this.messages.length > this.config.maxHistoryMessages) {
+      this.messages = this.messages.slice(-this.config.maxHistoryMessages);
     }
-
-    return { valid: true };
   }
 
   /**
-   * Main processing loop
-   *
-   * 1. Sends query to LLM.
-   * 2. Detects tool calls.
-   * 3. Validates arguments client-side.
-   * 4. Executes tools (if valid) or returns validation errors.
-   * 5. Returns final response from LLM.
+   * Main agent loop — supports multiple tool rounds
    */
-  async processQuery(query: string, modelName: string = 'llama3.1:8b') {
+  async processQuery(query: string, modelName = this.config.defaultModel): Promise<string> {
     this.messages.push({ role: 'user', content: query });
+    this.trimHistory();
 
     console.log('🤖 Sending query to Ollama...');
 
-    // --- Step 1: Initial LLM Request ---
-    const firstResponse = await ollama.chat({
+    // --- Initial LLM Request ---
+    let response = await this.ollama.chat({
       model: modelName,
       messages: this.messages,
-      tools: this.availableTools,
+      tools: Object.values(this.availableTools),
     });
 
-    this.messages.push(firstResponse.message);
+    this.messages.push(response.message);
 
-    // --- Step 2: Handle Tool Calls (if any) ---
-    if (firstResponse.message.tool_calls && firstResponse.message.tool_calls.length > 0) {
-      console.log(`🛠 Model requested ${firstResponse.message.tool_calls.length} tool(s)`);
+    // --- Handle Tool Calls (if any) ---
+    let round = 0;
+    while (response.message.tool_calls?.length && round < this.config.maxToolRounds) {
+      round++;
+      console.log(`🛠 Round ${round}: ${response.message.tool_calls.map((t) => t.function.name).join(', ')} tool call(s)`);
 
-      for (const toolCall of firstResponse.message.tool_calls) {
+      // === PARALLEL TOOL EXECUTION ===
+      const toolPromises = response.message.tool_calls.map(async (toolCall): Promise<Message> => {
         const toolName = toolCall.function.name;
         const toolArgs = toolCall.function.arguments as Record<string, any>;
 
-        console.log(`🔍 Validating args for ${toolName}...`);
-
-        // Client-Side Validation
         const validation = this.validateArgs(toolName, toolArgs);
-        let toolContent = '';
+        let content = '';
 
         if (!validation.valid) {
-          // Case A: Validation Failed
-          console.warn(`⚠️ Validation Failed: ${validation.errors}`);
-          toolContent = `Client-Side Validation Error: The arguments provided are invalid. ${validation.errors}. Please fix the arguments and try again.`;
+          console.warn(`⚠️ Validation failed for ${toolName}`);
+          content = toString({
+            error: 'validation_failed',
+            details: validation.error,
+            message: 'Please correct the arguments and try again.',
+          });
         } else {
-          // Case B: Validation Passed -> Execute Tool
           try {
-            if (toolName === 'read_mcp_resource') {
-              console.log(`📖 Reading resource: ${toolArgs.uri}...`);
-
-              const resourceResult = await this.mcp.readResource({ uri: toolArgs.uri });
-
-              toolContent = resourceResult.contents.map((c: any) => c.text || JSON.stringify(c)).join('\n\n');
-
-              console.log(`📄 Resource Read: ${toolContent.substring(0, 50)}...`);
+            if (toolName === 'read_documentations') {
+              const result = await this.mcp.readResource({ uri: toolArgs.uri });
+              content = result.contents.map((c: any) => c.text || toString(c)).join('\n\n');
             } else {
-              // Execute standard Server Tool
-              console.log('🔒 Injecting auth token for execution...');
-              console.log(`▶ Executing ${toolName}...`);
+              const result = await this.mcp.callTool({ name: toolName, arguments: toolArgs });
+              const textParts = (result.content as any[]).filter((c) => c.type === 'text').map((c) => c.text);
 
-              const result = await this.mcp.callTool({
-                name: toolName,
-                arguments: toolArgs,
-              });
-
-              // Parse result content
-              const resultContent = result.content as { type: 'text'; text: string }[];
-              toolContent = resultContent.map((c) => (c.type === 'text' ? c.text : '')).join('\n');
-
-              console.log(`📄 Tool Output: ${toolContent.substring(0, 50)}...`);
-              if (result.structuredContent) {
-                toolContent += `\n\nStructured Content:\n${toString(result.structuredContent)}`;
+              content = textParts.join('\n');
+              if ((result as any).structuredContent) {
+                content += `\n\nStructured Content:\n${toString((result as any).structuredContent)}`;
               }
             }
-          } catch (error: any) {
-            console.error(`❌ Execution failed for ${toolName}: ${error.message}`);
-            toolContent = `Error executing ${toolName}: ${error.message}`;
+          } catch (err: any) {
+            console.error(`❌ ${toolName} failed:`, err.message);
+            content = `${toolName} execution error: ${err.message}`;
           }
         }
 
-        // Append tool result to history
-        this.messages.push({
-          role: 'tool',
-          content: toolContent,
-        });
-      }
-
-      // --- Step 3: Final LLM Response ---
-      console.log('🤖 Generating final response...');
-      const finalResponse = await ollama.chat({
-        model: modelName,
-        messages: this.messages,
-        tools: this.availableTools,
+        return { role: 'tool', content, tool_name: toolName };
       });
 
-      return finalResponse.message.content;
+      const results = await Promise.all(toolPromises);
+
+      // Append results in original order
+      for (const result of results) {
+        this.messages.push(result);
+      }
+
+      this.trimHistory();
+
+      // Next LLM turn
+      response = await this.ollama.chat({
+        model: modelName,
+        messages: this.messages,
+        tools: Object.values(this.availableTools),
+      });
+
+      this.messages.push(response.message);
     }
 
-    // If no tools were called, return original response
-    return firstResponse.message.content;
+    if (round >= this.config.maxToolRounds) {
+      console.warn('⚠️ Reached maximum tool rounds');
+    }
+
+    return response.message.content || '';
   }
 
+  disconnect() {
+    console.log('👋 MCP client disconnected');
+    process.exit(0);
+  }
+
+  /**
+   * Interactive chat loop with graceful exit
+   */
   async chatLoop(modelName: string = 'qwen2.5:32b') {
     const rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
     });
 
-    console.log('\nMCP Client Started!!');
-    console.log("Type your queries or 'quit' to exit.");
+    console.log('\n🚀 MCP Client v2.0 started!');
+    console.log("Type your query or 'quit' to exit.\n");
 
-    while (true) {
-      const message = await new Promise<string>((resolve) => {
-        rl.question('\nQuery: ', resolve);
-      });
+    const ask = () => new Promise<string>((resolve) => rl.question('\nQuery > ', resolve));
 
-      if (message.toLowerCase() === 'quit') {
-        break;
+    try {
+      while (true) {
+        const input = await ask();
+        if (input.toLowerCase() === 'quit') break;
+
+        const response = await this.processQuery(input, modelName);
+        console.log('\n' + response);
       }
-
-      const response = await this.processQuery(message, modelName);
-      console.log('\n' + response);
+    } finally {
+      rl.close();
+      this.disconnect();
     }
-
-    rl.close();
   }
 }
 
-// --- Main Execution ---
+// ====================== MAIN ======================
 (async () => {
-  const client = new ClientMCP();
+  const token = process.env.MCP_CLIENT_APT_TOKEN;
+  if (!token) {
+    console.error('❌ MCP_CLIENT_APT_TOKEN environment variable is required!');
+    process.exit(1);
+  }
+
+  const client = new ClientMCP({
+    // override defaults here if needed
+    // defaultModel: 'llama3.1:8b',
+  });
+
   try {
-    await client.connect('http://127.0.0.1:3010/mcp');
-    // Start interactive loop with your model
-    await client.chatLoop('qwen2.5:32b');
+    await client.connect();
+    await client.chatLoop();
   } catch (err) {
-    console.error('Main Error:', err);
+    console.error('💥 Fatal error:', err);
+    client.disconnect();
   }
 })().catch(console.error);
