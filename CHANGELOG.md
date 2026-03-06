@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- update `@wenex/sdk` version to `1.3.3` @vhidvz
 - remove unnecessary code from resolvers @vhidvz
 
 ## [1.5.9] - 2025-02-25

@@ -171,7 +171,7 @@
   "devDependencies": {
     "@compodoc/compodoc": "^1.1.26",
     "@eslint/js": "^9.18.0",
-    "@modelcontextprotocol/inspector": "^0.17.1",
+    "@modelcontextprotocol/inspector": "^0.21.1",
     "@nestjs/cli": "^11.0.2",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.21",
@@ -191,7 +191,7 @@
     "@types/semver": "^7.5.8",
     "@types/supertest": "^6.0.2",
     "@types/web-push": "^3.6.4",
-    "@wenex/sdk": "^1.2.8",
+    "@wenex/sdk": "^1.3.3",
     "dpdm": "^3.14.0",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",

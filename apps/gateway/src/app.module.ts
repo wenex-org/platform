@@ -1,9 +1,11 @@
+import { getParam, loadMarkdownFile, ServerMCP, throwableResourceCall } from '@app/common/core/mcp';
 import { JWT_SECRET, NODE_ENV, REDIS_CONFIG, SENTRY_CONFIG } from '@app/common/core/envs';
 import { ComplexityPlugin, DateScalar } from '@app/common/core/plugins/graphql';
+import { ResourceTemplate } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { DynamicModule, Module, OnModuleInit } from '@nestjs/common';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { BlacklistModule } from '@app/module/blacklist';
-import { DynamicModule, Module } from '@nestjs/common';
 import { SentryModule } from '@ntegral/nestjs-sentry';
 import { HealthModule } from '@app/module/health';
 import { LoggerModule } from '@app/module/logger';
@@ -44,4 +46,34 @@ import { MODULES, HEALTH_CHECK_OPTIONS } from './modules';
   ],
   providers: [DateScalar, ComplexityPlugin],
 })
-export class AppModule {}
+export class AppModule implements OnModuleInit {
+  onModuleInit() {
+    const mcp = ServerMCP.create();
+
+    mcp.server.registerResource(
+      'documentations',
+      new ResourceTemplate('docs://{directory}/{file}', {
+        list: () => ({
+          resources: [
+            {
+              description: 'Wenex core concepts.',
+              ...{ uri: 'docs://schemas/core', name: 'core-schema' },
+            },
+          ],
+        }),
+      }),
+      {
+        name: 'documentations',
+        mimeType: 'text/markdown',
+        description: 'Wenex Documentations.',
+      },
+      async (uri, variables) =>
+        throwableResourceCall(uri.href, async () => {
+          const file = getParam(variables, 'file');
+          const directory = getParam(variables, 'directory');
+          const coreDocs = await loadMarkdownFile(`${directory}/${file}.md`);
+          return { contents: [{ type: 'text', uri: uri.href, mimeType: 'text/markdown', text: coreDocs }] };
+        }),
+    );
+  }
+}
