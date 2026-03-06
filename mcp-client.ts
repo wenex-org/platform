@@ -113,7 +113,7 @@ export class ClientMCP {
       },
     });
 
-    // Store schema for internal AJV validation (Fixed typos here)
+    // Store schema for internal AJV validation
     this.toolSchemas['read_mcp_resource'] = {
       type: 'object',
       properties: { uri: { type: 'string' } },
