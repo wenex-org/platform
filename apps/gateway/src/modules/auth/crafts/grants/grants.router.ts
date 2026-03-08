@@ -30,9 +30,9 @@ mcp.server.registerTool(
                   IMPORTANT: Before using this tool, you MUST understand the Wenex core concepts.
                   if you haven't read it yet, READ the resource at: "docs://schemas/core" to avoid permissions errors.`,
     inputSchema: {
-      subject: z.string().nonempty().email().describe('User email receiving the grant'),
-      action: z.nativeEnum(Action).describe('Permission action (e.g., read:share)'),
-      object: z.nativeEnum(Resource).describe('Target resource type'),
+      subject: z.string().nonempty().email().describe('REQUIRED. User email receiving the grant.'),
+      action: z.nativeEnum(Action).describe('REQUIRED. Permission action (e.g., read:share).'),
+      object: z.nativeEnum(Resource).describe('REQUIRED. Target resource type.'),
 
       location: z
         .array(
@@ -43,8 +43,10 @@ mcp.server.registerTool(
               message: 'Each location must be a valid IP address or CIDR notation',
             }),
         )
-        .optional().describe(`Optional list of network addresses allowed to access this resource.
-                Each Item must be a valid IP address or CIDR block`),
+        .optional()
+        .describe(
+          `OPTIONAL. List of network addresses (IP/CIDR) allowed to access this resource. Leave empty if user didn't specify.`,
+        ),
 
       // TODO: Write for `filter` and `field`
 

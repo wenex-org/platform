@@ -182,10 +182,17 @@ export class ClientMCP {
 
     console.log('🤖 Sending query to Ollama...');
 
+    //  Create a system prompt for today's Date.
+    const today = new Date().toISOString().split('T')[0];
+    const systemPrompt: Message = {
+      role: 'system',
+      content: `Today's date is ${today}. Use this for resolving relative dates.`,
+    };
+
     // --- Initial LLM Request ---
     let response = await this.ollama.chat({
       model: modelName,
-      messages: this.messages,
+      messages: [systemPrompt, ...this.messages],
       tools: Object.values(this.availableTools),
     });
 

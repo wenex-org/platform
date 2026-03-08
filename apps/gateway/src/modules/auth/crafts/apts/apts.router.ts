@@ -13,15 +13,22 @@ mcp.server.registerTool(
   'create_auth_apt',
   {
     title: 'Add a new APT',
-    description: `Creates a new Authentication Personal Token (APT).
-IMPORTANT: Before using this tool, you MUST understand the Wenex core concepts.
-if you haven't read it yet, READ the resource at: "docs://schemas/core" to avoid permissions errors.`,
+    description: `Creates a new Authentication Personal Token (APT).`,
     inputSchema: {
-      name: z.string().trim().min(1, 'name is required').describe('Name for apt token'),
+      name: z
+        .string()
+        .trim()
+        .min(1, 'name is required')
+        .describe(
+          'REQUIRED. Name for the apt token. You MUST ask the user for this. DO NOT call this tool without a real name provided by the user.',
+        ),
 
       expires_at: z
-        .union([z.number().int(), z.string().trim()])
-        .describe('Expiration timestamp (ms) or natural date string (e.g., "1 Mar 2026")'),
+        .string()
+        .trim()
+        .describe(
+          'REQUIRED. Expiration date. You (the AI) MUST convert the user input into an ISO 8601 format (YYYY-MM-DD) BEFORE calling this tool. Example: If user says "10 Mar 2027", send "2027-03-10". DO NOT call this tool without a real date provided by the user.',
+        ),
     },
   },
   async (data, { requestInfo }) =>
