@@ -1,6 +1,6 @@
-import { Module, OnModuleInit } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 
-import { mcpRegistration } from './grants.router';
+import './grants.router';
 import { GrantsResolver } from './grants.resolver';
 import { GrantsController } from './grants.controller';
 
@@ -8,8 +8,4 @@ import { GrantsController } from './grants.controller';
   controllers: [GrantsController],
   providers: [GrantsResolver],
 })
-export class GrantsModule implements OnModuleInit {
-  onModuleInit() {
-    return mcpRegistration();
-  }
-}
+export class GrantsModule {}
