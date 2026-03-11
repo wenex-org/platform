@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.10] - 2025-03-11
+
 ### Add
 
 - add: use cookie to get authorization token for authentication @winkcor
@@ -18,8 +20,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- ci improvements @vhidvz
 - update `@wenex/sdk` version to `1.3.3` @vhidvz
 - remove unnecessary code from resolvers @vhidvz
+
+### Fixed
+
+- fix: mcp bug on deployment @mhalizadeh
 
 ## [1.5.9] - 2025-02-25
 
@@ -379,7 +386,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.5.9...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.5.10...HEAD
+[1.5.10]: https://github.com/wenex-org/platform/compare/1.5.9...1.5.10
 [1.5.9]: https://github.com/wenex-org/platform/compare/1.5.8...1.5.9
 [1.5.8]: https://github.com/wenex-org/platform/compare/1.5.7...1.5.8
 [1.5.7]: https://github.com/wenex-org/platform/compare/1.5.6...1.5.7
