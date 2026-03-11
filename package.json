@@ -216,6 +216,7 @@
     "onlyBuiltDependencies": [
       "@apollo/protobufjs",
       "@compodoc/compodoc",
+      "@modelcontextprotocol/ext-apps",
       "@nestjs/core",
       "@scarf/scarf",
       "core-js",
