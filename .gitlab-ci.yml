@@ -19,7 +19,6 @@ build:
     - bash ./scripts/ci/setup.sh
   script:
     - npm run git:clone
-    - npm install -g pnpm@10.5.2
     - pnpm install --frozen-lockfile
     - npm run script:build
   artifacts:
@@ -79,7 +78,8 @@ publish:
   before_script:
     - rm .env && mkdir -p /kaniko/.docker
   variables:
-    KANIKO_ARGS: "--registry-mirror=docker.arvancloud.ir"
+    KANIKO_ARGS: "--registry-mirror=focker.ir"
+    # KANIKO_ARGS: "--registry-mirror=docker.arvancloud.ir"
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE:latest --destination $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME $KANIKO_ARGS
