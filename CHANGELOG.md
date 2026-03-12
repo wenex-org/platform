@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Add
+
+- add(`grants.router`):  `Add Multiple Grants (Bulk)` Tool for MCP @alihajqani
+
 ## [1.5.10] - 2025-03-11
 
 ### Add
