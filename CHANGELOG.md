@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Add
-
+- add(`grants.router`):  `Count Authorization Grants` Tool for MCP @alihajqani
 - add(`grants.router`): search functionality for authorization grants @alihajqani
 - add(`grants.router`):  `Add Multiple Grants (Bulk)` Tool for MCP @alihajqani
 - add: use cookie to get authorization token for authentication @winkcor

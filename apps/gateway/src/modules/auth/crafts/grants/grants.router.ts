@@ -117,13 +117,116 @@ const GRANT_OUTPUT_SCHEMA_FIELDS = {
 };
 
 // ------------------------------------------------------------------------------------------------
+// Search Schemas (AST / Query Builder for LLM)
+// ------------------------------------------------------------------------------------------------
+
+const Filter_Operator = z.enum(['eq', 'ne', 'gt', 'gte', 'lt', 'lte', 'in', 'nin', 'regex', 'exists']);
+
+const Query_Condition_Schema = z.object({
+  field: z.string().trim().describe("REQUIRED. The field name to query (e.g., 'subject', 'action', 'object', 'createdAt')."),
+
+  operator: Filter_Operator.default('eq').describe(
+    "REQUIRED. The comparison operator. Use 'regex' for partial text match, and 'exists' for null checks.",
+  ),
+
+  value: z.any().describe(
+    `REQUIRED. The value to match. 
+      CRITICAL RULES:
+      - If 'operator' is 'in' or 'nin', MUST be an array.
+      - If 'operator' is 'exists', MUST be a boolean.
+      - If querying a DATE (like createdAt), you MUST calculate relative dates based on today and convert to strictly ISO 8601 format string.`,
+  ),
+});
+
+const Allowed_Populates = z.enum(['owner', 'shares', 'clients']);
+const Populated_Reference_Schema = z
+  .union([
+    z.string(),
+    z
+      .object({
+        id: z.string().optional(),
+        name: z.string().optional(),
+      })
+      .passthrough(),
+  ])
+  .optional();
+
+// ------------------------------------------------------------------------------------------------
+// Count Authorization Grants
+// ------------------------------------------------------------------------------------------------
+
+mcp.server.registerTool(
+  'get_count_grant',
+  {
+    title: 'Get Count of Grants',
+    description: `Calculates and returns the EXACT total number of Authorization Grants matching specific criteria, without fetching the actual documents.
+                  CRITICAL TRIGGER: Use this tool ONLY when the user explicitly asks for "how many", "count", "number of", or "total" grants/permissions. 
+                  DO NOT use 'get_auth_grants' for counting, as it wastes network bandwidth.
+                  IMPORTANT: Before using this tool, you MUST understand the Wenex core concepts at "docs://schemas/core".`,
+    inputSchema: {
+      conditions: z
+        .array(Query_Condition_Schema)
+        .optional()
+        .describe(
+          `OPTIONAL. Array of search conditions (AST) to filter which grants should be counted.
+          Example: [{ field: "action", operator: "eq", value: "read:share" }]
+          Leave empty to get the total count of all grants in the system.`,
+        ),
+      ...CORE_INPUT_SCHEMA_FIELDS,
+    },
+    outputSchema: {
+      count: z.number().min(0).optional().describe('The total number of grants matching the conditions.'),
+    },
+  },
+  async (data, { requestInfo }) =>
+    throwableToolCall(async () => {
+      const headers = getHeaders({ requestInfo });
+      mcp.log('get_count_grant')('Building count query from LLM conditions: %j', data.conditions);
+
+      // Transform LLM AST to native MongoDB Query
+      const mongoQuery: Record<string, any> = {};
+
+      if (data.conditions && data.conditions.length > 0) {
+        const queryParts = data.conditions.map((cond) => {
+          if (cond.operator === 'eq') return { [cond.field]: cond.value };
+          return { [cond.field]: { [`$${cond.operator}`]: cond.value } };
+        });
+
+        if (queryParts.length === 1) {
+          Object.assign(mongoQuery, queryParts[0]);
+        } else {
+          mongoQuery['$and'] = queryParts;
+        }
+      }
+
+      mcp.log('get_count_grant')('Fetching count from platform SDK...');
+
+      // Call the Count SDK endpoint
+      const totalCount = await mcp.platform.auth.grants.count({ query: mongoQuery } as any, { headers });
+      const safeData = z.object({ count: z.number().optional() }).parse({ count: totalCount });
+      mcp.log('get_count_grant')('Counted %d grants matching the criteria', safeData.count);
+
+      // Return MCP compliant format
+      return {
+        structuredContent: safeData,
+        content: [
+          {
+            type: 'text',
+            text: `There are exactly ${safeData.count} grants matching your criteria.`,
+          },
+        ],
+      };
+    }),
+);
+
+// ------------------------------------------------------------------------------------------------
 // Creates a single Authorization Grant.
 // ------------------------------------------------------------------------------------------------
 
 mcp.server.registerTool(
   'create_auth_grant',
   {
-    title: 'Add a new Grant',
+    title: 'Add a New Grant',
     description: `Creates a new Authorization Grant.
                   IMPORTANT: Before using this tool, you MUST understand the Wenex core concepts.
                   if you haven't read it yet, READ the resource at: "docs://schemas/core" to avoid permissions errors.`,
@@ -187,41 +290,6 @@ mcp.server.registerTool(
       };
     }),
 );
-
-// ------------------------------------------------------------------------------------------------
-// Search Schemas (AST / Query Builder for LLM)
-// ------------------------------------------------------------------------------------------------
-
-const Filter_Operator = z.enum(['eq', 'ne', 'gt', 'gte', 'lt', 'lte', 'in', 'nin', 'regex', 'exists']);
-
-const Query_Condition_Schema = z.object({
-  field: z.string().trim().describe("REQUIRED. The field name to query (e.g., 'subject', 'action', 'object', 'createdAt')."),
-
-  operator: Filter_Operator.default('eq').describe(
-    "REQUIRED. The comparison operator. Use 'regex' for partial text match, and 'exists' for null checks.",
-  ),
-
-  value: z.any().describe(
-    `REQUIRED. The value to match. 
-      CRITICAL RULES:
-      - If 'operator' is 'in' or 'nin', MUST be an array.
-      - If 'operator' is 'exists', MUST be a boolean.
-      - If querying a DATE (like createdAt), you MUST calculate relative dates based on today and convert to strictly ISO 8601 format string.`,
-  ),
-});
-
-const Allowed_Populates = z.enum(['owner', 'shares', 'clients']);
-const Populated_Reference_Schema = z
-  .union([
-    z.string(),
-    z
-      .object({
-        id: z.string().optional(),
-        name: z.string().optional(),
-      })
-      .passthrough(),
-  ])
-  .optional();
 
 // ------------------------------------------------------------------------------------------------
 // Search & Get Authorization Grants
