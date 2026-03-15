@@ -359,7 +359,7 @@ mcp.server.registerTool(
           // Cast values to prevent mongo syntax errors based on operator
           if (cond.operator === 'eq') return { [cond.field]: cond.value };
 
-          if (cond.operator === 'regex') return { [cond.field]: { $regex: String(cond.value), $options: 'i' } };
+          if (cond.operator === 'regex') return { [cond.field]: { $regex: String(cond.value) } };
 
           if (cond.operator === 'exists') return { [cond.field]: { $exists: Boolean(cond.value) } };
 
