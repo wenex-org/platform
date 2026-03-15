@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Add
+
+- add(`grants.router`): search functionality for authorization grants @alihajqani
 - add(`grants.router`):  `Add Multiple Grants (Bulk)` Tool for MCP @alihajqani
 - add: use cookie to get authorization token for authentication @winkcor
 - refactor `mcpRegistration` to register core documentation resource @alihajqani
@@ -17,7 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - feat(`mcp-client`): enhance resource handling and add resource reading functionality @alihajqani
 
 ### Changed
-
+- refactor(`apts.router`): APT input and output schemas for improved validation and clarity @alihajqani
+- refactor(`grants.router`): grant schemas and remove unnecessary code @alihajqani
 - update `@wenex/sdk` version to `1.3.3` @vhidvz
 - remove unnecessary code from resolvers @vhidvz
 
