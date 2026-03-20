@@ -373,8 +373,8 @@ importers:
         specifier: ^3.6.4
         version: 3.6.4
       '@wenex/sdk':
-        specifier: ^1.3.3
-        version: 1.3.3(brotli-wasm@3.0.1)
+        specifier: ^1.3.4
+        version: 1.3.4(brotli-wasm@3.0.1)
       dpdm:
         specifier: ^3.14.0
         version: 3.14.0
@@ -4334,8 +4334,8 @@ packages:
   '@webassemblyjs/wast-printer@1.14.1':
     resolution: {integrity: sha512-kPSSXE6De1XOR820C90RIo2ogvZG+c3KiHzqUoO/F34Y2shGzesfqv7o57xrxovZJH/MetF5UjroJ/R/3isoiw==}
 
-  '@wenex/sdk@1.3.3':
-    resolution: {integrity: sha512-2CYRI2hSUJKlqJgTbDjC/527XfQAU521UH1L+alZJvFIXD723/vD37RUG9NIhYf5wtDi85zYhuFf0F0fI6ZUpQ==}
+  '@wenex/sdk@1.3.4':
+    resolution: {integrity: sha512-Ex0SDLl5sdsTsT7lx+61PkQMm20PFnH++aO6Vc3466ITUReErb3QIxT/DPN/4T+BNVqhf/4/2O8lAjgGZL+fDQ==}
     engines: {node: '>=22.x.x <23', npm: ~10.9.2}
     os: ['!win32']
     peerDependencies:
@@ -13318,7 +13318,7 @@ snapshots:
 
   '@pm2/pm2-version-check@1.0.4':
     dependencies:
-      debug: 4.4.3
+      debug: 4.4.0
     transitivePeerDependencies:
       - supports-color
 
@@ -14976,7 +14976,7 @@ snapshots:
       '@webassemblyjs/ast': 1.14.1
       '@xtuc/long': 4.2.2
 
-  '@wenex/sdk@1.3.3(brotli-wasm@3.0.1)':
+  '@wenex/sdk@1.3.4(brotli-wasm@3.0.1)':
     dependencies:
       '@microsoft/fetch-event-source': 2.0.1
       '@piercefreeman/brotli-compress': 1.3.3
@@ -16828,7 +16828,7 @@ snapshots:
       content-type: 1.0.5
       cookie: 0.7.1
       cookie-signature: 1.2.2
-      debug: 4.4.3
+      debug: 4.4.0
       depd: 2.0.0
       encodeurl: 2.0.0
       escape-html: 1.0.3
@@ -20106,7 +20106,7 @@ snapshots:
 
   spawn-rx@5.1.2:
     dependencies:
-      debug: 4.4.3
+      debug: 4.4.0
       rxjs: 7.8.2
     transitivePeerDependencies:
       - supports-color

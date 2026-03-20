@@ -105,7 +105,7 @@ mcp.server.registerTool(
     inputSchema: { ...APT_INPUT_SCHEMA_FIELDS, ...CORE_INPUT_SCHEMA_FIELDS },
     outputSchema: { ...APT_OUTPUT_SCHEMA_FIELDS, ...CORE_OUTPUT_SCHEMA_FIELDS },
   },
-  async (data, { requestInfo }) =>
+  (data: any, { requestInfo }) =>
     throwableToolCall(async () => {
       const headers = getHeaders({ requestInfo });
       mcp.log('create_auth_apt')('Trying to create apt...');
