@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Add
+### Added
 
 - refactor(`apts.router`): APT input and output schemas for improved validation and clarity @alihajqani
 - refactor(`grants.router`): grant schemas and remove unnecessary code @alihajqani
@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.5.10] - 2025-03-11
 
-### Add
+### Added
 
 - add: use cookie to get authorization token for authentication @winkcor
 - refactor `mcpRegistration` to register core documentation resource @alihajqani
