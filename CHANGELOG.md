@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Add
 
+- refactor(`apts.router`): APT input and output schemas for improved validation and clarity @alihajqani
+- refactor(`grants.router`): grant schemas and remove unnecessary code @alihajqani
+- add(`grants.router`):  `Count Authorization Grants` Tool for MCP @alihajqani
+- add(`grants.router`): search functionality for authorization grants @alihajqani
 - add(`grants.router`):  `Add Multiple Grants (Bulk)` Tool for MCP @alihajqani
 
 ## [1.5.10] - 2025-03-11
