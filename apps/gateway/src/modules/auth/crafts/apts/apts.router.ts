@@ -5,7 +5,6 @@ import {
   ServerMCP,
   throwableToolCall,
 } from '@app/common/core/mcp';
-import { fixOut } from '@app/common/core/utils/mongo';
 import { toDate } from '@app/common/core/utils';
 import { Scope } from '@app/common/core';
 import { z } from 'zod';
@@ -111,19 +110,10 @@ mcp.server.registerTool(
       mcp.log('create_auth_apt')('Trying to create apt...');
       const expiresAtTimestamp = toDate(data.expires_at).getTime();
       const apt = await mcp.platform.auth.apts.create({ ...data, expires_at: expiresAtTimestamp }, { headers });
-      const fixedApt = fixOut(apt);
-      const allSafeData = z.object({ ...APT_OUTPUT_SCHEMA_FIELDS, ...CORE_OUTPUT_SCHEMA_FIELDS }).parse(fixedApt);
-      mcp.log('create_auth_apt')('A new APT created with ID: %s', allSafeData.id);
-      const finalResponse = { ...allSafeData };
-
+      mcp.log('create_auth_apt')('A new APT created with ID: %s', apt.id);
       return {
-        structuredContent: finalResponse,
-        content: [
-          {
-            type: 'text',
-            text: `APT token "${finalResponse.name}" created successfully. Your token is: ${finalResponse.token}`,
-          },
-        ],
+        structuredContent: { ...apt },
+        content: [{ type: 'text', text: `APT token "${apt.name}" created successfully. Your token is: ${apt.token}` }],
       };
     }),
 );
