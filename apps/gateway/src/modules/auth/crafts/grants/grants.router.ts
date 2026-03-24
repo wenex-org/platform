@@ -117,39 +117,131 @@ const GRANT_OUTPUT_SCHEMA_FIELDS = {
 };
 
 // ------------------------------------------------------------------------------------------------
-// Search Schemas (AST / Query Builder for LLM)
+// Search Schemas (Abstract Syntax Tree(AST) / Query Builder for LLM)
 // ------------------------------------------------------------------------------------------------
 
-const Filter_Operator = z.enum(['eq', 'ne', 'gt', 'gte', 'lt', 'lte', 'in', 'nin', 'regex', 'exists']);
+const FIELD_OPERATOR = z.enum([
+  'eq',
+  'ne',
+  'gt',
+  'gte',
+  'lt',
+  'lte',
+  'in',
+  'nin',
+  'regex',
+  'exists',
+  'near',
+  'nearSphere',
+  'geoWithin',
+  'geoIntersects',
+]);
 
-const Query_Condition_Schema = z.object({
-  field: z.string().trim().describe("REQUIRED. The field name to query (e.g., 'subject', 'action', 'object', 'createdAt')."),
+const LOGICAL_OPERATOR = z.enum(['and', 'or']);
 
-  operator: Filter_Operator.default('eq').describe(
-    "REQUIRED. The comparison operator. Use 'regex' for partial text match, and 'exists' for null checks.",
-  ),
+export type AstNode =
+  | { logical: z.infer<typeof LOGICAL_OPERATOR>; conditions: AstNode[] }
+  | { field: string; operator: z.infer<typeof FIELD_OPERATOR>; value: any };
 
-  value: z.any().describe(
-    `REQUIRED. The value to match. 
-      CRITICAL RULES:
-      - If 'operator' is 'in' or 'nin', MUST be an array.
-      - If 'operator' is 'exists', MUST be a boolean.
-      - If querying a DATE (like createdAt), you MUST calculate relative dates based on today and convert to strictly ISO 8601 format string.`,
-  ),
+const AST_NODE_SCHEMA: z.ZodType<AstNode> = z.lazy(() =>
+  z.union([
+    z.object({
+      logical: LOGICAL_OPERATOR.describe("REQUIRED for grouping. Use 'and' (all must match) or 'or' (at least one must match)."),
+      conditions: z.array(AST_NODE_SCHEMA).min(1).describe('REQUIRED. Array of nested conditions.'),
+    }),
+
+    z.object({
+      field: z.string().trim().describe("REQUIRED. Field name (e.g., 'subject', 'action', 'location')."),
+      operator: FIELD_OPERATOR.describe('REQUIRED. The comparison or geospatial operator.'),
+      value: z
+        .union([z.string(), z.number(), z.boolean(), z.array(z.any()), z.record(z.any())])
+        .describe('REQUIRED. The value to match. For geo-queries, provide valid GeoJSON object.'),
+    }),
+  ]),
+);
+
+const ROOT_QUERY_SCHEMA = z.object({
+  logical: z.literal('and').default('and').describe("The root must always be an 'and' operator."),
+  conditions: z
+    .array(AST_NODE_SCHEMA)
+    .default([])
+    .describe(
+      `OPTIONAL. The AST conditions. 
+    Example for "email is X OR role is Y":
+    {
+      "logical": "and",
+      "conditions": [
+        {
+          "logical": "or",
+          "conditions": [
+            { "field": "subject", "operator": "eq", "value": "X" },
+            { "field": "role", "operator": "eq", "value": "Y" }
+          ]
+        }
+      ]
+    }`,
+    ),
 });
 
-const Allowed_Populates = z.enum(['owner', 'shares', 'clients']);
-const Populated_Reference_Schema = z
-  .union([
-    z.string(),
-    z
-      .object({
-        id: z.string().optional(),
-        name: z.string().optional(),
-      })
-      .passthrough(),
-  ])
-  .optional();
+function buildMongoQuery(node: AstNode): Record<string, any> {
+  if ('logical' in node) {
+    if (!node.conditions || node.conditions.length === 0) return {};
+
+    const mappedConditions = node.conditions.map((child) => buildMongoQuery(child));
+
+    return { [`$${node.logical}`]: mappedConditions };
+  }
+
+  const { field, operator, value } = node;
+
+  switch (operator) {
+    case 'eq':
+      return { [field]: value };
+    case 'regex':
+      return { [field]: { $regex: String(value) } };
+    case 'exists':
+      return { [field]: { $exist: Boolean(value) } };
+
+    case 'near':
+    case 'nearSphere':
+    case 'geoWithin':
+    case 'geoIntersects':
+      return { [field]: { [`$${operator}`]: value } };
+
+    default:
+      return { [field]: { [`$${operator}`]: value } };
+  }
+}
+
+const ALLOWED_POPULATES = z.enum(['owner', 'shares', 'clients']);
+
+// const QUERY_SCHEMA = z.object({
+//   field: z.string().trim().describe("REQUIRED. The field name to query (e.g., 'subject', 'action', 'object', 'create_at')."),
+
+//   operator: FILTER_OPERATOR.default('eq').describe(
+//     "REQUIRED. The comparison operator. Use 'regex' for partial text match, and 'exists' for null checks.",
+//   ),
+
+//   value: z.any().describe(
+//     `REQUIRED. The value to match.
+//       CRITICAL RULES:
+//       - If 'operator' is 'in' or 'nin', MUST be an array.
+//       - If 'operator' is 'exists', MUST be a boolean.
+//       - If querying a DATE (like createdAt), you MUST calculate relative dates based on today and convert to strictly ISO 8601 format string.`,
+//   ),
+// });
+
+// const Populated_Reference_Schema = z
+//   .union([
+//     z.string(),
+//     z
+//       .object({
+//         id: z.string().optional(),
+//         name: z.string().optional(),
+//       })
+//       .passthrough(),
+//   ])
+//   .optional();
 
 // ------------------------------------------------------------------------------------------------
 // Count Authorization Grants
@@ -164,15 +256,7 @@ mcp.server.registerTool(
                   DO NOT use 'get_auth_grants' for counting, as it wastes network bandwidth.
                   IMPORTANT: Before using this tool, you MUST understand the Wenex core concepts at "docs://schemas/core".`,
     inputSchema: {
-      conditions: z
-        .array(Query_Condition_Schema)
-        .optional()
-        .describe(
-          `OPTIONAL. Array of search conditions (AST) to filter which grants should be counted.
-          Example: [{ field: "action", operator: "eq", value: "read:share" }]
-          Leave empty to get the total count of all grants in the system.`,
-        ),
-      ...CORE_INPUT_SCHEMA_FIELDS,
+      ast_query: ROOT_QUERY_SCHEMA.optional().describe('OPTIONAL. The nested query tree.'),
     },
     outputSchema: {
       count: z.number().min(0).optional().describe('The total number of grants matching the conditions.'),
@@ -181,22 +265,11 @@ mcp.server.registerTool(
   async (data, { requestInfo }) =>
     throwableToolCall(async () => {
       const headers = getHeaders({ requestInfo });
-      mcp.log('get_count_grant')('Building count query from LLM conditions: %j', data.conditions);
+      mcp.log('get_count_grant')('Building count query from LLM AST: %j', data.ast_query);
 
-      // Transform LLM AST to native MongoDB Query
-      const mongoQuery: Record<string, any> = {};
-
-      if (data.conditions && data.conditions.length > 0) {
-        const queryParts = data.conditions.map((cond) => {
-          if (cond.operator === 'eq') return { [cond.field]: cond.value };
-          return { [cond.field]: { [`$${cond.operator}`]: cond.value } };
-        });
-
-        if (queryParts.length === 1) {
-          Object.assign(mongoQuery, queryParts[0]);
-        } else {
-          mongoQuery['$and'] = queryParts;
-        }
+      let mongoQuery: Record<string, any> = {};
+      if (data.ast_query && data.ast_query.conditions && data.ast_query.conditions.length > 0) {
+        mongoQuery = buildMongoQuery(data.ast_query as AstNode);
       }
 
       mcp.log('get_count_grant')('Fetching count from platform SDK...');
@@ -303,13 +376,7 @@ mcp.server.registerTool(
                   Use this tool to search for permissions, check user access, or list grants based on specific criteria.
                   IMPORTANT: Before using this tool, you MUST understand the Wenex core concepts at "docs://schemas/core".`,
     inputSchema: {
-      conditions: z
-        .array(Query_Condition_Schema)
-        .optional()
-        .describe(
-          `OPTIONAL. Array of search conditions (AST). Do not invent conditions, ask user if unsure.
-          Example: [{ field: "subject", operator: "eq", value: "user@example.com" }]`,
-        ),
+      ast_query: ROOT_QUERY_SCHEMA.optional().describe('OPTIONAL. The nested AST query tree for advanced filtering.'),
 
       projection: z
         .array(z.string().trim())
@@ -317,7 +384,7 @@ mcp.server.registerTool(
         .describe(`OPTIONAL. Controls output fields (Dot-notation). Leave empty to let system decide. Do not invent.`),
 
       populate: z
-        .array(Allowed_Populates)
+        .array(ALLOWED_POPULATES)
         .optional()
         .describe('OPTIONAL. Relations to join. Only use if user explicitly needs related data. Do not invent.'),
 
@@ -328,8 +395,6 @@ mcp.server.registerTool(
         })
         .optional()
         .describe('OPTIONAL. Pagination config. Default is page 1, limit 20.'),
-
-      ...CORE_INPUT_SCHEMA_FIELDS,
     },
     outputSchema: {
       items: z
@@ -338,9 +403,9 @@ mcp.server.registerTool(
             ...GRANT_OUTPUT_SCHEMA_FIELDS,
             ...CORE_OUTPUT_SCHEMA_FIELDS,
             // Override Reference fields to support Type Shifting (String ID vs Populated Object)
-            owner: Populated_Reference_Schema,
-            shares: z.array(Populated_Reference_Schema).optional(),
-            clients: z.array(Populated_Reference_Schema).optional(),
+            // owner: Populated_Reference_Schema,
+            // shares: z.array(Populated_Reference_Schema).optional(),
+            // clients: z.array(Populated_Reference_Schema).optional(),
           }),
         )
         .describe('The list of matching grants.'),
@@ -349,31 +414,12 @@ mcp.server.registerTool(
   async (data, { requestInfo }) =>
     throwableToolCall(async () => {
       const headers = getHeaders({ requestInfo });
-      mcp.log('get_auth_grants')('Building query from LLM conditions: %j', data.conditions);
+      mcp.log('get_auth_grants')('Building query from LLM AST: %j', data.ast_query);
 
-      // Transform LLM AST to native MongoDB Query (FilterDto.query) safely
-      const mongoQuery: Record<string, any> = {};
-
-      if (data.conditions && data.conditions.length > 0) {
-        const queryParts = data.conditions.map((cond) => {
-          // Cast values to prevent mongo syntax errors based on operator
-          if (cond.operator === 'eq') return { [cond.field]: cond.value };
-
-          if (cond.operator === 'regex') return { [cond.field]: { $regex: String(cond.value) } };
-
-          if (cond.operator === 'exists') return { [cond.field]: { $exists: Boolean(cond.value) } };
-
-          return { [cond.field]: { [`$${cond.operator}`]: cond.value } };
-        });
-
-        // Use $and to prevent key overriding when multiple conditions target the same field
-        if (queryParts.length === 1) {
-          Object.assign(mongoQuery, queryParts[0]);
-        } else {
-          mongoQuery['$and'] = queryParts;
-        }
+      let mongoQuery: Record<string, any> = {};
+      if (data.ast_query && data.ast_query.conditions && data.ast_query.conditions.length > 0) {
+        mongoQuery = buildMongoQuery(data.ast_query as AstNode);
       }
-
       // Build the precise FilterDto expected by SDK
       const filterPayload = {
         query: mongoQuery,
@@ -391,9 +437,9 @@ mcp.server.registerTool(
       const DynamicOutputSchema = z.object({
         ...GRANT_OUTPUT_SCHEMA_FIELDS,
         ...CORE_OUTPUT_SCHEMA_FIELDS,
-        owner: Populated_Reference_Schema,
-        shares: z.array(Populated_Reference_Schema).optional(),
-        clients: z.array(Populated_Reference_Schema).optional(),
+        // owner: Populated_Reference_Schema,
+        // shares: z.array(Populated_Reference_Schema).optional(),
+        // clients: z.array(Populated_Reference_Schema).optional(),
       });
 
       const safeDataArray = z.array(DynamicOutputSchema).parse(fixedGrants);
