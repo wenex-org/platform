@@ -151,7 +151,19 @@ const AST_NODE_SCHEMA: z.ZodType<AstNode> = z.lazy(() =>
     }),
 
     z.object({
-      field: z.string().trim().describe("REQUIRED. Field name (e.g., 'subject', 'action', 'location')."),
+      field: z
+        .string()
+        .trim()
+        .describe(
+          `REQUIRED. The exact database field name. 
+        CRITICAL MAPPING RULES FOR GRANTS:
+        - If user asks for "name", "email", "user", or "who receives it" -> MUST use 'subject'
+        - If user asks for "permission", "privilege", or "access level" -> MUST use 'action'
+        - If user asks for "resource", "target", or "on what" -> MUST use 'object'
+        - You can also query Core fields: 'owner', 'shares', 'groups', 'clients', 'tags', 'created_at'.
+        - For nested arrays/objects, use dot-notation (e.g., 'time.duration', 'time.cron_exp').
+        DO NOT invent field names.`,
+        ),
       operator: FIELD_OPERATOR.describe('REQUIRED. The comparison or geospatial operator.'),
       value: z
         .union([z.string(), z.number(), z.boolean(), z.array(z.any()), z.record(z.any())])
@@ -215,48 +227,26 @@ function buildMongoQuery(node: AstNode): Record<string, any> {
 
 const ALLOWED_POPULATES = z.enum(['owner', 'shares', 'clients']);
 
-// const QUERY_SCHEMA = z.object({
-//   field: z.string().trim().describe("REQUIRED. The field name to query (e.g., 'subject', 'action', 'object', 'create_at')."),
-
-//   operator: FILTER_OPERATOR.default('eq').describe(
-//     "REQUIRED. The comparison operator. Use 'regex' for partial text match, and 'exists' for null checks.",
-//   ),
-
-//   value: z.any().describe(
-//     `REQUIRED. The value to match.
-//       CRITICAL RULES:
-//       - If 'operator' is 'in' or 'nin', MUST be an array.
-//       - If 'operator' is 'exists', MUST be a boolean.
-//       - If querying a DATE (like createdAt), you MUST calculate relative dates based on today and convert to strictly ISO 8601 format string.`,
-//   ),
-// });
-
-// const Populated_Reference_Schema = z
-//   .union([
-//     z.string(),
-//     z
-//       .object({
-//         id: z.string().optional(),
-//         name: z.string().optional(),
-//       })
-//       .passthrough(),
-//   ])
-//   .optional();
-
-// ------------------------------------------------------------------------------------------------
-// Count Authorization Grants
-// ------------------------------------------------------------------------------------------------
-
 mcp.server.registerTool(
   'get_count_grant',
   {
     title: 'Get Count of Grants',
-    description: `Calculates and returns the EXACT total number of Authorization Grants matching specific criteria, without fetching the actual documents.
-                  CRITICAL TRIGGER: Use this tool ONLY when the user explicitly asks for "how many", "count", "number of", or "total" grants/permissions. 
-                  DO NOT use 'get_auth_grants' for counting, as it wastes network bandwidth.
+    description: `Calculates and returns the EXACT total number of Authorization Grants matching specific criteria, without fetching the actual documents. 
+                  Use this tool to search for permissions, check user access, or count grants based on specific criteria using advanced filtering.
+
+                  CRITICAL TRIGGER: Use this tool ONLY when the user explicitly asks for "how many", "count", "number of", or "total" grants/permissions. DO NOT use 'get_auth_grants' for counting, as it wastes network bandwidth.
+                  
+                  DATA DICTIONARY (Field Mappings):
+                  - 'subject': The user email or identifier receiving the grant.
+                  - 'action': The specific permission granted (e.g., 'read:share').
+                  - 'object': The target resource type.
+                  - Core Entity Fields: 'owner', 'shares', 'groups', 'clients', 'tags', 'props', 'created_at'.
+                  
                   IMPORTANT: Before using this tool, you MUST understand the Wenex core concepts at "docs://schemas/core".`,
     inputSchema: {
-      ast_query: ROOT_QUERY_SCHEMA.optional().describe('OPTIONAL. The nested query tree.'),
+      ast_query: ROOT_QUERY_SCHEMA.optional().describe(
+        'OPTIONAL. The nested query tree. Leave empty to count all accessible grants.',
+      ),
     },
     outputSchema: {
       count: z.number().min(0).optional().describe('The total number of grants matching the conditions.'),
@@ -265,21 +255,20 @@ mcp.server.registerTool(
   async (data, { requestInfo }) =>
     throwableToolCall(async () => {
       const headers = getHeaders({ requestInfo });
-      mcp.log('get_count_grant')('Building count query from LLM AST: %j', data.ast_query);
+
+      mcp.log('get_count_grant')('=== 1. LLM INPUT (AST) === : %j', data);
 
       let mongoQuery: Record<string, any> = {};
       if (data.ast_query && data.ast_query.conditions && data.ast_query.conditions.length > 0) {
         mongoQuery = buildMongoQuery(data.ast_query as AstNode);
       }
 
-      mcp.log('get_count_grant')('Fetching count from platform SDK...');
-
-      // Call the Count SDK endpoint
       const totalCount = await mcp.platform.auth.grants.count({ query: mongoQuery } as any, { headers });
-      const safeData = z.object({ count: z.number().optional() }).parse({ count: totalCount });
-      mcp.log('get_count_grant')('Counted %d grants matching the criteria', safeData.count);
 
-      // Return MCP compliant format
+      mcp.log('get_count_grant')('=== 2. RAW DB OUTPUT === : %s', totalCount);
+
+      const safeData = z.object({ count: z.number().optional() }).parse({ count: totalCount });
+
       return {
         structuredContent: safeData,
         content: [
@@ -374,20 +363,18 @@ mcp.server.registerTool(
     title: 'Search and Get Grants',
     description: `Fetches Authorization Grants from the database with advanced filtering, pagination, and relation population.
                   Use this tool to search for permissions, check user access, or list grants based on specific criteria.
+                  
+                  DATA DICTIONARY (Field Mappings):
+                  - 'subject': The user email or identifier receiving the grant.
+                  - 'action': The specific permission granted (e.g., 'read:share').
+                  - 'object': The target resource type.
+                  - Core Entity Fields: 'owner', 'shares', 'groups', 'clients', 'tags', 'props', 'created_at'.
+                  
                   IMPORTANT: Before using this tool, you MUST understand the Wenex core concepts at "docs://schemas/core".`,
     inputSchema: {
       ast_query: ROOT_QUERY_SCHEMA.optional().describe('OPTIONAL. The nested AST query tree for advanced filtering.'),
-
-      projection: z
-        .array(z.string().trim())
-        .optional()
-        .describe(`OPTIONAL. Controls output fields (Dot-notation). Leave empty to let system decide. Do not invent.`),
-
-      populate: z
-        .array(ALLOWED_POPULATES)
-        .optional()
-        .describe('OPTIONAL. Relations to join. Only use if user explicitly needs related data. Do not invent.'),
-
+      projection: z.array(z.string().trim()).optional().describe(`OPTIONAL. Controls output fields.`),
+      populate: z.array(ALLOWED_POPULATES).optional().describe('OPTIONAL. Relations to join.'),
       pagination: z
         .object({
           page: z.number().int().min(1).default(1),
@@ -402,10 +389,6 @@ mcp.server.registerTool(
           z.object({
             ...GRANT_OUTPUT_SCHEMA_FIELDS,
             ...CORE_OUTPUT_SCHEMA_FIELDS,
-            // Override Reference fields to support Type Shifting (String ID vs Populated Object)
-            // owner: Populated_Reference_Schema,
-            // shares: z.array(Populated_Reference_Schema).optional(),
-            // clients: z.array(Populated_Reference_Schema).optional(),
           }),
         )
         .describe('The list of matching grants.'),
@@ -414,13 +397,14 @@ mcp.server.registerTool(
   async (data, { requestInfo }) =>
     throwableToolCall(async () => {
       const headers = getHeaders({ requestInfo });
-      mcp.log('get_auth_grants')('Building query from LLM AST: %j', data.ast_query);
+
+      mcp.log('get_auth_grants')('=== 1. LLM INPUT (AST & Config) === : %j', data);
 
       let mongoQuery: Record<string, any> = {};
       if (data.ast_query && data.ast_query.conditions && data.ast_query.conditions.length > 0) {
         mongoQuery = buildMongoQuery(data.ast_query as AstNode);
       }
-      // Build the precise FilterDto expected by SDK
+
       const filterPayload = {
         query: mongoQuery,
         projection: data.projection,
@@ -428,29 +412,30 @@ mcp.server.registerTool(
         pagination: data.pagination || { page: 1, limit: 20 },
       };
 
-      mcp.log('get_auth_grants')('Fetching grants from platform SDK...');
-
       const grantsArray = await mcp.platform.auth.grants.find(filterPayload as any, { headers });
-      const fixedGrants = fixOut(grantsArray);
 
-      // Safe mapping utilizing the overridden Type Shifting schema
+      mcp.log('get_auth_grants')('=== 2. RAW DB OUTPUT === : %j', grantsArray);
+
       const DynamicOutputSchema = z.object({
         ...GRANT_OUTPUT_SCHEMA_FIELDS,
         ...CORE_OUTPUT_SCHEMA_FIELDS,
-        // owner: Populated_Reference_Schema,
-        // shares: z.array(Populated_Reference_Schema).optional(),
-        // clients: z.array(Populated_Reference_Schema).optional(),
       });
 
-      const safeDataArray = z.array(DynamicOutputSchema).parse(fixedGrants);
+      let safeDataArray;
+      try {
+        safeDataArray = z.array(DynamicOutputSchema).parse(grantsArray);
+        mcp.log('get_auth_grants')('=== 3. AFTER ZOD PARSE === : %j', safeDataArray);
+      } catch (error) {
+        mcp.log('get_auth_grants')('=== ❌ ZOD ERROR ❌ === : %j', error);
+        throw error;
+      }
 
-      mcp.log('get_auth_grants')('Found %d grants matching the criteria', safeDataArray.length);
+      const finalResponsePayload = { items: safeDataArray };
 
-      // Return strictly compliant MCP format
+      mcp.log('get_auth_grants')('=== 4. FINAL MCP RESPONSE === : %j', finalResponsePayload);
+
       return {
-        structuredContent: {
-          items: safeDataArray,
-        },
+        structuredContent: finalResponsePayload,
         content: [
           {
             type: 'text',
