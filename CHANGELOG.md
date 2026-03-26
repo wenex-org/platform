@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-03-26
+
+### Added
+
+- support for populating core fields `identity` (Mongo ID) and `relations` (Mongo ID array) on any resource @vhidvz
+
 ## [1.5.X] - 2026-03-26
 
 ### Added
