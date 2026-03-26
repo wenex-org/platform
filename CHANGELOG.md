@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.5.11] - 2026-03-26
+## [1.5.X] - 2026-03-26
 
 ### Added
 
@@ -16,97 +16,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - add(`grants.router`):  `Count Authorization Grants` Tool for MCP @alihajqani
 - add(`grants.router`): search functionality for authorization grants @alihajqani
 - add(`grants.router`):  `Add Multiple Grants (Bulk)` Tool for MCP @alihajqani
-
-## [1.5.10] - 2026-03-11
-
-### Added
-
 - add: use cookie to get authorization token for authentication @winkcor
 - refactor `mcpRegistration` to register core documentation resource @alihajqani
 - improve date handling in `apt.inspector` @alihajqani
 - add `MCP_CLIENT_APT_TOKEN` to `.env.example` @alihajqani
 - read `Authorization` in `mcp-client` from `.env` @alihajqani
 - feat(`mcp-client`): enhance resource handling and add resource reading functionality @alihajqani
-
-### Changed
-
-- ci improvements @vhidvz
-- update `@wenex/sdk` version to `1.3.3` @vhidvz
-- remove unnecessary code from resolvers @vhidvz
-
-### Fixed
-
-- fix: mcp bug on deployment @mhalizadeh
-
-## [1.5.9] - 2026-02-25
-
-### Changed
-
-- copy build directory from `dist` to `wnx` for start script @vhidvz
-
-## [1.5.8] - 2026-02-24
-
-### Changed
-
-- revert: commit `faddbebced749cb89f1849e9bcdf71cd06c6e0ec` @vhidvz
-
-## [1.5.7] - 2026-02-21
-
-### Fixed
-
-- fix: `feature` in product @fdaei
-
-## [1.5.6] - 2026-02-19
-
-### Fixed
-
-- fix: `CacheInterceptor` issue on `flush` @vhidvz
-
-## [1.5.5] - 2026-02-17
-
-### Fixed
-
-- fix: transfer issue with `double` and `float` in protos for `financial` @vhidvz
-
-## [1.5.4] - 2026-02-11
-
-### Fixed
-
-- fix: `withdraw` real provider of transfer @vhidvz 
-
-## [1.5.3] - 2026-02-09
-
-### Add
-
 - add: documentation in `docs` directory @vhidvz
 - add: `mcp-client` test script using `ollama` @vhidvz
-
-### Changed
-
-- add `shares` to the `payment` method of `financial/invoice` @vhidvz
-
-## [1.5.2] - 2026-02-04
-
-### Changed
-
-- indexed `general/comments.type` @vhidvz
-
-## [1.5.1] - 2026-02-04
-
-### Added
-
 - add `general/comments` module @fdaei
-
-## [1.5.0] - 2026-02-02
-
-### Added
-
 - add elastic `search` to `content.posts` @vhidvz
 - add `special.stats` and `thing.metrics` cleaner @vhidvz
 - add `thing` microservice @vhidvz
 - add `travels/routing` with valhalla service @m-hadi-arefi
 - add `x-stat-type` and `x-stat-additional-props` metadata @vhidvz
 - add `auth/apts` service @vhidvz
+
+### Changed
+
+- ci improvements @vhidvz
+- update `@wenex/sdk` version to `1.3.3` @vhidvz
+- remove unnecessary code from resolvers @vhidvz
+- copy build directory from `dist` to `wnx` for start script @vhidvz
+- revert: commit `faddbebced749cb89f1849e9bcdf71cd06c6e0ec` @vhidvz
+- add `shares` to the `payment` method of `financial/invoice` @vhidvz
+- indexed `general/comments.type` @vhidvz
+
+### Fixed
+
+- fix: mcp bug on deployment @mhalizadeh
+- fix: `feature` in product @fdaei
+- fix: `CacheInterceptor` issue on `flush` @vhidvz
+- fix: transfer issue with `double` and `float` in protos for `financial` @vhidvz
+- fix: `withdraw` real provider of transfer @vhidvz 
 
 ## [1.4.X] - 2026-01-26
 
@@ -396,19 +338,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.5.11...HEAD
-[1.5.11]: https://github.com/wenex-org/platform/compare/1.5.10...1.5.11
-[1.5.10]: https://github.com/wenex-org/platform/compare/1.5.9...1.5.10
-[1.5.9]: https://github.com/wenex-org/platform/compare/1.5.8...1.5.9
-[1.5.8]: https://github.com/wenex-org/platform/compare/1.5.7...1.5.8
-[1.5.7]: https://github.com/wenex-org/platform/compare/1.5.6...1.5.7
-[1.5.6]: https://github.com/wenex-org/platform/compare/1.5.5...1.5.6
-[1.5.5]: https://github.com/wenex-org/platform/compare/1.5.4...1.5.5
-[1.5.4]: https://github.com/wenex-org/platform/compare/1.5.3...1.5.4
-[1.5.3]: https://github.com/wenex-org/platform/compare/1.5.2...1.5.3
-[1.5.2]: https://github.com/wenex-org/platform/compare/1.5.1...1.5.2
-[1.5.1]: https://github.com/wenex-org/platform/compare/1.5.0...1.5.1
-[1.5.0]: https://github.com/wenex-org/platform/compare/1.4.11...1.5.0
+[unreleased]: https://github.com/wenex-org/platform/compare/1.6.0...HEAD
+[1.6.0]: https://github.com/wenex-org/platform/compare/1.5.11...1.6.0
+[1.5.X]: https://github.com/wenex-org/platform/compare/1.4.11...1.5.11
 [1.4.X]: https://github.com/wenex-org/platform/compare/1.3.39...1.4.11
 [1.3.X]: https://github.com/wenex-org/platform/compare/1.2.49...1.3.39
 [1.2.X]: https://github.com/wenex-org/platform/compare/1.1.20...1.2.49
