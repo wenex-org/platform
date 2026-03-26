@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.11] - 2026-03-26
+
 ### Added
 
 - refactor(`apts.router`): APT input and output schemas for improved validation and clarity @alihajqani
@@ -15,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - add(`grants.router`): search functionality for authorization grants @alihajqani
 - add(`grants.router`):  `Add Multiple Grants (Bulk)` Tool for MCP @alihajqani
 
-## [1.5.10] - 2025-03-11
+## [1.5.10] - 2026-03-11
 
 ### Added
 
@@ -36,19 +38,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - fix: mcp bug on deployment @mhalizadeh
 
-## [1.5.9] - 2025-02-25
+## [1.5.9] - 2026-02-25
 
 ### Changed
 
 - copy build directory from `dist` to `wnx` for start script @vhidvz
 
-## [1.5.8] - 2025-02-24
+## [1.5.8] - 2026-02-24
 
 ### Changed
 
 - revert: commit `faddbebced749cb89f1849e9bcdf71cd06c6e0ec` @vhidvz
 
-## [1.5.7] - 2025-02-21
+## [1.5.7] - 2026-02-21
 
 ### Fixed
 
@@ -394,7 +396,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.5.10...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.5.11...HEAD
+[1.5.11]: https://github.com/wenex-org/platform/compare/1.5.10...1.5.11
 [1.5.10]: https://github.com/wenex-org/platform/compare/1.5.9...1.5.10
 [1.5.9]: https://github.com/wenex-org/platform/compare/1.5.8...1.5.9
 [1.5.8]: https://github.com/wenex-org/platform/compare/1.5.7...1.5.8
