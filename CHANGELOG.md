@@ -8,7 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-
+- add (`grants.router`): `Delete a Grant` Tool for MCP. @alihajqani
+- add (`const.mcp`): `CORE_DATA_DICTIONARY` to use in get query. @alihajqani
 - refactor(`apts.router`): APT input and output schemas for improved validation and clarity @alihajqani
 - refactor(`grants.router`): grant schemas and remove unnecessary code @alihajqani
 - add(`grants.router`):  `Count Authorization Grants` Tool for MCP @alihajqani

@@ -1,6 +1,7 @@
 import {
   CORE_INPUT_SCHEMA_FIELDS,
   CORE_OUTPUT_SCHEMA_FIELDS,
+  CORE_DATA_DICTIONARY,
   getHeaders,
   ServerMCP,
   throwableToolCall,
@@ -212,7 +213,7 @@ function buildMongoQuery(node: AstNode): Record<string, any> {
     case 'regex':
       return { [field]: { $regex: String(value) } };
     case 'exists':
-      return { [field]: { $exist: Boolean(value) } };
+      return { [field]: { $exists: Boolean(value) } };
 
     case 'near':
     case 'nearSphere':
@@ -227,6 +228,38 @@ function buildMongoQuery(node: AstNode): Record<string, any> {
 
 const ALLOWED_POPULATES = z.enum(['owner', 'shares', 'clients']);
 
+// ------------------------------------------------------------------------------------------------
+// Shared Date Dictionary
+// ------------------------------------------------------------------------------------------------
+
+const GRANT_DATA_DICTIONARY = `
+  subject: User email receiving the grant. Use as name for a grant.
+  action: Permission action (e.g., read:share).
+  object: Target resource type.
+  field: Controls INPUT data (Write/Update access). Defines which properties of the payload the subject is allowed to send/modify.
+      Uses 'notation' package syntax (dot-notation).
+      Examples:
+      - ['*'] -> Can modify everything.
+      - ['*', '!role'] -> Can modify everything EXCEPT the role field.
+      - ['status'] -> Can ONLY modify the status field.
+
+  filter: Controls OUTPUT data (Read access). Defines which properties of the resource the subject is allowed to see in the response.
+      Uses 'notation' package syntax (dot-notation).
+      Examples:
+      - ['*'] -> Can see everything.
+      - ['*', '!password', '!secret'] -> Can see everything EXCEPT password and secret.
+      - ['id', 'name'] -> Can ONLY see id and name.
+
+  location: List of network addresses (IP/CIDR) allowed to access this resource.
+  time: List of time rules defining when the grant is active. Each item contains a cron schedule and duration.
+  cron_exp: Cron expression that defines when the grant becomes active.
+  duration: Duration of the grant in seconds.
+`;
+
+// ------------------------------------------------------------------------------------------------
+// Search & Get Count Grants
+// ------------------------------------------------------------------------------------------------
+
 mcp.server.registerTool(
   'get_count_grant',
   {
@@ -234,13 +267,12 @@ mcp.server.registerTool(
     description: `Calculates and returns the EXACT total number of Authorization Grants matching specific criteria, without fetching the actual documents. 
                   Use this tool to search for permissions, check user access, or count grants based on specific criteria using advanced filtering.
 
-                  CRITICAL TRIGGER: Use this tool ONLY when the user explicitly asks for "how many", "count", "number of", or "total" grants/permissions. DO NOT use 'get_auth_grants' for counting, as it wastes network bandwidth.
+                  CRITICAL TRIGGER: Use this tool ONLY when the user explicitly asks for "how many", "count", "number of", or "total" grants/permissions.
+                  DO NOT use 'get_auth_grants' for counting, as it wastes network bandwidth.
                   
                   DATA DICTIONARY (Field Mappings):
-                  - 'subject': The user email or identifier receiving the grant.
-                  - 'action': The specific permission granted (e.g., 'read:share').
-                  - 'object': The target resource type.
-                  - Core Entity Fields: 'owner', 'shares', 'groups', 'clients', 'tags', 'props', 'created_at'.
+                    ${CORE_DATA_DICTIONARY}, 
+                    ${GRANT_DATA_DICTIONARY}
                   
                   IMPORTANT: Before using this tool, you MUST understand the Wenex core concepts at "docs://schemas/core".`,
     inputSchema: {
@@ -365,11 +397,9 @@ mcp.server.registerTool(
                   Use this tool to search for permissions, check user access, or list grants based on specific criteria.
                   
                   DATA DICTIONARY (Field Mappings):
-                  - 'subject': The user email or identifier receiving the grant.
-                  - 'action': The specific permission granted (e.g., 'read:share').
-                  - 'object': The target resource type.
-                  - Core Entity Fields: 'owner', 'shares', 'groups', 'clients', 'tags', 'props', 'created_at'.
-                  
+                    ${CORE_DATA_DICTIONARY}, 
+                    ${GRANT_DATA_DICTIONARY}
+                    
                   IMPORTANT: Before using this tool, you MUST understand the Wenex core concepts at "docs://schemas/core".`,
     inputSchema: {
       ast_query: ROOT_QUERY_SCHEMA.optional().describe('OPTIONAL. The nested AST query tree for advanced filtering.'),
@@ -409,7 +439,7 @@ mcp.server.registerTool(
         query: mongoQuery,
         projection: data.projection,
         populate: data.populate,
-        pagination: data.pagination || { page: 1, limit: 20 },
+        pagination: data.pagination,
       };
 
       const grantsArray = await mcp.platform.auth.grants.find(filterPayload as any, { headers });
@@ -440,6 +470,77 @@ mcp.server.registerTool(
           {
             type: 'text',
             text: `Search completed successfully. Found ${safeDataArray.length} grants.`,
+          },
+        ],
+      };
+    }),
+);
+
+// ------------------------------------------------------------------------------------------------
+// Delete an Authorization Grant
+// ------------------------------------------------------------------------------------------------
+
+mcp.server.registerTool(
+  'delete_auth_grant',
+  {
+    title: 'Delete a Grant',
+    description: `Soft-deletes an Authorization Grant by its exact ID.
+                  CRITICAL RULE: You MUST NOT guess or invent the ID. If the user asks to delete a grant by its name or subject (e.g., "Delete Ali's grant"), you MUST FIRST use 'get_auth_grants' to find the exact MongoDB ObjectId, and THEN call this tool.
+                  
+                  IMPORTANT: Before using this tool, you MUST understand the Wenex core concepts at "docs://schemas/core".`,
+    inputSchema: {
+      id: z
+        .string()
+        .trim()
+        .min(1)
+        .describe('REQUIRED. The exact MongoDB ObjectId of the grant to be deleted. Do not guess this value.'),
+      ref: z
+        .string()
+        .trim()
+        .optional()
+        .describe('OPTIONAL. External reference identity (query parameter). Leave empty unless explicitly requested.'),
+    },
+
+    outputSchema: {
+      ...GRANT_OUTPUT_SCHEMA_FIELDS,
+      ...CORE_OUTPUT_SCHEMA_FIELDS,
+    },
+  },
+  async (data, { requestInfo }) =>
+    throwableToolCall(async () => {
+      const headers = getHeaders({ requestInfo });
+
+      mcp.log('delete_auth_grant')('=== 1. LLM INPUT === : %j', data);
+
+      const axiosConfig: Record<string, any> = { headers };
+      if (data.ref) {
+        axiosConfig.params = { ref: data.ref };
+      }
+
+      const deleteUrl = `/auth/grants/${data.id}`;
+
+      const response = await mcp.platform.auth.grants.delete(deleteUrl, axiosConfig as any);
+
+      mcp.log('delete_auth_grant')('=== 2. RAW DB OUTPUT === : %j', response);
+
+      const actualData = (response as any)?.data || response;
+      const fixedGrant = fixOut(actualData);
+
+      const OutputSchema = z.object({
+        ...GRANT_OUTPUT_SCHEMA_FIELDS,
+        ...CORE_OUTPUT_SCHEMA_FIELDS,
+      });
+
+      const safeData = OutputSchema.parse(fixedGrant);
+
+      mcp.log('delete_auth_grant')('=== 3. FINAL MCP RESPONSE === : %j', safeData);
+
+      return {
+        structuredContent: safeData,
+        content: [
+          {
+            type: 'text',
+            text: `Grant with ID "${safeData.id}" (Subject: ${safeData.subject || 'Unknown'}) was successfully deleted.`,
           },
         ],
       };
