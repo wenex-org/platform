@@ -517,6 +517,7 @@ mcp.server.registerTool(
         axiosConfig.params = { ref: data.ref };
       }
 
+      // ASK: DIFFERENT BETWEEN THIS TOOLS AND GET GRANT BY ID (VAHID)
       const deleteUrl = `/auth/grants/${data.id}`;
 
       const response = await mcp.platform.auth.grants.delete(deleteUrl, axiosConfig as any);
@@ -541,6 +542,79 @@ mcp.server.registerTool(
           {
             type: 'text',
             text: `Grant with ID "${safeData.id}" (Subject: ${safeData.subject || 'Unknown'}) was successfully deleted.`,
+          },
+        ],
+      };
+    }),
+);
+
+// ------------------------------------------------------------------------------------------------
+// Get an Authorization Grant With ID
+// ------------------------------------------------------------------------------------------------
+
+mcp.server.registerTool(
+  'find_auth_grant_by_id',
+  {
+    title: 'Find Auth Grant By Id',
+    description: `Retrieves the complete, detailed record of a specific Authorization Grant using its exact MongoDB ObjectId or external reference (ref).
+
+                  CRITICAL USAGE RULES (DO NOT IGNORE):
+                  1. NO HALLUCINATION: You MUST NEVER guess, invent, or assume the 'id' or 'ref'.
+                  2. TOOL CHAINING: If the user asks for a grant by its subject, email, or action (e.g., "Show me the grant for admin@test.com"),
+                    you MUST FIRST use the 'get_auth_grants' tool to search and extract the correct exact ID, and ONLY THEN use this tool to fetch the full document.
+                  3. EXACT MATCH: Use this tool ONLY when the user explicitly provides an ID, or when you have definitively obtained the ID from a previous search step.
+
+                  DATA DICTIONARY (Returned Fields):
+                  ${CORE_DATA_DICTIONARY}
+                  ${GRANT_DATA_DICTIONARY}
+
+                  IMPORTANT: Before using this tool, you MUST understand the Wenex core concepts at "docs://schemas/core".`,
+    inputSchema: {
+      id: z.string().trim().min(1).describe('REQUIRED. The exact MongoDB OjectId of the grant to find. Do not guess this value.'),
+
+      ref: z
+        .string()
+        .trim()
+        .optional()
+        .describe('OPTIONAL. External reference identity (query parameter). Leave empty unless explicitly requested.'),
+    },
+    outputSchema: {
+      ...GRANT_OUTPUT_SCHEMA_FIELDS,
+      ...CORE_OUTPUT_SCHEMA_FIELDS,
+    },
+  },
+  async (data, { requestInfo }) =>
+    throwableToolCall(async () => {
+      const headers = getHeaders({ requestInfo });
+
+      mcp.log('find_auth_grant_by_id')('=== 1. LLM INPUT === : %j', data);
+
+      const axiosConfig: Record<string, any> = { headers };
+      if (data.ref) {
+        axiosConfig.params = { ref: data.ref };
+      }
+
+      const response = await mcp.platform.auth.grants.findById(data.id, axiosConfig as any);
+
+      mcp.log('find_auth_grant_by_id')('=== 2. RAW DB OUTPUT === : %j', response);
+      const actualData = (response as any)?.data || response;
+      const fixedGrant = fixOut(actualData);
+
+      const outputSchema = z.object({
+        ...GRANT_OUTPUT_SCHEMA_FIELDS,
+        ...CORE_OUTPUT_SCHEMA_FIELDS,
+      });
+
+      const safeData = outputSchema.parse(fixedGrant);
+
+      mcp.log('find_auth_grant_by_id')('=== 3. FINAL MCP RESPONSE === : %j', safeData);
+
+      return {
+        structuredContent: safeData,
+        content: [
+          {
+            type: 'text',
+            text: `Grant with ID "${data.id}" was successfully found.`,
           },
         ],
       };

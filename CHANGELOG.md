@@ -8,13 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- add (`grants.router`): `Delete a Grant` Tool for MCP. @alihajqani
-- add (`const.mcp`): `CORE_DATA_DICTIONARY` to use in get query. @alihajqani
+- feat(`grants.router`): `Find Auth Grant By Id`Tool for MCP. @alihajqani
+- add(`grants.router`): `Delete a Grant` Tool for MCP. @alihajqani
+- add(`const.mcp`): `CORE_DATA_DICTIONARY` to use in get query. @alihajqani
 - refactor(`apts.router`): APT input and output schemas for improved validation and clarity @alihajqani
 - refactor(`grants.router`): grant schemas and remove unnecessary code @alihajqani
 - add(`grants.router`):  `Count Authorization Grants` Tool for MCP @alihajqani
 - add(`grants.router`): search functionality for authorization grants @alihajqani
 - add(`grants.router`):  `Add Multiple Grants (Bulk)` Tool for MCP @alihajqani
+
+### Fixed
+- fix(`const.mcp`): handle Date and string inputs for core output schema timestamps @alihajqani
 
 ## [1.5.10] - 2025-03-11
 
