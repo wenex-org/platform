@@ -549,3 +549,69 @@ mcp.server.registerTool(
       };
     }),
 );
+
+// ------------------------------------------------
+// Restore Auth Grant By Id
+// ------------------------------------------------
+mcp.server.registerTool(
+  'restore_auth_grant_by_id',
+  {
+    title: 'Restore Auth Grant By Id',
+    description: `[ACTION] Restores (un-deletes) a previously soft-deleted Authorization Grant by its exact MongoDB ObjectId.
+      [TRIGGER] Use ONLY when the user explicitly asks to restore, recover, reactivate, or undelete a specific grant/permission.
+      [RULES]
+      1. NO HALLUCINATION: NEVER guess or invent 'id' or 'ref'.
+      2. CHAINING: If the exact ID is unknown (e.g., "Restore example's grant"), you MUST use 'find_auth_grant' 
+      (with appropriate filters for deleted items) first to retrieve the correct exact ID.
+      [DICTIONARY] ${CORE_DATA_DICTIONARY}, ${GRANT_DATA_DICTIONARY}
+      [CONTEXT] MUST read "docs://schemas/core" before use.`
+      .replace(/\s+/g, ' ')
+      .trim(),
+    inputSchema: {
+      id: z.string().trim().min(1).describe('REQUIRED. Exact MongoDB ObjectId of the grant. Do not guess.'),
+      ref: z
+        .string()
+        .trim()
+        .optional()
+        .describe('OPTIONAL. External reference identity (query parameter).Leave empty unless explicitly requested.'),
+    },
+    outputSchema: {
+      ...GRANT_OUTPUT_SCHEMA_FIELDS,
+      ...CORE_OUTPUT_SCHEMA_FIELDS,
+    },
+  },
+  async (data, { requestInfo }) =>
+    throwableToolCall(async () => {
+      const logger = mcp.log('restore_auth_grant_by_id');
+      const headers = getHeaders({ requestInfo });
+
+      logger('=== 1. LLM INPUT === : %j', data);
+
+      type RestoreConfig = Parameters<typeof mcp.platform.auth.grants.restoreById>[1];
+      const config: RestoreConfig = {
+        headers,
+        ...(data.ref && { params: { ref: data.ref } }),
+      };
+
+      const restoreGrant = await mcp.platform.auth.grants.restoreById(data.id, config);
+
+      logger('=== 2. RAW DB OUTPUT === : %j', restoreGrant);
+
+      const fixedRestoreGrant = fixOut(restoreGrant);
+
+      const schema = z.object({ ...GRANT_OUTPUT_SCHEMA_FIELDS, ...CORE_OUTPUT_SCHEMA_FIELDS });
+      const safeData = schema.parse(fixedRestoreGrant);
+
+      logger('=== 3. FINAL MCP RESPONSE === : %j', safeData);
+
+      return {
+        structuredContent: safeData,
+        content: [
+          {
+            type: 'text',
+            text: `Grant with ID ${safeData.id} (Subject: ${safeData.subject || 'Unknown'}) was restored.`,
+          },
+        ],
+      };
+    }),
+);
