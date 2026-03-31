@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- refactor(`grants.router`): Standardized tool naming based on resolvers for consistency. @alihajqani
+- refactor(`grants.router`): Refactored prompts with structured format (ACTION, TRIGGER, RULES). @alihajqani
+- refactor(`grants.router`): Introduced shared data dictionary for better field understanding. @alihajqani
+- refactor(`grants.router`): Improved schemas, validation, and type safety across tools. @alihajqani
+- refactor(`grants.router`): Cleaned up codebase with better logging, performance, and readability. @alihajqani
 - feat(`grants.router`): `Find Auth Grant By Id`Tool for MCP. @alihajqani
 - add(`grants.router`): `Delete a Grant` Tool for MCP. @alihajqani
 - add(`const.mcp`): `CORE_DATA_DICTIONARY` to use in get query. @alihajqani

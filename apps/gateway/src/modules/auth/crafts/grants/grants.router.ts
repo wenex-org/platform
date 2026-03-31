@@ -24,9 +24,9 @@ const GRANT_TIME_SCHEMA = z.object({
     .trim()
     .refine((val) => isCron(val), { message: 'cron_exp must be a valid cron expression' })
     .describe(
-      'REQUIRED. Cron expression that defines when the grant becomes active. If not provided, DO NOT call this tool, you MUST ask the user.',
+      `REQUIRED. Cron expression that defines when the grant becomes active.
+      If not provided, DO NOT call this tool, you MUST ask the user.`,
     ),
-
   duration: z
     .number()
     .positive()
@@ -38,62 +38,46 @@ const GRANT_INPUT_SCHEMA_FIELDS = {
     .string()
     .trim()
     .min(1)
-    .refine((val) => isSubject(val), { message: 'Invalid subject' }).describe(`REQUIRED. User email receiving the grant.
-      If not provided, DO NOT call this tool, you MUST ask the user.`),
-
-  action: z.nativeEnum(Action).describe(`REQUIRED. Permission action (e.g., read:share).
-    If not provided, DO NOT call this tool, you MUST ask the user.`),
-
+    .refine((val) => isSubject(val), { message: 'Invalid subject' })
+    .describe('REQUIRED. User email receiving the grant. If not provided, DO NOT call this tool, you MUST ask the user.'),
+  action: z
+    .nativeEnum(Action)
+    .describe('REQUIRED. Permission action (e.g., read:share). If not provided, DO NOT call this tool, you MUST ask the user.'),
   object: z
     .nativeEnum(Resource)
-    .describe(`REQUIRED. Target resource type. If not provided, DO NOT call this tool, you MUST ask the user.`),
-
+    .describe('REQUIRED. Target resource type. If not provided, DO NOT call this tool, you MUST ask the user.'),
   field: z
     .array(z.string().trim())
     .optional()
     .describe(
-      `OPTIONAL. Controls INPUT data (Write/Update access). Defines which properties of the payload the subject is allowed to send/modify.
-      Uses 'notation' package syntax (dot-notation).
-      Examples:
-      - ['*'] -> Can modify everything.
-      - ['*', '!role'] -> Can modify everything EXCEPT the role field.
-      - ['status'] -> Can ONLY modify the status field.
-      Leave empty if not explicitly requested.`,
+      `OPTIONAL. Controls INPUT data (Write/Update access) via 'notation' syntax.
+        Examples: ['*'] (All), ['*', '!role'] (All except role), ['status'] (Only status).
+        Leave empty if not explicitly requested.`,
     ),
-
   filter: z
     .array(z.string().trim())
     .optional()
     .describe(
-      `OPTIONAL. Controls OUTPUT data (Read access). Defines which properties of the resource the subject is allowed to see in the response.
-      Uses 'notation' package syntax (dot-notation).
-      Examples:
-      - ['*'] -> Can see everything.
-      - ['*', '!password', '!secret'] -> Can see everything EXCEPT password and secret.
-      - ['id', 'name'] -> Can ONLY see id and name.
-      Leave empty if not explicitly requested.`,
+      `OPTIONAL. Controls OUTPUT data (Read access) via 'notation' syntax.
+        Examples: ['*'] (All), ['*', '!password'] (All except password).
+        Leave empty if not explicitly requested.`,
     ),
-
   location: z
     .array(
       z
         .string()
         .trim()
         .refine((val) => isNetAdd(val), {
-          message: 'Each location must be a valid IP address or CIDR notation',
+          message: 'Each location must be a valid IP address or CIDR notation.',
         }),
     )
     .optional()
     .describe(
-      'OPTIONAL. List of network addresses (IP/CIDR) allowed to access this resource. Leave empty if not explicitly requested.',
+      `OPTIONAL. List of network addresses (IP/CIDR) allowed to access this resource.
+      Leave empty if not explicitly requested.`,
     ),
-
-  time: z
-    .array(GRANT_TIME_SCHEMA)
-    .optional()
-    .describe(
-      'OPTIONAL. List of time rules defining when the grant is active. Each item contains a cron schedule and duration. Leave empty if not explicitly requested.',
-    ),
+  time: z.array(GRANT_TIME_SCHEMA).optional().describe(`OPTIONAL. List of time rules defining when the grant is active.
+    Leave empty if not explicitly requested.`),
 };
 
 // ------------------------------------------------------------------------------------------------
@@ -118,7 +102,23 @@ const GRANT_OUTPUT_SCHEMA_FIELDS = {
 };
 
 // ------------------------------------------------------------------------------------------------
-// Search Schemas (Abstract Syntax Tree(AST) / Query Builder for LLM)
+// Shared Data Dictionary
+// ------------------------------------------------------------------------------------------------
+
+const GRANT_DATA_DICTIONARY = `
+  subject: User email receiving the grant. Use as name for a grant.
+  action: Permission action (e.g., read:share).
+  object: Target resource type.
+  field: Controls INPUT data (Write/Update access). Defines properties the subject can modify via 'notation' syntax (dot-notation).
+  filter: Controls OUTPUT data (Read access). Defines properties the subject can see in the response via 'notation' syntax (dot-notation).
+  location: List of network addresses (IP/CIDR) allowed to access this resource.
+  time: List of time rules defining when the grant is active. Each item contains a cron schedule and duration.
+  cron_exp: Cron expression that defines when the grant becomes active.
+  duration: Duration of the grant in seconds.
+`.trim();
+
+// ------------------------------------------------------------------------------------------------
+// Search Schemas (Abstract Syntax Tree (AST) / Query Builder for LLM)
 // ------------------------------------------------------------------------------------------------
 
 const FIELD_OPERATOR = z.enum([
@@ -139,6 +139,7 @@ const FIELD_OPERATOR = z.enum([
 ]);
 
 const LOGICAL_OPERATOR = z.enum(['and', 'or']);
+const ALLOWED_POPULATES = z.enum(['owner', 'shares', 'clients']);
 
 export type AstNode =
   | { logical: z.infer<typeof LOGICAL_OPERATOR>; conditions: AstNode[] }
@@ -147,39 +148,29 @@ export type AstNode =
 const AST_NODE_SCHEMA: z.ZodType<AstNode> = z.lazy(() =>
   z.union([
     z.object({
-      logical: LOGICAL_OPERATOR.describe("REQUIRED for grouping. Use 'and' (all must match) or 'or' (at least one must match)."),
+      logical: LOGICAL_OPERATOR.describe("REQUIRED for grouping. Use 'and' or 'or'."),
       conditions: z.array(AST_NODE_SCHEMA).min(1).describe('REQUIRED. Array of nested conditions.'),
     }),
-
     z.object({
       field: z
         .string()
         .trim()
         .describe(
-          `REQUIRED. The exact database field name. 
-        CRITICAL MAPPING RULES FOR GRANTS:
-        - If user asks for "name", "email", "user", or "who receives it" -> MUST use 'subject'
-        - If user asks for "permission", "privilege", or "access level" -> MUST use 'action'
-        - If user asks for "resource", "target", or "on what" -> MUST use 'object'
-        - You can also query Core fields: 'owner', 'shares', 'groups', 'clients', 'tags', 'created_at'.
-        - For nested arrays/objects, use dot-notation (e.g., 'time.duration', 'time.cron_exp').
-        DO NOT invent field names.`,
+          `REQUIRED. Exact DB field name.
+          MAPPINGS: "name/email/user" -> subject | "permission/privilege/access level" -> action | "resource/target/on what" -> object.
+            Support core fields (owner, shares, tags) & dot-notation (time.duration). DO NOT invent fields.`,
         ),
-      operator: FIELD_OPERATOR.describe('REQUIRED. The comparison or geospatial operator.'),
+      operator: FIELD_OPERATOR.describe('REQUIRED. Comparison or geospatial operator.'),
       value: z
         .union([z.string(), z.number(), z.boolean(), z.array(z.any()), z.record(z.any())])
-        .describe('REQUIRED. The value to match. For geo-queries, provide valid GeoJSON object.'),
+        .describe('REQUIRED. The value to match.'),
     }),
   ]),
 );
 
 const ROOT_QUERY_SCHEMA = z.object({
   logical: z.literal('and').default('and').describe("The root must always be an 'and' operator."),
-  conditions: z
-    .array(AST_NODE_SCHEMA)
-    .default([])
-    .describe(
-      `OPTIONAL. The AST conditions. 
+  conditions: z.array(AST_NODE_SCHEMA).default([]).describe(`OPTIONAL. The nested AST conditions.
     Example for "email is X OR role is Y":
     {
       "logical": "and",
@@ -192,16 +183,14 @@ const ROOT_QUERY_SCHEMA = z.object({
           ]
         }
       ]
-    }`,
-    ),
+    }`),
 });
 
+// Recursively builds a MongoDB query object from the AST node
 function buildMongoQuery(node: AstNode): Record<string, any> {
   if ('logical' in node) {
-    if (!node.conditions || node.conditions.length === 0) return {};
-
+    if (!node.conditions?.length) return {};
     const mappedConditions = node.conditions.map((child) => buildMongoQuery(child));
-
     return { [`$${node.logical}`]: mappedConditions };
   }
 
@@ -214,71 +203,37 @@ function buildMongoQuery(node: AstNode): Record<string, any> {
       return { [field]: { $regex: String(value) } };
     case 'exists':
       return { [field]: { $exists: Boolean(value) } };
-
     case 'near':
     case 'nearSphere':
     case 'geoWithin':
     case 'geoIntersects':
       return { [field]: { [`$${operator}`]: value } };
-
     default:
       return { [field]: { [`$${operator}`]: value } };
   }
 }
 
-const ALLOWED_POPULATES = z.enum(['owner', 'shares', 'clients']);
-
 // ------------------------------------------------------------------------------------------------
-// Shared Date Dictionary
+// Tools Implementation
 // ------------------------------------------------------------------------------------------------
-
-const GRANT_DATA_DICTIONARY = `
-  subject: User email receiving the grant. Use as name for a grant.
-  action: Permission action (e.g., read:share).
-  object: Target resource type.
-  field: Controls INPUT data (Write/Update access). Defines which properties of the payload the subject is allowed to send/modify.
-      Uses 'notation' package syntax (dot-notation).
-      Examples:
-      - ['*'] -> Can modify everything.
-      - ['*', '!role'] -> Can modify everything EXCEPT the role field.
-      - ['status'] -> Can ONLY modify the status field.
-
-  filter: Controls OUTPUT data (Read access). Defines which properties of the resource the subject is allowed to see in the response.
-      Uses 'notation' package syntax (dot-notation).
-      Examples:
-      - ['*'] -> Can see everything.
-      - ['*', '!password', '!secret'] -> Can see everything EXCEPT password and secret.
-      - ['id', 'name'] -> Can ONLY see id and name.
-
-  location: List of network addresses (IP/CIDR) allowed to access this resource.
-  time: List of time rules defining when the grant is active. Each item contains a cron schedule and duration.
-  cron_exp: Cron expression that defines when the grant becomes active.
-  duration: Duration of the grant in seconds.
-`;
-
-// ------------------------------------------------------------------------------------------------
+// ------------------------------------------------
 // Search & Get Count Grants
-// ------------------------------------------------------------------------------------------------
-
+// ------------------------------------------------
 mcp.server.registerTool(
-  'get_count_grant',
+  'count_auth_grant',
   {
-    title: 'Get Count of Grants',
-    description: `Calculates and returns the EXACT total number of Authorization Grants matching specific criteria, without fetching the actual documents. 
-                  Use this tool to search for permissions, check user access, or count grants based on specific criteria using advanced filtering.
-
-                  CRITICAL TRIGGER: Use this tool ONLY when the user explicitly asks for "how many", "count", "number of", or "total" grants/permissions.
-                  DO NOT use 'get_auth_grants' for counting, as it wastes network bandwidth.
-                  
-                  DATA DICTIONARY (Field Mappings):
-                    ${CORE_DATA_DICTIONARY}, 
-                    ${GRANT_DATA_DICTIONARY}
-                  
-                  IMPORTANT: Before using this tool, you MUST understand the Wenex core concepts at "docs://schemas/core".`,
+    title: 'Get Count Auth Grant',
+    description:
+      `[ACTION] Calculates and returns the EXACT total number of Authorization Grants matching criteria without fetching documents.
+          [TRIGGER] Use ONLY when the user explicitly asks for "how many", "count", "number of", or "total" grants/permissions.
+          [RULES]
+          1. PERFORMANCE: Never use 'find_auth_grant' to count items. Always use this tool to save network bandwidth.
+          [DICTIONARY] ${CORE_DATA_DICTIONARY}, ${GRANT_DATA_DICTIONARY}
+          [CONTEXT] MUST read "docs://schemas/core" before use.`
+        .replace(/\s+/g, ' ')
+        .trim(),
     inputSchema: {
-      ast_query: ROOT_QUERY_SCHEMA.optional().describe(
-        'OPTIONAL. The nested query tree. Leave empty to count all accessible grants.',
-      ),
+      ast_query: ROOT_QUERY_SCHEMA.optional().describe('OPTIONAL. Query tree. Leave empty to count all accessible.'),
     },
     outputSchema: {
       count: z.number().min(0).optional().describe('The total number of grants matching the conditions.'),
@@ -286,75 +241,87 @@ mcp.server.registerTool(
   },
   async (data, { requestInfo }) =>
     throwableToolCall(async () => {
+      const logger = mcp.log('count_auth_grant');
       const headers = getHeaders({ requestInfo });
 
-      mcp.log('get_count_grant')('=== 1. LLM INPUT (AST) === : %j', data);
+      logger('=== 1. LLM INPUT (AST) === : %j', data);
 
-      let mongoQuery: Record<string, any> = {};
-      if (data.ast_query && data.ast_query.conditions && data.ast_query.conditions.length > 0) {
-        mongoQuery = buildMongoQuery(data.ast_query as AstNode);
-      }
+      const mongoQuery = data.ast_query?.conditions?.length ? buildMongoQuery(data.ast_query as AstNode) : {};
 
-      const totalCount = await mcp.platform.auth.grants.count({ query: mongoQuery } as any, { headers });
+      // Extract exact SDK type for payload to enforce compile-time safety
+      type CountPayload = Parameters<typeof mcp.platform.auth.grants.count>[0];
+      const payload: CountPayload = { query: mongoQuery } as CountPayload;
 
-      mcp.log('get_count_grant')('=== 2. RAW DB OUTPUT === : %s', totalCount);
+      const totalCount = await mcp.platform.auth.grants.count(payload, { headers });
+
+      logger('=== 2. RAW DB OUTPUT === : %s', totalCount);
 
       const safeData = z.object({ count: z.number().optional() }).parse({ count: totalCount });
 
       return {
         structuredContent: safeData,
-        content: [
-          {
-            type: 'text',
-            text: `There are exactly ${safeData.count} grants matching your criteria.`,
-          },
-        ],
+        content: [{ type: 'text', text: `There are exactly ${safeData.count} grants matching your criteria.` }],
       };
     }),
 );
 
-// ------------------------------------------------------------------------------------------------
+// ------------------------------------------------
 // Creates a single Authorization Grant.
-// ------------------------------------------------------------------------------------------------
-
+// ------------------------------------------------
 mcp.server.registerTool(
   'create_auth_grant',
   {
-    title: 'Add a New Grant',
-    description: `Creates a new Authorization Grant.
-                  IMPORTANT: Before using this tool, you MUST understand the Wenex core concepts.
-                  if you haven't read it yet, READ the resource at: "docs://schemas/core" to avoid permissions errors.`,
+    title: 'Create a New Auth Grant',
+    description: `[ACTION] Creates a single new Authorization Grant.
+          [TRIGGER] Use when the user explicitly asks to create, add, or assign a new permission/grant to a user.
+          [RULES]
+          1. ACCURACY: Ensure all REQUIRED fields (subject, action, object) are provided or explicitly asked from the user before calling this tool.
+          [DICTIONARY] ${CORE_DATA_DICTIONARY}, ${GRANT_DATA_DICTIONARY}
+          [CONTEXT] MUST read "docs://schemas/core" before use.`
+      .replace(/\s+/g, ' ')
+      .trim(),
     inputSchema: { ...GRANT_INPUT_SCHEMA_FIELDS, ...CORE_INPUT_SCHEMA_FIELDS },
     outputSchema: { ...GRANT_OUTPUT_SCHEMA_FIELDS, ...CORE_OUTPUT_SCHEMA_FIELDS },
   },
   async (data: GrantDto, { requestInfo }) =>
     throwableToolCall(async () => {
+      const logger = mcp.log('create_auth_grant');
       const headers = getHeaders({ requestInfo });
-      mcp.log('create_auth_grant')('Trying to create grant...');
+
+      logger('Trying to create grant...');
+
       const grant = await mcp.platform.auth.grants.create(data, { headers });
       const fixedGrant = fixOut(grant);
-      const allSafeData = z.object({ ...GRANT_OUTPUT_SCHEMA_FIELDS, ...CORE_OUTPUT_SCHEMA_FIELDS }).parse(fixedGrant);
-      mcp.log('create_auth_grant')('A new grant created with ID: %s', allSafeData.id);
-      const finalResponse = { ...allSafeData };
+
+      // Strict validation of the newly created entity against exact schemas
+      const schema = z.object({ ...GRANT_OUTPUT_SCHEMA_FIELDS, ...CORE_OUTPUT_SCHEMA_FIELDS });
+      const safeData = schema.parse(fixedGrant);
+
+      logger('A new grant created with ID: %s', safeData.id);
+
       return {
-        structuredContent: finalResponse,
-        content: [{ type: 'text', text: `Grant for subject "${finalResponse.subject}" created successfully.` }],
+        structuredContent: safeData,
+        content: [{ type: 'text', text: `Grant for subject "${safeData.subject}" created successfully.` }],
       };
     }),
 );
 
-// ------------------------------------------------------------------------------------------------
-// Creates multiple Authorization Grants in bulk.
-// ------------------------------------------------------------------------------------------------
-
+// ------------------------------------------------
+// Creates Multiple Auth Grants in Bulk.
+// ------------------------------------------------
 mcp.server.registerTool(
-  'create_bulk_auth_grants',
+  'create_auth_grant_bulk',
   {
-    title: 'Add Multiple Grants (Bulk)',
-    description: `Creates multiple Authorization Grants in a single request (Bulk operation).
-                  Use this tool whenever the user needs to assign multiple permissions at once to save network overhead.
-                  IMPORTANT: Before using this tool, you MUST understand the Wenex core concepts.
-                  if you haven't read it yet, READ the resource at: "docs://schemas/core" to avoid permissions errors.`,
+    title: 'Create Multiple Grants (Bulk)',
+    description: `[ACTION] Creates multiple Authorization Grants in a single request (Bulk operation).
+      [TRIGGER] Use when the user needs to assign multiple permissions/grants at once.
+      [RULES]
+      1. PERFORMANCE: Always prefer this tool over calling 'create_auth_grant' multiple times in a loop to save network overhead.
+      [WARNING] Ensure the items array is correctly formatted and all required fields are present for each item.
+      [DICTIONARY] ${CORE_DATA_DICTIONARY}, ${GRANT_DATA_DICTIONARY}
+      [CONTEXT] MUST read "docs://schemas/core" before use.`
+      .replace(/\s+/g, ' ')
+      .trim(),
     inputSchema: {
       items: z
         .array(z.object({ ...GRANT_INPUT_SCHEMA_FIELDS, ...CORE_INPUT_SCHEMA_FIELDS }))
@@ -369,40 +336,45 @@ mcp.server.registerTool(
   },
   async (data: { items: GrantDto[] }, { requestInfo }) =>
     throwableToolCall(async () => {
+      const logger = mcp.log('create_auth_grant_bulk');
       const headers = getHeaders({ requestInfo });
-      mcp.log('create_bulk_auth_grants')('Trying to create bulk grants...');
+
+      logger('Trying to create bulk grants...');
+
       const grants = await mcp.platform.auth.grants.createBulk({ items: data.items }, { headers });
       const fixedGrants = fixOut(grants);
-      const allSafeDataArray = z
-        .array(z.object({ ...GRANT_OUTPUT_SCHEMA_FIELDS, ...CORE_OUTPUT_SCHEMA_FIELDS }))
-        .parse(fixedGrants);
-      mcp.log('create_bulk_auth_grants')('%d grants created in bulk', allSafeDataArray.length);
-      const finalResponseItems = allSafeDataArray;
+
+      const schemaArray = z.array(z.object({ ...GRANT_OUTPUT_SCHEMA_FIELDS, ...CORE_OUTPUT_SCHEMA_FIELDS }));
+      const safeDataArray = schemaArray.parse(fixedGrants);
+
+      logger('%d grants created in bulk', safeDataArray.length);
+
       return {
-        structuredContent: { items: finalResponseItems },
-        content: [{ type: 'text', text: `${finalResponseItems.length} Grants created successfully in bulk.` }],
+        structuredContent: { items: safeDataArray },
+        content: [{ type: 'text', text: `${safeDataArray.length} Grants created successfully in bulk.` }],
       };
     }),
 );
 
-// ------------------------------------------------------------------------------------------------
+// ------------------------------------------------
 // Search & Get Authorization Grants
-// ------------------------------------------------------------------------------------------------
-
+// ------------------------------------------------
 mcp.server.registerTool(
-  'get_auth_grants',
+  'find_auth_grant',
   {
-    title: 'Search and Get Grants',
-    description: `Fetches Authorization Grants from the database with advanced filtering, pagination, and relation population.
-                  Use this tool to search for permissions, check user access, or list grants based on specific criteria.
-                  
-                  DATA DICTIONARY (Field Mappings):
-                    ${CORE_DATA_DICTIONARY}, 
-                    ${GRANT_DATA_DICTIONARY}
-                    
-                  IMPORTANT: Before using this tool, you MUST understand the Wenex core concepts at "docs://schemas/core".`,
+    title: 'Find Auth Grant',
+    description: `[ACTION] Fetches Authorization Grants using advanced AST filtering, pagination, and relation population.
+      [TRIGGER] Use when the user asks to list, search, or check specific permissions/grants based on criteria.
+      [RULES]
+      1. DO NOT use this tool if the user only wants the "total number" or "count" (Use 'count_auth_grant' instead).
+      2. MAPPING: Map natural language fields to exact DB fields accurately using the Dictionary.
+      [PAGINATION] Defaults to page 1, limit 20. If the user asks for "all" records, you MUST iterate through pages.
+      [DICTIONARY] ${CORE_DATA_DICTIONARY}, ${GRANT_DATA_DICTIONARY}
+      [CONTEXT] MUST read "docs://schemas/core" before use.`
+      .replace(/\s+/g, ' ')
+      .trim(),
     inputSchema: {
-      ast_query: ROOT_QUERY_SCHEMA.optional().describe('OPTIONAL. The nested AST query tree for advanced filtering.'),
+      ast_query: ROOT_QUERY_SCHEMA.optional().describe('OPTIONAL. Nested AST query tree for advanced filtering.'),
       projection: z.array(z.string().trim()).optional().describe(`OPTIONAL. Controls output fields.`),
       populate: z.array(ALLOWED_POPULATES).optional().describe('OPTIONAL. Relations to join.'),
       pagination: z
@@ -415,208 +387,165 @@ mcp.server.registerTool(
     },
     outputSchema: {
       items: z
-        .array(
-          z.object({
-            ...GRANT_OUTPUT_SCHEMA_FIELDS,
-            ...CORE_OUTPUT_SCHEMA_FIELDS,
-          }),
-        )
+        .array(z.object({ ...GRANT_OUTPUT_SCHEMA_FIELDS, ...CORE_OUTPUT_SCHEMA_FIELDS }))
         .describe('The list of matching grants.'),
     },
   },
   async (data, { requestInfo }) =>
     throwableToolCall(async () => {
+      const logger = mcp.log('find_auth_grant');
       const headers = getHeaders({ requestInfo });
 
-      mcp.log('get_auth_grants')('=== 1. LLM INPUT (AST & Config) === : %j', data);
+      logger('=== 1. LLM INPUT (AST & Config) === : %j', data);
 
-      let mongoQuery: Record<string, any> = {};
-      if (data.ast_query && data.ast_query.conditions && data.ast_query.conditions.length > 0) {
-        mongoQuery = buildMongoQuery(data.ast_query as AstNode);
-      }
+      const mongoQuery = data.ast_query?.conditions?.length ? buildMongoQuery(data.ast_query as AstNode) : {};
 
-      const filterPayload = {
+      // Extract exact SDK type for payload to enforce compile-time safety
+      type FindFilterPayload = Parameters<typeof mcp.platform.auth.grants.find>[0];
+      const filterPayload: FindFilterPayload = {
         query: mongoQuery,
-        projection: data.projection,
-        populate: data.populate,
-        pagination: data.pagination,
+        projection: data.projection as FindFilterPayload['projection'],
+        populate: data.populate as FindFilterPayload['populate'],
+        pagination: data.pagination as FindFilterPayload['pagination'],
       };
 
-      const grantsArray = await mcp.platform.auth.grants.find(filterPayload as any, { headers });
+      const grantsArray = await mcp.platform.auth.grants.find(filterPayload, { headers });
 
-      mcp.log('get_auth_grants')('=== 2. RAW DB OUTPUT === : %j', grantsArray);
+      logger('=== 2. RAW DB OUTPUT === : %j', grantsArray);
 
-      const DynamicOutputSchema = z.object({
-        ...GRANT_OUTPUT_SCHEMA_FIELDS,
-        ...CORE_OUTPUT_SCHEMA_FIELDS,
-      });
+      const schemaArray = z.array(z.object({ ...GRANT_OUTPUT_SCHEMA_FIELDS, ...CORE_OUTPUT_SCHEMA_FIELDS }));
+      const safeDataArray = schemaArray.parse(grantsArray);
 
-      let safeDataArray;
-      try {
-        safeDataArray = z.array(DynamicOutputSchema).parse(grantsArray);
-        mcp.log('get_auth_grants')('=== 3. AFTER ZOD PARSE === : %j', safeDataArray);
-      } catch (error) {
-        mcp.log('get_auth_grants')('=== ❌ ZOD ERROR ❌ === : %j', error);
-        throw error;
-      }
-
-      const finalResponsePayload = { items: safeDataArray };
-
-      mcp.log('get_auth_grants')('=== 4. FINAL MCP RESPONSE === : %j', finalResponsePayload);
+      logger('=== 3. AFTER ZOD PARSE === : %j', safeDataArray);
 
       return {
-        structuredContent: finalResponsePayload,
-        content: [
-          {
-            type: 'text',
-            text: `Search completed successfully. Found ${safeDataArray.length} grants.`,
-          },
-        ],
+        structuredContent: { items: safeDataArray },
+        content: [{ type: 'text', text: `Search completed successfully. Found ${safeDataArray.length} grants.` }],
       };
     }),
 );
 
-// ------------------------------------------------------------------------------------------------
-// Delete an Authorization Grant
-// ------------------------------------------------------------------------------------------------
-
+// ------------------------------------------------
+// Delete Authorization Grant By Id
+// ------------------------------------------------
 mcp.server.registerTool(
-  'delete_auth_grant',
+  'delete_auth_grant_by_id',
   {
-    title: 'Delete a Grant',
-    description: `Soft-deletes an Authorization Grant by its exact ID.
-                  CRITICAL RULE: You MUST NOT guess or invent the ID. If the user asks to delete a grant by its name or subject (e.g., "Delete Ali's grant"), you MUST FIRST use 'get_auth_grants' to find the exact MongoDB ObjectId, and THEN call this tool.
-                  
-                  IMPORTANT: Before using this tool, you MUST understand the Wenex core concepts at "docs://schemas/core".`,
+    title: 'Delete Auth Grant By Id',
+    description: `[ACTION] Soft-deletes an Authorization Grant by its exact MongoDB ObjectId.
+      [TRIGGER] Use ONLY when the user explicitly asks to remove, revoke, or delete a specific grant/permission.
+      [RULES]
+      1. NO HALLUCINATION: NEVER guess or invent 'id' or 'ref'.
+      2. CHAINING: If the exact ID is unknown (e.g., "Delete Ali's grant"), you MUST use 'find_auth_grant' first to retrieve the correct exact ID.
+      [WARNING] DESTRUCTIVE ACTION: Make sure you have the correct ID before executing.
+      [DICTIONARY] ${CORE_DATA_DICTIONARY}, ${GRANT_DATA_DICTIONARY}
+      [CONTEXT] MUST read "docs://schemas/core" before use.`
+      .replace(/\s+/g, ' ')
+      .trim(),
     inputSchema: {
-      id: z
-        .string()
-        .trim()
-        .min(1)
-        .describe('REQUIRED. The exact MongoDB ObjectId of the grant to be deleted. Do not guess this value.'),
+      id: z.string().trim().min(1).describe('REQUIRED. Exact MongoDB ObjectId of the grant. Do not guess.'),
       ref: z
         .string()
         .trim()
         .optional()
-        .describe('OPTIONAL. External reference identity (query parameter). Leave empty unless explicitly requested.'),
+        .describe('OPTIONAL. External reference identity (query parameter).Leave empty unless explicitly requested.'),
     },
-
-    outputSchema: {
-      ...GRANT_OUTPUT_SCHEMA_FIELDS,
-      ...CORE_OUTPUT_SCHEMA_FIELDS,
-    },
+    outputSchema: { ...GRANT_OUTPUT_SCHEMA_FIELDS, ...CORE_OUTPUT_SCHEMA_FIELDS },
   },
   async (data, { requestInfo }) =>
     throwableToolCall(async () => {
+      const logger = mcp.log('delete_auth_grant_by_id');
       const headers = getHeaders({ requestInfo });
 
-      mcp.log('delete_auth_grant')('=== 1. LLM INPUT === : %j', data);
+      logger('=== 1. LLM INPUT === : %j', data);
 
-      const axiosConfig: Record<string, any> = { headers };
-      if (data.ref) {
-        axiosConfig.params = { ref: data.ref };
-      }
+      // Extract exact SDK type for payload to enforce compile-time safety
+      type DeleteConfig = Parameters<typeof mcp.platform.auth.grants.deleteById>[1];
+      const config: DeleteConfig = {
+        headers,
+        ...(data.ref && { params: { ref: data.ref } }),
+      };
 
-      // ASK: DIFFERENT BETWEEN THIS TOOLS AND GET GRANT BY ID (VAHID)
-      const deleteUrl = `/auth/grants/${data.id}`;
+      const deletedGrant = await mcp.platform.auth.grants.deleteById(data.id, config);
 
-      const response = await mcp.platform.auth.grants.delete(deleteUrl, axiosConfig as any);
+      logger('=== 2. RAW DB OUTPUT === : %j', deletedGrant);
 
-      mcp.log('delete_auth_grant')('=== 2. RAW DB OUTPUT === : %j', response);
+      // const actualData = (response as any)?.data || response;
+      const fixedDeletedGrant = fixOut(deletedGrant);
 
-      const actualData = (response as any)?.data || response;
-      const fixedGrant = fixOut(actualData);
+      const schema = z.object({ ...GRANT_OUTPUT_SCHEMA_FIELDS, ...CORE_OUTPUT_SCHEMA_FIELDS });
+      const safeData = schema.parse(fixedDeletedGrant);
 
-      const OutputSchema = z.object({
-        ...GRANT_OUTPUT_SCHEMA_FIELDS,
-        ...CORE_OUTPUT_SCHEMA_FIELDS,
-      });
-
-      const safeData = OutputSchema.parse(fixedGrant);
-
-      mcp.log('delete_auth_grant')('=== 3. FINAL MCP RESPONSE === : %j', safeData);
+      logger('=== 3. FINAL MCP RESPONSE === : %j', safeData);
 
       return {
         structuredContent: safeData,
         content: [
           {
             type: 'text',
-            text: `Grant with ID "${safeData.id}" (Subject: ${safeData.subject || 'Unknown'}) was successfully deleted.`,
+            text: `Grant with ID "${safeData.id}" (Subject: ${safeData.subject || 'Unknown'}) was deleted.`,
           },
         ],
       };
     }),
 );
 
-// ------------------------------------------------------------------------------------------------
-// Get an Authorization Grant With ID
-// ------------------------------------------------------------------------------------------------
-
+// ------------------------------------------------
+// Find Authorization Grant By Id
+// ------------------------------------------------
 mcp.server.registerTool(
   'find_auth_grant_by_id',
   {
     title: 'Find Auth Grant By Id',
-    description: `Retrieves the complete, detailed record of a specific Authorization Grant using its exact MongoDB ObjectId or external reference (ref).
-
-                  CRITICAL USAGE RULES (DO NOT IGNORE):
-                  1. NO HALLUCINATION: You MUST NEVER guess, invent, or assume the 'id' or 'ref'.
-                  2. TOOL CHAINING: If the user asks for a grant by its subject, email, or action (e.g., "Show me the grant for admin@test.com"),
-                    you MUST FIRST use the 'get_auth_grants' tool to search and extract the correct exact ID, and ONLY THEN use this tool to fetch the full document.
-                  3. EXACT MATCH: Use this tool ONLY when the user explicitly provides an ID, or when you have definitively obtained the ID from a previous search step.
-
-                  DATA DICTIONARY (Returned Fields):
-                  ${CORE_DATA_DICTIONARY}
-                  ${GRANT_DATA_DICTIONARY}
-
-                  IMPORTANT: Before using this tool, you MUST understand the Wenex core concepts at "docs://schemas/core".`,
+    description:
+      `[ACTION] Retrieves the complete, detailed record of a specific Authorization Grant using its exact MongoDB ObjectId or external reference (ref).
+      [TRIGGER] Use when the user provides an exact ID or asks for full details of a specific grant identified in a previous step.
+      [RULES]
+      1. NO HALLUCINATION: NEVER guess or invent 'id' or 'ref'.
+      2. CHAINING: If searching by subject, email, or action, use 'find_auth_grant' first to extract the correct ID, THEN call this tool.
+      [DICTIONARY] ${CORE_DATA_DICTIONARY}, ${GRANT_DATA_DICTIONARY}
+      [CONTEXT] MUST read "docs://schemas/core" before use.`
+        .replace(/\s+/g, ' ')
+        .trim(),
     inputSchema: {
-      id: z.string().trim().min(1).describe('REQUIRED. The exact MongoDB OjectId of the grant to find. Do not guess this value.'),
-
+      id: z.string().trim().min(1).describe('REQUIRED. Exact MongoDB OjectId to find. Do not guess.'),
       ref: z
         .string()
         .trim()
         .optional()
         .describe('OPTIONAL. External reference identity (query parameter). Leave empty unless explicitly requested.'),
     },
-    outputSchema: {
-      ...GRANT_OUTPUT_SCHEMA_FIELDS,
-      ...CORE_OUTPUT_SCHEMA_FIELDS,
-    },
+    outputSchema: { ...GRANT_OUTPUT_SCHEMA_FIELDS, ...CORE_OUTPUT_SCHEMA_FIELDS },
   },
   async (data, { requestInfo }) =>
     throwableToolCall(async () => {
+      const logger = mcp.log('find_auth_grant_by_id');
       const headers = getHeaders({ requestInfo });
 
-      mcp.log('find_auth_grant_by_id')('=== 1. LLM INPUT === : %j', data);
+      logger('=== 1. LLM INPUT === : %j', data);
 
-      const axiosConfig: Record<string, any> = { headers };
-      if (data.ref) {
-        axiosConfig.params = { ref: data.ref };
-      }
+      // Extract exact SDK type for payload to enforce compile-time safety
+      type FindByIdConfig = Parameters<typeof mcp.platform.auth.grants.findById>[1];
+      const config: FindByIdConfig = {
+        headers,
+        ...(data.ref && { params: { ref: data.ref } }),
+      };
 
-      const response = await mcp.platform.auth.grants.findById(data.id, axiosConfig as any);
+      const grant = await mcp.platform.auth.grants.findById(data.id, config);
 
-      mcp.log('find_auth_grant_by_id')('=== 2. RAW DB OUTPUT === : %j', response);
-      const actualData = (response as any)?.data || response;
-      const fixedGrant = fixOut(actualData);
+      logger('=== 2. RAW DB OUTPUT === : %j', grant);
 
-      const outputSchema = z.object({
-        ...GRANT_OUTPUT_SCHEMA_FIELDS,
-        ...CORE_OUTPUT_SCHEMA_FIELDS,
-      });
+      // const actualData = (response as any)?.data || response;
+      const fixedGrant = fixOut(grant);
 
-      const safeData = outputSchema.parse(fixedGrant);
+      const schema = z.object({ ...GRANT_OUTPUT_SCHEMA_FIELDS, ...CORE_OUTPUT_SCHEMA_FIELDS });
+      const safeData = schema.parse(fixedGrant);
 
-      mcp.log('find_auth_grant_by_id')('=== 3. FINAL MCP RESPONSE === : %j', safeData);
+      logger('=== 3. FINAL MCP RESPONSE === : %j', safeData);
 
       return {
         structuredContent: safeData,
-        content: [
-          {
-            type: 'text',
-            text: `Grant with ID "${data.id}" was successfully found.`,
-          },
-        ],
+        content: [{ type: 'text', text: `Grant with ID "${data.id}" was successfully found.` }],
       };
     }),
 );
