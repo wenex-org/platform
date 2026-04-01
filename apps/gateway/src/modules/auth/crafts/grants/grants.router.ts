@@ -160,7 +160,11 @@ const AST_NODE_SCHEMA: z.ZodType<AstNode> = z.lazy(() =>
           MAPPINGS: "name/email/user" -> subject | "permission/privilege/access level" -> action | "resource/target/on what" -> object.
             Support core fields (owner, shares, tags) & dot-notation (time.duration). DO NOT invent fields.`,
         ),
-      operator: FIELD_OPERATOR.describe('REQUIRED. Comparison or geospatial operator.'),
+      operator: FIELD_OPERATOR.describe(
+        `REQUIRED. Comparison or geospatial operator.
+        [CRITICAL RULE FOR 'regex']: If the user asks for a "contains", "like", or "search" operation, you MUST use the 'regex' operator and pass ONLY the raw exact string in 'value'.
+        DO NOT manually add '.*', '^', or '$' wildcards.`,
+      ),
       value: z
         .union([z.string(), z.number(), z.boolean(), z.array(z.any()), z.record(z.any())])
         .describe('REQUIRED. The value to match.'),
@@ -199,15 +203,31 @@ function buildMongoQuery(node: AstNode): Record<string, any> {
   switch (operator) {
     case 'eq':
       return { [field]: value };
-    case 'regex':
-      return { [field]: { $regex: String(value) } };
+
+    case 'regex': {
+      let regexStr = String(value);
+      // Clean up LLM hallucinations: Remove leading and trailing '.*' if they exist
+      if (regexStr.startsWith('.*') && regexStr.endsWith('.*')) {
+        regexStr = regexStr.slice(2, -2);
+      }
+      // ASK[VAHID]: CAN WE USE $options?
+      /*
+      - Add $options: 'i' to make the search case-insensitive
+      - BUT PLATFORM NOT SUPPORT $options
+      - return { [field]: { $regex: regexStr, $options: 'i' } };
+      */
+      return { [field]: { $regex: regexStr } };
+    }
+
     case 'exists':
       return { [field]: { $exists: Boolean(value) } };
+
     case 'near':
     case 'nearSphere':
     case 'geoWithin':
     case 'geoIntersects':
       return { [field]: { [`$${operator}`]: value } };
+
     default:
       return { [field]: { [`$${operator}`]: value } };
   }
@@ -408,7 +428,7 @@ mcp.server.registerTool(
         populate: data.populate as FindFilterPayload['populate'],
         pagination: data.pagination as FindFilterPayload['pagination'],
       };
-
+      // TODO: FIND FOR SOFT DELETED
       const grantsArray = await mcp.platform.auth.grants.find(filterPayload, { headers });
 
       logger('=== 2. RAW DB OUTPUT === : %j', grantsArray);
@@ -610,6 +630,104 @@ mcp.server.registerTool(
           {
             type: 'text',
             text: `Grant with ID ${safeData.id} (Subject: ${safeData.subject || 'Unknown'}) was restored.`,
+          },
+        ],
+      };
+    }),
+);
+
+// ------------------------------------------------
+// Destroy Auth Grant By Id
+// ------------------------------------------------
+mcp.server.registerTool(
+  'destroy_auth_grant_by_id',
+  {
+    title: 'Destroy Auth Grant By Id',
+    description: `[ACTION] Permanently destroys (hard-deletes) an Authorization Grant by its exact MongoDB ObjectId.
+      [TRIGGER] Use ONLY when the user explicitly asks to "permanently delete", "destroy", "purge", or "completely remove" a grant.
+      [RULES]
+      1. CONFIRMATION REQUIRED: NEVER execute this tool immediately. First, explain to the user that this action is IRREVERSIBLE,
+          show them the Grant ID/Subject, and ask for their explicit confirmation (e.g., "Are you absolutely sure?").
+          ONLY call this tool AFTER the user replies "yes".
+      2. NO HALLUCINATION: NEVER guess or invent 'id' or 'ref'.
+      3. CHAINING: If the exact ID is unknown, MUST use 'find_auth_grant' first to retrieve it.
+      [WARNING] IRREVERSIBLE ACTION: This permanently removes the record from the database. It CANNOT be restored.
+      [DICTIONARY] ${CORE_DATA_DICTIONARY}, ${GRANT_DATA_DICTIONARY}
+      [CONTEXT] MUST read "docs://schemas/core" before use.`
+      .replace(/\s+/g, ' ')
+      .trim(),
+    inputSchema: {
+      id: z.string().trim().min(1).describe('REQUIRED. Exact MongoDB ObjectId of the grant. Do not guess.'),
+      ref: z
+        .string()
+        .trim()
+        .optional()
+        .describe('OPTIONAL. External reference identity (query parameter).Leave empty unless explicitly requested.'),
+      // to force the LLM's behavior via MCP!
+      verification_code: z
+        .string()
+        .trim()
+        .optional()
+        .describe(
+          `CRITICAL: MUST be exactly 'CONFIRM_DESTROY'. 
+          If the user's prompt DOES NOT contain the exact phrase 'CONFIRM_DESTROY', you MUST leave this field empty. Do NOT auto-fill or guess this.`,
+        ),
+    },
+    // TODO[ALI]: handle output for exception.
+    outputSchema: { ...GRANT_OUTPUT_SCHEMA_FIELDS, ...CORE_OUTPUT_SCHEMA_FIELDS },
+  },
+  async (data, { requestInfo }) =>
+    throwableToolCall(async () => {
+      const logger = mcp.log('destroy_auth_grant_by_id');
+      const headers = getHeaders({ requestInfo });
+
+      logger('=== 1. LLM INPUT === : %j', data);
+
+      if (data.verification_code !== 'CONFIRM_DESTROY') {
+        logger('=== BLOCKED: Waiting for User Confirmation ===');
+
+        const blockedPayload = {
+          status: 'BLOCKED_AWAITING_CONFIRMATION' as const,
+          message: 'Security Gate: User confirmation required.',
+        };
+
+        return {
+          structuredContent: blockedPayload,
+          content: [
+            {
+              type: 'text',
+              text: ` SYSTEM SECURITY GATE: Execution BLOCKED.
+                    You MUST STOP and ask the user this exact question right now:
+                    "WARNING: You are about to PERMANENTLY destroy this grant.
+                    This action cannot be undone and the data will be lost forever.
+                    To proceed, please reply with the exact phrase: CONFIRM_DESTROY"`,
+            },
+          ],
+        };
+      }
+
+      logger('=== UNLOCKED: Executing Destruction ===');
+      type DestroyConfig = Parameters<typeof mcp.platform.auth.grants.destroyById>[1];
+      const config: DestroyConfig = {
+        headers,
+        ...(data.ref && { params: { ref: data.ref } }),
+      };
+
+      const destroyGrant = await mcp.platform.auth.grants.destroyById(data.id, config);
+
+      logger('=== 2. RAW DB OUTPUT === : %j', destroyGrant);
+
+      const fixedDestroyGrant = fixOut(destroyGrant);
+
+      const schema = z.object({ ...GRANT_OUTPUT_SCHEMA_FIELDS, ...CORE_OUTPUT_SCHEMA_FIELDS });
+      const safeData = schema.parse(fixedDestroyGrant);
+
+      return {
+        structuredContent: safeData,
+        content: [
+          {
+            type: 'text',
+            text: `Grant with ID ${safeData.id} (Subject: ${safeData.subject || 'Unknown'}) was destroyed.`,
           },
         ],
       };

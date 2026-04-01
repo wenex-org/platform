@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+- feat(`grants.router`): `Destroy Auth Grant By Id`Tool for MCP. @alihajqani
 - refactor(`grants.router`): Standardized tool naming based on resolvers for consistency. @alihajqani
 - refactor(`grants.router`): Refactored prompts with structured format (ACTION, TRIGGER, RULES). @alihajqani
 - refactor(`grants.router`): Introduced shared data dictionary for better field understanding. @alihajqani
@@ -18,11 +20,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - add(`const.mcp`): `CORE_DATA_DICTIONARY` to use in get query. @alihajqani
 - refactor(`apts.router`): APT input and output schemas for improved validation and clarity @alihajqani
 - refactor(`grants.router`): grant schemas and remove unnecessary code @alihajqani
-- add(`grants.router`):  `Count Authorization Grants` Tool for MCP @alihajqani
+- add(`grants.router`): `Count Authorization Grants` Tool for MCP @alihajqani
 - add(`grants.router`): search functionality for authorization grants @alihajqani
-- add(`grants.router`):  `Add Multiple Grants (Bulk)` Tool for MCP @alihajqani
+- add(`grants.router`): `Add Multiple Grants (Bulk)` Tool for MCP @alihajqani
 
 ### Fixed
+
 - fix(`const.mcp`): handle Date and string inputs for core output schema timestamps @alihajqani
 
 ## [1.5.10] - 2025-03-11
@@ -80,7 +83,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- fix: `withdraw` real provider of transfer @vhidvz 
+- fix: `withdraw` real provider of transfer @vhidvz
 
 ## [1.5.3] - 2026-02-09
 
