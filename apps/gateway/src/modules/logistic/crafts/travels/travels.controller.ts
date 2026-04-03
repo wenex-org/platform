@@ -20,9 +20,9 @@ import {
   TravelItemsSerializer,
   TravelSerializer,
 } from '@app/common/serializers/logistic';
+import { Audit, Cache, CollectionPath, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { RoutingDto, CreateTravelDto, CreateTravelItemsDto, UpdateTravelDto } from '@app/common/dto/logistic';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { AuthorityInterceptor, ProjectionInterceptor } from '@app/common/core/interceptors/mongo';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
@@ -49,6 +49,7 @@ const COLL_PATH = COLLECTION('travels', 'logistic');
 @RateLimit(COLL_PATH)
 @Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
+@CollectionPath(COLL_PATH)
 @ApiTags('logistic', 'travels')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)

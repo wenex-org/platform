@@ -20,8 +20,8 @@ import {
   CredentialDataSerializer,
   CredentialSerializer,
 } from '@app/common/serializers/conjoint';
+import { Audit, Cache, CollectionPath, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateAccountDto, CreateAccountItemsDto, UpdateAccountDto } from '@app/common/dto/conjoint';
 import { AuthorityInterceptor, ProjectionInterceptor } from '@app/common/core/interceptors/mongo';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -49,6 +49,7 @@ const COLL_PATH = COLLECTION('accounts', 'conjoint');
 @RateLimit(COLL_PATH)
 @Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
+@CollectionPath(COLL_PATH)
 @ApiTags('conjoint', 'accounts')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)

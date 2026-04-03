@@ -13,9 +13,9 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import { Audit, Cache, CollectionPath, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { WalletDataSerializer, WalletItemsSerializer, WalletSerializer } from '@app/common/serializers/financial';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CreateWalletDto, CreateWalletItemsDto, UpdateWalletDto } from '@app/common/dto/financial';
 import { AuthorityInterceptor, ProjectionInterceptor } from '@app/common/core/interceptors/mongo';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -43,6 +43,7 @@ const COLL_PATH = COLLECTION('wallets', 'financial');
 @RateLimit(COLL_PATH)
 @Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
+@CollectionPath(COLL_PATH)
 @ApiTags('financial', 'wallets')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)

@@ -1,7 +1,7 @@
 import { Controller, Post, UploadedFiles, UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { FileUploadInterceptor, GatewayInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { Audit, Cache, CollectionPath, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Audit, Cache, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { FileItemsSerializer, FileSerializer } from '@app/common/serializers/special';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { TransformerPipe, ValidationPipe } from '@app/common/core/pipes';
@@ -22,6 +22,7 @@ const COLL_PATH = COLLECTION('files', 'special');
 @ApiBearerAuth()
 @RateLimit(COLL_PATH)
 @Controller(COLL_PATH)
+@CollectionPath(COLL_PATH)
 @ApiTags('special', 'files')
 @UseFilters(AllExceptionsFilter)
 @UsePipes(TransformerPipe, ValidationPipe)

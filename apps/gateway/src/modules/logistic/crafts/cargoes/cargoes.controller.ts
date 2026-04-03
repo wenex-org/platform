@@ -13,9 +13,9 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
+import { Audit, Cache, CollectionPath, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { CargoDataSerializer, CargoItemsSerializer, CargoSerializer } from '@app/common/serializers/logistic';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { AuthorityInterceptor, ProjectionInterceptor } from '@app/common/core/interceptors/mongo';
 import { CreateCargoDto, CreateCargoItemsDto, UpdateCargoDto } from '@app/common/dto/logistic';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -43,6 +43,7 @@ const COLL_PATH = COLLECTION('cargoes', 'logistic');
 @RateLimit(COLL_PATH)
 @Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
+@CollectionPath(COLL_PATH)
 @ApiTags('logistic', 'cargoes')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)

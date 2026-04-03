@@ -14,9 +14,9 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { PusHistoryDataSerializer, PusHistoryItemsSerializer, PusHistorySerializer } from '@app/common/serializers/touch';
+import { Audit, Cache, CollectionPath, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
 import { CreatePusHistoryDto, CreatePusHistoryItemsDto, UpdatePusHistoryDto } from '@app/common/dto/touch';
-import { Audit, Cache, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { AuthorityInterceptor, ProjectionInterceptor } from '@app/common/core/interceptors/mongo';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
@@ -43,6 +43,7 @@ const COLL_PATH = COLLECTION('push-histories', 'touch');
 @RateLimit(COLL_PATH)
 @Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
+@CollectionPath(COLL_PATH)
 @UseFilters(AllExceptionsFilter)
 @ApiTags('touch', 'push-histories')
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
