@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- fix: population security bug fix @vhidvz
+
 ## [1.6.0] - 2026-03-26
 
 ### Added
