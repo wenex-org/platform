@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- fix: population security bug fix @vhidvz
+- fix: population security bug @vhidvz
 
 ## [1.6.0] - 2026-03-26
 
