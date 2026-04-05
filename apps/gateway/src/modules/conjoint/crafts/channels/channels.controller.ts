@@ -5,6 +5,7 @@ import {
   Get,
   HttpStatus,
   Patch,
+  Param,
   Post,
   Put,
   Res,
@@ -16,28 +17,32 @@ import {
 import { Audit, Cache, CollectionPath, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ChannelDataSerializer, ChannelItemsSerializer, ChannelSerializer } from '@app/common/serializers/conjoint';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { CreateChannelDto, CreateChannelItemsDto, UpdateChannelDto } from '@app/common/dto/conjoint';
+import { ChannelAccessDto, CreateChannelDto, CreateChannelItemsDto, UpdateChannelDto } from '@app/common/dto/conjoint';
 import { AuthorityInterceptor, ProjectionInterceptor } from '@app/common/core/interceptors/mongo';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { GrantItemsSerializer, GrantSerializer } from '@app/common/serializers/auth';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
 import { Controller as IController } from '@app/common/core/interfaces/mongo';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
 import { Channel, ChannelDto } from '@app/common/interfaces/conjoint';
-import { Filter, Meta, Perm } from '@app/common/core/decorators';
+import { getSseMessage, mapToInstance } from '@app/common/core/utils';
 import { ConjointProvider } from '@app/common/providers/conjoint';
-import { AllExceptionsFilter } from '@app/common/core/filters';
+import { Filter, Meta, Perm } from '@app/common/core/decorators';
+import { channelAccessGrants } from '@app/common/utils/conjoint';
 import { TotalSerializer } from '@app/common/core/serializers';
+import { AllExceptionsFilter } from '@app/common/core/filters';
+import { AuthProvider } from '@app/common/providers/auth';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { ValidationPipe } from '@app/common/core/pipes';
-import { getSseMessage } from '@app/common/core/utils';
 import { Metadata } from '@app/common/core/interfaces';
-import { Observable, switchMap } from 'rxjs';
+import { from, Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
 
 const COLL_PATH = COLLECTION('channels', 'conjoint');
+const AUTH_GRANTS_COLL_PATH = COLLECTION('grants', 'auth');
 
 @ApiBearerAuth()
 @RateLimit(COLL_PATH)
@@ -49,7 +54,10 @@ const COLL_PATH = COLLECTION('channels', 'conjoint');
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class ChannelsController extends ControllerClass<Channel, ChannelDto> implements IController<Channel, ChannelDto> {
-  constructor(readonly provider: ConjointProvider) {
+  constructor(
+    readonly provider: ConjointProvider,
+    readonly auth: AuthProvider,
+  ) {
     super(provider.channels, ChannelSerializer);
   }
 
@@ -85,6 +93,21 @@ export class ChannelsController extends ControllerClass<Channel, ChannelDto> imp
   @SetPolicy(Action.Create, Resource.ConjointChannels)
   override createBulk(@Meta() meta: Metadata, @Body() data: CreateChannelItemsDto): Observable<ChannelItemsSerializer> {
     return super.createBulk(meta, data);
+  }
+
+  @Post(':id/access')
+  @Audit('GATEWAY')
+  @Cache(AUTH_GRANTS_COLL_PATH, 'flush')
+  @SetScope(Scope.WriteConjointChannels)
+  @UseInterceptors(...WriteInterceptors)
+  @ApiResponse({ type: GrantItemsSerializer })
+  @SetPolicy(Action.Update, Resource.ConjointChannels)
+  @ApiParam({ type: String, name: 'id', required: true })
+  access(@Meta() meta: Metadata, @Param('id') id: string, @Body() data: ChannelAccessDto): Observable<GrantItemsSerializer> {
+    return from(this.provider.channels.findById({ query: { id } }, { meta })).pipe(
+      switchMap((channel) => this.auth.grants.createBulk(channelAccessGrants(channel, data), { meta })),
+      mapToInstance(GrantSerializer, 'items'),
+    );
   }
 
   @Get()

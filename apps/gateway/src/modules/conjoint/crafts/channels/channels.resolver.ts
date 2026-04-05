@@ -1,7 +1,8 @@
+import { ChannelAccessDto, CreateChannelDto, CreateChannelItemsDto, UpdateChannelDto } from '@app/common/dto/conjoint';
 import { Audit, Cache, CollectionPath, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { ChannelDataSerializer, ChannelItemsSerializer, ChannelSerializer } from '@app/common/serializers/conjoint';
 import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
-import { CreateChannelDto, CreateChannelItemsDto, UpdateChannelDto } from '@app/common/dto/conjoint';
+import { GrantItemsSerializer, GrantSerializer } from '@app/common/serializers/auth';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -13,15 +14,19 @@ import { Channel, ChannelDto } from '@app/common/interfaces/conjoint';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
 import { ConjointProvider } from '@app/common/providers/conjoint';
+import { channelAccessGrants } from '@app/common/utils/conjoint';
 import { AllExceptionsFilter } from '@app/common/core/filters';
 import { TotalSerializer } from '@app/common/core/serializers';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { Filter, Meta } from '@app/common/core/decorators';
+import { AuthProvider } from '@app/common/providers/auth';
 import { ValidationPipe } from '@app/common/core/pipes';
 import { Metadata } from '@app/common/core/interfaces';
-import { Observable } from 'rxjs';
+import { mapToInstance } from '@app/common/core/utils';
+import { from, Observable, switchMap } from 'rxjs';
 
 const COLL_PATH = COLLECTION('channels', 'conjoint');
+const AUTH_GRANTS_COLL_PATH = COLLECTION('grants', 'auth');
 
 @Resolver()
 @RateLimit(COLL_PATH)
@@ -31,7 +36,10 @@ const COLL_PATH = COLLECTION('channels', 'conjoint');
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class ChannelsResolver extends ControllerClass<Channel, ChannelDto> implements IController<Channel, ChannelDto> {
-  constructor(readonly provider: ConjointProvider) {
+  constructor(
+    readonly provider: ConjointProvider,
+    readonly auth: AuthProvider,
+  ) {
     super(provider.channels, ChannelSerializer);
   }
 
@@ -64,6 +72,23 @@ export class ChannelsResolver extends ControllerClass<Channel, ChannelDto> imple
   @SetPolicy(Action.Create, Resource.ConjointChannels)
   createConjointChannelBulk(@Meta() meta: Metadata, @Args('data') data: CreateChannelItemsDto): Observable<ChannelItemsSerializer> {
     return super.createBulk(meta, data);
+  }
+
+  @Mutation(() => GrantItemsSerializer)
+  @Audit('GATEWAY')
+  @Cache(AUTH_GRANTS_COLL_PATH, 'flush')
+  @SetScope(Scope.WriteConjointChannels)
+  @UseInterceptors(...WriteInterceptors)
+  @SetPolicy(Action.Update, Resource.ConjointChannels)
+  accessConjointChannelById(
+    @Args('id') id: string,
+    @Meta() meta: Metadata,
+    @Args('data') data: ChannelAccessDto,
+  ): Observable<GrantItemsSerializer> {
+    return from(this.provider.channels.findById({ query: { id } }, { meta })).pipe(
+      switchMap((channel) => this.auth.grants.createBulk(channelAccessGrants(channel, data), { meta })),
+      mapToInstance(GrantSerializer, 'items'),
+    );
   }
 
   @Query(() => ChannelItemsSerializer)
