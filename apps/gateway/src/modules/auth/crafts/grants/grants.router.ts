@@ -733,3 +733,85 @@ mcp.server.registerTool(
       };
     }),
 );
+
+// ------------------------------------------------
+// Update Auth Grant By Id
+// ------------------------------------------------
+mcp.server.registerTool(
+  'update_auth_grant_by_id',
+  {
+    title: 'Update Auth Grant By Id',
+    description: `[ACTION] Updates (patches) an existing Authorization Grant by its exact MongoDB ObjectId.
+      [TRIGGER] Use ONLY when the user explicitly asks to update, modify, edit, or change an existing permission/grant.
+      [RULES]
+      1. NO HALLUCINATION: NEVER guess or invent 'id' or 'ref'.
+      2. CHAINING: If the exact ID is unknown (e.g., "Update Ali's grant"), you MUST use 'find_auth_grant' first to retrieve it.
+      3. PARTIAL UPDATE: Only provide the fields that actually need to be changed. Leave other fields empty.
+      [DICTIONARY] ${CORE_DATA_DICTIONARY}, ${GRANT_DATA_DICTIONARY}
+      [CONTEXT] MUST read "docs://schemas/core" before use.`
+      .replace(/\s+/g, ' ')
+      .trim(),
+
+    inputSchema: {
+      id: z.string().trim().min(1).describe('REQUIRED. Exact MongoDB ObjectId of the grant to update. Do not guess.'),
+      // Merge Create schemas and make every field OPTIONAL for patching
+      ...z
+        .object({
+          ...GRANT_INPUT_SCHEMA_FIELDS,
+          ...CORE_INPUT_SCHEMA_FIELDS,
+        })
+        .partial().shape,
+    },
+
+    outputSchema: {
+      ...GRANT_OUTPUT_SCHEMA_FIELDS,
+      ...CORE_OUTPUT_SCHEMA_FIELDS,
+    },
+  },
+  async (data, { requestInfo }) =>
+    throwableToolCall(async () => {
+      const logger = mcp.log('update_auth_grant_by_id');
+      const headers = getHeaders({ requestInfo });
+
+      logger('=== 1. LLM INPUT === : %j', data);
+
+      // Separate 'id' and 'ref' from the actual update payload
+      const { id, ref, ...updatePayload } = data;
+
+      // Extract exact SDK type for config to enforce compile-time safety
+      type UpdateByIdConfig = Parameters<typeof mcp.platform.auth.grants.updateById>[2];
+      const config: UpdateByIdConfig = {
+        headers,
+        ...(ref && { params: { ref } }),
+      };
+
+      // Using 'as' here is safe because Zod has already validated the shape of the payload
+      type UpdateByIdData = Parameters<typeof mcp.platform.auth.grants.updateById>[1];
+      const safePayload = updatePayload as UpdateByIdData;
+
+      logger('=== 2. EXTRACTED PAYLOAD === : %j', safePayload);
+
+      const updatedGrant = await mcp.platform.auth.grants.updateById(id, safePayload, config);
+
+      logger('=== 3. RAW DB OUTPUT === : %j', updatedGrant);
+
+      const fixedUpdatedGrant = fixOut(updatedGrant);
+      const Schema = z.object({
+        ...GRANT_OUTPUT_SCHEMA_FIELDS,
+        ...CORE_OUTPUT_SCHEMA_FIELDS,
+      });
+      const safeData = Schema.parse(fixedUpdatedGrant);
+
+      logger('=== 4. FINAL MCP RESPONSE === : %j', safeData);
+
+      return {
+        structuredContent: safeData,
+        content: [
+          {
+            type: 'text',
+            text: `Grant with ID "${id}" was successfully updated.`,
+          },
+        ],
+      };
+    }),
+);

@@ -9,7 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- feat(`grants.router`): `Update Auth Grant By Id`Tool for MCP. @alihajqani
 - feat(`grants.router`): `Destroy Auth Grant By Id`Tool for MCP. @alihajqani
+- feat(`grants.router`): `Restore Auth Grant By Id`Tool for MCP. @alihajqani
 - refactor(`grants.router`): Standardized tool naming based on resolvers for consistency. @alihajqani
 - refactor(`grants.router`): Refactored prompts with structured format (ACTION, TRIGGER, RULES). @alihajqani
 - refactor(`grants.router`): Introduced shared data dictionary for better field understanding. @alihajqani
