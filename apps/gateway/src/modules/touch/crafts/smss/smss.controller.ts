@@ -16,7 +16,7 @@ import {
 import { Audit, Cache, CollectionPath, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { SmsDataSerializer, SmsItemsSerializer, SmsSerializer } from '@app/common/serializers/touch';
-import { CreateSmsDto, CreateSmsItemsDto, SendSmsDto, UpdateSmsDto } from '@app/common/dto/touch';
+import { CreateSmsDto, CreateSmsItemsDto, SendSmsDto, SendSmsItemsDto, UpdateSmsDto } from '@app/common/dto/touch';
 import { AuthorityInterceptor, ProjectionInterceptor } from '@app/common/core/interceptors/mongo';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
@@ -62,6 +62,17 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
   @SetPolicy(Action.Send, Resource.TouchSmss)
   send(@Meta() meta: Metadata, @Body() data: SendSmsDto): Observable<SmsDataSerializer> {
     return from(this.provider.smss.send(data, { meta })).pipe(mapToInstance(SmsSerializer, 'data'));
+  }
+
+  @Post('send/bulk')
+  @Audit('GATEWAY')
+  @Cache(COLL_PATH, 'flush')
+  @SetScope(Scope.SendTouchSmss)
+  @UseInterceptors(...WriteInterceptors)
+  @ApiResponse({ type: SmsItemsSerializer })
+  @SetPolicy(Action.Send, Resource.TouchSmss)
+  sendBulk(@Meta() meta: Metadata, @Body() data: SendSmsItemsDto): Observable<SmsItemsSerializer> {
+    return from(this.provider.smss.sendBulk(data.items, { meta })).pipe(mapToInstance(SmsSerializer, 'items'));
   }
 
   // ##############################
