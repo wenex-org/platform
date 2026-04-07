@@ -19,20 +19,18 @@ last-updated: "2026-04-07"
 
 The Wenex Model Context Protocol (MCP) is the official standard that allows **AI agents** (platform-agent and client-agent) to discover, read, understand, and interact with all structured information inside the Wenex platform.
 
-The Wenex ecosystem consists of multiple standard applications built on the same platform protocols. These applications (clients) can collaborate securely with each other inside a dedicated shared environment called the **coworkers**.
+The Wenex ecosystem consists of multiple standard applications built on the same platform protocols. These applications (clients) can collaborate securely with each other inside a dedicated shared environment called the **coworkers** space.
+
+> **Note**: Clients are responsible for implementing all business logic. The platform only manages resource structure and strictly enforces access levels.
 
 ## 2. Terms and Definitions
 
-- **Platform**: The central system (Wenex) that stores all **resources**, coordinates clients, and enforces rules inside the **coworkers**.
+- **Platform**: The central system (Wenex) that stores all **resources**, coordinates clients, and enforces rules inside the **coworkers** space.
 - **Client**: An application built according to the platform rules. It uses the official Wenex SDK and consists of a backend and a frontend.
 - **User**: A person who registers or logs into a client and uses that client’s features according to its business logic.
-
 - **Coworkers**: A secure, shared collaboration environment where multiple clients (and their AI agents) can interact, share resources, and coordinate actions under strict platform-controlled access rules.
-
 - **Record**: A single, complete entry inside a resource (one user, one project, one document, etc.).
 - **Resource**: A named collection of similar records (for example: `users`, `projects`, `documents`, `tasks`). It defines the type and structure of the data.
-
-> **Note**: Clients are responsible for implementing all business logic. The platform only manages resource structure and strictly enforces access levels.
 
 ## 3. Core Concepts
 
