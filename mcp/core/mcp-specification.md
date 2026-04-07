@@ -18,20 +18,20 @@ last-updated: "2026-04-07"
 
 ## 1. Introduction
 
-the Wenex is a comprehensive ecosystem for implementing a set of standard applications based on the Wenex platform protocols that can easily interact with each other.
+The Wenex ecosystem provides a set of standard applications based on the Wenex platform protocols that can easily interact with each other.
 
-Terms and literature:
+Terms and Definitions:
 
-- Platform: It is an application for storing all data from all clients and coordinating clients in its own standard way. Wenex is that platform.
-- Client: An application that is developed based on the rules and regulations of the platform and generally uses the platform's software development kit. It consists of two main parts: backend and frontend.
-- User: A user is someone who registers or logs in to a client and uses the features of that client based on the business logic of that client.
+- Platform: The central application responsible for storing all resources from clients and coordinating clients according to its standard rules. Wenex is this platform.
+- Client: An application developed according to the platform’s rules and regulations, typically using the platform’s software development kit. It consists of two main parts: backend and frontend.
+- User: A person who registers or logs into a client and uses its features according to the client’s business logic.
 
-> Note: Clients implement the business logic, and the platform generally focuses on data structure and tightly controlled access levels.
+> Note: Clients implement the business logic, while the platform primarily manages `resource structure` and enforces tightly controlled `access levels`.
 
 ## 2. Core Concepts
 
-The Wenex platform is a collection of categorized resources, all of which generally have the following functions:
+The Wenex platform is a collection of categorized resources. These resources generally support the following core operations:
 
-- Count: It is used to count the number of data items according to the user's request based on a query.
-- Create: This function is used to create data of the selected source type. The result of executing this function is the same data that was stored in the database after executing the request, to which access control data and information about the creator and creation time are also added.
-- Create Bulk: It has exactly the same function as the `create` function, except that instead of receiving one data, you can pass it multiple data and create a group of data at the same time.
+- **Count**: Used to count the number of records that match a given query within a specific resource, based on the user’s request.
+- Create: This operation is used to create a new record in the selected resource type. The result returned is the record that was stored in the database, enriched with access control metadata as well as information about the creator and creation timestamp.
+- Create Bulk: This operation has the same behavior as the `Create` function, except that instead of accepting a single record, it accepts multiple records for that resource and creates them all at once.
