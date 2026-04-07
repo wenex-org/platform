@@ -21,8 +21,6 @@ The Wenex Model Context Protocol (MCP) is the official standard that allows **AI
 
 The Wenex ecosystem consists of multiple standard applications built on the same platform protocols. These applications (clients) can collaborate securely with each other inside a dedicated shared environment called the **coworkers** space.
 
-> **Note**: Clients are responsible for implementing all business logic. The platform only manages resource structure and strictly enforces access levels.
-
 ## 2. Terms and Definitions
 
 - **Platform**: The central system (Wenex) that stores all **resources**, coordinates clients, and enforces rules inside the **coworkers** space.
@@ -31,6 +29,8 @@ The Wenex ecosystem consists of multiple standard applications built on the same
 - **Coworkers**: A secure, shared collaboration environment where multiple clients (and their AI agents) can interact, share resources, and coordinate actions under strict platform-controlled access rules.
 - **Record**: A single, complete entry inside a resource (one user, one project, one document, etc.).
 - **Resource**: A named collection of similar records (for example: `users`, `projects`, `documents`, `tasks`). It defines the type and structure of the data.
+
+> **Note**: Clients are responsible for implementing all business logic. The platform only manages resource structure and strictly enforces access levels.
 
 ## 3. Core Concepts
 
