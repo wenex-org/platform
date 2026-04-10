@@ -103,8 +103,8 @@ Almost every document in any collection extends this core schema. All properties
 | `groups` | `(string \| email \| FQDN)[]` | Groups allowed access (from `identity/users.groups`). |
 | `clients` | `string[]` (24-char hex) | Client IDs allowed to access this document. Unlisted clients may read via user interaction but cannot write. |
 | `created_at` | ISO 8601 datetime | Creation timestamp. Auto-filled. |
-| `created_by` | 24-character hex string | User ID who created the document. |
-| `created_in` | 24-character hex string | Client ID where creation occurred. |
+| `created_by` | 24-character hex string | User ID who created the document (from `identity/users`). |
+| `created_in` | 24-character hex string | Client ID where creation occurred (from `domain/apps` or `domain/clients`). |
 | `updated_at` | ISO 8601 datetime | Last-update timestamp. Auto-filled. |
 | `updated_by` | 24-character hex string | User ID who last updated the document. |
 | `updated_in` | 24-character hex string | Client ID where the update occurred. |
