@@ -36,6 +36,7 @@ All data in Wenex is organized as **resources**. A resource is the canonical ide
 
 ## 2. Terms and Definitions
 
+- **Auth Personal Token (APT)**: A token is given to work with the platform's core operations to guide the user to obtain this token. The AI ​​agent should look up the MCP resource `docs://core/auth-specification`.
 - **AI Agent**: An autonomous or assistive entity that uses the MCP to discover, read, and interact with resources inside the Wenex platform and coworkers space. Almost every operation requires a valid **Auth Personal Token (APT)** access token.
 - **Service**: A logical namespace that groups related collections sharing the same domain or functionality. Some built-in services that are always present include `auth`, `domain`, `context`, `identity` and etc.
 - **Resource**: The canonical identifier of a collection within a service, written as `service/collection` (or optionally `service/collection.field` when targeting a specific schema property). Use this exact format consistently in all MCP interactions and agent reasoning.
@@ -55,11 +56,10 @@ Clients can define additional custom resources; these are stored on the platform
 
 The Wenex platform organizes all information as **collections** under **services** (collectively called **resources**). Every resource supports the same simple, predictable set of CRUD-style operations. These operations are intentionally minimal and consistent so AI agents can discover them once and apply them reliably across the entire ecosystem.
 
-### Resource Identification (for AI Agents)
+**Resource Identification (for AI Agents)**:
 
-Always use the full `service/collection` path (or `service/collection.field` when targeting a specific schema property) when referring to any collection. This path-based naming makes collection discovery and cross-service referencing straightforward and unambiguous.
-
-To discover and retrieve the complete list and definitions of all built-in resources an AI agent must query the `docs://core/resource-specification` MCP resource.
+- Always use the full `service/collection` path (or `service/collection.field` when targeting a specific schema property) when referring to any collection. This path-based naming makes collection discovery and cross-service referencing straightforward and unambiguous.
+- To discover and retrieve the complete list and definitions of all built-in resources an AI agent must query the `docs://core/resource-specification` MCP resource.
 
 ### Core Schema (Base Properties)
 
@@ -130,3 +130,4 @@ All operations return rich metadata (including creator, updater, timestamps, and
   Permanently removes a document by `id`. Returns the final state before destruction for auditing.
 
 These operations are identical across every resource (built-in and custom). An AI agent only needs to learn this single interaction pattern to work reliably with the entire Wenex ecosystem.
+
