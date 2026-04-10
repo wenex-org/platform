@@ -6,146 +6,161 @@ mcp-category: "core"
 mcp-module: "specification"
 
 title: "Wenex Model Context Protocol (MCP) Specification"
-description: "Official definition of the Model Context Protocol (MCP) – the standard for how AI agents discover, read, understand, query, and interact with structured information inside the Wenex platform and its ecosystem."
+description: "Official definition of the Model Context Protocol (MCP) — the standard governing how AI agents discover, read, understand, query, and interact with structured information inside the Wenex platform and its ecosystem."
 tags: ["core", "specification", "platform", "resources"]
 
 last-updated: "2026-04-10"
 ---
 
-# Wenex Model Context Protocol (MCP) Specification
+# Wenex Model Context Protocol (MCP)
 
 ## 1. Introduction
 
-The **Wenex Model Context Protocol (MCP)** is the official standard that enables **AI agents** to discover, read, understand, query, and interact with all structured information inside the Wenex platform in a secure, consistent, and predictable way.
+The **Wenex Model Context Protocol (MCP)** is the official standard that enables **AI agents** to discover, read, understand, query, and interact with all structured information inside the Wenex platform in a secure, consistent, and predictable manner.
 
-### Wenex Platform & Ecosystem Overview
+### 1.1 Wenex Platform & Ecosystem Overview
 
-**Wenex** is a unified platform designed for building collaborative applications (clients) that seamlessly integrate human users and AI agents.
+**Wenex** is a unified platform for building collaborative applications (clients) that seamlessly integrate human users and AI agents.
 
-The ecosystem consists of multiple **standard clients** (applications) built on the same set of platform protocols. Each client can have its own business logic, user interface, and specialized features, while all clients interoperate securely inside a shared collaboration environment called the **coworkers space**. In the coworkers space, multiple clients and their AI agents can discover collections, coordinate actions, and interact under platform-controlled permissions.
+The ecosystem consists of multiple **standard clients** (applications) built on the same set of platform protocols. Each client may have its own business logic, user interface, and specialized features, while all clients interoperate securely inside a shared collaboration environment called the **Coworkers Space**. Within the Coworkers Space, multiple clients and their AI agents can discover collections, coordinate actions, and interact — all under platform-controlled permissions.
 
-Key elements of the Wenex ecosystem:
+#### Key Elements
 
-- **Platform** — Central system responsible for storing documents, enforcing access control, coordinating clients, and providing MCP endpoints.
-- **Clients** — Applications (backend + frontend) built with the official Wenex SDK. Clients implement domain-specific business logic and may register their own custom resources.
-- **Users** — Human users who authenticate through a client and interact with its features.
+| Element      | Description |
+|--------------|-------------|
+| **Platform** | The central system responsible for storing documents, enforcing access control, coordinating clients, and exposing MCP endpoints. |
+| **Clients**  | Applications (backend + frontend) built with the official Wenex SDK. Clients implement domain-specific business logic and may register their own custom resources. |
+| **Users**    | Human users who authenticate through a client and interact with its features. |
 
-All data in Wenex is organized as **resources**. A resource is the canonical identifier of a collection within a service. Collections are logically grouped into **services** for better organization and discoverability. This design follows modern microservice patterns and document-oriented storage, making it intuitive for AI agents.
+All data in Wenex is organized as **resources**. A resource is the canonical identifier of a collection within a service. Collections are logically grouped into **services** for discoverability and organization. This design follows modern microservice and document-oriented storage patterns, making it intuitive for AI agents.
 
-> **Note**: The platform only manages data structure, storage, versioning, and access control. All business logic remains the responsibility of the individual clients. Clients may define and register their own custom resources; these are stored and managed by the platform exactly like built-in resources.
+> **Note:** The platform manages only data structure, storage, versioning, and access control. All business logic remains the responsibility of the individual clients. Clients may define and register custom resources; these are stored and managed by the platform exactly like built-in resources.
+
+---
 
 ## 2. Terminology
 
-- **Auth Personal Token (APT)**: A secure token required for platform core operations. AI agents should reference the MCP resource `docs://core/auth-specification` to guide users on obtaining this token.
-- **AI Agent**: An autonomous or assistive entity that uses the MCP to discover, read, and interact with resources inside the Wenex platform and coworkers space. Nearly all operations require a valid **Auth Personal Token (APT)**.
-- **Service**: A logical namespace that groups related collections sharing the same domain or functionality. Built-in services always present include `auth`, `domain`, `context`, `identity`, and others.
-- **Resource**: The canonical identifier of a collection within a service, formatted as `service/collection` (or optionally `service/collection.field` when targeting a specific schema property). Use this exact format consistently in all MCP interactions and agent reasoning.
-- **Token Identity**: Every access token (APT) provides three properties that identify the caller:
-  - `uid` — User identity from the `identity/users.id` resource (present only when a human user is logged in).
-  - `aid` — Application identity from the `domain/apps.id` resource (present when a user logged in through an application or only an application logged in).
-  - `cid` — Client identity from the `domain/clients.id` resource (always present, as every login occurs through a client).
+| Term | Definition |
+|------|------------|
+| **Auth Personal Token (APT)** | A token used to authenticate with the platform's core operations. AI agents should consult the MCP resource `docs://core/auth-specification` to guide the user through obtaining one. |
+| **AI Agent** | An autonomous or assistive entity that uses MCP to discover, read, and interact with resources inside the Wenex platform and Coworkers Space. Almost every operation requires a valid APT. |
+| **Service** | A logical namespace that groups related collections sharing the same domain or functionality (e.g., `auth`, `domain`, `context`, `identity`). |
+| **Resource** | The canonical identifier of a collection within a service, written as `service/collection` (or `service/collection.field` when targeting a specific schema property). Use this exact format consistently in all MCP interactions. |
+| **Zone** | Defines the scope of an AI agent's activity over data in the platform. See [Access Control Model](#access-control-model) for details. |
 
-  The effective **token identity** is determined by this priority order (highest to lowest):
-  - Use `uid` if it exists (user-level token).
-  - Otherwise use `aid` if it exists (application-level token).
-  - Otherwise use `cid` (client-only token).
-- **Zone**: Defines the scope of an AI agent's activity over data in the platform's information and resources, closely tied to base fields `owner`, `shares`, `groups`, and `clients`.
-- **Metadata Parameter**: Parameters that AI agents can set to influence platform behavior. These are detailed in relevant sections based on agent needs.
+### 2.1 Token Identity
 
-  Common metadata parameters include:
-  - `x-zone`: Defines the requested **zone** with a default value of `own,share`.
-  - `x-request-id`: A unique identifier per request for tracking operation execution.
-  - `x-no-api-response`: If the output is not critical or predictable, setting this to `true` still returns the request status.
-  - `x-exclude-soft-delete-query`: By default, soft-deleted data is excluded from AI agent views. Setting this parameter makes soft-deleted data visible.
+Every access token (including APTs) provides three properties that identify the caller:
+
+| Property | Source Resource | Present When |
+|----------|----------------|--------------|
+| `uid` | `identity/users.id` | A human user is logged in. |
+| `aid` | `domain/apps.id` | A user logged in through an application, or an application logged in independently. |
+| `cid` | `domain/clients.id` | Always present — every login occurs through a client. |
+
+The effective **token identity** is resolved using the following priority (highest → lowest):
+
+1. **`uid`** — if present, the token represents a user-level identity.
+2. **`aid`** — if `uid` is absent, the token represents an application-level identity.
+3. **`cid`** — fallback; represents a client-only identity.
+
+### 2.2 Metadata Parameters
+
+Metadata parameters are request-level headers that an AI agent can set to influence platform behavior. Below are the common parameters:
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `x-zone` | `string` | `own,share` | Defines the requested [zone](#access-control-model) scope. |
+| `x-request-id` | `string` | *(none)* | A unique identifier per request, used to track the operation's execution. |
+| `x-no-api-response` | `boolean` | `false` | When `true`, the response body is suppressed (only the HTTP status is returned). Useful when the response payload is predictable or unneeded. |
+| `x-exclude-soft-delete-query` | `boolean` | `false` | When `true`, soft-deleted documents are included in query results. By default, soft-deleted data is excluded. |
+
+---
 
 ## 3. Core Concepts
 
-The Wenex platform organizes all information as **collections** under **services** (collectively called **resources**). Every resource supports the same simple, predictable set of CRUD-style operations. These operations are intentionally minimal and consistent, allowing AI agents to learn them once and apply them reliably across the entire ecosystem.
+The Wenex platform organizes all information as **collections** under **services** (collectively referred to as **resources**). Every resource supports the same predictable set of CRUD-style operations. These operations are intentionally minimal and consistent, so AI agents can learn them once and apply them reliably across the entire ecosystem.
 
-### Resource Identification (for AI Agents)
+### 3.1 Resource Identification
 
-- Always use the full `service/collection` path (or `service/collection.field` when targeting a specific schema property) when referring to any collection. This path-based naming simplifies collection discovery and cross-service referencing.
-- To discover and retrieve the complete list and definitions of all built-in resources, AI agents must query the `docs://core/resource-specification` MCP resource.
+> **For AI Agents:**
+>
+> - Always use the full `service/collection` path (or `service/collection.field` when targeting a specific schema property) when referring to any collection. This path-based naming makes discovery and cross-service referencing straightforward and unambiguous.
+> - To retrieve the complete list and definitions of all built-in resources, query the MCP resource `docs://core/resource-specification`.
 
-### Core Schema (Base Properties)
+### 3.2 Core Schema (Base Properties)
 
-Almost every document in any collection extends this core schema. All properties are **optional** during `Create` and `Update` operations. Most are automatically filled by the platform. **Do not invent values** for core properties; leave them empty (or omit them) unless explicitly provided by the user or client.
+Almost every document in any collection extends this core schema. All properties below are **optional** during `Create` and `Update` operations — most are automatically populated by the platform.
 
-| Property       | Type / Format                          | Description / AI Guidance |
-|----------------|----------------------------------------|---------------------------|
-| `id`           | 24-character hexadecimal string (MongoDB ObjectId) | Primary identifier. Auto-generated. |
-| `ref`          | String                                 | External reference identity for legacy-system integration. Must be unique within the collection. |
-| `owner`        | 24-character hex string                | User ID from `identity/users` who owns this document (one owner only). |
-| `shares`       | Array of 24-character hex strings      | List of user IDs explicitly granted share-level access. |
-| `groups`       | Array of (24-character hex string \| email \| FQDN) | Groups allowed to access this document (from `identity/users.groups`). |
-| `clients`      | Array of 24-character hex strings      | Client IDs allowed to access this document. Unlisted clients may read via user interaction but cannot write. |
-| `created_at`   | ISO datetime string                    | Creation timestamp (auto-filled). |
-| `created_by`   | 24-character hex string                | User ID who created the document (from `identity/users`). |
-| `created_in`   | 24-character hex string                | Client ID where creation occurred (from `domain/apps` or `domain/clients`). |
-| `updated_at`   | ISO datetime string                    | Last update timestamp (auto-filled). |
-| `updated_by`   | 24-character hex string                | User ID who last updated the document. |
-| `updated_in`   | 24-character hex string                | Client ID where the update occurred. |
-| `deleted_at`   | ISO datetime string                    | Soft-delete timestamp (auto-filled on soft delete). |
-| `deleted_by`   | 24-character hex string                | User ID who performed the soft-delete. |
-| `deleted_in`   | 24-character hex string                | Client ID where the delete occurred. |
-| `restored_at`  | ISO datetime string                    | Restore (undo soft-delete) timestamp. |
-| `restored_by`  | 24-character hex string                | User ID who restored the document. |
-| `restored_in`  | 24-character hex string                | Client ID where the restore occurred. |
-| `identity`     | Resource reference object              | Single reference/relation to any other Wenex resource. Do not guess values. |
-| `relations`    | Array of resource reference objects    | List of references/relations to any Wenex resources. Do not guess values. |
-| `description`  | String                                 | Short sentence for full-text search. AI agents may generate a relevant summary if omitted. |
-| `version`      | Semantic version string (SemVer)       | Document version. |
-| `props`        | Free-schema JSON object                | Additional fields not defined in the official schema. |
-| `tags`         | Array of strings matching `/^[\w\-._]+(:[\w\-._]+)?$/` | Categorization tags. AI agents may infer 1–2 relevant tags based on context; otherwise leave empty. |
-| `rand`         | Digit-only string                      | Automatically generated random string – cannot be changed. |
-| `timestamp`    | Digit-only string                      | Automatically generated timestamp string – cannot be changed. |
+> ⚠️ **AI Agent Guidance:** Do **NOT** invent values for core properties. Leave them empty (or omit them) unless the user or client explicitly provides a value.
 
-### Foundational Operations
+| Property | Type / Format | Description |
+|----------|---------------|-------------|
+| `id` | 24-character hex string (MongoDB ObjectId) | Primary identifier. Auto-generated by the platform. |
+| `ref` | `string` | External reference for legacy-system integration. Must be unique within the collection. |
+| `owner` | 24-character hex string | User ID (`identity/users`) who owns this document. One owner only. |
+| `shares` | `string[]` (24-char hex) | User IDs explicitly granted share-level access. |
+| `groups` | `(string \| email \| FQDN)[]` | Groups allowed access (from `identity/users.groups`). |
+| `clients` | `string[]` (24-char hex) | Client IDs allowed to access this document. Unlisted clients may read via user interaction but cannot write. |
+| `created_at` | ISO 8601 datetime | Creation timestamp. Auto-filled. |
+| `created_by` | 24-character hex string | User ID who created the document. |
+| `created_in` | 24-character hex string | Client ID where creation occurred. |
+| `updated_at` | ISO 8601 datetime | Last-update timestamp. Auto-filled. |
+| `updated_by` | 24-character hex string | User ID who last updated the document. |
+| `updated_in` | 24-character hex string | Client ID where the update occurred. |
+| `deleted_at` | ISO 8601 datetime | Soft-delete timestamp. Auto-filled on soft delete. |
+| `deleted_by` | 24-character hex string | User ID who performed the soft delete. |
+| `deleted_in` | 24-character hex string | Client ID where the delete occurred. |
+| `restored_at` | ISO 8601 datetime | Restore timestamp. Auto-filled on restore. |
+| `restored_by` | 24-character hex string | User ID who restored the document. |
+| `restored_in` | 24-character hex string | Client ID where the restore occurred. |
+| `identity` | Resource reference object | Single reference/relation to another Wenex resource. Do not guess values. |
+| `relations` | Resource reference object[] | List of references/relations to other Wenex resources. Do not guess values. |
+| `description` | `string` | Short sentence used for full-text search. AI agents may generate a relevant summary if omitted. |
+| `version` | SemVer string | Document version. |
+| `props` | `object` (free-schema JSON) | Additional fields not defined in the official schema. |
+| `tags` | `string[]` matching `/^[\w\-._]+(:[\w\-._]+)?$/` | Categorization tags. AI agents may infer 1–2 relevant tags based on context; otherwise leave empty. |
+| `rand` | Digit-only string | Auto-generated random string. Read-only. |
+| `timestamp` | Digit-only string | Auto-generated timestamp string. Read-only. |
+
+### 3.3 Foundational Operations
 
 All operations return rich metadata (including creator, updater, timestamps, and access-control fields) to help AI agents maintain full context and audit trails.
 
-- **Count**  
-  Returns the number of documents in a `service/collection` that match a given query.  
-  *AI use case*: Fast cardinality checks, existence verification, or pagination planning.
+> **Key principle:** These operations are identical across every resource — both built-in and custom. An AI agent only needs to learn this single interaction pattern to work reliably with the entire Wenex ecosystem.
 
-- **Create**  
-  Creates exactly one new document. Returns the fully stored document with all auto-filled system fields.
+| Operation | Description | Returns |
+|-----------|-------------|---------|
+| **Count** | Returns the number of documents in a `service/collection` matching a given query. *Use for cardinality checks, existence verification, or pagination planning.* | Document count. |
+| **Create** | Creates exactly one new document. | The fully stored document with all auto-filled system fields. |
+| **Create Bulk** | Creates multiple documents in a single call. Accepts an array. | An array of fully stored documents. |
+| **Find** | Retrieves documents matching the provided query/filter. | An array of full documents with metadata. |
+| **Find One** | Retrieves exactly one document by its `id`. | The document, or `null`. |
+| **Update One** | Updates a single document by `id`. | The updated document with new metadata. |
+| **Update Bulk** | Updates all documents matching a query. | The count of modified documents. |
+| **Delete One** *(Soft Delete)* | Marks a document as deleted by `id`. | The document with deletion metadata. |
+| **Restore One** | Restores a soft-deleted document by `id`. | The restored document with restore metadata. |
+| **Destroy One** *(Hard Delete)* | Permanently removes a document by `id`. | The final document state before destruction (for auditing). |
 
-- **Create Bulk**  
-  Creates multiple documents in one call. Accepts an array and returns an array of fully stored documents.
+### 3.4 Access Control Model
 
-- **Find**  
-  Retrieves an array of documents matching the provided query/filter. Returns full documents with metadata.
+#### Zone
 
-- **Find One**  
-  Retrieves exactly one document by its `id`. Returns the document or `null`.
+The `x-zone` metadata parameter is the most important access-control mechanism per request. It defines the **scope** of an AI agent's activity over data, and is strongly tied to the base fields `owner`, `shares`, `groups`, and `clients`.
 
-- **Update One**  
-  Updates a single document by `id`. Returns the updated document with new metadata.
+**Default behavior:**
 
-- **Update Bulk**  
-  Updates all documents matching a query. Returns the count of modified documents.
+| Scenario | Default `x-zone` |
+|----------|-------------------|
+| Read-only operations | `own,share` — data owned by or shared with the user, across all clients. |
+| Write operations | `own,share,client` — the platform automatically apply the `client` zone for write actions. |
 
-- **Delete One** (Soft Delete)  
-  Marks a document as deleted by `id`. Returns the document with deletion metadata.
+**Zone combination logic:**
 
-- **Restore One**  
-  Restores a soft-deleted document by `id`. Returns the restored document with restore metadata.
+| Combination | Logic |
+|-------------|-------|
+| `group` + `client` | Combined with **AND** — documents matching *both* zone are included. |
+| `own` + `share` | Combined with **OR** — documents matching *either* zone are included. |
+| (`own` and/or `share`) + (`client` and/or `group`) | Combined with **AND** — documents must match both sides. |
 
-- **Destroy One** (Hard Delete)  
-  Permanently removes a document by `id`. Returns the final state before destruction for auditing.
-
-These operations are identical across every resource (built-in and custom). An AI agent only needs to learn this single interaction pattern to work reliably with the entire Wenex ecosystem.
-
-### Access Control Model
-
-**Zone**:
-
-The most important metadata parameter in each request is `x-zone`, which defines the zone of activity for an AI agent over platform data and resources. It is strongly related to base fields like `owner`, `shares`, `groups`, and `clients`.
-
-The default value is `own,share` (data owned by or shared with the user across all clients). For read-only access, this suffices; for write operations, the platform automatically adds the `client` zone, resulting in `own,share,client`.
-
-- The `group` and `client` zones combine with `AND` logic when used.
-- The `own` and `share` zones combine with `OR` logic when used simultaneously.
-- Combining `own` or `share` or `own,share` with `client` or `group` uses `AND` logic.
-- If a requested zone is not allowed by the AI agent's token, the platform automatically ignores that zone.
+> **Note:** If a requested zone is not permitted by the AI agent's token, the platform silently ignores that zone.
