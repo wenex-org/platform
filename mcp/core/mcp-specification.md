@@ -6,8 +6,8 @@ mcp-category: "core"
 mcp-module: "specification"
 
 title: "Wenex Model Context Protocol (MCP) Specification"
-description: "Official definition of the Model Context Protocol (MCP) – the standard for how AI agents discover, read, understand, and interact with structured information inside the Wenex platform and its ecosystem."
-tags: ["core", "specification", "ai-agents", "platform"]
+description: "Official definition of the Model Context Protocol (MCP) – the standard for how AI agents discover, read, understand, query, and interact with structured information inside the Wenex platform and its ecosystem."
+tags: ["core", "specification", "ai-agents", "platform", "services", "resources", "discovery"]
 
 last-updated: "2026-04-10"
 ---
@@ -27,100 +27,110 @@ The ecosystem consists of multiple **standard clients** (applications) built on 
 Key elements of the Wenex ecosystem:
 
 - **Platform** — Central system responsible for storing resources, enforcing access control, coordinating clients, and providing MCP endpoints.
-- **Clients** — Applications (backend + frontend) built with the official Wenex SDK. Clients implement domain-specific business logic.
+- **Clients** — Applications (backend + frontend) built with the official Wenex SDK. Clients implement domain-specific business logic and may register their own custom resources.
 - **Users** — Human users who authenticate through a client and interact with its features.
-- **AI Agents** — Autonomous or semi-autonomous agents that operate inside or across clients using the MCP to access and manipulate data. agent should interaction with platform operations with a user or client authorization token. APT (Auth Personal Token) token is required for agents.
+- **AI Agents** — Autonomous or semi-autonomous entities that operate inside or across clients using the MCP to access and manipulate data. Agents **must** interact with platform operations using a valid user or client authorization token. An **APT (Auth Personal Token)** is required for all agent-initiated operations.
 - **Coworkers Space** — A secure, platform-managed shared environment where multiple clients (and their associated AI agents) can discover each other, share resources, and coordinate actions under strict access rules.
 
-All data in Wenex is organized as **resources** — named collections of **documents**. This design is deliberately aligned with modern document-oriented databases (such as MongoDB), making it intuitive for AI agents trained on document-based systems.
+All data in Wenex is organized as **resources** — named collections of **documents**. Resources are logically grouped into **services** for better organization and discoverability. This design is deliberately aligned with modern document-oriented databases (such as MongoDB), making it intuitive for AI agents trained on document-based systems.
 
-> **Note**: The platform only manages data structure, storage, versioning, and access control. All business logic remains the responsibility of the individual clients.
+> **Note**: The platform only manages data structure, storage, versioning, and access control. All business logic remains the responsibility of the individual clients. Clients may define and register their own custom resources; these are stored and managed by the platform exactly like built-in resources.
 
 ## 2. Terms and Definitions
 
 - **Platform**: The central Wenex system that stores all **resources**, coordinates clients and AI agents, and strictly enforces access rules.
-- **Client**: An application built according to Wenex rules using the official SDK. It includes backend and frontend components and implements its own business logic.
+- **Client**: An application built according to Wenex rules using the official SDK. It includes backend and frontend components and implements its own business logic. Clients may define custom resources.
 - **User**: A person who registers or logs into a client and uses its features.
-- **AI Agent**: An autonomous or assistive entity that uses the MCP to discover, read, and interact with resources inside the Wenex platform and coworkers space.
+- **AI Agent**: An autonomous or assistive entity that uses the MCP to discover, read, and interact with resources inside the Wenex platform and coworkers space. All operations require a valid APT (Auth Personal Token).
 - **Coworkers Space**: A secure, shared collaboration environment where multiple clients and their AI agents can interact, discover resources, and coordinate actions under platform-controlled permissions.
+- **Service**: A logical namespace that groups related resources sharing the same domain or functionality `auth`, `domain`, `context`, `identity` are some of built-in services always present. to know built-in service functionality and operations need to get `service-specification` mcp resource id.
+- **Resource**: A named collection of similar documents inside a service. A resource is always referenced by its **fully-qualified path** in the format `service/resource` (example: `identity/users`).
 - **Document**: A single, complete entry inside a resource (e.g., one user, one project, one task, one file metadata entry, etc.). Documents are the fundamental unit of data.
-- **Resource**: A named collection of similar documents (for example: `users`, `projects`, `documents`, `tasks`, `messages`). Each resource defines the schema and structure of its documents.
+- **Resource Path**: The canonical identifier of a resource, written as `service/resource`. Use this format consistently in all MCP interactions and agent reasoning.
+
+Clients can define additional custom resources; these are stored on the platform using the same `service/resource` model from client backend endpoints to work or develop client backend need to know `client-specification` mcp resource id.
 
 ## 3. Core Concepts
 
-The Wenex platform organizes all information as **resources**. Every resource supports the same simple, predictable set of CRUD-style operations. These operations are intentionally minimal and consistent so AI agents can easily discover them, reason about them, and call them reliably.
+The Wenex platform organizes all information as **resources** under **services**. Every resource supports the same simple, predictable set of CRUD-style operations. These operations are intentionally minimal and consistent so AI agents can easily discover them, reason about them, and call them reliably.
+
+### Resource Identification (for AI Agents)
+
+Always use the full `service/resource` path when referring to any resource. This path-based naming makes resource discovery and cross-service referencing straightforward and unambiguous for agents.
 
 ### Core Schema (Base Properties)
 
-Almost every resource extended by this core schema properties, all these properties are optional within creation and update operations method, most of them automatically filled by platform. DO NOT invent values for core properties. Leave empty if not explicitly mentioned by the user.
+Almost every document extends this core schema. All these properties are **optional** during Create and Update operations. Most are automatically filled by the platform. **DO NOT invent values** for core properties. Leave them empty (or omit them) unless explicitly provided by the user or client.
 
 - `id`: Primary identifier (MongoDB ObjectId as hex string)
-- `ref`: External reference identity used for integration with old systems with legacy databases. Must be unique within a specific resource, is required for wenex migration solution.
-- `owner`: User ID (MongoDB ObjectId) from "identity/users" resource who owns this resource. A document can only have one owner at a time.
-- `shares`: List of user IDs explicitly granted share-level access to this resource.
-- `groups`: Groups allowed to access this resource from groups of "identity/users". Each item can be a MongoDB ObjectId, an email address or a domain (FQDN).
-- `clients`: List of client IDs allowed to access this resource. Clients that are not mentioned here may can read this data base on user interaction with other clients that are not co-worker with this client but could not run any operation that make changes on it.
-- `created_at`: Creation timestamp
-- `created_by`: User ID who created the record
+- `ref`: External reference identity used for integration with legacy systems. Must be unique within the specific resource and is required for the Wenex migration solution.
+- `owner`: User ID (MongoDB ObjectId) from `identity/users` who owns this document. A document can have only one owner at a time.
+- `shares`: List of user IDs explicitly granted share-level access to this document.
+- `groups`: Groups allowed to access this document (from the `identity/users.groups` field). Each item can be a MongoDB ObjectId, an email address, or a domain (FQDN).
+- `clients`: List of client IDs allowed to access this document. Clients not listed may read the data based on user interaction with other clients but cannot perform any write operations.
+- `created_at`: Creation datetime
+- `created_by`: User ID who created the document
 - `created_in`: Client ID where creation occurred
-- `updated_at`: Last update timestamp
-- `updated_by`: User ID who last updated
-- `updated_in`: Client ID where update occurred
-- `deleted_at`: Soft-delete timestamp
-- `deleted_by`: User ID who performed soft-delete
-- `deleted_in`: Client ID where delete occurred
-- `restored_at`: Restore timestamp (undo soft-delete)
-- `restored_by`: User ID who restored
-- `restored_in`: Client ID where restore occurred
-- `identity`: A reference/relation to a MongoDB ObjectId within the Wenex ecosystem. this could be populate from mongodb id to any resource of wenex platform resources. should be explicitly mentioned to populate it. DO NOT guess this value.
-- `relations`: A list of references/relations to a MongoDB ObjectId within the Wenex ecosystem. this could be populate from mongodb id to any resource of wenex platform resources. should be explicitly mentioned to populate it. DO NOT guess this value.
-- `description`: A sentence indexed as text for full-text search. You (the AI) can generate a short, relevant summary based on the user request if not explicitly provided.
-- `version`: Semantic version (SemVer) of this resource.
-- `props`: A JSON free schema to store unusual fields not mentioned in the original schema.
-- `tags`: List of tags for categorization. You (the AI) can infer 1 or 2 relevant tags (matching /^[\\w\\-._]+(:[\\w\\-._]+)?$/) based on the context, otherwise leave empty.
-- `rand`: a random string value filled with digits, automatically generated and cloud not change it.
-- `timestamp`: a timestamp string value stored in database, filled with digits, automatically generated and cloud not change it.
+- `updated_at`: Last update datetime
+- `updated_by`: User ID who last updated the document
+- `updated_in`: Client ID where the update occurred
+- `deleted_at`: Soft-delete datetime
+- `deleted_by`: User ID who performed the soft-delete
+- `deleted_in`: Client ID where the delete occurred
+- `restored_at`: Restore datetime (undo soft-delete)
+- `restored_by`: User ID who restored the document
+- `restored_in`: Client ID where the restore occurred
+- `identity`: A reference/relation to any service resources identity within the Wenex ecosystem. Must be explicitly requested for population. Do not guess this value.
+- `relations`: A list of references/relations to any service resources identity within the Wenex ecosystem. Must be explicitly requested for population. Do not guess this value.
+- `description`: A sentence indexed as text for full-text search. AI agents may generate a short, relevant summary if not explicitly provided.
+- `version`: Semantic version (SemVer) of this document.
+- `props`: Free-schema JSON object to store additional fields not defined in the official schema.
+- `tags`: List of tags for categorization. AI agents may infer 1–2 relevant tags (matching `/^[\w\-._]+(:[\w\-._]+)?$/`) based on context; otherwise leave empty.
+- `rand`: Automatically generated random string (digits only) – cannot be changed.
+- `timestamp`: Automatically generated timestamp string (digits only) – cannot be changed.
 
 ### Foundational Operations
 
-All operations are designed to return rich metadata (including creator, updater, timestamps, and access-control fields) to help AI agents maintain context and audit trails.
+All operations are designed to return rich metadata (including creator, updater, timestamps, and access-control fields) to help AI agents maintain full context and audit trails.
 
 - **Count**  
-  Returns the number of documents in a resource that match a given query.  
+  Returns the number of documents in a `service/resource` that match a given query.  
   *AI agent use case*: Fast cardinality checks, existence verification, or pagination planning without loading full data.
 
 - **Create**  
-  Creates exactly one new document in the specified resource.  
-  Returns the fully stored document, including system-generated fields (ID, creation timestamp, creator info, access metadata).
+  Creates exactly one new document in the specified `service/resource`.  
+  Returns the fully stored document, including automatically added system fields (ID, creation timestamp, creator info, access-control metadata).
 
 - **Create Bulk**  
-  Creates multiple documents in a single operation.  
-  Accepts an array of documents and behaves like repeated `Create` calls, but more efficiently.
+  Creates multiple documents in a single operation in the specified `service/resource`.  
+  Accepts an array of documents and behaves like repeated `Create` calls, but more efficiently. Returns the array of fully stored documents.
 
 - **Find**  
-  Retrieves an array of documents from a resource that match the provided query/filter.
+  Retrieves an array of documents from a `service/resource` that match the provided query/filter.  
+  Returns the matching documents (with full metadata).
 
 - **Find One**  
-  Retrieves exactly one document by its unique identifier (`id`) when known in advance.
+  Retrieves exactly one document by its unique `id` from a `service/resource`.  
+  Returns the full document or null if not found.
 
 - **Update One**  
-  Updates a single document by its `id`.  
-  Returns the updated document together with update metadata (who updated it and in which client).
+  Updates a single document by its `id` in the specified `service/resource`.  
+  Returns the updated document together with update metadata (`updated_by`, `updated_in`, `updated_at`).
 
 - **Update Bulk**  
-  Updates all documents in a resource that match a given query.  
+  Updates all documents in a `service/resource` that match a given query.  
   Returns the total number of documents that were modified.
 
 - **Delete One** (Soft Delete)  
-  Marks a document as deleted by its `id`.  
+  Marks a document as deleted by its `id` in the specified `service/resource`.  
   Returns the document with deletion metadata and timestamp. The document remains recoverable.
 
 - **Restore One**  
-  Restores a previously soft-deleted document by its `id`.  
+  Restores a previously soft-deleted document by its `id` in the specified `service/resource`.  
   Returns the restored document with restore metadata and timestamp.
 
 - **Destroy One** (Hard Delete)  
-  Permanently removes a document by its `id`.  
+  Permanently removes a document by its `id` in the specified `service/resource`.  
   Returns the final state of the document just before destruction for auditing purposes.
 
-These operations form the universal foundation for almost all interactions between AI agents and the Wenex platform. Because they are uniform across almost every resource, agents can learn a single interaction pattern and apply it reliably throughout the entire ecosystem.
+These operations form the universal foundation for almost all interactions between AI agents and the Wenex platform. Because they are uniform across every resource (including client-defined custom resources), agents can learn a single interaction pattern and apply it reliably throughout the entire ecosystem.
