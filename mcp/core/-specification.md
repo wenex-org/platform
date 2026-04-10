@@ -7,12 +7,12 @@ mcp-module: "specification"
 
 title: "Wenex Model Context Protocol (MCP) Specification"
 description: "Official definition of the Model Context Protocol (MCP) – the standard for how AI agents discover, read, understand, query, and interact with structured information inside the Wenex platform and its ecosystem."
-tags: ["core", "specification", "ai-agents", "platform", "services", "collections", "discovery"]
+tags: ["core", "specification", "platform", "resources"]
 
 last-updated: "2026-04-10"
 ---
 
-# Wenex Model Context Protocol (MCP)
+# Wenex Model Context Protocol (MCP) Specification
 
 ## 1. Introduction
 
@@ -20,7 +20,7 @@ The **Wenex Model Context Protocol (MCP)** is the official standard that enables
 
 ### Wenex Platform & Ecosystem Overview
 
-**Wenex** is a unified platform designed for building collaborative applications (clients) that seamlessly integrate human users and AI agents.  
+**Wenex** is a unified platform designed for building collaborative applications (clients) that seamlessly integrate human users and AI agents.
 
 The ecosystem consists of multiple **standard clients** (applications) built on the same set of platform protocols. Each client can have its own business logic, user interface, and specialized features, while all clients interoperate securely inside a shared collaboration environment called the **coworkers space**. In the coworkers space, multiple clients and their AI agents can discover collections, coordinate actions, and interact under platform-controlled permissions.
 
@@ -34,40 +34,46 @@ All data in Wenex is organized as **resources**. A resource is the canonical ide
 
 > **Note**: The platform only manages data structure, storage, versioning, and access control. All business logic remains the responsibility of the individual clients. Clients may define and register their own custom resources; these are stored and managed by the platform exactly like built-in resources.
 
-## 2. Terms and Definitions
+## 2. Terminology
 
-- **Auth Personal Token (APT)**: A token is given to work with the platform's core operations to guide the user to obtain this token. The AI ​​agent should look up the MCP resource `docs://core/auth-specification`.
-- **AI Agent**: An autonomous or assistive entity that uses the MCP to discover, read, and interact with resources inside the Wenex platform and coworkers space. Almost every operation requires a valid **Auth Personal Token (APT)** access token.
-- **Service**: A logical namespace that groups related collections sharing the same domain or functionality. Some built-in services that are always present include `auth`, `domain`, `context`, `identity` and etc.
-- **Resource**: The canonical identifier of a collection within a service, written as `service/collection` (or optionally `service/collection.field` when targeting a specific schema property). Use this exact format consistently in all MCP interactions and agent reasoning.
-- **Token Identity**: Every Access token also APT provides three properties that identify the caller:
+- **Auth Personal Token (APT)**: A secure token required for platform core operations. AI agents should reference the MCP resource `docs://core/auth-specification` to guide users on obtaining this token.
+- **AI Agent**: An autonomous or assistive entity that uses the MCP to discover, read, and interact with resources inside the Wenex platform and coworkers space. Nearly all operations require a valid **Auth Personal Token (APT)**.
+- **Service**: A logical namespace that groups related collections sharing the same domain or functionality. Built-in services always present include `auth`, `domain`, `context`, `identity`, and others.
+- **Resource**: The canonical identifier of a collection within a service, formatted as `service/collection` (or optionally `service/collection.field` when targeting a specific schema property). Use this exact format consistently in all MCP interactions and agent reasoning.
+- **Token Identity**: Every access token (APT) provides three properties that identify the caller:
   - `uid` — User identity from the `identity/users.id` resource (present only when a human user is logged in).
-  - `aid` — Application identity from the `domain/apps.id` resource (present when user logged in through an application or only an application logged in).
-  - `cid` — Client identity from the `domain/clients.id` resource (always present, because every login occurs through a client).
-  
+  - `aid` — Application identity from the `domain/apps.id` resource (present when a user logged in through an application or only an application logged in).
+  - `cid` — Client identity from the `domain/clients.id` resource (always present, as every login occurs through a client).
+
   The effective **token identity** is determined by this priority order (highest to lowest):
   - Use `uid` if it exists (user-level token).
   - Otherwise use `aid` if it exists (application-level token).
   - Otherwise use `cid` (client-only token).
+- **Zone**: Defines the scope of an AI agent's activity over data in the platform's information and resources, closely tied to base fields `owner`, `shares`, `groups`, and `clients`.
+- **Metadata Parameter**: Parameters that AI agents can set to influence platform behavior. These are detailed in relevant sections based on agent needs.
 
-Clients can define additional custom resources; these are stored on the platform using the same `service/collection` model.
+  Common metadata parameters include:
+  - `x-zone`: Defines the requested **zone** with a default value of `own,share`.
+  - `x-request-id`: A unique identifier per request for tracking operation execution.
+  - `x-no-api-response`: If the output is not critical or predictable, setting this to `true` still returns the request status.
+  - `x-exclude-soft-delete-query`: By default, soft-deleted data is excluded from AI agent views. Setting this parameter makes soft-deleted data visible.
 
 ## 3. Core Concepts
 
-The Wenex platform organizes all information as **collections** under **services** (collectively called **resources**). Every resource supports the same simple, predictable set of CRUD-style operations. These operations are intentionally minimal and consistent so AI agents can discover them once and apply them reliably across the entire ecosystem.
+The Wenex platform organizes all information as **collections** under **services** (collectively called **resources**). Every resource supports the same simple, predictable set of CRUD-style operations. These operations are intentionally minimal and consistent, allowing AI agents to learn them once and apply them reliably across the entire ecosystem.
 
-**Resource Identification (for AI Agents)**:
+### Resource Identification (for AI Agents)
 
-- Always use the full `service/collection` path (or `service/collection.field` when targeting a specific schema property) when referring to any collection. This path-based naming makes collection discovery and cross-service referencing straightforward and unambiguous.
-- To discover and retrieve the complete list and definitions of all built-in resources an AI agent must query the `docs://core/resource-specification` MCP resource.
+- Always use the full `service/collection` path (or `service/collection.field` when targeting a specific schema property) when referring to any collection. This path-based naming simplifies collection discovery and cross-service referencing.
+- To discover and retrieve the complete list and definitions of all built-in resources, AI agents must query the `docs://core/resource-specification` MCP resource.
 
 ### Core Schema (Base Properties)
 
-Almost every document in any collection extends this core schema. All these properties are **optional** during `Create` and `Update` operations. Most are automatically filled by the platform. **DO NOT invent values** for core properties. Leave them empty (or omit them) unless explicitly provided by the user or client.
+Almost every document in any collection extends this core schema. All properties are **optional** during `Create` and `Update` operations. Most are automatically filled by the platform. **Do not invent values** for core properties; leave them empty (or omit them) unless explicitly provided by the user or client.
 
 | Property       | Type / Format                          | Description / AI Guidance |
 |----------------|----------------------------------------|---------------------------|
-| `id`           | 24-character hexadecimal string | Primary identifier. Auto-generated. |
+| `id`           | 24-character hexadecimal string (MongoDB ObjectId) | Primary identifier. Auto-generated. |
 | `ref`          | String                                 | External reference identity for legacy-system integration. Must be unique within the collection. |
 | `owner`        | 24-character hex string                | User ID from `identity/users` who owns this document (one owner only). |
 | `shares`       | Array of 24-character hex strings      | List of user IDs explicitly granted share-level access. |
@@ -131,3 +137,14 @@ All operations return rich metadata (including creator, updater, timestamps, and
 
 These operations are identical across every resource (built-in and custom). An AI agent only needs to learn this single interaction pattern to work reliably with the entire Wenex ecosystem.
 
+### Access Control Model
+
+**Zone**:
+
+The most important metadata parameter in each request is `x-zone`, which defines the zone of activity for an AI agent over platform data and resources. It is strongly related to base fields like `owner`, `shares`, `groups`, and `clients`.
+
+The default value is `own,share` (data owned by or shared with the user across all clients). For read-only access, this suffices; for write operations, the platform automatically adds the `client` zone, resulting in `own,share,client`.
+
+- The `own` and `share` zones combine with `OR` logic when used simultaneously.
+- Combining `own` or `share` or `own,share` with `client` or `group` uses `AND` logic.
+- If a requested zone is not allowed by the AI agent's token, the platform automatically ignores that zone.
