@@ -145,6 +145,7 @@ The most important metadata parameter in each request is `x-zone`, which defines
 
 The default value is `own,share` (data owned by or shared with the user across all clients). For read-only access, this suffices; for write operations, the platform automatically adds the `client` zone, resulting in `own,share,client`.
 
+- The `group` and `client` zones combine with `AND` logic when used.
 - The `own` and `share` zones combine with `OR` logic when used simultaneously.
 - Combining `own` or `share` or `own,share` with `client` or `group` uses `AND` logic.
 - If a requested zone is not allowed by the AI agent's token, the platform automatically ignores that zone.
