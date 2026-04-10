@@ -114,8 +114,8 @@ Almost every document in any collection extends this core schema. All properties
 | `restored_at` | ISO 8601 datetime | Restore timestamp. Auto-filled on restore. |
 | `restored_by` | 24-character hex string | User ID who restored the document. |
 | `restored_in` | 24-character hex string | Client ID where the restore occurred. |
-| `identity` | Resource reference object | Single reference/relation to another Wenex resource. Do not guess values. |
-| `relations` | Resource reference object[] | List of references/relations to other Wenex resources. Do not guess values. |
+| `identity` | Resource reference 24-character hex string | Single reference/relation to another Wenex resource. Do not guess values. |
+| `relations` | Resource reference 24-character hex string[] | List of references/relations to other Wenex resources. Do not guess values. |
 | `description` | `string` | Short sentence used for full-text search. AI agents may generate a relevant summary if omitted. |
 | `version` | SemVer string | Document version. |
 | `props` | `object` (free-schema JSON) | Additional fields not defined in the official schema. |
