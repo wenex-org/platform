@@ -90,7 +90,7 @@ The Wenex platform organizes all information as **collections** under **services
 
 ### 3.2 Core Schema (Base Properties)
 
-Almost every document in any collection extends this core schema. All properties below are **optional** during `Create` and `Update` operations — most are automatically populated by the platform.
+Almost every document in any collection extends this core schema. All properties below are **optional** during `Create` and `Update` operations — most are automatically filled by the platform.
 
 > ⚠️ **AI Agent Guidance:** Do **NOT** invent values for core properties. Leave them empty (or omit them) unless the user or client explicitly provides a value.
 
