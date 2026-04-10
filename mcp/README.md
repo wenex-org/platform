@@ -1,1 +1,1 @@
-# Wenex MCP
+[Wenex Model Context Protocol (MCP) Specification](./core/-specification.md)
