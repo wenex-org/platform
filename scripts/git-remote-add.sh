@@ -65,6 +65,16 @@ else
   echo "Remote repository for platform-docs added successfully."
 fi
 
+# Navigate to the mcp directory of the project
+cd "../mcp"
+git remote add "$STAGE" "git@gitlab.$DOMAIN:wenex/platform-mcp.git"
+if [ $? -ne 0 ]; then
+  echo "Error: Failed to add remote repository for platform-mcp."
+else
+  git push "$STAGE" main
+  echo "Remote repository for platform-mcp added successfully."
+fi
+
 # Navigate to the libs directory of the project
 cd "../libs"
 git remote add "$STAGE" "git@gitlab.$DOMAIN:wenex/platform-libs.git"
