@@ -45,7 +45,7 @@ All data in Wenex is organized as **resources**. A resource is the canonical ide
 | **Auth Personal Token (APT)** | A token used to authenticate with the platform's core operations. AI agents should consult the MCP resource `docs://core/auth-specification` to guide the user through obtaining one. |
 | **AI Agent** | An autonomous or assistive entity that uses MCP to discover, read, and interact with resources inside the Wenex platform and Coworkers Space. Almost every operation requires a valid APT. |
 | **Service** | A logical namespace that groups related collections sharing the same domain or functionality (e.g., `auth`, `domain`, `context`, `identity`). |
-| **Resource** | The canonical identifier of a collection within a service, written as `service/collection` (or `service/collection.field` when targeting a specific schema property). Use this exact format consistently in all MCP interactions. |
+| **Resource** | The canonical identifier of a collection within a service, written as `service/collection` (or `service/collection.field[.field]` when targeting a specific schema property). Use this exact format consistently in all MCP interactions. |
 | **Zone** | Defines the scope of an AI agent's activity over data in the platform. See [Access Control Model](#access-control-model) for details. |
 
 ### 2.1 Token Identity
@@ -153,7 +153,7 @@ The `x-zone` metadata parameter is the most important access-control mechanism p
 | Scenario | Default `x-zone` |
 |----------|-------------------|
 | Read-only operations | `own,share` — data owned by or shared with the user, across all clients. |
-| Write operations | `own,share,client` — the platform automatically apply the `client` zone for write actions. |
+| Write operations | `own,share` — the platform automatically apply the `client` zone for write actions. |
 
 **Zone combination logic:**
 
@@ -164,3 +164,32 @@ The `x-zone` metadata parameter is the most important access-control mechanism p
 | (`own` and/or `share`) + (`client` and/or `group`) | Combined with **AND** — documents must match both sides. |
 
 > **Note:** If a requested zone is not permitted by the AI agent's token, the platform silently ignores that zone.
+
+#### Grants
+
+The platform access control model is base on ABAC (Attribute-Based Access Control), a grant is the smallest unit of an ABAC permission, It tells you whether a `subject` is allowed to perform a specific `action` on a specific `object/resource`. user subjects are specified within `identity/users.subjects` resource.
+
+Grants are scoped to have more fine-grained version of a grant to apply precise restrictions instead of broad/all-or-nothing, Scoping is done by appending a scope after a colon (`:`) in the `action` or `object/resource` name. default scope (when nothing is specified) is usually `any` for actions and `all` for objects.
+
+Scoping allows you to express rules like: "User can only read their own articles" instead of "User can read all articles".
+
+Wenex common action Scopes: `own`, `share`, `group` and `client` (e.t. `create:own`, `update:share`, `restore:group`)
+Wenex object/resource Scopes: collection within services it's like a resource (e.t. `identity:users`, `users` is scope)
+
+Grant Definition Example (how you define a scoped grant):
+
+```ts
+{
+  "subject": "user@wenex.org",
+  "action": "create:own",           // scoped action
+  "object": "article",              // can be scoped too, e.g. "article:published"
+  "field": ["*", "!owner"]          // optional: allow all fields except "owner", apply on request body
+  "filter": ["*", "!description"]   // optional: allow all fields except "description", apply on response body
+}
+```
+
+A Grant is strongly tied to the base fields `owner`, `shares`, `groups`, and `clients`.
+
+> Note: AI agents should always define scopes if wants to create a new grant
+
+subjects within the wenex platform are postfixed by user `domain` - domain is a unique identifier in FQDN format for each token, each domain in wenex ecosystem provided by the `domain/clients.domains[].name` (`name` is a nested field of object array `domains`), each client can have multiple `domain` but a token can have only one of them in a same time.
