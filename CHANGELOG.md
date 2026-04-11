@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- feat(`branches.router`): Add all MCP Tools. @alihajqani
 - feat(`apts.router`): `Destroy Auth APT By Id` Tool for MCP. @alihajqani
 - feat(`apts.router`): `Restore Auth APT By Id` Tool for MCP. @alihajqani
 - feat(`apts.router`): `Find Auth APT By Id` Tool for MCP. @alihajqani
@@ -36,6 +37,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- fix(`apt.router`): Add error response fields to APT output schemas @alihajqani
+- fix(`grants.router`): Add error response fields to grant output schemas @alihajqani
 - fix(`const.mcp`): add `relations` field to `CORE_INPUT_SCHEMA_FIELDS` @alihajqani
 - fix(`const.mcp`): handle Date and string inputs for core output schema timestamps @alihajqani
 
