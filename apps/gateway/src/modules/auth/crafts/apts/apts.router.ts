@@ -255,6 +255,10 @@ mcp.server.registerTool(
     },
     outputSchema: {
       count: z.number().min(0).optional().describe('The total number of APTs matching the conditions.'),
+      // Error response fields (returned by throwableToolCall on failure)
+      status: z.any().optional(),
+      data: z.any().optional(),
+      message: z.string().optional(),
     },
   },
   async (data, { requestInfo }) =>
@@ -300,7 +304,14 @@ mcp.server.registerTool(
       .replace(/\s+/g, ' ')
       .trim(),
     inputSchema: { ...APT_INPUT_SCHEMA_FIELDS, ...CORE_INPUT_SCHEMA_FIELDS },
-    outputSchema: { ...APT_OUTPUT_SCHEMA_FIELDS, ...CORE_OUTPUT_SCHEMA_FIELDS },
+    outputSchema: {
+      ...APT_OUTPUT_SCHEMA_FIELDS,
+      ...CORE_OUTPUT_SCHEMA_FIELDS,
+      // Error response fields (returned by throwableToolCall on failure)
+      status: z.any().optional(),
+      data: z.any().optional(),
+      message: z.string().optional(),
+    },
   },
   async (data: any, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -350,7 +361,14 @@ mcp.server.registerTool(
         .describe('REQUIRED. An array containing the APTs to be created.'),
     },
     outputSchema: {
-      items: z.array(z.object({ ...APT_OUTPUT_SCHEMA_FIELDS, ...CORE_OUTPUT_SCHEMA_FIELDS })).describe('List of the created APTs.'),
+      items: z
+        .array(z.object({ ...APT_OUTPUT_SCHEMA_FIELDS, ...CORE_OUTPUT_SCHEMA_FIELDS }))
+        .optional()
+        .describe('List of the created APTs.'),
+      // Error response fields (returned by throwableToolCall on failure)
+      status: z.any().optional(),
+      data: z.any().optional(),
+      message: z.string().optional(),
     },
   },
   async (data: any, { requestInfo }) =>
@@ -412,7 +430,12 @@ mcp.server.registerTool(
     outputSchema: {
       items: z
         .array(z.object({ ...APT_OUTPUT_SCHEMA_FIELDS, ...CORE_OUTPUT_SCHEMA_FIELDS }))
+        .optional()
         .describe('The list of matching APTs.'),
+      // Error response fields (returned by throwableToolCall on failure)
+      status: z.any().optional(),
+      data: z.any().optional(),
+      message: z.string().optional(),
     },
   },
   async (data, { requestInfo }) =>
@@ -474,7 +497,14 @@ mcp.server.registerTool(
         .optional()
         .describe('OPTIONAL. External reference identity (query parameter). Leave empty unless explicitly requested.'),
     },
-    outputSchema: { ...APT_OUTPUT_SCHEMA_FIELDS, ...CORE_OUTPUT_SCHEMA_FIELDS },
+    outputSchema: {
+      ...APT_OUTPUT_SCHEMA_FIELDS,
+      ...CORE_OUTPUT_SCHEMA_FIELDS,
+      // Error response fields (returned by throwableToolCall on failure)
+      status: z.any().optional(),
+      data: z.any().optional(),
+      message: z.string().optional(),
+    },
   },
   async (data, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -536,7 +566,14 @@ mcp.server.registerTool(
         .optional()
         .describe('OPTIONAL. External reference identity (query parameter). Leave empty unless explicitly requested.'),
     },
-    outputSchema: { ...APT_OUTPUT_SCHEMA_FIELDS, ...CORE_OUTPUT_SCHEMA_FIELDS },
+    outputSchema: {
+      ...APT_OUTPUT_SCHEMA_FIELDS,
+      ...CORE_OUTPUT_SCHEMA_FIELDS,
+      // Error response fields (returned by throwableToolCall on failure)
+      status: z.any().optional(),
+      data: z.any().optional(),
+      message: z.string().optional(),
+    },
   },
   async (data, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -593,7 +630,14 @@ mcp.server.registerTool(
         .optional()
         .describe('OPTIONAL. External reference identity (query parameter). Leave empty unless explicitly requested.'),
     },
-    outputSchema: { ...APT_OUTPUT_SCHEMA_FIELDS, ...CORE_OUTPUT_SCHEMA_FIELDS },
+    outputSchema: {
+      ...APT_OUTPUT_SCHEMA_FIELDS,
+      ...CORE_OUTPUT_SCHEMA_FIELDS,
+      // Error response fields (returned by throwableToolCall on failure)
+      status: z.any().optional(),
+      data: z.any().optional(),
+      message: z.string().optional(),
+    },
   },
   async (data, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -667,7 +711,14 @@ mcp.server.registerTool(
           If the user's prompt DOES NOT contain the exact phrase 'CONFIRM_DESTROY', you MUST leave this field empty. Do NOT auto-fill or guess this.`,
         ),
     },
-    outputSchema: { ...APT_OUTPUT_SCHEMA_FIELDS, ...CORE_OUTPUT_SCHEMA_FIELDS },
+    outputSchema: {
+      ...APT_OUTPUT_SCHEMA_FIELDS,
+      ...CORE_OUTPUT_SCHEMA_FIELDS,
+      // Error response fields (returned by throwableToolCall on failure)
+      status: z.any().optional(),
+      data: z.any().optional(),
+      message: z.string().optional(),
+    },
   },
   async (data, { requestInfo }) =>
     throwableToolCall(async () => {
