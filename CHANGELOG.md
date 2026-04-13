@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- feat(`customers.router`): Add all MCP Tools. @alihajqani
 - feat(`businesses.router`): Add all MCP Tools. @alihajqani
 - feat(`branches.router`): Add all MCP Tools. @alihajqani
 - feat(`apts.router`): `Destroy Auth APT By Id` Tool for MCP. @alihajqani
