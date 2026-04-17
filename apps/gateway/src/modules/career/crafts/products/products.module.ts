@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 
+import './products.router';
 import { ProductsResolver } from './products.resolver';
 import { ProductsController } from './products.controller';
 
