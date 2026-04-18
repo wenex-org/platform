@@ -7,6 +7,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { BlacklistModule } from '@app/module/blacklist';
 import { SentryModule } from '@ntegral/nestjs-sentry';
+import { McpModule } from './modules/mcp/mcp.module';
 import { HealthModule } from '@app/module/health';
 import { LoggerModule } from '@app/module/logger';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -19,6 +20,7 @@ import { MODULES, HEALTH_CHECK_OPTIONS } from './modules';
 
 @Module({
   imports: [
+    McpModule,
     LoggerModule.forRoot(),
     BlacklistModule.forRoot(),
     PrometheusModule.register(),
