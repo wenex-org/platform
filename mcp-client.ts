@@ -222,8 +222,8 @@ NEVER GUESS tool names. Always load them first.`,
 
     let response = await this.ollama.chat({
       model: modelName,
-      messages: [systemPrompt, ...this.messages],
       tools: Object.values(this.activeTools),
+      messages: [systemPrompt, ...this.messages],
     });
 
     this.messages.push(response.message);
