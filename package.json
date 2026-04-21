@@ -171,7 +171,7 @@
   "devDependencies": {
     "@compodoc/compodoc": "^1.1.26",
     "@eslint/js": "^9.18.0",
-    "@modelcontextprotocol/inspector": "^0.21.1",
+    "@modelcontextprotocol/inspector": "^0.21.2",
     "@nestjs/cli": "^11.0.2",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.21",
