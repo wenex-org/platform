@@ -11,6 +11,7 @@ require('dotenv').config();
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 import { Ollama, type Tool as OllamaTool, type Message } from 'ollama';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
+import { toKebabCase } from 'naming-conventions-modeler';
 import { toString } from '@app/common/core/utils';
 import * as readline from 'node:readline';
 import addFormats from 'ajv-formats';
@@ -43,6 +44,7 @@ export class ClientMCP {
   private transport?: StreamableHTTPClientTransport;
 
   // Tool Management
+  private activeTools: Record<string, OllamaTool> = {};
   private availableTools: Record<string, OllamaTool> = {};
 
   // Validation
@@ -95,8 +97,10 @@ export class ClientMCP {
     const availableResourcesUris = resourcesResult.resources.map((r) => r.uri).join(', ');
 
     // Reset local tool storage
-    this.availableTools = {};
     this.validators = {};
+
+    this.activeTools = {};
+    this.availableTools = {};
 
     // Map MCP Tools to Ollama Format
     toolsResult.tools.forEach((tool) => {
@@ -114,12 +118,12 @@ export class ClientMCP {
       this.validators[tool.name] = { schema: tool.inputSchema };
     });
 
-    // Inject Client-side Resource Reader Tool
-    this.availableTools['read_documentations'] = {
+    // Inject Client-side Tools
+    this.activeTools['read_documentations'] = {
       type: 'function',
       function: {
         name: 'read_documentations',
-        description: `Read the content of an MCP server resource. Available resource: ${availableResourcesUris}`,
+        description: `CRITICAL: Read the content of an MCP server resource. Available resources: ${availableResourcesUris}.`,
         parameters: {
           type: 'object',
           required: ['uri'],
@@ -130,7 +134,31 @@ export class ClientMCP {
 
     // Store schema for internal AJV validation
     this.validators['read_documentations'] = {
-      schema: { type: 'object', properties: { uri: { type: 'string' } }, required: ['uri'] },
+      schema: {
+        type: 'object',
+        properties: { uri: { type: 'string', description: 'The URI of the resource to read' } },
+        required: ['uri'],
+      },
+    };
+
+    this.activeTools['load_collection_tools'] = {
+      type: 'function',
+      function: {
+        name: 'load_collection_tools',
+        description: `CRITICAL: Call this tool AFTER reading the docs to unlock the database execution tools.
+Example: If you need to manage auth grants, pass service="auth" and collection="grant".`,
+        parameters: {
+          type: 'object',
+          required: ['service', 'collection'],
+          properties: {
+            service: { type: 'string', description: 'The service name (e.g., auth, career)' },
+            collection: { type: 'string', description: 'The singular collection name (e.g., grant, user, profile)' },
+          },
+        },
+      },
+    };
+    this.validators['load_collection_tools'] = {
+      schema: this.activeTools['load_collection_tools'].function.parameters,
     };
 
     console.log('✅ Connected to MCP server');
@@ -180,20 +208,22 @@ export class ClientMCP {
     this.messages.push({ role: 'user', content: query });
     this.trimHistory();
 
-    console.log('🤖 Sending query to Ollama...');
-
-    //  Create a system prompt for today's Date.
+    console.log('🤖 Analyzing request...');
     const today = new Date().toISOString().split('T')[0];
     const systemPrompt: Message = {
       role: 'system',
-      content: `Today's date is ${today}. Use this for resolving relative dates.`,
+      content: `You are an advanced AI Agent for the Wenex Platform. Today is ${today}.
+[CRITICAL WORKFLOW - DO THIS IN EXACT ORDER]:
+1. DISCOVER: Call 'read_documentations' on 'docs://readme' and then the relevant docs.
+2. LOAD: You DO NOT have the database execution tools by default. You MUST call 'load_collection_tools' with the correct service and collection (e.g. auth service, grant collection) to unlock them.
+3. EXECUTE: Call the newly loaded tools (e.g., find_auth_grant, create_auth_grant) to process the user's request.
+NEVER GUESS tool names. Always load them first.`,
     };
 
-    // --- Initial LLM Request ---
     let response = await this.ollama.chat({
       model: modelName,
       messages: [systemPrompt, ...this.messages],
-      tools: Object.values(this.availableTools),
+      tools: Object.values(this.activeTools),
     });
 
     this.messages.push(response.message);
@@ -202,7 +232,7 @@ export class ClientMCP {
     let round = 0;
     while (response.message.tool_calls?.length && round < this.config.maxToolRounds) {
       round++;
-      console.log(`🛠 Round ${round}: ${response.message.tool_calls.map((t) => t.function.name).join(', ')} tool call(s)`);
+      console.log(`🛠 Round ${round}: Executing ${response.message.tool_calls.map((t) => t.function.name).join(', ')}...`);
 
       // === PARALLEL TOOL EXECUTION ===
       const toolPromises = response.message.tool_calls.map(async (toolCall): Promise<Message> => {
@@ -221,7 +251,25 @@ export class ClientMCP {
           });
         } else {
           try {
-            if (toolName === 'read_documentations') {
+            if (toolName === 'load_collection_tools') {
+              const { service, collection } = toolArgs;
+              const targetPattern = `_${toKebabCase(service)}_${toKebabCase(collection)}`;
+
+              let loadedCount = 0;
+              Object.values(this.availableTools).forEach((tool) => {
+                const toolName = tool.function?.name;
+
+                if (toolName && toolName.endsWith(targetPattern)) {
+                  this.activeTools[toolName] = tool;
+                  loadedCount++;
+                }
+              });
+
+              content =
+                loadedCount > 0
+                  ? `Successfully loaded ${loadedCount} tools containing "*${targetPattern}". You can now execute them.`
+                  : `No tools found containing "*${targetPattern}". Please check the spelling from the documentation.`;
+            } else if (toolName === 'read_documentations') {
               const result = await this.mcp.readResource({ uri: toolArgs.uri });
               content = result.contents.map((c: any) => c.text || toString(c)).join('\n\n');
             } else {
@@ -235,7 +283,7 @@ export class ClientMCP {
             }
           } catch (err: any) {
             console.error(`❌ ${toolName} failed:`, err.message);
-            content = `${toolName} execution error: ${err.message}`;
+            content = `ERROR executing ${toolName}: ${err.message}`;
           }
         }
 
@@ -243,19 +291,12 @@ export class ClientMCP {
       });
 
       const results = await Promise.all(toolPromises);
+      results.forEach((res) => this.messages.push(res));
 
-      // Append results in original order
-      for (const result of results) {
-        this.messages.push(result);
-      }
-
-      this.trimHistory();
-
-      // Next LLM turn
       response = await this.ollama.chat({
         model: modelName,
-        messages: this.messages,
-        tools: Object.values(this.availableTools),
+        tools: Object.values(this.activeTools),
+        messages: [systemPrompt, ...this.messages],
       });
 
       this.messages.push(response.message);
@@ -277,12 +318,8 @@ export class ClientMCP {
    * Interactive chat loop with graceful exit
    */
   async chatLoop(modelName: string = 'qwen2.5:32b') {
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    });
-
-    console.log('\n🚀 MCP Client v2.0 started!');
+    const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+    console.log('\n🚀 MCP Client v2.0 (Lazy Loaded) started!');
     console.log("Type your query or 'quit' to exit.\n");
 
     const ask = () => new Promise<string>((resolve) => rl.question('\nQuery > ', resolve));
