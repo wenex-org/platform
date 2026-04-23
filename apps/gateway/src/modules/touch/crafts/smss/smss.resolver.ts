@@ -1,7 +1,7 @@
 import { Audit, Cache, CollectionPath, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
 import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { SmsDataSerializer, SmsItemsSerializer, SmsSerializer } from '@app/common/serializers/touch';
-import { CreateSmsDto, CreateSmsItemsDto, SendSmsTemplateDto, UpdateSmsDto } from '@app/common/dto/touch';
+import { CreateSmsDto, CreateSmsItemsDto, UpdateSmsDto } from '@app/common/dto/touch';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
 import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
@@ -18,9 +18,8 @@ import { Sms, SmsDto } from '@app/common/interfaces/touch';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { Filter, Meta } from '@app/common/core/decorators';
 import { ValidationPipe } from '@app/common/core/pipes';
-import { mapToInstance } from '@app/common/core/utils';
 import { Metadata } from '@app/common/core/interfaces';
-import { from, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
 const COLL_PATH = COLLECTION('smss', 'touch');
 
@@ -34,16 +33,6 @@ const COLL_PATH = COLLECTION('smss', 'touch');
 export class SmssResolver extends ControllerClass<Sms, SmsDto> implements IController<Sms, SmsDto> {
   constructor(readonly provider: TouchProvider) {
     super(provider.smss, SmsSerializer);
-  }
-
-  @Mutation(() => SmsDataSerializer)
-  @Audit('GATEWAY')
-  @Cache(COLL_PATH, 'flush')
-  @SetScope(Scope.SendTouchSmss)
-  @UseInterceptors(...WriteInterceptors)
-  @SetPolicy(Action.Send, Resource.TouchSmss)
-  sendTemplateTouchSms(@Meta() meta: Metadata, @Args('data') data: SendSmsTemplateDto): Observable<SmsDataSerializer> {
-    return from(this.provider.smss.sendTemplate(data, { meta })).pipe(mapToInstance(SmsSerializer, 'data'));
   }
 
   @Query(() => TotalSerializer)

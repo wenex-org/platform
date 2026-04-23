@@ -64,15 +64,15 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
     return from(this.provider.smss.send(data, { meta })).pipe(mapToInstance(SmsSerializer, 'data'));
   }
 
-  @Post('sendTemplate')
+  @Post('send/template')
   @Audit('GATEWAY')
   @Cache(COLL_PATH, 'flush')
   @SetScope(Scope.SendTouchSmss)
   @UseInterceptors(...WriteInterceptors)
   @ApiResponse({ type: SmsDataSerializer })
   @SetPolicy(Action.Send, Resource.TouchSmss)
-  sendTemplate(@Meta() meta: Metadata, @Body() data: SendSmsTemplateDto): Observable<SmsDataSerializer> {
-    return from(this.provider.smss.sendTemplate(data, { meta })).pipe(mapToInstance(SmsSerializer, 'data'));
+  sendByTemplate(@Meta() meta: Metadata, @Body() data: SendSmsTemplateDto): Observable<SmsDataSerializer> {
+    return from(this.provider.smss.sendByTemplate(data, { meta })).pipe(mapToInstance(SmsSerializer, 'data'));
   }
 
   // ##############################
