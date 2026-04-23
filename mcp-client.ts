@@ -15,6 +15,7 @@ import { toKebabCase } from 'naming-conventions-modeler';
 import { toString } from '@app/common/core/utils';
 import * as readline from 'node:readline';
 import addFormats from 'ajv-formats';
+import axios from 'axios';
 import Ajv from 'ajv';
 
 interface ClientMCPConfig {
@@ -23,6 +24,7 @@ interface ClientMCPConfig {
   defaultModel?: string;
   maxToolRounds?: number;
   maxHistoryMessages?: number;
+  platformAuthVerifyPath: string;
 }
 
 const DEFAULT_CONFIG: Required<ClientMCPConfig> = {
@@ -31,6 +33,7 @@ const DEFAULT_CONFIG: Required<ClientMCPConfig> = {
   defaultModel: 'qwen2.5:32b',
   ollamaHost: 'http://localhost:11434',
   mcpServerUrl: 'http://127.0.0.1:3010/mcp',
+  platformAuthVerifyPath: 'http://127.0.0.1:3010/auth/verify',
 };
 
 export class ClientMCP {
@@ -119,6 +122,14 @@ export class ClientMCP {
     });
 
     // Inject Client-side Tools
+    this.activeTools['auth_verify'] = {
+      type: 'function',
+      function: {
+        name: 'auth_verify',
+        description: 'CRITICAL: Call this tool BEFORE calling the tools to prevent unauthenticated request exception call',
+      },
+    };
+
     this.activeTools['read_documentations'] = {
       type: 'function',
       function: {
@@ -129,15 +140,6 @@ export class ClientMCP {
           required: ['uri'],
           properties: { uri: { type: 'string', description: 'The URI of the resource to read' } },
         },
-      },
-    };
-
-    // Store schema for internal AJV validation
-    this.validators['read_documentations'] = {
-      schema: {
-        type: 'object',
-        properties: { uri: { type: 'string', description: 'The URI of the resource to read' } },
-        required: ['uri'],
       },
     };
 
@@ -157,18 +159,22 @@ Example: If you need to manage auth grants, pass service="auth" and collection="
         },
       },
     };
+
+    // Store schema for internal AJV validation
+    this.validators['auth_verify'] = { schema: {} };
+
+    this.validators['read_documentations'] = {
+      schema: this.activeTools['read_documentations'].function.parameters,
+    };
+
     this.validators['load_collection_tools'] = {
       schema: this.activeTools['load_collection_tools'].function.parameters,
     };
 
     console.log('✅ Connected to MCP server');
-    console.log('   Resources :', availableResourcesUris || 'none');
-    console.log(
-      '   Tools     :',
-      Object.values(this.availableTools)
-        .map((t) => t.function.name)
-        .join(', '),
-    );
+    console.log('   Resources     :', availableResourcesUris || 'none');
+    console.log('   Tools         :', Object.keys(this.availableTools).join(', '));
+    console.log('\n\n   Active Tools  :', Object.keys(this.activeTools).join(', '));
   }
 
   private getValidator(toolName: string) {
@@ -213,10 +219,10 @@ Example: If you need to manage auth grants, pass service="auth" and collection="
     const systemPrompt: Message = {
       role: 'system',
       content: `You are an advanced AI Agent for the Wenex Platform. Today is ${today}.
-[CRITICAL WORKFLOW - DO THIS IN EXACT ORDER]:
-1. DISCOVER: Call 'read_documentations' on 'docs://readme' and then the relevant docs.
-2. LOAD: You DO NOT have the database execution tools by default. You MUST call 'load_collection_tools' with the correct service and collection (e.g. auth service, grant collection) to unlock them.
-3. EXECUTE: Call the newly loaded tools (e.g., find_auth_grant, create_auth_grant) to process the user's request.
+[ CRITICAL WORKFLOW - DO THIS IN EXACT ORDER ]:
+1. DISCOVER: first of all call 'read_documentations' on 'docs://readme' uri and then the relevant docs.
+2. LOAD: You DO NOT have the platform tools by default. You MUST call 'load_collection_tools' with the correct service and collection to unlock them.
+3. EXECUTE: Call the newly loaded tools to process the user's request.
 NEVER GUESS tool names. Always load them first.`,
     };
 
@@ -235,13 +241,14 @@ NEVER GUESS tool names. Always load them first.`,
       console.log(`🛠 Round ${round}: Executing ${response.message.tool_calls.map((t) => t.function.name).join(', ')}...`);
 
       // === PARALLEL TOOL EXECUTION ===
-      const toolPromises = response.message.tool_calls.map(async (toolCall): Promise<Message> => {
+      for (const toolCall of response.message.tool_calls) {
         const toolName = toolCall.function.name;
         const toolArgs = toolCall.function.arguments as Record<string, any>;
 
+        console.log(`Parallel execution (${toolName}) args:`, toolArgs);
         const validation = this.validateArgs(toolName, toolArgs);
-        let content = '';
 
+        let content = '';
         if (!validation.valid) {
           console.warn(`⚠️ Validation failed for ${toolName}`);
           content = toString({
@@ -251,14 +258,25 @@ NEVER GUESS tool names. Always load them first.`,
           });
         } else {
           try {
-            if (toolName === 'load_collection_tools') {
+            if (toolName === 'auth_verify') {
+              try {
+                const { data } = await axios.get(this.config.platformAuthVerifyPath, {
+                  headers: { Authorization: process.env.MCP_CLIENT_APT_TOKEN },
+                });
+                content += `\n\nTOKEN DECRYPTED VALUES:\n${toString(data)}\n
+NOTE: if AI Agent don't know about token values read "docs://core/auth-specification" with "read_documentations" tool`;
+              } catch (error) {
+                console.error('❌ "auth_verify" endpoint called with exception:', error);
+                content += `\n\nTOKEN DECRYPTED VALUES:\n is not valid or expired\n
+NOTE: if AI Agent don't know about token values read "docs://core/auth-specification" with "read_documentations" tool`;
+              }
+            } else if (toolName === 'load_collection_tools') {
               const { service, collection } = toolArgs;
               const targetPattern = `_${toKebabCase(service)}_${toKebabCase(collection)}`;
 
               let loadedCount = 0;
               Object.values(this.availableTools).forEach((tool) => {
                 const toolName = tool.function?.name;
-
                 if (toolName && toolName.endsWith(targetPattern)) {
                   this.activeTools[toolName] = tool;
                   loadedCount++;
@@ -269,6 +287,8 @@ NEVER GUESS tool names. Always load them first.`,
                 loadedCount > 0
                   ? `Successfully loaded ${loadedCount} tools containing "*${targetPattern}". You can now execute them.`
                   : `No tools found containing "*${targetPattern}". Please check the spelling from the documentation.`;
+
+              console.log('\n\n   Active Tools  :', Object.keys(this.activeTools).join(', '), '\n');
             } else if (toolName === 'read_documentations') {
               const result = await this.mcp.readResource({ uri: toolArgs.uri });
               content = result.contents.map((c: any) => c.text || toString(c)).join('\n\n');
@@ -287,11 +307,14 @@ NEVER GUESS tool names. Always load them first.`,
           }
         }
 
-        return { role: 'tool', content, tool_name: toolName };
-      });
+        const lines = content.split(/\r?\n/).filter((line) => line.trim());
+        lines.slice(0, 14).forEach((line, index) => {
+          console.log(`${(index + 1).toString().padStart(2, '0')}: ${line}`);
+        });
+        console.log(`... (${lines.length - 14} more lines)\n\n`);
 
-      const results = await Promise.all(toolPromises);
-      results.forEach((res) => this.messages.push(res));
+        this.messages.push({ role: 'tool', content, tool_name: toolName });
+      }
 
       response = await this.ollama.chat({
         model: modelName,
