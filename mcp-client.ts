@@ -219,7 +219,7 @@ Example: If you need to manage auth grants, pass service="auth" and collection="
     const systemPrompt: Message = {
       role: 'system',
       content: `You are an advanced AI Agent for the Wenex Platform. Today is ${today}.
-[ CRITICAL WORKFLOW - DO THIS IN EXACT ORDER ]:
+[ CRITICAL WORKFLOW - DO THIS IN EXACT ORDER EVERY TIME ]:
 1. DISCOVER: first of all call 'read_documentations' on 'docs://readme' uri and then the relevant docs.
 2. LOAD: You DO NOT have the platform tools by default. You MUST call 'load_collection_tools' with the correct service and collection to unlock them.
 3. EXECUTE: Call the newly loaded tools to process the user's request.
@@ -308,10 +308,10 @@ NOTE: if AI Agent don't know about token values read "docs://core/auth-specifica
         }
 
         const lines = content.split(/\r?\n/).filter((line) => line.trim());
-        lines.slice(0, 14).forEach((line, index) => {
+        lines.slice(0, 12).forEach((line, index) => {
           console.log(`${(index + 1).toString().padStart(2, '0')}: ${line}`);
         });
-        console.log(`... (${lines.length - 14} more lines)\n\n`);
+        console.log(`... (${lines.length - 12} more lines)\n\n`);
 
         this.messages.push({ role: 'tool', content, tool_name: toolName });
       }
