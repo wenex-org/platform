@@ -353,6 +353,10 @@ NOTE: if AI Agent don't know about token values read "docs://core/auth-specifica
         if (input.toLowerCase() === 'quit') break;
 
         const response = await this.processQuery(input, modelName);
+        console.log('\n\n');
+        console.log('  -------------------------------------------------------  ');
+        console.log('  --------------------- AI RESPONSE ---------------------  ');
+        console.log('  -------------------------------------------------------  ');
         console.log('\n' + response);
       }
     } finally {
