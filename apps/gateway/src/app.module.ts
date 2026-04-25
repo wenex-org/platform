@@ -12,12 +12,14 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { RedisModule } from '@app/module/redis';
 import GraphQLJSON from 'graphql-type-json';
 import { JwtModule } from '@nestjs/jwt';
+import { McpModule } from './modules/mcp/mcp.module';
 import { join } from 'path';
 
 import { MODULES, HEALTH_CHECK_OPTIONS } from './modules';
 
 @Module({
   imports: [
+    McpModule,
     LoggerModule.forRoot(),
     BlacklistModule.forRoot(),
     PrometheusModule.register(),
