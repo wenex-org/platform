@@ -1,5 +1,4 @@
 import { getHeaders, ServerMCP, throwableToolCall, CORE_INPUT_SCHEMA, CORE_OUTPUT_SCHEMA } from '@app/common/core/mcp';
-import { isCron, isNetAdd, isSubject } from '@app/common/core/decorators/validation';
 import { CreateGrantDto } from '@app/common/dto/auth';
 import { z } from 'zod';
 
@@ -10,30 +9,17 @@ const mcp = ServerMCP.create();
 // ------------------------------------------------------------
 
 const TIME_SCHEMA = z.object({
-  cron_exp: z
-    .string()
-    .trim()
-    .refine((val) => isCron(val)),
+  cron_exp: z.string(),
   duration: z.number().positive(),
 });
 
 const GRANT_SCHEMA = {
-  subject: z
-    .string()
-    .trim()
-    .refine((val) => isSubject(val)),
-  action: z.string().trim(),
-  object: z.string().trim(),
-  field: z.array(z.string().trim()).optional(),
-  filter: z.array(z.string().trim()).optional(),
-  location: z
-    .array(
-      z
-        .string()
-        .trim()
-        .refine((val) => isNetAdd(val)),
-    )
-    .optional(),
+  subject: z.string(),
+  action: z.string(),
+  object: z.string(),
+  field: z.array(z.string()).optional(),
+  filter: z.array(z.string()).optional(),
+  location: z.array(z.string()).optional(),
   time: z.array(TIME_SCHEMA).optional(),
 };
 
@@ -68,7 +54,7 @@ mcp.server.registerTool(
       logger('endpoint call with query %o and config %o', query, config);
 
       const result = await mcp.platform.auth.grants.count(query, config);
-      logger('the structured content of result output is: %o', result);
+      logger('the structured content of result value after call is: %o', result);
 
       return {
         structuredContent: { result },
@@ -88,7 +74,7 @@ mcp.server.registerTool(
     },
     outputSchema: {
       errors: z.array(z.object({}).passthrough()).optional(),
-      result: z.object({ ...GRANT_SCHEMA, ...CORE_OUTPUT_SCHEMA }).optional(),
+      result: z.object({ ...GRANT_SCHEMA, ...CORE_OUTPUT_SCHEMA }).partial(),
     },
   },
   async (data, { requestInfo }) =>
@@ -104,7 +90,7 @@ mcp.server.registerTool(
       logger('endpoint call with payload %o and config %o', payload, config);
 
       const result = await mcp.platform.auth.grants.create(payload, config);
-      logger('the structured content of result output is: %o', result);
+      logger('the structured content of result value after call is: %o', result);
 
       return {
         structuredContent: { result },
