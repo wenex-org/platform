@@ -11,20 +11,26 @@ import { GrantDto } from '@app/common/interfaces/auth';
 import { fixOut } from '@app/common/core/utils/mongo';
 import { z } from 'zod';
 
-export const registerCreateAuthGrantTool = (mcp: ReturnType<typeof ServerMCP.create>) => {
+export const registerCreateAuthGrantsTool = (mcp: ReturnType<typeof ServerMCP.create>) => {
   mcp.server.registerTool(
-    'create_auth_grant',
+    'create_auth_grants',
     {
       title: 'Create a New Auth Grant',
       description: `[ACTION] Creates a single new Authorization Grant.
           [TRIGGER] Use when the user explicitly asks to create, add, or assign a new permission/grant to a user.
           [RULES]
-          1. ACCURACY: Ensure all REQUIRED fields (subject, action, object) are provided.[DICTIONARY] ${CORE_DATA_DICTIONARY}, ${GRANT_DATA_DICTIONARY}`
+          1. ACCURACY: Ensure all REQUIRED fields (subject, action, object) are provided.
+          [DICTIONARY] ${CORE_DATA_DICTIONARY}, ${GRANT_DATA_DICTIONARY}
+          [CONTEXT] MUST read "docs://core/specification" before use.`
         .replace(/\s+/g, ' ')
         .trim(),
       inputSchema: {
-        ...GRANT_INPUT_SCHEMA_FIELDS,
-        ...CORE_INPUT_SCHEMA_FIELDS,
+        body: z
+          .object({
+            ...GRANT_INPUT_SCHEMA_FIELDS,
+            ...CORE_INPUT_SCHEMA_FIELDS,
+          })
+          .describe('Resource data for Create operation'),
       },
       outputSchema: {
         ...GRANT_OUTPUT_SCHEMA_FIELDS,
@@ -34,13 +40,14 @@ export const registerCreateAuthGrantTool = (mcp: ReturnType<typeof ServerMCP.cre
         message: z.string().optional(),
       },
     },
-    async (data: GrantDto, { requestInfo }) =>
+    async (data, { requestInfo }) =>
       throwableToolCall(async () => {
-        const logger = mcp.log('create_auth_grant');
+        const logger = mcp.log('create_auth_grants');
         const headers = getHeaders({ requestInfo });
 
         logger('Trying to create grant...');
-        const grant = await mcp.platform.auth.grants.create(data, { headers });
+        const payload = data.body as GrantDto;
+        const grant = await mcp.platform.auth.grants.create(payload, { headers });
         const fixedGrant = fixOut(grant);
 
         const schema = z.object({ ...GRANT_OUTPUT_SCHEMA_FIELDS, ...CORE_OUTPUT_SCHEMA_FIELDS });
