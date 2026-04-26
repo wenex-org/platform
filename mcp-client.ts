@@ -222,7 +222,19 @@ Follow this workflow exactly:
    - Only call tools after loading them
    - Never guess tool names
    - Never guess collection names
-   - Follow Wenex docs for x-zone and request shape`,
+   - Follow Wenex docs for x-zone and request shape
+
+STRICT ARGUMENT COLLECTION RULES — HIGHEST PRIORITY:
+- Before calling ANY tool that has required fields (subject, action, object, or similar):
+  STOP. Do NOT call the tool yet.
+  Ask the user explicitly for EACH required value, one by one if needed.
+  Only call the tool AFTER the user has typed the exact values in their message.
+- NEVER infer, assume, or use example/placeholder values for required fields.
+- NEVER use values like "user@example.com", "guest", "create:own", or any guessed string.
+- If the user says "create a grant" without providing subject, action, and object:
+  Respond by asking: "Please provide the exact subject (email), action, and object for the grant."
+  Do NOT call prepare_grant_creation or create_auth_grants until all three are given explicitly.
+- A value is only valid if the user typed it in their message. Inference is forbidden.`,
     };
   }
 
