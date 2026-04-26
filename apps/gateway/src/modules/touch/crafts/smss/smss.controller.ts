@@ -14,9 +14,9 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { Audit, Cache, CollectionPath, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
-import { CreateSmsDto, CreateSmsItemsDto, SendSmsDto, SendSmsTemplateDto, UpdateSmsDto } from '@app/common/dto/touch';
 import { GatewayInterceptors, WriteInterceptors, ResponseInterceptors } from '@app/common/core/interceptors';
 import { SmsDataSerializer, SmsItemsSerializer, SmsSerializer } from '@app/common/serializers/touch';
+import { CreateSmsDto, CreateSmsItemsDto, SendSmsDto, UpdateSmsDto } from '@app/common/dto/touch';
 import { AuthorityInterceptor, ProjectionInterceptor } from '@app/common/core/interceptors/mongo';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
@@ -36,6 +36,7 @@ import { Metadata } from '@app/common/core/interfaces';
 import { from, Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
+import { SendSmsTemplateDto } from '@app/common/dto/touch/smss/template.dto';
 
 const COLL_PATH = COLLECTION('smss', 'touch');
 
