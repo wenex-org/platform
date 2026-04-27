@@ -36,6 +36,7 @@ import { Metadata } from '@app/common/core/interfaces';
 import { from, Observable, switchMap } from 'rxjs';
 import { Permission } from 'abacl';
 import { Response } from 'express';
+import { SendSmsTemplateDto } from '@app/common/dto/touch/smss/template.dto';
 
 const COLL_PATH = COLLECTION('smss', 'touch');
 
@@ -62,6 +63,17 @@ export class SmssController extends ControllerClass<Sms, SmsDto> implements ICon
   @SetPolicy(Action.Send, Resource.TouchSmss)
   send(@Meta() meta: Metadata, @Body() data: SendSmsDto): Observable<SmsDataSerializer> {
     return from(this.provider.smss.send(data, { meta })).pipe(mapToInstance(SmsSerializer, 'data'));
+  }
+
+  @Post('send/template')
+  @Audit('GATEWAY')
+  @Cache(COLL_PATH, 'flush')
+  @SetScope(Scope.SendTouchSmss)
+  @UseInterceptors(...WriteInterceptors)
+  @ApiResponse({ type: SmsDataSerializer })
+  @SetPolicy(Action.Send, Resource.TouchSmss)
+  sendByTemplate(@Meta() meta: Metadata, @Body() data: SendSmsTemplateDto): Observable<SmsDataSerializer> {
+    return from(this.provider.smss.sendByTemplate(data, { meta })).pipe(mapToInstance(SmsSerializer, 'data'));
   }
 
   // ##############################
