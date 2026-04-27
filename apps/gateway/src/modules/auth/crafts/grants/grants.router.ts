@@ -1,6 +1,15 @@
-import { getHeaders, ServerMCP, throwableToolCall, CORE_INPUT_SCHEMA, CORE_OUTPUT_SCHEMA } from '@app/common/core/mcp';
+import {
+  ServerMCP,
+  throwableToolCall,
+  CORE_INPUT_SCHEMA,
+  CORE_OUTPUT_SCHEMA,
+  mcpInputSchema,
+  mcpOutputSchema,
+  TOTAL_SCHEMA,
+} from '@app/common/core/mcp';
+import { Grant, GrantTime } from '@app/common/interfaces/auth';
 import { CreateGrantDto } from '@app/common/dto/auth';
-import { z } from 'zod';
+import { z, ZodType } from 'zod';
 
 const mcp = ServerMCP.create();
 
@@ -8,20 +17,25 @@ const mcp = ServerMCP.create();
 // Shared Schemas
 // ------------------------------------------------------------
 
-const TIME_SCHEMA = z.object({
+const TIME_SCHEMA: Record<keyof GrantTime, ZodType> = {
   cron_exp: z.string(),
   duration: z.number().positive(),
-});
+};
 
-const GRANT_SCHEMA = {
+type GrantSchema = Record<keyof Grant, ZodType>;
+
+const GRANT_SCHEMA: Partial<GrantSchema> = {
   subject: z.string(),
   action: z.string(),
   object: z.string(),
   field: z.array(z.string()).optional(),
   filter: z.array(z.string()).optional(),
   location: z.array(z.string()).optional(),
-  time: z.array(TIME_SCHEMA).optional(),
+  time: z.array(z.object(TIME_SCHEMA)).optional(),
 };
+
+const GRANT_INPUT_SCHEMA: Partial<GrantSchema> = { ...GRANT_SCHEMA, ...CORE_INPUT_SCHEMA };
+const GRANT_OUTPUT_SCHEMA: Partial<GrantSchema> = { ...GRANT_SCHEMA, ...CORE_OUTPUT_SCHEMA };
 
 // ------------------------------------------------------------
 // Tools Implementation
@@ -32,32 +46,21 @@ mcp.server.registerTool(
   {
     title: 'Count AuthGrant',
     description: `Read "docs://core/auth-specification"`,
-    inputSchema: {
-      headers: z.record(z.string(), z.string()).optional(),
-      filter: z.object({}).passthrough().optional(),
-    },
-    outputSchema: {
-      result: z.object({}).passthrough().optional(),
-      errors: z.array(z.object({}).passthrough()).optional(),
-    },
+    inputSchema: mcpInputSchema({ filter: true }),
+    outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
   },
-  async (data, { requestInfo }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const logger = mcp.log('count_auth_grants');
-      const headers = getHeaders({ requestInfo });
+      const [logger, headers] = mcp.utils('count_auth_grants', requestInfo, args);
 
-      logger('input schema: %o', data);
-      logger('request headers: %o', headers);
-
-      const query = data.filter?.query ?? {};
-      const config = { headers: { ...(data.headers ?? {}), ...headers } };
-      logger('endpoint call with query %o and config %o', query, config);
+      const query = args.filter?.query ?? {};
+      const config = { headers: { ...(args.headers ?? {}), ...headers } };
+      logger('platform endpoint calling with query %o and config %o', query, config);
 
       const result = await mcp.platform.auth.grants.count(query, config);
       logger('the structured content of result value after call is: %o', result);
-
       return {
-        structuredContent: { result },
+        structuredContent: { result: { total: result } },
         content: [{ type: 'text', text: `There are exactly ${result} items matching your criteria.` }],
       };
     }),
@@ -68,30 +71,19 @@ mcp.server.registerTool(
   {
     title: 'Create AuthGrant',
     description: `Read "docs://core/auth-specification"`,
-    inputSchema: {
-      headers: z.record(z.string(), z.string()).optional(),
-      body: z.object({ ...GRANT_SCHEMA, ...CORE_INPUT_SCHEMA }),
-    },
-    outputSchema: {
-      errors: z.array(z.object({}).passthrough()).optional(),
-      result: z.object({ ...GRANT_SCHEMA, ...CORE_OUTPUT_SCHEMA }).partial(),
-    },
+    inputSchema: mcpInputSchema({ body: GRANT_INPUT_SCHEMA }),
+    outputSchema: mcpOutputSchema({ result: GRANT_OUTPUT_SCHEMA }),
   },
-  async (data, { requestInfo }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const logger = mcp.log('create_auth_grant');
-      const headers = getHeaders({ requestInfo });
+      const [logger, headers] = mcp.utils('create_auth_grants', requestInfo, args);
 
-      logger('input schema: %o', data);
-      logger('request headers: %o', headers);
-
-      const payload = data.body as CreateGrantDto;
-      const config = { headers: { ...(data.headers ?? {}), ...headers } };
+      const payload = args.body as CreateGrantDto;
+      const config = { headers: { ...(args.headers ?? {}), ...headers } };
       logger('endpoint call with payload %o and config %o', payload, config);
 
       const result = await mcp.platform.auth.grants.create(payload, config);
       logger('the structured content of result value after call is: %o', result);
-
       return {
         structuredContent: { result },
         content: [{ type: 'text', text: `Grant for subject "${result.subject}" created successfully.` }],
