@@ -16,12 +16,6 @@ const TIME_SCHEMA = z.object({
 });
 
 const GRANT_SCHEMA = {
-  user_confirmed_values_from_user_message: z.literal(true).describe(
-    `Set to true ONLY IF the user explicitly typed the subject, action, and object values in their chat message.
-      If you are inferring, guessing, or using example values for ANY of these fields, you MUST NOT call this tool.
-      Instead, ask the user to provide the exact values first.`,
-  ),
-
   subject: z.string(),
   // .describe(
   //   'REQUIRED. The exact subject email as typed by the user (e.g. user@domain.com). ' +
@@ -42,53 +36,6 @@ const GRANT_SCHEMA = {
   location: z.array(z.string()).optional(),
   time: z.array(TIME_SCHEMA).optional(),
 };
-
-// ------------------------------------------------------------
-// ------------------------------------------------------------
-
-mcp.server.registerTool(
-  'prepare_grant_creation',
-  {
-    title: 'Prepare Grant Creation',
-    description: `ALWAYS call this tool FIRST before calling create_auth_grants.
-      This tool returns the required fields and valid enum values.
-      After calling this, you MUST ask the user to explicitly provide subject, action, and object before proceeding.`,
-    inputSchema: {},
-    outputSchema: {
-      required_fields: z.array(z.string()).optional(),
-      valid_actions: z.array(z.string()).optional(),
-      valid_objects: z.array(z.string()).optional(),
-      instructions: z.string().optional(),
-    },
-  },
-  () =>
-    throwableToolCall(() => {
-      const validActions = Object.values(Action);
-      const validObjects = Object.values(Resource);
-
-      const instructions = [
-        'To create a grant, you MUST collect ALL of the following from the user explicitly:',
-        '',
-        '1. subject — email format (e.g. user@domain.com)',
-        `2. action  — must be one of: ${validActions.join(', ')}`,
-        `3. object  — must be one of: ${validObjects.join(', ')}`,
-        '',
-        'STOP. Ask the user for each value now.',
-        'Do NOT call create_auth_grants until the user has provided all three in their message.',
-        'Do NOT infer or guess any value.',
-      ].join('\n');
-
-      return {
-        structuredContent: {
-          required_fields: ['subject', 'action', 'object'],
-          valid_actions: validActions,
-          valid_objects: validObjects,
-          instructions,
-        },
-        content: [{ type: 'text' as const, text: instructions }],
-      };
-    }),
-);
 
 // ------------------------------------------------------------
 // Tools Implementation
@@ -154,22 +101,7 @@ mcp.server.registerTool(
       logger('input schema: %o', data);
       logger('request headers: %o', headers);
 
-      if (!data.body.user_confirmed_values_from_user_message) {
-        return {
-          isError: true,
-          content: [
-            {
-              type: 'text' as const,
-              text: `Blocked: user_confirmed_values_from_user_message is not true.
-                You must first call prepare_grant_creation, then ask the user for exact subject, action, and object values,
-                and only call this tool after the user has explicitly provided all three.`,
-            },
-          ],
-        };
-      }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const grantData = (({ user_confirmed_values_from_user_message: _, ...rest }) => rest)(data.body);
-      const payload = grantData as CreateGrantDto;
+      const payload = data.body as CreateGrantDto;
       const config = { headers: { ...(data.headers ?? {}), ...headers } };
       logger('endpoint call with payload %o and config %o', payload, config);
 
