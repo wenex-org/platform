@@ -153,6 +153,38 @@ export class ClientMCP {
       },
     };
 
+    this.activeTools['prepare_tool_execution'] = {
+      type: 'function',
+      function: {
+        name: 'prepare_tool_execution',
+        description: `ALWAYS call this before any create_* or update_* or delete_* tool.
+          Returns required fields for the target tool.
+          After calling this, if any required field is missing from the user message,
+          ask the user explicitly for each missing value before calling the tool.
+          For enum fields (action, object, status, etc.), consult the relevant documentation.`,
+        parameters: {
+          type: 'object',
+          required: ['tool_name'],
+          properties: {
+            tool_name: {
+              type: 'string',
+              description: 'Exact name of the tool you plan to call next.',
+            },
+          },
+        },
+      },
+    };
+
+    this.validators['prepare_tool_execution'] = {
+      schema: {
+        type: 'object',
+        required: ['tool_name'],
+        properties: {
+          tool_name: { type: 'string' },
+        },
+      },
+    };
+
     this.validators['auth_verify'] = {
       schema: { type: 'object', properties: {} },
     };
@@ -219,10 +251,25 @@ Follow this workflow exactly:
    - Call load_collection_tools with the exact service and exact collection name from documentation
    - Collection names are exact resource collection names and are usually plural (examples: grants, users, products)
 4. EXECUTE:
-   - Only call tools after loading them
-   - Never guess tool names
-   - Never guess collection names
-   - Follow Wenex docs for x-zone and request shape`,
+   - Before calling any create_*, update_*, or delete_* tool:
+     ALWAYS call prepare_tool_execution with the exact tool name first.
+   - After prepare_tool_execution responds, check which required fields
+     the user has provided. Ask for any missing ones explicitly.
+   - Only call the actual tool after ALL required fields are confirmed.
+   - Never guess or infer field values.
+   - Follow Wenex docs for x-zone and request shape.
+
+STRICT ARGUMENT COLLECTION RULES — HIGHEST PRIORITY:
+- Before calling ANY tool that has required fields (subject, action, object, or similar):
+  STOP. Do NOT call the tool yet.
+  Ask the user explicitly for EACH required value, one by one if needed.
+  Only call the tool AFTER the user has typed the exact values in their message.
+- NEVER infer, assume, or use example/placeholder values for required fields.
+- NEVER use values like "user@example.com", "guest", "create:own", or any guessed string.
+- If the user says "create a grant" without providing subject, action, and object:
+  Respond by asking: "Please provide the exact subject (email), action, and object for the grant."
+  Do NOT call prepare_grant_creation or create_auth_grants until all three are given explicitly.
+- A value is only valid if the user typed it in their message. Inference is forbidden.`,
     };
   }
 
@@ -294,6 +341,65 @@ Follow this workflow exactly:
                   : `No tools found matching "*${targetPattern}". Use the exact service and exact collection name from the documentation.`;
 
               console.log('\n   Active Tools  :', Object.keys(this.activeTools).join(', '), '\n');
+            } else if (toolName === 'prepare_tool_execution') {
+              const { tool_name } = toolArgs;
+
+              const tool = this.activeTools[tool_name] ?? this.availableTools[tool_name];
+
+              if (!tool) {
+                content = [
+                  `Tool "${tool_name}" is not loaded.`,
+                  'First use load_collection_tools to load it, then call prepare_tool_execution again.',
+                ].join('\n');
+              } else {
+                const schema = tool.function.parameters as any;
+                const bodyProps: Record<string, any> = schema?.properties?.body?.properties ?? {};
+                const bodyRequired: string[] = schema?.properties?.body?.required ?? [];
+
+                const INTERNAL_FIELDS = new Set(['user_confirmed_values_from_user_message', 'headers']);
+
+                const requiredFields = bodyRequired.filter((f) => !INTERNAL_FIELDS.has(f));
+                const optionalFields = Object.keys(bodyProps).filter((f) => !bodyRequired.includes(f) && !INTERNAL_FIELDS.has(f));
+
+                const likelyEnumFields = requiredFields.filter((f) =>
+                  ['action', 'object', 'status', 'type', 'role', 'kind'].includes(f),
+                );
+
+                const serviceMatch = tool_name.match(/^[a-z]+_([a-z]+)_[a-z]+$/);
+                const serviceName = serviceMatch?.[1] ?? null;
+
+                const AUTH_SERVICES = new Set(['auth']);
+                const docUri = serviceName
+                  ? AUTH_SERVICES.has(serviceName)
+                    ? `docs://core/auth-specification`
+                    : `docs://service/${serviceName}-specification`
+                  : null;
+
+                const lines = [
+                  `Tool: ${tool_name}`,
+                  '',
+                  `Required fields (${requiredFields.length}): ${requiredFields.join(', ')}`,
+                  optionalFields.length ? `Optional fields: ${optionalFields.join(', ')}` : '',
+                  '',
+                  likelyEnumFields.length
+                    ? [
+                        `IMPORTANT: fields [${likelyEnumFields.join(', ')}] require exact valid values.`,
+                        docUri
+                          ? `REQUIRED NEXT STEP: call read_documentations with uri="${docUri}" NOW to get the exact valid values before asking the user or calling the tool.`
+                          : 'Consult the relevant service documentation for exact valid values.',
+                      ].join('\n')
+                    : '',
+                  '',
+                  'INSTRUCTIONS:',
+                  '1. If enum fields exist, call read_documentations NOW to get valid values.',
+                  '2. Check which required fields the user has already provided.',
+                  '3. Validate provided values against documentation — accept them if they match.',
+                  '4. Ask the user only for genuinely missing fields.',
+                  '5. Only call the tool after ALL required fields are confirmed.',
+                ].filter(Boolean);
+
+                content = lines.join('\n');
+              }
             } else if (toolName === 'read_documentations') {
               const result = await this.mcp.readResource({ uri: toolArgs.uri });
               content = result.contents.map((c: any) => c.text || toString(c)).join('\n\n');

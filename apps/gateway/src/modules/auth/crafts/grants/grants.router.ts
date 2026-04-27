@@ -31,7 +31,7 @@ mcp.server.registerTool(
   'count_auth_grants',
   {
     title: 'Count AuthGrant',
-    description: 'REQUIRED: "docs://core/auth-specification"',
+    description: `Read "docs://core/auth-specification"`,
     inputSchema: {
       headers: z.record(z.string(), z.string()).optional(),
       filter: z.object({}).passthrough().optional(),
@@ -67,7 +67,7 @@ mcp.server.registerTool(
   'create_auth_grants',
   {
     title: 'Create AuthGrant',
-    description: 'REQUIRED: "docs://core/auth-specification"',
+    description: `Read "docs://core/auth-specification"`,
     inputSchema: {
       headers: z.record(z.string(), z.string()).optional(),
       body: z.object({ ...GRANT_SCHEMA, ...CORE_INPUT_SCHEMA }),
