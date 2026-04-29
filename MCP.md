@@ -1,4 +1,4 @@
-# Powerful prompt
+# Powerful Prompt - [Github Copilot](https://github.com/copilot)
 
 Refactor the attached "-specification.compact.md" and "-specification.extended.md" markdown files for me, considering the prompt and refactoring checklist, respecting the knowledge provided in the files.
 
