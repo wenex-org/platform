@@ -1,7 +1,7 @@
 import { Controller, Get, HttpStatus, Query, Req, Res, UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
+import { CollectionPath, IsPublic, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { ParseResizePipe, ParseRotatePipe, Resize, Rotate } from '@app/common/core/pipes/sharp';
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { IsPublic, RateLimit, SetPolicy, SetScope } from '@app/common/core/metadatas';
 import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
 import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
 import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
@@ -26,6 +26,7 @@ const COLL_PATH = COLLECTION('files', 'special');
 @RateLimit(COLL_PATH)
 @Controller(COLL_PATH)
 @UsePipes(ValidationPipe)
+@CollectionPath(COLL_PATH)
 @ApiTags('special', 'files')
 @UseFilters(AllExceptionsFilter)
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
