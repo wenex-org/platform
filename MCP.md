@@ -1,15 +1,32 @@
 # Powerful Prompt - [Github Copilot](https://github.com/copilot)
 
-Refactor the attached "-specification.compact.md" and "-specification.extended.md" markdown files for me, considering the prompt and refactoring checklist, respecting the knowledge provided in the files.
+Refactor the attached `-specification.compact.md` and `-specification.extended.md` into final
+production-ready versions using the attached refactor prompt and checklist as governing instructions.
 
-This is a modification to the MCP document specification for an AI agent to assist the user on the Wenex platform.
+## Sources of Truth (precedence order)
 
-> Endpoints definition are in the `apps/gateway/src` directory of the @wenex-org/platform controllers/routers/inspectors.
->
-> Find enum values in the @wenex-org/platform-libs enum directory and files.
->
-> The @wenex-org/platform-libs sub-project is a git submodule to store common code and modules.
->
-> Population paths are mentioned in the `common/src/schemas/map.ts` file from  @wenex-org/platform-libs repository.
+1. @wenex-org/platform → `apps/gateway/src` (controllers, routers, resolvers — external surface only)
+2. @wenex-org/platform-libs → enum files + `common/src/schemas/map.ts` (enums, types, population paths)
+3. Existing spec prose
+4. Examples
 
-NOTE: DO NOT MAKE A PULL REQUEST. CREATE ALL FILES HERE IN THIS CHAT. ALL YOUR NEEDED FILES AND REPOSITORIES ARE ATTACHED. IGNORE INTERNAL USE METHODS, CLASSES, AND INTERFACES.
+Ignore internal-only methods, classes, and interfaces unless they directly define externally visible runtime behavior.
+
+## Content Rules
+
+- Enums: only values confirmed by platform-libs enum files
+- Population: only paths confirmed by `map.ts`; label others as "raw ID – not a confirmed population path"
+- Operations: confirm existence via gateway controllers before documenting
+- Mark fields as write-only / platform-managed / serializer-hidden where applicable; never expose them in examples
+- Do not invent operations, enums, population paths, headers, or tool names not confirmed by runtime sources
+- Do not remove safety warnings
+
+## File Rules
+
+- **Compact:** shorter, decision-first, safety-first, low-token; defer detail to extended
+- **Extended:** semantically identical to compact, fuller rationale, richer examples, stronger agent guidance
+- Do not merge the two files into one
+
+## Output
+
+Return both files fully rewritten in this chat. No pull request. No summaries. No partial edits.

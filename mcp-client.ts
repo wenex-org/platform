@@ -118,6 +118,18 @@ export class ClientMCP {
       },
     };
 
+    this.activeTools['current_datetime'] = {
+      type: 'function',
+      function: {
+        name: 'current_datetime',
+        description: 'Returns the current timestamp and ISO 8601 format.',
+        parameters: {
+          type: 'object',
+          properties: {},
+        },
+      },
+    };
+
     this.activeTools['read_documentations'] = {
       type: 'function',
       function: {
@@ -153,24 +165,11 @@ export class ClientMCP {
       },
     };
 
-    this.activeTools['get_current_time'] = {
-      type: 'function',
-      function: {
-        name: 'get_current_time',
-        description:
-          'Returns the current timestamp in ISO 8601 format. Call this whenever you need the current date, time, or timestamp.',
-        parameters: {
-          type: 'object',
-          properties: {},
-        },
-      },
-    };
-
-    this.validators['get_current_time'] = {
+    this.validators['auth_verify'] = {
       schema: { type: 'object', properties: {} },
     };
 
-    this.validators['auth_verify'] = {
+    this.validators['current_datetime'] = {
       schema: { type: 'object', properties: {} },
     };
 
@@ -218,13 +217,9 @@ export class ClientMCP {
   }
 
   private buildSystemPrompt(): Message {
-    const today = new Date().toISOString().split('T')[0];
-
     return {
       role: 'system',
-      content: `You are an advanced AI Agent for the Wenex Platform. Today is ${today}.
-
-Follow this workflow exactly:
+      content: `FOLLOW THIS WORKFLOW EXACTLY:
 1. DISCOVER:
    - First call read_documentations with uri="docs://readme"
    - Then read the relevant core docs, especially docs://core/specification and docs://core/resource-specification
@@ -237,19 +232,7 @@ Follow this workflow exactly:
    - Collection names are exact resource collection names and are usually plural (examples: grants, users, products)
 4. EXECUTE:
    - Never guess or infer field values.
-   - Follow Wenex docs for x-zone and request shape.
-
-STRICT ARGUMENT COLLECTION RULES — HIGHEST PRIORITY:
-- Before calling ANY tool that has required fields (subject, action, object, or similar):
-  STOP. Do NOT call the tool yet.
-  Ask the user explicitly for EACH required value, one by one if needed.
-  Only call the tool AFTER the user has typed the exact values in their message.
-- NEVER infer, assume, or use example/placeholder values for required fields.
-- NEVER use values like "user@example.com", "guest", "create:own", or any guessed string.
-- If the user says "create a grant" without providing subject, action, and object:
-  Respond by asking: "Please provide the exact subject (email), action, and object for the grant."
-  Do NOT call prepare_grant_creation or create_auth_grants until all three are given explicitly.
-- A value is only valid if the user typed it in their message. Inference is forbidden.`,
+   - Follow Wenex docs for x-zone and request shape.`,
     };
   }
 
@@ -302,15 +285,9 @@ STRICT ARGUMENT COLLECTION RULES — HIGHEST PRIORITY:
                 content =
                   'TOKEN DECRYPTED VALUES:\ninvalid or expired token\n\nNOTE: If you need help interpreting token values, read docs://core/auth-specification using read_documentations.';
               }
-            } else if (toolName === 'get_current_time') {
-              // ASK[VAHID]: SHOULD WE NEED TIMEZONE INFO TOO? OR ALWAYS RETURN IN UTC?
+            } else if (toolName === 'current_datetime') {
               const now = new Date();
-              content = [
-                `ISO 8601:   ${now.toISOString()}`,
-                `Unix (ms):  ${now.getTime()}`,
-                `Unix (s):   ${Math.floor(now.getTime() / 1000)}`,
-                `UTC:        ${now.toUTCString()}`,
-              ].join('\n');
+              content = [`Date ISO 8601: ${now.toISOString()}`, `Unix Timestamp (MS): ${now.getTime()}`].join('\n');
             } else if (toolName === 'load_collection_tools') {
               const { service, collection } = toolArgs;
               const targetPattern = `_${service}_${collection}`;
