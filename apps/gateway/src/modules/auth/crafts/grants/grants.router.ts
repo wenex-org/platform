@@ -179,63 +179,6 @@ mcp.server.registerTool(
     }),
 );
 
-// Update One AuthGrant
-
-mcp.server.registerTool(
-  'update-one_auth_grants',
-  {
-    title: 'Update One AuthGrant',
-    description: `Read "docs://core/auth-specification"`,
-    inputSchema: mcpInputSchema({ params: true, body: GRANT_INPUT_SCHEMA }),
-    outputSchema: mcpOutputSchema({ result: GRANT_OUTPUT_SCHEMA }),
-  },
-  async (args, { requestInfo }) =>
-    throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('update-one_auth_grants', requestInfo, args);
-
-      const payload = args.body as CreateGrantDto;
-      const config = { headers: { ...(args.headers ?? {}), ...headers } };
-      const { id, ref } = args.params ?? ({} as { id?: string; ref?: string });
-      logger('endpoint call with id and ref %o, payload %o and config %o', { id, ref }, payload, config);
-
-      if (ref && (!id || id == '-')) (config as RequestConfig).params = { ref };
-      const result = await mcp.platform.auth.grants.updateById(id || '-', payload, config);
-      logger('the structured content of result value after call is: %o', result);
-      return {
-        structuredContent: { result },
-        content: [{ type: 'text', text: `Grant updated successfully.` }],
-      };
-    }),
-);
-
-// Update Bulk AuthGrant
-
-mcp.server.registerTool(
-  'update-bulk_auth_grants',
-  {
-    title: 'Update Bulk AuthGrant',
-    description: `Read "docs://core/auth-specification"`,
-    inputSchema: mcpInputSchema({ filter: true, body: GRANT_INPUT_SCHEMA }),
-    outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
-  },
-  async (args, { requestInfo }) =>
-    throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('update-bulk_auth_grants', requestInfo, args);
-
-      const query = args.filter?.query ?? {};
-      const payload = args.body as CreateGrantDto;
-      const config = { headers: { ...(args.headers ?? {}), ...headers } };
-      logger('endpoint call with payload %o, query %o and config %o', payload, query, config);
-
-      const result = await mcp.platform.auth.grants.updateBulk(payload, query, config);
-      logger('the structured content of result value after call is: %o', result);
-      return {
-        structuredContent: { result: { total: result } },
-        content: [{ type: 'text', text: `Successfully updated ${result} items in bulk.` }],
-      };
-    }),
-);
-
 // Delete One AuthGrant
 
 mcp.server.registerTool(
@@ -316,6 +259,63 @@ mcp.server.registerTool(
       return {
         structuredContent: { result },
         content: [{ type: 'text', text: `Grant destroyed (hard) successfully.` }],
+      };
+    }),
+);
+
+// Update Bulk AuthGrant
+
+mcp.server.registerTool(
+  'update-bulk_auth_grants',
+  {
+    title: 'Update Bulk AuthGrant',
+    description: `Read "docs://core/auth-specification"`,
+    inputSchema: mcpInputSchema({ filter: true, body: GRANT_INPUT_SCHEMA }),
+    outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
+  },
+  async (args, { requestInfo }) =>
+    throwableToolCall(async () => {
+      const [logger, headers] = mcp.utils('update-bulk_auth_grants', requestInfo, args);
+
+      const query = args.filter?.query ?? {};
+      const payload = args.body as CreateGrantDto;
+      const config = { headers: { ...(args.headers ?? {}), ...headers } };
+      logger('endpoint call with payload %o, query %o and config %o', payload, query, config);
+
+      const result = await mcp.platform.auth.grants.updateBulk(payload, query, config);
+      logger('the structured content of result value after call is: %o', result);
+      return {
+        structuredContent: { result: { total: result } },
+        content: [{ type: 'text', text: `Successfully updated ${result} items in bulk.` }],
+      };
+    }),
+);
+
+// Update One AuthGrant
+
+mcp.server.registerTool(
+  'update-one_auth_grants',
+  {
+    title: 'Update One AuthGrant',
+    description: `Read "docs://core/auth-specification"`,
+    inputSchema: mcpInputSchema({ params: true, body: GRANT_INPUT_SCHEMA }),
+    outputSchema: mcpOutputSchema({ result: GRANT_OUTPUT_SCHEMA }),
+  },
+  async (args, { requestInfo }) =>
+    throwableToolCall(async () => {
+      const [logger, headers] = mcp.utils('update-one_auth_grants', requestInfo, args);
+
+      const payload = args.body as CreateGrantDto;
+      const config = { headers: { ...(args.headers ?? {}), ...headers } };
+      const { id, ref } = args.params ?? ({} as { id?: string; ref?: string });
+      logger('endpoint call with id and ref %o, payload %o and config %o', { id, ref }, payload, config);
+
+      if (ref && (!id || id == '-')) (config as RequestConfig).params = { ref };
+      const result = await mcp.platform.auth.grants.updateById(id || '-', payload, config);
+      logger('the structured content of result value after call is: %o', result);
+      return {
+        structuredContent: { result },
+        content: [{ type: 'text', text: `Grant updated successfully.` }],
       };
     }),
 );
