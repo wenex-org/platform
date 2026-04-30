@@ -8,9 +8,9 @@ import {
   TOTAL_SCHEMA,
   ITEMS_SCHEMA,
 } from '@app/common/core/mcp';
+import { CreateGrantDto, UpdateGrantDto } from '@app/common/dto/auth';
 import { Grant, GrantTime } from '@app/common/interfaces/auth';
 import { RequestConfig } from '@wenex/sdk/common/core/types';
-import { CreateGrantDto } from '@app/common/dto/auth';
 import { z, ZodType } from 'zod';
 
 const mcp = ServerMCP.create();
@@ -278,7 +278,7 @@ mcp.server.registerTool(
       const [logger, headers] = mcp.utils('update-bulk_auth_grants', requestInfo, args);
 
       const query = args.filter?.query ?? {};
-      const payload = args.body as CreateGrantDto;
+      const payload = args.body as UpdateGrantDto;
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       logger('endpoint call with payload %o, query %o and config %o', payload, query, config);
 
@@ -305,7 +305,7 @@ mcp.server.registerTool(
     throwableToolCall(async () => {
       const [logger, headers] = mcp.utils('update-one_auth_grants', requestInfo, args);
 
-      const payload = args.body as CreateGrantDto;
+      const payload = args.body as UpdateGrantDto;
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = args.params ?? ({} as { id?: string; ref?: string });
       logger('endpoint call with id and ref %o, payload %o and config %o', { id, ref }, payload, config);
