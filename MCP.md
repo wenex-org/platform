@@ -1,12 +1,12 @@
 # Powerful Prompt - [Github Copilot](https://github.com/copilot)
 
 Refactor the attached `-specification.compact.md` and `-specification.extended.md` into final
-production-ready versions using the attached prompt and checklist as governing instructions.
+production-ready versions using the attached refactor prompt and checklist as governing instructions.
 
 ## Sources of Truth (precedence order)
 
-1. `@wenex-org/platform` → `apps/gateway/src` (controllers, routers, resolvers — external surface only)
-2. `@wenex-org/platform-libs` → enum files + `common/src/schemas/map.ts` (enums, types, population paths)
+1. @wenex-org/platform → `apps/gateway/src` (controllers, routers, resolvers — external surface only)
+2. @wenex-org/platform-libs → enum files + `common/src/schemas/map.ts` (enums, types, population paths)
 3. Existing spec prose
 4. Examples
 
