@@ -30,9 +30,11 @@ const GRANT_SCHEMA: Partial<GrantSchema> = {
   subject: z.string(),
   action: z.string(),
   object: z.string(),
+
   field: z.array(z.string()).optional(),
   filter: z.array(z.string()).optional(),
   location: z.array(z.string()).optional(),
+
   time: z.array(z.object(TIME_SCHEMA)).optional(),
 };
 
@@ -92,7 +94,7 @@ mcp.server.registerTool(
       logger('the structured content of result value after call is: %o', result);
       return {
         structuredContent: { result },
-        content: [{ type: 'text', text: `Grant for subject "${result.subject}" created successfully.` }],
+        content: [{ type: 'text', text: `Grant with id "${result.id}" created successfully.` }],
       };
     }),
 );
@@ -146,7 +148,7 @@ mcp.server.registerTool(
       logger('the structured content of result value after call is: %o', result);
       return {
         structuredContent: { result: { items: result } },
-        content: [{ type: 'text', text: `Found ${result.length ?? 0} items.` }],
+        content: [{ type: 'text', text: `Retrieves ${result.length ?? 0} items from grants.` }],
       };
     }),
 );
