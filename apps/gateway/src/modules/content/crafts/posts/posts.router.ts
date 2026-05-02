@@ -7,11 +7,12 @@ import {
   mcpOutputSchema,
   TOTAL_SCHEMA,
   ITEMS_SCHEMA,
+  REACTION_SCHEMA,
 } from '@app/common/core/mcp';
-import { CreateProductDto, UpdateProductDto } from '@app/common/dto/career';
-import { Product, ProductFeature } from '@app/common/interfaces/career';
-import { ProductFeatureType } from '@app/common/enums/career';
+import { CreatePostDto, UpdatePostDto } from '@app/common/dto/content';
 import { RequestConfig } from '@wenex/sdk/common/core/types';
+import { PostStatus } from '@app/common/enums/content';
+import { Post } from '@app/common/interfaces/content';
 import { State } from '@app/common/core/enums';
 import { z, ZodType } from 'zod';
 
@@ -21,69 +22,73 @@ const mcp = ServerMCP.create();
 // Shared Schemas
 // ------------------------------------------------------------
 
-type ProductFeatureSchema = Record<keyof ProductFeature, ZodType>;
+type PostSchema = Record<keyof Post, ZodType>;
 
-const FEATURE_SCHEMA: Partial<ProductFeatureSchema> = {
-  type: z.nativeEnum(ProductFeatureType),
-
+const POST_SCHEMA: Partial<PostSchema> = {
   title: z.string(),
-  value: z.union([z.boolean(), z.number(), z.string()]),
+  type: z.string().optional(),
 
-  ...CORE_INPUT_SCHEMA,
-};
+  slug: z.string().optional(),
+  subtitle: z.string().optional(),
 
-type ProductSchema = Record<keyof Product, ZodType>;
+  parent: z.string().optional(),
 
-const PRODUCT_SCHEMA: Partial<ProductSchema> = {
-  name: z.string(),
-  alias: z.string().optional(),
+  content: z.string(),
+  summary: z.string().optional(),
+
+  categories: z.array(z.string()).optional(),
 
   state: z.nativeEnum(State),
+  status: z.nativeEnum(PostStatus),
+  visibility: z.string().optional(),
 
-  store: z.string().optional(),
-  branch: z.string().optional(),
-  business: z.string().optional(),
+  rate: z.number().optional(),
+  votes: z.number().optional(),
+  rating: z.number().optional(),
 
-  brand: z.string().optional(),
-  content: z.string().optional(),
+  views: z.number().optional(),
+  loves: z.number().optional(),
+  likes: z.number().optional(),
+  dislikes: z.number().optional(),
 
-  cover: z.string().optional(),
-  gallery: z.array(z.string()),
-  categories: z.array(z.string()),
+  thumbnail: z.string().optional(),
+  attachments: z.array(z.string()).optional(),
+  featured_image: z.string().optional(),
 
-  rate: z.number(),
-  votes: z.number(),
-  rating: z.number(),
+  keywords: z.array(z.string()).optional(),
 
-  features: z.array(z.object(FEATURE_SCHEMA)).optional(),
+  related_posts: z.array(z.string()).optional(),
+  publication_date: z.string().optional(),
+
+  reactions: z.array(z.object(REACTION_SCHEMA)).optional(),
 };
 
-const PRODUCT_INPUT_SCHEMA: Partial<ProductSchema> = { ...PRODUCT_SCHEMA, ...CORE_INPUT_SCHEMA };
-const PRODUCT_OUTPUT_SCHEMA: Partial<ProductSchema> = { ...PRODUCT_SCHEMA, ...CORE_OUTPUT_SCHEMA };
+const POST_INPUT_SCHEMA: Partial<PostSchema> = { ...POST_SCHEMA, ...CORE_INPUT_SCHEMA };
+const POST_OUTPUT_SCHEMA: Partial<PostSchema> = { ...POST_SCHEMA, ...CORE_OUTPUT_SCHEMA };
 
 // ------------------------------------------------------------
 // Tools Implementation
 // ------------------------------------------------------------
 
-// Count CareerProduct
+// Count ContentPost
 
 mcp.server.registerTool(
-  'count_career_products',
+  'count_content_posts',
   {
-    title: 'Count CareerProduct',
-    description: `Read "docs://service/career-specification"`,
+    title: 'Count ContentPost',
+    description: `Read "docs://service/content-specification"`,
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('count_career_products', requestInfo, args);
+      const [logger, headers] = mcp.utils('count_content_posts', requestInfo, args);
 
       const query = args.filter?.query ?? {};
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       logger('platform endpoint calling with query %o and config %o', query, config);
 
-      const result = await mcp.platform.career.products.count(query, config);
+      const result = await mcp.platform.content.posts.count(query, config);
       logger('the structured content of result value after call is: %o', result);
       return {
         structuredContent: { result: { total: result } },
@@ -92,52 +97,52 @@ mcp.server.registerTool(
     }),
 );
 
-// Create CareerProduct
+// Create ContentPost
 
 mcp.server.registerTool(
-  'create_career_products',
+  'create_content_posts',
   {
-    title: 'Create CareerProduct',
-    description: `Read "docs://service/career-specification"`,
-    inputSchema: mcpInputSchema({ body: PRODUCT_INPUT_SCHEMA }),
-    outputSchema: mcpOutputSchema({ result: PRODUCT_OUTPUT_SCHEMA }),
+    title: 'Create ContentPost',
+    description: `Read "docs://service/content-specification"`,
+    inputSchema: mcpInputSchema({ body: POST_INPUT_SCHEMA }),
+    outputSchema: mcpOutputSchema({ result: POST_OUTPUT_SCHEMA }),
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('create_career_products', requestInfo, args);
+      const [logger, headers] = mcp.utils('create_content_posts', requestInfo, args);
 
-      const payload = args.body as CreateProductDto;
+      const payload = args.body as CreatePostDto;
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       logger('endpoint call with payload %o and config %o', payload, config);
 
-      const result = await mcp.platform.career.products.create(payload, config);
+      const result = await mcp.platform.content.posts.create(payload, config);
       logger('the structured content of result value after call is: %o', result);
       return {
         structuredContent: { result },
-        content: [{ type: 'text', text: `Product with id "${result.id}" created successfully.` }],
+        content: [{ type: 'text', text: `Post with id "${result.id}" created successfully.` }],
       };
     }),
 );
 
-// Create Bulk CareerProduct
+// Create Bulk ContentPost
 
 mcp.server.registerTool(
-  'create-bulk_career_products',
+  'create-bulk_content_posts',
   {
-    title: 'Create Bulk CareerProduct',
-    description: `Read "docs://service/career-specification"`,
-    inputSchema: mcpInputSchema({ body: ITEMS_SCHEMA(PRODUCT_INPUT_SCHEMA) }),
-    outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(PRODUCT_OUTPUT_SCHEMA) }),
+    title: 'Create Bulk ContentPost',
+    description: `Read "docs://service/content-specification"`,
+    inputSchema: mcpInputSchema({ body: ITEMS_SCHEMA(POST_INPUT_SCHEMA) }),
+    outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(POST_OUTPUT_SCHEMA) }),
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('create-bulk_career_products', requestInfo, args);
+      const [logger, headers] = mcp.utils('create-bulk_content_posts', requestInfo, args);
 
-      const payload = args.body as { items: CreateProductDto[] };
+      const payload = args.body as { items: CreatePostDto[] };
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       logger('endpoint call with payload %o and config %o', payload, config);
 
-      const result = await mcp.platform.career.products.createBulk(payload, config);
+      const result = await mcp.platform.content.posts.createBulk(payload, config);
       logger('the structured content of result value after call is: %o', result);
       return {
         structuredContent: { result: { items: result } },
@@ -146,165 +151,165 @@ mcp.server.registerTool(
     }),
 );
 
-// Find CareerProduct
+// Find ContentPost
 
 mcp.server.registerTool(
-  'find_career_products',
+  'find_content_posts',
   {
-    title: 'Find CareerProduct',
-    description: `Read "docs://service/career-specification"`,
+    title: 'Find ContentPost',
+    description: `Read "docs://service/content-specification"`,
     inputSchema: mcpInputSchema({ filter: true }),
-    outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(PRODUCT_OUTPUT_SCHEMA) }),
+    outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(POST_OUTPUT_SCHEMA) }),
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('find_career_products', requestInfo, args);
+      const [logger, headers] = mcp.utils('find_content_posts', requestInfo, args);
 
       const filter = args.filter ?? {};
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       logger('endpoint call with filter %o and config %o', filter, config);
 
-      const result = await mcp.platform.career.products.find(filter, config);
+      const result = await mcp.platform.content.posts.find(filter, config);
       logger('the structured content of result value after call is: %o', result);
       return {
         structuredContent: { result: { items: result } },
-        content: [{ type: 'text', text: `Retrieves ${result.length ?? 0} items from products.` }],
+        content: [{ type: 'text', text: `Retrieves ${result.length ?? 0} items from services.` }],
       };
     }),
 );
 
-// Find One CareerProduct
+// Find One ContentPost
 
 mcp.server.registerTool(
-  'find-one_career_products',
+  'find-one_content_posts',
   {
-    title: 'Find One CareerProduct',
-    description: `Read "docs://service/career-specification"`,
+    title: 'Find One ContentPost',
+    description: `Read "docs://service/content-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
-    outputSchema: mcpOutputSchema({ result: PRODUCT_OUTPUT_SCHEMA }),
+    outputSchema: mcpOutputSchema({ result: POST_OUTPUT_SCHEMA }),
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('find-one_career_products', requestInfo, args);
+      const [logger, headers] = mcp.utils('find-one_content_posts', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = args.params ?? ({} as { id?: string; ref?: string });
       logger('endpoint call with id and ref %o and config %o', { id, ref }, config);
 
       if (ref && (!id || id == '-')) (config as RequestConfig).params = { ref };
-      const result = await mcp.platform.career.products.findById(id || '-', config);
+      const result = await mcp.platform.content.posts.findById(id || '-', config);
       logger('the structured content of result value after call is: %o', result);
       return {
         structuredContent: { result },
-        content: [{ type: 'text', text: result ? `Product found successfully.` : `Product not found.` }],
+        content: [{ type: 'text', text: result ? `Post found successfully.` : `Post not found.` }],
       };
     }),
 );
 
-// Delete One CareerProduct
+// Delete One ContentPost
 
 mcp.server.registerTool(
-  'delete-one_career_products',
+  'delete-one_content_posts',
   {
-    title: 'Delete One CareerProduct',
-    description: `Read "docs://service/career-specification"`,
+    title: 'Delete One ContentPost',
+    description: `Read "docs://service/content-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
-    outputSchema: mcpOutputSchema({ result: PRODUCT_OUTPUT_SCHEMA }),
+    outputSchema: mcpOutputSchema({ result: POST_OUTPUT_SCHEMA }),
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('delete-one_career_products', requestInfo, args);
+      const [logger, headers] = mcp.utils('delete-one_content_posts', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = args.params ?? ({} as { id?: string; ref?: string });
       logger('endpoint call with id and ref %o and config %o', { id, ref }, config);
 
       if (ref && (!id || id == '-')) (config as RequestConfig).params = { ref };
-      const result = await mcp.platform.career.products.deleteById(id || '-', config);
+      const result = await mcp.platform.content.posts.deleteById(id || '-', config);
       logger('the structured content of result value after call is: %o', result);
       return {
         structuredContent: { result },
-        content: [{ type: 'text', text: `Product deleted (soft) successfully.` }],
+        content: [{ type: 'text', text: `Post deleted (soft) successfully.` }],
       };
     }),
 );
 
-// Restore One CareerProduct
+// Restore One ContentPost
 
 mcp.server.registerTool(
-  'restore-one_career_products',
+  'restore-one_content_posts',
   {
-    title: 'Restore One CareerProduct',
-    description: `Read "docs://service/career-specification"`,
+    title: 'Restore One ContentPost',
+    description: `Read "docs://service/content-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
-    outputSchema: mcpOutputSchema({ result: PRODUCT_OUTPUT_SCHEMA }),
+    outputSchema: mcpOutputSchema({ result: POST_OUTPUT_SCHEMA }),
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('restore-one_career_products', requestInfo, args);
+      const [logger, headers] = mcp.utils('restore-one_content_posts', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = args.params ?? ({} as { id?: string; ref?: string });
       logger('endpoint call with id and ref %o and config %o', { id, ref }, config);
 
       if (ref && (!id || id == '-')) (config as RequestConfig).params = { ref };
-      const result = await mcp.platform.career.products.restoreById(id || '-', config);
+      const result = await mcp.platform.content.posts.restoreById(id || '-', config);
       logger('the structured content of result value after call is: %o', result);
       return {
         structuredContent: { result },
-        content: [{ type: 'text', text: `Product restored successfully.` }],
+        content: [{ type: 'text', text: `Post restored successfully.` }],
       };
     }),
 );
 
-// Destroy One CareerProduct
+// Destroy One ContentPost
 
 mcp.server.registerTool(
-  'destroy-one_career_products',
+  'destroy-one_content_posts',
   {
-    title: 'Destroy One CareerProduct',
-    description: `Read "docs://service/career-specification"`,
+    title: 'Destroy One ContentPost',
+    description: `Read "docs://service/content-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
-    outputSchema: mcpOutputSchema({ result: PRODUCT_OUTPUT_SCHEMA }),
+    outputSchema: mcpOutputSchema({ result: POST_OUTPUT_SCHEMA }),
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('destroy-one_career_products', requestInfo, args);
+      const [logger, headers] = mcp.utils('destroy-one_content_posts', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = args.params ?? ({} as { id?: string; ref?: string });
       logger('endpoint call with id and ref %o and config %o', { id, ref }, config);
 
       if (ref && (!id || id == '-')) (config as RequestConfig).params = { ref };
-      const result = await mcp.platform.career.products.destroyById(id || '-', config);
+      const result = await mcp.platform.content.posts.destroyById(id || '-', config);
       logger('the structured content of result value after call is: %o', result);
       return {
         structuredContent: { result },
-        content: [{ type: 'text', text: `Product destroyed (hard) successfully.` }],
+        content: [{ type: 'text', text: `Post destroyed (hard) successfully.` }],
       };
     }),
 );
 
-// Update Bulk CareerProduct
+// Update Bulk ContentPost
 
 mcp.server.registerTool(
-  'update-bulk_career_products',
+  'update-bulk_content_posts',
   {
-    title: 'Update Bulk CareerProduct',
-    description: `Read "docs://service/career-specification"`,
-    inputSchema: mcpInputSchema({ filter: true, body: PRODUCT_INPUT_SCHEMA }),
+    title: 'Update Bulk ContentPost',
+    description: `Read "docs://service/content-specification"`,
+    inputSchema: mcpInputSchema({ filter: true, body: POST_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('update-bulk_career_products', requestInfo, args);
+      const [logger, headers] = mcp.utils('update-bulk_content_posts', requestInfo, args);
 
       const query = args.filter?.query ?? {};
-      const payload = args.body as UpdateProductDto;
+      const payload = args.body as UpdatePostDto;
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       logger('endpoint call with payload %o, query %o and config %o', payload, query, config);
 
-      const result = await mcp.platform.career.products.updateBulk(payload, query, config);
+      const result = await mcp.platform.content.posts.updateBulk(payload, query, config);
       logger('the structured content of result value after call is: %o', result);
       return {
         structuredContent: { result: { total: result } },
@@ -313,31 +318,31 @@ mcp.server.registerTool(
     }),
 );
 
-// Update One CareerProduct
+// Update One ContentPost
 
 mcp.server.registerTool(
-  'update-one_career_products',
+  'update-one_content_posts',
   {
-    title: 'Update One CareerProduct',
-    description: `Read "docs://service/career-specification"`,
-    inputSchema: mcpInputSchema({ params: true, body: PRODUCT_INPUT_SCHEMA }),
-    outputSchema: mcpOutputSchema({ result: PRODUCT_OUTPUT_SCHEMA }),
+    title: 'Update One ContentPost',
+    description: `Read "docs://service/content-specification"`,
+    inputSchema: mcpInputSchema({ params: true, body: POST_INPUT_SCHEMA }),
+    outputSchema: mcpOutputSchema({ result: POST_OUTPUT_SCHEMA }),
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('update-one_career_products', requestInfo, args);
+      const [logger, headers] = mcp.utils('update-one_content_posts', requestInfo, args);
 
-      const payload = args.body as UpdateProductDto;
+      const payload = args.body as UpdatePostDto;
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = args.params ?? ({} as { id?: string; ref?: string });
       logger('endpoint call with id and ref %o, payload %o and config %o', { id, ref }, payload, config);
 
       if (ref && (!id || id == '-')) (config as RequestConfig).params = { ref };
-      const result = await mcp.platform.career.products.updateById(id || '-', payload, config);
+      const result = await mcp.platform.content.posts.updateById(id || '-', payload, config);
       logger('the structured content of result value after call is: %o', result);
       return {
         structuredContent: { result },
-        content: [{ type: 'text', text: `Product updated successfully.` }],
+        content: [{ type: 'text', text: `Post updated successfully.` }],
       };
     }),
 );

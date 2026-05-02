@@ -8,11 +8,11 @@ import {
   TOTAL_SCHEMA,
   ITEMS_SCHEMA,
 } from '@app/common/core/mcp';
-import { CreateProductDto, UpdateProductDto } from '@app/common/dto/career';
-import { Product, ProductFeature } from '@app/common/interfaces/career';
-import { ProductFeatureType } from '@app/common/enums/career';
+import { LocationRange, StoreFork, StoreType } from '@app/common/enums/career';
+import { CreateStoreDto, UpdateStoreDto } from '@app/common/dto/career';
 import { RequestConfig } from '@wenex/sdk/common/core/types';
-import { State } from '@app/common/core/enums';
+import { State, Status } from '@app/common/core/enums';
+import { Store } from '@app/common/interfaces/career';
 import { z, ZodType } from 'zod';
 
 const mcp = ServerMCP.create();
@@ -21,69 +21,60 @@ const mcp = ServerMCP.create();
 // Shared Schemas
 // ------------------------------------------------------------
 
-type ProductFeatureSchema = Record<keyof ProductFeature, ZodType>;
+type StoreSchema = Record<keyof Store, ZodType>;
 
-const FEATURE_SCHEMA: Partial<ProductFeatureSchema> = {
-  type: z.nativeEnum(ProductFeatureType),
-
-  title: z.string(),
-  value: z.union([z.boolean(), z.number(), z.string()]),
-
-  ...CORE_INPUT_SCHEMA,
-};
-
-type ProductSchema = Record<keyof Product, ZodType>;
-
-const PRODUCT_SCHEMA: Partial<ProductSchema> = {
+const STORE_SCHEMA: Partial<StoreSchema> = {
   name: z.string(),
-  alias: z.string().optional(),
 
-  state: z.nativeEnum(State),
+  type: z.nativeEnum(StoreType),
+  fork: z.nativeEnum(StoreFork),
 
-  store: z.string().optional(),
-  branch: z.string().optional(),
-  business: z.string().optional(),
+  range: z.nativeEnum(LocationRange).optional(),
 
-  brand: z.string().optional(),
-  content: z.string().optional(),
+  state: z.nativeEnum(State).optional(),
+  status: z.nativeEnum(Status),
 
-  cover: z.string().optional(),
-  gallery: z.array(z.string()),
-  categories: z.array(z.string()),
+  parent: z.string().optional(),
+  manager: z.string().optional(),
+  business: z.string(),
 
-  rate: z.number(),
-  votes: z.number(),
-  rating: z.number(),
+  categories: z.array(z.string()).optional(),
 
-  features: z.array(z.object(FEATURE_SCHEMA)).optional(),
+  rate: z.number().optional(),
+  votes: z.number().optional(),
+  rating: z.number().optional(),
+
+  phone: z.string().optional(),
+  address: z.string().optional(),
+  location: z.string().optional(),
 };
 
-const PRODUCT_INPUT_SCHEMA: Partial<ProductSchema> = { ...PRODUCT_SCHEMA, ...CORE_INPUT_SCHEMA };
-const PRODUCT_OUTPUT_SCHEMA: Partial<ProductSchema> = { ...PRODUCT_SCHEMA, ...CORE_OUTPUT_SCHEMA };
+const STORE_INPUT_SCHEMA: Partial<StoreSchema> = { ...STORE_SCHEMA, ...CORE_INPUT_SCHEMA };
+const STORE_OUTPUT_SCHEMA: Partial<StoreSchema> = { ...STORE_SCHEMA, ...CORE_OUTPUT_SCHEMA };
 
 // ------------------------------------------------------------
 // Tools Implementation
 // ------------------------------------------------------------
 
-// Count CareerProduct
+// Count CareerStore
 
 mcp.server.registerTool(
-  'count_career_products',
+  'count_career_stores',
   {
-    title: 'Count CareerProduct',
+    title: 'Count CareerStore',
     description: `Read "docs://service/career-specification"`,
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('count_career_products', requestInfo, args);
+      const [logger, headers] = mcp.utils('count_career_stores', requestInfo, args);
 
       const query = args.filter?.query ?? {};
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       logger('platform endpoint calling with query %o and config %o', query, config);
 
-      const result = await mcp.platform.career.products.count(query, config);
+      const result = await mcp.platform.career.stores.count(query, config);
       logger('the structured content of result value after call is: %o', result);
       return {
         structuredContent: { result: { total: result } },
@@ -92,52 +83,52 @@ mcp.server.registerTool(
     }),
 );
 
-// Create CareerProduct
+// Create CareerStore
 
 mcp.server.registerTool(
-  'create_career_products',
+  'create_career_stores',
   {
-    title: 'Create CareerProduct',
+    title: 'Create CareerStore',
     description: `Read "docs://service/career-specification"`,
-    inputSchema: mcpInputSchema({ body: PRODUCT_INPUT_SCHEMA }),
-    outputSchema: mcpOutputSchema({ result: PRODUCT_OUTPUT_SCHEMA }),
+    inputSchema: mcpInputSchema({ body: STORE_INPUT_SCHEMA }),
+    outputSchema: mcpOutputSchema({ result: STORE_OUTPUT_SCHEMA }),
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('create_career_products', requestInfo, args);
+      const [logger, headers] = mcp.utils('create_career_stores', requestInfo, args);
 
-      const payload = args.body as CreateProductDto;
+      const payload = args.body as CreateStoreDto;
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       logger('endpoint call with payload %o and config %o', payload, config);
 
-      const result = await mcp.platform.career.products.create(payload, config);
+      const result = await mcp.platform.career.stores.create(payload, config);
       logger('the structured content of result value after call is: %o', result);
       return {
         structuredContent: { result },
-        content: [{ type: 'text', text: `Product with id "${result.id}" created successfully.` }],
+        content: [{ type: 'text', text: `Store with id "${result.id}" created successfully.` }],
       };
     }),
 );
 
-// Create Bulk CareerProduct
+// Create Bulk CareerStore
 
 mcp.server.registerTool(
-  'create-bulk_career_products',
+  'create-bulk_career_stores',
   {
-    title: 'Create Bulk CareerProduct',
+    title: 'Create Bulk CareerStore',
     description: `Read "docs://service/career-specification"`,
-    inputSchema: mcpInputSchema({ body: ITEMS_SCHEMA(PRODUCT_INPUT_SCHEMA) }),
-    outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(PRODUCT_OUTPUT_SCHEMA) }),
+    inputSchema: mcpInputSchema({ body: ITEMS_SCHEMA(STORE_INPUT_SCHEMA) }),
+    outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(STORE_OUTPUT_SCHEMA) }),
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('create-bulk_career_products', requestInfo, args);
+      const [logger, headers] = mcp.utils('create-bulk_career_stores', requestInfo, args);
 
-      const payload = args.body as { items: CreateProductDto[] };
+      const payload = args.body as { items: CreateStoreDto[] };
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       logger('endpoint call with payload %o and config %o', payload, config);
 
-      const result = await mcp.platform.career.products.createBulk(payload, config);
+      const result = await mcp.platform.career.stores.createBulk(payload, config);
       logger('the structured content of result value after call is: %o', result);
       return {
         structuredContent: { result: { items: result } },
@@ -146,165 +137,165 @@ mcp.server.registerTool(
     }),
 );
 
-// Find CareerProduct
+// Find CareerStore
 
 mcp.server.registerTool(
-  'find_career_products',
+  'find_career_stores',
   {
-    title: 'Find CareerProduct',
+    title: 'Find CareerStore',
     description: `Read "docs://service/career-specification"`,
     inputSchema: mcpInputSchema({ filter: true }),
-    outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(PRODUCT_OUTPUT_SCHEMA) }),
+    outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(STORE_OUTPUT_SCHEMA) }),
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('find_career_products', requestInfo, args);
+      const [logger, headers] = mcp.utils('find_career_stores', requestInfo, args);
 
       const filter = args.filter ?? {};
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       logger('endpoint call with filter %o and config %o', filter, config);
 
-      const result = await mcp.platform.career.products.find(filter, config);
+      const result = await mcp.platform.career.stores.find(filter, config);
       logger('the structured content of result value after call is: %o', result);
       return {
         structuredContent: { result: { items: result } },
-        content: [{ type: 'text', text: `Retrieves ${result.length ?? 0} items from products.` }],
+        content: [{ type: 'text', text: `Retrieves ${result.length ?? 0} items from services.` }],
       };
     }),
 );
 
-// Find One CareerProduct
+// Find One CareerStore
 
 mcp.server.registerTool(
-  'find-one_career_products',
+  'find-one_career_stores',
   {
-    title: 'Find One CareerProduct',
+    title: 'Find One CareerStore',
     description: `Read "docs://service/career-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
-    outputSchema: mcpOutputSchema({ result: PRODUCT_OUTPUT_SCHEMA }),
+    outputSchema: mcpOutputSchema({ result: STORE_OUTPUT_SCHEMA }),
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('find-one_career_products', requestInfo, args);
+      const [logger, headers] = mcp.utils('find-one_career_stores', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = args.params ?? ({} as { id?: string; ref?: string });
       logger('endpoint call with id and ref %o and config %o', { id, ref }, config);
 
       if (ref && (!id || id == '-')) (config as RequestConfig).params = { ref };
-      const result = await mcp.platform.career.products.findById(id || '-', config);
+      const result = await mcp.platform.career.stores.findById(id || '-', config);
       logger('the structured content of result value after call is: %o', result);
       return {
         structuredContent: { result },
-        content: [{ type: 'text', text: result ? `Product found successfully.` : `Product not found.` }],
+        content: [{ type: 'text', text: result ? `Store found successfully.` : `Store not found.` }],
       };
     }),
 );
 
-// Delete One CareerProduct
+// Delete One CareerStore
 
 mcp.server.registerTool(
-  'delete-one_career_products',
+  'delete-one_career_stores',
   {
-    title: 'Delete One CareerProduct',
+    title: 'Delete One CareerStore',
     description: `Read "docs://service/career-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
-    outputSchema: mcpOutputSchema({ result: PRODUCT_OUTPUT_SCHEMA }),
+    outputSchema: mcpOutputSchema({ result: STORE_OUTPUT_SCHEMA }),
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('delete-one_career_products', requestInfo, args);
+      const [logger, headers] = mcp.utils('delete-one_career_stores', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = args.params ?? ({} as { id?: string; ref?: string });
       logger('endpoint call with id and ref %o and config %o', { id, ref }, config);
 
       if (ref && (!id || id == '-')) (config as RequestConfig).params = { ref };
-      const result = await mcp.platform.career.products.deleteById(id || '-', config);
+      const result = await mcp.platform.career.stores.deleteById(id || '-', config);
       logger('the structured content of result value after call is: %o', result);
       return {
         structuredContent: { result },
-        content: [{ type: 'text', text: `Product deleted (soft) successfully.` }],
+        content: [{ type: 'text', text: `Store deleted (soft) successfully.` }],
       };
     }),
 );
 
-// Restore One CareerProduct
+// Restore One CareerStore
 
 mcp.server.registerTool(
-  'restore-one_career_products',
+  'restore-one_career_stores',
   {
-    title: 'Restore One CareerProduct',
+    title: 'Restore One CareerStore',
     description: `Read "docs://service/career-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
-    outputSchema: mcpOutputSchema({ result: PRODUCT_OUTPUT_SCHEMA }),
+    outputSchema: mcpOutputSchema({ result: STORE_OUTPUT_SCHEMA }),
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('restore-one_career_products', requestInfo, args);
+      const [logger, headers] = mcp.utils('restore-one_career_stores', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = args.params ?? ({} as { id?: string; ref?: string });
       logger('endpoint call with id and ref %o and config %o', { id, ref }, config);
 
       if (ref && (!id || id == '-')) (config as RequestConfig).params = { ref };
-      const result = await mcp.platform.career.products.restoreById(id || '-', config);
+      const result = await mcp.platform.career.stores.restoreById(id || '-', config);
       logger('the structured content of result value after call is: %o', result);
       return {
         structuredContent: { result },
-        content: [{ type: 'text', text: `Product restored successfully.` }],
+        content: [{ type: 'text', text: `Store restored successfully.` }],
       };
     }),
 );
 
-// Destroy One CareerProduct
+// Destroy One CareerStore
 
 mcp.server.registerTool(
-  'destroy-one_career_products',
+  'destroy-one_career_stores',
   {
-    title: 'Destroy One CareerProduct',
+    title: 'Destroy One CareerStore',
     description: `Read "docs://service/career-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
-    outputSchema: mcpOutputSchema({ result: PRODUCT_OUTPUT_SCHEMA }),
+    outputSchema: mcpOutputSchema({ result: STORE_OUTPUT_SCHEMA }),
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('destroy-one_career_products', requestInfo, args);
+      const [logger, headers] = mcp.utils('destroy-one_career_stores', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = args.params ?? ({} as { id?: string; ref?: string });
       logger('endpoint call with id and ref %o and config %o', { id, ref }, config);
 
       if (ref && (!id || id == '-')) (config as RequestConfig).params = { ref };
-      const result = await mcp.platform.career.products.destroyById(id || '-', config);
+      const result = await mcp.platform.career.stores.destroyById(id || '-', config);
       logger('the structured content of result value after call is: %o', result);
       return {
         structuredContent: { result },
-        content: [{ type: 'text', text: `Product destroyed (hard) successfully.` }],
+        content: [{ type: 'text', text: `Store destroyed (hard) successfully.` }],
       };
     }),
 );
 
-// Update Bulk CareerProduct
+// Update Bulk CareerStore
 
 mcp.server.registerTool(
-  'update-bulk_career_products',
+  'update-bulk_career_stores',
   {
-    title: 'Update Bulk CareerProduct',
+    title: 'Update Bulk CareerStore',
     description: `Read "docs://service/career-specification"`,
-    inputSchema: mcpInputSchema({ filter: true, body: PRODUCT_INPUT_SCHEMA }),
+    inputSchema: mcpInputSchema({ filter: true, body: STORE_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('update-bulk_career_products', requestInfo, args);
+      const [logger, headers] = mcp.utils('update-bulk_career_stores', requestInfo, args);
 
       const query = args.filter?.query ?? {};
-      const payload = args.body as UpdateProductDto;
+      const payload = args.body as UpdateStoreDto;
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       logger('endpoint call with payload %o, query %o and config %o', payload, query, config);
 
-      const result = await mcp.platform.career.products.updateBulk(payload, query, config);
+      const result = await mcp.platform.career.stores.updateBulk(payload, query, config);
       logger('the structured content of result value after call is: %o', result);
       return {
         structuredContent: { result: { total: result } },
@@ -313,31 +304,31 @@ mcp.server.registerTool(
     }),
 );
 
-// Update One CareerProduct
+// Update One CareerStore
 
 mcp.server.registerTool(
-  'update-one_career_products',
+  'update-one_career_stores',
   {
-    title: 'Update One CareerProduct',
+    title: 'Update One CareerStore',
     description: `Read "docs://service/career-specification"`,
-    inputSchema: mcpInputSchema({ params: true, body: PRODUCT_INPUT_SCHEMA }),
-    outputSchema: mcpOutputSchema({ result: PRODUCT_OUTPUT_SCHEMA }),
+    inputSchema: mcpInputSchema({ params: true, body: STORE_INPUT_SCHEMA }),
+    outputSchema: mcpOutputSchema({ result: STORE_OUTPUT_SCHEMA }),
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('update-one_career_products', requestInfo, args);
+      const [logger, headers] = mcp.utils('update-one_career_stores', requestInfo, args);
 
-      const payload = args.body as UpdateProductDto;
+      const payload = args.body as UpdateStoreDto;
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = args.params ?? ({} as { id?: string; ref?: string });
       logger('endpoint call with id and ref %o, payload %o and config %o', { id, ref }, payload, config);
 
       if (ref && (!id || id == '-')) (config as RequestConfig).params = { ref };
-      const result = await mcp.platform.career.products.updateById(id || '-', payload, config);
+      const result = await mcp.platform.career.stores.updateById(id || '-', payload, config);
       logger('the structured content of result value after call is: %o', result);
       return {
         structuredContent: { result },
-        content: [{ type: 'text', text: `Product updated successfully.` }],
+        content: [{ type: 'text', text: `Store updated successfully.` }],
       };
     }),
 );

@@ -121,7 +121,7 @@ mcp.server.registerTool(
       logger('the structured content of result value after call is: %o', result);
       return {
         structuredContent: { result: { items: result } },
-        content: [{ type: 'text', text: `Successfully created ${result.length} grants in bulk.` }],
+        content: [{ type: 'text', text: `Successfully created ${result.length} items in bulk.` }],
       };
     }),
 );
