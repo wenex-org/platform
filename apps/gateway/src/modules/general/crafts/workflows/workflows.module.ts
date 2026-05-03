@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 
+import './workflows.router';
 import { WorkflowsResolver } from './workflows.resolver';
 import { WorkflowsController } from './workflows.controller';
 

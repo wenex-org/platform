@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 
+import './profiles.router';
 import { ProfilesResolver } from './profiles.resolver';
 import { ProfilesController } from './profiles.controller';
 

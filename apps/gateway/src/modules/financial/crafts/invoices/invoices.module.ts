@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 
+import './invoices.router';
 import { InvoicesResolver } from './invoices.resolver';
 import { InvoicesController } from './invoices.controller';
 
