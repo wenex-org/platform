@@ -67,6 +67,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/financial-specification"`,
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -94,6 +95,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/financial-specification"`,
     inputSchema: mcpInputSchema({ body: CURRENCY_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: CURRENCY_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -121,6 +123,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/financial-specification"`,
     inputSchema: mcpInputSchema({ body: ITEMS_SCHEMA(CURRENCY_INPUT_SCHEMA) }),
     outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(CURRENCY_OUTPUT_SCHEMA) }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -148,6 +151,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/financial-specification"`,
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(CURRENCY_OUTPUT_SCHEMA) }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -175,6 +179,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/financial-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: CURRENCY_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -203,6 +208,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/financial-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: CURRENCY_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -231,6 +237,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/financial-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: CURRENCY_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -259,6 +266,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/financial-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: CURRENCY_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -287,6 +295,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/financial-specification"`,
     inputSchema: mcpInputSchema({ filter: true, body: CURRENCY_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -315,6 +324,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/financial-specification"`,
     inputSchema: mcpInputSchema({ params: true, body: CURRENCY_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: CURRENCY_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {

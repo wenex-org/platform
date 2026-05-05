@@ -72,6 +72,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/domain-specification"`,
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -99,6 +100,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/domain-specification"`,
     inputSchema: mcpInputSchema({ body: APP_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: APP_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -126,6 +128,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/domain-specification"`,
     inputSchema: mcpInputSchema({ body: ITEMS_SCHEMA(APP_INPUT_SCHEMA) }),
     outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(APP_OUTPUT_SCHEMA) }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -153,6 +156,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/domain-specification"`,
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(APP_OUTPUT_SCHEMA) }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -180,6 +184,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/domain-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: APP_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -208,6 +213,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/domain-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: APP_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -236,6 +242,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/domain-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: APP_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -264,6 +271,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/domain-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: APP_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -292,6 +300,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/domain-specification"`,
     inputSchema: mcpInputSchema({ filter: true, body: APP_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -320,6 +329,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/domain-specification"`,
     inputSchema: mcpInputSchema({ params: true, body: APP_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: APP_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {

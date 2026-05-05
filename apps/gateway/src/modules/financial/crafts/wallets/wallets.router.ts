@@ -52,6 +52,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/financial-specification"`,
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -79,6 +80,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/financial-specification"`,
     inputSchema: mcpInputSchema({ body: WALLET_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: WALLET_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -106,6 +108,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/financial-specification"`,
     inputSchema: mcpInputSchema({ body: ITEMS_SCHEMA(WALLET_INPUT_SCHEMA) }),
     outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(WALLET_OUTPUT_SCHEMA) }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -133,6 +136,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/financial-specification"`,
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(WALLET_OUTPUT_SCHEMA) }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -160,6 +164,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/financial-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: WALLET_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -188,6 +193,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/financial-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: WALLET_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -216,6 +222,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/financial-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: WALLET_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -244,6 +251,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/financial-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: WALLET_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -272,6 +280,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/financial-specification"`,
     inputSchema: mcpInputSchema({ filter: true, body: WALLET_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -300,6 +309,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/financial-specification"`,
     inputSchema: mcpInputSchema({ params: true, body: WALLET_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: WALLET_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {

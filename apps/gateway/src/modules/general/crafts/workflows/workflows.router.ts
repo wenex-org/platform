@@ -61,6 +61,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/general-specification"`,
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -88,6 +89,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/general-specification"`,
     inputSchema: mcpInputSchema({ body: WORKFLOW_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: WORKFLOW_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -115,6 +117,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/general-specification"`,
     inputSchema: mcpInputSchema({ body: ITEMS_SCHEMA(WORKFLOW_INPUT_SCHEMA) }),
     outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(WORKFLOW_OUTPUT_SCHEMA) }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -142,6 +145,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/general-specification"`,
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(WORKFLOW_OUTPUT_SCHEMA) }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -169,6 +173,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/general-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: WORKFLOW_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -197,6 +202,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/general-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: WORKFLOW_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -225,6 +231,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/general-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: WORKFLOW_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -253,6 +260,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/general-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: WORKFLOW_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -281,6 +289,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/general-specification"`,
     inputSchema: mcpInputSchema({ filter: true, body: WORKFLOW_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -309,6 +318,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/general-specification"`,
     inputSchema: mcpInputSchema({ params: true, body: WORKFLOW_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: WORKFLOW_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {

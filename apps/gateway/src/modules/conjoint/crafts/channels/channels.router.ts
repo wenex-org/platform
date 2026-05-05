@@ -54,6 +54,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/conjoint-specification"`,
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -81,6 +82,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/conjoint-specification"`,
     inputSchema: mcpInputSchema({ body: CHANNEL_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: CHANNEL_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -108,6 +110,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/conjoint-specification"`,
     inputSchema: mcpInputSchema({ body: ITEMS_SCHEMA(CHANNEL_INPUT_SCHEMA) }),
     outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(CHANNEL_OUTPUT_SCHEMA) }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -135,6 +138,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/conjoint-specification"`,
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(CHANNEL_OUTPUT_SCHEMA) }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -162,6 +166,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/conjoint-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: CHANNEL_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -190,6 +195,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/conjoint-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: CHANNEL_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -218,6 +224,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/conjoint-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: CHANNEL_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -246,6 +253,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/conjoint-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: CHANNEL_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -274,6 +282,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/conjoint-specification"`,
     inputSchema: mcpInputSchema({ filter: true, body: CHANNEL_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -302,6 +311,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/conjoint-specification"`,
     inputSchema: mcpInputSchema({ params: true, body: CHANNEL_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: CHANNEL_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {

@@ -71,6 +71,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/touch-specification"`,
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -98,6 +99,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/touch-specification"`,
     inputSchema: mcpInputSchema({ body: EMAIL_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: EMAIL_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -125,6 +127,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/touch-specification"`,
     inputSchema: mcpInputSchema({ body: ITEMS_SCHEMA(EMAIL_INPUT_SCHEMA) }),
     outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(EMAIL_OUTPUT_SCHEMA) }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -152,6 +155,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/touch-specification"`,
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(EMAIL_OUTPUT_SCHEMA) }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -179,6 +183,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/touch-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: EMAIL_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -207,6 +212,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/touch-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: EMAIL_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -235,6 +241,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/touch-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: EMAIL_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -263,6 +270,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/touch-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: EMAIL_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -291,6 +299,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/touch-specification"`,
     inputSchema: mcpInputSchema({ filter: true, body: EMAIL_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -319,6 +328,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/touch-specification"`,
     inputSchema: mcpInputSchema({ params: true, body: EMAIL_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: EMAIL_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {

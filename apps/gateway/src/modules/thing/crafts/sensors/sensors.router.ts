@@ -51,6 +51,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/thing-specification"`,
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -78,6 +79,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/thing-specification"`,
     inputSchema: mcpInputSchema({ body: SENSOR_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: SENSOR_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -105,6 +107,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/thing-specification"`,
     inputSchema: mcpInputSchema({ body: ITEMS_SCHEMA(SENSOR_INPUT_SCHEMA) }),
     outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(SENSOR_OUTPUT_SCHEMA) }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -132,6 +135,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/thing-specification"`,
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(SENSOR_OUTPUT_SCHEMA) }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -159,6 +163,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/thing-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: SENSOR_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -187,6 +192,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/thing-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: SENSOR_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -215,6 +221,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/thing-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: SENSOR_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -243,6 +250,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/thing-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: SENSOR_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -271,6 +279,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/thing-specification"`,
     inputSchema: mcpInputSchema({ filter: true, body: SENSOR_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -299,6 +308,7 @@ mcp.server.registerTool(
     description: `Read "docs://service/thing-specification"`,
     inputSchema: mcpInputSchema({ params: true, body: SENSOR_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: SENSOR_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
