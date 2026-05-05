@@ -9,11 +9,11 @@ import {
   ITEMS_SCHEMA,
 } from '@app/common/core/mcp';
 import { CreateChannelDto, UpdateChannelDto } from '@app/common/dto/conjoint';
+import { ChannelScope, ChannelType } from '@app/common/enums/conjoint';
 import { RequestConfig } from '@wenex/sdk/common/core/types';
 import { Channel } from '@app/common/interfaces/conjoint';
-import { ChannelScope, ChannelType } from '@app/common/enums/conjoint';
-import { z, ZodType } from 'zod';
 import { State, Status } from '@app/common/core/enums';
+import { z, ZodType } from 'zod';
 
 const mcp = ServerMCP.create();
 

@@ -27,7 +27,7 @@ const METRIC_SCHEMA: Partial<MetricSchema> = {
   sensor: z.string(),
   key: z.string().optional(),
 
-  state: z.enum(State).optional(),
+  state: z.nativeEnum(State).optional(),
 
   device: z.string().optional(),
   value: z.union([z.number(), z.array(z.number())]),
@@ -50,9 +50,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('count_thing_metrics', http?.req, args);
+      const [logger, headers] = mcp.utils('count_thing_metrics', requestInfo, args);
 
       const query = args.filter?.['query'] ?? {};
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
@@ -77,9 +77,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ body: METRIC_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: METRIC_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('create_thing_metrics', http?.req, args);
+      const [logger, headers] = mcp.utils('create_thing_metrics', requestInfo, args);
 
       const payload = args.body as CreateMetricDto;
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
@@ -104,9 +104,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ body: ITEMS_SCHEMA(METRIC_INPUT_SCHEMA) }),
     outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(METRIC_OUTPUT_SCHEMA) }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('create-bulk_thing_metrics', http?.req, args);
+      const [logger, headers] = mcp.utils('create-bulk_thing_metrics', requestInfo, args);
 
       const payload = args.body as { items: CreateMetricDto[] };
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
@@ -131,9 +131,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(METRIC_OUTPUT_SCHEMA) }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('find_thing_metrics', http?.req, args);
+      const [logger, headers] = mcp.utils('find_thing_metrics', requestInfo, args);
 
       const filter = (args.filter ?? {}) as Filter;
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
@@ -158,9 +158,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: METRIC_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('find-one_thing_metrics', http?.req, args);
+      const [logger, headers] = mcp.utils('find-one_thing_metrics', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = (args.params ?? {}) as { id?: string; ref?: string };
@@ -186,9 +186,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: METRIC_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('delete-one_thing_metrics', http?.req, args);
+      const [logger, headers] = mcp.utils('delete-one_thing_metrics', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = (args.params ?? {}) as { id?: string; ref?: string };
@@ -214,9 +214,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: METRIC_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('restore-one_thing_metrics', http?.req, args);
+      const [logger, headers] = mcp.utils('restore-one_thing_metrics', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = (args.params ?? {}) as { id?: string; ref?: string };
@@ -242,9 +242,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: METRIC_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('destroy-one_thing_metrics', http?.req, args);
+      const [logger, headers] = mcp.utils('destroy-one_thing_metrics', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = (args.params ?? {}) as { id?: string; ref?: string };
@@ -270,9 +270,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ filter: true, body: METRIC_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('update-bulk_thing_metrics', http?.req, args);
+      const [logger, headers] = mcp.utils('update-bulk_thing_metrics', requestInfo, args);
 
       const query = args.filter?.['query'] ?? {};
       const payload = args.body as UpdateMetricDto;
@@ -298,9 +298,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ params: true, body: METRIC_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: METRIC_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('update-one_thing_metrics', http?.req, args);
+      const [logger, headers] = mcp.utils('update-one_thing_metrics', requestInfo, args);
 
       const payload = args.body as UpdateMetricDto;
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
