@@ -13,7 +13,7 @@ import { Email, EmailSmtp } from '@app/common/interfaces/touch';
 import { RequestConfig } from '@wenex/sdk/common/core/types';
 import { Filter } from '@app/common/core/interfaces/mongo';
 import { EmailProvider } from '@app/common/enums/touch';
-import { z, ZodType } from 'zod/v4';
+import { z, ZodType } from 'zod';
 
 const mcp = ServerMCP.create();
 
@@ -34,7 +34,7 @@ const SMTP_SCHEMA: Record<keyof EmailSmtp, ZodType> = {
 type EmailSchema = Record<keyof Email, ZodType>;
 
 const EMAIL_SCHEMA: Partial<EmailSchema> = {
-  provider: z.enum(EmailProvider),
+  provider: z.nativeEnum(EmailProvider),
 
   to: z.array(z.string()),
   cc: z.array(z.string()).optional(),
@@ -72,9 +72,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('count_touch_emails', http?.req, args);
+      const [logger, headers] = mcp.utils('count_touch_emails', requestInfo, args);
 
       const query = args.filter?.['query'] ?? {};
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
@@ -99,9 +99,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ body: EMAIL_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: EMAIL_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('create_touch_emails', http?.req, args);
+      const [logger, headers] = mcp.utils('create_touch_emails', requestInfo, args);
 
       const payload = args.body as CreateEmailDto;
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
@@ -126,9 +126,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ body: ITEMS_SCHEMA(EMAIL_INPUT_SCHEMA) }),
     outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(EMAIL_OUTPUT_SCHEMA) }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('create-bulk_touch_emails', http?.req, args);
+      const [logger, headers] = mcp.utils('create-bulk_touch_emails', requestInfo, args);
 
       const payload = args.body as { items: CreateEmailDto[] };
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
@@ -153,9 +153,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(EMAIL_OUTPUT_SCHEMA) }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('find_touch_emails', http?.req, args);
+      const [logger, headers] = mcp.utils('find_touch_emails', requestInfo, args);
 
       const filter = (args.filter ?? {}) as Filter;
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
@@ -180,9 +180,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: EMAIL_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('find-one_touch_emails', http?.req, args);
+      const [logger, headers] = mcp.utils('find-one_touch_emails', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = (args.params ?? {}) as { id?: string; ref?: string };
@@ -208,9 +208,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: EMAIL_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('delete-one_touch_emails', http?.req, args);
+      const [logger, headers] = mcp.utils('delete-one_touch_emails', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = (args.params ?? {}) as { id?: string; ref?: string };
@@ -236,9 +236,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: EMAIL_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('restore-one_touch_emails', http?.req, args);
+      const [logger, headers] = mcp.utils('restore-one_touch_emails', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = (args.params ?? {}) as { id?: string; ref?: string };
@@ -264,9 +264,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: EMAIL_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('destroy-one_touch_emails', http?.req, args);
+      const [logger, headers] = mcp.utils('destroy-one_touch_emails', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = (args.params ?? {}) as { id?: string; ref?: string };
@@ -292,9 +292,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ filter: true, body: EMAIL_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('update-bulk_touch_emails', http?.req, args);
+      const [logger, headers] = mcp.utils('update-bulk_touch_emails', requestInfo, args);
 
       const query = args.filter?.['query'] ?? {};
       const payload = args.body as UpdateEmailDto;
@@ -320,9 +320,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ params: true, body: EMAIL_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: EMAIL_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('update-one_touch_emails', http?.req, args);
+      const [logger, headers] = mcp.utils('update-one_touch_emails', requestInfo, args);
 
       const payload = args.body as UpdateEmailDto;
       const config = { headers: { ...(args.headers ?? {}), ...headers } };

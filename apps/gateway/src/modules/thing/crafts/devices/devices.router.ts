@@ -13,7 +13,7 @@ import { RequestConfig } from '@wenex/sdk/common/core/types';
 import { Filter } from '@app/common/core/interfaces/mongo';
 import { State, Status } from '@app/common/core/enums';
 import { Device } from '@app/common/interfaces/thing';
-import { z, ZodType } from 'zod/v4';
+import { z, ZodType } from 'zod';
 
 const mcp = ServerMCP.create();
 
@@ -29,8 +29,8 @@ const DEVICE_SCHEMA: Partial<DeviceSchema> = {
   type: z.string().optional(),
   token: z.string().optional(),
 
-  state: z.enum(State).optional(),
-  status: z.enum(Status).optional(),
+  state: z.nativeEnum(State).optional(),
+  status: z.nativeEnum(Status).optional(),
 
   location: z.string().optional(),
 };
@@ -52,9 +52,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('count_thing_devices', http?.req, args);
+      const [logger, headers] = mcp.utils('count_thing_devices', requestInfo, args);
 
       const query = args.filter?.['query'] ?? {};
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
@@ -79,9 +79,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ body: DEVICE_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: DEVICE_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('create_thing_devices', http?.req, args);
+      const [logger, headers] = mcp.utils('create_thing_devices', requestInfo, args);
 
       const payload = args.body as CreateDeviceDto;
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
@@ -106,9 +106,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ body: ITEMS_SCHEMA(DEVICE_INPUT_SCHEMA) }),
     outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(DEVICE_OUTPUT_SCHEMA) }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('create-bulk_thing_devices', http?.req, args);
+      const [logger, headers] = mcp.utils('create-bulk_thing_devices', requestInfo, args);
 
       const payload = args.body as { items: CreateDeviceDto[] };
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
@@ -133,9 +133,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(DEVICE_OUTPUT_SCHEMA) }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('find_thing_devices', http?.req, args);
+      const [logger, headers] = mcp.utils('find_thing_devices', requestInfo, args);
 
       const filter = (args.filter ?? {}) as Filter;
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
@@ -160,9 +160,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: DEVICE_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('find-one_thing_devices', http?.req, args);
+      const [logger, headers] = mcp.utils('find-one_thing_devices', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = (args.params ?? {}) as { id?: string; ref?: string };
@@ -188,9 +188,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: DEVICE_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('delete-one_thing_devices', http?.req, args);
+      const [logger, headers] = mcp.utils('delete-one_thing_devices', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = (args.params ?? {}) as { id?: string; ref?: string };
@@ -216,9 +216,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: DEVICE_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('restore-one_thing_devices', http?.req, args);
+      const [logger, headers] = mcp.utils('restore-one_thing_devices', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = (args.params ?? {}) as { id?: string; ref?: string };
@@ -244,9 +244,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: DEVICE_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('destroy-one_thing_devices', http?.req, args);
+      const [logger, headers] = mcp.utils('destroy-one_thing_devices', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = (args.params ?? {}) as { id?: string; ref?: string };
@@ -272,9 +272,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ filter: true, body: DEVICE_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('update-bulk_thing_devices', http?.req, args);
+      const [logger, headers] = mcp.utils('update-bulk_thing_devices', requestInfo, args);
 
       const query = args.filter?.['query'] ?? {};
       const payload = args.body as UpdateDeviceDto;
@@ -300,9 +300,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ params: true, body: DEVICE_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: DEVICE_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('update-one_thing_devices', http?.req, args);
+      const [logger, headers] = mcp.utils('update-one_thing_devices', requestInfo, args);
 
       const payload = args.body as UpdateDeviceDto;
       const config = { headers: { ...(args.headers ?? {}), ...headers } };

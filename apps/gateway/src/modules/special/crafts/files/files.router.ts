@@ -13,7 +13,7 @@ import { RequestConfig } from '@wenex/sdk/common/core/types';
 import { Filter } from '@app/common/core/interfaces/mongo';
 import { File } from '@app/common/interfaces/special';
 import { State } from '@app/common/core/enums';
-import { z, ZodType } from 'zod/v4';
+import { z, ZodType } from 'zod';
 
 const mcp = ServerMCP.create();
 
@@ -27,7 +27,7 @@ const FILE_SCHEMA: Partial<FileSchema> = {
   field: z.string().optional(),
   title: z.string().optional(),
 
-  state: z.enum(State).optional(),
+  state: z.nativeEnum(State).optional(),
 
   original: z.string(),
   encoding: z.string().optional(),
@@ -63,9 +63,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('count_special_files', http?.req, args);
+      const [logger, headers] = mcp.utils('count_special_files', requestInfo, args);
 
       const query = args.filter?.['query'] ?? {};
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
@@ -90,9 +90,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ body: FILE_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: FILE_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('create_special_files', http?.req, args);
+      const [logger, headers] = mcp.utils('create_special_files', requestInfo, args);
 
       const payload = args.body as CreateFileDto;
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
@@ -117,9 +117,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ body: ITEMS_SCHEMA(FILE_INPUT_SCHEMA) }),
     outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(FILE_OUTPUT_SCHEMA) }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('create-bulk_special_files', http?.req, args);
+      const [logger, headers] = mcp.utils('create-bulk_special_files', requestInfo, args);
 
       const payload = args.body as { items: CreateFileDto[] };
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
@@ -144,9 +144,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(FILE_OUTPUT_SCHEMA) }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('find_special_files', http?.req, args);
+      const [logger, headers] = mcp.utils('find_special_files', requestInfo, args);
 
       const filter = (args.filter ?? {}) as Filter;
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
@@ -171,9 +171,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: FILE_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('find-one_special_files', http?.req, args);
+      const [logger, headers] = mcp.utils('find-one_special_files', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = (args.params ?? {}) as { id?: string; ref?: string };
@@ -199,9 +199,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: FILE_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('delete-one_special_files', http?.req, args);
+      const [logger, headers] = mcp.utils('delete-one_special_files', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = (args.params ?? {}) as { id?: string; ref?: string };
@@ -227,9 +227,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: FILE_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('restore-one_special_files', http?.req, args);
+      const [logger, headers] = mcp.utils('restore-one_special_files', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = (args.params ?? {}) as { id?: string; ref?: string };
@@ -255,9 +255,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: FILE_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('destroy-one_special_files', http?.req, args);
+      const [logger, headers] = mcp.utils('destroy-one_special_files', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = (args.params ?? {}) as { id?: string; ref?: string };
@@ -283,9 +283,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ filter: true, body: FILE_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('update-bulk_special_files', http?.req, args);
+      const [logger, headers] = mcp.utils('update-bulk_special_files', requestInfo, args);
 
       const query = args.filter?.['query'] ?? {};
       const payload = args.body as UpdateFileDto;
@@ -311,9 +311,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ params: true, body: FILE_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: FILE_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('update-one_special_files', http?.req, args);
+      const [logger, headers] = mcp.utils('update-one_special_files', requestInfo, args);
 
       const payload = args.body as UpdateFileDto;
       const config = { headers: { ...(args.headers ?? {}), ...headers } };

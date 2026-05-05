@@ -99,7 +99,7 @@ export class ClientMCP {
         function: {
           name: tool.name,
           description: tool.description,
-          parameters: tool.inputSchema as any,
+          parameters: tool.inputSchema as OllamaTool['function']['parameters'],
         },
       };
 

@@ -12,7 +12,7 @@ import { CreatePushDto, UpdatePushDto } from '@app/common/dto/touch';
 import { Push, PushKeys } from '@app/common/interfaces/touch';
 import { RequestConfig } from '@wenex/sdk/common/core/types';
 import { Filter } from '@app/common/core/interfaces/mongo';
-import { z, ZodType } from 'zod/v4';
+import { z, ZodType } from 'zod';
 
 const mcp = ServerMCP.create();
 
@@ -55,9 +55,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('count_touch_pushes', http?.req, args);
+      const [logger, headers] = mcp.utils('count_touch_pushes', requestInfo, args);
 
       const query = args.filter?.['query'] ?? {};
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
@@ -82,9 +82,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ body: PUSH_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: PUSH_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('create_touch_pushes', http?.req, args);
+      const [logger, headers] = mcp.utils('create_touch_pushes', requestInfo, args);
 
       const payload = args.body as CreatePushDto;
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
@@ -109,9 +109,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ body: ITEMS_SCHEMA(PUSH_INPUT_SCHEMA) }),
     outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(PUSH_OUTPUT_SCHEMA) }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('create-bulk_touch_pushes', http?.req, args);
+      const [logger, headers] = mcp.utils('create-bulk_touch_pushes', requestInfo, args);
 
       const payload = args.body as { items: CreatePushDto[] };
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
@@ -136,9 +136,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(PUSH_OUTPUT_SCHEMA) }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('find_touch_pushes', http?.req, args);
+      const [logger, headers] = mcp.utils('find_touch_pushes', requestInfo, args);
 
       const filter = (args.filter ?? {}) as Filter;
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
@@ -163,9 +163,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: PUSH_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('find-one_touch_pushes', http?.req, args);
+      const [logger, headers] = mcp.utils('find-one_touch_pushes', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = (args.params ?? {}) as { id?: string; ref?: string };
@@ -191,9 +191,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: PUSH_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('delete-one_touch_pushes', http?.req, args);
+      const [logger, headers] = mcp.utils('delete-one_touch_pushes', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = (args.params ?? {}) as { id?: string; ref?: string };
@@ -219,9 +219,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: PUSH_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('restore-one_touch_pushes', http?.req, args);
+      const [logger, headers] = mcp.utils('restore-one_touch_pushes', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = (args.params ?? {}) as { id?: string; ref?: string };
@@ -247,9 +247,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: PUSH_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('destroy-one_touch_pushes', http?.req, args);
+      const [logger, headers] = mcp.utils('destroy-one_touch_pushes', requestInfo, args);
 
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = (args.params ?? {}) as { id?: string; ref?: string };
@@ -275,9 +275,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ filter: true, body: PUSH_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('update-bulk_touch_pushes', http?.req, args);
+      const [logger, headers] = mcp.utils('update-bulk_touch_pushes', requestInfo, args);
 
       const query = args.filter?.['query'] ?? {};
       const payload = args.body as UpdatePushDto;
@@ -303,9 +303,9 @@ mcp.server.registerTool(
     inputSchema: mcpInputSchema({ params: true, body: PUSH_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: PUSH_OUTPUT_SCHEMA }),
   },
-  async (args, { http }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('update-one_touch_pushes', http?.req, args);
+      const [logger, headers] = mcp.utils('update-one_touch_pushes', requestInfo, args);
 
       const payload = args.body as UpdatePushDto;
       const config = { headers: { ...(args.headers ?? {}), ...headers } };

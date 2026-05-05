@@ -13,7 +13,7 @@ import { RequestConfig } from '@wenex/sdk/common/core/types';
 import { Filter } from '@app/common/core/interfaces/mongo';
 import { Metric } from '@app/common/interfaces/thing';
 import { State } from '@app/common/core/enums';
-import { z, ZodType } from 'zod/v4';
+import { z, ZodType } from 'zod';
 
 const mcp = ServerMCP.create();
 
