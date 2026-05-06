@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 
+import './smss.router';
 import { SmssResolver } from './smss.resolver';
 import { SmssController } from './smss.controller';
 

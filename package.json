@@ -76,7 +76,7 @@
     "@elastic/elasticsearch": "^8.18.2",
     "@grpc/grpc-js": "^1.12.5",
     "@grpc/proto-loader": "^0.7.13",
-    "@modelcontextprotocol/sdk": "^1.20.1",
+    "@modelcontextprotocol/sdk": "1.20.1",
     "@nestjs/apollo": "^13.0.2",
     "@nestjs/axios": "^4.0.0",
     "@nestjs/bullmq": "^11.0.3",

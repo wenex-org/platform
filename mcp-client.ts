@@ -99,7 +99,7 @@ export class ClientMCP {
         function: {
           name: tool.name,
           description: tool.description,
-          parameters: tool.inputSchema as any,
+          parameters: tool.inputSchema as OllamaTool['function']['parameters'],
         },
       };
 
@@ -326,11 +326,11 @@ export class ClientMCP {
         }
 
         const lines = content.split(/\r?\n/).filter((line) => line.trim());
-        lines.slice(0, 12).forEach((line, index) => {
+        lines.slice(0, 14).forEach((line, index) => {
           console.log(`${(index + 1).toString().padStart(2, '0')}: ${line}`);
         });
 
-        const remaining = Math.max(0, lines.length - 12);
+        const remaining = Math.max(0, lines.length - 14);
         if (remaining > 0) console.log(`... (${remaining} more lines)\n`);
 
         this.messages.push({ role: 'tool', content, tool_name: toolName });

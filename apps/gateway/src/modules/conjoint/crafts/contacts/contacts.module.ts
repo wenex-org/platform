@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 
+import './contacts.router';
 import { ContactsResolver } from './contacts.resolver';
 import { ContactsController } from './contacts.controller';
 

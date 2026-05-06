@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 
+import './members.router';
 import { MembersResolver } from './members.resolver';
 import { MembersController } from './members.controller';
 

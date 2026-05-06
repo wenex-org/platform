@@ -8,9 +8,9 @@ import {
   TOTAL_SCHEMA,
   ITEMS_SCHEMA,
 } from '@app/common/core/mcp';
+import { CreateGrantDto, UpdateGrantDto } from '@app/common/dto/auth';
 import { Grant, GrantTime } from '@app/common/interfaces/auth';
 import { RequestConfig } from '@wenex/sdk/common/core/types';
-import { CreateGrantDto } from '@app/common/dto/auth';
 import { z, ZodType } from 'zod';
 
 const mcp = ServerMCP.create();
@@ -30,9 +30,11 @@ const GRANT_SCHEMA: Partial<GrantSchema> = {
   subject: z.string(),
   action: z.string(),
   object: z.string(),
+
   field: z.array(z.string()).optional(),
   filter: z.array(z.string()).optional(),
   location: z.array(z.string()).optional(),
+
   time: z.array(z.object(TIME_SCHEMA)).optional(),
 };
 
@@ -52,6 +54,7 @@ mcp.server.registerTool(
     description: `Read "docs://core/auth-specification"`,
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -79,6 +82,7 @@ mcp.server.registerTool(
     description: `Read "docs://core/auth-specification"`,
     inputSchema: mcpInputSchema({ body: GRANT_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: GRANT_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -92,7 +96,7 @@ mcp.server.registerTool(
       logger('the structured content of result value after call is: %o', result);
       return {
         structuredContent: { result },
-        content: [{ type: 'text', text: `Grant for subject "${result.subject}" created successfully.` }],
+        content: [{ type: 'text', text: `Grant with id "${result.id}" created successfully.` }],
       };
     }),
 );
@@ -106,6 +110,7 @@ mcp.server.registerTool(
     description: `Read "docs://core/auth-specification"`,
     inputSchema: mcpInputSchema({ body: ITEMS_SCHEMA(GRANT_INPUT_SCHEMA) }),
     outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(GRANT_OUTPUT_SCHEMA) }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -119,7 +124,7 @@ mcp.server.registerTool(
       logger('the structured content of result value after call is: %o', result);
       return {
         structuredContent: { result: { items: result } },
-        content: [{ type: 'text', text: `Successfully created ${result.length} grants in bulk.` }],
+        content: [{ type: 'text', text: `Successfully created ${result.length} items in bulk.` }],
       };
     }),
 );
@@ -133,6 +138,7 @@ mcp.server.registerTool(
     description: `Read "docs://core/auth-specification"`,
     inputSchema: mcpInputSchema({ filter: true }),
     outputSchema: mcpOutputSchema({ result: ITEMS_SCHEMA(GRANT_OUTPUT_SCHEMA) }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -146,7 +152,7 @@ mcp.server.registerTool(
       logger('the structured content of result value after call is: %o', result);
       return {
         structuredContent: { result: { items: result } },
-        content: [{ type: 'text', text: `Found ${result.length ?? 0} items.` }],
+        content: [{ type: 'text', text: `Retrieves ${result.length ?? 0} items from grants.` }],
       };
     }),
 );
@@ -160,6 +166,7 @@ mcp.server.registerTool(
     description: `Read "docs://core/auth-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: GRANT_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -188,6 +195,7 @@ mcp.server.registerTool(
     description: `Read "docs://core/auth-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: GRANT_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -216,6 +224,7 @@ mcp.server.registerTool(
     description: `Read "docs://core/auth-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: GRANT_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -244,6 +253,7 @@ mcp.server.registerTool(
     description: `Read "docs://core/auth-specification"`,
     inputSchema: mcpInputSchema({ params: true }),
     outputSchema: mcpOutputSchema({ result: GRANT_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
@@ -272,13 +282,14 @@ mcp.server.registerTool(
     description: `Read "docs://core/auth-specification"`,
     inputSchema: mcpInputSchema({ filter: true, body: GRANT_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: TOTAL_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
       const [logger, headers] = mcp.utils('update-bulk_auth_grants', requestInfo, args);
 
       const query = args.filter?.query ?? {};
-      const payload = args.body as CreateGrantDto;
+      const payload = args.body as UpdateGrantDto;
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       logger('endpoint call with payload %o, query %o and config %o', payload, query, config);
 
@@ -300,12 +311,13 @@ mcp.server.registerTool(
     description: `Read "docs://core/auth-specification"`,
     inputSchema: mcpInputSchema({ params: true, body: GRANT_INPUT_SCHEMA }),
     outputSchema: mcpOutputSchema({ result: GRANT_OUTPUT_SCHEMA }),
+    annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
   },
   async (args, { requestInfo }) =>
     throwableToolCall(async () => {
       const [logger, headers] = mcp.utils('update-one_auth_grants', requestInfo, args);
 
-      const payload = args.body as CreateGrantDto;
+      const payload = args.body as UpdateGrantDto;
       const config = { headers: { ...(args.headers ?? {}), ...headers } };
       const { id, ref } = args.params ?? ({} as { id?: string; ref?: string });
       logger('endpoint call with id and ref %o, payload %o and config %o', { id, ref }, payload, config);
