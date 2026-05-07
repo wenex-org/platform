@@ -4,6 +4,8 @@ Give me refactor plan for MCP (Model Context Protocol) specification documentati
 
 Move the system prompt and other necessary client-side tools from `mcp-client.ts` to the server MCP tools definition files `*.router.ts` and the `mcp/**/*.md` specification documents. alongside MongoDB query teaching, add some training content to teach agents to draw diagrams and charts using Mermaid in their markdown responses.
 
+NOTE: THERE IS NO NEED TO RUN GIT TESTS AND COMMANDS.
+
 ## Sources of Truth (precedence order)
 
 1. @wenex-org/platform → `apps/gateway/src` (controllers, routers, resolvers — external surface only)
