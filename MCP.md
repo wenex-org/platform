@@ -7,7 +7,7 @@ Prepare a refactor plan for MCP (Model Context Protocol) specification documenta
 
 Move the system prompt and other necessary client-side tools from `mcp-client.ts` to the server MCP tools definition files `*.router.ts` and the `mcp/**/*.md` specification documents. alongside MongoDB query teaching, add some training content to teach agents to draw diagrams and charts using Mermaid in their markdown responses.
 
-NOTE: THERE IS NO NEED TO RUN GIT TESTS AND COMMANDS.
+NOTE: THERE IS NO NEED TO RUN GIT AND TEST COMMANDS.
 
 ## Sources of Truth (precedence order)
 
