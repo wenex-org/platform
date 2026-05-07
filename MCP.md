@@ -3,7 +3,7 @@ title: "Powerful Prompt"
 claude-extensions: [rtk, code-review-graph, superpowers]
 ---
 
-Prepare a refactor plan for MCP (Model Context Protocol) specification documentations in the `mcp/**/*.md` and the server tools definition exists in the `apps/gateway/src/**/*.router.ts` files, then execute it. Refactor the specific client `mcp-client.ts` for the Wenex platform to act like a standard MCP client available to every user (Claude, GPT, or other MCP clients). Refactor the MCP client by ollama usage; feel free to ask me any question to produce an efficient and elegant MCP server and client. I want you to produce the final production-ready version for agents to assist user intent in the Wenex platform.
+Prepare a refactor plan for MCP (Model Context Protocol) specification documentations in the `mcp/**/*.md` and the server tools definition exists in the `apps/gateway/src/**/*.router.ts` files, then execute it. Refactor the specific client `mcp-client.ts` for the Wenex platform to act like a standard MCP client available to every user (Claude, GPT, or other MCP clients). feel free to ask me any question to produce an efficient and elegant MCP server and client. I want you to produce the final production-ready version for agents to assist user intent in the Wenex platform.
 
 NOTE: THERE IS NO NEED TO RUN GIT AND TEST COMMANDS.
 
