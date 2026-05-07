@@ -1,18 +1,16 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
-require('dotenv').config();
-
 /**
- * Wenex MCP Client v3.0
+ * Generic MCP Client
  *
  * Standard MCP client using Ollama as the LLM backend.
- * Connects to the Wenex MCP server, loads all tools and the startup prompt,
- * then enters an interactive chat loop.
+ * Connects to any MCP server, captures server-sent startup context,
+ * loads all tools, then enters an interactive chat loop.
  *
  * Prerequisites:
  *   - Run Ollama locally: ollama run qwen2.5:32b
- *   - Remote tunnel:      ssh -L 11434:localhost:11434 wenex@gpu.wenex.org
- *   - Set env:            MCP_CLIENT_APT_TOKEN=<your-apt-token>
+ *   - Set env:            MCP_CLIENT_APT_TOKEN=<your-auth-token>
  */
+/* eslint-disable @typescript-eslint/no-require-imports */
+import { LoggingMessageNotificationSchema } from '@modelcontextprotocol/sdk/types.js';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 import { Ollama, type Tool as OllamaTool, type Message } from 'ollama';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
@@ -40,7 +38,8 @@ export class ClientMCP {
   private ollama: Ollama;
   private messages: Message[] = [];
   private tools: OllamaTool[] = [];
-  private startupMessages: Message[] = [];
+  private systemContext: string = '';
+  private contextReadyResolver?: () => void;
 
   private config: Required<ClientMCPConfig>;
   private transport?: StreamableHTTPClientTransport;
@@ -48,31 +47,32 @@ export class ClientMCP {
   constructor(config: Partial<ClientMCPConfig> = {}) {
     this.config = { ...DEFAULT_CONFIG, ...config };
 
-    this.mcp = new Client({ name: 'wenex-mcp-client', version: '3.0.0' });
+    this.mcp = new Client({ name: 'mcp-client', version: '1.0.0' }, { capabilities: { sampling: {} } });
     this.ollama = new Ollama({ host: this.config.ollamaHost });
   }
 
-  private getAuthorizationHeader(): string {
-    const token = process.env.MCP_CLIENT_APT_TOKEN;
-    if (!token) throw new Error('MCP_CLIENT_APT_TOKEN environment variable is required');
-    return token.startsWith('Bearer ') ? token : `Bearer ${token}`;
-  }
-
-  async connect(serverUrl: string = this.config.mcpServerUrl): Promise<void> {
+  async connect(serverUrl: string = this.config.mcpServerUrl, authToken?: string): Promise<void> {
     if (this.transport) await this.transport.close();
 
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (authToken) {
+      headers['Authorization'] = authToken.startsWith('Bearer ') ? authToken : `Bearer ${authToken}`;
+    }
+
     this.transport = new StreamableHTTPClientTransport(new URL(serverUrl), {
-      requestInit: {
-        headers: {
-          Authorization: this.getAuthorizationHeader(),
-          'Content-Type': 'application/json',
-        },
-        keepalive: true,
-      },
+      requestInit: { headers, keepalive: true },
     });
 
-    this.transport.onerror = (err) => console.error('❌ Transport error:', err);
-    this.transport.onclose = () => console.log('🔌 Transport closed');
+    this.transport.onerror = (err) => console.error('Transport error:', err);
+    this.transport.onclose = () => console.log('Transport closed');
+
+    // Register notification handler before connecting so we don't miss the session-init push
+    this.mcp.setNotificationHandler(LoggingMessageNotificationSchema, (notification) => {
+      if (notification.params.level === 'info' && typeof notification.params.data === 'string') {
+        this.systemContext = notification.params.data;
+        this.contextReadyResolver?.();
+      }
+    });
 
     await this.mcp.connect(this.transport);
 
@@ -87,20 +87,43 @@ export class ClientMCP {
       },
     }));
 
-    // Fetch the startup workflow prompt from the server
-    try {
-      const promptResult = await this.mcp.getPrompt({ name: 'wenex-startup', arguments: {} });
-      this.startupMessages = promptResult.messages.map((msg) => ({
-        role: msg.role === 'assistant' ? 'assistant' : 'user',
-        content: typeof msg.content === 'string' ? msg.content : ((msg.content as any).text ?? ''),
-      }));
-    } catch {
-      console.warn('⚠️  Startup prompt not available — proceeding without it');
-    }
+    // Wait up to 2 seconds for a server-pushed session-init notification.
+    // If none arrives, fall back to listPrompts() for servers that use prompt discovery.
+    await new Promise<void>((resolve) => {
+      if (this.systemContext) {
+        resolve();
+        return;
+      }
 
-    console.log('✅ Connected to MCP server');
-    console.log('   Tools  :', this.tools.length, 'loaded');
-    console.log('   Prompt :', this.startupMessages.length > 0 ? 'wenex-startup loaded' : 'none');
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      const timer = setTimeout(async () => {
+        this.contextReadyResolver = undefined;
+        if (!this.systemContext) {
+          try {
+            const promptsResult = await this.mcp.listPrompts();
+            if (promptsResult.prompts.length > 0) {
+              const first = await this.mcp.getPrompt({ name: promptsResult.prompts[0].name, arguments: {} });
+              const text = first.messages
+                .map((m) => (typeof m.content === 'string' ? m.content : ((m.content as any).text ?? '')))
+                .join('\n');
+              if (text) this.systemContext = text;
+            }
+          } catch {
+            // No prompts available — proceed without startup context
+          }
+        }
+        resolve();
+      }, 2000);
+
+      this.contextReadyResolver = () => {
+        clearTimeout(timer);
+        resolve();
+      };
+    });
+
+    console.log('Connected to MCP server');
+    console.log('  Tools  :', this.tools.length, 'loaded');
+    console.log('  Context:', this.systemContext ? 'received' : 'none');
   }
 
   private trimHistory(): void {
@@ -113,12 +136,14 @@ export class ClientMCP {
     this.messages.push({ role: 'user', content: query });
     this.trimHistory();
 
-    console.log('🤖 Processing...');
+    console.log('Processing...');
+
+    const contextMessages: Message[] = this.systemContext ? [{ role: 'system', content: this.systemContext }] : [];
 
     let response = await this.ollama.chat({
       model: modelName,
       tools: this.tools,
-      messages: [...this.startupMessages, ...this.messages],
+      messages: [...contextMessages, ...this.messages],
     });
 
     this.messages.push(response.message);
@@ -128,46 +153,46 @@ export class ClientMCP {
       round++;
 
       const toolNames = response.message.tool_calls.map((t) => t.function.name).join(', ');
-      console.log(`🛠  Round ${round}: ${toolNames}`);
+      console.log(`Round ${round}: ${toolNames}`);
 
       for (const toolCall of response.message.tool_calls) {
         const toolName = toolCall.function.name;
         const toolArgs = toolCall.function.arguments as Record<string, any>;
 
-        console.log(`   → ${toolName}`, toolArgs);
+        console.log(`  → ${toolName}`, toolArgs);
 
         let content: string;
         try {
           const result = await this.mcp.callTool({ name: toolName, arguments: toolArgs });
           const textParts = (result.content as any[]).filter((c) => c.type === 'text').map((c) => c.text);
           content = textParts.join('\n');
-          if ((result as any).structuredContent) {
-            content += `\n\nStructured Content:\n${toString((result as any).structuredContent)}`;
-          }
+          const structured = (result as { structuredContent?: unknown }).structuredContent;
+          if (structured) content += `\n\nStructured Content:\n${toString(structured)}`;
         } catch (err: any) {
-          console.error(`❌ ${toolName} failed:`, err.message);
+          console.error(`${toolName} failed:`, err.message);
           content = `ERROR executing ${toolName}: ${err.message}`;
         }
 
         // Preview first 14 lines of tool output
         const lines = content.split(/\r?\n/).filter((line) => line.trim());
         lines.slice(0, 14).forEach((line, i) => console.log(`${(i + 1).toString().padStart(2, '0')}: ${line}`));
-        if (lines.length > 14) console.log(`   ... (${lines.length - 14} more lines)`);
+        if (lines.length > 14) console.log(`  ... (${lines.length - 14} more lines)`);
 
         this.messages.push({ role: 'tool', content, tool_name: toolName });
+        this.trimHistory();
       }
 
       response = await this.ollama.chat({
         model: modelName,
         tools: this.tools,
-        messages: [...this.startupMessages, ...this.messages],
+        messages: [...contextMessages, ...this.messages],
       });
 
       this.messages.push(response.message);
     }
 
     if (round >= this.config.maxToolRounds) {
-      console.warn('⚠️  Reached maximum tool rounds');
+      console.warn('Reached maximum tool rounds');
     }
 
     return response.message.content || '';
@@ -178,14 +203,13 @@ export class ClientMCP {
       await this.transport.close();
       this.transport = undefined;
     }
-    console.log('👋 Disconnected');
+    console.log('Disconnected');
   }
 
   async chatLoop(modelName = this.config.defaultModel): Promise<void> {
     const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
-    console.log('\n🚀 Wenex MCP Client v3.0 started!');
-    console.log("   Type your query or 'quit' to exit.\n");
+    console.log('\nMCP Client started. Type your query or "quit" to exit.\n');
 
     const ask = () => new Promise<string>((resolve) => rl.question('\nQuery > ', resolve));
 
@@ -197,7 +221,7 @@ export class ClientMCP {
         const response = await this.processQuery(input, modelName);
 
         console.log('\n  ─────────────────────────────────────────');
-        console.log('  AI RESPONSE');
+        console.log('  RESPONSE');
         console.log('  ─────────────────────────────────────────\n');
         console.log(response);
       }
@@ -208,22 +232,25 @@ export class ClientMCP {
   }
 }
 
+// Only Wenex-specific knowledge lives here — outside the class
 (async () => {
+  require('dotenv').config();
+
   const token = process.env.MCP_CLIENT_APT_TOKEN;
+  const serverUrl = process.env.MCP_SERVER_URL;
+
   if (!token) {
-    console.error('❌ MCP_CLIENT_APT_TOKEN environment variable is required');
+    console.error('MCP_CLIENT_APT_TOKEN environment variable is required');
     process.exit(1);
   }
 
-  const client = new ClientMCP({
-    // defaultModel: 'llama3.1:8b',
-  });
+  const client = new ClientMCP({});
 
   try {
-    await client.connect();
+    await client.connect(serverUrl, token);
     await client.chatLoop();
   } catch (err) {
-    console.error('💥 Fatal error:', err);
+    console.error('Fatal error:', err);
     await client.disconnect();
     process.exit(1);
   }
