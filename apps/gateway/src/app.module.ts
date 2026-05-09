@@ -1,7 +1,6 @@
-import { mcpInputSchema, mcpOutputSchema, throwableToolCall } from '@app/common/core/mcp';
 import { JWT_SECRET, NODE_ENV, REDIS_CONFIG, SENTRY_CONFIG } from '@app/common/core/envs';
-import { mcpDocLoader, registerDocumentations } from '@app/common/core/mcp/loader.mcp';
 import { ComplexityPlugin, DateScalar } from '@app/common/core/plugins/graphql';
+import { registerDocumentations } from '@app/common/core/mcp/loader.mcp';
 import { DynamicModule, Module, OnModuleInit } from '@nestjs/common';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
@@ -14,8 +13,8 @@ import { RedisModule } from '@app/module/redis';
 import GraphQLJSON from 'graphql-type-json';
 import { JwtModule } from '@nestjs/jwt';
 import { join } from 'path';
-import { z } from 'zod';
 
+import './app.router';
 import { MODULES, HEALTH_CHECK_OPTIONS } from './modules';
 
 @Module({
@@ -49,29 +48,6 @@ import { MODULES, HEALTH_CHECK_OPTIONS } from './modules';
 })
 export class AppModule implements OnModuleInit {
   onModuleInit() {
-    const mcp = registerDocumentations();
-
-    mcp.server.registerTool(
-      'read_docs',
-      {
-        title: 'read documentations',
-        description: 'documentations read using uri',
-        inputSchema: mcpInputSchema({ body: { uri: z.string() } }),
-        outputSchema: mcpOutputSchema({ result: { content: z.string() } }),
-        annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
-      },
-      (args) =>
-        throwableToolCall(() => {
-          let content = '';
-          if (args.uri === 'docs://readme') content = mcpDocLoader(`docs://readme`, null);
-          else if (args.uri === 'docs://core/specification') {
-            content = mcpDocLoader(args.uri.replace('core/specification', 'core/-specification'));
-          } else content = mcpDocLoader(args.uri);
-          return {
-            structuredContent: { result: { content } },
-            content: [{ type: 'text', text: `Look at structured data.` }],
-          };
-        }),
-    );
+    registerDocumentations();
   }
 }

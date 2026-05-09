@@ -1,21 +1,21 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
-require('dotenv').config();
-
 /**
- * Configuration
+ * Generic MCP Client
  *
- * Run Ollama as a service on local
- * Using: ollama run qwen2.5:32b
- * Remote: ssh -L 11434:localhost:11434 wenex@gpu.wenex.org
+ * Standard MCP client using Ollama as the LLM backend.
+ * Connects to any MCP server, captures server-sent startup context,
+ * loads all tools, then enters an interactive chat loop.
+ *
+ * Prerequisites:
+ *  - Run Ollama locally: ollama run qwen2.5:32b
+ *  - Set env: MCP_CLIENT_APT_TOKEN=<your-auth-token>
+ *  - Remote: ssh -L 11434:localhost:11434 wenex@gpu.wenex.org
  */
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
+import { LoggingMessageNotificationSchema } from '@modelcontextprotocol/sdk/types.js';
 import { Ollama, type Tool as OllamaTool, type Message } from 'ollama';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { toString } from '@app/common/core/utils';
 import * as readline from 'node:readline';
-import addFormats from 'ajv-formats';
-import axios from 'axios';
-import Ajv from 'ajv';
 
 interface ClientMCPConfig {
   mcpServerUrl: string;
@@ -23,7 +23,6 @@ interface ClientMCPConfig {
   defaultModel?: string;
   maxToolRounds?: number;
   maxHistoryMessages?: number;
-  platformAuthVerifyPath: string;
 }
 
 const DEFAULT_CONFIG: Required<ClientMCPConfig> = {
@@ -32,7 +31,6 @@ const DEFAULT_CONFIG: Required<ClientMCPConfig> = {
   defaultModel: 'qwen2.5:32b',
   ollamaHost: 'http://localhost:11434',
   mcpServerUrl: 'http://127.0.0.1:3010/mcp',
-  platformAuthVerifyPath: 'http://127.0.0.1:3010/auth/verify',
 };
 
 export class ClientMCP {
@@ -40,213 +38,111 @@ export class ClientMCP {
   private ollama: Ollama;
   private messages: Message[] = [];
 
+  private tools: OllamaTool[] = [];
+  private systemContext: string = '';
+  private contextReadyResolver?: () => void;
+
   private config: Required<ClientMCPConfig>;
   private transport?: StreamableHTTPClientTransport;
-
-  private activeTools: Record<string, OllamaTool> = {};
-  private availableTools: Record<string, OllamaTool> = {};
-
-  private ajv: Ajv = new Ajv({ strict: false, allErrors: true });
-  private validators: Record<string, { schema: any; validator?: any }> = {};
 
   constructor(config: Partial<ClientMCPConfig> = {}) {
     this.config = { ...DEFAULT_CONFIG, ...config };
 
-    this.mcp = new Client({
-      name: 'ollama-mcp-client',
-      version: '2.1.0',
-    });
-
+    this.mcp = new Client({ name: 'mcp-client', version: '1.0.0' }, { capabilities: { sampling: {} } });
     this.ollama = new Ollama({ host: this.config.ollamaHost });
-    addFormats(this.ajv);
   }
 
-  private getAuthorizationHeader(): string {
-    const token = process.env.MCP_CLIENT_APT_TOKEN;
-    if (!token) throw new Error('MCP_CLIENT_APT_TOKEN environment variable is required');
-    return token.startsWith('Bearer ') ? token : `Bearer ${token}`;
-  }
-
-  async connect(serverUrl: string = this.config.mcpServerUrl): Promise<void> {
+  async connect(serverUrl: string = this.config.mcpServerUrl, authToken?: string): Promise<void> {
     if (this.transport) await this.transport.close();
 
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (authToken) {
+      headers['Authorization'] = authToken.startsWith('Bearer ') ? authToken : `Bearer ${authToken}`;
+    }
+
     this.transport = new StreamableHTTPClientTransport(new URL(serverUrl), {
-      requestInit: {
-        headers: {
-          Authorization: this.getAuthorizationHeader(),
-          'Content-Type': 'application/json',
-        },
-        keepalive: true,
-      },
+      requestInit: { headers, keepalive: true },
     });
 
-    this.transport.onerror = (err) => console.error('❌ Transport error:', err);
-    this.transport.onclose = () => console.log('🔌 Transport closed');
+    this.transport.onerror = (err) => console.error('Transport error:', err);
+    this.transport.onclose = () => console.log('Transport closed');
+
+    // Register notification handler before connecting so we don't miss the session-init push
+    this.mcp.setNotificationHandler(LoggingMessageNotificationSchema, (notification) => {
+      console.log('notification handler before connecting received notification with value:', notification);
+      if (notification.params.level === 'info' && typeof notification.params.data === 'string') {
+        this.systemContext = notification.params.data;
+        this.contextReadyResolver?.();
+      }
+    });
 
     await this.mcp.connect(this.transport);
 
-    const [toolsResult, resourcesResult] = await Promise.all([this.mcp.listTools(), this.mcp.listResources()]);
+    // Load all available tools from the server
+    const toolsResult = await this.mcp.listTools();
+    this.tools = toolsResult.tools.map((tool) => ({
+      type: 'function',
+      function: {
+        name: tool.name,
+        description: tool.description,
+        parameters: tool.inputSchema as OllamaTool['function']['parameters'],
+      },
+    }));
 
-    const availableResourcesUris = resourcesResult.resources.map((r) => r.uri).join(', ');
+    // Wait up to 2 seconds for a server-pushed session-init notification.
+    // If none arrives, fall back to listPrompts() for servers that use prompt discovery.
+    await new Promise<void>((resolve) => {
+      if (this.systemContext) {
+        resolve();
+        return;
+      }
 
-    this.validators = {};
-    this.activeTools = {};
-    this.availableTools = {};
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      const timer = setTimeout(async () => {
+        this.contextReadyResolver = undefined;
+        if (!this.systemContext) {
+          const promptsResult = await this.mcp.listPrompts();
+          if (promptsResult.prompts.length > 0) {
+            const first = await this.mcp.getPrompt({ name: promptsResult.prompts[0].name, arguments: {} });
+            const text = first.messages
+              .map((m) => (typeof m.content === 'string' ? m.content : ((m.content as any).text ?? '')))
+              .join('\n');
+            if (text) this.systemContext = text;
+          }
+          console.log('from the prompt, systemContext value is:', this.systemContext);
+        }
+        resolve();
+      }, 2000);
 
-    toolsResult.tools.forEach((tool) => {
-      this.availableTools[tool.name] = {
-        type: 'function',
-        function: {
-          name: tool.name,
-          description: tool.description,
-          parameters: tool.inputSchema as OllamaTool['function']['parameters'],
-        },
+      this.contextReadyResolver = () => {
+        clearTimeout(timer);
+        resolve();
       };
-
-      this.validators[tool.name] = { schema: tool.inputSchema };
     });
 
-    this.activeTools['auth_verify'] = {
-      type: 'function',
-      function: {
-        name: 'auth_verify',
-        description: 'Verify the current APT before calling Wenex resource tools.',
-        parameters: {
-          type: 'object',
-          properties: {},
-        },
-      },
-    };
-
-    this.activeTools['current_datetime'] = {
-      type: 'function',
-      function: {
-        name: 'current_datetime',
-        description: 'Returns the current timestamp and ISO 8601 format.',
-        parameters: {
-          type: 'object',
-          properties: {},
-        },
-      },
-    };
-
-    this.activeTools['read_documentations'] = {
-      type: 'function',
-      function: {
-        name: 'read_documentations',
-        description: 'Read an MCP documentation resource by URI.',
-        parameters: {
-          type: 'object',
-          required: ['uri'],
-          properties: {
-            uri: { type: 'string', description: 'The MCP docs URI to read.' },
-          },
-        },
-      },
-    };
-
-    this.activeTools['load_collection_tools'] = {
-      type: 'function',
-      function: {
-        name: 'load_collection_tools',
-        description:
-          'Load Wenex collection tools using exact service and exact collection names from docs (for example service="auth", collection="grants").',
-        parameters: {
-          type: 'object',
-          required: ['service', 'collection'],
-          properties: {
-            service: { type: 'string', description: 'Exact service name, e.g. auth, career, identity.' },
-            collection: {
-              type: 'string',
-              description: 'Exact collection name, usually plural, e.g. grants, users, products.',
-            },
-          },
-        },
-      },
-    };
-
-    this.validators['auth_verify'] = {
-      schema: { type: 'object', properties: {} },
-    };
-
-    this.validators['current_datetime'] = {
-      schema: { type: 'object', properties: {} },
-    };
-
-    this.validators['read_documentations'] = {
-      schema: this.activeTools['read_documentations'].function.parameters,
-    };
-
-    this.validators['load_collection_tools'] = {
-      schema: this.activeTools['load_collection_tools'].function.parameters,
-    };
-
-    console.log('✅ Connected to MCP server');
-    console.log('   Resources     :', availableResourcesUris || 'none');
-    console.log('   Tools         :', Object.keys(this.availableTools).join(', '));
-    console.log('\n   Active Tools  :', Object.keys(this.activeTools).join(', '));
+    console.log('Connected to MCP server');
+    console.log('  Tools  :', this.tools.length, 'loaded');
+    console.log('  Context:', this.systemContext ? 'received' : 'none');
   }
 
-  private getValidator(toolName: string) {
-    if (!this.validators[toolName]?.validator) {
-      const { schema } = this.validators[toolName];
-      if (!schema) throw new Error(`No schema for tool: ${toolName}`);
-      this.validators[toolName].validator = this.ajv.compile(schema);
-    }
-    return this.validators[toolName].validator;
-  }
-
-  private validateArgs(toolName: string, args: any): { valid: boolean; error?: string } {
-    try {
-      const validate = this.getValidator(toolName);
-      const valid = validate(args);
-      if (!valid) {
-        const errors = validate.errors?.map((e) => `${e.instancePath || 'root'} ${e.message}`).join('; ');
-        return { valid: false, error: errors };
-      }
-      return { valid: true };
-    } catch (err: any) {
-      return { valid: false, error: err.message };
-    }
-  }
-
-  private trimHistory() {
+  private trimHistory(): void {
     if (this.messages.length > this.config.maxHistoryMessages) {
       this.messages = this.messages.slice(-this.config.maxHistoryMessages);
     }
-  }
-
-  private buildSystemPrompt(): Message {
-    return {
-      role: 'system',
-      content: `FOLLOW THIS WORKFLOW EXACTLY:
-1. DISCOVER:
-   - First call read_documentations with uri="docs://readme"
-   - Then read the relevant core docs, especially docs://core/specification and docs://core/resource-specification
-   - Read docs://core/auth-specification whenever token, auth, permissions, scopes, subjects, grants, 401, or 403 may matter
-2. VERIFY:
-   - Before using Wenex resource tools, call auth_verify
-3. LOAD:
-   - You do not have collection tools by default
-   - Call load_collection_tools with the exact service and exact collection name from documentation
-   - Collection names are exact resource collection names and are usually plural (examples: grants, users, products)
-4. EXECUTE:
-   - Never guess or infer field values.
-   - Follow Wenex docs for x-zone and request shape.`,
-    };
   }
 
   async processQuery(query: string, modelName = this.config.defaultModel): Promise<string> {
     this.messages.push({ role: 'user', content: query });
     this.trimHistory();
 
-    console.log('🤖 Analyzing request...');
-    const systemPrompt = this.buildSystemPrompt();
+    console.log('Processing...');
+
+    const contextMessages: Message[] = this.systemContext ? [{ role: 'system', content: this.systemContext }] : [];
 
     let response = await this.ollama.chat({
       model: modelName,
-      tools: Object.values(this.activeTools),
-      messages: [systemPrompt, ...this.messages],
+      tools: this.tools,
+      messages: [...contextMessages, ...this.messages],
     });
 
     this.messages.push(response.message);
@@ -254,130 +150,77 @@ export class ClientMCP {
     let round = 0;
     while (response.message.tool_calls?.length && round < this.config.maxToolRounds) {
       round++;
-      console.log(`🛠 Round ${round}: Executing ${response.message.tool_calls.map((t) => t.function.name).join(', ')}...`);
+
+      const toolNames = response.message.tool_calls.map((t) => t.function.name).join(', ');
+      console.log(`Round ${round}: ${toolNames}`);
 
       for (const toolCall of response.message.tool_calls) {
         const toolName = toolCall.function.name;
         const toolArgs = toolCall.function.arguments as Record<string, any>;
 
-        console.log(`Executing (${toolName}) args:`, toolArgs);
-        const validation = this.validateArgs(toolName, toolArgs);
+        console.log(`  → ${toolName}`, toolArgs);
 
-        let content = '';
-        if (!validation.valid) {
-          console.warn(`⚠️ Validation failed for ${toolName}`);
-          content = toString({
-            error: 'validation_failed',
-            details: validation.error,
-            message: 'Please correct the arguments and try again.',
-          });
-        } else {
-          try {
-            if (toolName === 'auth_verify') {
-              try {
-                const { data } = await axios.get(this.config.platformAuthVerifyPath, {
-                  headers: { Authorization: this.getAuthorizationHeader() },
-                });
-
-                content = `TOKEN DECRYPTED VALUES:\n${toString(data)}\n\nNOTE: If you need help interpreting token values, read docs://core/auth-specification using read_documentations.`;
-              } catch (error) {
-                console.error('❌ auth_verify failed:', error);
-                content =
-                  'TOKEN DECRYPTED VALUES:\ninvalid or expired token\n\nNOTE: If you need help interpreting token values, read docs://core/auth-specification using read_documentations.';
-              }
-            } else if (toolName === 'current_datetime') {
-              const now = new Date();
-              content = [`Date ISO 8601: ${now.toISOString()}`, `Unix Timestamp (MS): ${now.getTime()}`].join('\n');
-            } else if (toolName === 'load_collection_tools') {
-              const { service, collection } = toolArgs;
-              const targetPattern = `_${service}_${collection}`;
-
-              let loadedCount = 0;
-              Object.values(this.availableTools).forEach((tool) => {
-                const name = tool.function?.name;
-                if (name && name.endsWith(targetPattern)) {
-                  this.activeTools[name] = tool;
-                  loadedCount++;
-                }
-              });
-
-              content =
-                loadedCount > 0
-                  ? `Successfully loaded ${loadedCount} tools matching "*${targetPattern}". You can now execute them.`
-                  : `No tools found matching "*${targetPattern}". Use the exact service and exact collection name from the documentation.`;
-
-              console.log('\n   Active Tools  :', Object.keys(this.activeTools).join(', '), '\n');
-            } else if (toolName === 'read_documentations') {
-              const result = await this.mcp.readResource({ uri: toolArgs.uri });
-              content = result.contents.map((c: any) => c.text || toString(c)).join('\n\n');
-            } else {
-              const result = await this.mcp.callTool({ name: toolName, arguments: toolArgs });
-              const textParts = (result.content as any[]).filter((c) => c.type === 'text').map((c) => c.text);
-
-              content = textParts.join('\n');
-              if ((result as any).structuredContent) {
-                content += `\n\nStructured Content:\n${toString((result as any).structuredContent)}`;
-              }
-            }
-          } catch (err: any) {
-            console.error(`❌ ${toolName} failed:`, err.message);
-            content = `ERROR executing ${toolName}: ${err.message}`;
-          }
+        let content: string;
+        try {
+          const result = await this.mcp.callTool({ name: toolName, arguments: toolArgs });
+          const textParts = (result.content as any[]).filter((c) => c.type === 'text').map((c) => c.text);
+          content = textParts.join('\n');
+          const structured = (result as { structuredContent?: unknown }).structuredContent;
+          if (structured) content += `\n\nStructured Content:\n${toString(structured)}`;
+        } catch (err: any) {
+          console.error(`${toolName} failed:`, err.message);
+          content = `ERROR executing ${toolName}: ${err.message}`;
         }
 
+        // Preview first 14 lines of tool output
         const lines = content.split(/\r?\n/).filter((line) => line.trim());
-        lines.slice(0, 14).forEach((line, index) => {
-          console.log(`${(index + 1).toString().padStart(2, '0')}: ${line}`);
-        });
-
-        const remaining = Math.max(0, lines.length - 14);
-        if (remaining > 0) console.log(`... (${remaining} more lines)\n`);
+        lines.slice(0, 14).forEach((line, i) => console.log(`${(i + 1).toString().padStart(2, '0')}: ${line}`));
+        if (lines.length > 14) console.log(`  ... (${lines.length - 14} more lines)`);
 
         this.messages.push({ role: 'tool', content, tool_name: toolName });
+        this.trimHistory();
       }
 
       response = await this.ollama.chat({
         model: modelName,
-        tools: Object.values(this.activeTools),
-        messages: [systemPrompt, ...this.messages],
+        tools: this.tools,
+        messages: [...contextMessages, ...this.messages],
       });
 
       this.messages.push(response.message);
     }
 
     if (round >= this.config.maxToolRounds) {
-      console.warn('⚠️ Reached maximum tool rounds');
+      console.warn('Reached maximum tool rounds');
     }
 
     return response.message.content || '';
   }
 
-  async disconnect() {
+  async disconnect(): Promise<void> {
     if (this.transport) {
       await this.transport.close();
       this.transport = undefined;
     }
-    console.log('👋 MCP client disconnected');
+    console.log('Disconnected');
   }
 
-  async chatLoop(modelName: string = 'qwen2.5:32b') {
+  async chatLoop(modelName = this.config.defaultModel): Promise<void> {
     const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-    console.log('\n🚀 MCP Client v2.1 (Lazy Loaded) started!');
-    console.log("Type your query or 'quit' to exit.\n");
-
+    console.log('\nMCP Client started. Type your query or "quit" to exit.\n');
     const ask = () => new Promise<string>((resolve) => rl.question('\nQuery > ', resolve));
 
     try {
       while (true) {
         const input = await ask();
-        if (input.toLowerCase() === 'quit') break;
+        if (!input.trim() || input.toLowerCase() === 'quit') break;
 
         const response = await this.processQuery(input, modelName);
-        console.log('\n');
-        console.log('  -------------------------------------------------------  ');
-        console.log('  --------------------- AI RESPONSE ---------------------  ');
-        console.log('  -------------------------------------------------------  ');
-        console.log('\n' + response);
+
+        console.log('\n  ─────────────────────────────────────────');
+        console.log('  RESPONSE');
+        console.log('  ─────────────────────────────────────────\n');
+        console.log(response);
       }
     } finally {
       rl.close();
@@ -386,23 +229,26 @@ export class ClientMCP {
   }
 }
 
+// Only Wenex-specific knowledge lives here — outside the class
 (async () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  require('dotenv').config();
+
   const token = process.env.MCP_CLIENT_APT_TOKEN;
+  const serverUrl = process.env.MCP_SERVER_URL;
+
   if (!token) {
-    console.error('❌ MCP_CLIENT_APT_TOKEN environment variable is required!');
+    console.error('MCP_CLIENT_APT_TOKEN environment variable is required');
     process.exit(1);
   }
 
-  const client = new ClientMCP({
-    // override defaults here if needed
-    // defaultModel: 'llama3.1:8b',
-  });
+  const client = new ClientMCP({});
 
   try {
-    await client.connect();
+    await client.connect(serverUrl, token);
     await client.chatLoop();
   } catch (err) {
-    console.error('💥 Fatal error:', err);
+    console.error('Fatal error:', err);
     await client.disconnect();
     process.exit(1);
   }
