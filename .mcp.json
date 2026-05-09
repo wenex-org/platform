@@ -6,6 +6,13 @@
         "serve"
       ],
       "type": "stdio"
+    },
+    "wenex": {
+      "type": "http",
+      "url": "http://localhost:3010/mcp",
+      "headers": {
+        "authorization": "Bearer apt-7G8KYF4vGo1siXI9LV6EcWdz9CN"
+      }
     }
   }
 }

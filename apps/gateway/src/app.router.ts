@@ -1,21 +1,12 @@
-import { ServerMCP, throwableToolCall, mcpOutputSchema } from '@app/common/core/mcp';
+import { ServerMCP, throwableToolCall, mcpOutputSchema, mcpInputSchema } from '@app/common/core/mcp';
 import { mcpDocLoader, WENEX_STARTUP_PROMPT_TEXT } from '@app/common/core/mcp/loader.mcp';
 import { toString } from '@app/common/core/utils';
-import { APP } from '@app/common/core/app';
-import axios from 'axios';
 import { z } from 'zod';
-
-const { API_PORT } = APP.GATEWAY;
-const HOST = process.env['GATEWAY_HOST'] || 'localhost';
-const api = axios.create({ baseURL: `http://${HOST}:${API_PORT}` });
 
 const mcp = ServerMCP.create();
 
 // ------------------------------------------------------------
 // auth_verify
-// Reads the APT from the MCP request's Authorization header,
-// calls GET /auth/verify on the gateway, and returns decoded
-// token values. Must be called before any resource operations.
 // ------------------------------------------------------------
 
 mcp.server.registerTool(
@@ -35,25 +26,25 @@ mcp.server.registerTool(
       'On 401: the token is missing, expired, or malformed — ask the user for a valid APT.\n' +
       'On 403: valid token but insufficient scope/grant — ' +
       'call read_documentations with uri="docs://core/auth-specification?v=e" to diagnose.',
-    inputSchema: {},
+    inputSchema: mcpInputSchema({}),
     outputSchema: mcpOutputSchema({ result: { token: z.any() } }),
     annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   },
-  async (_args, { requestInfo }) =>
+  async (args, { requestInfo }) =>
     throwableToolCall(async () => {
-      const [logger, headers] = mcp.utils('auth_verify', requestInfo);
-      logger('verifying APT token via GET /auth/verify');
+      const [logger, headers] = mcp.utils('auth_verify', requestInfo, args);
+      logger('platform endpoint calling with headers %o', headers);
 
-      const { data } = await api.get('/auth/verify', { headers });
-      logger('token verified successfully: %o', data);
+      const token = await mcp.platform.auth.auths.verify({ headers });
+      logger('authorization bearer token verified successfully: %o', token);
 
       return {
-        structuredContent: { result: { token: data } },
+        structuredContent: { result: { token: token } },
         content: [
           {
             type: 'text',
             text:
-              `TOKEN DECRYPTED VALUES:\n${toString(data)}\n\n` +
+              `TOKEN DECRYPTED VALUES:\n${toString(token)}\n\n` +
               `NOTE: If you need help interpreting these values, read docs://core/auth-specification using read_documentations.`,
           },
         ],
@@ -63,9 +54,6 @@ mcp.server.registerTool(
 
 // ------------------------------------------------------------
 // read_documentations
-// Reads any Wenex MCP documentation resource by URI.
-// Supports docs://readme, docs://core/*, and docs://service/*.
-// Use ?v=c for compact (default) or ?v=e for extended.
 // ------------------------------------------------------------
 
 mcp.server.registerTool(
@@ -84,7 +72,7 @@ mcp.server.registerTool(
       '  docs://core/resource-specification   — all services and collections\n' +
       '  docs://core/auth-specification       — APTs, scopes, grants, subjects, zones\n' +
       '  docs://core/agent-guidance           — MongoDB query patterns and Mermaid diagram guide\n' +
-      '  docs://core/cross-service-patterns   — multi-service workflow patterns\n\n' +
+      '  docs://core/cross-service-pattern    — multi-service workflow patterns\n\n' +
       'SERVICE DOCUMENTS (load on-demand after mapping user intent):\n' +
       '  docs://service/identity-specification  — users, profiles, sessions\n' +
       '  docs://service/financial-specification — accounts, wallets, invoices, transactions\n' +
@@ -101,21 +89,23 @@ mcp.server.registerTool(
       '  docs://service/thing-specification     — devices, sensors, metrics, telemetry\n\n' +
       'VERSION: append ?v=c (compact, default) or ?v=e (extended — for troubleshooting, onboarding, complex filters).\n' +
       'ESCALATE to extended when: 401/403 diagnosis, complex MongoDB queries, schema authoring, saga reasoning, or any ambiguity.',
-    inputSchema: {
-      uri: z
-        .string()
-        .describe(
-          'MCP documentation URI. Examples: "docs://readme", "docs://core/specification?v=c", ' +
-            '"docs://service/identity-specification?v=e", "docs://core/agent-guidance"',
-        ),
-    },
+    inputSchema: mcpInputSchema({
+      body: {
+        uri: z
+          .string()
+          .describe(
+            'MCP documentation URI. Examples: "docs://readme", "docs://core/specification?v=c", ' +
+              '"docs://service/identity-specification?v=e", "docs://core/agent-guidance"',
+          ),
+      },
+    }),
     outputSchema: mcpOutputSchema({ result: { content: z.string() } }),
     annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   },
-  (args) =>
+  (args, { requestInfo }) =>
     throwableToolCall(() => {
-      const [logger] = mcp.utils('read_documentations', undefined);
-      logger('loading documentation for uri: %s', args.uri);
+      const [logger, headers] = mcp.utils('read_documentations', requestInfo, args);
+      logger('platform endpoint calling with headers %o', headers);
 
       // docs://core/specification maps to docs://core/-specification on disk
       let uri = args.uri;
@@ -146,12 +136,5 @@ mcp.server.registerTool(
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 mcp.server.server.oninitialized = async () => {
-  try {
-    await mcp.server.server.sendLoggingMessage({
-      level: 'info',
-      data: WENEX_STARTUP_PROMPT_TEXT,
-    });
-  } catch {
-    // Client may not support logging notifications — non-fatal
-  }
+  await mcp.server.server.sendLoggingMessage({ level: 'info', data: WENEX_STARTUP_PROMPT_TEXT });
 };

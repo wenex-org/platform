@@ -15,7 +15,6 @@ import { SpecialProvider } from '@app/common/providers/special';
 import { TouchProvider } from '@app/common/providers/touch';
 import { ThingProvider } from '@app/common/providers/thing';
 
-import { CoreModule } from './core';
 import { AuthModule } from './auth';
 import { ContextModule } from './context';
 import { DomainModule } from './domain';
@@ -55,7 +54,6 @@ export const HEALTH_CHECK_OPTIONS: HealthCheckOptions = [
 ] as const;
 
 export const MODULES = [
-  CoreModule,
   AuthModule,
   ContextModule,
   DomainModule,

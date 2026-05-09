@@ -6,12 +6,12 @@
  * loads all tools, then enters an interactive chat loop.
  *
  * Prerequisites:
- *   - Run Ollama locally: ollama run qwen2.5:32b
- *   - Set env:            MCP_CLIENT_APT_TOKEN=<your-auth-token>
+ *  - Run Ollama locally: ollama run qwen2.5:32b
+ *  - Set env: MCP_CLIENT_APT_TOKEN=<your-auth-token>
+ *  - Remote: ssh -L 11434:localhost:11434 wenex@gpu.wenex.org
  */
-/* eslint-disable @typescript-eslint/no-require-imports */
-import { LoggingMessageNotificationSchema } from '@modelcontextprotocol/sdk/types.js';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
+import { LoggingMessageNotificationSchema } from '@modelcontextprotocol/sdk/types.js';
 import { Ollama, type Tool as OllamaTool, type Message } from 'ollama';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { toString } from '@app/common/core/utils';
@@ -37,6 +37,7 @@ export class ClientMCP {
   private mcp: Client;
   private ollama: Ollama;
   private messages: Message[] = [];
+
   private tools: OllamaTool[] = [];
   private systemContext: string = '';
   private contextReadyResolver?: () => void;
@@ -68,6 +69,7 @@ export class ClientMCP {
 
     // Register notification handler before connecting so we don't miss the session-init push
     this.mcp.setNotificationHandler(LoggingMessageNotificationSchema, (notification) => {
+      console.log('notification handler before connecting received notification with value:', notification);
       if (notification.params.level === 'info' && typeof notification.params.data === 'string') {
         this.systemContext = notification.params.data;
         this.contextReadyResolver?.();
@@ -99,18 +101,15 @@ export class ClientMCP {
       const timer = setTimeout(async () => {
         this.contextReadyResolver = undefined;
         if (!this.systemContext) {
-          try {
-            const promptsResult = await this.mcp.listPrompts();
-            if (promptsResult.prompts.length > 0) {
-              const first = await this.mcp.getPrompt({ name: promptsResult.prompts[0].name, arguments: {} });
-              const text = first.messages
-                .map((m) => (typeof m.content === 'string' ? m.content : ((m.content as any).text ?? '')))
-                .join('\n');
-              if (text) this.systemContext = text;
-            }
-          } catch {
-            // No prompts available — proceed without startup context
+          const promptsResult = await this.mcp.listPrompts();
+          if (promptsResult.prompts.length > 0) {
+            const first = await this.mcp.getPrompt({ name: promptsResult.prompts[0].name, arguments: {} });
+            const text = first.messages
+              .map((m) => (typeof m.content === 'string' ? m.content : ((m.content as any).text ?? '')))
+              .join('\n');
+            if (text) this.systemContext = text;
           }
+          console.log('from the prompt, systemContext value is:', this.systemContext);
         }
         resolve();
       }, 2000);
@@ -208,9 +207,7 @@ export class ClientMCP {
 
   async chatLoop(modelName = this.config.defaultModel): Promise<void> {
     const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-
     console.log('\nMCP Client started. Type your query or "quit" to exit.\n');
-
     const ask = () => new Promise<string>((resolve) => rl.question('\nQuery > ', resolve));
 
     try {
@@ -234,6 +231,7 @@ export class ClientMCP {
 
 // Only Wenex-specific knowledge lives here — outside the class
 (async () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   require('dotenv').config();
 
   const token = process.env.MCP_CLIENT_APT_TOKEN;
