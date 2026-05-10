@@ -166,7 +166,7 @@ export class SettingsController extends ControllerClass<Setting, SettingDto> imp
   @SetPolicy(Action.Destroy, Resource.ContextSettings)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Setting>): Observable<SettingDataSerializer> {
     return super.destroyOne(meta, filter);
   }

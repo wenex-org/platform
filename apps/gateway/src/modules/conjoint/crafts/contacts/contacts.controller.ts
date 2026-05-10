@@ -166,7 +166,7 @@ export class ContactsController extends ControllerClass<Contact, ContactDto> imp
   @SetPolicy(Action.Destroy, Resource.ConjointContacts)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Contact>): Observable<ContactDataSerializer> {
     return super.destroyOne(meta, filter);
   }

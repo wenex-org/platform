@@ -166,7 +166,7 @@ export class CustomersController extends ControllerClass<Customer, CustomerDto> 
   @SetPolicy(Action.Destroy, Resource.CareerCustomers)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Customer>): Observable<CustomerDataSerializer> {
     return super.destroyOne(meta, filter);
   }

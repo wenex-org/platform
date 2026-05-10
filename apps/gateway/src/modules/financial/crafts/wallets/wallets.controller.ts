@@ -166,7 +166,7 @@ export class WalletsController extends ControllerClass<Wallet, WalletDto> implem
   @SetPolicy(Action.Destroy, Resource.FinancialWallets)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Wallet>): Observable<WalletDataSerializer> {
     return super.destroyOne(meta, filter);
   }

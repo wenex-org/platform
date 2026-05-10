@@ -166,7 +166,7 @@ export class BranchesController extends ControllerClass<Branch, BranchDto> imple
   @SetPolicy(Action.Destroy, Resource.CareerBranches)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Branch>): Observable<BranchDataSerializer> {
     return super.destroyOne(meta, filter);
   }

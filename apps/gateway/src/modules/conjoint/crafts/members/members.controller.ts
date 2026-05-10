@@ -166,7 +166,7 @@ export class MembersController extends ControllerClass<Member, MemberDto> implem
   @SetPolicy(Action.Destroy, Resource.ConjointMembers)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Member>): Observable<MemberDataSerializer> {
     return super.destroyOne(meta, filter);
   }

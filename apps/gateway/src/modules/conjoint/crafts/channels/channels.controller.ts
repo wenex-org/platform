@@ -166,7 +166,7 @@ export class ChannelsController extends ControllerClass<Channel, ChannelDto> imp
   @SetPolicy(Action.Destroy, Resource.ConjointChannels)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Channel>): Observable<ChannelDataSerializer> {
     return super.destroyOne(meta, filter);
   }

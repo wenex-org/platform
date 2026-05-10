@@ -184,7 +184,7 @@ export class AccountsController extends ControllerClass<Account, AccountDto> imp
   @SetPolicy(Action.Destroy, Resource.ConjointAccounts)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Account>): Observable<AccountDataSerializer> {
     return super.destroyOne(meta, filter);
   }

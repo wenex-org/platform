@@ -166,7 +166,7 @@ export class CurrenciesController extends ControllerClass<Currency, CurrencyDto>
   @SetPolicy(Action.Destroy, Resource.FinancialCurrencies)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Currency>): Observable<CurrencyDataSerializer> {
     return super.destroyOne(meta, filter);
   }

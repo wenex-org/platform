@@ -186,7 +186,7 @@ export class TravelsController extends ControllerClass<Travel, TravelDto> implem
   @SetPolicy(Action.Destroy, Resource.LogisticTravels)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Travel>): Observable<TravelDataSerializer> {
     return super.destroyOne(meta, filter);
   }

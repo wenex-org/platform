@@ -166,7 +166,7 @@ export class TicketsController extends ControllerClass<Ticket, TicketDto> implem
   @SetPolicy(Action.Destroy, Resource.ContentTickets)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Ticket>): Observable<TicketDataSerializer> {
     return super.destroyOne(meta, filter);
   }

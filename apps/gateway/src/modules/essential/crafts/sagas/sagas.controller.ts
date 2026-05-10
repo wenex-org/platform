@@ -224,7 +224,7 @@ export class SagasController extends ControllerClass<Saga, SagaDto> implements I
   @SetPolicy(Action.Destroy, Resource.EssentialSagas)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Saga>): Observable<SagaDataSerializer> {
     return super.destroyOne(meta, filter);
   }
