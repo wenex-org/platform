@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- add: add send/template endpoint in `touch/smss` @fdaei
 - add: mcp specification and CRUD-style service tools @vhidvz
 - refactor: Refactored prompts with structured format (ACTION, TRIGGER, RULES) @alihajqani
 - refactor: Introduced shared data dictionary for better field understanding @alihajqani
