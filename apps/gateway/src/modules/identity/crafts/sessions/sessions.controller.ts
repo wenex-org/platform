@@ -166,7 +166,7 @@ export class SessionsController extends ControllerClass<Session, SessionDto> imp
   @SetPolicy(Action.Destroy, Resource.IdentitySessions)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Session>): Observable<SessionDataSerializer> {
     return super.destroyOne(meta, filter);
   }

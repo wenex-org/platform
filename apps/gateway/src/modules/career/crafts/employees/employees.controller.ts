@@ -166,7 +166,7 @@ export class EmployeesController extends ControllerClass<Employee, EmployeeDto> 
   @SetPolicy(Action.Destroy, Resource.CareerEmployees)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Employee>): Observable<EmployeeDataSerializer> {
     return super.destroyOne(meta, filter);
   }

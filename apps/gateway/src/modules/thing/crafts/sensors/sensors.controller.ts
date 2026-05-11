@@ -166,7 +166,7 @@ export class SensorsController extends ControllerClass<ISensor, SensorDto> imple
   @SetPolicy(Action.Destroy, Resource.ThingSensors)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<ISensor>): Observable<SensorDataSerializer> {
     return super.destroyOne(meta, filter);
   }

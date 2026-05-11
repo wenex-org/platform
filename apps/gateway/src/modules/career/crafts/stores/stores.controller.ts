@@ -166,7 +166,7 @@ export class StoresController extends ControllerClass<Store, StoreDto> implement
   @SetPolicy(Action.Destroy, Resource.CareerStores)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Store>): Observable<StoreDataSerializer> {
     return super.destroyOne(meta, filter);
   }

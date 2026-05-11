@@ -192,7 +192,7 @@ export class FilesController extends ControllerClass<File, FileDto> implements I
   @SetPolicy(Action.Destroy, Resource.SpecialFiles)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<File>): Observable<FileDataSerializer> {
     return super.destroyOne(meta, filter);
   }

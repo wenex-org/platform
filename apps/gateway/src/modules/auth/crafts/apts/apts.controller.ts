@@ -165,7 +165,7 @@ export class AptsController extends ControllerClass<Apt, AptDto> implements ICon
   @SetPolicy(Action.Destroy, Resource.AuthApts)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Apt>): Observable<AptDataSerializer> {
     return super.destroyOne(meta, filter);
   }

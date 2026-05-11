@@ -166,7 +166,7 @@ export class VehiclesController extends ControllerClass<IVehicle, VehicleDto> im
   @SetPolicy(Action.Destroy, Resource.LogisticVehicles)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<IVehicle>): Observable<VehicleDataSerializer> {
     return super.destroyOne(meta, filter);
   }

@@ -166,7 +166,7 @@ export class CommentsController extends ControllerClass<Comment, CommentDto> imp
   @SetPolicy(Action.Destroy, Resource.GeneralComments)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Comment>): Observable<CommentDataSerializer> {
     return super.destroyOne(meta, filter);
   }

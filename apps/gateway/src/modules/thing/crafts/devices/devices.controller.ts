@@ -166,7 +166,7 @@ export class DevicesController extends ControllerClass<IDevice, DeviceDto> imple
   @SetPolicy(Action.Destroy, Resource.ThingDevices)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<IDevice>): Observable<DeviceDataSerializer> {
     return super.destroyOne(meta, filter);
   }

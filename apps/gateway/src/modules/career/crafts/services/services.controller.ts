@@ -166,7 +166,7 @@ export class ServicesController extends ControllerClass<Service, ServiceDto> imp
   @SetPolicy(Action.Destroy, Resource.CareerServices)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Service>): Observable<ServiceDataSerializer> {
     return super.destroyOne(meta, filter);
   }

@@ -164,7 +164,7 @@ export class ConfigsController extends ControllerClass<Config, ConfigDto> implem
   @SetPolicy(Action.Destroy, Resource.ContextConfigs)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Config>): Observable<ConfigDataSerializer> {
     return super.destroyOne(meta, filter);
   }

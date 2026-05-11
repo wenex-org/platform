@@ -166,7 +166,7 @@ export class ActivitiesController extends ControllerClass<Activity, ActivityDto>
   @SetPolicy(Action.Destroy, Resource.GeneralActivities)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<Activity>): Observable<ActivityDataSerializer> {
     return super.destroyOne(meta, filter);
   }

@@ -166,7 +166,7 @@ export class SagaStagesController extends ControllerClass<SagaStage, SagaStageDt
   @SetPolicy(Action.Destroy, Resource.EssentialSagaStages)
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: String, name: 'ref', required: false })
-  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  @UseInterceptors(AuthorityInterceptor, ProjectionInterceptor, ...ResponseInterceptors)
   override destroyOne(@Meta() meta: Metadata, @Filter() filter: FilterDto<SagaStage>): Observable<SagaStageDataSerializer> {
     return super.destroyOne(meta, filter);
   }
