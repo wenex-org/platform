@@ -1,5 +1,5 @@
-import { mcpDocLoader, WENEX_STARTUP_PROMPT_TEXT } from '@app/common/core/mcp/loader.mcp';
 import { ServerMCP, throwableToolCall } from '@app/common/core/mcp';
+import { mcpDocLoader } from '@app/common/core/mcp/loader.mcp';
 import { toString } from '@app/common/core/utils';
 import { z } from 'zod';
 
@@ -123,18 +123,3 @@ mcp.server.registerTool(
       };
     }),
 );
-
-// ------------------------------------------------------------
-// Session-init push
-// After the MCP initialize handshake completes, push the
-// startup workflow context to the connecting agent via
-// notifications/message. Generic clients capture level:'info'
-// messages and prepend them as system context automatically.
-// Named prompt 'wenex-startup' also remains registered for
-// clients that use explicit prompt discovery.
-// ------------------------------------------------------------
-
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
-mcp.server.server.oninitialized = async () => {
-  await mcp.server.server.sendLoggingMessage({ level: 'info', data: WENEX_STARTUP_PROMPT_TEXT });
-};

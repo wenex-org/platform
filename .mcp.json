@@ -4,7 +4,7 @@
       "type": "http",
       "url": "http://localhost:3010/mcp",
       "headers": {
-        "authorization": "Bearer MCP_CLIENT_APT_TOKEN"
+        "authorization": "Bearer apt-7G8KYF4vGo1siXI9LV6EcWdz9CN"
       }
     }
   }
