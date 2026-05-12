@@ -242,7 +242,9 @@ export class ClientMCP {
     process.exit(1);
   }
 
-  const client = new ClientMCP({});
+  const client = new ClientMCP({
+    // defaultModel: 'llama3.1:8b',
+  });
 
   try {
     await client.connect(serverUrl, token);
