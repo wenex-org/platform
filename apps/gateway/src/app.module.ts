@@ -15,7 +15,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { join } from 'path';
 
 import './app.router';
-import './workflow.router';
 import { MODULES, HEALTH_CHECK_OPTIONS } from './modules';
 
 @Module({

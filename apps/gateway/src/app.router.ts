@@ -1,5 +1,5 @@
-import { ServerMCP, throwableToolCall, mcpOutputSchema, mcpInputSchema } from '@app/common/core/mcp';
 import { mcpDocLoader, WENEX_STARTUP_PROMPT_TEXT } from '@app/common/core/mcp/loader.mcp';
+import { ServerMCP, throwableToolCall } from '@app/common/core/mcp';
 import { toString } from '@app/common/core/utils';
 import { z } from 'zod';
 
@@ -26,18 +26,17 @@ mcp.server.registerTool(
       'On 401: the token is missing, expired, or malformed — ask the user for a valid APT.\n' +
       'On 403: valid token but insufficient scope/grant — ' +
       'call read_documentations with uri="docs://core/auth-specification?v=e" to diagnose.',
-    inputSchema: mcpInputSchema({}),
-    outputSchema: mcpOutputSchema({ result: { token: z.any() } }),
-    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
+    inputSchema: { headers: z.record(z.string(), z.string()).optional() },
+    outputSchema: { errors: z.array(z.any()).optional(), result: z.object({ token: z.any() }) },
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
   },
   async (args, { requestInfo }) =>
-    throwableToolCall(async () => {
+    throwableToolCall('auth_verify', async () => {
       const [logger, headers] = mcp.utils('auth_verify', requestInfo, args);
       logger('platform endpoint calling with headers %o', headers);
 
       const token = await mcp.platform.auth.auths.verify({ headers });
       logger('authorization bearer token verified successfully: %o', token);
-
       return {
         structuredContent: { result: { token: token } },
         content: [
@@ -89,26 +88,27 @@ mcp.server.registerTool(
       '  docs://service/thing-specification     — devices, sensors, metrics, telemetry\n\n' +
       'VERSION: append ?v=c (compact, default) or ?v=e (extended — for troubleshooting, onboarding, complex filters).\n' +
       'ESCALATE to extended when: 401/403 diagnosis, complex MongoDB queries, schema authoring, saga reasoning, or any ambiguity.',
-    inputSchema: mcpInputSchema({
-      body: {
+    inputSchema: {
+      headers: z.record(z.string(), z.string()).optional(),
+      body: z.object({
         uri: z
           .string()
           .describe(
             'MCP documentation URI. Examples: "docs://readme", "docs://core/specification?v=c", ' +
               '"docs://service/identity-specification?v=e", "docs://core/agent-guidance"',
           ),
-      },
-    }),
-    outputSchema: mcpOutputSchema({ result: { content: z.string() } }),
-    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
+      }),
+    },
+    outputSchema: { errors: z.array(z.any()).optional(), result: z.object({ content: z.string() }) },
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
   },
   (args, { requestInfo }) =>
-    throwableToolCall(() => {
+    throwableToolCall('read_documentations', () => {
       const [logger, headers] = mcp.utils('read_documentations', requestInfo, args);
       logger('platform endpoint calling with headers %o', headers);
 
       // docs://core/specification maps to docs://core/-specification on disk
-      let uri = args.uri;
+      let uri = args.body?.uri;
       if (uri === 'docs://core/specification' || uri.startsWith('docs://core/specification?')) {
         uri = uri.replace('docs://core/specification', 'docs://core/-specification');
       }
