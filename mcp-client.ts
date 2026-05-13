@@ -6,7 +6,7 @@
  * loads all tools, then enters an interactive chat loop.
  *
  * Prerequisites:
- *  - Run Ollama locally: ollama run qwen2.5:32b
+ *  - Run Ollama locally: ollama run qwen3.6:35b
  *  - Set env: MCP_CLIENT_APT_TOKEN=<your-auth-token>
  *  - Remote: ssh -L 11434:localhost:11434 wenex@gpu.wenex.org
  */
@@ -27,7 +27,7 @@ interface ClientMCPConfig {
 const DEFAULT_CONFIG: Required<ClientMCPConfig> = {
   maxToolRounds: 10,
   maxHistoryMessages: 50,
-  defaultModel: 'kimi-k2.6:cloud',
+  defaultModel: 'qwen3.6:35b',
   ollamaHost: 'http://localhost:11434',
   mcpServerUrl: 'http://127.0.0.1:3010/mcp',
 };
@@ -213,7 +213,7 @@ export class ClientMCP {
   }
 
   const client = new ClientMCP({
-    // defaultModel: 'llama3.1:8b',
+    // defaultModel: 'gemma4:31b',
   });
 
   try {
