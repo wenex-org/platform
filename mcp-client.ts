@@ -27,7 +27,7 @@ interface ClientMCPConfig {
 const DEFAULT_CONFIG: Required<ClientMCPConfig> = {
   maxToolRounds: 10,
   maxHistoryMessages: 50,
-  defaultModel: 'qwen2.5:32b',
+  defaultModel: 'kimi-k2.6:cloud',
   ollamaHost: 'http://localhost:11434',
   mcpServerUrl: 'http://127.0.0.1:3010/mcp',
 };
@@ -90,7 +90,7 @@ export class ClientMCP {
       console.log('from the prompt, systemContext value is:', this.systemContext);
     }
 
-    console.log('Connected to MCP server');
+    console.log('\nConnected to MCP server');
     console.log('  Tools  :', this.tools.length, 'loaded');
     console.log('  Context:', this.systemContext ? 'received' : 'none');
   }
