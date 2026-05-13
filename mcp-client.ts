@@ -11,7 +11,6 @@
  *  - Remote: ssh -L 11434:localhost:11434 wenex@gpu.wenex.org
  */
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
-import { LoggingMessageNotificationSchema } from '@modelcontextprotocol/sdk/types.js';
 import { Ollama, type Tool as OllamaTool, type Message } from 'ollama';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { toString } from '@app/common/core/utils';
@@ -40,16 +39,14 @@ export class ClientMCP {
 
   private tools: OllamaTool[] = [];
   private systemContext: string = '';
-  private contextReadyResolver?: () => void;
 
   private config: Required<ClientMCPConfig>;
   private transport?: StreamableHTTPClientTransport;
 
   constructor(config: Partial<ClientMCPConfig> = {}) {
     this.config = { ...DEFAULT_CONFIG, ...config };
-
-    this.mcp = new Client({ name: 'mcp-client', version: '1.0.0' }, { capabilities: { sampling: {} } });
     this.ollama = new Ollama({ host: this.config.ollamaHost });
+    this.mcp = new Client({ name: 'mcp-client', version: '1.0.0' });
   }
 
   async connect(serverUrl: string = this.config.mcpServerUrl, authToken?: string): Promise<void> {
@@ -67,15 +64,6 @@ export class ClientMCP {
     this.transport.onerror = (err) => console.error('Transport error:', err);
     this.transport.onclose = () => console.log('Transport closed');
 
-    // Register notification handler before connecting so we don't miss the session-init push
-    this.mcp.setNotificationHandler(LoggingMessageNotificationSchema, (notification) => {
-      console.log('notification handler before connecting received notification with value:', notification);
-      if (notification.params.level === 'info' && typeof notification.params.data === 'string') {
-        this.systemContext = notification.params.data;
-        this.contextReadyResolver?.();
-      }
-    });
-
     await this.mcp.connect(this.transport);
 
     // Load all available tools from the server
@@ -89,36 +77,18 @@ export class ClientMCP {
       },
     }));
 
-    // Wait up to 2 seconds for a server-pushed session-init notification.
-    // If none arrives, fall back to listPrompts() for servers that use prompt discovery.
-    await new Promise<void>((resolve) => {
-      if (this.systemContext) {
-        resolve();
-        return;
+    // listPrompts() for servers that use prompt discovery.
+    if (!this.systemContext) {
+      const promptsResult = await this.mcp.listPrompts();
+      if (promptsResult.prompts.length > 0) {
+        const first = await this.mcp.getPrompt({ name: promptsResult.prompts[0].name, arguments: {} });
+        const text = first.messages
+          .map((m) => (typeof m.content === 'string' ? m.content : ((m.content as any).text ?? '')))
+          .join('\n');
+        if (text) this.systemContext = text;
       }
-
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
-      const timer = setTimeout(async () => {
-        this.contextReadyResolver = undefined;
-        if (!this.systemContext) {
-          const promptsResult = await this.mcp.listPrompts();
-          if (promptsResult.prompts.length > 0) {
-            const first = await this.mcp.getPrompt({ name: promptsResult.prompts[0].name, arguments: {} });
-            const text = first.messages
-              .map((m) => (typeof m.content === 'string' ? m.content : ((m.content as any).text ?? '')))
-              .join('\n');
-            if (text) this.systemContext = text;
-          }
-          console.log('from the prompt, systemContext value is:', this.systemContext);
-        }
-        resolve();
-      }, 2000);
-
-      this.contextReadyResolver = () => {
-        clearTimeout(timer);
-        resolve();
-      };
-    });
+      console.log('from the prompt, systemContext value is:', this.systemContext);
+    }
 
     console.log('Connected to MCP server');
     console.log('  Tools  :', this.tools.length, 'loaded');
