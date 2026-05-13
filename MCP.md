@@ -18,7 +18,7 @@ NOTE: THERE IS NO NEED TO RUN GIT AND TEST COMMANDS.
 
 1. @wenex-org/platform → `apps/gateway/src` (controllers, routers, resolvers — external surface only)
 2. @wenex-org/platform-libs → enum files + `common/src/schemas/map.ts` (enums, types, population paths)
-3. Existing MCP spec prose → `mcp/readme.md`, `mcp/core/...` and `mcp/service/...` directories
+3. Existing MCP spec prose → `mcp/readme.md`, `mcp/core/...` and `mcp/service/...` directory and files
 
 Ignore internal-only methods, classes, and interfaces unless they directly define externally visible runtime behavior.
 
