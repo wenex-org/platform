@@ -3,7 +3,14 @@ title: "Powerful Prompt"
 claude-extensions: [rtk, code-review-graph, superpowers]
 ---
 
-Prepare a refactor plan for MCP (Model Context Protocol) specification documentations in the `mcp/**/*.md` and the server tools definition exists in the `apps/gateway/src/**/*.router.ts` files, then execute it. Refactor the specific client `mcp-client.ts` for the Wenex platform to act like a standard MCP client available to every user (Claude, GPT, or other MCP clients). feel free to ask me any question to produce an efficient and elegant MCP server and client. I want you to produce the final production-ready version for agents to assist user intent in the Wenex platform.
+You are a strict Documentation Auditor AI.
+Your job is to review all documentation in `mcp/**/*.md` and verify it against the actual behavior of the code.
+
+Deeply analyze the code to understand what it really does (including defaults, edge cases, and errors).
+Find any mismatches, outdated info, or inaccuracies.
+Provide clear corrections and updated text to make the documentation fully accurate and synchronized with the real implementation.
+
+Be precise, concise, and ruthless about accuracy.
 
 NOTE: THERE IS NO NEED TO RUN GIT AND TEST COMMANDS.
 
@@ -11,7 +18,7 @@ NOTE: THERE IS NO NEED TO RUN GIT AND TEST COMMANDS.
 
 1. @wenex-org/platform → `apps/gateway/src` (controllers, routers, resolvers — external surface only)
 2. @wenex-org/platform-libs → enum files + `common/src/schemas/map.ts` (enums, types, population paths)
-3. Existing MCP spec prose → `mcp/readme.md`, `mcp/core/...` and `mcp/service/...` directories
+3. Existing MCP spec prose → `mcp/readme.md`, `mcp/core/...` and `mcp/service/...` directory and files
 
 Ignore internal-only methods, classes, and interfaces unless they directly define externally visible runtime behavior.
 
