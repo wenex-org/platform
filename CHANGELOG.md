@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - fix: population serializer transformer execution @vhidvz
+- fix: make location optional in branch schema @mhalizadeh
 
 ## [1.6.1] - 2026-04-05
 
@@ -42,9 +43,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - refactor(`apts.router`): APT input and output schemas for improved validation and clarity @alihajqani
 - refactor(`grants.router`): grant schemas and remove unnecessary code @alihajqani
-- add(`grants.router`):  `Count Authorization Grants` Tool for MCP @alihajqani
+- add(`grants.router`): `Count Authorization Grants` Tool for MCP @alihajqani
 - add(`grants.router`): search functionality for authorization grants @alihajqani
-- add(`grants.router`):  `Add Multiple Grants (Bulk)` Tool for MCP @alihajqani
+- add(`grants.router`): `Add Multiple Grants (Bulk)` Tool for MCP @alihajqani
 - add: use cookie to get authorization token for authentication @winkcor
 - refactor `mcpRegistration` to register core documentation resource @alihajqani
 - improve date handling in `apt.inspector` @alihajqani
@@ -77,7 +78,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fix: `feature` in product @fdaei
 - fix: `CacheInterceptor` issue on `flush` @vhidvz
 - fix: transfer issue with `double` and `float` in protos for `financial` @vhidvz
-- fix: `withdraw` real provider of transfer @vhidvz 
+- fix: `withdraw` real provider of transfer @vhidvz
 
 ## [1.4.X] - 2026-01-26
 
