@@ -231,6 +231,7 @@
       "@nestjs/core",
       "@scarf/scarf",
       "core-js",
+      "esbuild",
       "msgpackr-extract",
       "protobufjs",
       "sharp"
