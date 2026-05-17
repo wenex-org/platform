@@ -6,6 +6,7 @@ export default withMermaid(
   defineConfig({
     title: 'Wenex Platform',
     description: 'Documentation for Wenex Platform v1.6.0',
+    base: '/platform/',
     srcDir: 'docs',
     outDir: '.vitepress/dist',
 
