@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- fix: `libs/module/saga` exception error status code @mhalizadeh
 - fix: `thing/metric` serializer `device` forgotten property @vhidvz
 
 ## [1.6.2] - 2026-05-16
