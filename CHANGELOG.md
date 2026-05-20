@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- fix: use `'$date' in data[key]` instead of optional chaining in `debezium.util` to avoid false positives @mhalizadeh
+- fix: replace `class-validator`'s `isDateString` with a custom `isIsoString` regex in `tools.util` for stricter ISO 8601 detection @mhalizadeh
+- fix: make `location` optional in `career/branch` BranchRpcSerializer @mhalizadeh
 - fix: `libs/module/saga` exception error status code @mhalizadeh
 - fix: `thing/metric` serializer `device` forgotten property @vhidvz
 
