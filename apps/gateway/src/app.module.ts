@@ -1,10 +1,10 @@
-import { registerDocumentations, WENEX_STARTUP_PROMPT_TEXT } from '@app/common/core/mcp/loader.mcp';
 import { JWT_SECRET, NODE_ENV, REDIS_CONFIG, SENTRY_CONFIG } from '@app/common/core/envs';
 import { ComplexityPlugin, DateScalar } from '@app/common/core/plugins/graphql';
-import { DynamicModule, Module, OnModuleInit } from '@nestjs/common';
+import { DynamicModule, Module, OnApplicationBootstrap } from '@nestjs/common';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { BlacklistModule } from '@app/module/blacklist';
+import { registerCommon } from '@app/common/core/mcp';
 import { SentryModule } from '@ntegral/nestjs-sentry';
 import { HealthModule } from '@app/module/health';
 import { LoggerModule } from '@app/module/logger';
@@ -14,7 +14,6 @@ import GraphQLJSON from 'graphql-type-json';
 import { JwtModule } from '@nestjs/jwt';
 import { join } from 'path';
 
-import './app.router';
 import { MODULES, HEALTH_CHECK_OPTIONS } from './modules';
 
 @Module({
@@ -46,21 +45,8 @@ import { MODULES, HEALTH_CHECK_OPTIONS } from './modules';
   ],
   providers: [DateScalar, ComplexityPlugin],
 })
-export class AppModule implements OnModuleInit {
-  onModuleInit() {
-    const mcp = registerDocumentations();
-
-    // -----------------------------------------
-    // MCP Prompt: wenex-startup
-    // -----------------------------------------
-
-    mcp.server.registerPrompt(
-      'wenex-startup',
-      {
-        title: 'START FROM HERE - WENEX MCP STARTUP WORKFLOW',
-        description: 'REQUIRED AGENT WORKFLOW FOR WENEX PLATFORM: DISCOVER → VERIFY → EXECUTE',
-      },
-      () => ({ messages: [{ role: 'user', content: { type: 'text', text: WENEX_STARTUP_PROMPT_TEXT } }] }),
-    );
+export class AppModule implements OnApplicationBootstrap {
+  onApplicationBootstrap() {
+    registerCommon();
   }
 }
