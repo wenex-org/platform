@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 
-import './stats.router';
 import { StatsResolver } from './stats.resolver';
 import { StatsController } from './stats.controller';
 

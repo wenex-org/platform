@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 
-import './transactions.router';
 import { TransactionsResolver } from './transactions.resolver';
 import { TransactionsController } from './transactions.controller';
 

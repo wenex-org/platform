@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 
-import './businesses.router';
 import { BusinessesResolver } from './businesses.resolver';
 import { BusinessesController } from './businesses.controller';
 

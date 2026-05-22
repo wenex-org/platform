@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 
-import './pushes.router';
 import { PushesResolver } from './pushes.resolver';
 import { PushesController } from './pushes.controller';
 
