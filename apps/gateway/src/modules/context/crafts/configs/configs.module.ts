@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 
-import './configs.router';
 import { ConfigsResolver } from './configs.resolver';
 import { ConfigsController } from './configs.controller';
 

@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 
-import './apps.router';
 import { AppsResolver } from './apps.resolver';
 import { AppsController } from './apps.controller';
 

@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 
-import './artifacts.router';
 import { ArtifactsResolver } from './artifacts.resolver';
 import { ArtifactsController } from './artifacts.controller';
 

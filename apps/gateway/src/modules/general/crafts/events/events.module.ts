@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 
-import './events.router';
 import { EventsResolver } from './events.resolver';
 import { EventsController } from './events.controller';
 

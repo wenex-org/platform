@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 
-import './sagas.router';
 import { SagasResolver } from './sagas.resolver';
 import { SagasController } from './sagas.controller';
 
