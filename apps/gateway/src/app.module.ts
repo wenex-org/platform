@@ -1,7 +1,7 @@
 import { JWT_SECRET, NODE_ENV, REDIS_CONFIG, SENTRY_CONFIG } from '@app/common/core/envs';
 import { ComplexityPlugin, DateScalar } from '@app/common/core/plugins/graphql';
-import { registerDocumentations } from '@app/common/core/mcp/loader.mcp';
-import { DynamicModule, Module, OnModuleInit } from '@nestjs/common';
+import { DynamicModule, Module, OnApplicationBootstrap } from '@nestjs/common';
+import { mcpRegisterCommon, mcpRegisterCRUD } from '@app/common/core/mcp';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { BlacklistModule } from '@app/module/blacklist';
@@ -14,7 +14,6 @@ import GraphQLJSON from 'graphql-type-json';
 import { JwtModule } from '@nestjs/jwt';
 import { join } from 'path';
 
-import './app.router';
 import { MODULES, HEALTH_CHECK_OPTIONS } from './modules';
 
 @Module({
@@ -46,8 +45,9 @@ import { MODULES, HEALTH_CHECK_OPTIONS } from './modules';
   ],
   providers: [DateScalar, ComplexityPlugin],
 })
-export class AppModule implements OnModuleInit {
-  onModuleInit() {
-    registerDocumentations();
+export class AppModule implements OnApplicationBootstrap {
+  onApplicationBootstrap() {
+    mcpRegisterCommon();
+    mcpRegisterCRUD();
   }
 }

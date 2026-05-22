@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- fix: use `'$date' in data[key]` instead of optional chaining in `debezium.util` to avoid false positives @mhalizadeh
+- fix: replace `class-validator`'s `isDateString` with a custom `isIsoString` regex in `tools.util` for stricter ISO 8601 detection @mhalizadeh
+- fix: make `location` optional in `career/branch` BranchRpcSerializer @mhalizadeh
+- fix: `libs/module/saga` exception error status code @mhalizadeh
+- fix: `thing/metric` serializer `device` forgotten property @vhidvz
+
+## [1.6.2] - 2026-05-16
+
 ### Added
 
 - add: add send/template endpoint in `touch/smss` @fdaei
@@ -23,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - fix: population serializer transformer execution @vhidvz
+- fix: make location optional in branch schema @mhalizadeh
 
 ## [1.6.1] - 2026-04-05
 
@@ -42,9 +53,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - refactor(`apts.router`): APT input and output schemas for improved validation and clarity @alihajqani
 - refactor(`grants.router`): grant schemas and remove unnecessary code @alihajqani
-- add(`grants.router`):  `Count Authorization Grants` Tool for MCP @alihajqani
+- add(`grants.router`): `Count Authorization Grants` Tool for MCP @alihajqani
 - add(`grants.router`): search functionality for authorization grants @alihajqani
-- add(`grants.router`):  `Add Multiple Grants (Bulk)` Tool for MCP @alihajqani
+- add(`grants.router`): `Add Multiple Grants (Bulk)` Tool for MCP @alihajqani
 - add: use cookie to get authorization token for authentication @winkcor
 - refactor `mcpRegistration` to register core documentation resource @alihajqani
 - improve date handling in `apt.inspector` @alihajqani
@@ -77,7 +88,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fix: `feature` in product @fdaei
 - fix: `CacheInterceptor` issue on `flush` @vhidvz
 - fix: transfer issue with `double` and `float` in protos for `financial` @vhidvz
-- fix: `withdraw` real provider of transfer @vhidvz 
+- fix: `withdraw` real provider of transfer @vhidvz
 
 ## [1.4.X] - 2026-01-26
 
@@ -367,7 +378,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.6.1...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.6.2...HEAD
+[1.6.2]: https://github.com/wenex-org/platform/compare/1.6.1...1.6.2
 [1.6.1]: https://github.com/wenex-org/platform/compare/1.6.0...1.6.1
 [1.6.0]: https://github.com/wenex-org/platform/compare/1.5.11...1.6.0
 [1.5.X]: https://github.com/wenex-org/platform/compare/1.4.11...1.5.11

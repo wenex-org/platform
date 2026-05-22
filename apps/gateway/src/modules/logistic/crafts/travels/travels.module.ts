@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 
-import './travels.router';
 import { TravelsResolver } from './travels.resolver';
 import { TravelsController } from './travels.controller';
 
