@@ -220,9 +220,8 @@
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.21.0",
     "vitepress": "2.0.0-alpha.17",
-    "vitepress-plugin-mermaid": "^2.0.17",
-    "vitepress-sidebar": "^1.33.2"
-  },
+    "vitepress-plugin-mermaid": "^2.0.17"
+    },
   "pnpm": {
     "onlyBuiltDependencies": [
       "@apollo/protobufjs",
