@@ -24,6 +24,7 @@ export default withMermaid(
     themeConfig: {
       nav: [
         { text: 'Getting Started', link: '/getting-started' },
+        { text: 'Client', link: '/client-development' },
         { text: 'API', link: '/api/rest-reference' },
         { text: 'SDK', link: '/sdk/' },
         { text: 'MCP', link: '/mcp/overview' },
