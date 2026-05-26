@@ -56,8 +56,8 @@ export default withMermaid(
                   link: '/getting-started/overview/key-concepts/',
                   items: [
                     { text: 'Core Schema', link: '/getting-started/overview/key-concepts/core-schema' },
-                    { text: 'Access Control', link: '/getting-started/overview/key-concepts/abac' },
-                    { text: 'Coworkers Space', link: '/getting-started/overview/key-concepts/coworkers' },
+                    { text: 'Access Control', link: '/getting-started/overview/key-concepts/access-control' },
+                    { text: 'Coworkers Space', link: '/getting-started/overview/key-concepts/coworkers-space' },
                   ],
                 },
               ],
