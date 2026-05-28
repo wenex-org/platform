@@ -77,19 +77,6 @@ export class ClientMCP {
       },
     }));
 
-    // listPrompts() for servers that use prompt discovery.
-    if (!this.systemContext) {
-      const promptsResult = await this.mcp.listPrompts();
-      if (promptsResult.prompts.length > 0) {
-        const first = await this.mcp.getPrompt({ name: promptsResult.prompts[0].name, arguments: {} });
-        const text = first.messages
-          .map((m) => (typeof m.content === 'string' ? m.content : ((m.content as any).text ?? '')))
-          .join('\n');
-        if (text) this.systemContext = text;
-      }
-      console.log('from the prompt, systemContext value is:', this.systemContext);
-    }
-
     console.log('\nConnected to MCP server');
     console.log('  Tools  :', this.tools.length, 'loaded');
     console.log('  Context:', this.systemContext ? 'received' : 'none');

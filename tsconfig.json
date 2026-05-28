@@ -46,6 +46,8 @@
     "**/docs/**",
     "documentation",
     "**/documentation/**",
+    ".vitepress",
+    "**/.vitepress/**",
     ".data"
   ]
 }
