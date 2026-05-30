@@ -24,9 +24,9 @@ export default withMermaid(
     themeConfig: {
       nav: [
         { text: 'Getting Started', link: '/getting-started' },
-        { text: 'API', link: '/api/rest-reference' },
+        { text: 'API', link: '/api/' },
         { text: 'SDK', link: '/sdk/' },
-        { text: 'MCP', link: '/mcp/overview' },
+        { text: 'MCP', link: '/mcp/' },
         { text: 'MLOps', link: '/mlops/' },
       ],
 
@@ -130,9 +130,11 @@ export default withMermaid(
         },
         {
           text: 'API',
+          link: '/api/',
           collapsed: false,
           items: [
             { text: 'Authentication', link: '/api/authentication' },
+            { text: 'Authorization', link: '/api/authorization' },
             { text: 'REST Reference', link: '/api/rest-reference' },
             { text: 'GraphQL Reference', link: '/api/graphql-reference' },
             { text: 'Filtering & Pagination', link: '/api/filtering' },
@@ -141,25 +143,20 @@ export default withMermaid(
         },
         {
           text: 'SDK',
+          link: '/sdk/',
           collapsed: false,
           items: [
-            { text: 'SDK Guide', link: '/sdk/' },
-          ],
-        },
-        {
-          text: 'Architecture',
-          collapsed: false,
-          items: [
-            { text: 'Overview', link: '/architecture' },
-            { text: 'Ecosystem & ABAC', link: '/ecosystem' },
-            { text: 'Client Development', link: '/client-development' },
+            { text: 'Node SDK', link: '/sdk/node' },
           ],
         },
         {
           text: 'MCP',
+          link: '/mcp/',
           collapsed: false,
           items: [
             { text: 'Overview', link: '/mcp/overview' },
+            { text: 'Tools Reference', link: '/mcp/tools' },
+            { text: 'Integration Guide', link: '/mcp/integration' },
           ],
         },
         {
