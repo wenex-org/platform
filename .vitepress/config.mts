@@ -161,9 +161,15 @@ export default withMermaid(
         },
         {
           text: 'MLOps',
+          link: '/mlops/',
           collapsed: false,
           items: [
-            { text: 'Overview', link: '/mlops/' },
+            { text: 'Quickstart', link: '/mlops/quickstart' },
+            { text: 'Architecture', link: '/mlops/architecture' },
+            { text: 'Scripts', link: '/mlops/scripts' },
+            { text: 'Airflow DAGs', link: '/mlops/dags' },
+            { text: 'Model Training', link: '/mlops/model-training' },
+            { text: 'Deployment', link: '/mlops/deployment' },
           ],
         },
       ],
