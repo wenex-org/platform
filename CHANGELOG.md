@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- add: `groups` base topic generation in `publisher` worker @vhidvz
+
 ### Changed
 
 - refactor: `onBeforeCreate` logic @vhidvz
