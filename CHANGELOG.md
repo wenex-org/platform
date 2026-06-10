@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- add: `publisher` new topics relay on `identity` @vhidvz
 - add: emqx authorization base on regular grants definition @vhidvz
 - add: `groups` base topic generation in `publisher` worker @vhidvz
 
