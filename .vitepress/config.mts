@@ -32,7 +32,6 @@ export default withMermaid(
         { text: 'SDK', link: '/sdk/' },
         { text: 'MCP', link: '/mcp/' },
         { text: 'MLOps', link: '/mlops/' },
-        { text: 'Changelog', link: '/changelog' },
       ],
 
       sidebar: [
