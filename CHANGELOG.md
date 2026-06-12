@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - add: emqx authorization base on regular grants definition @vhidvz
 - add: `groups` base topic generation in `publisher` worker @vhidvz
 - add: wenex logo and favicon to VitePress docs site. @vhidvz
-- add: hidden `/changelog` docs route rendering the platform changelog. @vhidvz
+- add: `/changelog` docs route rendering the platform changelog as the last sidebar item. @vhidvz
 
 ### Changed
 

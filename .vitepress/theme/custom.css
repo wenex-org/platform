@@ -2,3 +2,22 @@
   text-align: justify;
   text-justify: inter-word;
 }
+
+/* Changelog page (docs/changelog.md, via pageClass frontmatter) */
+.changelog-page .vp-doc h2 {
+  margin-top: 32px;
+  padding: 10px 16px;
+  border: 1px solid var(--vp-c-divider);
+  border-left: 4px solid var(--vp-c-brand-1);
+  border-radius: 8px;
+  background-color: var(--vp-c-bg-soft);
+  font-size: 18px;
+}
+
+.changelog-page .vp-doc h3 {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--vp-c-text-2);
+}
