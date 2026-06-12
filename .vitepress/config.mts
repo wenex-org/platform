@@ -9,6 +9,8 @@ export default withMermaid(
     srcDir: 'docs',
     outDir: '.vitepress/dist',
 
+    head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/platform/logo.svg' }]],
+
     vite: {
       build: {
         chunkSizeWarningLimit: 2000,
@@ -22,6 +24,8 @@ export default withMermaid(
     },
 
     themeConfig: {
+      logo: '/logo.svg',
+
       nav: [
         { text: 'Getting Started', link: '/getting-started' },
         { text: 'API', link: '/api/' },
