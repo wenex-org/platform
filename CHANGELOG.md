@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- docs: correct the domain service count to 14 (was 15) in README, getting-started, and ecosystem index. @vhidvz
+- docs: PostgreSQL is used by workers (`logger`/`dispatcher`), not the `essential` service; saga state is in MongoDB. @vhidvz
+- docs: `cleaner` purges saga stages from MongoDB via `CLEANER_SAGA_STAGES_TTL`, not PostgreSQL/`CLEANER_SAGAS_TTL`. @vhidvz
+- docs: drop `preserver` from the Kafka-consumer list — it is an EMQX ExHook gRPC server, not a Kafka consumer. @vhidvz
+- docs: `thing/metrics.device` is returned in responses and populatable, not write-only. @vhidvz
+- docs: CQRS webhooks are delivered by the `dispatcher` worker with the `{id,op,after,before}` payload, not `publisher`. @vhidvz
+- docs: APT create requires only `name`; `scopes` and `subjects` are optional (was marked required). @vhidvz
+- docs: note `auth` has two public routes and that zone `group`/`client` are AND-combined; fix GraphQL `FilterDto` usage. @vhidvz
+
 ## [1.6.5] - 2026-06-15
 
 ### Changed
