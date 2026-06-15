@@ -7,9 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- refactor: MCP doc loader serves single-file docs and drops `?v=` version-suffix parsing. @vhidvz
+- docs: merge each MCP doc's compact and extended versions into one self-contained file per resource. @vhidvz
+- docs: drop the `?v=c`/`?v=e` version suffix and compact/extended machinery from all MCP docs. @vhidvz
+
 ### Fixed
 
 - fix: `preserver` granted permission or fixed @vhidvz
+- docs: `thing/metrics.device` is returned and populatable, not write-only in responses. @vhidvz
+- docs: drop the false `thing/metrics` append-only claim; metrics support update and delete. @vhidvz
+- docs: replace removed per-router MCP tool names in cross-service-pattern with shared `find`/`count`. @vhidvz
+- docs: correct MCP scope-splitting to whitespace, comma, semicolon, or pipe delimiters. @vhidvz
+- docs: document `essential/saga-stages` as MCP-callable via the shared CRUD tools. @vhidvz
+- docs: populating `identity`/`relations` requires a `model` in each populate entry. @vhidvz
 
 ## [1.6.4] - 2026-06-13
 
