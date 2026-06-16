@@ -79,6 +79,7 @@ export default withMermaid(
           items: [
             { text: 'Authentication', link: '/api/authentication' },
             { text: 'Authorization', link: '/api/authorization' },
+            { text: 'Request Headers', link: '/api/headers' },
             { text: 'REST Reference', link: '/api/rest-reference' },
             { text: 'GraphQL Reference', link: '/api/graphql-reference' },
             { text: 'Filtering & Pagination', link: '/api/filtering' },

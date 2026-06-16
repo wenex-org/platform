@@ -10,11 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - ci: add `docs:check` to verify load-bearing doc claims (headers, service count) against source; wired into build. @vhidvz
+- docs: add a canonical Request Headers reference (`/api/headers`) covering every header the gateway actually reads. @vhidvz
 
 ### Changed
 
 - docs: regroup the sidebar/nav so Concepts, Services, and Workers are top-level groups, flattening navigation. @vhidvz
 - docs: de-duplicate the ABAC ownership model; the authorization page links to the canonical Access Control page. @vhidvz
+- docs: slim the authentication headers table to a pointer; docs-claims-check now validates `/api/headers`. @vhidvz
 
 ### Fixed
 

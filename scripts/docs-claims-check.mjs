@@ -19,7 +19,7 @@ const DOCS = join(ROOT, 'docs');
 
 // The docs submodule may not be checked out (e.g. a source-only checkout).
 // Without it there are no doc claims to verify, so skip rather than fail.
-if (!existsSync(join(DOCS, 'api/authentication.md'))) {
+if (!existsSync(join(DOCS, 'api/headers.md'))) {
   console.warn('docs-claims-check: docs/ submodule not checked out — skipping.');
   process.exit(0);
 }
@@ -49,21 +49,22 @@ const passes = [];
 const fail = (id, msg) => failures.push(`[${id}] ${msg}`);
 const ok = (id, msg) => passes.push(`[${id}] ${msg}`);
 
-// --- Claim 1: every x- header listed in authentication.md's reference table is
-//     actually read by the gateway. (This is the exact drift that documented the
-//     non-existent `x-domain` header.) ---
-const authMd = readFileSync(join(DOCS, 'api/authentication.md'), 'utf8');
-const tableBody = authMd.split('## Request headers reference')[1]?.split('\n## ')[0] ?? '';
-const tableHeaders = [...tableBody.matchAll(/^\|\s*`([^`]+)`\s*\|/gm)]
-  .map((m) => m[1].trim().toLowerCase())
-  .filter((h) => h.startsWith('x-'));
+// --- Claim 1: every x- header listed in the canonical Request Headers reference
+//     is actually read by the gateway. (This is the exact drift that documented
+//     the non-existent `x-domain` header.) ---
+const headersMd = readFileSync(join(DOCS, 'api/headers.md'), 'utf8');
+const tableHeaders = [...new Set(
+  [...headersMd.matchAll(/^\|\s*`([^`]+)`\s*\|/gm)]
+    .map((m) => m[1].trim().toLowerCase())
+    .filter((h) => h.startsWith('x-')),
+)];
 
 if (tableHeaders.length === 0) {
-  fail('headers-table', 'no x- headers parsed from the "Request headers reference" table — parser or heading drifted');
+  fail('headers-table', 'no x- headers parsed from api/headers.md — parser or table format drifted');
 } else {
   for (const h of tableHeaders) {
     if (sourceReadsHeader(h)) ok('headers-table', `\`${h}\` documented and read in source`);
-    else fail('headers-table', `\`${h}\` documented in authentication.md but never read in libs/apps source`);
+    else fail('headers-table', `\`${h}\` documented in api/headers.md but never read in libs/apps source`);
   }
 }
 
