@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- docs: regroup the sidebar/nav so Concepts, Services, and Workers are top-level groups, flattening navigation. @vhidvz
+- docs: de-duplicate the ABAC ownership model; the authorization page links to the canonical Access Control page. @vhidvz
+
 ### Fixed
 
 - docs: correct the domain service count to 14 (was 15) in README, getting-started, and ecosystem index. @vhidvz
