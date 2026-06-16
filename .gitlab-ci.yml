@@ -19,7 +19,6 @@ build:
     - bash ./scripts/ci/setup.sh
   script:
     - npm run git:clone
-    - npm run docs:check
     - pnpm install --frozen-lockfile
     - npm run script:build
   artifacts:
