@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- ci: add `docs:check` to verify load-bearing doc claims (headers, service count) against source; wired into build. @vhidvz
+
 ### Changed
 
 - docs: regroup the sidebar/nav so Concepts, Services, and Workers are top-level groups, flattening navigation. @vhidvz

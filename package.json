@@ -51,6 +51,7 @@
     "madge:report:ts": "madge --circular --warning --ts-config ./tsconfig.json --extensions ts --image circular-dependencies.png ./",
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",
+    "docs:check": "node ./scripts/docs-claims-check.mjs",
     "docs:preview": "vitepress preview",
     "git": "bash ./scripts/git-submodule.sh",
     "git:clone": "git submodule update --init --recursive",
