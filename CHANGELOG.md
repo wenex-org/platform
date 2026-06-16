@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - docs: CQRS webhooks are delivered by the `dispatcher` worker with the `{id,op,after,before}` payload, not `publisher`. @vhidvz
 - docs: APT create requires only `name`; `scopes` and `subjects` are optional (was marked required). @vhidvz
 - docs: note `auth` has two public routes and that zone `group`/`client` are AND-combined; fix GraphQL `FilterDto` usage. @vhidvz
+- docs: remove the non-existent `x-domain` request header from the authentication headers reference. @vhidvz
+- docs: Metadata `domain`/`client`/`user` derive from the JWT, not `x-domain`/`x-client-id` headers; user is `uid`. @vhidvz
+- docs: SDK multi-tenant usage relies on the `coworker` claim and `zone=client`, not an `x-domain` header. @vhidvz
 
 ## [1.6.5] - 2026-06-15
 
