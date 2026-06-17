@@ -9,16 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- refactor: add `\\[OID\\]` pattern support in the `preserver` authorization @vhidvz
 - docs: add a canonical Request Headers reference (`/api/headers`) covering every header the gateway actually reads. @vhidvz
 
 ### Changed
 
+- refactor: improvements in the `preserver` authorization logic @vhidvz
 - docs: regroup the sidebar/nav so Concepts, Services, and Workers are top-level groups, flattening navigation. @vhidvz
 - docs: de-duplicate the ABAC ownership model; the authorization page links to the canonical Access Control page. @vhidvz
 - docs: slim the authentication headers table to a pointer to the canonical Request Headers page. @vhidvz
 
 ### Fixed
 
+- security: escape redis pattern issue @vhidvz
 - docs: correct the domain service count to 14 (was 15) in README, getting-started, and ecosystem index. @vhidvz
 - docs: PostgreSQL is used by workers (`logger`/`dispatcher`), not the `essential` service; saga state is in MongoDB. @vhidvz
 - docs: `cleaner` purges saga stages from MongoDB via `CLEANER_SAGA_STAGES_TTL`, not PostgreSQL/`CLEANER_SAGAS_TTL`. @vhidvz
