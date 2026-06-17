@@ -28,10 +28,7 @@ export default withMermaid(
 
       nav: [
         { text: 'Getting Started', link: '/getting-started' },
-        { text: 'Concepts', link: '/getting-started/overview/' },
         { text: 'API', link: '/api/' },
-        { text: 'Services', link: '/getting-started/services/' },
-        { text: 'Workers', link: '/getting-started/workers/' },
         { text: 'SDK', link: '/sdk/' },
         { text: 'MCP', link: '/mcp/' },
         { text: 'MLOps', link: '/mlops/' },
@@ -44,32 +41,95 @@ export default withMermaid(
           collapsed: false,
           items: [
             {
+              text: 'Overview',
+              link: '/getting-started/overview',
+              collapsed: true,
+              items: [
+                {
+                  text: 'Ecosystem',
+                  link: '/getting-started/overview/ecosystem',
+                  collapsed: true,
+                  items: [
+                    { text: 'Platform', link: '/getting-started/overview/ecosystem/platform' },
+                    { text: 'Client App', link: '/getting-started/overview/ecosystem/client-app' },
+                  ],
+                },
+                {
+                  text: 'Key Concepts',
+                  collapsed: true,
+                  link: '/getting-started/overview/key-concepts/',
+                  items: [
+                    { text: 'Core Schema', link: '/getting-started/overview/key-concepts/core-schema' },
+                    { text: 'Access Control', link: '/getting-started/overview/key-concepts/access-control' },
+                    { text: 'Coworkers Space', link: '/getting-started/overview/key-concepts/coworkers-space' },
+                  ],
+                },
+              ],
+            },
+            {
               text: 'Setup',
               link: '/getting-started/setup/',
               collapsed: true,
               items: [
                 { text: 'Prerequisites', link: '/getting-started/setup/prerequisites' },
-                { text: 'Start Infrastructure', link: '/getting-started/setup/start-infrastructure' },
-                { text: 'Manually Setup', link: '/getting-started/setup/manually-setup' },
-                { text: 'Docker Setup', link: '/getting-started/setup/docker-setup' },
-                { text: 'Kubernetes Setup', link: '/getting-started/setup/kubernetes-setup' },
-                { text: 'Configuration', link: '/getting-started/setup/configuration' },
+                {
+                  text: 'Start Infrastructure',
+                  link: '/getting-started/setup/start-infrastructure',
+                },
+                {
+                  text: 'Manually Setup',
+                  link: '/getting-started/setup/manually-setup',
+                },
+                {
+                  text: 'Docker Setup',
+                  link: '/getting-started/setup/docker-setup',
+                },
+                {
+                  text: 'Kubernetes Setup',
+                  link: '/getting-started/setup/kubernetes-setup',
+                },
+                {
+                  text: 'Configuration',
+                  link: '/getting-started/setup/configuration',
+                },
               ],
             },
             { text: 'Gateway', link: '/getting-started/gateway' },
-          ],
-        },
-        {
-          text: 'Concepts',
-          link: '/getting-started/overview/',
-          collapsed: false,
-          items: [
-            { text: 'Ecosystem Overview', link: '/getting-started/overview/ecosystem/' },
-            { text: 'Platform Architecture', link: '/getting-started/overview/ecosystem/platform' },
-            { text: 'Client Applications', link: '/getting-started/overview/ecosystem/client-app' },
-            { text: 'Core Schema', link: '/getting-started/overview/key-concepts/core-schema' },
-            { text: 'Access Control (ABAC)', link: '/getting-started/overview/key-concepts/access-control' },
-            { text: 'Coworkers Space', link: '/getting-started/overview/key-concepts/coworkers-space' },
+            {
+              text: 'Services',
+              link: '/getting-started/services/',
+              collapsed: true,
+              items: [
+                { text: 'Auth', link: '/getting-started/services/auth' },
+                { text: 'Domain', link: '/getting-started/services/domain' },
+                { text: 'Context', link: '/getting-started/services/context' },
+                { text: 'Essential', link: '/getting-started/services/essential' },
+                { text: 'Identity', link: '/getting-started/services/identity' },
+                { text: 'Financial', link: '/getting-started/services/financial' },
+                { text: 'Career', link: '/getting-started/services/career' },
+                { text: 'Special', link: '/getting-started/services/special' },
+                { text: 'Touch', link: '/getting-started/services/touch' },
+                { text: 'Content', link: '/getting-started/services/content' },
+                { text: 'Logistic', link: '/getting-started/services/logistic' },
+                { text: 'Conjoint', link: '/getting-started/services/conjoint' },
+                { text: 'General', link: '/getting-started/services/general' },
+                { text: 'Thing', link: '/getting-started/services/thing' },
+              ],
+            },
+            {
+              text: 'Workers',
+              link: '/getting-started/workers/',
+              collapsed: true,
+              items: [
+                { text: 'Dispatcher', link: '/getting-started/workers/dispatcher' },
+                { text: 'Observer', link: '/getting-started/workers/observer' },
+                { text: 'Preserver', link: '/getting-started/workers/preserver' },
+                { text: 'Watcher', link: '/getting-started/workers/watcher' },
+                { text: 'Publisher', link: '/getting-started/workers/publisher' },
+                { text: 'Logger', link: '/getting-started/workers/logger' },
+                { text: 'Cleaner', link: '/getting-started/workers/cleaner' },
+              ],
+            },
           ],
         },
         {
@@ -79,52 +139,17 @@ export default withMermaid(
           items: [
             { text: 'Authentication', link: '/api/authentication' },
             { text: 'Authorization', link: '/api/authorization' },
-            { text: 'Request Headers', link: '/api/headers' },
             { text: 'REST Reference', link: '/api/rest-reference' },
+            { text: 'Request Headers', link: '/api/headers' },
             { text: 'GraphQL Reference', link: '/api/graphql-reference' },
             { text: 'Filtering & Pagination', link: '/api/filtering' },
             { text: 'Streaming (SSE)', link: '/api/streaming' },
           ],
         },
         {
-          text: 'Services',
-          link: '/getting-started/services/',
-          collapsed: true,
-          items: [
-            { text: 'Auth', link: '/getting-started/services/auth' },
-            { text: 'Domain', link: '/getting-started/services/domain' },
-            { text: 'Context', link: '/getting-started/services/context' },
-            { text: 'Essential', link: '/getting-started/services/essential' },
-            { text: 'Identity', link: '/getting-started/services/identity' },
-            { text: 'Financial', link: '/getting-started/services/financial' },
-            { text: 'Career', link: '/getting-started/services/career' },
-            { text: 'Special', link: '/getting-started/services/special' },
-            { text: 'Touch', link: '/getting-started/services/touch' },
-            { text: 'Content', link: '/getting-started/services/content' },
-            { text: 'Logistic', link: '/getting-started/services/logistic' },
-            { text: 'Conjoint', link: '/getting-started/services/conjoint' },
-            { text: 'General', link: '/getting-started/services/general' },
-            { text: 'Thing', link: '/getting-started/services/thing' },
-          ],
-        },
-        {
-          text: 'Workers',
-          link: '/getting-started/workers/',
-          collapsed: true,
-          items: [
-            { text: 'Dispatcher', link: '/getting-started/workers/dispatcher' },
-            { text: 'Observer', link: '/getting-started/workers/observer' },
-            { text: 'Preserver', link: '/getting-started/workers/preserver' },
-            { text: 'Watcher', link: '/getting-started/workers/watcher' },
-            { text: 'Publisher', link: '/getting-started/workers/publisher' },
-            { text: 'Logger', link: '/getting-started/workers/logger' },
-            { text: 'Cleaner', link: '/getting-started/workers/cleaner' },
-          ],
-        },
-        {
           text: 'SDK',
           link: '/sdk/',
-          collapsed: true,
+          collapsed: false,
           items: [
             { text: 'Node SDK', link: '/sdk/node' },
           ],
@@ -132,7 +157,7 @@ export default withMermaid(
         {
           text: 'MCP',
           link: '/mcp/',
-          collapsed: true,
+          collapsed: false,
           items: [
             { text: 'Overview', link: '/mcp/overview' },
             { text: 'Tools Reference', link: '/mcp/tools' },
@@ -142,7 +167,7 @@ export default withMermaid(
         {
           text: 'MLOps',
           link: '/mlops/',
-          collapsed: true,
+          collapsed: false,
           items: [
             { text: 'Quickstart', link: '/mlops/quickstart' },
             { text: 'Architecture', link: '/mlops/architecture' },
