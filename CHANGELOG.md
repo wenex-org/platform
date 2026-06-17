@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.6] - 2026-06-17
+
 ### Added
 
 - refactor: add `\\[OID\\]` pattern support in the `preserver` authorization @vhidvz
@@ -439,7 +441,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.6.5...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.6.6...HEAD
+[1.6.6]: https://github.com/wenex-org/platform/compare/1.6.5...1.6.6
 [1.6.5]: https://github.com/wenex-org/platform/compare/1.6.4...1.6.5
 [1.6.4]: https://github.com/wenex-org/platform/compare/1.6.3...1.6.4
 [1.6.3]: https://github.com/wenex-org/platform/compare/1.6.2...1.6.3
