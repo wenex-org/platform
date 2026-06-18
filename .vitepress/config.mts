@@ -144,6 +144,7 @@ export default withMermaid(
             { text: 'GraphQL Reference', link: '/api/graphql-reference' },
             { text: 'Filtering & Pagination', link: '/api/filtering' },
             { text: 'Streaming (SSE)', link: '/api/streaming' },
+            { text: 'Realtime Data (MQTT)', link: '/api/realtime' },
           ],
         },
         {
