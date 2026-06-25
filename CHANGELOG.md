@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.7] - 2026-06-25
+
 ### Added
 
 - docs: add a Realtime Data (MQTT) reference — architecture, topics, message schema, the mqtt client, and EMQX authn/authz. @vhidvz
@@ -449,7 +451,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.6.6...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.6.7...HEAD
+[1.6.7]: https://github.com/wenex-org/platform/compare/1.6.6...1.6.7
 [1.6.6]: https://github.com/wenex-org/platform/compare/1.6.5...1.6.6
 [1.6.5]: https://github.com/wenex-org/platform/compare/1.6.4...1.6.5
 [1.6.4]: https://github.com/wenex-org/platform/compare/1.6.3...1.6.4
