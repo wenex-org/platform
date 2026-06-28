@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.8] - 2026-06-28
+
 ### Changed
 
 - libs: set MongoDB `readConcern: majority` + `writeConcern.journal: true` for financial durability. @vhidvz
@@ -455,7 +457,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.6.7...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.6.8...HEAD
+[1.6.8]: https://github.com/wenex-org/platform/compare/1.6.7...1.6.8
 [1.6.7]: https://github.com/wenex-org/platform/compare/1.6.6...1.6.7
 [1.6.6]: https://github.com/wenex-org/platform/compare/1.6.5...1.6.6
 [1.6.5]: https://github.com/wenex-org/platform/compare/1.6.4...1.6.5
