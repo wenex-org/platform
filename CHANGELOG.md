@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- libs: set MongoDB `readConcern: majority` + `writeConcern.journal: true` for financial durability. @vhidvz
+
 ## [1.6.7] - 2026-06-25
 
 ### Added
