@@ -171,6 +171,17 @@ services:
       OTLP_SERVICE_NAME: thing
     <<: *common
 
+  education:
+    profiles: [education, platform, services]
+    container_name: platform-education
+    ports:
+      - 3160:3160 # REST
+      - 5160:5160 # GRPC
+    environment:
+      SERVICE_NAME: education
+      OTLP_SERVICE_NAME: education
+    <<: *common
+
   # ---------
   # Workers
   # ---------

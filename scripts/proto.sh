@@ -17,6 +17,7 @@ LOGISTIC=./protos/logistic.proto
 CONJOINT=./protos/conjoint.proto
 CAREER=./protos/career.proto
 THING=./protos/thing.proto
+EDUCATION=./protos/education.proto
 
 PRESERVER=./protos/workers/preserver.proto
 
@@ -54,6 +55,7 @@ PROTOS[ESSENTIAL,C]=./apps/services/identity/src/protobuf/essential.proto
 PROTOS[ESSENTIAL,D]=./apps/services/logistic/src/protobuf/essential.proto
 PROTOS[ESSENTIAL,E]=./apps/services/conjoint/src/protobuf/essential.proto
 PROTOS[ESSENTIAL,F]=./apps/services/financial/src/protobuf/essential.proto
+PROTOS[ESSENTIAL,H]=./apps/services/education/src/protobuf/essential.proto
 PROTOS[ESSENTIAL,G]=./libs/common/src/providers/essential/protobuf/essential.proto
 
 # Financial Proto
@@ -111,6 +113,11 @@ PROTOS[THING,1]=./apps/services/thing/src/app.proto
 PROTOS[THING,2]=./apps/gateway/src/protobuf/thing.proto
 PROTOS[THING,3]=./libs/common/src/providers/thing/protobuf/thing.proto
 
+# Education Proto
+PROTOS[EDUCATION,1]=./apps/services/education/src/app.proto
+PROTOS[EDUCATION,2]=./apps/gateway/src/protobuf/education.proto
+PROTOS[EDUCATION,3]=./libs/common/src/providers/education/protobuf/education.proto
+
 # Preserver Proto
 PROTOS[PRESERVER,1]=./apps/workers/preserver/src/app.proto
 
@@ -130,6 +137,7 @@ for KEY in "${!PROTOS[@]}"; do
   if [[ $KEY == *"CONJOINT"* ]]; then ln -f $CONJOINT ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"CAREER"* ]]; then ln -f $CAREER ${PROTOS[$KEY]}; fi
   if [[ $KEY == *"THING"* ]]; then ln -f $THING ${PROTOS[$KEY]}; fi
+  if [[ $KEY == *"EDUCATION"* ]]; then ln -f $EDUCATION ${PROTOS[$KEY]}; fi
 
   if [[ $KEY == *"PRESERVER"* ]]; then ln -f $PRESERVER ${PROTOS[$KEY]}; fi
 done

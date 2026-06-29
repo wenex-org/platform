@@ -1,0 +1,176 @@
+import { Audit, Cache, CollectionPath, RateLimit, SetPolicy, SetScope, Validation } from '@app/common/core/metadatas';
+import { CourseDataSerializer, CourseItemsSerializer, CourseSerializer } from '@app/common/serializers/education';
+import { GatewayInterceptors, ResponseInterceptors, WriteInterceptors } from '@app/common/core/interceptors';
+import { CreateCourseDto, CreateCourseItemsDto, UpdateCourseDto } from '@app/common/dto/education';
+import { FilterDto, FilterOneDto, QueryFilterDto } from '@app/common/core/dto/mongo';
+import { UseFilters, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
+import { Controller as ControllerClass } from '@app/common/core/classes/mongo';
+import { Controller as IController } from '@app/common/core/interfaces/mongo';
+import { AuthGuard, PolicyGuard, ScopeGuard } from '@app/common/core/guards';
+import { AuthorityInterceptor } from '@app/common/core/interceptors/mongo';
+import { Action, COLLECTION, Resource, Scope } from '@app/common/core';
+import { Course, CourseDto } from '@app/common/interfaces/education';
+import { EducationProvider } from '@app/common/providers/education';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { refineQueryGraphQL } from '@app/common/core/utils/mongo';
+import { AllExceptionsFilter } from '@app/common/core/filters';
+import { TotalSerializer } from '@app/common/core/serializers';
+import { SentryInterceptor } from '@ntegral/nestjs-sentry';
+import { Filter, Meta } from '@app/common/core/decorators';
+import { ValidationPipe } from '@app/common/core/pipes';
+import { Metadata } from '@app/common/core/interfaces';
+import { Observable } from 'rxjs';
+
+const COLL_PATH = COLLECTION('courses', 'education');
+
+@Resolver()
+@RateLimit(COLL_PATH)
+@UsePipes(ValidationPipe)
+@CollectionPath(COLL_PATH)
+@UseFilters(AllExceptionsFilter)
+@UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
+@UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
+export class CoursesResolver extends ControllerClass<Course, CourseDto> implements IController<Course, CourseDto> {
+  constructor(readonly provider: EducationProvider) {
+    super(provider.courses, CourseSerializer);
+  }
+
+  @Query(() => TotalSerializer)
+  @Cache(COLL_PATH, 'fill')
+  @SetScope(Scope.ReadEducationCourses)
+  @UseInterceptors(AuthorityInterceptor)
+  @SetPolicy(Action.Read, Resource.EducationCourses)
+  countEducationCourse(@Meta() meta: Metadata, @Filter() @Args('filter') filter: QueryFilterDto): Observable<TotalSerializer> {
+    return super.count(meta, filter);
+  }
+
+  @Mutation(() => CourseDataSerializer)
+  @Audit('GATEWAY')
+  @Cache(COLL_PATH, 'flush')
+  @SetScope(Scope.WriteEducationCourses)
+  @Validation('education/courses', 'create')
+  @UseInterceptors(...WriteInterceptors)
+  @SetPolicy(Action.Create, Resource.EducationCourses)
+  createEducationCourse(@Meta() meta: Metadata, @Args('data') data: CreateCourseDto): Observable<CourseDataSerializer> {
+    return super.create(meta, data);
+  }
+
+  @Mutation(() => CourseItemsSerializer)
+  @Audit('GATEWAY')
+  @Cache(COLL_PATH, 'flush')
+  @SetScope(Scope.WriteEducationCourses)
+  @Validation('education/courses', 'create')
+  @UseInterceptors(...WriteInterceptors)
+  @SetPolicy(Action.Create, Resource.EducationCourses)
+  createEducationCourseBulk(@Meta() meta: Metadata, @Args('data') data: CreateCourseItemsDto): Observable<CourseItemsSerializer> {
+    return super.createBulk(meta, data);
+  }
+
+  @Query(() => CourseItemsSerializer)
+  @Cache(COLL_PATH, 'fill')
+  @SetScope(Scope.ReadEducationCourses)
+  @SetPolicy(Action.Read, Resource.EducationCourses)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  findEducationCourse(
+    @Meta() meta: Metadata,
+    @Filter() @Args('filter') filter: FilterDto<Course>,
+  ): Observable<CourseItemsSerializer> {
+    return super.find(meta, filter);
+  }
+
+  @Query(() => CourseDataSerializer)
+  @Cache(COLL_PATH, 'fill')
+  @SetScope(Scope.ReadEducationCourses)
+  @SetPolicy(Action.Read, Resource.EducationCourses)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  findEducationCourseById(
+    @Args('id') id: string,
+    @Meta() meta: Metadata,
+    @Filter() filter: FilterOneDto<Course>,
+    @Args('ref', { nullable: true }) ref?: string,
+  ): Observable<CourseDataSerializer> {
+    refineQueryGraphQL(filter, { id, ref });
+    return super.findOne(meta, filter);
+  }
+
+  @Mutation(() => CourseDataSerializer)
+  @Audit('GATEWAY')
+  @Cache(COLL_PATH, 'flush')
+  @SetScope(Scope.WriteEducationCourses)
+  @SetPolicy(Action.Delete, Resource.EducationCourses)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  deleteEducationCourseById(
+    @Args('id') id: string,
+    @Meta() meta: Metadata,
+    @Filter() filter: FilterDto<Course>,
+    @Args('ref', { nullable: true }) ref?: string,
+  ): Observable<CourseDataSerializer> {
+    refineQueryGraphQL(filter, { id, ref });
+    return super.deleteOne(meta, filter);
+  }
+
+  @Mutation(() => CourseDataSerializer)
+  @Audit('GATEWAY')
+  @Cache(COLL_PATH, 'flush')
+  @SetScope(Scope.WriteEducationCourses)
+  @SetPolicy(Action.Restore, Resource.EducationCourses)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  restoreEducationCourseById(
+    @Args('id') id: string,
+    @Meta() meta: Metadata,
+    @Filter() filter: FilterDto<Course>,
+    @Args('ref', { nullable: true }) ref?: string,
+  ): Observable<CourseDataSerializer> {
+    refineQueryGraphQL(filter, { id, ref });
+    return super.restoreOne(meta, filter);
+  }
+
+  @Mutation(() => CourseDataSerializer)
+  @Audit('GATEWAY')
+  @Cache(COLL_PATH, 'flush')
+  @SetScope(Scope.ManageEducationCourses)
+  @SetPolicy(Action.Destroy, Resource.EducationCourses)
+  @UseInterceptors(AuthorityInterceptor, ...ResponseInterceptors)
+  destroyEducationCourseById(
+    @Args('id') id: string,
+    @Meta() meta: Metadata,
+    @Filter() filter: FilterDto<Course>,
+    @Args('ref', { nullable: true }) ref?: string,
+  ): Observable<CourseDataSerializer> {
+    refineQueryGraphQL(filter, { id, ref });
+    return super.destroyOne(meta, filter);
+  }
+
+  @Mutation(() => TotalSerializer)
+  @Audit('GATEWAY')
+  @Cache(COLL_PATH, 'flush')
+  @SetScope(Scope.ManageEducationCourses)
+  @Validation('education/courses', 'update')
+  @SetPolicy(Action.Update, Resource.EducationCourses)
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
+  updateEducationCourseBulk(
+    @Meta() meta: Metadata,
+    @Args('data') update: UpdateCourseDto,
+    @Filter() @Args('filter') filter: QueryFilterDto<Course>,
+  ): Observable<TotalSerializer> {
+    return super.updateBulk(meta, filter, update);
+  }
+
+  @Mutation(() => CourseDataSerializer)
+  @Audit('GATEWAY')
+  @Cache(COLL_PATH, 'flush')
+  @SetScope(Scope.WriteEducationCourses)
+  @Validation('education/courses', 'update')
+  @SetPolicy(Action.Update, Resource.EducationCourses)
+  @UseInterceptors(AuthorityInterceptor, ...WriteInterceptors)
+  updateEducationCourseById(
+    @Args('id') id: string,
+    @Meta() meta: Metadata,
+    @Filter() filter: FilterOneDto<Course>,
+    @Args('data') update: UpdateCourseDto,
+    @Args('ref', { nullable: true }) ref?: string,
+  ): Observable<CourseDataSerializer> {
+    refineQueryGraphQL(filter, { id, ref });
+    return super.updateOne(meta, filter, update);
+  }
+}

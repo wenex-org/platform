@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- education: add LMS service domain (courses, sections, contents, enrollments, assessments, submissions, grades) on gRPC. @fdaei
+- education: wire gateway REST + GraphQL crafts, gRPC provider, proto, and Resource/Scope/Collection/ConfigKey enums. @fdaei
+
 ## [1.6.8] - 2026-06-28
 
 ### Changed
