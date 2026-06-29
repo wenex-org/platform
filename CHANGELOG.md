@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.9] - 2026-06-29
+
 ### Fixed
 
 - fix: guard `RedisService.del` against empty key lists to avoid `ERR wrong number of arguments for 'del'`. @vhidvz
@@ -461,7 +463,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.6.8...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.6.9...HEAD
+[1.6.9]: https://github.com/wenex-org/platform/compare/1.6.8...1.6.9
 [1.6.8]: https://github.com/wenex-org/platform/compare/1.6.7...1.6.8
 [1.6.7]: https://github.com/wenex-org/platform/compare/1.6.6...1.6.7
 [1.6.6]: https://github.com/wenex-org/platform/compare/1.6.5...1.6.6
