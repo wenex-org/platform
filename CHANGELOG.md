@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- fix: guard `RedisService.del` against empty key lists to avoid `ERR wrong number of arguments for 'del'`. @vhidvz
+
 ## [1.6.8] - 2026-06-28
 
 ### Changed
