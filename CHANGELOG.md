@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - education: add thin LMS domain (courses + enrollments); files/events/comments/invoices reused by reference. @fdaei
 - education: course aligned to career/services with embedded chapters/lessons; gateway REST+GraphQL, gRPC, enums. @fdaei
 - education: register service in circular-dependencies and kafka-connect (CDC) scripts. @fdaei
+- education: add StatKey metrics, MCP service spec + loader entry, and docs service page + sidebar. @fdaei
 
 ## [1.6.8] - 2026-06-28
 

@@ -114,6 +114,7 @@ export default withMermaid(
                 { text: 'Conjoint', link: '/getting-started/services/conjoint' },
                 { text: 'General', link: '/getting-started/services/general' },
                 { text: 'Thing', link: '/getting-started/services/thing' },
+                { text: 'Education', link: '/getting-started/services/education' },
               ],
             },
             {
