@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- fix: `TransferService` wallet lock uses atomic Redis `SET NX` instead of a wildcard `KEYS` scan loop. @vhidvz
+
 ## [1.6.9] - 2026-06-29
 
 ### Fixed
