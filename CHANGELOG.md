@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fix: `TransactionsService.init` no longer holds a Mongo transaction open across the essential-service RPC call. @vhidvz
 - fix: failed `verify()` now aborts the saga, closing a `SagaService.sessions` memory leak in essential. @vhidvz
 - fix: `TransferService.release()` now checks lock ownership by txn id before deleting it. @vhidvz
+- fix: `logger()` skips masking when a debug namespace is disabled; trimmed per-message log dumps. @vhidvz
 
 ## [1.6.9] - 2026-06-29
 
