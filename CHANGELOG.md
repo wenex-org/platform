@@ -9,8 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- fix: `TransferService` wallet lock uses atomic Redis `SET NX` instead of a wildcard `KEYS` scan loop. @vhidvz
+- fix: `TransferService.take()` uses one atomic Lua lock script with bounded backoff instead of a 10s busy-wait. @vhidvz
 - fix: `TransactionsService.init` no longer holds a Mongo transaction open across the essential-service RPC call. @vhidvz
+- fix: failed `verify()` now aborts the saga, closing a `SagaService.sessions` memory leak in essential. @vhidvz
 
 ## [1.6.9] - 2026-06-29
 
