@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.10] - 2026-07-14
+
 ### Fixed
 
 - fix: `TransferService.take()` uses one atomic Lua lock script with bounded backoff instead of a 10s busy-wait. @vhidvz
@@ -474,7 +476,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.6.9...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.6.10...HEAD
+[1.6.10]: https://github.com/wenex-org/platform/compare/1.6.9...1.6.10
 [1.6.9]: https://github.com/wenex-org/platform/compare/1.6.8...1.6.9
 [1.6.8]: https://github.com/wenex-org/platform/compare/1.6.7...1.6.8
 [1.6.7]: https://github.com/wenex-org/platform/compare/1.6.6...1.6.7
