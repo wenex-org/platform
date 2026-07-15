@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- libs: support nested/deep population (e.g. `account.profile` off `conjoint/channels`), resolved against the child collection's own populate whitelist; `applySerializer` now walks dot-paths so nested and array-embedded populated fields (e.g. `payees.wallet`) are wrapped in their serializer class. @mhalizadeh
+
 ## [1.6.10] - 2026-07-14
 
 ### Fixed
