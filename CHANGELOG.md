@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - libs: support nested/deep population (e.g. `account.profile` off `conjoint/channels`), resolved against the child collection's own populate whitelist; `applySerializer` now walks dot-paths so nested and array-embedded populated fields (e.g. `payees.wallet`) are wrapped in their serializer class. @mhalizadeh
 
+### Fixed
+
+- fix: `AuthorityInterceptor` now recursively authorizes nested populate requests (permission pruning, field-access, and query-exploit checks all walk into `populate[].populate`) instead of only checking the top level. @mhalizadeh
+- fix: cap populate nesting at `MAX_POPULATE_DEPTH` to close a stack-overflow DoS via self-referencing populate chains (e.g. `owner.owner.owner...`), enforced before validation runs and inside `MongoHelper.assignPopulateModel` (covering saga stage replay) and at the persisted `Populate` schema's write-time validator. @mhalizadeh
+
 ## [1.6.10] - 2026-07-14
 
 ### Fixed
