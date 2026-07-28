@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.12] - 2026-07-28
+
+### Fixed
+
+- resolved a security issue that allowed registering a subject outside the token domain. @vhidvz
+
 ## [1.6.11] - 2026-07-20
 
 ### Added
@@ -482,7 +488,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.6.11...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.6.12...HEAD
+[1.6.12]: https://github.com/wenex-org/platform/compare/1.6.11...1.6.12
 [1.6.11]: https://github.com/wenex-org/platform/compare/1.6.10...1.6.11
 [1.6.10]: https://github.com/wenex-org/platform/compare/1.6.9...1.6.10
 [1.6.9]: https://github.com/wenex-org/platform/compare/1.6.8...1.6.9
