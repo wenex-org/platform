@@ -10,6 +10,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - answer a login by a user with no `subjects` with an assertion; it threw a TypeError and 500'd. @vhidvz
+- stamp `items` on `financial/invoices`, so an invoice can be created with line items by any caller. @vhidvz
+- join an incoming `x-saga-session` in `transactions.init` instead of committing the row in a nested one. @vhidvz
+- retry a transient write conflict in `transactions.verify` on a fresh saga before failing the transaction. @vhidvz
+- name the missing saga and the reason in `sagas` add/abort/commit, instead of a bare `invalid transaction`. @vhidvz
+- reap and report the per-machine saga session registry at a soft cap rather than silently filling. @vhidvz
+- distribute the `Pay` rounding remainder so a `fraction` split sums to the amount at the currency precision. @vhidvz
+- drop binary-float dust from `totalPays`, which refused exact `fraction` splits as unequal to the amount. @vhidvz
+- refuse an unknown loose query param on a by-id read; it was merged into the filter and read as "row gone". @vhidvz
+- answer `404` naming the zone from `modifyPlugin.update`, not a `500` that never mentions zones. @vhidvz
+- key the read cache with the saga session, so an in-session read no longer poisons the out-of-session view. @vhidvz
+- flush the read cache at tenant level, so a user-scoped write no longer leaves an app-level reader stale. @vhidvz
 
 ## [1.6.12] - 2026-07-28
 

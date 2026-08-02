@@ -52,7 +52,7 @@ const COLL_PATH = COLLECTION('invoices', 'financial');
 @CollectionPath(COLL_PATH)
 @UseFilters(AllExceptionsFilter)
 @ApiTags('financial', 'invoices')
-@Nested<Invoice>('payees', 'payers')
+@Nested<Invoice>('payees', 'payers', 'items')
 @UseGuards(AuthGuard, ScopeGuard, PolicyGuard)
 @UseInterceptors(...GatewayInterceptors, new SentryInterceptor())
 export class InvoicesController extends ControllerClass<Invoice, InvoiceDto> implements IController<Invoice, InvoiceDto> {
