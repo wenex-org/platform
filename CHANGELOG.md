@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- normalise Persian at index time: ZWNJ splits compounds, ye/kaf and digits fold, stopwords go. @vhidvz
 - answer an Elasticsearch failure with its own status and root cause, instead of a bare 500. @vhidvz
 - accept every search query option Elasticsearch accepts: boost, numeric terms, fuzziness forms. @vhidvz
 - name the field, the expected shape and the received value in a search validation error. @vhidvz
