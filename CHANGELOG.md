@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - wrap a search query whose root is not a `bool`; merging a constraint beside it made ES 500. @vhidvz
 - accept the `{match: {field: 'text'}}` shorthand, as `term`/`terms` in the same schema already do. @vhidvz
+- read a schema alternative as a schema, so a declared object form is reachable at all. @vhidvz
 - make `{term: {field: {value: 'x'}}}` reachable; the expanded form was declared and always refused. @vhidvz
 - answer a login by a user with no `subjects` with an assertion; it threw a TypeError and 500'd. @vhidvz
 - stamp `items` on `financial/invoices`, so an invoice can be created with line items by any caller. @vhidvz
