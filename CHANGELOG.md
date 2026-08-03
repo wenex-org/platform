@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- name the field, the expected shape and the received value in a search validation error. @vhidvz
+- refuse a query container or leaf query holding more than one key, as Elasticsearch does. @vhidvz
+- require a list for a `terms` query; a scalar is a 400 from Elasticsearch. @vhidvz
 - wrap a search query whose root is not a `bool`; merging a constraint beside it made ES 500. @vhidvz
 - accept the `{match: {field: 'text'}}` shorthand, as `term`/`terms` in the same schema already do. @vhidvz
 - read a schema alternative as a schema, so a declared object form is reachable at all. @vhidvz
