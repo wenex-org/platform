@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.0] - 2026-08-04
+
 ### Fixed
 
 - normalise Persian at index time: ZWNJ splits compounds, ye/kaf and digits fold, stopwords go. @vhidvz
@@ -32,22 +34,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - key the read cache with the saga session, so an in-session read no longer poisons the out-of-session view. @vhidvz
 - flush the read cache at tenant level, so a user-scoped write no longer leaves an app-level reader stale. @vhidvz
 
-## [1.6.12] - 2026-07-28
-
-### Fixed
-
-- resolved a security issue that allowed registering a subject outside the token domain. @vhidvz
-
-## [1.6.11] - 2026-07-20
+## [1.6.X] - 2026-07-28
 
 ### Added
 
 - plain secret support to generate TOTP code. @vhidvz
+- docs: add a Realtime Data (MQTT) reference — architecture, topics, message schema, the mqtt client, and EMQX authn/authz. @vhidvz
+- refactor: add `\\[OID\\]` pattern support in the `preserver` authorization @vhidvz
+- docs: add a canonical Request Headers reference (`/api/headers`) covering every header the gateway actually reads. @vhidvz
+- add: `publisher` new topics relay on `identity` @vhidvz
+- add: emqx authorization base on regular grants definition @vhidvz
+- add: `groups` base topic generation in `publisher` worker @vhidvz
+- add: wenex logo and favicon to VitePress docs site. @vhidvz
+- add: `/changelog` docs route rendering the platform changelog as the last sidebar item. @vhidvz
+- support for populating core fields `identity` (Mongo ID) and `relations` (Mongo ID array) on any resource @vhidvz
+- add: add send/template endpoint in `touch/smss` @fdaei
+- add: mcp specification and CRUD-style service tools @vhidvz
+- refactor: Refactored prompts with structured format (ACTION, TRIGGER, RULES) @alihajqani
+- refactor: Introduced shared data dictionary for better field understanding @alihajqani
+- refactor: Improved schemas, validation, and type safety across tools @alihajqani
+- refactor: Cleaned up codebase with better logging, performance, and readability @alihajqani
 
-## [1.6.10] - 2026-07-14
+### Changed
+
+- libs: set MongoDB `readConcern: majority` + `writeConcern.journal: true` for financial durability. @vhidvz
+- refactor: improvements in the `preserver` authorization logic @vhidvz
+- docs: regroup the sidebar/nav so Concepts, Services, and Workers are top-level groups, flattening navigation. @vhidvz
+- docs: de-duplicate the ABAC ownership model; the authorization page links to the canonical Access Control page. @vhidvz
+- docs: slim the authentication headers table to a pointer to the canonical Request Headers page. @vhidvz
+- refactor: MCP doc loader serves single-file docs and drops `?v=` version-suffix parsing. @vhidvz
+- docs: merge each MCP doc's compact and extended versions into one self-contained file per resource. @vhidvz
+- docs: drop the `?v=c`/`?v=e` version suffix and compact/extended machinery from all MCP docs. @vhidvz
+- refactor: `onBeforeCreate` logic @vhidvz
+- del: remove unwanted `COMMON_COLLECTIONS` constant from app services @vhidvz
 
 ### Fixed
 
+- resolved a security issue that allowed registering a subject outside the token domain. @vhidvz
 - fix: `TransferService.take()` uses one atomic Lua lock script with bounded backoff instead of a 10s busy-wait. @vhidvz
 - fix: `TransactionsService.init` no longer holds a Mongo transaction open across the essential-service RPC call. @vhidvz
 - fix: failed `verify()` now aborts the saga, closing a `SagaService.sessions` memory leak in essential. @vhidvz
@@ -56,45 +79,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fix: bounded keepalive/backoff/retry channel options on all 14 inter-service gRPC clients. @vhidvz
 - fix: transfer lock TTL raised to 6s so it can't expire mid-verify under load and cause concurrent wallet writes. @vhidvz
 - fix: saga session/machine discovery uses non-blocking Redis SCAN instead of O(N) KEYS on the verify hot path. @vhidvz
-
-## [1.6.9] - 2026-06-29
-
-### Fixed
-
 - fix: guard `RedisService.del` against empty key lists to avoid `ERR wrong number of arguments for 'del'`. @vhidvz
-
-## [1.6.8] - 2026-06-28
-
-### Changed
-
-- libs: set MongoDB `readConcern: majority` + `writeConcern.journal: true` for financial durability. @vhidvz
-
-## [1.6.7] - 2026-06-25
-
-### Added
-
-- docs: add a Realtime Data (MQTT) reference — architecture, topics, message schema, the mqtt client, and EMQX authn/authz. @vhidvz
-
-### Fixed
-
 - fix: re-subscribe Kafka consumers to topics created after startup so new `mongo.*` source topics get consumed. @vhidvz
-
-## [1.6.6] - 2026-06-17
-
-### Added
-
-- refactor: add `\\[OID\\]` pattern support in the `preserver` authorization @vhidvz
-- docs: add a canonical Request Headers reference (`/api/headers`) covering every header the gateway actually reads. @vhidvz
-
-### Changed
-
-- refactor: improvements in the `preserver` authorization logic @vhidvz
-- docs: regroup the sidebar/nav so Concepts, Services, and Workers are top-level groups, flattening navigation. @vhidvz
-- docs: de-duplicate the ABAC ownership model; the authorization page links to the canonical Access Control page. @vhidvz
-- docs: slim the authentication headers table to a pointer to the canonical Request Headers page. @vhidvz
-
-### Fixed
-
 - security: escape redis pattern issue @vhidvz
 - docs: correct the domain service count to 14 (was 15) in README, getting-started, and ecosystem index. @vhidvz
 - docs: PostgreSQL is used by workers (`logger`/`dispatcher`), not the `essential` service; saga state is in MongoDB. @vhidvz
@@ -107,17 +93,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - docs: remove the non-existent `x-domain` request header from the authentication headers reference. @vhidvz
 - docs: Metadata `domain`/`client`/`user` derive from the JWT, not `x-domain`/`x-client-id` headers; user is `uid`. @vhidvz
 - docs: SDK multi-tenant usage relies on the `coworker` claim and `zone=client`, not an `x-domain` header. @vhidvz
-
-## [1.6.5] - 2026-06-15
-
-### Changed
-
-- refactor: MCP doc loader serves single-file docs and drops `?v=` version-suffix parsing. @vhidvz
-- docs: merge each MCP doc's compact and extended versions into one self-contained file per resource. @vhidvz
-- docs: drop the `?v=c`/`?v=e` version suffix and compact/extended machinery from all MCP docs. @vhidvz
-
-### Fixed
-
 - fix: `preserver` granted permission or fixed @vhidvz
 - docs: `thing/metrics.device` is returned and populatable, not write-only in responses. @vhidvz
 - docs: drop the false `thing/metrics` append-only claim; metrics support update and delete. @vhidvz
@@ -125,62 +100,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - docs: correct MCP scope-splitting to whitespace, comma, semicolon, or pipe delimiters. @vhidvz
 - docs: document `essential/saga-stages` as MCP-callable via the shared CRUD tools. @vhidvz
 - docs: populating `identity`/`relations` requires a `model` in each populate entry. @vhidvz
-
-## [1.6.4] - 2026-06-13
-
-### Added
-
-- add: `publisher` new topics relay on `identity` @vhidvz
-- add: emqx authorization base on regular grants definition @vhidvz
-- add: `groups` base topic generation in `publisher` worker @vhidvz
-- add: wenex logo and favicon to VitePress docs site. @vhidvz
-- add: `/changelog` docs route rendering the platform changelog as the last sidebar item. @vhidvz
-
-### Changed
-
-- refactor: `onBeforeCreate` logic @vhidvz
-
-## [1.6.3] - 2026-05-23
-
-### Fixed
-
 - fix: use `'$date' in data[key]` instead of optional chaining in `debezium.util` to avoid false positives @mhalizadeh
 - fix: replace `isDateString` with a custom `isIsoString` regex in `tools.util` for stricter ISO 8601 detection @mhalizadeh
 - fix: make `location` optional in `career/branch` BranchRpcSerializer @mhalizadeh
 - fix: `libs/module/saga` exception error status code @mhalizadeh
 - fix: `thing/metric` serializer `device` forgotten property @vhidvz
-
-## [1.6.2] - 2026-05-16
-
-### Added
-
-- add: add send/template endpoint in `touch/smss` @fdaei
-- add: mcp specification and CRUD-style service tools @vhidvz
-- refactor: Refactored prompts with structured format (ACTION, TRIGGER, RULES) @alihajqani
-- refactor: Introduced shared data dictionary for better field understanding @alihajqani
-- refactor: Improved schemas, validation, and type safety across tools @alihajqani
-- refactor: Cleaned up codebase with better logging, performance, and readability @alihajqani
-
-### Changed
-
-- del: remove unwanted `COMMON_COLLECTIONS` constant from app services @vhidvz
-
-### Fixed
-
 - fix: population serializer transformer execution @vhidvz
 - fix: make location optional in branch schema @mhalizadeh
-
-## [1.6.1] - 2026-04-05
-
-### Fixed
-
 - fix: population security bug @vhidvz
-
-## [1.6.0] - 2026-03-26
-
-### Added
-
-- support for populating core fields `identity` (Mongo ID) and `relations` (Mongo ID array) on any resource @vhidvz
 
 ## [1.5.X] - 2026-03-26
 
@@ -513,20 +440,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.6.12...HEAD
-[1.6.12]: https://github.com/wenex-org/platform/compare/1.6.11...1.6.12
-[1.6.11]: https://github.com/wenex-org/platform/compare/1.6.10...1.6.11
-[1.6.10]: https://github.com/wenex-org/platform/compare/1.6.9...1.6.10
-[1.6.9]: https://github.com/wenex-org/platform/compare/1.6.8...1.6.9
-[1.6.8]: https://github.com/wenex-org/platform/compare/1.6.7...1.6.8
-[1.6.7]: https://github.com/wenex-org/platform/compare/1.6.6...1.6.7
-[1.6.6]: https://github.com/wenex-org/platform/compare/1.6.5...1.6.6
-[1.6.5]: https://github.com/wenex-org/platform/compare/1.6.4...1.6.5
-[1.6.4]: https://github.com/wenex-org/platform/compare/1.6.3...1.6.4
-[1.6.3]: https://github.com/wenex-org/platform/compare/1.6.2...1.6.3
-[1.6.2]: https://github.com/wenex-org/platform/compare/1.6.1...1.6.2
-[1.6.1]: https://github.com/wenex-org/platform/compare/1.6.0...1.6.1
-[1.6.0]: https://github.com/wenex-org/platform/compare/1.5.11...1.6.0
+[unreleased]: https://github.com/wenex-org/platform/compare/1.7.0...HEAD
+[1.7.0]: https://github.com/wenex-org/platform/compare/1.6.12...1.7.0
+[1.6.X]: https://github.com/wenex-org/platform/compare/1.5.11...1.6.12
 [1.5.X]: https://github.com/wenex-org/platform/compare/1.4.11...1.5.11
 [1.4.X]: https://github.com/wenex-org/platform/compare/1.3.39...1.4.11
 [1.3.X]: https://github.com/wenex-org/platform/compare/1.2.49...1.3.39
