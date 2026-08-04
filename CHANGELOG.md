@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- normalise Persian at index time: ZWNJ splits compounds, ye/kaf and digits fold, stopwords go. @vhidvz
+- answer an Elasticsearch failure with its own status and root cause, instead of a bare 500. @vhidvz
+- accept every search query option Elasticsearch accepts: boost, numeric terms, fuzziness forms. @vhidvz
+- name the field, the expected shape and the received value in a search validation error. @vhidvz
+- refuse a query container or leaf query holding more than one key, as Elasticsearch does. @vhidvz
+- require a list for a `terms` query; a scalar is a 400 from Elasticsearch. @vhidvz
+- wrap a search query whose root is not a `bool`; merging a constraint beside it made ES 500. @vhidvz
+- accept the `{match: {field: 'text'}}` shorthand, as `term`/`terms` in the same schema already do. @vhidvz
+- read a schema alternative as a schema, so a declared object form is reachable at all. @vhidvz
+- make `{term: {field: {value: 'x'}}}` reachable; the expanded form was declared and always refused. @vhidvz
 - answer a login by a user with no `subjects` with an assertion; it threw a TypeError and 500'd. @vhidvz
 - stamp `items` on `financial/invoices`, so an invoice can be created with line items by any caller. @vhidvz
 - join an incoming `x-saga-session` in `transactions.init` instead of committing the row in a nested one. @vhidvz
