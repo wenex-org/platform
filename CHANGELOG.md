@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- stop wrapping `trimValue` in `valueFrom`; the pair blanked every element it touched. @vhidvz
+- restore `logistic/vehicles` creation, which that composition refused for every caller. @vhidvz
+
 ## [1.7.0] - 2026-08-04
 
 ### Fixed
