@@ -1,2 +1,2 @@
-npm run test
-npm run check
+pnpm run test
+pnpm run check

@@ -6,7 +6,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "nest build",
-    "prepare": "npm run script:setup",
+    "prepare": "pnpm run script:setup",
     "postinstall": "husky",
     "script:build": "bash ./scripts/build.sh",
     "script:setup": "bash ./scripts/setup.sh",
@@ -31,17 +31,17 @@
     "test:e2e:cov": "jest --runInBand --config ./jest-e2e.config.ts --coverage --forceExit",
     "command": "node -r tsconfig-paths/register -r ts-node/register libs/command/src/main.ts",
     "command:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register libs/command/src/main.ts",
-    "db:debug": "npm run command:debug -- db",
-    "db:index": "npm run command -- db index",
-    "db:seed": "npm run command -- db seed",
-    "db:clean": "npm run command -- db clean",
-    "db:index:e2e": "MONGO_PREFIX=e2e REDIS_PREFIX=e2e ELASTIC_PREFIX=e2e POSTGRES_PREFIX=e2e npm run command -- db index",
-    "db:seed:e2e": "MONGO_PREFIX=e2e REDIS_PREFIX=e2e ELASTIC_PREFIX=e2e POSTGRES_PREFIX=e2e npm run command -- db seed",
-    "db:clean:e2e": "MONGO_PREFIX=e2e REDIS_PREFIX=e2e ELASTIC_PREFIX=e2e POSTGRES_PREFIX=e2e npm run command -- db clean",
-    "storage:init": "npm run command -- storage init",
-    "storage:debug": "npm run command:debug -- storage",
-    "utility:init": "npm run command -- utility init",
-    "utility:debug": "npm run command:debug -- utility",
+    "db:debug": "pnpm run command:debug -- db",
+    "db:index": "pnpm run command -- db index",
+    "db:seed": "pnpm run command -- db seed",
+    "db:clean": "pnpm run command -- db clean",
+    "db:index:e2e": "MONGO_PREFIX=e2e REDIS_PREFIX=e2e ELASTIC_PREFIX=e2e POSTGRES_PREFIX=e2e pnpm run command -- db index",
+    "db:seed:e2e": "MONGO_PREFIX=e2e REDIS_PREFIX=e2e ELASTIC_PREFIX=e2e POSTGRES_PREFIX=e2e pnpm run command -- db seed",
+    "db:clean:e2e": "MONGO_PREFIX=e2e REDIS_PREFIX=e2e ELASTIC_PREFIX=e2e POSTGRES_PREFIX=e2e pnpm run command -- db clean",
+    "storage:init": "pnpm run command -- storage init",
+    "storage:debug": "pnpm run command:debug -- storage",
+    "utility:init": "pnpm run command -- utility init",
+    "utility:debug": "pnpm run command:debug -- utility",
     "check": "bash ./scripts/circular-dependencies.sh",
     "dpdm": "dpdm -T --skip-dynamic-imports circular --no-warning --no-tree --circular",
     "dpdm:ts": "dpdm --skip-dynamic-imports circular --no-warning --no-tree --circular",
@@ -66,8 +66,8 @@
   },
   "lint-staged": {
     "*.ts": [
-      "npm run format",
-      "npm run lint"
+      "pnpm run format",
+      "pnpm run lint"
     ]
   },
   "dependencies": {
