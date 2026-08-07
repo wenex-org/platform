@@ -12,8 +12,8 @@ WORKDIR /app
 
 COPY . .
 
-RUN npm run git:clone && \
+RUN pnpm run git:clone && \
   pnpm install --frozen-lockfile && \
-  npm run script:build
+  pnpm run script:build
 
 CMD ["node", "--stack-size=4096", "scripts/start.js"]
