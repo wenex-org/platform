@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- add bale provider @fdaei
+- add a new sms provider to touch/sms resource - bale messenger @fdaei
 
 ### Fixed
 
