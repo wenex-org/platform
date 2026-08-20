@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.1] - 2026-08-20
+
 ### Added
 
 - add a new sms provider to touch/sms resource - bale messenger @fdaei
@@ -450,7 +452,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.7.0...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.7.1...HEAD
+[1.7.1]: https://github.com/wenex-org/platform/compare/1.7.0...1.7.1
 [1.7.0]: https://github.com/wenex-org/platform/compare/1.6.12...1.7.0
 [1.6.X]: https://github.com/wenex-org/platform/compare/1.5.11...1.6.12
 [1.5.X]: https://github.com/wenex-org/platform/compare/1.4.11...1.5.11
