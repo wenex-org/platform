@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.2] - 2026-08-30
+
 ### Fixed
 
 - `essential/sagas`: the session sweep read `MAX_SAGA_TTL` (seconds) as ms and emptied the registry every minute. @vhidvz
@@ -465,7 +467,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.7.1...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.7.2...HEAD
+[1.7.2]: https://github.com/wenex-org/platform/compare/1.7.1...1.7.2
 [1.7.1]: https://github.com/wenex-org/platform/compare/1.7.0...1.7.1
 [1.7.0]: https://github.com/wenex-org/platform/compare/1.6.12...1.7.0
 [1.6.X]: https://github.com/wenex-org/platform/compare/1.5.11...1.6.12
