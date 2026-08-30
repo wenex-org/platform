@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `essential/sagas`: the session sweep read `MAX_SAGA_TTL` (seconds) as ms and emptied the registry every minute. @vhidvz
+- `essential/sagas`: a forgotten session is now aborted and ended (remove, sweep, shutdown, failed start) — the heap leak. @vhidvz
+- `essential/sagas`: registry keyed by saga id, so a lookup or remove never hits another session; duplicate ids refused. @vhidvz
+- `essential/sagas`: an expired saga answers with why its session is gone, not `no partition`; assignment lookup guarded. @vhidvz
+- `essential/sagas`: `abort`/`commit` failures log under their own name and no longer dereference a missing saga document. @vhidvz
+- `scripts/start.js`: a child killed by a signal (heap exhaustion) exits 128+signal instead of 0, so a crash reads as one. @vhidvz
+
+### Changed
+
+- `scripts/start.js` caps the V8 heap at 2 GB (`NODE_MAX_OLD_SPACE_SIZE`); compose services restart on failure, 6 GB limit. @vhidvz
+
 ## [1.7.1] - 2026-08-20
 
 ### Added

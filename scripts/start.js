@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 require('dotenv').config();
 
+const os = require('os');
 const fs = require('fs');
 const path = require('path');
 
@@ -11,10 +12,18 @@ console.log('Static MachineID:', process.env.MACHINE_ID);
 // Get the service name from command-line arguments (default to 'gateway')
 const SERVICE_NAME = process.env.SERVICE_NAME || 'gateway';
 
+// V8 heap ceiling in MB — chosen, not whatever V8 picks from the host's RAM (~4 GB): a leak then fails
+// fast and legibly instead of bloating for hours; keep it below the container's memory limit
+const MAX_OLD_SPACE_SIZE = Number(process.env.NODE_MAX_OLD_SPACE_SIZE) || 2048;
+
+// Exit like a shell would: a child killed by a signal (SIGABRT on heap exhaustion, SIGKILL from the
+// kernel) reports 128 + signal number, so a crash never reads as a clean exit 0
+const exitCodeOf = (code, signal) => code ?? (signal ? 128 + (os.constants.signals[signal] || 0) : 1);
+
 // Function to execute a Node.js process with specified stack size and signal forwarding
 function runNodeProcess(filePath) {
   console.log(`Starting service: ${SERVICE_NAME} from ${filePath}`);
-  const nodeProcess = spawn('node', ['--stack-size=4096', filePath], {
+  const nodeProcess = spawn('node', ['--stack-size=4096', `--max-old-space-size=${MAX_OLD_SPACE_SIZE}`, filePath], {
     stdio: 'inherit', // Inherit stdio to show output in console
   });
 
@@ -31,15 +40,15 @@ function runNodeProcess(filePath) {
     process.exit(1);
   });
 
-  nodeProcess.on('exit', (code) => {
-    console.log(`Child process exited with code ${code}`);
-    process.exit(code || 0);
+  nodeProcess.on('exit', (code, signal) => {
+    console.log(`Child process exited with code ${code} and signal ${signal}`);
+    process.exit(exitCodeOf(code, signal));
   });
 
   // Also listen for child close to clean up handlers
-  nodeProcess.on('close', (code) => {
+  nodeProcess.on('close', (code, signal) => {
     process.removeListener('SIGTERM', shutdown);
-    process.exit(code || 0);
+    process.exit(exitCodeOf(code, signal));
   });
 }
 
