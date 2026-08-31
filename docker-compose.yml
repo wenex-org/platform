@@ -5,14 +5,6 @@ x-common: &common
     - .env
   network_mode: host
 
-# Long-running services and workers only: a crash restarts (a clean stop or a daemon restart does
-# not), and the memory ceiling sits above the heap limit scripts/start.js gives node so V8 fails
-# first, legibly. One-shot commands below stay on *common — a restart policy would loop them.
-x-service: &service
-  <<: *common
-  restart: on-failure
-  mem_limit: ${PLATFORM_MEM_LIMIT:-6g}
-
 services:
   gateway:
     profiles: [gateway, platform, services]
@@ -23,7 +15,7 @@ services:
       SERVICE_NAME: gateway
       OTLP_SERVICE_NAME: gateway
       ELASTIC_APM_SERVICE_NAME: gateway
-    <<: *service
+    <<: *common
 
   auth:
     profiles: [auth, platform, services]
@@ -34,7 +26,7 @@ services:
     environment:
       SERVICE_NAME: auth
       OTLP_SERVICE_NAME: auth
-    <<: *service
+    <<: *common
 
   domain:
     profiles: [domain, platform, services]
@@ -45,7 +37,7 @@ services:
     environment:
       SERVICE_NAME: domain
       OTLP_SERVICE_NAME: domain
-    <<: *service
+    <<: *common
 
   context:
     profiles: [context, platform, services]
@@ -56,7 +48,7 @@ services:
     environment:
       SERVICE_NAME: context
       OTLP_SERVICE_NAME: context
-    <<: *service
+    <<: *common
 
   essential:
     profiles: [essential, platform, services]
@@ -67,7 +59,7 @@ services:
     environment:
       SERVICE_NAME: essential
       OTLP_SERVICE_NAME: essential
-    <<: *service
+    <<: *common
 
   financial:
     profiles: [financial, platform, services]
@@ -78,7 +70,7 @@ services:
     environment:
       SERVICE_NAME: financial
       OTLP_SERVICE_NAME: financial
-    <<: *service
+    <<: *common
 
   general:
     profiles: [general, platform, services]
@@ -89,7 +81,7 @@ services:
     environment:
       SERVICE_NAME: general
       OTLP_SERVICE_NAME: general
-    <<: *service
+    <<: *common
 
   identity:
     profiles: [identity, platform, services]
@@ -100,7 +92,7 @@ services:
     environment:
       SERVICE_NAME: identity
       OTLP_SERVICE_NAME: identity
-    <<: *service
+    <<: *common
 
   special:
     profiles: [special, platform, services]
@@ -111,7 +103,7 @@ services:
     environment:
       SERVICE_NAME: special
       OTLP_SERVICE_NAME: special
-    <<: *service
+    <<: *common
 
   touch:
     profiles: [touch, platform, services]
@@ -122,7 +114,7 @@ services:
     environment:
       SERVICE_NAME: touch
       OTLP_SERVICE_NAME: touch
-    <<: *service
+    <<: *common
 
   content:
     profiles: [content, platform, services]
@@ -133,7 +125,7 @@ services:
     environment:
       SERVICE_NAME: content
       OTLP_SERVICE_NAME: content
-    <<: *service
+    <<: *common
 
   logistic:
     profiles: [logistic, platform, services]
@@ -144,7 +136,7 @@ services:
     environment:
       SERVICE_NAME: logistic
       OTLP_SERVICE_NAME: logistic
-    <<: *service
+    <<: *common
 
   conjoint:
     profiles: [conjoint, platform, services]
@@ -155,7 +147,7 @@ services:
     environment:
       SERVICE_NAME: conjoint
       OTLP_SERVICE_NAME: conjoint
-    <<: *service
+    <<: *common
 
   career:
     profiles: [career, platform, services]
@@ -166,7 +158,7 @@ services:
     environment:
       SERVICE_NAME: career
       OTLP_SERVICE_NAME: career
-    <<: *service
+    <<: *common
 
   thing:
     profiles: [thing, platform, services]
@@ -177,7 +169,7 @@ services:
     environment:
       SERVICE_NAME: thing
       OTLP_SERVICE_NAME: thing
-    <<: *service
+    <<: *common
 
   # ---------
   # Workers
@@ -191,7 +183,7 @@ services:
     environment:
       SERVICE_NAME: watcher
       OTLP_SERVICE_NAME: watcher
-    <<: *service
+    <<: *common
 
   preserver:
     profiles: [preserver, platform, workers]
@@ -202,7 +194,7 @@ services:
     environment:
       SERVICE_NAME: preserver
       OTLP_SERVICE_NAME: preserver
-    <<: *service
+    <<: *common
 
   observer:
     profiles: [observer, platform, workers]
@@ -212,7 +204,7 @@ services:
     environment:
       SERVICE_NAME: observer
       OTLP_SERVICE_NAME: observer
-    <<: *service
+    <<: *common
 
   dispatcher:
     profiles: [dispatcher, platform, workers]
@@ -222,7 +214,7 @@ services:
     environment:
       SERVICE_NAME: dispatcher
       OTLP_SERVICE_NAME: dispatcher
-    <<: *service
+    <<: *common
 
   publisher:
     profiles: [publisher, platform, workers]
@@ -232,7 +224,7 @@ services:
     environment:
       SERVICE_NAME: publisher
       OTLP_SERVICE_NAME: publisher
-    <<: *service
+    <<: *common
 
   logger:
     profiles: [logger, platform, workers]
@@ -242,7 +234,7 @@ services:
     environment:
       SERVICE_NAME: logger
       OTLP_SERVICE_NAME: logger
-    <<: *service
+    <<: *common
 
   cleaner:
     profiles: [cleaner, platform, workers]
@@ -252,7 +244,7 @@ services:
     environment:
       SERVICE_NAME: cleaner
       OTLP_SERVICE_NAME: cleaner
-    <<: *service
+    <<: *common
 
   # ---------
   # Commands
