@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- `essential/sagas`: the unroutable-saga counter and terminal-state test moved into `@app/module/saga`. @vhidvz
+
 ### Fixed
 
 - `essential/sagas`: commit and abort stamp the row's final state before releasing the session and its rollback job. @vhidvz
@@ -19,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `essential/sagas`: the machine lease outlives the longest session it can hold, so a live owner is never unroutable. @vhidvz
 - `essential/sagas`: the unroutable-saga counter map is bounded, so a caller inventing ids cannot grow it. @vhidvz
 - `pm2`: essential instances get the same 2 GB V8 ceiling the container has — 2 916 MB of load became 2 072 MB. @vhidvz
+- `cleaner`: the saga reconciler reads the session registry once per pass, not once per row. @vhidvz
 
 ## [1.7.2] - 2026-08-30
 
