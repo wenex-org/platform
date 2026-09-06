@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.3] - 2026-09-06
+
 ### Changed
 
 - `essential/sagas`: the unroutable-saga counter and terminal-state test moved into `@app/module/saga`. @vhidvz
@@ -485,7 +487,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.7.2...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.7.3...HEAD
+[1.7.3]: https://github.com/wenex-org/platform/compare/1.7.2...1.7.3
 [1.7.2]: https://github.com/wenex-org/platform/compare/1.7.1...1.7.2
 [1.7.1]: https://github.com/wenex-org/platform/compare/1.7.0...1.7.1
 [1.7.0]: https://github.com/wenex-org/platform/compare/1.6.12...1.7.0
