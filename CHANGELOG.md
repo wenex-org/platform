@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `essential/sagas`: the machine record is a renewed lease, so a hard death no longer leaves it registered for ever. @vhidvz
 - `cleaner`: a reconciler settles saga rows stranded `AWAITING` past their ttl with no registry entry anywhere. @vhidvz
 - `essential/sagas`: a terminal stamp is retried once, so a committed saga is never force-stamped `ABORTED` after it. @vhidvz
+- `essential/sagas`: the machine lease outlives the longest session it can hold, so a live owner is never unroutable. @vhidvz
+- `essential/sagas`: the unroutable-saga counter map is bounded, so a caller inventing ids cannot grow it. @vhidvz
+- `pm2`: essential instances get the same 2 GB V8 ceiling the container has — 2 916 MB of load became 2 072 MB. @vhidvz
 
 ## [1.7.2] - 2026-08-30
 
