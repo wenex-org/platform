@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `essential/sagas`: a saga unroutable to any machine is counted and named, instead of refusing `424` unlogged. @vhidvz
 - `essential/sagas`: the machine record is a renewed lease, so a hard death no longer leaves it registered for ever. @vhidvz
 - `cleaner`: a reconciler settles saga rows stranded `AWAITING` past their ttl with no registry entry anywhere. @vhidvz
+- `essential/sagas`: a terminal stamp is retried once, so a committed saga is never force-stamped `ABORTED` after it. @vhidvz
 
 ## [1.7.2] - 2026-08-30
 
