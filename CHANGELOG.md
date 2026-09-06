@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `essential/sagas`: commit and abort stamp the row's final state before releasing the session and its rollback job. @vhidvz
+- `essential/sagas`: the rollback processor no longer overwrites a row that already reached a terminal state. @vhidvz
+- `essential/sagas`: a committed or aborted row answers directly, ending retry loops against a session that is gone. @vhidvz
+- `essential/sagas`: a saga unroutable to any machine is counted and named, instead of refusing `424` unlogged. @vhidvz
+- `essential/sagas`: the machine record is a renewed lease, so a hard death no longer leaves it registered for ever. @vhidvz
+- `cleaner`: a reconciler settles saga rows stranded `AWAITING` past their ttl with no registry entry anywhere. @vhidvz
+
 ## [1.7.2] - 2026-08-30
 
 ### Fixed
