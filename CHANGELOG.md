@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `core`: `Data`, `Items`, `Total` and `Result` gained an optional `meta` envelope, exposed by every data/items serializer. @vhidvz
+- `protos`: every data, items, `Total` and `Result` message gained an `optional string meta` field for gRPC metadata. @vhidvz
+- `auth/auths`: `token` reports which credential proved the login through the `x-auth-credential` meta key. @vhidvz
+
+### Changed
+
+- `core`: `MetadataInterceptor` moves the `x-*` keys of a response's `meta` into HTTP headers before serialization. @vhidvz
+- `auth/auths`: the gateway `token` route answers with `AuthenticationDataSerializer` and sets its `x-*` meta as headers. @vhidvz
+- `auth/auths`: `AuthsService.token` and the authentication model now resolve to `Data<AuthenticationResponse>`. @vhidvz
+- `career`: data and items serializers gained the `@ApiSchema` names their Swagger models were missing. @vhidvz
+
 ## [1.7.3] - 2026-09-06
 
 ### Changed
