@@ -7,11 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.4] - 2026-09-09
+
 ### Added
 
 - `core`: `Data`, `Items`, `Total` and `Result` gained an optional `meta` envelope, exposed by every data/items serializer. @vhidvz
 - `protos`: every data, items, `Total` and `Result` message gained an `optional string meta` field for gRPC metadata. @vhidvz
 - `auth/auths`: `token` reports which credential proved the login through the `x-auth-credential` meta key. @vhidvz
+- `mcp`: `auth/apts` and `touch/push-histories` joined the resource map, so all 52 collections answer the CRUD tools. @vhidvz
 
 ### Changed
 
@@ -19,6 +22,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `auth/auths`: the gateway `token` route answers with `AuthenticationDataSerializer` and sets its `x-*` meta as headers. @vhidvz
 - `auth/auths`: `AuthsService.token` and the authentication model now resolve to `Data<AuthenticationResponse>`. @vhidvz
 - `career`: data and items serializers gained the `@ApiSchema` names their Swagger models were missing. @vhidvz
+- `mcp`: the resource map is typed `Record<Collection, RestfulService>`; no collection maps to `null` any more. @vhidvz
+- `deps`: `@wenex/sdk` moved to `^1.4.0`, which supplies the `auth.apts` and `touch.pushes.histories` services. @vhidvz
+- `docs`/`mcp`: the resource specs record both collections as callable, and `auth/apts` as having no update tools. @vhidvz
 
 ## [1.7.3] - 2026-09-06
 
@@ -500,7 +506,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.7.3...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.7.4...HEAD
+[1.7.4]: https://github.com/wenex-org/platform/compare/1.7.3...1.7.4
 [1.7.3]: https://github.com/wenex-org/platform/compare/1.7.2...1.7.3
 [1.7.2]: https://github.com/wenex-org/platform/compare/1.7.1...1.7.2
 [1.7.1]: https://github.com/wenex-org/platform/compare/1.7.0...1.7.1
