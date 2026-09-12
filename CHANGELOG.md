@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.5] - 2026-09-12
+
 ### Fixed
 
 - `core`: `checkQueryExploits` turns a `groups` filter into `$in` under `any`/`client` scopes too, not an exact-array match. @vhidvz
@@ -515,7 +517,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.7.4...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.7.5...HEAD
+[1.7.5]: https://github.com/wenex-org/platform/compare/1.7.4...1.7.5
 [1.7.4]: https://github.com/wenex-org/platform/compare/1.7.3...1.7.4
 [1.7.3]: https://github.com/wenex-org/platform/compare/1.7.2...1.7.3
 [1.7.2]: https://github.com/wenex-org/platform/compare/1.7.1...1.7.2
