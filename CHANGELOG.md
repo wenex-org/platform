@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `core`: `checkQueryExploits` turns a `groups` filter into `$in` under `any`/`client` scopes too, not an exact-array match. @vhidvz
+- `core`: `checkQueryExploits` drops an empty `groups` filter under `any`/`client` scopes rather than matching `[]`. @vhidvz
+
 ## [1.7.4] - 2026-09-09
 
 ### Added
@@ -25,6 +30,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `mcp`: the resource map is typed `Record<Collection, RestfulService>`; no collection maps to `null` any more. @vhidvz
 - `deps`: `@wenex/sdk` moved to `^1.4.0`, which supplies the `auth.apts` and `touch.pushes.histories` services. @vhidvz
 - `docs`/`mcp`: the resource specs record both collections as callable, and `auth/apts` as having no update tools. @vhidvz
+
+### Fixed
+
+- `auth/auths`: the gRPC `token` reply sends `meta` as the string its proto declares, via `AuthenticationDataRpcSerializer`. @vhidvz
 
 ## [1.7.3] - 2026-09-06
 
