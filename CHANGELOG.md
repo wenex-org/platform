@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.6] - 2026-09-16
+
 ### Added
 
 - `command`: `elastic migrate -i <index>` updates an index to its schema in place, analysis then mapping; safe to re-run. @vhidvz
@@ -533,7 +535,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.7.5...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.7.6...HEAD
+[1.7.6]: https://github.com/wenex-org/platform/compare/1.7.5...1.7.6
 [1.7.5]: https://github.com/wenex-org/platform/compare/1.7.4...1.7.5
 [1.7.4]: https://github.com/wenex-org/platform/compare/1.7.3...1.7.4
 [1.7.3]: https://github.com/wenex-org/platform/compare/1.7.2...1.7.3
