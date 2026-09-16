@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `command`: `elastic migrate -i <index>` updates an index to its schema in place, analysis then mapping; safe to re-run. @vhidvz
+- `command`: run `elastic migrate -i message` before the new watcher starts, else `$value` maps without `text_analyzer`. @vhidvz
+
+### Changed
+
+- `command`: the messages index maps `content.$value` as `text_analyzer` text, so a string body is full-text searchable. @vhidvz
+- `conjoint/messages`: `$value` is a reserved body key; an object body whose only key it is reads back as that value. @vhidvz
+
+### Fixed
+
+- `watcher`: a message whose body is not an object no longer stalls the consumer; it is indexed under `content.$value`. @vhidvz
+- `conjoint/messages`: `search` hands a relocated body back as the client wrote it, so a hit matches the stored document. @vhidvz
+- `watcher`: an updated message replaces its Elasticsearch document instead of merging into it, leaving no stale key. @vhidvz
+
 ## [1.7.5] - 2026-09-12
 
 ### Fixed
