@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- docs: grant actions are the `Action` enum, subjects `local@domain[:scope]`; envelope, shield, SDK, mlops pages match code. @vhidvz
+- mcp: `$elemMatch`/`$size` stated as rejected; upload, share, send, saga-stage and state samples match the gateway. @vhidvz
+
 ## [1.7.6] - 2026-09-16
 
 ### Added
@@ -189,7 +194,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - docs: Metadata `domain`/`client`/`user` derive from the JWT, not `x-domain`/`x-client-id` headers; user is `uid`. @vhidvz
 - docs: SDK multi-tenant usage relies on the `coworker` claim and `zone=client`, not an `x-domain` header. @vhidvz
 - fix: `preserver` granted permission or fixed @vhidvz
-- docs: `thing/metrics.device` is returned and populatable, not write-only in responses. @vhidvz
 - docs: drop the false `thing/metrics` append-only claim; metrics support update and delete. @vhidvz
 - docs: replace removed per-router MCP tool names in cross-service-pattern with shared `find`/`count`. @vhidvz
 - docs: correct MCP scope-splitting to whitespace, comma, semicolon, or pipe delimiters. @vhidvz
