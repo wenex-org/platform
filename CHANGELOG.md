@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - docs: Getting Started, Overview and Ecosystem links no longer 404 on reload; the repo README is no longer a page. @vhidvz
 - docs: the authorization, gateway and services diagrams render again; the topology diagram labels Logistic. @vhidvz
 - docs: the hero button and code comments meet WCAG AA contrast in light and dark themes. @vhidvz
+- docs: the JWT/APT comparison table on the authentication page labels its header column. @vhidvz
 
 ## [1.7.6] - 2026-09-16
 
