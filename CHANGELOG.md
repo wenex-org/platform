@@ -7,10 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- docs: sitemap, canonical URLs, Open Graph and Twitter cards, JSON-LD and a share image on every page. @vhidvz
+- docs: every page has its own search title and meta description; all 32 diagrams carry an accessible title. @vhidvz
+
+### Changed
+
+- docs: mermaid loads only on pages that draw a diagram, so the rest ship ~140 KB less gzipped JavaScript. @vhidvz
+
 ### Fixed
 
 - docs: grant actions are the `Action` enum, subjects `local@domain[:scope]`; envelope, shield, SDK, mlops pages match code. @vhidvz
 - mcp: `$elemMatch`/`$size` stated as rejected; upload, share, send, saga-stage and state samples match the gateway. @vhidvz
+- docs: Getting Started, Overview and Ecosystem links no longer 404 on reload; the repo README is no longer a page. @vhidvz
+- docs: the authorization, gateway and services diagrams render again; the topology diagram labels Logistic. @vhidvz
+- docs: the hero button and code comments meet WCAG AA contrast in light and dark themes. @vhidvz
 
 ## [1.7.6] - 2026-09-16
 

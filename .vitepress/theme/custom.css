@@ -3,6 +3,27 @@
   text-justify: inter-word;
 }
 
+/* WCAG AA (4.5:1) nudges to VitePress defaults, each the smallest shift of the same hue that passes:
+   the brand button's white label is 4.48:1 on #5672cd in light mode (→ 4.83) and 4.15:1 on its dark
+   hover #5c73e7 (→ 4.71). */
+:root:not(.dark) {
+  --vp-button-brand-bg: #506ccb;
+}
+
+html.dark {
+  --vp-button-brand-hover-bg: #4e6ae0;
+}
+
+/* Shiki's github-light/-dark comment grey #6A737D is 4.46:1 on the light code background and 3.75:1
+   on the dark one; only that token moves (→ 4.94 light, 5.31 dark and 4.72 inside a dark container). */
+html:not(.dark) .shiki span[style*='--shiki-light:#6A737D'] {
+  color: #636c76;
+}
+
+html.dark .shiki span[style*='--shiki-dark:#6A737D'] {
+  color: #848c96;
+}
+
 /* Changelog page (docs/changelog.md, via pageClass frontmatter) */
 .changelog-page .vp-doc h2 {
   margin-top: 32px;
