@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- docs: the five secrets must be set explicitly; nothing writes them to `.env`, and Helm re-draws them per render. @vhidvz
 - docs: grant actions are the `Action` enum, subjects `local@domain[:scope]`; envelope, shield, SDK, mlops pages match code. @vhidvz
 - mcp: `$elemMatch`/`$size` stated as rejected; upload, share, send, saga-stage and state samples match the gateway. @vhidvz
 - docs: Getting Started, Overview and Ecosystem links no longer 404 on reload; the repo README is no longer a page. @vhidvz
