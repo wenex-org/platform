@@ -32,6 +32,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - docs: user subjects are emails; dropped body fields, 400 query fields, id lookups past soft delete, exact-IP whitelist. @vhidvz
 - docs: career enums, worker roles, watcher Elasticsearch, gateway without gRPC, EMQX users, README links match code. @vhidvz
 - docs: payment saga: `x-saga-session` binds, `verify` commits, TTL expiry cancels; the body `saga` is ignored. @vhidvz
+- docs: mlops: one archive row per document; Beat's PENDING check lets runs overlap; `batch_size` rule stated once. @vhidvz
+- docs: mlops: first commit after `commit_interval`; Flower/Airflow 3 port-forwards; broker env honoured after 1.0.6. @vhidvz
 
 ## [1.7.6] - 2026-09-16
 
