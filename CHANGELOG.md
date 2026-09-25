@@ -28,6 +28,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - mcp: touch `create` only stores, `send` delivers; payment saga is `init` then `verify`, a TTL cancels. @vhidvz
 - mcp: settings keys uppercase (`THEME`), `update:own`, RBAC read per check, career enums, BALE, 2 search routes. @vhidvz
 - mcp: maintainer: `docs://core/specification` loads `core/-specification.md` via the `loader.mcp.ts` alias. @vhidvz
+- docs: grant `field`/`filter` are field lists, not row queries; rows are bounded by the action scope and zone. @vhidvz
+- docs: user subjects are emails; dropped body fields, 400 query fields, id lookups past soft delete, exact-IP whitelist. @vhidvz
+- docs: career enums, worker roles, watcher Elasticsearch, gateway without gRPC, EMQX users, README links match code. @vhidvz
+- docs: payment saga: `x-saga-session` binds, `verify` commits, TTL expiry cancels; the body `saga` is ignored. @vhidvz
 
 ## [1.7.6] - 2026-09-16
 
