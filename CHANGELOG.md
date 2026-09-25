@@ -25,6 +25,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - docs: the authorization, gateway and services diagrams render again; the topology diagram labels Logistic. @vhidvz
 - docs: the hero button and code comments meet WCAG AA contrast in light and dark themes. @vhidvz
 - docs: the JWT/APT comparison table on the authentication page labels its header column. @vhidvz
+- mcp: touch `create` only stores, `send` delivers; payment saga is `init` then `verify`, a TTL cancels. @vhidvz
+- mcp: settings keys uppercase (`THEME`), `update:own`, RBAC read per check, career enums, BALE, 2 search routes. @vhidvz
+- mcp: maintainer: `docs://core/specification` loads `core/-specification.md` via the `loader.mcp.ts` alias. @vhidvz
 
 ## [1.7.6] - 2026-09-16
 
