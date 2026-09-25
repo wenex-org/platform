@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - docs: payment saga: `x-saga-session` binds, `verify` commits, TTL expiry cancels; the body `saga` is ignored. @vhidvz
 - docs: mlops: one archive row per document; Beat's PENDING check lets runs overlap; `batch_size` rule stated once. @vhidvz
 - docs: mlops: first commit after `commit_interval`; Flower/Airflow 3 port-forwards; broker env honoured after 1.0.6. @vhidvz
+- docker: README runs compose from the repo root; the local TURN cert expired 2026-06-18 (regenerate). @vhidvz
 
 ## [1.7.6] - 2026-09-16
 
