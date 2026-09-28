@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- rate limit: one atomic Lua count per request; the GET/PTTL race answered 500 in a lapsed window and lost ~10% of counts. @vhidvz
+- financial: money holds are atomic, all-or-nothing, released once, never after a paid verify; views move to `:reservation`. @vhidvz
+- cache: a failed cache write is logged instead of escaping as an unhandled rejection that ends the process. @vhidvz
+- preserver: an EMQX token with no lifetime left is refused before Redis is handed a zero or negative TTL. @vhidvz
 - docs: the five secrets must be set explicitly; nothing writes them to `.env`, and Helm re-draws them per render. @vhidvz
 - docs: grant actions are the `Action` enum, subjects `local@domain[:scope]`; envelope, shield, SDK, mlops pages match code. @vhidvz
 - mcp: `$elemMatch`/`$size` stated as rejected; upload, share, send, saga-stage and state samples match the gateway. @vhidvz
