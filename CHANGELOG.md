@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.7] - 2026-10-01
+
 ### Added
 
 - docs: sitemap, canonical URLs, Open Graph and Twitter cards, JSON-LD and a share image on every page. @vhidvz
@@ -563,7 +565,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.7.6...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.7.7...HEAD
+[1.7.7]: https://github.com/wenex-org/platform/compare/1.7.6...1.7.7
 [1.7.6]: https://github.com/wenex-org/platform/compare/1.7.5...1.7.6
 [1.7.5]: https://github.com/wenex-org/platform/compare/1.7.4...1.7.5
 [1.7.4]: https://github.com/wenex-org/platform/compare/1.7.3...1.7.4
