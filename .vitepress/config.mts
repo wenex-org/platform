@@ -91,6 +91,10 @@ const sidebar: DefaultTheme.SidebarItem[] = [
             text: 'Configuration',
             link: '/getting-started/setup/configuration',
           },
+          {
+            text: 'Upgrade 1.6.x → 1.7.x',
+            link: '/getting-started/setup/upgrade-1-6-to-1-7',
+          },
         ],
       },
       { text: 'Gateway', link: '/getting-started/gateway' },
