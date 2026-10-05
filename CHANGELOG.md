@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `command`: `elastic reindex` rebuilds an index behind an alias: verified copy and clone, atomic cutover, rollback kept. @vhidvz
+- `command`: `mongo migrate` applies declared index migrations; the first drops `unique` from `essential/sagas.session`. @vhidvz
+- `command`: `--dry-run` on `elastic migrate`, `elastic reindex` and `mongo migrate` prints each verdict, changes nothing. @vhidvz
+- docs: Upgrade 1.6.x → 1.7.x guide: backup, preflight, migrate, reindex, verify, recovery; validated end to end. @vhidvz
+
+### Changed
+
+- `command`: `elastic migrate` and `delete` act on the index behind an alias; `delete` keeps and lists rollback indices. @vhidvz
+- `command`: `elastic migrate` adds only missing analysis components and names the changes that still need a reindex. @vhidvz
+
+### Fixed
+
+- `command`: a failed command exits 1 and a finished one exits; the default handler exited 0, timers kept it alive. @vhidvz
+- `command`: an unknown task or `-i`/`-c` key, and `--dry-run` on a task that would ignore it, are refused, not run. @vhidvz
+- `command`: `elastic migrate` puts analysis under `index`; ES 8.18 ignored an unprefixed block that only adds to it. @vhidvz
+
 ## [1.7.8] - 2026-10-05
 
 ### Fixed
