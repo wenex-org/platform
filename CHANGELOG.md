@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.8] - 2026-10-05
+
+### Fixed
+
+- rate limit: one atomic Lua count per request; the GET/PTTL race answered 500 in a lapsed window and lost ~10% of counts. @vhidvz
+- financial: a reservation rounds a fractional saga ttl up, and a release keeps its expiry, so SETEX refuses neither. @vhidvz
+- cache: a failed cache write is logged instead of escaping as an unhandled rejection that ends the process. @vhidvz
+- preserver: an EMQX token with no lifetime left is refused before Redis is handed a zero or negative TTL. @vhidvz
+
 ## [1.7.7] - 2026-10-01
 
 ### Added
@@ -565,7 +574,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.7.7...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.7.8...HEAD
+[1.7.8]: https://github.com/wenex-org/platform/compare/1.7.7...1.7.8
 [1.7.7]: https://github.com/wenex-org/platform/compare/1.7.6...1.7.7
 [1.7.6]: https://github.com/wenex-org/platform/compare/1.7.5...1.7.6
 [1.7.5]: https://github.com/wenex-org/platform/compare/1.7.4...1.7.5
