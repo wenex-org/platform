@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.9] - 2026-10-06
+
 ### Added
 
 - `command`: `elastic reindex` rebuilds an index behind an alias: verified copy and clone, atomic cutover, rollback kept. @vhidvz
@@ -592,7 +594,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - initial release 🎉​🎊​.
 
-[unreleased]: https://github.com/wenex-org/platform/compare/1.7.8...HEAD
+[unreleased]: https://github.com/wenex-org/platform/compare/1.7.9...HEAD
+[1.7.9]: https://github.com/wenex-org/platform/compare/1.7.8...1.7.9
 [1.7.8]: https://github.com/wenex-org/platform/compare/1.7.7...1.7.8
 [1.7.7]: https://github.com/wenex-org/platform/compare/1.7.6...1.7.7
 [1.7.6]: https://github.com/wenex-org/platform/compare/1.7.5...1.7.6
